@@ -26,6 +26,7 @@ public class SpriteCamController : MonoBehaviour
         //Vector3 offset = CharPosition - transform.position;
         DistCharCamera = (CharPosition - CameraPosition).sqrMagnitude;
         DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;
+        //print(DistSelfCamera);
 
         if (DistCharCamera < DistSelfCamera)
 

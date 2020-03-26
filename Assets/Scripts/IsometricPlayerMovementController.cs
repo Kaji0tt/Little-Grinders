@@ -13,6 +13,8 @@ public class IsometricPlayerMovementController : MonoBehaviour
 
     Vector3 forward, right;
 
+    bool Trigger;
+
     private void Awake()
     {
         rbody = GetComponent<Rigidbody2D>();
@@ -32,7 +34,11 @@ public class IsometricPlayerMovementController : MonoBehaviour
     {
         // ** MOVE SPLASH ** //
         if (Input.anyKey)
+        { 
             Move();
+        }
+
+ 
 
         //Vector2 currentPos = rbody.position;
         float horizontalInput = Input.GetAxis("HorizontalKey");
@@ -43,8 +49,10 @@ public class IsometricPlayerMovementController : MonoBehaviour
         //Vector2 newPos = currentPos + movement * Time.fixedDeltaTime;
         isoRenderer.SetDirection(inputVector);
         //rbody.MovePosition(newPos);
+
+        print(Trigger);
     }
-        // ** MOVE SPLASH METHODE ** //
+    // ** MOVE SPLASH METHODE ** //
     void Move()
     {
         Vector3 direction = new Vector3(Input.GetAxis("HorizontalKey"), 0, Input.GetAxis("VerticalKey"));
@@ -54,16 +62,25 @@ public class IsometricPlayerMovementController : MonoBehaviour
         //Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
 
 
-        //transform.forward = heading;
-        /* Transform.Position ignoriert die Physic und deshalb sämltliche Colider 
-         * Nicht verwenden, wenn's anders geht!!*/
+
         //transform.Translate(rightMovement * movementSpeed);
         //transform.Translate(upMovement * movementSpeed);
+
+        // Was wir eigentlich wollen, ist das Objekt über AddForce zu bewegen, weil wir sonst die Physik von Unity umgehen (Collider funktionieren nicht)
+
         transform.position += rightMovement;
         transform.position += upMovement;
-        
+
 
     }
 
-}
+    private void OnTriggerEnter(Collider other)
+    {
+        Trigger = true;
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        Trigger = false;
+    }
+}
