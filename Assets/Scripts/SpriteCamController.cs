@@ -19,7 +19,7 @@ public class SpriteCamController : MonoBehaviour
     void Update()
     {
         CharPosition = GameObject.Find("Charakter").transform.position;
-        transform.LookAt(Camera.main.transform);
+        //transform.LookAt(Camera.main.transform);
         CameraPosition = GameObject.Find("Camera").transform.position;
 
 
@@ -37,7 +37,7 @@ public class SpriteCamController : MonoBehaviour
 
         else
         {
-            sprite.sortingOrder = 1;
+            sprite.sortingOrder = 2;
 
         }
                 //Falls 
