@@ -73,7 +73,7 @@ MonoBehaviour:
   m_MinSize: {x: 332, y: 274}
   m_MaxSize: {x: 14002, y: 10024}
   vertical: 0
-  controlID: 154
+  controlID: 17
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -95,10 +95,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 683, y: 498}
-  m_MaxSize: {x: 18004, y: 14048}
+  m_MinSize: {x: 679, y: 498}
+  m_MaxSize: {x: 18002, y: 14048}
   vertical: 0
-  controlID: 48
+  controlID: 58
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -118,8 +118,8 @@ MonoBehaviour:
     y: 0
     width: 405
     height: 947
-  m_MinSize: {x: 277, y: 74}
-  m_MaxSize: {x: 4002, y: 4024}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -144,8 +144,8 @@ MonoBehaviour:
     y: 0
     width: 438
     height: 636
-  m_MinSize: {x: 202, y: 224}
-  m_MaxSize: {x: 4002, y: 4024}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 21}
   m_Panes:
   - {fileID: 21}
@@ -265,10 +265,10 @@ MonoBehaviour:
     y: 0
     width: 1515
     height: 947
-  m_MinSize: {x: 406, y: 498}
+  m_MinSize: {x: 404, y: 498}
   m_MaxSize: {x: 14002, y: 14048}
   vertical: 1
-  controlID: 49
+  controlID: 59
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -290,10 +290,10 @@ MonoBehaviour:
     y: 0
     width: 1515
     height: 636
-  m_MinSize: {x: 406, y: 224}
-  m_MaxSize: {x: 8006, y: 4024}
+  m_MinSize: {x: 404, y: 224}
+  m_MaxSize: {x: 8004, y: 4024}
   vertical: 0
-  controlID: 50
+  controlID: 60
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -558,8 +558,8 @@ MonoBehaviour:
     height: 554
   m_PersistentViewDataDictionary: {fileID: 0}
   m_ResetOnNextRepaint: 0
-  m_SelectedAssetPath: Assets/Sprites/Charakter/SandalsSheet.png
-  m_SelectedSpriteRectGUID: fca740a3fb5fe564388ace2c74619b39
+  m_SelectedAssetPath: 
+  m_SelectedSpriteRectGUID: 
   m_LastUsedModuleTypeName: UnityEditor.SpriteFrameModule
 --- !u!114 &18
 MonoBehaviour:
@@ -625,20 +625,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Sprites
   m_ViewMode: 1
-  m_StartGridSize: 16
+  m_StartGridSize: 39
   m_LastFolders:
-  - Assets/Scripts
-  m_LastFoldersGridSize: 16
+  - Assets/Sprites
+  m_LastFoldersGridSize: 39
   m_LastProjectPath: D:\8 - Unterlagen\GameDesign\GitHubResp\Little-Grinders
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 66}
-    m_SelectedIDs: ae0c0000
-    m_LastClickedID: 3246
-    m_ExpandedIDs: 0000000086090000920a0000ae0a0000e00b0000340c0000ca0c0000dc0c0000de0c0000e40c0000e80c00006e0d0000120e000000ca9a3b
+    scrollPos: {x: 0, y: 98}
+    m_SelectedIDs: 360c0000
+    m_LastClickedID: 3126
+    m_ExpandedIDs: 0000000086090000940a0000b00a0000e20b0000360c0000cc0c0000de0c0000e00c0000e60c0000ea0c0000700d0000920e0000202d000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -666,7 +666,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000086090000920a0000ae0a0000340c0000ca0c0000dc0c0000de0c0000e40c0000e80c00006e0d0000120e0000
+    m_ExpandedIDs: 0000000086090000940a0000b00a0000e20b0000360c0000cc0c0000de0c0000e00c0000e60c0000ea0c0000700d0000920e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -719,7 +719,7 @@ MonoBehaviour:
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
     m_ScrollPosition: {x: 0, y: 0}
-    m_GridSize: 16
+    m_GridSize: 39
   m_DirectoriesAreaWidth: 309
 --- !u!114 &20
 MonoBehaviour:
@@ -785,9 +785,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 48eeffff
-      m_LastClickedID: -4536
-      m_ExpandedIDs: d6fbffffd80e0000ec0e0000
+      m_SelectedIDs: 6c2f0000
+      m_LastClickedID: 0
+      m_ExpandedIDs: d2e6ffff76e7ffffd6fbffff720f0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -872,13 +872,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.32550356, y: 0.2553544, z: -0.09179282, w: 0.90576804}
+    m_Target: {x: 0.24786276, y: 0.013947678, z: -0.0035711138, w: 0.96868813}
     speed: 2
-    m_Value: {x: 0.32550356, y: 0.2553544, z: -0.09179282, w: 0.90576804}
+    m_Value: {x: 0.24786277, y: 0.013947679, z: -0.003571114, w: 0.9686882}
   m_Size:
-    m_Target: 10.129851
+    m_Target: 455.15472
     speed: 2
-    m_Value: 10.129851
+    m_Value: 455.15472
   m_Ortho:
     m_Target: 1
     speed: 2
