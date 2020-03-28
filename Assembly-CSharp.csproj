@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\DebugLog.cs" />
-    <Compile Include="Assets\MobsCamScript.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
     <Compile Include="Assets\Scripts\EntityStats\EnemyStats.cs" />
@@ -72,8 +71,9 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\InventoryScript.cs" />
     <Compile Include="Assets\Scripts\IsometricCharacterRenderer.cs" />
     <Compile Include="Assets\Scripts\IsometricPlayerMovementController.cs" />
+    <Compile Include="Assets\Scripts\MobsCamScript.cs" />
     <Compile Include="Assets\Scripts\NPCMove.cs" />
-    <Compile Include="Assets\Scripts\SpriteCamController.cs" />
+    <Compile Include="Assets\Scripts\SortingOrder.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

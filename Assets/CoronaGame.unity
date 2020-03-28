@@ -952,7 +952,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589741445}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.05, y: -0.03, z: 0}
   m_LocalScale: {x: 0.08856707, y: 0.242127, z: 0.08020852}
   m_Children: []
   m_Father: {fileID: 918095514}
@@ -1143,6 +1143,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Baum1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7943412552912887111, guid: bea66cdc873ce3f4593953837b676b15,
+        type: 3}
+      propertyPath: m_TagString
+      value: EnvObj
       objectReference: {fileID: 0}
     - target: {fileID: 7943412552912887482, guid: bea66cdc873ce3f4593953837b676b15,
         type: 3}
@@ -1347,7 +1352,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918095513}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.12, y: 0.622, z: 15}
+  m_LocalPosition: {x: 16.37, y: 0.622, z: 22.12}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 589741446}
@@ -1366,6 +1371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106fb8f8f2fc55942990a1f0b632449c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sortingOrderBase: 5000
 --- !u!212 &918095516
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2868,7 +2874,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 7ef34c2ec5b40034dba127a328865605, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3149,6 +3155,7 @@ GameObject:
   - component: {fileID: 1817240037}
   - component: {fileID: 1817240043}
   - component: {fileID: 1817240042}
+  - component: {fileID: 1817240044}
   m_Layer: 0
   m_Name: Charakter
   m_TagString: Untagged
@@ -3180,7 +3187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0038be263d74d9b95eb7a5862c9f4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 25
+  movementSpeed: 20
   SlowFactor: 0
 --- !u!95 &1817240039
 Animator:
@@ -3239,7 +3246,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 95f9fa543387f5e42b96eb79beda5bf0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3279,7 +3286,7 @@ Rigidbody:
   m_GameObject: {fileID: 1817240036}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 10
+  m_Drag: 5
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -3298,6 +3305,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f6d3ae06fa5fe49969792463a83bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1817240044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817240036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6643ff433c0e36648a58d802b4878722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingOrderBase: 5000
 --- !u!1 &1829851006
 GameObject:
   m_ObjectHideFlags: 0
@@ -3739,6 +3759,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Busch1
       objectReference: {fileID: 0}
+    - target: {fileID: 6761017401102553521, guid: 4d226c5dd3b096a4e9e6bc07b7c9240b,
+        type: 3}
+      propertyPath: m_TagString
+      value: EnvObj
+      objectReference: {fileID: 0}
     - target: {fileID: 6761017401102553522, guid: 4d226c5dd3b096a4e9e6bc07b7c9240b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3807,6 +3832,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Baum1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7943412552912887111, guid: bea66cdc873ce3f4593953837b676b15,
+        type: 3}
+      propertyPath: m_TagString
+      value: EnvObj
       objectReference: {fileID: 0}
     - target: {fileID: 7943412552912887482, guid: bea66cdc873ce3f4593953837b676b15,
         type: 3}
