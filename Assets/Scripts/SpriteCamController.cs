@@ -37,7 +37,7 @@ public class SpriteCamController : MonoBehaviour
 
         else
         {
-            sprite.sortingOrder = 2;
+            sprite.sortingOrder = 10;
 
         }
                 //Falls 
