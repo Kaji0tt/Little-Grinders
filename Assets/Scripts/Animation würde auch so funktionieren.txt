@@ -1,0 +1,59 @@
+float zreal = destination.transform.position.z - transform.position.z;
+        float xim = destination.transform.position.x - transform.position.x;
+        if (zreal > 0)
+        {
+            float arg = Mathf.Atan(zreal / xim);
+
+        }
+        else if (zreal < 0)
+        {
+            float arg = Mathf.PI + Mathf.Atan(zreal / xim);
+        }
+        else if (zreal == 0 && xim != 0)
+        {
+            float arg = Mathf.PI / 2;
+        }
+
+        float xInputVector;
+        float zInputVector;
+
+        if (arg <= Mathf.PI / 8 && arg>15*Mathf.PI / 8)
+        {
+		zInputVector=1
+		xInputVector=0
+        }
+ if (arg <= 3*Mathf.PI / 8 && arg > Mathf.PI / 8)
+        {
+		zInputVector=0.7
+		xInputVector=0.7
+        }
+ if (arg <= 5*Mathf.PI / 8 && arg > 3*Mathf.PI / 8)
+        {
+		zInputVector=0
+		xInputVector=1
+        }
+ if (arg <= 7*Mathf.PI / 8 && arg > 5*Mathf.PI / 8)
+        {
+		zInputVector=-0.7
+		xInputVector=0.7
+        }
+ if (arg <= 9*Mathf.PI / 8 && arg > 7*Mathf.PI / 8)
+        {
+		zInputVector=-1
+		xInputVector=0
+        }
+ if (arg <= 11*Mathf.PI / 8 && arg > 9*Mathf.PI / 8)
+        {
+		zInputVector=-0.7
+		xInputVector=-0.7
+        }
+ if (arg <= 13*Mathf.PI / 8 && arg > Mathf.PI + 11*Mathf.PI/8)
+        {
+		zInputVector=0
+		xInputVector=-1
+        }
+ if (arg <= 15*Mathf.PI / 8 && arg > 13*Mathf.PI / 8)
+        {
+		zInputVector=0.7
+		xInputVector=-0.7
+        }

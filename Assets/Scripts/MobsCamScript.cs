@@ -22,7 +22,7 @@ public class MobsCamScript : MonoBehaviour
 
     void Update()
     {
-        transform.LookAt(Camera.main.transform);
+       transform.LookAt(Camera.main.transform);
 
         CameraPosition = GameObject.Find("Camera").transform.position;
         DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;

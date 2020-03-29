@@ -39,6 +39,7 @@ public class IsometricPlayerMovementController : MonoBehaviour
         float verticalInput = Input.GetAxis("VerticalKey");
         Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
+        //print(inputVector + "Peter stink");
         isoRenderer.SetDirection(inputVector);
     }
     void Move()

@@ -10,9 +10,10 @@ public class NPCMove : MonoBehaviour
     Transform destination;
 
     NavMeshAgent navMeshAgent;
+    IsometricCharacterRenderer isoRenderer;
 
     Vector3 forward, right;
-
+    private float xInputVector, zInputVector;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,35 +21,23 @@ public class NPCMove : MonoBehaviour
         forward.y = 0;
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
+
+        isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        /* Das NPC Script brauch einen >>DirectionArray<< um animiert werden zu können.
-           Das DirectionArray sollte ausgelesen werden.
-           Eine Lösung wäre:
-
-            Fetchen der Kamera Axe:
-
-
-            Right und Forward sind dann die Kamera Axen
-
-            >> Dann muss ermittelt, wo Destination in Bezug zum NPC steht, um die Axenwerte in relation zum NPC zu erhalten. << 
-                            Das ist die knackige Aufgabe von der ich kein Plan hab.
-                            // vgl. PlayerMovementController
-            
-            Schließlich kann man dann den Vektor2 ermitteln,
-            welcher zur Koordienierung des DirectionArrays verwendet wird.
-
-            (Der DirectionArray wird an ein weiteres Script übergeben, welches die Animation bestimmt)
-            // Vgl. IsoCharRenderer
+        // Die Direction berechnet sich noch aus den Welt
+        Vector3 Direction = destination.transform.position - transform.position;
+        
+        Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z); 
+        inputVector = Vector2.ClampMagnitude(inputVector, 1);
+  
+        isoRenderer.SetNPCDirection(inputVector);
 
 
-        */
-
-        navMeshAgent = this.GetComponent<NavMeshAgent>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
 
         if (navMeshAgent == null)
         {
