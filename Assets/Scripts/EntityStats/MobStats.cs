@@ -31,10 +31,15 @@ using UnityEngine;
 
 public class MobStats : MonoBehaviour
 {
+    [SerializeField]
     private int level;
+    [SerializeField]
     private int hp;
+    [SerializeField]
     private int attackPower;
+    [SerializeField]
     private int abilityPower;
+    [SerializeField]
     private float attackSpeed;
     private int movementSpeed;
 

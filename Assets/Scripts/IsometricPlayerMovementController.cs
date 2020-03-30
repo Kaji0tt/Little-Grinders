@@ -58,15 +58,5 @@ public class IsometricPlayerMovementController : MonoBehaviour
     //Bei Collision mit Busch soll das Movementspeed reduziert werden. 
     //"Other" sollte ersetzt werden um entsprechende Objektvariabel. 
     //Movementspeed sollte runter multipliziert werden, aber unter 1 mag float nicht.
-    private void OnTriggerEnter(Collider other)
-    {
-        //movementSpeed = 15;
-        rbody.velocity = rbody.velocity * SlowFactor * Time.deltaTime;
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        //movementSpeed = 30;
-
-    }
 }
