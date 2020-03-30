@@ -7,7 +7,7 @@ public class SortingOrder : MonoBehaviour
     private Vector3 CameraPosition;
     private float DistSelfCamera;  
     [SerializeField]
-    private int sortingOrderBase = 5000;
+    public int sortingOrderBase = 5000;
 
     private SpriteRenderer sprite;
 
