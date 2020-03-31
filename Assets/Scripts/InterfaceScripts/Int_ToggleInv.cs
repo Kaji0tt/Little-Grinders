@@ -8,6 +8,7 @@ public class Int_ToggleInv : MonoBehaviour
 
     public GameObject InventoryTab;
     private bool ToggleInv;
+    private Image[] InventoryItems;
 
     private void Start()
     {

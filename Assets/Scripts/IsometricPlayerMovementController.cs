@@ -8,10 +8,12 @@ public class IsometricPlayerMovementController : MonoBehaviour
     public float movementSpeed = 30f;
     public float SlowFactor;
     IsometricCharacterRenderer isoRenderer;
-
     Rigidbody rbody;
-
     Vector3 forward, right;
+
+    // Item Management
+    private Inventory inventory;
+    [SerializeField] private UI_Inventory uiInventory;
 
 
     private void Awake()
@@ -23,7 +25,15 @@ public class IsometricPlayerMovementController : MonoBehaviour
         forward.y = 0;
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
+
+
+        //Item Management
+        inventory = new Inventory();
+        uiInventory.SetInventory(inventory);
+
+        ItemWorld.SpawnItemWorld(new Vector3 (transform.position.x - 5, transform.position.y, transform.position.z + 3), new Item { itemType = Item.ItemType.Kopf, amount = 1 });
     }
+
 
 
     void FixedUpdate()
@@ -54,7 +64,15 @@ public class IsometricPlayerMovementController : MonoBehaviour
     }
 
 
-
+    private void OnTriggerEnter(Collider collider)
+    {
+        ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+        if (itemWorld != null)
+        {
+            inventory.AddItem(itemWorld.GetItem());
+            itemWorld.DestroySelf();
+        }
+    }
     //Bei Collision mit Busch soll das Movementspeed reduziert werden. 
     //"Other" sollte ersetzt werden um entsprechende Objektvariabel. 
     //Movementspeed sollte runter multipliziert werden, aber unter 1 mag float nicht.
