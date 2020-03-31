@@ -89,8 +89,14 @@
     <Compile Include="Assets\Scripts\NPCMove.cs" />
     <Compile Include="Assets\Scripts\SortingOrder.cs" />
     <None Include="Assets\Scripts\Animation würde auch so funktionieren.txt" />
+    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Shaders">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.multiplayer-hlapi.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
@@ -98,8 +104,20 @@
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Editor">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Editor">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
@@ -110,6 +128,9 @@
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Postprocessing.Editor">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="com.unity.multiplayer-weaver.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll</HintPath>
     </Reference>
@@ -119,8 +140,14 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Postprocessing.Runtime">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
@@ -130,6 +157,12 @@
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
@@ -145,39 +178,6 @@
     </Reference>
     <Reference Include="com.unity.multiplayer-hlapi.Runtime">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Universal.Shaders">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Editor">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Runtime">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Universal.Editor">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Postprocessing.Editor">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Postprocessing.Runtime">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ShaderGraph.Editor">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
-      <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
