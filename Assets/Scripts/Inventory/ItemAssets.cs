@@ -18,4 +18,5 @@ public class ItemAssets : MonoBehaviour
     public Sprite BrustSprite;
     public Sprite KopfSprite;
     public Sprite WeaponSprite;
+    public Sprite SchmuckSprite;
 }

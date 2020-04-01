@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CodeMonkey.Utils;
 
 public class ItemWorld : MonoBehaviour
 {
@@ -13,9 +14,17 @@ public class ItemWorld : MonoBehaviour
 
         return itemWorld;
     }
+
+    public static ItemWorld DropItem(Vector3 dropPosition, Item item)
+    {
+
+        ItemWorld itemWorld = SpawnItemWorld(dropPosition, item);
+            return itemWorld;
+    }
     private Item item;
 
     private SpriteRenderer spriteRenderer;
+
 
     private void Awake()
     {

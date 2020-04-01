@@ -16,6 +16,8 @@ public class Item
     }
     public ItemType itemType;
     public int amount;
+    public string ItemName;
+
 
     public Sprite GetSprite()
     {
@@ -27,6 +29,8 @@ public class Item
             case ItemType.Brust:        return ItemAssets.Instance.BrustSprite;
             case ItemType.Kopf:         return ItemAssets.Instance.KopfSprite;
             case ItemType.Weapon:       return ItemAssets.Instance.WeaponSprite;
+            case ItemType.Schmuck:      return ItemAssets.Instance.SchmuckSprite;
         }
     }
+
 }

@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using CodeMonkey.Utils;
 
 public class UI_Inventory : MonoBehaviour
 {
-    private Inventory inventory;
     private Transform Int_Inventory;
     private Transform Int_Slot;
+
+    private Inventory inventory;
+    private IsometricPlayerMovementController charakter;
+    private Equipment equipment;
+
 
     private void Awake()
     {
@@ -16,12 +21,22 @@ public class UI_Inventory : MonoBehaviour
         Int_Slot = Int_Inventory.Find("Slot");
     }
 
+    public void SetCharakter (IsometricPlayerMovementController charakter)
+    {
+        this.charakter = charakter; 
+    }
+
     public void SetInventory(Inventory inventory)
     {
         this.inventory = inventory;
 
         inventory.OnItemListChanged += Inventory_OnItemListChanged;
         RefreshInventoryItems();
+    }
+
+    public void SetEquipment(Equipment equipment)
+    {
+        this.equipment = equipment;
     }
 
     private void Inventory_OnItemListChanged(object sender, System.EventArgs e)
@@ -44,11 +59,22 @@ public class UI_Inventory : MonoBehaviour
 
             RectTransform SlotRectTransform = Instantiate(Int_Slot, Int_Inventory).GetComponent<RectTransform>();
             SlotRectTransform.gameObject.SetActive(true);
+
+            SlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
+            {
+                inventory.UseItem(item);
+                equipment.equip(item);
+            };
+            SlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
+            {
+                inventory.RemoveItem(item);
+                ItemWorld.DropItem(charakter.GetPosition(), item);
+            };
+
             SlotRectTransform.anchoredPosition = new Vector2(x * SlotCellSize, y * SlotCellSize);
 
             Image image = SlotRectTransform.Find("image").GetComponent<Image>();
             image.sprite = item.GetSprite();
-            print(image.sprite);
             x++;
             if (x > 5)
             {
@@ -58,4 +84,8 @@ public class UI_Inventory : MonoBehaviour
 
         }
     }
+
+
+
+
 }

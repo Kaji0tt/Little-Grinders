@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IsometricPlayerMovementController : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class IsometricPlayerMovementController : MonoBehaviour
     // Item Management
     private Inventory inventory;
     [SerializeField] private UI_Inventory uiInventory;
+    private Equipment equipment;
+
+    private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
 
     private void Awake()
@@ -28,12 +32,23 @@ public class IsometricPlayerMovementController : MonoBehaviour
 
 
         //Item Management
-        inventory = new Inventory();
+        inventory = new Inventory(UseItem);
         uiInventory.SetInventory(inventory);
+        uiInventory.SetCharakter(this);
+        equipment = new Equipment();
+        uiInventory.SetEquipment(equipment);
 
-        ItemWorld.SpawnItemWorld(new Vector3 (transform.position.x - 5, transform.position.y, transform.position.z + 3), new Item { itemType = Item.ItemType.Kopf, amount = 1 });
+        ItemWorld.SpawnItemWorld
+            (
+            new Vector3 (transform.position.x - 5, transform.position.y, transform.position.z + 3), 
+            new Item { itemType = Item.ItemType.Kopf, amount = 1 }
+            );
     }
 
+    public Vector3 GetPosition()
+    {
+        return new Vector3(transform.position.x, transform.position.y-0.3f, transform.position.z);
+    }
 
 
     void FixedUpdate()
@@ -64,17 +79,52 @@ public class IsometricPlayerMovementController : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerStay(Collider collider)
     {
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
-        if (itemWorld != null)
+        if (itemWorld != null && Input.GetKey(KeyCode.Q))
         {
             inventory.AddItem(itemWorld.GetItem());
             itemWorld.DestroySelf();
         }
     }
-    //Bei Collision mit Busch soll das Movementspeed reduziert werden. 
-    //"Other" sollte ersetzt werden um entsprechende Objektvariabel. 
-    //Movementspeed sollte runter multipliziert werden, aber unter 1 mag float nicht.
+    
+    private void UseItem(Item item)
+    {
+        switch (item.itemType)
+        {
+            
+            case Item.ItemType.Schuhe:
+                inventory.RemoveItem(item);
+
+                //equipment.equip(item.itemType);
+                //UseItem als Befehl an den Charakter ist viel sinniger um PlayerStats zu beeinflussen.. glaub. ansonsten 
+                // kann equipment.equip auch über das UI inventory laufen.
+                break;
+            case Item.ItemType.Hose:
+                inventory.RemoveItem(item);
+                break;
+            case Item.ItemType.Brust:
+                inventory.RemoveItem(item);
+                break;
+            case Item.ItemType.Kopf:
+                inventory.RemoveItem(item);
+                break;
+            case Item.ItemType.Weapon:
+                inventory.RemoveItem(item);
+                break;
+            case Item.ItemType.Schmuck:
+                inventory.RemoveItem(item);
+                break;
+      
+                // Das ist ein fauler Workaround.
+                // Richtig wäre: Item an Equiment weiter geben.
+        }
+
+
+
+    }
+
+
 
 }

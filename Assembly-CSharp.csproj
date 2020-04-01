@@ -62,6 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\CodeMonkey\Assets.cs" />
+    <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
     <Compile Include="Assets\DebugLog.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
@@ -78,6 +80,20 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Kopf.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Schuhe.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Weapon.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_Sprite.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_UI.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionTimer.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionUpdater.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_Bar.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_BarMultiple.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_Sprite.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_TextComplex.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UtilsClass.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Bar.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Mesh.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Sprite.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Equipment.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemAssets.cs" />
@@ -88,6 +104,7 @@
     <Compile Include="Assets\Scripts\MobsCamScript.cs" />
     <Compile Include="Assets\Scripts\NPCMove.cs" />
     <Compile Include="Assets\Scripts\SortingOrder.cs" />
+    <None Include="Assets\CodeMonkey\README.txt" />
     <None Include="Assets\Scripts\Animation würde auch so funktionieren.txt" />
     <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
       <HintPath>D:/8 - Unterlagen/GameDesign/GitHubResp/Little-Grinders/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
