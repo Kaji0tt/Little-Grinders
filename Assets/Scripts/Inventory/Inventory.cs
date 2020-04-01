@@ -15,8 +15,8 @@ public class Inventory
 
         itemList = new List<Item>();
 
-        AddItem(new Item { itemType = Item.ItemType.Schuhe, amount = 1 });
-        AddItem(new Item { itemType = Item.ItemType.Weapon, amount = 1 });
+        AddItem(new Item { itemName = Item.ItemName.Einfache_Sandalen, amount = 1 });
+        AddItem(new Item { itemName = Item.ItemName.Einfaches_Schwert, amount = 1 });
 
 
     }

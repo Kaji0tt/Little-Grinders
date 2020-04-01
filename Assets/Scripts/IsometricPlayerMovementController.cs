@@ -41,8 +41,10 @@ public class IsometricPlayerMovementController : MonoBehaviour
         ItemWorld.SpawnItemWorld
             (
             new Vector3 (transform.position.x - 5, transform.position.y, transform.position.z + 3), 
-            new Item { itemType = Item.ItemType.Kopf, amount = 1 }
+            new Item { itemName = Item.ItemName.Einfacher_Hut, amount = 1 }
             );
+
+
     }
 
     public Vector3 GetPosition()
@@ -75,7 +77,6 @@ public class IsometricPlayerMovementController : MonoBehaviour
         rbody.AddForce(ActualSpeed * movementSpeed, ForceMode.Force);
 
 
-
     }
 
 
@@ -91,29 +92,29 @@ public class IsometricPlayerMovementController : MonoBehaviour
     
     private void UseItem(Item item)
     {
-        switch (item.itemType)
+        switch (item.itemName)
         {
             
-            case Item.ItemType.Schuhe:
+            case Item.ItemName.Einfache_Sandalen:
                 inventory.RemoveItem(item);
 
                 //equipment.equip(item.itemType);
                 //UseItem als Befehl an den Charakter ist viel sinniger um PlayerStats zu beeinflussen.. glaub. ansonsten 
                 // kann equipment.equip auch über das UI inventory laufen.
                 break;
-            case Item.ItemType.Hose:
+            case Item.ItemName.Einfache_Hose:
                 inventory.RemoveItem(item);
                 break;
-            case Item.ItemType.Brust:
+            case Item.ItemName.Einfache_Brust:
                 inventory.RemoveItem(item);
                 break;
-            case Item.ItemType.Kopf:
+            case Item.ItemName.Einfacher_Hut:
                 inventory.RemoveItem(item);
                 break;
-            case Item.ItemType.Weapon:
+            case Item.ItemName.Einfaches_Schwert:
                 inventory.RemoveItem(item);
                 break;
-            case Item.ItemType.Schmuck:
+            case Item.ItemName.Anhänger:
                 inventory.RemoveItem(item);
                 break;
       

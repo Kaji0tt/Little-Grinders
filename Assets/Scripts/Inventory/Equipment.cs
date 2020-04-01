@@ -19,61 +19,62 @@ using UnityEngine.UI;
 
 public class Equipment : MonoBehaviour
 {
-    private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
+    //private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
     private Item item;
     private Inventory inventory;
-    private Equipped equipped;
+    public List<Item> eqlist;
+    private GameObject EQSlot;
+    private string itemType;
 
-    public enum Equipped
-    {
-        SlotSchuhe,
-        SlotHose,
-        SlotBrust,
-        SlotKopf,
-        SlotWeapon,
-        SlotSchmuck
-    }
 
+
+    //Anlegen des Items
     public void equip(Item item)
     {
 
-        //Store Item Data in own ENUM:
+        //Store Item Data in own List:
+        eqlist = new List<Item>(); // möglicherweise sollte nicht jedesmal eine neue liste erstellt werden
+        AddItem(new Item { itemName = item.itemName, amount = 1 });
 
-
-
-        GameObject EQSlot = GameObject.Find(item.itemType+"Img");
+        //Swap Sprite accordingly to Item:
+        itemType = item.ItemType(item);
+        GameObject EQSlot = GameObject.Find(itemType+"Img"); // <- elegantere Lösung finden
         EQSlot.GetComponent<Image>().sprite = item.GetSprite();
-
-        equipslot(item);
         //das Item sollte vorher im entsprechenden Slot gespeichert werden
+        print(eqlist);
 
 
-        //Schuhe.GetComponent<Image>().sprite = ItemAssets.Instance.SchuheSprite;
-        //inventory.RemoveItem(item);  
+    }
+    public void AddItem(Item item)
+    {
+        eqlist.Add(item);
+
     }
 
-    private Sprite equipslot(Item item)
+
+    public void dequip()
     {
-        switch (equipped)
+        EQSlot = gameObject;
+        gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
+      /*  switch(Item.ItemType)
         {
             default:
-            case Equipped.SlotSchuhe:   return item.GetSprite();
-            case Equipped.SlotHose:     return item.GetSprite();
-            case Equipped.SlotBrust:    return item.GetSprite();
-            case Equipped.SlotKopf:     return item.GetSprite();
-            case Equipped.SlotWeapon:   return item.GetSprite();
-            case Equipped.SlotSchmuck:  return item.GetSprite();
+            case EQSlot.name = GameObject.Find("SchuheImg"):         return Item.itemType.Schuhe;
+            case gameObject.name = "HoseImg";           return Item.ItemType.Hose;
+            case Item.ItemType.Brust:           return ItemAssets.Instance.BrustSprite;
+            case Item.ItemType.Kopf:            return ItemAssets.Instance.KopfSprite;
+            case Item.ItemType.Weapon:          return ItemAssets.Instance.WeaponSprite;
+            case Item.ItemType.Schmuck:         return ItemAssets.Instance.SchmuckSprite;
         }
+        */
+
+
     }
-
-
-    public void dequip(string item)
-    {
- 
-        
-    }
-
     
+    public void RemoveItem(Item item)
+    {
+        eqlist.Remove(item);
+    }
 
     //Hier sollten die Attribute des Item Typs auf die PlayerStats raufgerechnet werden.
 }

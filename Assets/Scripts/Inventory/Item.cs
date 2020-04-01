@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item 
+public class Item
+/*
 {
     public enum ItemType
     {
@@ -34,3 +35,82 @@ public class Item
     }
 
 }
+*/
+
+
+{
+    public enum ItemName
+    {
+        Einfache_Sandalen,
+        Einfache_Hose,
+        Einfache_Brust,
+        Einfacher_Hut,
+        Einfaches_Schwert,
+        Anhänger
+
+    }
+    public int amount;
+    public ItemName itemName;
+    public string type;
+    //private string Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
+
+    public Sprite GetSprite()
+    {
+        switch (itemName)
+        {
+            default:
+            case ItemName.Einfache_Sandalen:    return ItemAssets.Instance.SchuheSprite;
+            case ItemName.Einfache_Hose:        return ItemAssets.Instance.HoseSprite;
+            case ItemName.Einfache_Brust:       return ItemAssets.Instance.BrustSprite;
+            case ItemName.Einfacher_Hut:        return ItemAssets.Instance.KopfSprite;
+            case ItemName.Einfaches_Schwert:    return ItemAssets.Instance.WeaponSprite;
+            case ItemName.Anhänger:             return ItemAssets.Instance.SchmuckSprite;
+        }
+    }
+
+    public string ItemType(Item item)
+    {
+        switch (itemName)
+        {
+            default:
+                //Schuhe
+            case ItemName.Einfache_Sandalen:            type="Schuhe";
+                break;
+
+
+                //Hosen
+            case ItemName.Einfache_Hose:                type="Hose";
+                break;
+
+
+
+                //Brüste
+            case ItemName.Einfache_Brust:               type="Brust";
+                break;
+
+
+
+                //Köpfe
+            case ItemName.Einfacher_Hut:                type="Kopf";
+                break;
+
+
+
+                //Waffen
+            case ItemName.Einfaches_Schwert:            type="Weapon";
+                break;
+
+
+                //Schmuckstücke
+            case ItemName.Anhänger:                     type = "Schmuck";
+                break;
+
+
+
+        }
+        return type;
+
+    }
+
+}
+
