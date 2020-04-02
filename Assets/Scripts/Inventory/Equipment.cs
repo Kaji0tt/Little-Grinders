@@ -3,77 +3,87 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using CodeMonkey.Utils;
 
 // Equipment hat "Ausrüstungsslots"
 // ___.equip
-// Equipment.equip setzt Sprite für die entsprechenden Ausrüstungsslots richtig
-// Equipment.equip entfernt InventoryItem (inventory.removeItem) -> Braucht acces zu Inventory
+// 🗸 Equipment.equip setzt Sprite für die entsprechenden Ausrüstungsslots richtig
+// 🗸 Equipment.equip entfernt InventoryItem (inventory.removeItem) -> gereglt über PlayerController.
 // Equipment.equip setzt PlayerStat Values entsprechend der ausgerüsteten Items
-// Equipment.equip speichert die Items im Ausrüstungsslots -> return funktion
+// 🗸 Equipment.equip speichert die Items im Ausrüstungsslots -> geregelt über eqList
 // Equipment.equip -> ggf. Deequip
 
 // 
 // ___.deequip
 // Equipment.deequip nimmt Item.Item aus Ausrüstungsslot raus
-// Equipment.deeuip
+// Equipment.deeuip packt das entsprechende Item zurück ins Inventory
 
 public class Equipment : MonoBehaviour
 {
     //private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
-    private Item item;
+    //private Item item;
     private Inventory inventory;
-    public List<Item> eqlist;
+    //public List<Item> eqList;
     private GameObject EQSlot;
-    private string itemType;
+    public string itemType;
+    public Item item;
 
 
-
+    /*public Equipment()
+    {
+        eqList = new List<Item>();
+    }*/
     //Anlegen des Items
     public void equip(Item item)
     {
 
         //Store Item Data in own List:
-        eqlist = new List<Item>(); // möglicherweise sollte nicht jedesmal eine neue liste erstellt werden
-        AddItem(new Item { itemName = item.itemName, amount = 1 });
+        //eqList.Add(new Item { itemName = item.itemName, item.type});
+        item = new Item { itemName = item.itemName };
 
-        //Swap Sprite accordingly to Item:
-        itemType = item.ItemType(item);
-        GameObject EQSlot = GameObject.Find(itemType+"Img"); // <- elegantere Lösung finden
+        print(item);
+        //If EQSlot already has Item equipped, swap item
+        //Equipment.dequip equipped.item
+        //
+        //Swap Sprite accordingly to Item & give GO Item.values:
+            itemType = item.ItemType(item);
+        GameObject EQSlot = GameObject.Find("Equipped"+itemType); 
         EQSlot.GetComponent<Image>().sprite = item.GetSprite();
-        //das Item sollte vorher im entsprechenden Slot gespeichert werden
-        print(eqlist);
+        print(itemType);
+
+
 
 
     }
-    public void AddItem(Item item)
+
+
+
+    public void dequip(Item item)
     {
-        eqlist.Add(item);
-
-    }
-
-
-    public void dequip()
-    {
-        EQSlot = gameObject;
+        //EQSlot = GameObject.Find("Equipped" + itemType);
         gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-      /*  switch(Item.ItemType)
-        {
-            default:
-            case EQSlot.name = GameObject.Find("SchuheImg"):         return Item.itemType.Schuhe;
-            case gameObject.name = "HoseImg";           return Item.ItemType.Hose;
-            case Item.ItemType.Brust:           return ItemAssets.Instance.BrustSprite;
-            case Item.ItemType.Kopf:            return ItemAssets.Instance.KopfSprite;
-            case Item.ItemType.Weapon:          return ItemAssets.Instance.WeaponSprite;
-            case Item.ItemType.Schmuck:         return ItemAssets.Instance.SchmuckSprite;
-        }
-        */
+        inventory.AddItem(item);
+
+
+        /*  switch(Item.ItemType)
+          {
+              default:
+              case EQSlot.name = GameObject.Find("SchuheImg"):         return Item.itemType.Schuhe;
+              case gameObject.name = "HoseImg";           return Item.ItemType.Hose;
+              case Item.ItemType.Brust:           return ItemAssets.Instance.BrustSprite;
+              case Item.ItemType.Kopf:            return ItemAssets.Instance.KopfSprite;
+              case Item.ItemType.Weapon:          return ItemAssets.Instance.WeaponSprite;
+              case Item.ItemType.Schmuck:         return ItemAssets.Instance.SchmuckSprite;
+          }
+          */
 
 
     }
-    
-    public void RemoveItem(Item item)
+
+    public void TaskOnClick()
     {
-        eqlist.Remove(item);
+        dequip(item);
+        print(itemType);
     }
 
     //Hier sollten die Attribute des Item Typs auf die PlayerStats raufgerechnet werden.

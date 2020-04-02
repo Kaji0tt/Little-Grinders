@@ -97,7 +97,6 @@ public class IsometricPlayerMovementController : MonoBehaviour
             
             case Item.ItemName.Einfache_Sandalen:
                 inventory.RemoveItem(item);
-
                 //equipment.equip(item.itemType);
                 //UseItem als Befehl an den Charakter ist viel sinniger um PlayerStats zu beeinflussen.. glaub. ansonsten 
                 // kann equipment.equip auch über das UI inventory laufen.

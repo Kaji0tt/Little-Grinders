@@ -6,7 +6,7 @@ using UnityEngine;
 public class Inventory
 {
     public event EventHandler OnItemListChanged;
-    private List<Item> itemList;
+    public List<Item> itemList;
     private Action<Item> useItemAction;
 
     public Inventory(Action<Item> useItemAction)
@@ -15,8 +15,9 @@ public class Inventory
 
         itemList = new List<Item>();
 
-        AddItem(new Item { itemName = Item.ItemName.Einfache_Sandalen, amount = 1 });
-        AddItem(new Item { itemName = Item.ItemName.Einfaches_Schwert, amount = 1 });
+        AddItem(new Item { itemName = Item.ItemName.Einfache_Sandalen });
+
+        AddItem(new Item { itemName = Item.ItemName.Einfaches_Schwert  });
 
 
     }
@@ -25,6 +26,7 @@ public class Inventory
     {
         itemList.Add(item);
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
+
 
     }
 
