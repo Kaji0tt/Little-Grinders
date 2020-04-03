@@ -51,7 +51,7 @@ public class Item
     }
     public int amount;
     public ItemName itemName;
-    public string type;
+    public string itemType;
     //private string Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
     public Sprite GetSprite()
@@ -74,41 +74,41 @@ public class Item
         {
             default:
                 //Schuhe
-            case ItemName.Einfache_Sandalen:            type="Schuhe";
+            case ItemName.Einfache_Sandalen:            itemType="Schuhe";
                 break;
 
 
                 //Hosen
-            case ItemName.Einfache_Hose:                type="Hose";
+            case ItemName.Einfache_Hose:                itemType="Hose";
                 break;
 
 
 
                 //Brüste
-            case ItemName.Einfache_Brust:               type="Brust";
+            case ItemName.Einfache_Brust:               itemType="Brust";
                 break;
 
 
 
                 //Köpfe
-            case ItemName.Einfacher_Hut:                type="Kopf";
+            case ItemName.Einfacher_Hut:                itemType="Kopf";
                 break;
 
 
 
                 //Waffen
-            case ItemName.Einfaches_Schwert:            type="Weapon";
+            case ItemName.Einfaches_Schwert:            itemType="Weapon";
                 break;
 
 
                 //Schmuckstücke
-            case ItemName.Anhänger:                     type = "Schmuck";
+            case ItemName.Anhänger:                     itemType = "Schmuck";
                 break;
 
 
 
         }
-        return type;
+        return itemType;
 
     }
 

@@ -17,7 +17,7 @@ public class Inventory
 
         AddItem(new Item { itemName = Item.ItemName.Einfache_Sandalen });
 
-        AddItem(new Item { itemName = Item.ItemName.Einfaches_Schwert  });
+        AddItem(new Item { itemName = Item.ItemName.Einfaches_Schwert });
 
 
     }

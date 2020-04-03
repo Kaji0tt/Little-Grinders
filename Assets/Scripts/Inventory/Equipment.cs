@@ -21,32 +21,31 @@ using CodeMonkey.Utils;
 public class Equipment : MonoBehaviour
 {
     //private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
-    //private Item item;
+    private Item item;
     private Inventory inventory;
-    //public List<Item> eqList;
+    public List<Item> eqList;
     private GameObject EQSlot;
-    public string itemType;
-    public Item item;
+    private string itemType;
+    //public Item item;
 
 
-    /*public Equipment()
+    public Equipment()
     {
         eqList = new List<Item>();
-    }*/
+    }
     //Anlegen des Items
     public void equip(Item item)
     {
 
         //Store Item Data in own List:
-        //eqList.Add(new Item { itemName = item.itemName, item.type});
+        eqList.Add(new Item { itemName = item.itemName, itemType=item.itemType});
         item = new Item { itemName = item.itemName };
 
-        print(item);
         //If EQSlot already has Item equipped, swap item
         //Equipment.dequip equipped.item
         //
         //Swap Sprite accordingly to Item & give GO Item.values:
-            itemType = item.ItemType(item);
+        itemType = item.ItemType(item);
         GameObject EQSlot = GameObject.Find("Equipped"+itemType); 
         EQSlot.GetComponent<Image>().sprite = item.GetSprite();
         print(itemType);
@@ -79,9 +78,20 @@ public class Equipment : MonoBehaviour
 
 
     }
+    /*public override bool Equals(object obj)
+    {
+        if (obj == null) return false;
+        Item objAsPart = obj as Item;
+        if (objAsPart == null) return false;
+        else return Equals(objAsPart);
+    }*/
 
     public void TaskOnClick()
     {
+
+        item = eqList.Find(item => item.itemType.Contains("Schuhe"));
+        print(item);
+
         dequip(item);
         print(itemType);
     }
