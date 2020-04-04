@@ -8,7 +8,7 @@ public class Inventory
     public event EventHandler OnItemListChanged;
     public List<Item> itemList;
     private Action<Item> useItemAction;
-    public string itemType;
+    //public string itemType;
 
     public Inventory(Action<Item> useItemAction)
     {
@@ -16,12 +16,11 @@ public class Inventory
 
         itemList = new List<Item>();
 
-        Item testitem;
-        AddItem(testitem= new Item { itemName = Item.ItemName.Einfache_Sandalen });
-        //ItemType(testitem);
-        Debug.Log(testitem.itemName);
 
-        AddItem(new Item { itemName = Item.ItemName.Einfaches_Schwert });
+        AddItem(new Item { itemName = Item.ItemName.Einfache_Sandalen, itemType = "Schuhe" });
+
+
+        AddItem(new Item { itemName = Item.ItemName.Einfaches_Schwert, itemType = "Weapon" });
 
 
     }

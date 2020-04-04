@@ -61,12 +61,11 @@ public class IsometricPlayerMovementController : MonoBehaviour
             Move();
         }
 
-        //Vector2 currentPos = rbody.position;
+
         float horizontalInput = Input.GetAxis("HorizontalKey");
         float verticalInput = Input.GetAxis("VerticalKey");
         Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
-        //print(inputVector + "Peter stink");
         isoRenderer.SetDirection(inputVector);
     }
     void Move()
@@ -97,9 +96,6 @@ public class IsometricPlayerMovementController : MonoBehaviour
             
             case Item.ItemName.Einfache_Sandalen:
                 inventory.RemoveItem(item);
-                //equipment.equip(item.itemType);
-                //UseItem als Befehl an den Charakter ist viel sinniger um PlayerStats zu beeinflussen.. glaub. ansonsten 
-                // kann equipment.equip auch über das UI inventory laufen.
                 break;
             case Item.ItemName.Einfache_Hose:
                 inventory.RemoveItem(item);
@@ -117,12 +113,14 @@ public class IsometricPlayerMovementController : MonoBehaviour
                 inventory.RemoveItem(item);
                 break;
       
-                // Das ist ein fauler Workaround.
-                // Richtig wäre: Item an Equiment weiter geben.
         }
 
 
 
+    }
+    public Inventory Inventory
+    {
+        get { return inventory; }
     }
 
 

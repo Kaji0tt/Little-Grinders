@@ -53,6 +53,14 @@ public class Item
     public ItemName itemName;
     public string itemType;
     //private string Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
+    public Item Clone ()
+    {
+        this.itemName = itemName;
+        this.itemType = itemType;
+        this.amount = amount;
+
+        return this;
+    }
 
     public Sprite GetSprite()
     {
