@@ -12,10 +12,20 @@ public class IsometricPlayerMovementController : MonoBehaviour
     Rigidbody rbody;
     Vector3 forward, right;
 
+
     // Item Management
     private Inventory inventory;
     [SerializeField] private UI_Inventory uiInventory;
     private Equipment equipment;
+
+    // Equipment Slots
+    private EQSlotSchuhe eqSchuhe;
+    //private EQSlotSchuhe eqSchuhe;
+    //private EQSlotSchuhe eqSchuhe;
+    //private EQSlotSchuhe eqSchuhe;
+    //private EQSlotSchuhe eqSchuhe;
+    //private EQSlotSchuhe eqSchuhe;
+    //private EQSlotSchuhe eqSchuhe;
 
     private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
@@ -37,6 +47,7 @@ public class IsometricPlayerMovementController : MonoBehaviour
         uiInventory.SetCharakter(this);
         equipment = new Equipment();
         uiInventory.SetEquipment(equipment);
+
 
         ItemWorld.SpawnItemWorld
             (
@@ -91,13 +102,15 @@ public class IsometricPlayerMovementController : MonoBehaviour
     
     private void UseItem(Item item)
     {
-        switch (item.itemName)
+        switch (item.itemType)
         {
             
-            case Item.ItemName.Einfache_Sandalen:
+            case "Schuhe":
+                //eqSchuhe.equip(item);
                 inventory.RemoveItem(item);
+
                 break;
-            case Item.ItemName.Einfache_Hose:
+            /*case Item.ItemName.Einfache_Hose:
                 inventory.RemoveItem(item);
                 break;
             case Item.ItemName.Einfache_Brust:
@@ -112,7 +125,7 @@ public class IsometricPlayerMovementController : MonoBehaviour
             case Item.ItemName.Anhänger:
                 inventory.RemoveItem(item);
                 break;
-      
+               */
         }
 
 

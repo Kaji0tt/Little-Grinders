@@ -63,7 +63,8 @@ public class UI_Inventory : MonoBehaviour
             SlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
             {
                 inventory.UseItem(item);
-                equipment.equip(item);
+                //equipment.equip(item);
+                GameEvents.current.EquipChanged(item);
 
             };
             SlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>

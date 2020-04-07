@@ -34,6 +34,13 @@ public class Equipment : MonoBehaviour
     private GameObject player;
 
 
+
+    private void onEquipAdded()
+    {
+
+    }
+
+
     public void SetEQInventory(Inventory inventory)
     {
         this.inventory = inventory;
@@ -144,6 +151,10 @@ public class Equipment : MonoBehaviour
 
     public void TaskOnClick()
     {
+        //Event Attemp
+        
+
+
 
         // item = eqList.Find( item => item.itemType.Contains("Schuhe"));
         //item = eqList.Find(item => item.itemName.ToString().Contains("Sandalen"));

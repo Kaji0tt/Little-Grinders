@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory
+public class Inventory : MonoBehaviour
 {
     public event EventHandler OnItemListChanged;
     public List<Item> itemList;
     private Action<Item> useItemAction;
+    private GameEvents current;
     //public string itemType;
 
     public Inventory(Action<Item> useItemAction)
@@ -27,9 +28,11 @@ public class Inventory
 
     public void AddItem(Item item)
     {
-        itemList.Add(item);
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
-
+        if (itemList.Count <= 15)  // hier nochmal prüfen, aber irgendwie so die inv größe regeln
+        {
+            itemList.Add(item);
+            OnItemListChanged?.Invoke(this, EventArgs.Empty);
+        }
 
     }
 

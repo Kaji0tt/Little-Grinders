@@ -1731,7 +1731,7 @@ GameObject:
   - component: {fileID: 945392673}
   - component: {fileID: 945392675}
   - component: {fileID: 945392674}
-  - component: {fileID: 945392677}
+  - component: {fileID: 945392676}
   m_Layer: 5
   m_Name: EquippedSchuhe
   m_TagString: Untagged
@@ -1794,7 +1794,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945392672}
   m_CullTransparentMesh: 0
---- !u!114 &945392677
+--- !u!114 &945392676
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1803,7 +1803,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 945392672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4759892be8c5f6645bd25d8a5e657149, type: 3}
+  m_Script: {fileID: 11500000, guid: 0641d718accf8214fae99dbbe4cc1633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1128603009
@@ -3212,7 +3212,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 945392677}
+      - m_Target: {fileID: 945392676}
         m_MethodName: TaskOnClick
         m_Mode: 1
         m_Arguments:
@@ -3547,6 +3547,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939900113}
   - component: {fileID: 1939900114}
+  - component: {fileID: 1939900115}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: Untagged
@@ -3581,6 +3582,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InventoryTab: {fileID: 1233530588}
+--- !u!114 &1939900115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939900112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bc98318064aee74cb08a25a51384b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1958390602
 GameObject:
   m_ObjectHideFlags: 0
