@@ -51,8 +51,8 @@ public class IsometricPlayerMovementController : MonoBehaviour
 
         ItemWorld.SpawnItemWorld
             (
-            new Vector3 (transform.position.x - 5, transform.position.y, transform.position.z + 3), 
-            new Item { itemName = Item.ItemName.Einfacher_Hut, amount = 1 }
+            new Vector3(transform.position.x - 5, transform.position.y, transform.position.z + 3),
+            new Item { itemName = Item.ItemName.Einfacher_Hut, itemType = "Kopf" }
             );
 
 
