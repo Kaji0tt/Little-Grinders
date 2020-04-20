@@ -12,6 +12,11 @@ public class GameEvents : MonoBehaviour
         current = this;
     }
     public event Action<Item> equipSchuhe;
+    public event Action<Item> equipHose;
+    public event Action<Item> equipBrust;
+    public event Action<Item> equipKopf;
+    public event Action<Item> equipWeapon;
+    public event Action<Item> equipSchmuck;
 
     //EQSlots
     EQSlotSchuhe Schuhe;
@@ -22,25 +27,29 @@ public class GameEvents : MonoBehaviour
             {
                 default:
                 case "Schuhe":
-                print("Wo bin ich");
                 equipSchuhe(item);
 
                     break;
 
                 case "Hose":
-                    break;
+                equipHose(item);
+                break;
 
                 case "Brust":
-                    break;
+                equipBrust(item);
+                break;
 
                 case "Kopf":
-                    break;
+                equipKopf(item);
+                break;
 
                 case "Weapon":
-                    break;
+                equipWeapon(item);
+                break;
 
                 case "Schmuck":
-                    break;
+                equipSchmuck(item);
+                break;
             }
         
     }

@@ -65,7 +65,6 @@
     <Compile Include="Assets\CodeMonkey\Assets.cs" />
     <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
     <Compile Include="Assets\DebugLog.cs" />
-    <Compile Include="Assets\EQSlotSchuhe.cs" />
     <Compile Include="Assets\GameEvents.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
@@ -95,6 +94,12 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Bar.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Mesh.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Sprite.cs" />
+    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotBrust.cs" />
+    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotHose.cs" />
+    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotKopf.cs" />
+    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotSchmuck.cs" />
+    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotSchuhe.cs" />
+    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotWeapon.cs" />
     <Compile Include="Assets\Scripts\Inventory\Equipment.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />

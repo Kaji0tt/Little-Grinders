@@ -64,6 +64,7 @@ public class UI_Inventory : MonoBehaviour
             {
                 inventory.UseItem(item);
                 //equipment.equip(item);
+                inventory.RemoveItem(item);
                 GameEvents.current.EquipChanged(item);
 
             };
