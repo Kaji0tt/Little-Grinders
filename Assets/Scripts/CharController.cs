@@ -9,6 +9,7 @@ public class CharController : MonoBehaviour
     float moveSpeed = 0f;
 
     Vector3 forward, right;
+    Animator animator;
 
     void Start()
     {
@@ -16,6 +17,8 @@ public class CharController : MonoBehaviour
         forward.y = 0;
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
+
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -37,5 +40,15 @@ public class CharController : MonoBehaviour
         transform.forward = heading;
         //transform.position += rightMovement;
         //transform.position += upMovement;
+
+        float horizontalInput = Input.GetAxis("HorizontalKey");
+        float verticalInput = Input.GetAxis("VerticalKey");
+        Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
+        inputVector = Vector2.ClampMagnitude(inputVector, 1);
+        print(inputVector);
+
+        if (inputVector.x == 0 && inputVector.y > 0)
+        {
+        }
     }
 }
