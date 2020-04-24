@@ -10,6 +10,8 @@ public class CharController : MonoBehaviour
 
     Vector3 forward, right;
     Animator animator;
+    IsometricCharacterRenderer isoRenderer;
+    Vector2 inputVector;
 
     void Start()
     {
@@ -19,13 +21,21 @@ public class CharController : MonoBehaviour
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
         animator = GetComponent<Animator>();
+        isoRenderer = GetComponent<IsometricCharacterRenderer>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.anyKey)
+        {
+            animator.enabled = true;
             Move();
+        }
+        else
+            animator.enabled = false;
+
     }
 
     void Move()
@@ -45,10 +55,20 @@ public class CharController : MonoBehaviour
         float verticalInput = Input.GetAxis("VerticalKey");
         Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
-        print(inputVector);
 
-        if (inputVector.x == 0 && inputVector.y > 0)
+        if(Input.GetKey(KeyCode.Mouse0))
         {
+            Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
+
+            Vector3 Direction = clickPosition - transform.position;
+
+            inputVector = new Vector2(Direction.x * -1, Direction.z);
+            inputVector = Vector2.ClampMagnitude(inputVector, 1);
         }
+        isoRenderer.SetDirection(inputVector);
+
+
+
+
     }
 }

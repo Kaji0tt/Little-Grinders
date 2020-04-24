@@ -8,7 +8,7 @@ public class EQSlotWeapon : MonoBehaviour
     private Item storedItem = new Item();
     private string itemType;
     private Inventory inventory;
-    private GameObject player;
+    private GameObject player, weaponAnim;
     private string itemName;
 
     private void Start()
@@ -22,6 +22,8 @@ public class EQSlotWeapon : MonoBehaviour
         itemType = item.ItemType(item);
         storedItem = item;
         GetComponent<Image>().sprite = item.GetSprite();
+        weaponAnim = GameObject.Find("WeaponAnimParent");
+        weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite();
 
 
     }
@@ -35,6 +37,8 @@ public class EQSlotWeapon : MonoBehaviour
         inventory = player.GetComponent<IsometricPlayerMovementController>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
+        weaponAnim = GameObject.Find("WeaponAnimParent");
+        weaponAnim.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Blank_Icon");
         this.storedItem = null;
 
 
