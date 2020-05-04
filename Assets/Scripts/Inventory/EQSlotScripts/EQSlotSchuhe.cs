@@ -23,7 +23,7 @@ public class EQSlotSchuhe : MonoBehaviour
 
     //Aufgabe: Action<Item> useItemAction;
 
-    private Item storedItem = new Item();
+    private Item storedItem;
     private string itemType;
     private Inventory inventory;
     private GameObject player;

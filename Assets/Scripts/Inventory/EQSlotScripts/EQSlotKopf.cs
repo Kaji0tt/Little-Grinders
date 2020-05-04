@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EQSlotKopf : MonoBehaviour
 {
-    private Item storedItem = new Item();
+    private Item storedItem;
     private string itemType;
     private Inventory inventory;
     private GameObject player;

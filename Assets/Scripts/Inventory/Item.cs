@@ -52,8 +52,11 @@ public class Item
     public int amount;
     public ItemName itemName;
     public string itemType;
-    //private string Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
-    public Item Clone ()
+    //Stat Integers
+    public int attackPower, abillityPower, attackSpeed, armor;
+    public float movementSpeed, attackSped;
+
+    public Item Clone()
     {
         this.itemName = itemName;
         this.itemType = itemType;
@@ -67,12 +70,12 @@ public class Item
         switch (itemName)
         {
             default:
-            case ItemName.Einfache_Sandalen:    return ItemAssets.Instance.SchuheSprite;
-            case ItemName.Einfache_Hose:        return ItemAssets.Instance.HoseSprite;
-            case ItemName.Einfache_Brust:       return ItemAssets.Instance.BrustSprite;
-            case ItemName.Einfacher_Hut:        return ItemAssets.Instance.KopfSprite;
-            case ItemName.Einfaches_Schwert:    return ItemAssets.Instance.WeaponSprite;
-            case ItemName.Anhänger:             return ItemAssets.Instance.SchmuckSprite;
+            case ItemName.Einfache_Sandalen: return ItemAssets.Instance.SchuheSprite;
+            case ItemName.Einfache_Hose: return ItemAssets.Instance.HoseSprite;
+            case ItemName.Einfache_Brust: return ItemAssets.Instance.BrustSprite;
+            case ItemName.Einfacher_Hut: return ItemAssets.Instance.KopfSprite;
+            case ItemName.Einfaches_Schwert: return ItemAssets.Instance.WeaponSprite;
+            case ItemName.Anhänger: return ItemAssets.Instance.SchmuckSprite;
         }
     }
 
@@ -81,46 +84,99 @@ public class Item
         switch (itemName)
         {
             default:
-                //Schuhe
-            case ItemName.Einfache_Sandalen:            itemType="Schuhe";
+            //Schuhe
+            case ItemName.Einfache_Sandalen: itemType = "Schuhe";
                 break;
 
 
-                //Hosen
-            case ItemName.Einfache_Hose:                itemType="Hose";
-                break;
-
-
-
-                //Brüste
-            case ItemName.Einfache_Brust:               itemType="Brust";
+            //Hosen
+            case ItemName.Einfache_Hose: itemType = "Hose";
                 break;
 
 
 
-                //Köpfe
-            case ItemName.Einfacher_Hut:                itemType="Kopf";
+            //Brüste
+            case ItemName.Einfache_Brust: itemType = "Brust";
                 break;
 
 
 
-                //Waffen
-            case ItemName.Einfaches_Schwert:            itemType="Weapon";
+            //Köpfe
+            case ItemName.Einfacher_Hut: itemType = "Kopf";
                 break;
 
 
-                //Schmuckstücke
-            case ItemName.Anhänger:                     itemType = "Schmuck";
+
+            //Waffen
+            case ItemName.Einfaches_Schwert: itemType = "Weapon";
+                break;
+
+
+            //Schmuckstücke
+            case ItemName.Anhänger: itemType = "Schmuck";
                 break;
 
 
 
         }
-
         return itemType;
+    }
+
+ 
+
+    public string ItemStats(Item item)
+    {
+        switch (itemName)
+        {
+                default:
+                //Schuhe
+                case ItemName.Einfache_Sandalen:
+                    armor = 1;
+                    movementSpeed = 5;
+                    break;
+
+
+                //Hosen
+                case ItemName.Einfache_Hose:
+                    armor = 3;
+                    break;
+
+
+
+                //Brüste
+                case ItemName.Einfache_Brust:
+                    armor = 5;
+                    break;
+
+
+
+                //Köpfe
+                case ItemName.Einfacher_Hut:
+                    armor = 2;
+                    break;
+
+
+
+                //Waffen
+                case ItemName.Einfaches_Schwert:
+                    attackPower = 3;
+                    break;
+
+
+                //Schmuckstücke
+                case ItemName.Anhänger:
+                    abillityPower = 2;
+                    break;
+
+
+
+        }
+
+        string itemStats = "Armor:" + armor + "Movementspeed" + movementSpeed + "Attack Power" + attackPower + "Abillity Power" + abillityPower;
+            return itemStats;
 
 
     }
-
 }
+
 

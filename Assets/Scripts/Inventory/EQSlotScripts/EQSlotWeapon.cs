@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EQSlotWeapon : MonoBehaviour
 {
-    private Item storedItem = new Item();
+    private Item storedItem;
     private string itemType;
     private Inventory inventory;
     private GameObject player, weaponAnim;
@@ -25,6 +25,7 @@ public class EQSlotWeapon : MonoBehaviour
         weaponAnim = GameObject.Find("WeaponAnimParent");
         weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite();
 
+        print(item.ItemStats(item));
 
     }
 
