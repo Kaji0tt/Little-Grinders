@@ -21,6 +21,7 @@ public class UI_Inventory : MonoBehaviour
         Int_Slot = Int_Inventory.Find("Slot");
     }
 
+
     public void SetCharakter (IsometricPlayerMovementController charakter)
     {
         this.charakter = charakter; 

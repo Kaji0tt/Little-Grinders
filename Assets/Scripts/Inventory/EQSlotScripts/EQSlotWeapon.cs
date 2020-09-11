@@ -10,11 +10,13 @@ public class EQSlotWeapon : MonoBehaviour
     private Inventory inventory;
     private GameObject player, weaponAnim;
     private string itemName;
+    private PlayerStats playerStats;
 
     private void Start()
     {
         GameEvents.current.equipWeapon += equip;
     }
+
 
     public void equip(Item item)
     {
@@ -25,16 +27,35 @@ public class EQSlotWeapon : MonoBehaviour
         weaponAnim = GameObject.Find("WeaponAnimParent");
         weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite();
 
-        print(item.ItemStats(item));
+
+        //Berechnen der neuen Playerstats Values
+
+        player = GameObject.Find("Charakter");
+        playerStats = player.GetComponent<PlayerStats>();
+        print(playerStats.hp);
+
+        // Pause - Die Stats werden in einem extra Modifier berechnet, wahrscheinlich.
+        // Es hängt daran, dass ich nicht die einzelnen Variabeln in der Funktion ItemStats abrufen kann.
+        playerStats.hp = playerStats.hp + item.ItemStats(item);
+        playerStats.armor = playerStats.armor + item.ItemStats(item);
+        playerStats.attackPower = playerStats.attackPower + item.ItemStats(item);
+        playerStats.abilityPower = playerStats.abilityPower + item.ItemStats(item);
+        playerStats.attackSpeed = playerStats.attackSpeed + item.ItemStats(item);
+        playerStats.movementSpeed = playerStats.movementSpeed + item.ItemStats(item);
+
+        print("Spieler Rüstung:" + playerStats.armor);
+        print("Spieler Angriff:" + playerStats.attackPower);
+        
+
 
     }
 
+ 
     public void dequip()
 
     {
         print(itemName);
         player = GameObject.Find("Charakter");
-        print("Folgendes Item soll ausgezogen werden:" + storedItem.itemName + " es handelt sich um ein " + storedItem);
         inventory = player.GetComponent<IsometricPlayerMovementController>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");

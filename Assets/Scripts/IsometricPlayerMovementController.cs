@@ -18,14 +18,11 @@ public class IsometricPlayerMovementController : MonoBehaviour
     [SerializeField] private UI_Inventory uiInventory;
     private Equipment equipment;
 
-    // Equipment Slots
-    private EQSlotSchuhe eqSchuhe;
-    //private EQSlotSchuhe eqSchuhe;
-    //private EQSlotSchuhe eqSchuhe;
-    //private EQSlotSchuhe eqSchuhe;
-    //private EQSlotSchuhe eqSchuhe;
-    //private EQSlotSchuhe eqSchuhe;
-    //private EQSlotSchuhe eqSchuhe;
+
+    //PlayerStat UI
+    GameObject uiInventoryTab, uiHealthStat;
+    Text uiHealthText;
+    private PlayerStats hp;
 
     private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
@@ -49,12 +46,21 @@ public class IsometricPlayerMovementController : MonoBehaviour
         uiInventory.SetEquipment(equipment);
 
 
+
+
         ItemWorld.SpawnItemWorld
             (
-            new Vector3(transform.position.x - 5, transform.position.y, transform.position.z + 3),
+            new Vector3(transform.position.x + 5, transform.position.y, transform.position.z + 5),
             new Item { itemName = Item.ItemName.Einfacher_Hut, itemType = "Kopf" }
             );
 
+
+        //PlayerStat UI
+        uiInventoryTab = GameObject.Find("Inventory Tab");
+        uiHealthStat = GameObject.Find("uiHealth");
+        uiHealthText = uiHealthStat.GetComponent<Text>();
+        hp = GetComponent<PlayerStats>();
+        uiHealthText.text = "Health:" + hp.hp;
 
     }
 
@@ -78,6 +84,7 @@ public class IsometricPlayerMovementController : MonoBehaviour
         Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
         isoRenderer.SetDirection(inputVector);
+
     }
     void Move()
     {
@@ -98,34 +105,19 @@ public class IsometricPlayerMovementController : MonoBehaviour
             inventory.AddItem(itemWorld.GetItem());
             itemWorld.DestroySelf();
         }
+
+        
+
     }
-    
+
+
+
     private void UseItem(Item item)
     {
         switch (item.itemType)
         {
             
-            case "Schuhe":
-                //eqSchuhe.equip(item);
-                inventory.RemoveItem(item);
-
-                break;
-            /*case Item.ItemName.Einfache_Hose:
-                inventory.RemoveItem(item);
-                break;
-            case Item.ItemName.Einfache_Brust:
-                inventory.RemoveItem(item);
-                break;
-            case Item.ItemName.Einfacher_Hut:
-                inventory.RemoveItem(item);
-                break;
-            case Item.ItemName.Einfaches_Schwert:
-                inventory.RemoveItem(item);
-                break;
-            case Item.ItemName.Anhänger:
-                inventory.RemoveItem(item);
-                break;
-               */
+           
         }
 
 

@@ -34,14 +34,18 @@ public class MobStats : MonoBehaviour
     [SerializeField]
     private int level;
     [SerializeField]
-    private int hp;
+    public int hp;
     [SerializeField]
-    private int attackPower;
+    public int armor;
     [SerializeField]
-    private int abilityPower;
+    public int attackPower;
     [SerializeField]
-    private float attackSpeed;
-    private int movementSpeed;
+    public int abilityPower;
+    [SerializeField]
+    public float attackSpeed;
+
+    public int movementSpeed;
+
 
     public int Hp 
     {
@@ -50,6 +54,16 @@ public class MobStats : MonoBehaviour
         {
             if (value < 0) hp = 0;
             else hp = value;
+        }
+    }
+
+    public int Armor
+    {
+        get { return armor; }
+        private set
+        {
+            if (value < 0) hp = 0;
+            else armor = value;
         }
     }
 
@@ -107,7 +121,7 @@ public class MobStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("test");
+
     }
 
     // Update is called once per frame

@@ -28,6 +28,7 @@ public class EQSlotSchuhe : MonoBehaviour
     private Inventory inventory;
     private GameObject player;
     private string itemName;
+    private PlayerStats playerStats;
 
     private void Start()
     {
@@ -42,6 +43,24 @@ public class EQSlotSchuhe : MonoBehaviour
         GetComponent<Image>().sprite = item.GetSprite();
 
 
+        //Berechnen der neuen Playerstats Values
+
+        player = GameObject.Find("Charakter");
+        playerStats = player.GetComponent<PlayerStats>();
+        print(playerStats.hp);
+
+        playerStats.hp = playerStats.hp + item.ItemStats(item);
+        playerStats.armor = playerStats.armor + item.ItemStats(item);
+        playerStats.attackPower = playerStats.attackPower + item.ItemStats(item);
+        playerStats.abilityPower = playerStats.abilityPower + item.ItemStats(item);
+        playerStats.attackSpeed = playerStats.attackSpeed + item.ItemStats(item);
+        playerStats.movementSpeed = playerStats.movementSpeed + item.ItemStats(item);
+
+        print("Spieler Rüstung:" + playerStats.armor);
+        print("Spieler Angriff:" + playerStats.attackPower);
+
+
+
     }
 
     public void dequip()
@@ -49,7 +68,7 @@ public class EQSlotSchuhe : MonoBehaviour
     {
         print(itemName);
         player = GameObject.Find("Charakter");
-        print("Folgendes Item soll ausgezogen werden:" + storedItem.itemName + " es handelt sich um ein " + storedItem);
+        print("Folgendes Item soll ausgezogen werden:" + storedItem.itemName + " es handelt sich um " + itemType);
         inventory = player.GetComponent<IsometricPlayerMovementController>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");

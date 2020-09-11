@@ -53,14 +53,16 @@ public class Item
     public ItemName itemName;
     public string itemType;
     //Stat Integers
-    public int attackPower, abillityPower, attackSpeed, armor;
-    public float movementSpeed, attackSped;
+    public int hp, armor, attackPower, abilityPower, movementSpeed;
+    public float attackSpeed;
 
     public Item Clone()
     {
+       /* Vorerst ausgeklammert, da kein erkennbarer nutzen. 
         this.itemName = itemName;
         this.itemType = itemType;
         this.amount = amount;
+        */
 
         return this;
     }
@@ -124,7 +126,7 @@ public class Item
 
  
 
-    public string ItemStats(Item item)
+    public int ItemStats(Item item)
     {
         switch (itemName)
         {
@@ -165,14 +167,15 @@ public class Item
 
                 //Schmuckstücke
                 case ItemName.Anhänger:
-                    abillityPower = 2;
+                    abilityPower = 2;
                     break;
 
 
 
         }
 
-        string itemStats = "Armor:" + armor + "Movementspeed" + movementSpeed + "Attack Power" + attackPower + "Abillity Power" + abillityPower;
+        //Hier geschiet ein grob fahrlässiger fehler, wir addieren und geben nicht die einzelnen Schubladen der Itemstats zurück.
+        int itemStats = armor + movementSpeed + attackPower  + abilityPower;
             return itemStats;
 
 
