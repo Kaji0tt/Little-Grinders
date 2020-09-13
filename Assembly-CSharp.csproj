@@ -69,6 +69,8 @@
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
     <Compile Include="Assets\Scripts\EntityStats\EnemyStats.cs" />
+    <Compile Include="Assets\Scripts\EntityStats\MetaStats\CharStats.cs" />
+    <Compile Include="Assets\Scripts\EntityStats\MetaStats\StatModifier.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MobStats.cs" />
     <Compile Include="Assets\Scripts\EntityStats\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\EnvCamScript.cs" />

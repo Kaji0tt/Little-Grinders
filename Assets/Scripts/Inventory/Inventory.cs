@@ -10,6 +10,8 @@ public class Inventory : MonoBehaviour
     private Action<Item> useItemAction;
     private GameEvents current;
     //public string itemType;
+    //private PlayerStats playerStats;
+
 
     public Inventory(Action<Item> useItemAction)
     {

@@ -4653,8 +4653,8 @@ GameObject:
   - component: {fileID: 1817240038}
   - component: {fileID: 1817240037}
   - component: {fileID: 1817240046}
-  - component: {fileID: 1817240043}
   - component: {fileID: 1817240042}
+  - component: {fileID: 1817240043}
   m_Layer: 0
   m_Name: Charakter
   m_TagString: Untagged
@@ -4805,7 +4805,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1817240036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f6d3ae06fa5fe49969792463a83bd4, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e16bb22f066338408ee3bf30ba1c96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   level: 1
@@ -4813,8 +4813,9 @@ MonoBehaviour:
   armor: 0
   attackPower: 0
   abilityPower: 0
-  attackSpeed: 1
+  attackSpeed: 0
   movementSpeed: 0
+  BaseValue: 0
 --- !u!114 &1817240046
 MonoBehaviour:
   m_ObjectHideFlags: 0

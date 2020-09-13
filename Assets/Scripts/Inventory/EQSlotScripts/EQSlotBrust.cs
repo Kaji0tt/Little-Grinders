@@ -10,7 +10,7 @@ public class EQSlotBrust : MonoBehaviour
     private Inventory inventory;
     private GameObject player;
     private string itemName;
-    private PlayerStats playerStats;
+    private CharStats charStats;
 
     private void Start()
     {
@@ -26,16 +26,18 @@ public class EQSlotBrust : MonoBehaviour
 
         //Berechnen der neuen Playerstats Values
 
+        /*
         player = GameObject.Find("Charakter");
-        playerStats = player.GetComponent<PlayerStats>();
-        print(playerStats.hp);
+        charStats = player.GetComponent<CharStats>();
+        print(charStats.hp);
 
-        playerStats.hp = playerStats.hp + item.ItemStats(item);
-        playerStats.armor = playerStats.armor + item.ItemStats(item);
-        playerStats.attackPower = playerStats.attackPower + item.ItemStats(item);
-        playerStats.abilityPower = playerStats.abilityPower + item.ItemStats(item);
-        playerStats.attackSpeed = playerStats.attackSpeed + item.ItemStats(item);
-        playerStats.movementSpeed = playerStats.movementSpeed + item.ItemStats(item);
+        charStats.hp = charStats.hp + item.ItemStats(item);
+        charStats.armor = charStats.armor + item.ItemStats(item);
+        charStats.attackPower = charStats.attackPower + item.ItemStats(item);
+        charStats.abilityPower = charStats.abilityPower + item.ItemStats(item);
+        charStats.attackSpeed = charStats.attackSpeed + item.ItemStats(item);
+        charStats.movementSpeed = charStats.movementSpeed + item.ItemStats(item);
+        */
     }
 
     public void dequip()

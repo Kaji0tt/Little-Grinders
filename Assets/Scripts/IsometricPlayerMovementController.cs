@@ -22,7 +22,10 @@ public class IsometricPlayerMovementController : MonoBehaviour
     //PlayerStat UI
     GameObject uiInventoryTab, uiHealthStat;
     Text uiHealthText;
-    private PlayerStats hp;
+    private CharStats charStats;
+    //private CharStats charStats;
+
+
 
     private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
@@ -45,7 +48,12 @@ public class IsometricPlayerMovementController : MonoBehaviour
         equipment = new Equipment();
         uiInventory.SetEquipment(equipment);
 
-
+        //PlayerStat UI
+        uiInventoryTab = GameObject.Find("Inventory Tab");
+        uiHealthStat = GameObject.Find("uiHealth");
+        uiHealthText = uiHealthStat.GetComponent<Text>();
+        charStats = GetComponent<CharStats>();
+        uiHealthText.text = "Health:" + charStats.hp;
 
 
         ItemWorld.SpawnItemWorld
@@ -54,13 +62,16 @@ public class IsometricPlayerMovementController : MonoBehaviour
             new Item { itemName = Item.ItemName.Einfacher_Hut, itemType = "Kopf" }
             );
 
-
+        //Damit der Readonly tüddelkram trotzdem im UI abgerufen werden kann, wird der Code entsprechend auf die CharStat Klasse transferiert.
+        /*
         //PlayerStat UI
         uiInventoryTab = GameObject.Find("Inventory Tab");
         uiHealthStat = GameObject.Find("uiHealth");
         uiHealthText = uiHealthStat.GetComponent<Text>();
-        hp = GetComponent<PlayerStats>();
-        uiHealthText.text = "Health:" + hp.hp;
+        charStats = GetComponent<CharStats>();
+        uiHealthText.text = "Health:" + charStats.hp;
+
+        */
 
     }
 
@@ -114,11 +125,8 @@ public class IsometricPlayerMovementController : MonoBehaviour
 
     private void UseItem(Item item)
     {
-        switch (item.itemType)
-        {
-            
-           
-        }
+
+       charStats.AddModifier(item.ItemStats(item));
 
 
 
