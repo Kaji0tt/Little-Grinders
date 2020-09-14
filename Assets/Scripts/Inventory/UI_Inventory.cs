@@ -10,8 +10,8 @@ public class UI_Inventory : MonoBehaviour
     private Transform Int_Slot;
 
     private Inventory inventory;
-    private IsometricPlayerMovementController charakter;
-    private Equipment equipment;
+    private IsometricPlayer charakter;
+    //private Equipment equipment; -- Tote Equipment.cs gefunden.
 
 
     private void Awake()
@@ -22,7 +22,7 @@ public class UI_Inventory : MonoBehaviour
     }
 
 
-    public void SetCharakter (IsometricPlayerMovementController charakter)
+    public void SetCharakter (IsometricPlayer charakter)
     {
         this.charakter = charakter; 
     }
@@ -35,10 +35,11 @@ public class UI_Inventory : MonoBehaviour
         RefreshInventoryItems();
     }
 
-    public void SetEquipment(Equipment equipment)
+    /*public void SetEquipment(Equipment equipment) -- Tote Equipment.cs gefunden.
     {
         this.equipment = equipment;
     }
+    */
 
     private void Inventory_OnItemListChanged(object sender, System.EventArgs e)
     {

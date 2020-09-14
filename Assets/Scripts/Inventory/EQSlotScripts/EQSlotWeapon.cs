@@ -10,11 +10,12 @@ public class EQSlotWeapon : MonoBehaviour
     private Inventory inventory;
     private GameObject player, weaponAnim;
     private string itemName;
-    private CharStats charStats;
+    //private CharStats charStats;
 
     private void Start()
     {
         GameEvents.current.equipWeapon += equip;
+        storedItem = null;
     }
 
 
@@ -34,8 +35,8 @@ public class EQSlotWeapon : MonoBehaviour
         // Pause - Die Stats werden in einem extra Modifier berechnet, wahrscheinlich.
         // Es hängt daran, dass ich nicht die einzelnen Variabeln in der Funktion ItemStats abrufen kann.
         player = GameObject.Find("Charakter");
-        charStats = player.GetComponent<CharStats>();
-        print(charStats.hp);
+        //charStats = player.GetComponent<CharStats>();
+        //print(charStats.Hp);
 
         /*
         player = GameObject.Find("Charakter");
@@ -62,7 +63,7 @@ public class EQSlotWeapon : MonoBehaviour
     {
         print(itemName);
         player = GameObject.Find("Charakter");
-        inventory = player.GetComponent<IsometricPlayerMovementController>().Inventory;
+        inventory = player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
         weaponAnim = GameObject.Find("WeaponAnimParent");

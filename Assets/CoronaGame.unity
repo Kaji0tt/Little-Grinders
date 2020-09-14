@@ -1802,7 +1802,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -2.07
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7943412552912887484, guid: bea66cdc873ce3f4593953837b676b15, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bea66cdc873ce3f4593953837b676b15, type: 3}
 --- !u!1 &836026768
 GameObject:
@@ -1982,7 +1983,6 @@ GameObject:
   - component: {fileID: 918095520}
   - component: {fileID: 918095517}
   - component: {fileID: 918095521}
-  - component: {fileID: 918095519}
   - component: {fileID: 918095522}
   m_Layer: 0
   m_Name: FirstMob
@@ -2105,25 +2105,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: {fileID: 1817240041}
---- !u!114 &918095519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918095513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0dc29db564efaa40a563c40c76364c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  level: 1
-  hp: 50
-  armor: 0
-  attackPower: 2
-  abilityPower: 0
-  attackSpeed: 1
-  movementSpeed: 0
 --- !u!95 &918095520
 Animator:
   serializedVersion: 3
@@ -2768,7 +2749,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.07
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7943412552912887484, guid: bea66cdc873ce3f4593953837b676b15, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bea66cdc873ce3f4593953837b676b15, type: 3}
 --- !u!1 &1200493290
 GameObject:
@@ -4648,13 +4630,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1817240041}
+  - component: {fileID: 1817240038}
   - component: {fileID: 1817240040}
   - component: {fileID: 1817240039}
-  - component: {fileID: 1817240038}
   - component: {fileID: 1817240037}
   - component: {fileID: 1817240046}
   - component: {fileID: 1817240042}
-  - component: {fileID: 1817240043}
   m_Layer: 0
   m_Name: Charakter
   m_TagString: Untagged
@@ -4689,6 +4670,18 @@ MonoBehaviour:
   movementSpeed: 20
   SlowFactor: 0
   uiInventory: {fileID: 1478674764}
+  Hp:
+    BaseValue: 100
+  Armor:
+    BaseValue: 0
+  AttackPower:
+    BaseValue: 0
+  AbilityPower:
+    BaseValue: 0
+  MovementSpeed:
+    BaseValue: 0
+  AttackSpeed:
+    BaseValue: 0
 --- !u!95 &1817240039
 Animator:
   serializedVersion: 3
@@ -4796,26 +4789,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1817240043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817240036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e16bb22f066338408ee3bf30ba1c96c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  level: 1
-  hp: 100
-  armor: 0
-  attackPower: 0
-  abilityPower: 0
-  attackSpeed: 0
-  movementSpeed: 0
-  BaseValue: 0
 --- !u!114 &1817240046
 MonoBehaviour:
   m_ObjectHideFlags: 0

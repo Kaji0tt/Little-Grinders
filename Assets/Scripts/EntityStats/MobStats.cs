@@ -30,24 +30,25 @@ using UnityEngine;
 
 
 public class MobStats : MonoBehaviour
-{
-    [SerializeField]
+{ /*
+    //[SerializeField]
     private int level;
-    [SerializeField]
-    public int hp;
-    [SerializeField]
-    public int armor;
-    [SerializeField]
-    public int attackPower;
-    [SerializeField]
-    public int abilityPower;
-    [SerializeField]
-    public float attackSpeed;
+    //[SerializeField]
+    private float hp;
+    //[SerializeField]
+    private float armor;
+    //[SerializeField]
+    private float attackPower;
+    //[SerializeField]
+    private float abilityPower;
+    //[SerializeField]
+    private float attackSpeed;
 
-    public int movementSpeed;
+    
+    private float movementSpeed;
 
 
-    public int Hp 
+    public float Hp 
     {
         get {return hp; }
         private set
@@ -57,7 +58,7 @@ public class MobStats : MonoBehaviour
         }
     }
 
-    public int Armor
+    public float Armor
     {
         get { return armor; }
         private set
@@ -67,7 +68,7 @@ public class MobStats : MonoBehaviour
         }
     }
 
-    public int AttackPower
+    public float AttackPower
     {
         get { return attackPower; }
         private set
@@ -77,7 +78,7 @@ public class MobStats : MonoBehaviour
         }
     }
 
-    public int AbilityPower
+    public float AbilityPower
     {
         get { return abilityPower; }
         private set
@@ -96,7 +97,7 @@ public class MobStats : MonoBehaviour
             else attackSpeed = value;
         }
     }
-    public int MovementSpeed
+    public float MovementSpeed
     {
         get { return movementSpeed; }
         private set
@@ -129,5 +130,5 @@ public class MobStats : MonoBehaviour
     {
         
     }
-
+    */
 }

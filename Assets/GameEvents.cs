@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameEvents : MonoBehaviour
-{
+{ 
     public static GameEvents current;
 
     private void Awake()
@@ -28,8 +28,7 @@ public class GameEvents : MonoBehaviour
                 default:
                 case "Schuhe":
                 equipSchuhe(item);
-
-                    break;
+                break;
 
                 case "Hose":
                 equipHose(item);
@@ -54,5 +53,5 @@ public class GameEvents : MonoBehaviour
         
     }
 
-
+    
 }

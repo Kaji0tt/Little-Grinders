@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="Assets\CodeMonkey\Assets.cs" />
     <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
-    <Compile Include="Assets\DebugLog.cs" />
     <Compile Include="Assets\GameEvents.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
@@ -110,7 +109,7 @@
     <Compile Include="Assets\Scripts\Inventory\ItemWorld.cs" />
     <Compile Include="Assets\Scripts\Inventory\UI_Inventory.cs" />
     <Compile Include="Assets\Scripts\IsometricCharacterRenderer.cs" />
-    <Compile Include="Assets\Scripts\IsometricPlayerMovementController.cs" />
+    <Compile Include="Assets\Scripts\IsometricPlayer.cs" />
     <Compile Include="Assets\Scripts\MobsCamScript.cs" />
     <Compile Include="Assets\Scripts\NPCMove.cs" />
     <Compile Include="Assets\Scripts\SortingOrder.cs" />

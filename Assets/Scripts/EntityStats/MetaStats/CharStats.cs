@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-public class CharStats : MobStats
+[Serializable]
+public class CharStats //: MobStats
 {
     //BaseValue ist im Prinzip der Value, welcher von MobStats geerbt wurde und in Unity eingestellt wurde.
     //Erklär das mal dem Programm.
@@ -29,11 +30,17 @@ public class CharStats : MobStats
     private readonly List<StatModifier> statModifiers;
     public readonly ReadOnlyCollection<StatModifier> StatModifiers;
 
-    public CharStats(float baseValue)
+    //Das entsprechend umbauen, dass baseValue sich aus MobStats generiert
+    public CharStats()
     {
-        BaseValue = baseValue;
         statModifiers = new List<StatModifier>();
         StatModifiers = statModifiers.AsReadOnly();
+    }
+
+    public CharStats(float baseValue) : this()
+    {
+        BaseValue = baseValue;
+
     }
 
     public void AddModifier(StatModifier mod)
@@ -41,6 +48,7 @@ public class CharStats : MobStats
         isDirty = true;
         statModifiers.Add(mod);
         statModifiers.Sort(CompareModifierOrder);
+        //print(mod);
     }
 
     private int CompareModifierOrder(StatModifier a, StatModifier b)
@@ -114,7 +122,7 @@ public class CharStats : MobStats
     }
     
 
-
+    /*
     private int xp;
 
     public int Xp
@@ -126,25 +134,7 @@ public class CharStats : MobStats
             else xp = value;
         }
     }
+    */
 
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Nach dem Tutorial von Kryzarel, hier die entsprechenden Randomrolls anwenden?
-        // Oder: Hier die entsprechenden Randomrolls von Item als StatModifier kalkulieren. Ich hätte die Modifier lieber in der Itemklasse. 
-        // Allerdings muss hier die Kalkulation losgetreten werden, denke ich.
-
-        //Dem Beispiel folgend:
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
 

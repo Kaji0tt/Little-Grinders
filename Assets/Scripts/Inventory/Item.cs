@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Item
 /*
@@ -50,19 +51,13 @@ public class Item
 
     }
 
-    public StatModifier
-        hp,
-        armor,
-        attackPower,
-        abilityPower,
-        movementSpeed,
-        attackSpeed;
+
         
     public int amount;
     public ItemName itemName;
     public string itemType;
     //Stat Integers
-    public CharStats charStats;
+    //public CharStats charStats;
     //public float attackSpeed;
 
     //Stat Mods
@@ -92,6 +87,7 @@ public class Item
             case ItemName.Anhänger: return ItemAssets.Instance.SchmuckSprite;
         }
     }
+
 
     public string ItemType(Item item)
     {
@@ -136,66 +132,80 @@ public class Item
         return itemType;
     }
 
- 
-    //Hier würden dann die Stat Modifier auftauchen, ggf. ItemStats überarbeiten.
-    public StatModifier ItemStats(Item item)
+
+    public StatModifier[] itemValues;
+    /*Hp,
+    Armor,
+    AttackPower,
+    AbilityPower,
+    MovementSpeed,
+    AttackSpeed;*/
+    
+    
+
+
+    private CharStats charStats;
+
+    public StatModifier[] ItemStats(Item item)
     {
-        
+
+        StatModifier[] itemValues = new StatModifier[5];
         switch (itemName)
         {
                 default:
                 //Schuhe
                 // To Do: Stack overflow Error beseitigen, MobStats in die BaseValue integrieren
                 case ItemName.Einfache_Sandalen:
-                armor = new StatModifier(5, StatModType.Flat, this);
-                hp = new StatModifier(10, StatModType.Flat, this);
-                movementSpeed = (new StatModifier(0.1f, StatModType.PercentMult, this));
-                //charStats.armor.AddModifier(new StatModifier(10, StatModType.Flat, this));
-
-
+                itemValues[0] = new StatModifier(10, StatModType.Flat, this);
+                itemValues[1] = new StatModifier(5, StatModType.Flat, this);
 
                 break;
 
 
                 //Hosen
                 case ItemName.Einfache_Hose:
-                    armor = new StatModifier(3, StatModType.Flat, this);
+                    //armor = new StatModifier(3, StatModType.Flat, this);
                 break;
 
 
 
                 //Brüste
                 case ItemName.Einfache_Brust:
-                armor = new StatModifier(5, StatModType.Flat, this);
+                //armor = new StatModifier(5, StatModType.Flat, this);
                 break;
 
 
 
                 //Köpfe
                 case ItemName.Einfacher_Hut:
-                armor = new StatModifier(2, StatModType.Flat, this);
+                //armor = new StatModifier(2, StatModType.Flat, this);
                 break;
 
 
 
                 //Waffen
                 case ItemName.Einfaches_Schwert:
-                    attackPower = new StatModifier(3, StatModType.Flat, this);
+                itemValues[1] = new StatModifier(10, StatModType.Flat, this);
                 break;
 
 
                 //Schmuckstücke
                 case ItemName.Anhänger:
-                    abilityPower = new StatModifier(2, StatModType.Flat, this);
+                    //abilityPower = new StatModifier(2, StatModType.Flat, this);
                 break;
 
 
 
         }
 
+
+
         //Hier geschiet ein grob fahrlässiger fehler, wir addieren und geben nicht die einzelnen Schubladen der Itemstats zurück.
         //int itemStats = armor + movementSpeed + attackPower  + abilityPower;
-        return ItemStats(item);
+        //Debug.Log(i_hp);
+        //float itemStats = Hp;
+        //Debug.Log(itemValues[1]);
+        return itemValues;
 
 
     }

@@ -34,6 +34,7 @@ public class Inventory : MonoBehaviour
         {
             itemList.Add(item);
             OnItemListChanged?.Invoke(this, EventArgs.Empty);
+
         }
 
     }
@@ -53,6 +54,7 @@ public class Inventory : MonoBehaviour
     public List<Item> GetItemList()
     {
         return itemList;
+
 
     }
 }

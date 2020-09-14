@@ -10,7 +10,7 @@ public class EQSlotBrust : MonoBehaviour
     private Inventory inventory;
     private GameObject player;
     private string itemName;
-    private CharStats charStats;
+    //private readonly CharStats charStats;
 
     private void Start()
     {
@@ -46,7 +46,7 @@ public class EQSlotBrust : MonoBehaviour
         print(itemName);
         player = GameObject.Find("Charakter");
         print("Folgendes Item soll ausgezogen werden:" + storedItem.itemName + " es handelt sich um ein " + storedItem);
-        inventory = player.GetComponent<IsometricPlayerMovementController>().Inventory;
+        inventory = player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
         this.storedItem = null;
