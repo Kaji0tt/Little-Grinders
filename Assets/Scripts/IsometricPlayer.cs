@@ -20,7 +20,7 @@ public class IsometricPlayer : MonoBehaviour
 
     //PlayerStat UI
     GameObject uiInventoryTab, uiHealthStat;
-    Text uiHealthText;
+    private Text uiHealthText, ui_invHealthText, ui_invArmorText;
     //private CharStats charStats;
     //private CharStats charStats;
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
@@ -53,6 +53,10 @@ public class IsometricPlayer : MonoBehaviour
         uiHealthStat = GameObject.Find("uiHealth");
         uiHealthText = uiHealthStat.GetComponent<Text>();
         //charStats = GetComponent<CharStats>();
+
+        //PlayerStat Inventory
+        ui_invHealthText = GameObject.Find("ui_invHp").GetComponent<Text>();
+        ui_invArmorText = GameObject.Find("ui_invArmor").GetComponent<Text>();
 
 
 
@@ -87,6 +91,8 @@ public class IsometricPlayer : MonoBehaviour
         isoRenderer.SetDirection(inputVector);
 
         uiHealthText.text = "Health:" + Hp.Value;
+        ui_invHealthText.text = "Health:" + Hp.Value;
+        ui_invArmorText.text = "Armor:" + Armor.Value;
 
     }
     void Move()
@@ -130,15 +136,17 @@ public class IsometricPlayer : MonoBehaviour
         Armor.AddModifier(item.ItemStats(item)[1]);
         //AttackPower.AddModifier(item.ItemStats(item)[2]);
         //AbilityPower.AddModifier(item.ItemStats(item)[3]);
-        //Armor.AddModifier(item.ItemStats(item)[1]);
+        //MovementSpeed.AddModifier(item.ItemStats(item)[4]);
+        //AttackSpeed.AddModifier(item.ItemStats(item)[5]);
 
 
         //print(item.ItemStats(item)[1]);
     }
 
+    //public EQSlotSchuhe eQSlotSchuhe; 
     public void Dequip (Item item)
     {
-        Hp.RemoveAllModifiersFromSource(this);
+        //Hp.RemoveAllModifiersFromSource(item.ItemStats(item)[0]);
     }
     public Inventory Inventory
     {

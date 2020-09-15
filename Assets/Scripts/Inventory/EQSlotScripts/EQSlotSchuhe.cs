@@ -11,35 +11,39 @@ public class EQSlotSchuhe : MonoBehaviour
     // ___.equip
     // 🗸 Equipment.equip setzt Sprite für die entsprechenden Ausrüstungsslots richtig
     // 🗸 Equipment.equip entfernt InventoryItem (inventory.removeItem) -> gereglt über PlayerController.
-    // Equipment.equip setzt PlayerStat Values entsprechend der ausgerüsteten Items
+    // 🗸 Equipment.equip setzt PlayerStat Values entsprechend der ausgerüsteten Items
     // 🗸 Equipment.equip speichert die Items im Ausrüstungsslots -> geregelt über eqList
     // Equipment.equip -> ggf. Deequip
 
     // 
     // ___.deequip
-    // Equipment.deequip nimmt Item.Item aus Ausrüstungsslot raus
-    // Equipment.deeuip packt das entsprechende Item zurück ins Inventory
+    // 🗸Equipment.deequip nimmt Item.Item aus Ausrüstungsslot raus
+    // 🗸Equipment.deeuip packt das entsprechende Item zurück ins Inventory
+    //      Equipment.deeuip setzt PlayerStat Values zurück
 
 
     //Aufgabe: Action<Item> useItemAction;
 
-    private Item storedItem;
-    private string itemType;
+    public Item storedItem;
+    //private string itemType;
     private Inventory inventory;
     private GameObject player;
     private string itemName;
-    private IsometricPlayer playerStats;
+    private IsometricPlayer isometricPlayer;
+    private CharStats Hp, Armor;
 
     private void Start()
     {
         GameEvents.current.equipSchuhe += equip;
     }
 
+
     public void equip(Item item)
     {
         itemName = item.itemName.ToString();
-        itemType = item.ItemType(item);
+        //itemType = item.ItemType(item);
         storedItem = item;
+        //print(storedItem.itemName);
         GetComponent<Image>().sprite = item.GetSprite();
 
 
@@ -69,15 +73,23 @@ public class EQSlotSchuhe : MonoBehaviour
     public void Dequip()
 
     {
-        print(itemName);
+        //print(storedItem.itemName);
         player = GameObject.Find("Charakter");
-        print("Folgendes Item soll ausgezogen werden:" + storedItem.itemName + " es handelt sich um " + itemType);
+        print("Folgendes Item soll ausgezogen werden:" + storedItem.itemName + " es handelt sich um " + storedItem.itemType);
         inventory = player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
 
-        playerStats = GetComponent<IsometricPlayer>();
-        playerStats.Dequip(storedItem);
+
+
+        //print(storedItem.ItemStats(storedItem)[0]);
+        Hp = player.GetComponent<IsometricPlayer>().Hp;
+        Armor = player.GetComponent<IsometricPlayer>().Armor;
+        //isometricPlayer.Dequip(storedItem);
+        Hp.RemoveAllModifiersFromSource(storedItem);
+        Armor.RemoveAllModifiersFromSource(storedItem);
+
+
 
 
         this.storedItem = null;
