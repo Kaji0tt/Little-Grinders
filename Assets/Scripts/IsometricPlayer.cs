@@ -134,10 +134,11 @@ public class IsometricPlayer : MonoBehaviour
 
 
         //print(item.ItemStats(item)[1]);
+    }
 
-
-
-
+    public void Dequip (Item item)
+    {
+        Hp.RemoveAllModifiersFromSource(this);
     }
     public Inventory Inventory
     {

@@ -28,7 +28,7 @@ public class EQSlotSchuhe : MonoBehaviour
     private Inventory inventory;
     private GameObject player;
     private string itemName;
-    //private CharStats charStats;
+    private IsometricPlayer playerStats;
 
     private void Start()
     {
@@ -66,7 +66,7 @@ public class EQSlotSchuhe : MonoBehaviour
 
     }
 
-    public void dequip()
+    public void Dequip()
 
     {
         print(itemName);
@@ -75,7 +75,18 @@ public class EQSlotSchuhe : MonoBehaviour
         inventory = player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
+
+        playerStats = GetComponent<IsometricPlayer>();
+        playerStats.Dequip(storedItem);
+
+
         this.storedItem = null;
+        //charStats = GetComponent<CharStats>();
+
+
+
+        
+        
 
 
     }
@@ -84,7 +95,7 @@ public class EQSlotSchuhe : MonoBehaviour
     public void TaskOnClick()
     {
 
-        dequip();
+        Dequip();
 
     }
 
