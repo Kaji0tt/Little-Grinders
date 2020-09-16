@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class IsometricPlayer : MonoBehaviour
 {
@@ -17,12 +18,13 @@ public class IsometricPlayer : MonoBehaviour
     private Inventory inventory;
     [SerializeField] private UI_Inventory uiInventory;
 
+    // Item which spawns upon load:
+    public Item test_item, test_item2, test_item3;
+
 
     //PlayerStat UI
     GameObject uiInventoryTab, uiHealthStat;
-    private Text uiHealthText, ui_invHealthText, ui_invArmorText;
-    //private CharStats charStats;
-    //private CharStats charStats;
+    private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText;
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
 
 
@@ -35,6 +37,7 @@ public class IsometricPlayer : MonoBehaviour
         rbody = GetComponent<Rigidbody>();
         isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
 
+        //Isometric Camera
         forward = Camera.main.transform.forward;
         forward.y = 0;
         forward = Vector3.Normalize(forward);
@@ -45,26 +48,29 @@ public class IsometricPlayer : MonoBehaviour
         inventory = new Inventory(UseItem);
         uiInventory.SetInventory(inventory);
         uiInventory.SetCharakter(this);
-        //equipment = new Equipment();-- Tote Equipment.cs gefunden.
-        //uiInventory.SetEquipment(equipment);-- Tote Equipment.cs gefunden.
 
         //PlayerStat UI
         uiInventoryTab = GameObject.Find("Inventory Tab");
         uiHealthStat = GameObject.Find("uiHealth");
         uiHealthText = uiHealthStat.GetComponent<Text>();
-        //charStats = GetComponent<CharStats>();
 
         //PlayerStat Inventory
         ui_invHealthText = GameObject.Find("ui_invHp").GetComponent<Text>();
         ui_invArmorText = GameObject.Find("ui_invArmor").GetComponent<Text>();
+        ui_invAttackPowerText = GameObject.Find("ui_invAttP").GetComponent<Text>();
+        ui_invAbilityPowerText = GameObject.Find("ui_invAbiP").GetComponent<Text>();
+        ui_invAttackSpeedText = GameObject.Find("ui_invAttS").GetComponent<Text>();
+        ui_invMovementSpeedText = GameObject.Find("ui_invMS").GetComponent<Text>();
 
 
-
+        //Spawning Random Items for Test purposes
         ItemWorld.SpawnItemWorld
-            (
-            new Vector3(transform.position.x + 5, transform.position.y, transform.position.z + 5),
-            new Item { itemName = Item.ItemName.Einfacher_Hut, itemType = "Kopf" }
-            );
+            (new Vector3(transform.position.x + 5, transform.position.y, transform.position.z + 5),test_item);
+        ItemWorld.SpawnItemWorld
+            (new Vector3(transform.position.x + 3, transform.position.y, transform.position.z + 3),test_item2);
+        ItemWorld.SpawnItemWorld
+            (new Vector3(transform.position.x + 6, transform.position.y, transform.position.z + 1),test_item3);
+
 
 
     }
@@ -90,9 +96,15 @@ public class IsometricPlayer : MonoBehaviour
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
         isoRenderer.SetDirection(inputVector);
 
-        uiHealthText.text = "Health:" + Hp.Value;
-        ui_invHealthText.text = "Health:" + Hp.Value;
-        ui_invArmorText.text = "Armor:" + Armor.Value;
+
+        //Define Inventory Tab Values
+        uiHealthText.text = "Health: " + Hp.Value;
+        ui_invHealthText.text = "Health: " + Hp.Value;
+        ui_invArmorText.text = "Armor: " + Armor.Value;
+        ui_invAttackPowerText.text = "Attack: " + AttackPower.Value;
+        ui_invAbilityPowerText.text = "Ability: " + AbilityPower.Value;
+        ui_invAttackSpeedText.text = "Speed: " + AttackSpeed.Value;
+        ui_invMovementSpeedText.text = "Movement: " + MovementSpeed.Value;
 
     }
     void Move()
@@ -108,45 +120,30 @@ public class IsometricPlayer : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
+        
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
         if (itemWorld != null && Input.GetKey(KeyCode.Q))
         {
             inventory.AddItem(itemWorld.GetItem());
             itemWorld.DestroySelf();
         }
+        
 
         
 
     }
 
-    //public StatModifier
-    //Hp,
-    //Armor,
-    //AttackPower,
-    //AbilityPower,
-   //movementSpeed,
-    //AttackSpeed;
 
     private void UseItem(Item item)
     {
+        item.Equip(this);
 
-        //Er ist gut!
-        //Hp.AddModifier(new StatModifier(item.ItemStats(item), StatModType.Flat, this));
-        Hp.AddModifier(item.ItemStats(item)[0]);
-        Armor.AddModifier(item.ItemStats(item)[1]);
-        //AttackPower.AddModifier(item.ItemStats(item)[2]);
-        //AbilityPower.AddModifier(item.ItemStats(item)[3]);
-        //MovementSpeed.AddModifier(item.ItemStats(item)[4]);
-        //AttackSpeed.AddModifier(item.ItemStats(item)[5]);
-
-
-        //print(item.ItemStats(item)[1]);
     }
 
-    //public EQSlotSchuhe eQSlotSchuhe; 
+
     public void Dequip (Item item)
     {
-        //Hp.RemoveAllModifiersFromSource(item.ItemStats(item)[0]);
+        item.Unequip(this, item);
     }
     public Inventory Inventory
     {

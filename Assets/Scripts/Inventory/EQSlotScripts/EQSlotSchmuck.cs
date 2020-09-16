@@ -5,12 +5,11 @@ using UnityEngine.UI;
 
 public class EQSlotSchmuck : MonoBehaviour
 {
-    private Item storedItem;
-    private string itemType;
+
+    public Item storedItem;
     private Inventory inventory;
     private GameObject player;
-    private string itemName;
-    private CharStats charStats;
+    public IsometricPlayer isometricPlayer;
 
     private void Start()
     {
@@ -19,49 +18,26 @@ public class EQSlotSchmuck : MonoBehaviour
 
     public void equip(Item item)
     {
-        itemName = item.itemName.ToString();
-        itemType = item.ItemType(item);
         storedItem = item;
-        GetComponent<Image>().sprite = item.GetSprite();
-
-        //Berechnen der neuen Playerstats Values
+        GetComponent<Image>().sprite = item.GetSprite;
         player = GameObject.Find("Charakter");
-        charStats = player.GetComponent<CharStats>();
-        //print(charStats.Hp);
-
-        /*
-        player = GameObject.Find("Charakter");
-        charStats = player.GetComponent<CharStats>();
-        print(charStats.hp);
-
-        charStats.hp = charStats.hp + item.ItemStats(item);
-        charStats.armor = charStats.armor + item.ItemStats(item);
-        charStats.attackPower = charStats.attackPower + item.ItemStats(item);
-        charStats.abilityPower = charStats.abilityPower + item.ItemStats(item);
-        charStats.attackSpeed = charStats.attackSpeed + item.ItemStats(item);
-        charStats.movementSpeed = charStats.movementSpeed + item.ItemStats(item);
-        */
     }
 
-    public void dequip()
-
+    public void Dequip()
     {
-        print(itemName);
         player = GameObject.Find("Charakter");
-        print("Folgendes Item soll ausgezogen werden:" + storedItem.itemName + " es handelt sich um ein " + storedItem);
+
         inventory = player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
+        isometricPlayer.Dequip(storedItem);
         this.storedItem = null;
-
-
     }
 
 
     public void TaskOnClick()
     {
-
-        dequip();
-
+        Dequip();
     }
+
 }

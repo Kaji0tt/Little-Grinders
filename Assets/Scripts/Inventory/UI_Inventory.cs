@@ -6,6 +6,7 @@ using CodeMonkey.Utils;
 
 public class UI_Inventory : MonoBehaviour
 {
+    
     private Transform Int_Inventory;
     private Transform Int_Slot;
 
@@ -35,11 +36,7 @@ public class UI_Inventory : MonoBehaviour
         RefreshInventoryItems();
     }
 
-    /*public void SetEquipment(Equipment equipment) -- Tote Equipment.cs gefunden.
-    {
-        this.equipment = equipment;
-    }
-    */
+
 
     private void Inventory_OnItemListChanged(object sender, System.EventArgs e)
     {
@@ -79,7 +76,7 @@ public class UI_Inventory : MonoBehaviour
             SlotRectTransform.anchoredPosition = new Vector2(x * SlotCellSize, y * SlotCellSize);
 
             Image image = SlotRectTransform.Find("image").GetComponent<Image>();
-            image.sprite = item.GetSprite();
+            image.sprite = item.GetSprite;
             x++;
             if (x > 5)
             {
@@ -91,6 +88,6 @@ public class UI_Inventory : MonoBehaviour
     }
 
 
-
+    
 
 }

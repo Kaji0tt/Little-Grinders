@@ -13,10 +13,10 @@ public class ItemAssets : MonoBehaviour
 
     public Transform pfItemWorld;
 
-    public Sprite SchuheSprite;
-    public Sprite HoseSprite;
-    public Sprite BrustSprite;
-    public Sprite KopfSprite;
-    public Sprite WeaponSprite;
-    public Sprite SchmuckSprite;
+    public Item Einfache_Schuhe;
+    public Item Einfaches_Schwert;
+    public Item BrustSprite;
+    public Item Einfacher_Kopf;
+    public Item WeaponSprite;
+    public Item SchmuckSprite;
 }

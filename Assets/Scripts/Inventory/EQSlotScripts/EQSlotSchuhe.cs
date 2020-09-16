@@ -22,15 +22,13 @@ public class EQSlotSchuhe : MonoBehaviour
     //      Equipment.deeuip setzt PlayerStat Values zurück
 
 
-    //Aufgabe: Action<Item> useItemAction;
+    //Aufgabe: Wenn wir ein Item ausrüsten wollen, welches bereits besetzt ist, wird das alte Item verschwinden.
+    //Dazu folgender Link: https://youtu.be/d9oLS5hy0zU?t=531
 
     public Item storedItem;
-    //private string itemType;
     private Inventory inventory;
     private GameObject player;
-    private string itemName;
-    private IsometricPlayer isometricPlayer;
-    private CharStats Hp, Armor;
+    public IsometricPlayer isometricPlayer;
 
     private void Start()
     {
@@ -40,77 +38,26 @@ public class EQSlotSchuhe : MonoBehaviour
 
     public void equip(Item item)
     {
-        itemName = item.itemName.ToString();
-        //itemType = item.ItemType(item);
         storedItem = item;
-        //print(storedItem.itemName);
-        GetComponent<Image>().sprite = item.GetSprite();
-
-
-        //Berechnen der neuen Playerstats Values
-
+        GetComponent<Image>().sprite = item.GetSprite;
         player = GameObject.Find("Charakter");
-        //charStats = player.GetComponent<CharStats>();
-
-        /*
-        player = GameObject.Find("Charakter");
-        charStats = player.GetComponent<CharStats>();
-        print(charStats.hp);
-
-        charStats.hp = charStats.hp + item.ItemStats(item);
-        charStats.armor = charStats.armor + item.ItemStats(item);
-        charStats.attackPower = charStats.attackPower + item.ItemStats(item);
-        charStats.abilityPower = charStats.abilityPower + item.ItemStats(item);
-        charStats.attackSpeed = charStats.attackSpeed + item.ItemStats(item);
-        charStats.movementSpeed = charStats.movementSpeed + item.ItemStats(item);
-        */
-
-
-
-
     }
 
     public void Dequip()
-
     {
-        //print(storedItem.itemName);
         player = GameObject.Find("Charakter");
-        print("Folgendes Item soll ausgezogen werden:" + storedItem.itemName + " es handelt sich um " + storedItem.itemType);
+        
         inventory = player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-
-
-
-        //print(storedItem.ItemStats(storedItem)[0]);
-        Hp = player.GetComponent<IsometricPlayer>().Hp;
-        Armor = player.GetComponent<IsometricPlayer>().Armor;
-        //isometricPlayer.Dequip(storedItem);
-        Hp.RemoveAllModifiersFromSource(storedItem);
-        Armor.RemoveAllModifiersFromSource(storedItem);
-
-
-
-
+        isometricPlayer.Dequip(storedItem);
         this.storedItem = null;
-        //charStats = GetComponent<CharStats>();
-
-
-
-        
-        
-
-
     }
 
 
     public void TaskOnClick()
     {
-
         Dequip();
-
-    }
-
-
+    } 
 
 }

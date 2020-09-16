@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+ 
     public event EventHandler OnItemListChanged;
     public List<Item> itemList;
     private Action<Item> useItemAction;
     private GameEvents current;
-    //public string itemType;
-    //private PlayerStats playerStats;
+
 
 
     public Inventory(Action<Item> useItemAction)
@@ -18,14 +18,6 @@ public class Inventory : MonoBehaviour
         this.useItemAction = useItemAction;
 
         itemList = new List<Item>();
-
-
-        AddItem(new Item { itemName = Item.ItemName.Einfache_Sandalen, itemType = "Schuhe" });
-
-
-        AddItem(new Item { itemName = Item.ItemName.Einfaches_Schwert, itemType = "Weapon" });
-
-
     }
 
     public void AddItem(Item item)
@@ -57,4 +49,5 @@ public class Inventory : MonoBehaviour
 
 
     }
+    
 }

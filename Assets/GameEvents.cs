@@ -18,12 +18,11 @@ public class GameEvents : MonoBehaviour
     public event Action<Item> equipWeapon;
     public event Action<Item> equipSchmuck;
 
-    //EQSlots
-    EQSlotSchuhe Schuhe;
+    private IsometricPlayer isometricPlayer;
 
     public void EquipChanged(Item item)
     {
-            switch (item.itemType)
+            switch (item.ItemType)
             {
                 default:
                 case "Schuhe":
@@ -50,6 +49,7 @@ public class GameEvents : MonoBehaviour
                 equipSchmuck(item);
                 break;
             }
+        
         
     }
 

@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\CodeMonkey\Assets.cs" />
     <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
+    <Compile Include="Assets\GameAssets.cs" />
     <Compile Include="Assets\GameEvents.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemAssets.cs" />
+    <Compile Include="Assets\Scripts\Inventory\ItemDatabase.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemWorld.cs" />
     <Compile Include="Assets\Scripts\Inventory\UI_Inventory.cs" />
     <Compile Include="Assets\Scripts\IsometricCharacterRenderer.cs" />

@@ -5,6 +5,7 @@ using CodeMonkey.Utils;
 
 public class ItemWorld : MonoBehaviour
 {
+    
     public static ItemWorld SpawnItemWorld(Vector3 position, Item item)
     {
         Transform transform = Instantiate(ItemAssets.Instance.pfItemWorld, position, Quaternion.identity);
@@ -33,7 +34,7 @@ public class ItemWorld : MonoBehaviour
     public void SetItem(Item item)
     {
         this.item = item;
-        spriteRenderer.sprite = item.GetSprite();
+        spriteRenderer.sprite = item.GetSprite;
 
     }
     public Item GetItem ()
@@ -44,4 +45,5 @@ public class ItemWorld : MonoBehaviour
     {
         Destroy(gameObject);
     }
+   
 }
