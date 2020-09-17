@@ -18,9 +18,19 @@ public class EQSlotHose : MonoBehaviour
 
     public void equip(Item item)
     {
-        storedItem = item;
-        GetComponent<Image>().sprite = item.GetSprite;
-        player = GameObject.Find("Charakter");
+        if (storedItem == null)
+        {
+            storedItem = item;
+            GetComponent<Image>().sprite = item.GetSprite;
+            player = GameObject.Find("Charakter");
+        }
+        else
+        {
+            Dequip();
+            storedItem = item;
+            GetComponent<Image>().sprite = item.GetSprite;
+            player = GameObject.Find("Charakter");
+        }
     }
 
     public void Dequip()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using System;
 
 public class IsometricPlayer : MonoBehaviour
 {
@@ -22,13 +23,14 @@ public class IsometricPlayer : MonoBehaviour
     public Item test_item, test_item2, test_item3;
 
 
-    //PlayerStat UI
+    //PlayerStats & UI
     GameObject uiInventoryTab, uiHealthStat;
     private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText;
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
-
-
-
+    //private NPCMove npcMove;
+    public int Range;
+    private float attackCD = 0f;
+    Transform enemy;
     private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
 
@@ -49,7 +51,9 @@ public class IsometricPlayer : MonoBehaviour
         uiInventory.SetInventory(inventory);
         uiInventory.SetCharakter(this);
 
-        //PlayerStat UI
+        //PlayerStats & UI
+        //npcMove = GetComponent<NPCMove>();
+        enemy = EnemyManager.instance.enemy.transform;
         uiInventoryTab = GameObject.Find("Inventory Tab");
         uiHealthStat = GameObject.Find("uiHealth");
         uiHealthText = uiHealthStat.GetComponent<Text>();
@@ -98,14 +102,40 @@ public class IsometricPlayer : MonoBehaviour
 
 
         //Define Inventory Tab Values
-        uiHealthText.text = "Health: " + Hp.Value;
-        ui_invHealthText.text = "Health: " + Hp.Value;
+        uiHealthText.text = "Health: " + (int)Hp.Value;
+        ui_invHealthText.text = "Health: " + (int)Hp.Value;
         ui_invArmorText.text = "Armor: " + Armor.Value;
         ui_invAttackPowerText.text = "Attack: " + AttackPower.Value;
         ui_invAbilityPowerText.text = "Ability: " + AbilityPower.Value;
         ui_invAttackSpeedText.text = "Speed: " + AttackSpeed.Value;
         ui_invMovementSpeedText.text = "Movement: " + MovementSpeed.Value;
 
+    }
+
+    private void Update()
+    {
+        //Folgender Singleton wird erforderlich sein, sobald ich enemy Spawns hinzufüge:
+        // Ein entsprechender Verweis wird spätestens wenn Enemys Spawnen sollen wichtig sein. (EnemyManager.instance.enemy.transform
+                //enemy = EnemyManager.instance.enemy.transform;
+         
+        //TestZeieln
+        
+        attackCD -= Time.deltaTime;
+        NPCMove npcMove = enemy.GetComponent<NPCMove>();
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+
+            if (attackCD <= 0)
+            {
+
+                npcMove.TakeDamage(AttackPower.Value, Range);
+                attackCD = 1f / AttackSpeed.Value;
+            }
+
+            //TakeDamage(20);
+            // Hier abfragen, ob der Gegner in Reichweite der Waffe !->Und in der richtigen Richtung<-! steht.
+        }
+        
     }
     void Move()
     {
@@ -139,8 +169,6 @@ public class IsometricPlayer : MonoBehaviour
         item.Equip(this);
 
     }
-
-
     public void Dequip (Item item)
     {
         item.Unequip(this, item);
@@ -150,6 +178,20 @@ public class IsometricPlayer : MonoBehaviour
         get { return inventory; }
     }
 
+    
+    public void TakeDamage(float damage)
+    {
+        damage -=Armor.Value;
+        damage = Mathf.Clamp(damage, 0, int.MaxValue);
+        Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+        if (Hp.Value <= 0)
+            Die();
 
+    }
+
+    public virtual void Die ()
+    {
+        Debug.Log(transform.name + "ist gestorben.");
+    }
 
 }

@@ -13,17 +13,14 @@ public class EQSlotSchuhe : MonoBehaviour
     // 🗸 Equipment.equip entfernt InventoryItem (inventory.removeItem) -> gereglt über PlayerController.
     // 🗸 Equipment.equip setzt PlayerStat Values entsprechend der ausgerüsteten Items
     // 🗸 Equipment.equip speichert die Items im Ausrüstungsslots -> geregelt über eqList
-    // Equipment.equip -> ggf. Deequip
+    // 🗸 Equipment.equip -> ggf. Deequip
 
     // 
     // ___.deequip
     // 🗸Equipment.deequip nimmt Item.Item aus Ausrüstungsslot raus
     // 🗸Equipment.deeuip packt das entsprechende Item zurück ins Inventory
-    //      Equipment.deeuip setzt PlayerStat Values zurück
+    // 🗸Equipment.deeuip setzt PlayerStat Values zurück
 
-
-    //Aufgabe: Wenn wir ein Item ausrüsten wollen, welches bereits besetzt ist, wird das alte Item verschwinden.
-    //Dazu folgender Link: https://youtu.be/d9oLS5hy0zU?t=531
 
     public Item storedItem;
     private Inventory inventory;
@@ -38,9 +35,19 @@ public class EQSlotSchuhe : MonoBehaviour
 
     public void equip(Item item)
     {
-        storedItem = item;
-        GetComponent<Image>().sprite = item.GetSprite;
-        player = GameObject.Find("Charakter");
+        if (storedItem == null)
+        {
+            storedItem = item;
+            GetComponent<Image>().sprite = item.GetSprite;
+            player = GameObject.Find("Charakter");
+        }
+        else
+        {
+            Dequip();
+            storedItem = item;
+            GetComponent<Image>().sprite = item.GetSprite;
+            player = GameObject.Find("Charakter");
+        }
     }
 
     public void Dequip()

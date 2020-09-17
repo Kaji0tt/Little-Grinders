@@ -7,12 +7,13 @@ public class IsometricCharacterRenderer : MonoBehaviour
 {
 
     public static readonly string[] staticDirections = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
-    public static readonly string[] runDirections = { "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE"};
+    public static readonly string[] runDirections = { "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
     public static readonly string[] runNPCDirections = { "Run NE", "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E" };
 
     public static readonly string[] weaponSwing = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
     Animator animator;
     int lastDirection;
+
 
     private void Awake()
     {
@@ -130,5 +131,6 @@ public class IsometricCharacterRenderer : MonoBehaviour
         //we're done!
         return hashArray;
     }
+
 
 }

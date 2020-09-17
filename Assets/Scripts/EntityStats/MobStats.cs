@@ -30,27 +30,27 @@ using UnityEngine;
 
 
 public class MobStats : MonoBehaviour
-{ /*
-    //[SerializeField]
+{
+    [SerializeField]
     private int level;
-    //[SerializeField]
+    [SerializeField]
     private float hp;
-    //[SerializeField]
+    [SerializeField]
     private float armor;
-    //[SerializeField]
+    [SerializeField]
     private float attackPower;
-    //[SerializeField]
+    [SerializeField]
     private float abilityPower;
-    //[SerializeField]
+    [SerializeField]
     private float attackSpeed;
 
-    
+
     private float movementSpeed;
 
 
-    public float Hp 
+    public float Hp
     {
-        get {return hp; }
+        get { return hp; }
         private set
         {
             if (value < 0) hp = 0;
@@ -119,16 +119,10 @@ public class MobStats : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
         
     }
-    */
+    
 }

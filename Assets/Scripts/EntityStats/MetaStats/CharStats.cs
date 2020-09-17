@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 [Serializable]
-public class CharStats //: MobStats
+public class CharStats //: MobStats - Die Stats werden in der entsprechenden Klasse definiert. 
+                       //Ein Mob könnte die Egenschaften CharStats Hp, Armor etc. erhalten, wie auch der Isometric Player.
 {
-    //BaseValue ist im Prinzip der Value, welcher von MobStats geerbt wurde und in Unity eingestellt wurde.
-    //Erklär das mal dem Programm.
     public float BaseValue;
     
     public float Value
@@ -30,7 +29,6 @@ public class CharStats //: MobStats
     private readonly List<StatModifier> statModifiers;
     public readonly ReadOnlyCollection<StatModifier> StatModifiers;
 
-    //Das entsprechend umbauen, dass baseValue sich aus MobStats generiert
     public CharStats()
     {
         statModifiers = new List<StatModifier>();
@@ -120,21 +118,38 @@ public class CharStats //: MobStats
 
         return (float)Math.Round(finalValue, 4);
     }
+
+    //Eigenes Tobabo, hier beginnt der Splash von eigenen Funktionen & Methoden, deren Sinn zunächst Fragwürdig sein könnte.
     
 
     /*
-    private int xp;
 
-    public int Xp
+    public void TakeDamage(int damage)
     {
-        get { return xp; }
-        private set
+        e_attackPower -= Armor.Value;
+        e_attackPower = Mathf.Clamp(e_attackPower, 0, int.MaxValue);
+        e_hp -= isometricPlayer.AttackPower.Value;
+
+        if (e_hp <= 0)
         {
-            if (value < 0) xp = 0;
-            else xp = value;
+            Die();
         }
+
     }
     */
+        /*
+        private int xp;
+
+        public int Xp
+        {
+            get { return xp; }
+            private set
+            {
+                if (value < 0) xp = 0;
+                else xp = value;
+            }
+        }
+        */
 
 }
 

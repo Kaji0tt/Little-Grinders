@@ -45,12 +45,6 @@ public class CharController : MonoBehaviour
         Vector3 rightMovement = right * Input.GetAxis("HorizontalKey");
         Vector3 upMovement = forward * Input.GetAxis("VerticalKey");
 
-        //Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
-
-        //transform.forward = heading;
-        //transform.position += rightMovement;
-        //transform.position += upMovement;
-
         float horizontalInput = Input.GetAxis("HorizontalKey");
         float verticalInput = Input.GetAxis("VerticalKey");
         Vector2 inputVector = new Vector2(horizontalInput, verticalInput);

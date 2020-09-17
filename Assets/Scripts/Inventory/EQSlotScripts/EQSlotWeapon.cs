@@ -20,11 +20,24 @@ public class EQSlotWeapon : MonoBehaviour
 
     public void equip(Item item)
     {
-        storedItem = item;
-        GetComponent<Image>().sprite = item.GetSprite;
-        weaponAnim = GameObject.Find("WeaponAnimParent");
-        weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite;
-        player = GameObject.Find("Charakter");
+        if (storedItem == null)
+        {
+            storedItem = item;
+            GetComponent<Image>().sprite = item.GetSprite;
+            weaponAnim = GameObject.Find("WeaponAnimParent");
+            weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite;
+            isometricPlayer.Range = item.Range;
+            player = GameObject.Find("Charakter");
+        }
+        else
+        {
+            Dequip();
+            storedItem = item;
+            GetComponent<Image>().sprite = item.GetSprite;
+            weaponAnim = GameObject.Find("WeaponAnimParent");
+            weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite;
+            player = GameObject.Find("Charakter");
+        }
 
     }
 
@@ -37,6 +50,7 @@ public class EQSlotWeapon : MonoBehaviour
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
         isometricPlayer.Dequip(storedItem);
+        weaponAnim.GetComponent<SpriteRenderer>().sprite = null;
         this.storedItem = null;
     }
 
