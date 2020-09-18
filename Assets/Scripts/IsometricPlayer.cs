@@ -52,8 +52,8 @@ public class IsometricPlayer : MonoBehaviour
         uiInventory.SetCharakter(this);
 
         //PlayerStats & UI
-        //npcMove = GetComponent<NPCMove>();
-        enemy = EnemyManager.instance.enemy.transform;
+        //enemy = GetComponent<Enemy>();
+        //enemy = EnemyManager.instance.enemy.transform;
         uiInventoryTab = GameObject.Find("Inventory Tab");
         uiHealthStat = GameObject.Find("uiHealth");
         uiHealthText = uiHealthStat.GetComponent<Text>();
@@ -100,7 +100,7 @@ public class IsometricPlayer : MonoBehaviour
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
         isoRenderer.SetDirection(inputVector);
 
-
+        //print(inputVector);
         //Define Inventory Tab Values
         uiHealthText.text = "Health: " + (int)Hp.Value;
         ui_invHealthText.text = "Health: " + (int)Hp.Value;
@@ -116,19 +116,19 @@ public class IsometricPlayer : MonoBehaviour
     {
         //Folgender Singleton wird erforderlich sein, sobald ich enemy Spawns hinzufüge:
         // Ein entsprechender Verweis wird spätestens wenn Enemys Spawnen sollen wichtig sein. (EnemyManager.instance.enemy.transform
-                //enemy = EnemyManager.instance.enemy.transform;
-         
-        //TestZeieln
-        
+
+
+
+        //Combat     
         attackCD -= Time.deltaTime;
-        NPCMove npcMove = enemy.GetComponent<NPCMove>();
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
 
             if (attackCD <= 0)
             {
 
-                npcMove.TakeDamage(AttackPower.Value, Range);
+                //enemyStats.TakeDamage(AttackPower.Value, Range);
+                FindObjectOfType<Enemy>().TakeDamage(AttackPower.Value, Range);
                 attackCD = 1f / AttackSpeed.Value;
             }
 

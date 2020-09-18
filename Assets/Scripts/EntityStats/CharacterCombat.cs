@@ -11,9 +11,13 @@ public class CharacterCombat : MonoBehaviour
         isometricPlayer = GetComponent<IsometricPlayer>();
     }
 
-  public void AttackPlayer (IsometricPlayer playerStats)
+
+
+    /*
+    public void AttackPlayer(IsometricPlayer playerStats)
     {
-       playerStats.TakeDamage(isometricPlayer.AttackPower.Value);
+        playerStats.TakeDamage(isometricPlayer.AttackPower.Value);
     }
-    
+    */
+
 }
