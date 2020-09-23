@@ -64,15 +64,16 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
             SlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
             {
                 inventory.UseItem(item);
-                //equipment.equip(item);
                 inventory.RemoveItem(item);
                 GameEvents.current.EquipChanged(item);
+                Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
 
             };
             SlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
             {
                 inventory.RemoveItem(item);
                 ItemWorld.DropItem(charakter.GetPosition(), item);
+                Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
             };
 
             SlotRectTransform.anchoredPosition = new Vector2(x * SlotCellSize, y * SlotCellSize);

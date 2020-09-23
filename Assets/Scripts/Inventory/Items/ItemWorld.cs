@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
+using UnityEditor;
 
 public class ItemWorld : MonoBehaviour
 {
@@ -34,7 +35,9 @@ public class ItemWorld : MonoBehaviour
     public void SetItem(Item item)
     {
         this.item = item;
+        //Texture2D texture = item.GetSprite;
         spriteRenderer.sprite = item.GetSprite;
+ 
 
     }
     public Item GetItem ()

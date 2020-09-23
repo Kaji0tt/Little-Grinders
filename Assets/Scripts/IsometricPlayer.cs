@@ -114,28 +114,7 @@ public class IsometricPlayer : MonoBehaviour
 
     private void Update()
     {
-        //Folgender Singleton wird erforderlich sein, sobald ich enemy Spawns hinzufüge:
-        // Ein entsprechender Verweis wird spätestens wenn Enemys Spawnen sollen wichtig sein. (EnemyManager.instance.enemy.transform
 
-
-        /*
-        //Combat     
-        attackCD -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-
-            if (attackCD <= 0)
-            {
-
-                //enemyStats.TakeDamage(AttackPower.Value, Range);
-                FindObjectOfType<Enemy>().TakeDamage(AttackPower.Value, Range); // <- Das ist böse und geht nicht.
-                attackCD = 1f / AttackSpeed.Value;
-            }
-
-            //TakeDamage(20);
-            // Hier abfragen, ob der Gegner in Reichweite der Waffe !->Und in der richtigen Richtung<-! steht.
-        }
-        */
         
     }
     void Move()
@@ -182,8 +161,8 @@ public class IsometricPlayer : MonoBehaviour
     
     public void TakeDamage(float damage)
     {
-        damage -=Armor.Value;
-        damage = Mathf.Clamp(damage, 0, int.MaxValue);
+        damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
+        damage = Mathf.Clamp(damage, 1, int.MaxValue);
         Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
         if (Hp.Value <= 0)
             Die();

@@ -10,24 +10,30 @@ public class EQSlotHose : MonoBehaviour
     private Inventory inventory;
     private GameObject player;
     public IsometricPlayer isometricPlayer;
+    private Int_SlotBtn int_slotBtn;
 
     private void Start()
     {
         GameEvents.current.equipHose += equip;
+        int_slotBtn = GetComponent<Int_SlotBtn>();
     }
+
 
     public void equip(Item item)
     {
         if (storedItem == null)
         {
             storedItem = item;
+            int_slotBtn.StoreItem(item);
             GetComponent<Image>().sprite = item.GetSprite;
             player = GameObject.Find("Charakter");
+
         }
         else
         {
             Dequip();
             storedItem = item;
+            int_slotBtn.storedItem = item;
             GetComponent<Image>().sprite = item.GetSprite;
             player = GameObject.Find("Charakter");
         }
@@ -42,6 +48,7 @@ public class EQSlotHose : MonoBehaviour
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
         isometricPlayer.Dequip(storedItem);
         this.storedItem = null;
+        int_slotBtn.storedItem = null;
     }
 
 

@@ -20,7 +20,6 @@ public class UI_Manager : MonoBehaviour
     private void Start()
     {
         tooltipText = tooltip.GetComponentInChildren<Text>();
-        print(tooltipText.text);
     }
 
     public void ShowTooltip(Vector3 position, Item item)
@@ -29,13 +28,13 @@ public class UI_Manager : MonoBehaviour
         tooltip.SetActive(true);
         //tooltip.GetComponentInChildren<GameObject>().SetActive(true);
         tooltip.transform.position = position;
-        print("you got here");
+        //print("you got here");
         if (item != null)
         {
-            print("and for some suspicious reason you got here aswell. Hi there" + item.ItemName);
+            //print("and for some suspicious reason you got here aswell. Hi there" + item.ItemName);
             //tooltipText = tooltip.GetComponentInChildren<Text>();
 
-            tooltipText.text = "<b>"+item.ItemName + "</b>\n"+ item.ItemDescription;
+            tooltipText.text = "<b>"+item.ItemName + "</b>\n"+ item.ItemDescription + "\n\n" + item.GetValueDescription();
         }
     }
 

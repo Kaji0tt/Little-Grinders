@@ -35,7 +35,6 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (storedItem != null)
         ShowItem();
 
-        //Debug.Log("Enter");
     }
 
     public void OnPointerExit(PointerEventData eventData)

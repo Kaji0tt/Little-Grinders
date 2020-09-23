@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,32 +11,35 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     Transform destination;
 
-
     NavMeshAgent navMeshAgent;
     IsometricCharacterRenderer isoRenderer;
 
-    //Combat Stuff
+
+    ///----Combat Variables-----
+    ///
     CharacterCombat combat;
     IsometricPlayer isometricPlayer;
     private GameObject scriptController;
     ItemDatabase itemDatabase;
+    public GameObject hpBar;
+    public Slider slider;
 
-    //Stat Stuff
+
+    ///-----Stat Stuff-----
+    ///
+    [Header("Stats")]
     private float attackCD = 0f;
-    //public Sprite Dead;
-
     public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
+    private float maxHp;
     [Space]
-    [Header("Combat Stats")]
     public int Experience;
     public float aggroRange = 5f, attackRange;
 
-    //Vektoren zur Berechnung von Position/Ziel/Direction
+
+    ///----Position/Ziel/Direction----
+    ///
     Vector3 forward, right;
     private float xInputVector, zInputVector;
-
-    //Kampf Variabeln
-
     private float distance;
     private Vector3 targetVector;
 
@@ -45,6 +49,7 @@ public class Enemy : MonoBehaviour
         combat = GetComponent<CharacterCombat>();
         scriptController = GameObject.FindWithTag("GameController");
         itemDatabase = scriptController.GetComponent<ItemDatabase>();
+        maxHp = Hp.Value;
 
 
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
@@ -61,6 +66,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+
         // Die Direction berechnet sich noch aus den Welt
         navMeshAgent = GetComponent<NavMeshAgent>();
         distance = Vector3.Distance(destination.position, transform.position);
@@ -94,6 +100,15 @@ public class Enemy : MonoBehaviour
 
         }
 
+        #region Hp-Bar
+
+        slider.value = Hp.Value / maxHp;
+        if(Hp.Value < maxHp)
+            hpBar.SetActive(true);
+
+        if (Hp.Value <= 0)
+            Destroy(gameObject);
+        #endregion
 
     }
 
@@ -137,8 +152,8 @@ public class Enemy : MonoBehaviour
         distance = Vector3.Distance(destination.position, transform.position);       
             if (distance <= range)
             {
-              damage -= Armor.Value;
-              damage = Mathf.Clamp(damage, 0, int.MaxValue);
+              damage = 10 * (damage*damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
+              damage = Mathf.Clamp(damage, 1, int.MaxValue);
               Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
               print(gameObject + " hat " + damage + " Schaden erhalten");
               if (Hp.Value <= 0)
@@ -149,7 +164,7 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
-        print("enemy died");
+        //print("enemy died");
         itemDatabase.GetComponent<ItemDatabase>().GetDrop(gameObject.transform.position);   
         Destroy(gameObject);
     }

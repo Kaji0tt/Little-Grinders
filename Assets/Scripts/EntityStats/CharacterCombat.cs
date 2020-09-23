@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterCombat : MonoBehaviour
 { 
+
+    //gerade Tote CS - außerdem: get isometricPlayer through PlayerManager
     IsometricPlayer isometricPlayer;
     //EnemyStats enemyStats;
     private void Start()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target;
+    private Transform target;
     public float smoothSpeed = 0.125f;
     public Vector3 offset;
 
@@ -17,12 +17,13 @@ public class CameraFollow : MonoBehaviour
     {
         currentZoom -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
         currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
+        target = PlayerManager.instance.player.transform;
 
 
     }
 
     private void LateUpdate()
     {
-        transform.position = target.position + offset;
+        //transform.position = target.position + offset;
     }
 }
