@@ -20,38 +20,39 @@ public class GameEvents : MonoBehaviour
 
     private IsometricPlayer isometricPlayer;
 
+    
     public void EquipChanged(Item item)
     {
-            switch (item.ItemType)
-            {
-                default:
-                case "Schuhe":
-                equipSchuhe(item);
-                break;
-
-                case "Hose":
-                equipHose(item);
-                break;
-
-                case "Brust":
-                equipBrust(item);
-                break;
-
-                case "Kopf":
+        switch (item.itemType)
+        {
+            case ItemType.Kopf:
                 equipKopf(item);
                 break;
-
-                case "Weapon":
-                equipWeapon(item);
+            case ItemType.Brust:
+                equipBrust(item);
                 break;
-
-                case "Schmuck":
+            case ItemType.Beine:
+                equipHose(item);
+                break;
+            case ItemType.Schuhe:
+                equipSchuhe(item);
+                break;
+            case ItemType.Schmuck:
                 equipSchmuck(item);
                 break;
-            }
-        
-        
-    }
+            case ItemType.Weapon:
+                equipWeapon(item);
+                break;
+            case ItemType.Consumable:
+                //Placeholder. Call for ItemDelte or something.
+                break;
+              
 
-    
+
+
+        }
+
+
+
+    }
 }

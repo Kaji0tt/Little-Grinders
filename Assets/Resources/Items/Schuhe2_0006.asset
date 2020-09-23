@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b95acfd6bf6c5e479bfd7d937d42a15, type: 3}
+  m_Name: Schuhe2_0006
+  m_EditorClassIdentifier: 
+  ItemID: ID0006
+  ItemName: Lederstiefel
+  ItemDescription: Robustes Schuhwerk. Bequem und bietet Schutz.
+  itemType: 3
+  itemRarity: 0
+  Range: 0
+  GetSprite: {fileID: -6165161769700477807, guid: cb670f0cb677c6e488d36c49f83a9187,
+    type: 3}
+  percent: 3
+  hp: 0
+  armor: 5
+  attackPower: 0
+  abilityPower: 0
+  attackSpeed: 1
+  p_hp: 0
+  p_armor: 0
+  p_attackPower: 0
+  p_abilityPower: 0
+  p_attackSpeed: 0
+  p_movementSpeed: 0

@@ -28,8 +28,9 @@ public class IsometricCharacterRenderer : MonoBehaviour
         string[] directionArray = null;
 
         //measure the magnitude of the input.
-        if (direction.magnitude < .02f && transform.name != "WeaponAnim")
+        if (direction.magnitude < .01f && transform.name != "WeaponAnim")  //<- Damit wurde die Waffe animiert. Muss eh überarbeitet werden.
         //if (Input.GetKeyDown(KeyCode.Mouse1))
+        //if (direction.magnitude < .01f)
         {
             //if we are basically standing still, we'll use the Static states
             //we won't be able to calculate a direction if the user isn't pressing one, anyway!
@@ -37,10 +38,12 @@ public class IsometricCharacterRenderer : MonoBehaviour
 
         }
 
+        
         else if (Input.GetKey(KeyCode.Mouse0)  && transform.name == "WeaponAnim")
         {
             directionArray = weaponSwing;
         }
+        
 
 
         else

@@ -29,7 +29,7 @@ public class IsometricPlayer : MonoBehaviour
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
     //private NPCMove npcMove;
     public int Range;
-    private float attackCD = 0f;
+    public float attackCD = 0f;
     Transform enemy;
     private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
@@ -75,7 +75,7 @@ public class IsometricPlayer : MonoBehaviour
         ItemWorld.SpawnItemWorld
             (new Vector3(transform.position.x + 6, transform.position.y, transform.position.z + 1),test_item3);
 
-
+        //itemDatabase.GetDrop(transform.position);
 
     }
 
@@ -118,7 +118,7 @@ public class IsometricPlayer : MonoBehaviour
         // Ein entsprechender Verweis wird spätestens wenn Enemys Spawnen sollen wichtig sein. (EnemyManager.instance.enemy.transform
 
 
-
+        /*
         //Combat     
         attackCD -= Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -128,13 +128,14 @@ public class IsometricPlayer : MonoBehaviour
             {
 
                 //enemyStats.TakeDamage(AttackPower.Value, Range);
-                FindObjectOfType<Enemy>().TakeDamage(AttackPower.Value, Range);
+                FindObjectOfType<Enemy>().TakeDamage(AttackPower.Value, Range); // <- Das ist böse und geht nicht.
                 attackCD = 1f / AttackSpeed.Value;
             }
 
             //TakeDamage(20);
             // Hier abfragen, ob der Gegner in Reichweite der Waffe !->Und in der richtigen Richtung<-! steht.
         }
+        */
         
     }
     void Move()

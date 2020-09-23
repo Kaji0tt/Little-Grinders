@@ -20,6 +20,13 @@ public class EnvCamScript : MonoBehaviour
 
         no_children = this.gameObject.transform.childCount;
 
+        for (int i = 0; i < no_children; i++)
+        {
+            child = this.gameObject.transform.GetChild(i);
+            sprite = child.GetComponent<SpriteRenderer>();
+            child.Rotate(25, 0, 0);
+
+        }
     }
 
     void Update()
@@ -28,27 +35,15 @@ public class EnvCamScript : MonoBehaviour
         {
             child = this.gameObject.transform.GetChild(i);
             sprite = child.GetComponent<SpriteRenderer>();
-            child.LookAt(Camera.main.transform);
+            //child.LookAt(Camera.main.transform); //LookAt ist fragwürdig, es würde mehr Illusion von 3D erzeugt werden ohne LookAt
+            //Rather: Automatische Rotation bis Grad x° für mehr Tiefe.
+            //child.Rotate(0, 25, 0);                           
 
             CameraPosition = GameObject.Find("Camera").transform.position;
             DistSelfCamera = (child.position - CameraPosition).sqrMagnitude;
             sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
             sprite.sortingLayerName = "Umgebung_col Layer";
         }
-        //transform.LookAt(Camera.main.transform);
-
-        /*
-        foreach (this.gameObject.GetChild child in transform)
-        {
-            sprite = child.GetComponent<SpriteRenderer>();
-            child.LookAt(Camera.main.transform);
-
-            CameraPosition = GameObject.Find("Camera").transform.position;
-            DistSelfCamera = (child.position - CameraPosition).sqrMagnitude;
-            sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
-
-        }
-        */
 
     }
 }

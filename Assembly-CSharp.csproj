@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Kopf.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Schuhe.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Weapon.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Tooltip.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_Sprite.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_UI.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
@@ -103,12 +104,14 @@
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotSchuhe.cs" />
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotWeapon.cs" />
     <Compile Include="Assets\Scripts\Inventory\Equipment.cs" />
+    <Compile Include="Assets\Scripts\Inventory\IDescribable.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
-    <Compile Include="Assets\Scripts\Inventory\Item.cs" />
-    <Compile Include="Assets\Scripts\Inventory\ItemAssets.cs" />
-    <Compile Include="Assets\Scripts\Inventory\ItemDatabase.cs" />
-    <Compile Include="Assets\Scripts\Inventory\ItemWorld.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Items\Item.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Items\ItemAssets.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Items\ItemDatabase.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Items\ItemWorld.cs" />
     <Compile Include="Assets\Scripts\Inventory\UI_Inventory.cs" />
+    <Compile Include="Assets\Scripts\Inventory\UI_Manager.cs" />
     <Compile Include="Assets\Scripts\IsometricCharacterRenderer.cs" />
     <Compile Include="Assets\Scripts\IsometricPlayer.cs" />
     <Compile Include="Assets\Scripts\Manager\CameraFollow.cs" />

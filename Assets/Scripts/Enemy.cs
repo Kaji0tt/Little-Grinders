@@ -17,16 +17,25 @@ public class Enemy : MonoBehaviour
     //Combat Stuff
     CharacterCombat combat;
     IsometricPlayer isometricPlayer;
-    private bool dirCollider = false;
+    private GameObject scriptController;
+    ItemDatabase itemDatabase;
+
+    //Stat Stuff
     private float attackCD = 0f;
-    public Sprite Dead;
+    //public Sprite Dead;
+
     public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
+    [Space]
+    [Header("Combat Stats")]
+    public int Experience;
+    public float aggroRange = 5f, attackRange;
 
     //Vektoren zur Berechnung von Position/Ziel/Direction
     Vector3 forward, right;
     private float xInputVector, zInputVector;
 
-    public float aggroRange = 5f, attackRange;
+    //Kampf Variabeln
+
     private float distance;
     private Vector3 targetVector;
 
@@ -34,7 +43,8 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         combat = GetComponent<CharacterCombat>();
-        //enemyStats = GetComponent<EnemyStats>();
+        scriptController = GameObject.FindWithTag("GameController");
+        itemDatabase = scriptController.GetComponent<ItemDatabase>();
 
 
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
@@ -87,13 +97,22 @@ public class Enemy : MonoBehaviour
 
     }
 
-    //Klappt so halb. Sobald einmal true, geht er nicht mehr auf false.
+
     private void OnTriggerStay(Collider collider)
     {
         if (collider.gameObject.name == "DirectionCollider")
-            dirCollider = true;
-        else
-            dirCollider = false;
+        {
+            IsometricPlayer isometricPlayer = destination.GetComponent<IsometricPlayer>();
+            isometricPlayer.attackCD -= Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                if (isometricPlayer.attackCD <= 0)
+                {
+                    TakeDamage(isometricPlayer.AttackPower.Value, isometricPlayer.Range);
+                    isometricPlayer.attackCD = 1f / isometricPlayer.AttackSpeed.Value;
+                }
+            }
+        }
     }
 
     private void SetDestination()
@@ -115,30 +134,23 @@ public class Enemy : MonoBehaviour
     
     public void TakeDamage(float damage, int range)
     {
-        if (dirCollider == true)
-        {
-            distance = Vector3.Distance(destination.position, transform.position);
-            //print(distance);
-            //print(range);
+        distance = Vector3.Distance(destination.position, transform.position);       
             if (distance <= range)
             {
-                damage -= Armor.Value;
-                damage = Mathf.Clamp(damage, 0, int.MaxValue);
-                Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
-                print(gameObject + " hat " + damage + " Schaden erhalten");
-                if (Hp.Value <= 0)
-                    Die();
+              damage -= Armor.Value;
+              damage = Mathf.Clamp(damage, 0, int.MaxValue);
+              Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+              print(gameObject + " hat " + damage + " Schaden erhalten");
+              if (Hp.Value <= 0)
+              Die();
             }
-        }
     }
-    
+
 
     public void Die()
     {
-        print("Na supi! Erster Gegener wurde getötet.");
-        
-        //gequirrlte scheiße. animationen sind mal wieder n ganz neue chapter, der mob soll halt einfach verschwinden plsssss
-        this.gameObject.GetComponent<SpriteRenderer>().sprite = Dead;
-        GameObject.Destroy(this);
+        print("enemy died");
+        itemDatabase.GetComponent<ItemDatabase>().GetDrop(gameObject.transform.position);   
+        Destroy(gameObject);
     }
 }

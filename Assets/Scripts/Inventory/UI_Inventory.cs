@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using CodeMonkey.Utils;
 
-public class UI_Inventory : MonoBehaviour
+public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitHandler
 {
     
     private Transform Int_Inventory;
@@ -58,6 +59,7 @@ public class UI_Inventory : MonoBehaviour
 
             RectTransform SlotRectTransform = Instantiate(Int_Slot, Int_Inventory).GetComponent<RectTransform>();
             SlotRectTransform.gameObject.SetActive(true);
+            SlotRectTransform.GetComponent<Int_SlotBtn>().StoreItem(item); //funktioniert
 
             SlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
             {
@@ -86,8 +88,19 @@ public class UI_Inventory : MonoBehaviour
 
         }
     }
+    /*
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Int_Slot.GetComponent<Int_SlotBtn>().ShowItem();
 
+        //Debug.Log("Enter");
+    }
 
-    
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
+
+    }
+    */
 
 }
