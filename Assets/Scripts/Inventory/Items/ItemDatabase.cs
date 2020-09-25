@@ -25,9 +25,9 @@ public class ItemDatabase : MonoBehaviour
         int roll = Random.Range(0, 101);
         foreach (Item item in tier1)
         {
-            print(item.ItemName + " hat eine % von " + item.percent + ". Bei einem Roll von" + roll +".");
+            //print(item.ItemName + " hat eine % von " + item.percent + ". Bei einem Roll von" + roll +".");
             percentSum += item.percent;
-            print("Die kumulative Wahrscheinlichkeit beträgt nun: " + percentSum);
+            //print("Die kumulative Wahrscheinlichkeit beträgt nun: " + percentSum);
             if (roll < percentSum)
             {
 

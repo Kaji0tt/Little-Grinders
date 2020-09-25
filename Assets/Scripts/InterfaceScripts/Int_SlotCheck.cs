@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Int_SlotCheck : MonoBehaviour
 {
+    /*
     // Start is called before the first frame update
     void Start()
     {
@@ -28,4 +29,5 @@ public class Int_SlotCheck : MonoBehaviour
             }
         }
     }
+    */
 }

@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destination: {fileID: 0}
   hpBar: {fileID: 512658005682034938}
-  slider: {fileID: 512658005638272297}
+  enemyHpSlider: {fileID: 512658005638272297}
   Hp:
     BaseValue: 30
   Armor:
@@ -164,7 +164,7 @@ MonoBehaviour:
     BaseValue: 0
   AttackSpeed:
     BaseValue: 1
-  Experience: 3
+  Experience: 50
   aggroRange: 5
   attackRange: 1
 --- !u!95 &512658005152426385

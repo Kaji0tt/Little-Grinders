@@ -9,7 +9,10 @@ public class EQSlotWeapon : MonoBehaviour
     private Item storedItem;
     private Inventory inventory;
     private GameObject player, weaponAnim;
+
     public IsometricPlayer isometricPlayer;
+    private PlayerStats playerStats;
+
     private Int_SlotBtn int_slotBtn;
 
     private void Start()
@@ -17,6 +20,7 @@ public class EQSlotWeapon : MonoBehaviour
         GameEvents.current.equipWeapon += equip;
         storedItem = null;
         int_slotBtn = GetComponent<Int_SlotBtn>();
+        player = PlayerManager.instance.player.gameObject;
     }
 
 
@@ -29,8 +33,9 @@ public class EQSlotWeapon : MonoBehaviour
             GetComponent<Image>().sprite = item.GetSprite;
             weaponAnim = GameObject.Find("WeaponAnimParent");
             weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite;
-            isometricPlayer.Range = item.Range;
-            player = GameObject.Find("Charakter");
+            playerStats = player.GetComponent<PlayerStats>();
+            playerStats.Range = item.Range;
+
         }
         else
         {

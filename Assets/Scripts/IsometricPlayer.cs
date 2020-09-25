@@ -8,9 +8,10 @@ using System;
 public class IsometricPlayer : MonoBehaviour
 {
 
-    public float movementSpeed = 30f;
+    //public float movementSpeed = 30f;
     public float SlowFactor;
     IsometricCharacterRenderer isoRenderer;
+    PlayerStats playerStats;
     Rigidbody rbody;
     Vector3 forward, right;
 
@@ -25,11 +26,15 @@ public class IsometricPlayer : MonoBehaviour
 
     //PlayerStats & UI
     GameObject uiInventoryTab, uiHealthStat;
-    private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText;
-    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
-    //private NPCMove npcMove;
-    public int Range;
-    public float attackCD = 0f;
+    // *****Deklarieren von Interface Texten*********
+    private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText, ui_Level, ui_Xp;
+    public Slider HpSlider, XpSlider;
+    private float maxHP;
+
+
+
+    //public int Range;
+    //public float attackCD = 0f;
     Transform enemy;
     private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
@@ -38,6 +43,7 @@ public class IsometricPlayer : MonoBehaviour
     {
         rbody = GetComponent<Rigidbody>();
         isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
+        playerStats = GetComponent<PlayerStats>();
 
         //Isometric Camera
         forward = Camera.main.transform.forward;
@@ -45,26 +51,29 @@ public class IsometricPlayer : MonoBehaviour
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
-
+        
         //Item Management
         inventory = new Inventory(UseItem);
         uiInventory.SetInventory(inventory);
         uiInventory.SetCharakter(this);
+        
 
         //PlayerStats & UI
-        //enemy = GetComponent<Enemy>();
-        //enemy = EnemyManager.instance.enemy.transform;
         uiInventoryTab = GameObject.Find("Inventory Tab");
         uiHealthStat = GameObject.Find("uiHealth");
         uiHealthText = uiHealthStat.GetComponent<Text>();
+        ui_Level = GameObject.Find("LevelText").GetComponent<Text>();
+        ui_Xp = GameObject.Find("XpText").GetComponent<Text>();
 
-        //PlayerStat Inventory
+
+        //PlayerStat Inventory - ***********Initialisieren von Texten**********
         ui_invHealthText = GameObject.Find("ui_invHp").GetComponent<Text>();
         ui_invArmorText = GameObject.Find("ui_invArmor").GetComponent<Text>();
         ui_invAttackPowerText = GameObject.Find("ui_invAttP").GetComponent<Text>();
         ui_invAbilityPowerText = GameObject.Find("ui_invAbiP").GetComponent<Text>();
         ui_invAttackSpeedText = GameObject.Find("ui_invAttS").GetComponent<Text>();
         ui_invMovementSpeedText = GameObject.Find("ui_invMS").GetComponent<Text>();
+
 
 
         //Spawning Random Items for Test purposes
@@ -93,7 +102,21 @@ public class IsometricPlayer : MonoBehaviour
             Move();
         }
 
+    }
 
+    private void Update()
+    {
+
+        //UI Orb
+        HpSlider.value = playerStats.Get_currentHp() / playerStats.Hp.Value;
+        XpSlider.maxValue = playerStats.LevelUp_need(); //irgendwie unschön, vll kann man Max.Value einmalig einstellen, nachdem man levelUp gekommen ist.
+        XpSlider.value = playerStats.xp;
+        ui_Level.text = playerStats.level.ToString();
+        ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
+
+
+
+        //Input
         float horizontalInput = Input.GetAxis("HorizontalKey");
         float verticalInput = Input.GetAxis("VerticalKey");
         Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
@@ -101,28 +124,22 @@ public class IsometricPlayer : MonoBehaviour
         isoRenderer.SetDirection(inputVector);
 
         //print(inputVector);
-        //Define Inventory Tab Values
-        uiHealthText.text = "Health: " + (int)Hp.Value;
-        ui_invHealthText.text = "Health: " + (int)Hp.Value;
-        ui_invArmorText.text = "Armor: " + Armor.Value;
-        ui_invAttackPowerText.text = "Attack: " + AttackPower.Value;
-        ui_invAbilityPowerText.text = "Ability: " + AbilityPower.Value;
-        ui_invAttackSpeedText.text = "Speed: " + AttackSpeed.Value;
-        ui_invMovementSpeedText.text = "Movement: " + MovementSpeed.Value;
+        //Define Inventory Tab Values   ********schreiben von Interface Texten*********
+        uiHealthText.text = "Health: " + (int)playerStats.Hp.Value;
+        ui_invHealthText.text = "Health: " + (int)playerStats.Hp.Value;
+        ui_invArmorText.text = "Armor: " + playerStats.Armor.Value;
+        ui_invAttackPowerText.text = "Attack: " + playerStats.AttackPower.Value;
+        ui_invAbilityPowerText.text = "Ability: " + playerStats.AbilityPower.Value;
+        ui_invAttackSpeedText.text = "Speed: " + playerStats.AttackSpeed.Value;
+        ui_invMovementSpeedText.text = "Movement: " + playerStats.MovementSpeed.Value;
 
-    }
-
-    private void Update()
-    {
-
-        
     }
     void Move()
     {
 
         Vector3 ActualSpeed = right * Input.GetAxis("HorizontalKey") + forward * Input.GetAxis("VerticalKey");
         ActualSpeed = Vector3.ClampMagnitude(ActualSpeed, 1);
-        rbody.AddForce(ActualSpeed * movementSpeed, ForceMode.Force);
+        rbody.AddForce(ActualSpeed * playerStats.MovementSpeed.Value, ForceMode.Force);
 
 
     }
@@ -143,22 +160,23 @@ public class IsometricPlayer : MonoBehaviour
 
     }
 
-
+    
     private void UseItem(Item item)
     {
-        item.Equip(this);
+        item.Equip(playerStats);
 
     }
     public void Dequip (Item item)
     {
-        item.Unequip(this, item);
+        item.Unequip(playerStats, item);
     }
+    
     public Inventory Inventory
     {
         get { return inventory; }
     }
-
     
+    /*
     public void TakeDamage(float damage)
     {
         damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
@@ -168,10 +186,8 @@ public class IsometricPlayer : MonoBehaviour
             Die();
 
     }
+    */
 
-    public virtual void Die ()
-    {
-        Debug.Log(transform.name + "ist gestorben.");
-    }
+
 
 }

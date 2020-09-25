@@ -6,11 +6,11 @@ public class CharacterCombat : MonoBehaviour
 { 
 
     //gerade Tote CS - außerdem: get isometricPlayer through PlayerManager
-    IsometricPlayer isometricPlayer;
+    IsometricPlayer playerStats;
     //EnemyStats enemyStats;
     private void Start()
     {
-        isometricPlayer = GetComponent<IsometricPlayer>();
+        playerStats = GetComponent<IsometricPlayer>();
     }
 
 

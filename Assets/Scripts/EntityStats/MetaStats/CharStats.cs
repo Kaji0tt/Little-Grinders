@@ -119,24 +119,10 @@ public class CharStats //: MobStats - Die Stats werden in der entsprechenden Kla
         return (float)Math.Round(finalValue, 4);
     }
 
+
     //Eigenes Tobabo, hier beginnt der Splash von eigenen Funktionen & Methoden, deren Sinn zunächst Fragwürdig sein könnte.
     
 
-    /*
-
-    public void TakeDamage(int damage)
-    {
-        e_attackPower -= Armor.Value;
-        e_attackPower = Mathf.Clamp(e_attackPower, 0, int.MaxValue);
-        e_hp -= isometricPlayer.AttackPower.Value;
-
-        if (e_hp <= 0)
-        {
-            Die();
-        }
-
-    }
-    */
         /*
         private int xp;
 
@@ -150,6 +136,7 @@ public class CharStats //: MobStats - Die Stats werden in der entsprechenden Kla
             }
         }
         */
+        
 
 }
 

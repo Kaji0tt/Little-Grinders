@@ -21,7 +21,7 @@ MonoBehaviour:
   GetSprite: {fileID: -804648594177512020, guid: 95a129829be181b4f81de5c1363c0f03,
     type: 3}
   percent: 25
-  hp: 20
+  hp: 0
   armor: 0
   attackPower: 0
   abilityPower: 0
@@ -31,3 +31,4 @@ MonoBehaviour:
   p_abilityPower: 0
   p_attackSpeed: 0
   p_movementSpeed: 0
+  c_hp: 20

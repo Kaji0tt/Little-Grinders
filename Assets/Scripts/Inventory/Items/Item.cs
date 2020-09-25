@@ -36,14 +36,18 @@ public class Item : ScriptableObject, IDescribable
     public int p_attackSpeed;
     public int p_movementSpeed;
 
+    [Space]
+    [Header("Consumables")]
+    public int c_hp;
+
     private string[] modStrings = new string[] {"Hp" ,"Armor" , "Attack Power", "Ability Power", "p_hp", "p_armor", "p_attackPower", "p_abilityPower", "p_attackSpeed", "p_movemenSpeed" };
 
 
     //private List<StatModifier> itemModifiers = new List<StatModifier>(); //Mit einer Liste wäre bestimmt entspannter, dafür bin ich aber zu dumm.
     //Kein Bock mich jetzt nochmal mit der Syntax zu befassen, wenn das Ziel so nah ist.
-    private StatModifier m1, m2, m3, m4, m5, m1p, m2p, m3p, m4p, m5p, m6p;
+    private StatModifier m1, m2, m3, m4, m5, m1p, m2p, m3p, m4p, m5p, m6p, m1c;
 
-    public void Equip(IsometricPlayer isometricPlayer)
+    public void Equip(PlayerStats playerStats)
     {
         //Store Modifiers
         if (hp !=0)             {m1 = new StatModifier(hp, StatModType.Flat, this);} //Add HP Only if the Item is an Consumeable. -> Rather create CurrentHP=Hp.Value variable for HP Management.
@@ -53,27 +57,30 @@ public class Item : ScriptableObject, IDescribable
 
 
 
-        if (p_hp != 0)              {m1p = new StatModifier(p_attackPower, StatModType.PercentMult, this);}
-        if (p_armor != 0)           {m2p = new StatModifier(p_abilityPower, StatModType.PercentMult, this);}
-        if (p_attackPower != 0)     {m3p = new StatModifier(p_attackPower, StatModType.PercentMult, this);}
-        if (p_abilityPower != 0)    {m4p = new StatModifier(p_abilityPower, StatModType.PercentMult, this);}
-        if (p_attackSpeed != 0)     {m5p = new StatModifier(p_attackSpeed, StatModType.PercentMult, this);} //Ich glaub damit würde was nicht stimmen, da AttackSpeed als Flat int durch 1 addiert wird.
-        if (p_movementSpeed != 0)   {m6p = new StatModifier(p_movementSpeed, StatModType.PercentMult, this);}
+        if (p_hp != 0)              {m1p = new StatModifier(p_attackPower, StatModType.PercentAdd, this);}
+        if (p_armor != 0)           {m2p = new StatModifier(p_abilityPower, StatModType.PercentAdd, this);}
+        if (p_attackPower != 0)     {m3p = new StatModifier(p_attackPower, StatModType.PercentAdd, this);}
+        if (p_abilityPower != 0)    {m4p = new StatModifier(p_abilityPower, StatModType.PercentAdd, this);}
+        if (p_attackSpeed != 0)     {m5p = new StatModifier(p_attackSpeed, StatModType.PercentAdd, this);} //Ich glaub damit würde was nicht stimmen, da AttackSpeed als Flat int durch 1 addiert wird.
+        if (p_movementSpeed != 0)   {m6p = new StatModifier(p_movementSpeed, StatModType.PercentAdd, this);}
+
+        if (c_hp != 0)
+            playerStats.Heal(c_hp); 
 
 
         //Add Modifiers to Character
-        if (m1 != null)isometricPlayer.Hp.AddModifier(m1);
-        if (m2 != null)isometricPlayer.Armor.AddModifier(m2);
-        if (m3 != null)isometricPlayer.AttackPower.AddModifier(m3);
-        if (m4 != null)isometricPlayer.AbilityPower.AddModifier(m4);
+        if (m1 != null)playerStats.Hp.AddModifier(m1);
+        if (m2 != null)playerStats.Armor.AddModifier(m2);
+        if (m3 != null)playerStats.AttackPower.AddModifier(m3);
+        if (m4 != null)playerStats.AbilityPower.AddModifier(m4);
 
 
-        if (m1p != null) isometricPlayer.Hp.AddModifier(m1p);
-        if (m2p != null) isometricPlayer.Armor.AddModifier(m2p);
-        if (m3p != null) isometricPlayer.AttackPower.AddModifier(m3p);
-        if (m4p != null) isometricPlayer.AbilityPower.AddModifier(m4p);
-        if (m5p != null) isometricPlayer.AttackSpeed.AddModifier(m5p);
-        if (m6p != null) isometricPlayer.MovementSpeed.AddModifier(m6p);
+        if (m1p != null) playerStats.Hp.AddModifier(m1p);
+        if (m2p != null) playerStats.Armor.AddModifier(m2p);
+        if (m3p != null) playerStats.AttackPower.AddModifier(m3p);
+        if (m4p != null) playerStats.AbilityPower.AddModifier(m4p);
+        if (m5p != null) playerStats.AttackSpeed.AddModifier(m5p);
+        if (m6p != null) playerStats.MovementSpeed.AddModifier(m6p);
 
 
 
@@ -82,21 +89,21 @@ public class Item : ScriptableObject, IDescribable
 
     }
 
-    public void Unequip (IsometricPlayer isometricPlayer, Item item)
+    public void Unequip (PlayerStats playerStats, Item item)
     {
 
-        if (m1 != null) isometricPlayer.Hp.RemoveModifier(m1);
-        if (m2 != null) isometricPlayer.Armor.RemoveModifier(m2);
-        if (m3 != null) isometricPlayer.AttackPower.RemoveModifier(m3);
-        if (m4 != null) isometricPlayer.AbilityPower.RemoveModifier(m4);
+        if (m1 != null) playerStats.Hp.RemoveModifier(m1);
+        if (m2 != null) playerStats.Armor.RemoveModifier(m2);
+        if (m3 != null) playerStats.AttackPower.RemoveModifier(m3);
+        if (m4 != null) playerStats.AbilityPower.RemoveModifier(m4);
 
 
-        if (m1p != null) isometricPlayer.Hp.RemoveModifier(m1p);
-        if (m2p != null) isometricPlayer.Armor.RemoveModifier(m2p);
-        if (m3p != null) isometricPlayer.AttackPower.RemoveModifier(m3p);
-        if (m4p != null) isometricPlayer.AbilityPower.RemoveModifier(m4p);
-        if (m5p != null) isometricPlayer.AttackSpeed.RemoveModifier(m5p);
-        if (m6p != null) isometricPlayer.MovementSpeed.RemoveModifier(m6p);
+        if (m1p != null) playerStats.Hp.RemoveModifier(m1p);
+        if (m2p != null) playerStats.Armor.RemoveModifier(m2p);
+        if (m3p != null) playerStats.AttackPower.RemoveModifier(m3p);
+        if (m4p != null) playerStats.AbilityPower.RemoveModifier(m4p);
+        if (m5p != null) playerStats.AttackSpeed.RemoveModifier(m5p);
+        if (m6p != null) playerStats.MovementSpeed.RemoveModifier(m6p);
 
     }
 

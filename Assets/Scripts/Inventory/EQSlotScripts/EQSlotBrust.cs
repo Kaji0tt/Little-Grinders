@@ -26,7 +26,7 @@ public class EQSlotBrust : MonoBehaviour
             storedItem = item;
             int_slotBtn.StoreItem(item);
             GetComponent<Image>().sprite = item.GetSprite;
-            player = GameObject.Find("Charakter");
+            player = GameObject.Find("Charakter");  //?? Was mach ich hier eigentlich
 
         }
         else
@@ -35,7 +35,7 @@ public class EQSlotBrust : MonoBehaviour
             storedItem = item;
             int_slotBtn.storedItem = item;
             GetComponent<Image>().sprite = item.GetSprite;
-            player = GameObject.Find("Charakter");
+            player = GameObject.Find("Charakter"); //?? Was mach ich hier eigentlich
         }
     }
 

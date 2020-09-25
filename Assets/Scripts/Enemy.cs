@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
     private GameObject scriptController;
     ItemDatabase itemDatabase;
     public GameObject hpBar;
-    public Slider slider;
+    public Slider enemyHpSlider;
 
 
     ///-----Stat Stuff-----
@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
     [Space]
     public int Experience;
     public float aggroRange = 5f, attackRange;
+    //private PlayerStats playerStats;
 
 
     ///----Position/Ziel/Direction----
@@ -54,6 +55,7 @@ public class Enemy : MonoBehaviour
 
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
         destination = PlayerManager.instance.player.transform;
+        //PlayerStats playerStats = destination.GetComponent<PlayerStats>();
 
         forward = Camera.main.transform.forward;
         forward.y = 0;
@@ -84,13 +86,13 @@ public class Enemy : MonoBehaviour
                 //Hier müssten entsprechende Animationen geladen werden, welche sich aus dem inputVector ergibt.
                 //isoRenderer.SetNPCDirection(inputVector); <-- Im isoRender entsprechende Animationen hinzufügen.
 
-                IsometricPlayer isometricPlayer = destination.GetComponent<IsometricPlayer>();
+                PlayerStats playerStats = destination.GetComponent<PlayerStats>();
                 attackCD -= Time.deltaTime;
-                if (isometricPlayer != null)
+                if (playerStats != null)
                 {
                     if (attackCD <= 0)
                     {
-                        isometricPlayer.TakeDamage(AttackPower.Value);
+                        playerStats.TakeDamage(AttackPower.Value);
                         attackCD = 1f / AttackSpeed.Value;
                     }
                 }
@@ -102,7 +104,7 @@ public class Enemy : MonoBehaviour
 
         #region Hp-Bar
 
-        slider.value = Hp.Value / maxHp;
+        enemyHpSlider.value = Hp.Value / maxHp;
         if(Hp.Value < maxHp)
             hpBar.SetActive(true);
 
@@ -117,14 +119,14 @@ public class Enemy : MonoBehaviour
     {
         if (collider.gameObject.name == "DirectionCollider")
         {
-            IsometricPlayer isometricPlayer = destination.GetComponent<IsometricPlayer>();
-            isometricPlayer.attackCD -= Time.deltaTime;
+            PlayerStats playerStats = destination.GetComponent<PlayerStats>();
+            playerStats.attackCD -= Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (isometricPlayer.attackCD <= 0)
+                if (playerStats.attackCD <= 0)
                 {
-                    TakeDamage(isometricPlayer.AttackPower.Value, isometricPlayer.Range);
-                    isometricPlayer.attackCD = 1f / isometricPlayer.AttackSpeed.Value;
+                    TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+                    playerStats.attackCD = 1f / playerStats.AttackSpeed.Value;
                 }
             }
         }
@@ -155,7 +157,7 @@ public class Enemy : MonoBehaviour
               damage = 10 * (damage*damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
               damage = Mathf.Clamp(damage, 1, int.MaxValue);
               Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
-              print(gameObject + " hat " + damage + " Schaden erhalten");
+              //print(gameObject + " hat " + damage + " Schaden erhalten");
               if (Hp.Value <= 0)
               Die();
             }
@@ -165,6 +167,8 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         //print("enemy died");
+        PlayerStats playerStats = destination.GetComponent<PlayerStats>();
+        playerStats.Set_xp(Experience);
         itemDatabase.GetComponent<ItemDatabase>().GetDrop(gameObject.transform.position);   
         Destroy(gameObject);
     }
