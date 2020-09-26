@@ -5,7 +5,7 @@ using UnityEngine;
 public class SortingOrder : MonoBehaviour
 {
     private Vector3 CameraPosition;
-    private float DistSelfCamera;  
+    private float DistSelfCamera;
     [SerializeField]
     public int sortingOrderBase = 5000;
 

@@ -9,6 +9,7 @@ public class EnvCamScript : MonoBehaviour
 
     [SerializeField]
     private int sortingOrderBase = 5000;
+    public int sO_OffSet;
 
     private SpriteRenderer sprite;
 
@@ -41,7 +42,7 @@ public class EnvCamScript : MonoBehaviour
 
             CameraPosition = GameObject.Find("Camera").transform.position;
             DistSelfCamera = (child.position - CameraPosition).sqrMagnitude;
-            sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
+            sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera) + sO_OffSet;
             sprite.sortingLayerName = "Umgebung_col Layer";
         }
 
