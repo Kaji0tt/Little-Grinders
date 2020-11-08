@@ -22,7 +22,7 @@ public class Int_ToggleInv : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(ToggleInv);
+     //   print(ToggleInv);
         if (Input.GetKeyDown(KeyCode.E) && ToggleInv==false)
         {
             ToggleInv = true;

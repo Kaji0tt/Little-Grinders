@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+public enum LootTable { tier1, tier2, tier3, tier4, tier5 }
+
 public class Enemy : MonoBehaviour
 {
 
@@ -35,6 +37,7 @@ public class Enemy : MonoBehaviour
     public int Experience;
     public float aggroRange = 5f, attackRange;
     //private PlayerStats playerStats;
+    public LootTable lootTable;
 
 
     ///----Position/Ziel/Direction----
@@ -50,7 +53,10 @@ public class Enemy : MonoBehaviour
         combat = GetComponent<CharacterCombat>();
         scriptController = GameObject.FindWithTag("GameController");
         itemDatabase = scriptController.GetComponent<ItemDatabase>();
+        
+
         maxHp = Hp.Value;
+
 
 
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
@@ -169,7 +175,9 @@ public class Enemy : MonoBehaviour
         //print("enemy died");
         PlayerStats playerStats = destination.GetComponent<PlayerStats>();
         playerStats.Set_xp(Experience);
-        itemDatabase.GetComponent<ItemDatabase>().GetDrop(gameObject.transform.position);   
+
+        string _lootTable = lootTable.ToString();
+        itemDatabase.GetComponent<ItemDatabase>().GetDrop(gameObject.transform.position, _lootTable);   
         Destroy(gameObject);
     }
 }
