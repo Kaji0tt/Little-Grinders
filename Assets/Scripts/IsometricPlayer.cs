@@ -14,6 +14,7 @@ public class IsometricPlayer : MonoBehaviour
     PlayerStats playerStats;
     Rigidbody rbody;
     Vector3 forward, right;
+    float zoom;
 
 
     // Item Management
@@ -100,8 +101,9 @@ public class IsometricPlayer : MonoBehaviour
         if (Input.anyKey)
         { 
             Move();
-        }
 
+        }
+        Zoom();
     }
 
     private void Update()
@@ -141,9 +143,28 @@ public class IsometricPlayer : MonoBehaviour
         ActualSpeed = Vector3.ClampMagnitude(ActualSpeed, 1);
         rbody.AddForce(ActualSpeed * playerStats.MovementSpeed.Value, ForceMode.Force);
 
+    }
+    void Zoom()
+    {
+        //Versuch des Zoomens
+        //float _zoom = Camera.main.fieldOfView;
+
+        float max, min;
+        max = 30.0f;
+        min = 15.0f;
+
+        if(Input.mouseScrollDelta.y < 0 &&  zoom > min)
+        {
+            Camera.main.fieldOfView = Camera.main.fieldOfView + Input.mouseScrollDelta.y;
+        }
+
+        if (Input.mouseScrollDelta.y > 0 && zoom < max)
+        {
+            Camera.main.fieldOfView = Camera.main.fieldOfView + Input.mouseScrollDelta.y;
+        }
+        zoom = Camera.main.fieldOfView;
 
     }
-
 
     private void OnTriggerStay(Collider collider)
     {

@@ -25,7 +25,7 @@ public class EnvCamScript : MonoBehaviour
         {
             child = this.gameObject.transform.GetChild(i);
             sprite = child.GetComponent<SpriteRenderer>();
-            child.Rotate(30, 0, 0);
+            child.Rotate(25, 0, 0);
 
         }
     }
