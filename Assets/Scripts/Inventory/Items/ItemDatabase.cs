@@ -57,8 +57,7 @@ public class ItemDatabase : MonoBehaviour
                     ItemWorld.SpawnItemWorld(position, item);
                     break;
                 }
-                else
-                    print("nothing dropped");
+
 
             }
         }
@@ -79,8 +78,7 @@ public class ItemDatabase : MonoBehaviour
                     ItemWorld.SpawnItemWorld(position, item);
                     break;
                 }
-                else
-                    print("nothing dropped");
+
 
             }
 
@@ -101,8 +99,6 @@ public class ItemDatabase : MonoBehaviour
                         ItemWorld.SpawnItemWorld(position, item);
                         break;
                     }
-                    else
-                        print("nothing dropped");
 
                 }
 
@@ -122,8 +118,6 @@ public class ItemDatabase : MonoBehaviour
                         ItemWorld.SpawnItemWorld(position, item);
                         break;
                     }
-                    else
-                        print("nothing dropped");
 
                 }
 
@@ -143,8 +137,6 @@ public class ItemDatabase : MonoBehaviour
                         ItemWorld.SpawnItemWorld(position, item);
                         break;
                     }
-                    else
-                        print("nothing dropped");
 
                 }
 

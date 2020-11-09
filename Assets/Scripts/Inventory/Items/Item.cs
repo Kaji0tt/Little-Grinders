@@ -29,12 +29,12 @@ public class Item : ScriptableObject, IDescribable
 
     [Space]
     [Header("Prozent-Werte")]
-    public int p_hp;
-    public int p_armor;
-    public int p_attackPower;
-    public int p_abilityPower;
-    public int p_attackSpeed;
-    public int p_movementSpeed;
+    public float p_hp;
+    public float p_armor;
+    public float p_attackPower;
+    public float p_abilityPower;
+    public float p_attackSpeed;
+    public float p_movementSpeed;
 
     [Space]
     [Header("Consumables")]
@@ -57,8 +57,8 @@ public class Item : ScriptableObject, IDescribable
 
 
 
-        if (p_hp != 0)              {m1p = new StatModifier(p_attackPower, StatModType.PercentAdd, this);}
-        if (p_armor != 0)           {m2p = new StatModifier(p_abilityPower, StatModType.PercentAdd, this);}
+        if (p_hp != 0)              {m1p = new StatModifier(p_hp, StatModType.PercentAdd, this);}
+        if (p_armor != 0)           {m2p = new StatModifier(p_armor, StatModType.PercentAdd, this);}
         if (p_attackPower != 0)     {m3p = new StatModifier(p_attackPower, StatModType.PercentAdd, this);}
         if (p_abilityPower != 0)    {m4p = new StatModifier(p_abilityPower, StatModType.PercentAdd, this);}
         if (p_attackSpeed != 0)     {m5p = new StatModifier(p_attackSpeed, StatModType.PercentAdd, this);} //Ich glaub damit würde was nicht stimmen, da AttackSpeed als Flat int durch 1 addiert wird.

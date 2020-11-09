@@ -26,9 +26,9 @@ public class IsometricPlayer : MonoBehaviour
 
 
     //PlayerStats & UI
-    GameObject uiInventoryTab, uiHealthStat;
+    GameObject uiInventoryTab, uiHpOrb;
     // *****Deklarieren von Interface Texten*********
-    private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText, ui_Level, ui_Xp;
+    private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText, ui_Level, ui_Xp, ui_HpOrbTxt;
     public Slider HpSlider, XpSlider;
     private float maxHP;
 
@@ -61,10 +61,11 @@ public class IsometricPlayer : MonoBehaviour
 
         //PlayerStats & UI
         uiInventoryTab = GameObject.Find("Inventory Tab");
-        uiHealthStat = GameObject.Find("uiHealth");
-        uiHealthText = uiHealthStat.GetComponent<Text>();
         ui_Level = GameObject.Find("LevelText").GetComponent<Text>();
         ui_Xp = GameObject.Find("XpText").GetComponent<Text>();
+        uiHpOrb = GameObject.Find("HpOrbTxt");
+        GameObject uiXp = GameObject.Find("XpText");
+
 
 
         //PlayerStat Inventory - ***********Initialisieren von Texten**********
@@ -74,6 +75,8 @@ public class IsometricPlayer : MonoBehaviour
         ui_invAbilityPowerText = GameObject.Find("ui_invAbiP").GetComponent<Text>();
         ui_invAttackSpeedText = GameObject.Find("ui_invAttS").GetComponent<Text>();
         ui_invMovementSpeedText = GameObject.Find("ui_invMS").GetComponent<Text>();
+        ui_HpOrbTxt = GameObject.Find("HpOrbTxt").GetComponent<Text>();
+
 
 
 
@@ -104,6 +107,14 @@ public class IsometricPlayer : MonoBehaviour
 
         }
         Zoom();
+
+        if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
+            ShowStatText();
+        else
+        {
+            uiHpOrb.SetActive(false);
+            ui_Xp.text = "";
+        }
     }
 
     private void Update()
@@ -114,7 +125,7 @@ public class IsometricPlayer : MonoBehaviour
         XpSlider.maxValue = playerStats.LevelUp_need(); //irgendwie unschön, vll kann man Max.Value einmalig einstellen, nachdem man levelUp gekommen ist.
         XpSlider.value = playerStats.xp;
         ui_Level.text = playerStats.level.ToString();
-        ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
+
 
 
 
@@ -127,7 +138,6 @@ public class IsometricPlayer : MonoBehaviour
 
         //print(inputVector);
         //Define Inventory Tab Values   ********schreiben von Interface Texten*********
-        uiHealthText.text = "Health: " + (int)playerStats.Hp.Value;
         ui_invHealthText.text = "Health: " + (int)playerStats.Hp.Value;
         ui_invArmorText.text = "Armor: " + playerStats.Armor.Value;
         ui_invAttackPowerText.text = "Attack: " + playerStats.AttackPower.Value;
@@ -164,6 +174,12 @@ public class IsometricPlayer : MonoBehaviour
         }
         zoom = Camera.main.fieldOfView;
 
+    }
+    void ShowStatText() 
+    {
+        uiHpOrb.SetActive(true);
+        ui_HpOrbTxt.text = Mathf.RoundToInt(playerStats.Get_currentHp()) + "\n" + Mathf.RoundToInt(playerStats.Hp.Value);
+        ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
     }
 
     private void OnTriggerStay(Collider collider)
