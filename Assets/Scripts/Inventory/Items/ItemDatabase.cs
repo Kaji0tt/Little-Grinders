@@ -16,7 +16,6 @@ public class ItemDatabase : MonoBehaviour
     public List<Item> tier4;
     public List<Item> tier5;
 
-
     private int percentSum = 0;
 
     private void Awake()

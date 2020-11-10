@@ -114,12 +114,12 @@ public class Item : ScriptableObject, IDescribable
         if (armor != 0) modStrings[1] = "\nArmor: " + armor; else modStrings[1] = "";
         if (attackPower != 0) modStrings[2] = "\nAttack Power: " + attackPower; else modStrings[2] = "";
         if (abilityPower != 0) modStrings[3] = "\nAbility Power: " + abilityPower; else modStrings[3] = "";
-        if (p_hp != 0) modStrings[4] = "\nErhöht HP um " + p_hp + "%"; else modStrings[4] = "";
-        if (p_armor != 0) modStrings[5] = "\nErhöht Armor um " + p_armor + "%"; else modStrings[5] = "";
-        if (p_attackPower != 0) modStrings[6] = "\nErhöht Attack Power um " + p_attackPower + "%"; else modStrings[6] = "";
-        if (p_abilityPower != 0) modStrings[7] = "\nErhöht Ability Power um " + p_abilityPower + "%"; else modStrings[7] = "";
-        if (p_attackSpeed != 0) modStrings[8] = "\nErhöht Attack Speed um " + p_attackSpeed + "%"; else modStrings[8] = "";
-        if (p_movementSpeed != 0) modStrings[9] = "\nErhöht deinen Movementspeed um " + p_movementSpeed + "%"; else modStrings[9] = "";
+        if (p_hp != 0) modStrings[4] = "\nErhöht HP um " + p_hp * 100 + "%"; else modStrings[4] = "";
+        if (p_armor != 0) modStrings[5] = "\nErhöht Armor um " + p_armor * 100 + "%"; else modStrings[5] = "";
+        if (p_attackPower != 0) modStrings[6] = "\nErhöht Attack Power um " + p_attackPower * 100 + "%"; else modStrings[6] = "";
+        if (p_abilityPower != 0) modStrings[7] = "\nErhöht Ability Power um " + p_abilityPower * 100 + "%"; else modStrings[7] = "";
+        if (p_attackSpeed != 0) modStrings[8] = "\nErhöht Attack Speed um " + p_attackSpeed * 100 + "%"; else modStrings[8] = "";
+        if (p_movementSpeed != 0) modStrings[9] = "\nErhöht deinen Movementspeed um " + p_movementSpeed * 100 + "%"; else modStrings[9] = "";
 
         string finalString;
         finalString = modStrings[0] + modStrings[1] + modStrings[2] + modStrings[3] + modStrings[4] + modStrings[5] + modStrings[6] + modStrings[7] + modStrings[8] + modStrings[9];
