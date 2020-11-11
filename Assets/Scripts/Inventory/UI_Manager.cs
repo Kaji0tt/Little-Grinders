@@ -22,7 +22,7 @@ public class UI_Manager : MonoBehaviour
         tooltipText = tooltip.GetComponentInChildren<Text>();
     }
 
-    public void ShowTooltip(Vector3 position, Item item)
+    public void ShowItemTooltip(Vector3 position, Item item)
     {
  
         tooltip.SetActive(true);
@@ -35,6 +35,18 @@ public class UI_Manager : MonoBehaviour
             //tooltipText = tooltip.GetComponentInChildren<Text>();
 
             tooltipText.text = "<b>"+item.ItemName + "</b>\n"+ item.ItemDescription + "\n\n" + item.GetValueDescription();
+        }
+    }
+
+    public void ShowTooltip(Vector3 position, string description)
+    {
+
+        tooltip.SetActive(true);
+        tooltip.transform.position = position;
+
+        if (description != null)
+        {
+            tooltipText.text = description;
         }
     }
 

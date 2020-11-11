@@ -24,6 +24,7 @@ public class Talent : MonoBehaviour
     //Kp ob ich das so machen wollen würde, entsprechendes Video hier:
     // https://youtu.be/NEqaBBnAFfM?t=406
 
+
     private void Awake()
     {
         sprite = GetComponent<Image>();

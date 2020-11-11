@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Tooltip : MonoBehaviour
 {
     //22.09.20 This is currently of no use.
+    /*
     private static Tooltip instance;
 
     [SerializeField]
@@ -59,4 +60,5 @@ public class Tooltip : MonoBehaviour
     {
         instance.HideTooltip();
     }
+    */
 }
