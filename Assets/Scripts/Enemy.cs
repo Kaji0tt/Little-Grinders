@@ -123,7 +123,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        if (collider.gameObject.name == "DirectionCollider") // Andere Lösung finden zur Liebe des CPU.
+        if (collider.gameObject.name == "DirectionCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
             PlayerStats playerStats = destination.GetComponent<PlayerStats>();
             playerStats.attackCD -= Time.deltaTime;

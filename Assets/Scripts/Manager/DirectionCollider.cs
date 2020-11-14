@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class DirectionCollider : MonoBehaviour
 {
+    #region Singleton;
+    public static DirectionCollider instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+    public GameObject directionCollider;
+    #endregion
 
     public IsometricPlayer player;
     private Vector3 right, forward;
