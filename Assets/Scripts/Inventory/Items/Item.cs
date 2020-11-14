@@ -17,6 +17,7 @@ public class Item : ScriptableObject, IDescribable
     public ItemType itemType;
     public ItemRarity itemRarity;   // Not used yet. For further Information to implement the infleunce of itemRarity check: https://www.youtube.com/watch?v=dvSYloBxzrU
     public int Range;
+    public bool RangedWeapon;
     public Sprite GetSprite;        //scale item.sprite always to correct size, for ItemWorld to Spawn it in according size aswell. either here or in itemworld
     public int percent;
 

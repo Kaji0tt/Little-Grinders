@@ -1,0 +1,632 @@
+fileFormatVersion: 2
+guid: 511ef0f4614845146afb9e73772e3f94
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7013426209640334135
+    second: fences grass_0
+  - first:
+      213: -4606356249777075605
+    second: fences grass_1
+  - first:
+      213: -3018924879631263881
+    second: fences grass_2
+  - first:
+      213: 4883378716379081312
+    second: fences grass_3
+  - first:
+      213: 4701119483147493965
+    second: fences grass_4
+  - first:
+      213: 201674644760232835
+    second: fences grass_5
+  - first:
+      213: 8438104226687675251
+    second: fences grass_6
+  - first:
+      213: 3933427270243599627
+    second: fences grass_7
+  - first:
+      213: -4520964264918072805
+    second: fences grass_8
+  - first:
+      213: 134086380903749352
+    second: fences grass_9
+  - first:
+      213: -847278716033397567
+    second: fences grass_10
+  - first:
+      213: -9105019801506311677
+    second: fences grass_11
+  - first:
+      213: 7242222001723700393
+    second: fences grass_12
+  - first:
+      213: 3628043684351061674
+    second: fences grass_13
+  - first:
+      213: -5372023103148177222
+    second: fences grass_14
+  - first:
+      213: -1417062928516339547
+    second: fences grass_15
+  - first:
+      213: -4603102350831122747
+    second: fences grass_16
+  - first:
+      213: -4448150727956304544
+    second: fences grass_17
+  - first:
+      213: 7235977114868173918
+    second: fences grass_18
+  - first:
+      213: 1325411230018937571
+    second: fences grass_19
+  - first:
+      213: -5017286645957374544
+    second: fences grass_20
+  - first:
+      213: 3365967314017553896
+    second: fences grass_21
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: fences grass_0
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 877
+        width: 16
+        height: 12
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 733c60c9af1b45160800000000000000
+      internalID: 7013426209640334135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_1
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 830
+        width: 21
+        height: 57
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6a0327756fe210c0800000000000000
+      internalID: -4606356249777075605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_2
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 886
+        width: 6
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7775df121df9a16d0800000000000000
+      internalID: -3018924879631263881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_3
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 882
+        width: 22
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06a6a7db11f35c340800000000000000
+      internalID: 4883378716379081312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_4
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 870
+        width: 21
+        height: 28
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d42aca7234bbd3140800000000000000
+      internalID: 4701119483147493965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_5
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 868
+        width: 21
+        height: 8
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3830329550e7cc200800000000000000
+      internalID: 201674644760232835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_6
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 827
+        width: 37
+        height: 28
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37be071561b2a1570800000000000000
+      internalID: 8438104226687675251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_7
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 795
+        width: 13
+        height: 48
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0544b81347569630800000000000000
+      internalID: 3933427270243599627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_8
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 808
+        width: 48
+        height: 47
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b12c25344fe4241c0800000000000000
+      internalID: -4520964264918072805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_9
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 831
+        width: 12
+        height: 27
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e65cfe5ade5cd100800000000000000
+      internalID: 134086380903749352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_10
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 811
+        width: 30
+        height: 25
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cc84113f7cdd34f0800000000000000
+      internalID: -847278716033397567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_11
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 721
+        width: 45
+        height: 49
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30291522bb874a180800000000000000
+      internalID: -9105019801506311677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_12
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 769
+        width: 22
+        height: 24
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a472452a8a818460800000000000000
+      internalID: 7242222001723700393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_13
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 729
+        width: 33
+        height: 24
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aae285b3286695230800000000000000
+      internalID: 3628043684351061674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_14
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 696
+        width: 45
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab849ab237db275b0800000000000000
+      internalID: -5372023103148177222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_15
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 693
+        width: 35
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a8a86146c4955ce0800000000000000
+      internalID: -1417062928516339547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_16
+      rect:
+        serializedVersion: 2
+        x: 807
+        y: 536
+        width: 21
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c602f9dcce7e10c0800000000000000
+      internalID: -4603102350831122747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_17
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 353
+        width: 32
+        height: 89
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06de4c0fa7ef442c0800000000000000
+      internalID: -4448150727956304544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_18
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 350
+        width: 31
+        height: 94
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5cc29e19da5b6460800000000000000
+      internalID: 7235977114868173918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_19
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 365
+        width: 32
+        height: 88
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e2a79acd7ec46210800000000000000
+      internalID: 1325411230018937571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_20
+      rect:
+        serializedVersion: 2
+        x: 957
+        y: 346
+        width: 41
+        height: 129
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bd4663d0640f5ab0800000000000000
+      internalID: -5017286645957374544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fences grass_21
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 366
+        width: 44
+        height: 132
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ed879d307156be20800000000000000
+      internalID: 3365967314017553896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 4695deaf6f7049f478d899b173a2be52
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

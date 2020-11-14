@@ -46,9 +46,6 @@ public class GameEvents : MonoBehaviour
             case ItemType.Consumable:
                 //Placeholder. Call for ItemDelte or something.
                 break;
-              
-
-
 
         }
 

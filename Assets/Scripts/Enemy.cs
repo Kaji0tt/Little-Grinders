@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour
     ///
     Vector3 forward, right;
     private float xInputVector, zInputVector;
-    private float distance;
+    private float player_distance;
     private Vector3 targetVector;
 
 
@@ -77,17 +77,17 @@ public class Enemy : MonoBehaviour
 
         // Die Direction berechnet sich noch aus den Welt
         navMeshAgent = GetComponent<NavMeshAgent>();
-        distance = Vector3.Distance(destination.position, transform.position);
+        player_distance = Vector3.Distance(destination.position, transform.position);
 
         if (navMeshAgent == null)
         {
             Debug.LogError("The Nav Mesh agent Component is not attached to " + gameObject.name);
         }
-        else if (distance <= aggroRange)
+        else if (player_distance <= aggroRange)
         {
             SetDestination();
 
-            if (distance <= attackRange)
+            if (player_distance <= attackRange)
             {
                 //Hier müssten entsprechende Animationen geladen werden, welche sich aus dem inputVector ergibt.
                 //isoRenderer.SetNPCDirection(inputVector); <-- Im isoRender entsprechende Animationen hinzufügen.
@@ -123,7 +123,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        if (collider.gameObject.name == "DirectionCollider")
+        if (collider.gameObject.name == "DirectionCollider") // Andere Lösung finden zur Liebe des CPU.
         {
             PlayerStats playerStats = destination.GetComponent<PlayerStats>();
             playerStats.attackCD -= Time.deltaTime;
@@ -157,16 +157,18 @@ public class Enemy : MonoBehaviour
     
     public void TakeDamage(float damage, int range)
     {
-        distance = Vector3.Distance(destination.position, transform.position);       
-            if (distance <= range)
+        player_distance = Vector3.Distance(destination.position, transform.position);       
+            if (player_distance <= range)
             {
               damage = 10 * (damage*damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
               damage = Mathf.Clamp(damage, 1, int.MaxValue);
               Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
-              //print(gameObject + " hat " + damage + " Schaden erhalten");
-              if (Hp.Value <= 0)
-              Die();
+              
+
             }
+
+        if (Hp.Value <= 0)
+            Die();
     }
 
 

@@ -13,8 +13,10 @@ public class IsometricPlayer : MonoBehaviour
     IsometricCharacterRenderer isoRenderer;
     PlayerStats playerStats;
     Rigidbody rbody;
+    //EQSlotWeapon weapon;
     Vector3 forward, right;
     float zoom;
+    public bool rangedWeapon;
 
 
     // Item Management
@@ -33,9 +35,10 @@ public class IsometricPlayer : MonoBehaviour
     private float maxHP;
 
 
+    //Talente und Kampf-System
+    [SerializeField]
+    private GameObject[] skillPrefab;
 
-    //public int Range;
-    //public float attackCD = 0f;
     Transform enemy;
     private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
 
@@ -45,6 +48,8 @@ public class IsometricPlayer : MonoBehaviour
         rbody = GetComponent<Rigidbody>();
         isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
         playerStats = GetComponent<PlayerStats>();
+        //weapon = GetComponent<EQSlotWeapon>();
+        rangedWeapon = false;
 
         //Isometric Camera
         forward = Camera.main.transform.forward;
@@ -84,7 +89,7 @@ public class IsometricPlayer : MonoBehaviour
         ItemWorld.SpawnItemWorld
             (new Vector3(transform.position.x + 5, transform.position.y, transform.position.z + 5),test_item);
         ItemWorld.SpawnItemWorld
-            (new Vector3(transform.position.x + 3, transform.position.y, transform.position.z + 3),test_item2);
+            (new Vector3(transform.position.x + 1, transform.position.y, transform.position.z + 1),test_item2);
         ItemWorld.SpawnItemWorld
             (new Vector3(transform.position.x + 6, transform.position.y, transform.position.z + 1),test_item3);
 
@@ -102,7 +107,7 @@ public class IsometricPlayer : MonoBehaviour
     {
 
         if (Input.anyKey)
-        { 
+        {
             Move();
 
         }
@@ -115,8 +120,19 @@ public class IsometricPlayer : MonoBehaviour
             uiHpOrb.SetActive(false);
             ui_Xp.text = "";
         }
-    }
 
+        //Hier weiter machen - es muss abgefragt werden, ob es eine Fernkampfwaffe ist.
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            RaycastHit hit;
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (rangedWeapon == true)
+                    CastSpell(hit.point);
+            }
+        }
+    }
     private void Update()
     {
 
@@ -180,6 +196,18 @@ public class IsometricPlayer : MonoBehaviour
         uiHpOrb.SetActive(true);
         ui_HpOrbTxt.text = Mathf.RoundToInt(playerStats.Get_currentHp()) + "\n" + Mathf.RoundToInt(playerStats.Hp.Value);
         ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
+    }
+    void CastSpell(Vector3 worldPos)
+    {
+
+            float dist = Vector3.Distance(worldPos, transform.position);
+            if (dist <= playerStats.Range)
+            {
+                Instantiate(skillPrefab[0], transform.position, Quaternion.identity);
+            }
+
+
+
     }
 
     private void OnTriggerStay(Collider collider)
