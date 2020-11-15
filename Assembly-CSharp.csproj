@@ -68,7 +68,8 @@
     <Compile Include="Assets\GameEvents.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
-    <Compile Include="Assets\Scripts\EnemyController.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyAnimator.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyController.cs" />
     <Compile Include="Assets\Scripts\EntityStats\CharacterCombat.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MetaStats\CharStats.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MetaStats\StatModifier.cs" />
