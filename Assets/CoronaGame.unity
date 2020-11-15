@@ -20772,8 +20772,8 @@ Transform:
   m_Father: {fileID: 2124112871}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &1270170730
-SphereCollider:
+--- !u!136 &1270170730
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -20782,9 +20782,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.34
+  m_Height: 4.48
+  m_Direction: 1
+  m_Center: {x: -0.12, y: 0, z: 0}
 --- !u!1 &1274219780
 GameObject:
   m_ObjectHideFlags: 0
@@ -29636,7 +29637,7 @@ GameObject:
   - component: {fileID: 1817240046}
   m_Layer: 0
   m_Name: Charakter
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32937,7 +32938,7 @@ GameObject:
   - component: {fileID: 2002525280}
   m_Layer: 0
   m_Name: DirectionCollider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

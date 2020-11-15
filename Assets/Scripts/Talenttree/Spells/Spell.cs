@@ -12,6 +12,7 @@ public class Spell : MonoBehaviour
     [SerializeField]
     private float bullet_height;
 
+    public float damage;
 
 
     private Transform target;
@@ -66,6 +67,14 @@ public class Spell : MonoBehaviour
 
 
     }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+
+        if(collider.gameObject.tag != "Player" && collider.gameObject.tag == "Enemy")
+        Destroy(this.gameObject);
+    }
+
 
 
 }

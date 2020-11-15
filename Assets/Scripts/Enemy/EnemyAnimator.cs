@@ -86,8 +86,10 @@ public class EnemyAnimator : MonoBehaviour
         Back.SetActive(false);
 
 
-            //animator.SetFloat("AnimDistance", player_distance);
+        //animator.SetFloat("AnimDistance", player_distance);
 
+        if (gameObject.activeSelf)
+        {
 
             if (animator.GetFloat("AnimDistance") <= attackRange)
             {
@@ -101,6 +103,8 @@ public class EnemyAnimator : MonoBehaviour
             {
                 animator.Play("F_Idle");
             }
+        }
+
         
     }
 
@@ -109,20 +113,24 @@ public class EnemyAnimator : MonoBehaviour
         Back.SetActive(true);
         Front.SetActive(false);
 
-        print(player_distance);
-        //animator.SetFloat("AnimDistance", player_distance);
-        if (animator.GetFloat("AnimDistance") <= attackRange)
+        if (gameObject.activeSelf)
         {
-            animator.Play("B_Attacking");
+            print("this loob is triggered");
+            animator.SetFloat("AnimDistance", player_distance);
+            if (animator.GetFloat("AnimDistance") <= attackRange)
+            {
+                animator.Play("B_Attacking");
+            }
+            else if (animator.GetFloat("AnimDistance") <= aggroRange)
+            {
+                animator.Play("B_Chasing");
+            }
+            else if (animator.GetFloat("AnimDistance") >= aggroRange)
+            {
+                animator.Play("B_Idle");
+            }
         }
-        else if (animator.GetFloat("AnimDistance") <= aggroRange)
-        {
-            animator.Play("B_Chasing");
-        }
-        else if (animator.GetFloat("AnimDistance") >= aggroRange)
-        {
-            animator.Play("B_Idle");
-        }
+
     }
         
 }

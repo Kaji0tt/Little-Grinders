@@ -25,6 +25,7 @@ public class EnemyController : MonoBehaviour
     ItemDatabase itemDatabase;
     public GameObject hpBar;
     public Slider enemyHpSlider;
+    private Spell spell;
 
 
     ///-----Stat Stuff-----
@@ -79,7 +80,7 @@ public class EnemyController : MonoBehaviour
 
         player_distance = Vector3.Distance(character_transform.position, transform.position);
 
-        enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
+
 
         if (navMeshAgent == null)
         {
@@ -133,12 +134,27 @@ public class EnemyController : MonoBehaviour
             {
                 if (playerStats.attackCD <= 0)
                 {
-                    TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+                    bool bullet = false;
+                    TakeDamage(playerStats.AttackPower.Value, bullet);
                     playerStats.attackCD = 1f / playerStats.AttackSpeed.Value;
                 }
             }
         }
     }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.tag == "Bullet") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
+        {
+
+            spell = collider.GetComponent<Spell>();
+            bool bullet = true;
+            TakeDamage(spell.damage, bullet = true);
+
+
+        }
+    }
+
 
     private void SetDestination()
     {
@@ -155,21 +171,27 @@ public class EnemyController : MonoBehaviour
 
 
             //irgendwo hier ist noch n kleiner fehler
-
+            enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
 
         }
     }
 
-    public void TakeDamage(float damage, int range)
+    public void TakeDamage(float damage, bool bullet)
     {
+        PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
         player_distance = Vector3.Distance(character_transform.position, transform.position);
-        if (player_distance <= range)
+
+        if (player_distance <= playerStats.Range)
         {
             damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
             Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+        }
 
-
+        //jetzt müsste eine Abfrage 
+        if (bullet == true)
+        {
+            Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
         }
 
         if (Hp.Value <= 0)

@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 4017818009230314486}
   - component: {fileID: 4017818009230314487}
   - component: {fileID: 4017818009230314480}
+  - component: {fileID: 665735155113493916}
   m_Layer: 0
   m_Name: TestBullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,6 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   bullet_height: 0.02
+  damage: 5
 --- !u!114 &4017818009230314480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,3 +131,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sortingOrderBase: 5000
   sO_OffSet: 0
+--- !u!65 &665735155113493916
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4017818009230314481}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8025167, y: 0.06632325, z: 0.17667718}
+  m_Center: {x: 0.04550326, y: -0.048615932, z: 0.01166141}
