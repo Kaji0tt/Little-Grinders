@@ -32192,21 +32192,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1954349141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954349138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7d0e8381953e940af39b53c64a5acf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 1954349140}
-  Front: {fileID: 2060688977}
-  Back: {fileID: 1954349138}
 --- !u!4 &1954497635 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 601652975532770066, guid: 56e2dbd4f0f52894bbb12be42feacc71,
@@ -34094,21 +34079,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2060688980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060688977}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7d0e8381953e940af39b53c64a5acf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 2060688979}
-  Front: {fileID: 2060688977}
-  Back: {fileID: 1954349138}
 --- !u!1001 &2060744518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34882,6 +34852,7 @@ GameObject:
   - component: {fileID: 2124112874}
   - component: {fileID: 2124112875}
   - component: {fileID: 2124112876}
+  - component: {fileID: 2124112877}
   m_Layer: 0
   m_Name: ShamanGhost
   m_TagString: Enemy
@@ -35037,6 +35008,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2124112877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124112870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce7d0e8381953e940af39b53c64a5acf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  Front: {fileID: 0}
+  Back: {fileID: 0}
+  toAnimate: []
 --- !u!1001 &2124757351
 PrefabInstance:
   m_ObjectHideFlags: 0
