@@ -72,7 +72,7 @@ public class Spell : MonoBehaviour
     {
 
         if(collider.gameObject.tag != "Player" && collider.gameObject.tag == "Enemy")
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 
 

@@ -138,6 +138,8 @@ public class Enemy : MonoBehaviour
         }
     }
 
+
+
     private void SetDestination()
     {
         if (destination != null)

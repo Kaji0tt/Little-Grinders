@@ -80,7 +80,7 @@ public class EnemyController : MonoBehaviour
 
         player_distance = Vector3.Distance(character_transform.position, transform.position);
 
-
+        enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
 
         if (navMeshAgent == null)
         {
@@ -134,8 +134,7 @@ public class EnemyController : MonoBehaviour
             {
                 if (playerStats.attackCD <= 0)
                 {
-                    bool bullet = false;
-                    TakeDamage(playerStats.AttackPower.Value, bullet);
+                    TakeDamage(playerStats.AttackPower.Value);
                     playerStats.attackCD = 1f / playerStats.AttackSpeed.Value;
                 }
             }
@@ -148,8 +147,7 @@ public class EnemyController : MonoBehaviour
         {
 
             spell = collider.GetComponent<Spell>();
-            bool bullet = true;
-            TakeDamage(spell.damage, bullet = true);
+            TakeDamage(spell.damage);
 
 
         }
@@ -171,16 +169,15 @@ public class EnemyController : MonoBehaviour
 
 
             //irgendwo hier ist noch n kleiner fehler
-            enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
+
 
         }
     }
 
-    public void TakeDamage(float damage, bool bullet)
+    public void TakeDamage(float damage)
     {
         PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
         player_distance = Vector3.Distance(character_transform.position, transform.position);
-
         if (player_distance <= playerStats.Range)
         {
             damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
@@ -189,10 +186,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //jetzt müsste eine Abfrage 
-        if (bullet == true)
-        {
-            Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
-        }
+
 
         if (Hp.Value <= 0)
             Die();

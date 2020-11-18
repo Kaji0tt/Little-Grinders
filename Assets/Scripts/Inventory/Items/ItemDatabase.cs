@@ -16,11 +16,20 @@ public class ItemDatabase : MonoBehaviour
     public List<Item> tier4;
     public List<Item> tier5;
 
+    public List<Item> totalDrops;
+
+    int itemsTotalCount;
+
+    int totalWeight;
+
     private int percentSum = 0;
 
     private void Awake()
     {
         instance = this;
+
+        itemsTotalCount = tier1.Count + tier2.Count + tier3.Count + tier4.Count + tier5.Count;
+
     }
 
     /*
@@ -34,6 +43,7 @@ public class ItemDatabase : MonoBehaviour
     {
         //Item-Drop Calculation
         percentSum = 0;
+        totalWeight = 0;
         int roll = Random.Range(0, 101);
 
 
@@ -46,8 +56,14 @@ public class ItemDatabase : MonoBehaviour
         {
             foreach (Item item in tier1)
             {
+                totalWeight += item.percent;
+            }
+
+            foreach (Item item in tier1)
+            {
                 //print(item.ItemName + " hat eine % von " + item.percent + ". Bei einem Roll von" + roll +".");
-                percentSum += item.percent;
+                percentSum += (item.percent * 100) / totalWeight;
+                
                 //print("Die kumulative Wahrscheinlichkeit beträgt nun: " + percentSum);
                 if (roll < percentSum)
                 {
@@ -59,6 +75,7 @@ public class ItemDatabase : MonoBehaviour
 
 
             }
+
         }
 
 
