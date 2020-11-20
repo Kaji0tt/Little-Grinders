@@ -1,0 +1,124 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+/*
+Auch innerhalb dieser oder der erbenden Klassen den Wert der kleingeschriebenen Variablen nur per Getter und Setter manipulieren, damit fehlerhafte Inputs nicht weiterverarbeitet
+      werden(z.B.negativer Level oder movementSpeed wären unsinnig).
+
+      richtig: 
+                Xp = 10;
+
+      falsch:   xp = 10;
+
+      also zum merken: immer die Variablen mit Großbuchstaben manipulieren.
+*/
+public class PlayerStats : MonoBehaviour
+{
+    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
+
+    public int xp;
+    public int Get_xp()
+    {
+        return xp;
+    }
+
+    public int Set_xp(int mod)
+    {
+        xp = xp + mod;
+        if (xp >= LevelUp_need())
+            Set_level(1);
+        return xp;
+    }
+    public int xp_needed;
+
+    public float attackCD = 0f;
+    public int Range;
+
+
+
+
+    private float currentHp;
+    public float Get_currentHp()
+    {
+        return currentHp;
+    }
+    public void Set_currentHp(float mod)
+    {
+        currentHp = currentHp + mod;
+    }
+
+    private float maxHp;
+    public void Get_maxHp()
+    {
+        maxHp = Hp.Value;
+    }
+    public void Set_maxHp()
+    {
+        maxHp = Hp.Value;
+    }
+
+
+
+    public int level;
+    public int Get_level()
+    { return level;}
+    public int Set_level(int new_Level)
+    {
+        xp = xp - LevelUp_need();
+        level = level + new_Level;return level;
+    }
+
+    public void Start()
+    {
+        //Folgender Funktion zum leveln initialisieren: y = log(​1+​x^​3)*​300/​2.5
+    }
+    public void Update()
+    {
+        LevelUp_need();
+    }
+
+
+    public void Awake()
+    {
+        currentHp = Hp.Value;
+        Set_xp(1);
+        //Set_level(1);
+    }
+
+
+
+
+    public void TakeDamage(float damage)
+    {
+        damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
+        damage = Mathf.Clamp(damage, 1, int.MaxValue);
+        //currentHp -= damage;
+        Set_currentHp(-damage);
+        if (currentHp <= 0)
+            Die();
+
+    }
+
+    public void Heal (int healAmount)
+    {
+        Set_currentHp(healAmount);
+    }
+
+    public int LevelUp_need()
+    {
+        float max_xp;
+        max_xp = (Mathf.Log(1 + Mathf.Pow(level, 3)) * 300) / 2.5f; // log(​1 +​x ^​3) *​300 /​2.5
+        int xp_needed = Mathf.CeilToInt(max_xp);
+        return xp_needed;
+    }
+
+    public virtual void Die()
+    {
+        Debug.Log(transform.name + "ist gestorben.");
+    }
+
+
+}
+
+
