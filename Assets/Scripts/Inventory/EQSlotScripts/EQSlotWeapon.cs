@@ -99,10 +99,7 @@ public class EQSlotWeapon : MonoBehaviour
         playerStats = player.GetComponent<PlayerStats>();
         playerStats.Range = item.Range;
 
-        if (item.RangedWeapon == true)
-            print("== klappt gut");
-        if (item.RangedWeapon == false)
-            print("ohne == klappt");
+
 
         if (item.RangedWeapon)
             isometricPlayer.rangedWeapon = true;

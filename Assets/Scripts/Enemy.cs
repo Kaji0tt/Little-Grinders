@@ -30,8 +30,11 @@ public class Enemy : MonoBehaviour
     ///-----Stat Stuff-----
     ///
     [Header("Stats")]
-    private float attackCD = 0f;
+
     public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
+    public int level;
+
+    private float attackCD = 0f;
     private float maxHp;
     [Space]
     public int Experience;
@@ -179,7 +182,7 @@ public class Enemy : MonoBehaviour
         playerStats.Set_xp(Experience);
 
         string _lootTable = lootTable.ToString();
-        itemDatabase.GetComponent<ItemDatabase>().GetDrop(gameObject.transform.position, _lootTable);   
+        itemDatabase.GetComponent<ItemDatabase>().GetWeightDrop(gameObject.transform.position);   
         Destroy(gameObject);
     }
 }

@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class EnemyAnimator : MonoBehaviour
 {
-    [SerializeField]
     private Animator animator;
 
-    [SerializeField]
-    private GameObject Front, Back;
+
 
     //[SerializeField]
     //public static readonly string[] staticDirections = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
