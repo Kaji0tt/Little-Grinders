@@ -10,7 +10,7 @@ public class Spell : MonoBehaviour
     [SerializeField]
     private float speed;
     [SerializeField]
-    private float bullet_height;
+    private float bullet_height; //soll noch eingebaut werden, damit die projectiles in kurven fliegen.
 
     public float damage;
 

@@ -197,48 +197,60 @@ public class ItemDatabase : MonoBehaviour
         //Im Prinzip müssen alle Listen in einer großen Liste liegen. (totalLoottable) check
         //Dann muss entsprechend der Tier und Enemy-Level Stuffe totalWeight erhöht oder verringert werden.
 
-        /*      if(enemy_level = 1)
-         * 
-         * 
-         */
+
         bool foundItem = false;
 
-        for (int i = 0; i < totalLoottable.Count; i++)
+        //Im finalen Roll orientiere ich i am Player.Level.. 
+
+        //Fragen die zum Fixxen relevant sind: Wofür steht i genau? 
+        //i ist eine unabhängige Variabel, welche sich an meinem Level orientieren sollte
+        for (int i = 0; i < totalLoottable.Count; i++)      
         {
             int levelInfluence = 1 / level;
 
-            if (i+1 == level)
+            //if (i+1 == level) //das würde bedeuten, dass es eine Spannweite < i > geben sollte, welche die erste capsule definiert.
+
+            //definieren wir einfach eine variabel für die Drop-Range, also die Levelgröße der Loottables.
+            int dropRange = 5;
+
+            //und definieren wir das total weight orientiert an der drop range
+            if (i + 1 <= level + dropRange && i + 1 >= level - dropRange) //Logikfehler - eins von beiden tritt aufjedenfall ein. && stattdessen
+                                                                         // weiterer Logikfehler: solange die level variabel im spiel ist, wird sich niemals was daran ändern.
+                                                                         //conclusion: die Loottables sollten eine eigene Klasse besitzen, aus denen die entsprechenden drop ranges ausgelesen werden können - und alle informationen die nötig sind.
+                                                                         // to do für morgen: schreibe ein ScriptableObject Script für einzelne Loottables.
+                                                                         // notwendige Parameter: Range Parameter // levelspannweite
+                                                                         // ggf. enemy type's oder sowas..
                 foreach (Item item in totalLoottable[i])
                 {
                     totalWeight += item.percent;
                 }
 
 
-            if (PosDiff(i+1, level) == 1)
+            else if (PosDiff(i+1, level) <= 2*dropRange || PosDiff(i + 1, level) >= 2*dropRange)
                 foreach (Item item in totalLoottable[i])
                 {
                     totalWeight += item.percent * 1 / ((int)PosDiff(i + 1, level) + 1);
                 }
 
-            if (PosDiff(i+1, level) == 2)
+            if (PosDiff(i + 1, level) <= 3 * dropRange || PosDiff(i + 1, level) >= 3 * dropRange)
                 foreach (Item item in totalLoottable[i])
                 {
                     totalWeight += item.percent * 1 / ((int)PosDiff(i + 1, level) + 1);
                 }
 
-            if (PosDiff(i + 1, level) == 3)
+            if (PosDiff(i + 1, level) <= 4 * dropRange || PosDiff(i + 1, level) >= 4 * dropRange)
                 foreach (Item item in totalLoottable[i])
                 {
                     totalWeight += item.percent * 1 / ((int)PosDiff(i + 1, level) + 1);
                 }
 
-            if (PosDiff(i + 1, level) == 4)
+            if (PosDiff(i + 1, level) <= 5 * dropRange || PosDiff(i + 1, level) >= 5 * dropRange)
                 foreach (Item item in totalLoottable[i])
                 {
                     totalWeight += item.percent * 1 / ((int)PosDiff(i + 1, level) + 1);
                 }
 
-            if (PosDiff(i + 1, level) == 5)
+            if (PosDiff(i + 1, level) <= 6 * dropRange || PosDiff(i + 1, level) >= 6 * dropRange)
                 foreach (Item item in totalLoottable[i - 1])
                 {
                     totalWeight += item.percent * 1 / ((int)PosDiff(i + 1, level) + 1);
@@ -283,7 +295,7 @@ public class ItemDatabase : MonoBehaviour
         //Hochzählen der Loot-Tier Listen bis zu einem Grenzbereich von 3
         for (int i = level +1; i < level + 3; i++)
         {
-            if(foundItem == false)
+            if(foundItem == false && totalLoottable[i] != null)
             {
                 foreach (Item item in totalLoottable[i])
                 {
