@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
 
     ///-----Stat Stuff-----
     ///
-    [Header("Stats")]
+    [Space]
 
     public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
     public int level;

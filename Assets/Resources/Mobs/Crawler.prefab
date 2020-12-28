@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1785854264286108909}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -69,11 +69,11 @@ GameObject:
   - component: {fileID: 7839687458832828457}
   - component: {fileID: 7839687458832828456}
   - component: {fileID: 7839687458832828459}
-  - component: {fileID: 7839687458832828458}
   - component: {fileID: 7839687458832828461}
   - component: {fileID: 7839687458832828460}
   - component: {fileID: 7839687458832828463}
   - component: {fileID: 7839687458832828462}
+  - component: {fileID: 764865214548323693}
   m_Layer: 0
   m_Name: Crawler
   m_TagString: Enemy
@@ -161,36 +161,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sortingOrderBase: 5000
---- !u!114 &7839687458832828458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7839687458832828465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c033829b5f5e044697af17c27852dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destination: {fileID: 0}
-  hpBar: {fileID: 7839687460562832954}
-  enemyHpSlider: {fileID: 7839687460541522322}
-  Hp:
-    BaseValue: 30
-  Armor:
-    BaseValue: 1
-  AttackPower:
-    BaseValue: 3
-  AbilityPower:
-    BaseValue: 0
-  AttackSpeed:
-    BaseValue: 1
-  level: 0
-  Experience: 50
-  aggroRange: 5
-  attackRange: 1
-  lootTable: 0
 --- !u!95 &7839687458832828461
 Animator:
   serializedVersion: 3
@@ -260,6 +230,37 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &764865214548323693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7839687458832828465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba17f4bbc98f2b84b89b8d74272773ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character_transform: {fileID: 0}
+  animated: 0
+  hpBar: {fileID: 7839687460562832954}
+  enemyHpSlider: {fileID: 7839687460541522322}
+  Hp:
+    BaseValue: 30
+  Armor:
+    BaseValue: 2
+  AttackPower:
+    BaseValue: 3
+  AbilityPower:
+    BaseValue: 1
+  AttackSpeed:
+    BaseValue: 1
+  level: 1
+  Experience: 30
+  aggroRange: 5
+  attackRange: 1
+  lootTable: 0
 --- !u!1 &7839687458876821628
 GameObject:
   m_ObjectHideFlags: 0

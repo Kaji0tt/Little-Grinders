@@ -57,7 +57,9 @@ public class Spell : MonoBehaviour
         //direction = new Vector3 (direction.normalized.x, bullet_height, direction.normalized.z); 
         myRigidBody.velocity = (direction.normalized * speed);
 
-        if (transform.position == spell_destination)
+        float timer = 0;
+        timer += Time.deltaTime;
+        if (timer >= 15)
             Destroy(gameObject);
 
 
@@ -73,6 +75,8 @@ public class Spell : MonoBehaviour
 
         if (collider.gameObject.tag != "Player" && collider.gameObject.tag == "Enemy")
             Destroy(gameObject);
+
+
     }
 
 

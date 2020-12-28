@@ -13,9 +13,11 @@ public class EnemyController : MonoBehaviour
     Transform character_transform;
 
     NavMeshAgent navMeshAgent;
-    //IsometricCharacterRenderer isoRenderer;
+    IsometricCharacterRenderer isoRenderer;
     //private Animator animator;
     private EnemyAnimator enemyAnimator;
+    public bool animated;
+
 
     ///----Combat Variables-----
     ///
@@ -29,7 +31,7 @@ public class EnemyController : MonoBehaviour
 
 
     ///-----Stat Stuff-----
-    [Header("Stats")]
+    [Space]
     public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
     public int level;
 
@@ -71,7 +73,8 @@ public class EnemyController : MonoBehaviour
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
-        //isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
+        if (animated == false)
+        isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
     }
 
 
@@ -82,35 +85,42 @@ public class EnemyController : MonoBehaviour
 
         player_distance = Vector3.Distance(character_transform.position, transform.position);
 
-        enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
+        if (animated == true)
+            enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
 
         if (navMeshAgent == null)
         {
             Debug.LogError("The Nav Mesh agent Component is not attached to " + gameObject.name);
         }
 
-        else if (player_distance <= aggroRange)
+        else
         {
-            SetDestination();
 
-            if (player_distance <= attackRange)
+            if (player_distance <= aggroRange)
             {
+                SetDestination();
+                inputVector = transform.position - navMeshAgent.transform.position;
 
-                PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
-                attackCD -= Time.deltaTime;
-                if (playerStats != null)
+                if (player_distance <= attackRange)
                 {
-                    if (attackCD <= 0)
+
+                    PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+                    attackCD -= Time.deltaTime;
+                    if (playerStats != null)
                     {
-                        playerStats.TakeDamage(AttackPower.Value);
-                        attackCD = 1f / AttackSpeed.Value;
+                        if (attackCD <= 0)
+                        {
+                            playerStats.TakeDamage(AttackPower.Value);
+                            attackCD = 1f / AttackSpeed.Value;
+                        }
                     }
                 }
             }
+
+            else
+                navMeshAgent.SetDestination(transform.position);
         }
 
-        else
-            navMeshAgent.SetDestination(transform.position);
 
 
         #region Hp-Bar
@@ -167,7 +177,9 @@ public class EnemyController : MonoBehaviour
             Vector3 Direction = character_transform.transform.position - transform.position;
             Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
             inputVector = Vector2.ClampMagnitude(inputVector, 1);
-            //isoRenderer.SetNPCDirection(inputVector);
+
+            if (animated == false) 
+            isoRenderer.SetNPCDirection(inputVector);
 
 
             //irgendwo hier ist noch n kleiner fehler

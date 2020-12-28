@@ -47,8 +47,8 @@ public class ItemDatabase : MonoBehaviour
 
 
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
-        int level = playerStats.Get_level();
 
+        int level = playerStats.Get_level();
 
 
         currentDropTable.Clear();
@@ -58,8 +58,6 @@ public class ItemDatabase : MonoBehaviour
         int dropRange = 2;
 
         int dropTable = 0;
-
-
 
             if (level <= dropRange)
             {
@@ -129,7 +127,7 @@ public class ItemDatabase : MonoBehaviour
 
             currentDropTable.Add(item);
 
-            print(totalWeight);
+
         }
 
 
@@ -140,7 +138,7 @@ public class ItemDatabase : MonoBehaviour
                 totalWeight += item.percent / 2;
 
                 currentDropTable.Add(item);
-                print(totalWeight);
+
             }
 
         if (totalLoottable[lootTable + 2] != null)
@@ -150,7 +148,7 @@ public class ItemDatabase : MonoBehaviour
                 totalWeight += item.percent / 3;
 
                 currentDropTable.Add(item);
-                print(totalWeight);
+
             }
 
         if (lootTable >= 1)
@@ -160,7 +158,7 @@ public class ItemDatabase : MonoBehaviour
                 totalWeight += item.percent / 2;
 
                 currentDropTable.Add(item);
-                print(totalWeight);
+
             }
 
         if (lootTable >= 2)
@@ -170,7 +168,7 @@ public class ItemDatabase : MonoBehaviour
                 totalWeight += item.percent / 3;
 
                 currentDropTable.Add(item);
-                print(totalWeight);
+
             }
 
         return totalWeight;

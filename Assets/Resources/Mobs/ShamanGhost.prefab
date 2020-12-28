@@ -245,6 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character_transform: {fileID: 0}
+  animated: 1
   hpBar: {fileID: 8659852318879507760}
   enemyHpSlider: {fileID: 8659852318577960805}
   Hp:
@@ -257,7 +258,7 @@ MonoBehaviour:
     BaseValue: 0
   AttackSpeed:
     BaseValue: 1
-  level: 0
+  level: 1
   Experience: 50
   aggroRange: 5
   attackRange: 1
