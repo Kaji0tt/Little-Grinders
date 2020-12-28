@@ -18,9 +18,10 @@ MonoBehaviour:
   itemType: 5
   itemRarity: 0
   Range: 1
+  RangedWeapon: 0
   GetSprite: {fileID: -598602018589989760, guid: 49ba478eb0b56784ea728d4165ef457b,
     type: 3}
-  percent: 1
+  percent: 5
   hp: 0
   armor: 0
   attackPower: 13
@@ -32,3 +33,4 @@ MonoBehaviour:
   p_attackSpeed: 0.01
   p_movementSpeed: 0
   c_hp: 0
+  c_percent: 0

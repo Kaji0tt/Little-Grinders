@@ -41,6 +41,9 @@ public class Item : ScriptableObject, IDescribable
     [Header("Consumables")]
     public int c_hp;
 
+    [HideInInspector]
+    public float c_percent;
+
     private string[] modStrings = new string[] {"Hp" ,"Armor" , "Attack Power", "Ability Power", "p_hp", "p_armor", "p_attackPower", "p_abilityPower", "p_attackSpeed", "p_movemenSpeed" };
 
 
