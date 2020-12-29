@@ -99,14 +99,14 @@ public class ItemDatabase : MonoBehaviour
 
 
 
-            print("So viele Items könnten gedropped werden" + currentDropTable.Count);
+            //print("So viele Items könnten gedropped werden" + currentDropTable.Count);
 
                 foreach (Item item in currentDropTable)
                 {
                     
                     percentSum += ((int)item.c_percent * 100) / totalWeight;
-                    print( item.c_percent + "% wurde von dem Item " + item.ItemName + " hinzugefügt. Ergibt insgesamt " + percentSum + "%");
-
+                    //print( item.c_percent + "% wurde von dem Item " + item.ItemName + " hinzugefügt. Ergibt insgesamt " + percentSum + "%");
+                    
                     if (roll < percentSum)
                     {
                         position = position + new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
@@ -122,7 +122,7 @@ public class ItemDatabase : MonoBehaviour
 
         foreach (Item item in totalLoottable[lootTable])
         {
-            item.c_percent = item.percent;
+            item.c_percent = item.percent; //Nochmal nachsehen. item.c_percent scheint falsch weiter gegeben zu werden (e.g. 10% = 8% im Roll, wtf)
             totalWeight += item.percent;
 
             currentDropTable.Add(item);

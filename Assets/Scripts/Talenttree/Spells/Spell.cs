@@ -17,6 +17,7 @@ public class Spell : MonoBehaviour
 
     private Transform target;
     private Vector3 spell_destination;
+    private float timer;
 
     // Diese Datei wäre auch praktisch für z.B. Pfeile
     // Target sollte stets der erste Enemy sein, welcher sich im 3D Raum zwischen Mouse.ScreenPointToArray und Charakter befindet.
@@ -49,6 +50,14 @@ public class Spell : MonoBehaviour
     {
 
     }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer >= 5)
+            Destroy(gameObject);
+    }
+
     private void FixedUpdate()
     {
 
@@ -57,10 +66,8 @@ public class Spell : MonoBehaviour
         //direction = new Vector3 (direction.normalized.x, bullet_height, direction.normalized.z); 
         myRigidBody.velocity = (direction.normalized * speed);
 
-        float timer = 0;
-        timer += Time.deltaTime;
-        if (timer >= 15)
-            Destroy(gameObject);
+
+
 
 
         //Hey Christoph, na. Ich hab da mal was vorbereitet. Hast du Lust einzustellen, dass die Flugbahn eine Parabel bildet? Also das die "Bullet" sozusagen in einer Bogenlampe fliegt?

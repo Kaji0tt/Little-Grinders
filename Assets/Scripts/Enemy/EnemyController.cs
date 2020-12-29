@@ -85,6 +85,10 @@ public class EnemyController : MonoBehaviour
 
         player_distance = Vector3.Distance(character_transform.position, transform.position);
 
+
+
+        inputVector.x = character_transform.transform.position.x - transform.position.x;
+        inputVector.y = character_transform.transform.position.z - transform.position.z;
         if (animated == true)
             enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
 
@@ -99,7 +103,7 @@ public class EnemyController : MonoBehaviour
             if (player_distance <= aggroRange)
             {
                 SetDestination();
-                inputVector = transform.position - navMeshAgent.transform.position;
+
 
                 if (player_distance <= attackRange)
                 {
