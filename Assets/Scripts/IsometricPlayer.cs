@@ -38,6 +38,7 @@ public class IsometricPlayer : MonoBehaviour
     //Talente und Kampf-System
     [SerializeField]
     private GameObject[] skillPrefab;
+    private Vector3 targetDirection;
 
     Transform enemy;
     private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
@@ -128,13 +129,15 @@ public class IsometricPlayer : MonoBehaviour
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                if (rangedWeapon == true)
+                if (rangedWeapon == true && InLineOfSight())           //Kladaradatsch. Die Abfrage nach Spells sollte eine eigene Methode sein.
                     CastSpell(hit.point);
             }
         }
     }
     private void Update()
     {
+
+        print(InLineOfSight());
 
         //UI Orb
         HpSlider.value = playerStats.Get_currentHp() / playerStats.Hp.Value;
@@ -170,6 +173,37 @@ public class IsometricPlayer : MonoBehaviour
         rbody.AddForce(ActualSpeed * playerStats.MovementSpeed.Value, ForceMode.Force);
 
     }
+
+    public bool InLineOfSight()         //Abfrage, ob Spieler in LOS zum Geschoss / Spell ist.
+    {
+
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 100.0f);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+
+            RaycastHit hit = hits[i];
+            //print(hits[i].transform.name);
+            if (hit.transform.tag == "Floor")
+            {
+
+                targetDirection = (hit.point - transform.position);
+            }
+        }
+
+        //Debug.DrawRay(transform.position, targetDirection, Color.red);
+        //DirectionCollider = Physics.Raycast(targetDirection, transform.position);
+
+        RaycastHit dirCollider;
+        int layerMask = 1 << 8;
+        if (Physics.Raycast(transform.position, targetDirection, out dirCollider, Mathf.Infinity, layerMask))
+            return true;
+        else
+            return false;
+
+    }
+
     void Zoom()
     {
         //Versuch des Zoomens

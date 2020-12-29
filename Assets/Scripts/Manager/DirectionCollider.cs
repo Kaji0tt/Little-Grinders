@@ -31,11 +31,24 @@ public class DirectionCollider : MonoBehaviour
 
     void Update()
     {
+
+        if (Input.anyKey)
+        {
+            Move();
+
+        }
+        
+    }
+
+    private void Move()
+    {
         Vector3 direction = right * Input.GetAxis("HorizontalKey") + forward * Input.GetAxis("VerticalKey");
         direction = Vector3.ClampMagnitude(direction, 1);
+        direction = direction.normalized;
 
         if (direction.magnitude > .5f)
             transform.position = PlayerManager.instance.player.transform.position + direction;
+
     }
 
     /* Vielleicht das ganze im Enemy abfragen?

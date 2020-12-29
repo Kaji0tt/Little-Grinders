@@ -7,13 +7,26 @@ public class Spell : MonoBehaviour
 
     private Rigidbody myRigidBody;
 
+    //TravelTime of Spell
     [SerializeField]
     private float speed;
+
+    //Arc the Spell is flying in
     [SerializeField]
     private float bullet_height; //soll noch eingebaut werden, damit die projectiles in kurven fliegen.
 
+
+    //Damage of the Spell. Should be scaling with Ability Power later on.
+    [SerializeField]
     public float damage;
 
+    // Scaling of AP
+    //[SerilizeField]
+    //private float scaling;
+
+    //The spell's icon
+    [SerializeField]
+    private Sprite icon;
 
     private Transform target;
     private Vector3 spell_destination;
@@ -76,6 +89,8 @@ public class Spell : MonoBehaviour
 
 
     }
+
+
 
     private void OnTriggerEnter(Collider collider)
     {
