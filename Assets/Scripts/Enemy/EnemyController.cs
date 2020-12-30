@@ -49,6 +49,7 @@ public class EnemyController : MonoBehaviour
     private float player_distance;
     private Vector3 targetVector;
     Vector2 inputVector;
+    public bool pulled;
 
 
     void Start()
@@ -100,7 +101,7 @@ public class EnemyController : MonoBehaviour
         else
         {
 
-            if (player_distance <= aggroRange)
+            if (player_distance <= aggroRange || pulled)
             {
                 SetDestination();
 
@@ -142,6 +143,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
+
         if (collider.gameObject.name == "DirectionCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
             PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
@@ -150,7 +152,7 @@ public class EnemyController : MonoBehaviour
             {
                 if (playerStats.attackCD <= 0)
                 {
-                    TakeDamage(playerStats.AttackPower.Value);
+                    TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
                     playerStats.attackCD = 1f / playerStats.AttackSpeed.Value;
                 }
             }
@@ -163,7 +165,8 @@ public class EnemyController : MonoBehaviour
         {
 
             spell = collider.GetComponent<Spell>();
-            TakeDamage(spell.damage);
+
+            TakeDamage(spell.damage, spell.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.
 
 
         }
@@ -192,15 +195,16 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, float range)
     {
-        PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+        
         player_distance = Vector3.Distance(character_transform.position, transform.position);
-        if (player_distance <= playerStats.Range)
+        if (player_distance <= range)
         {
             damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
             Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+            pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
 
         //jetzt müsste eine Abfrage 
@@ -213,7 +217,7 @@ public class EnemyController : MonoBehaviour
 
     public void Die()
     {
-        //print("enemy died");
+
         PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
         playerStats.Set_xp(Experience);
 
@@ -221,26 +225,5 @@ public class EnemyController : MonoBehaviour
         itemDatabase.GetComponent<ItemDatabase>().GetWeightDrop(gameObject.transform.position);
         Destroy(gameObject);
     }
-
-    /*
-    private void AnimateMe()
-    {
-        animator.SetFloat("AnimDistance", player_distance);
-        
-
-        if(animator.GetFloat("AnimDistance") <= attackRange)
-        {
-            animator.Play("F_Attacking");
-        }
-        else if (animator.GetFloat("AnimDistance") <= aggroRange)
-        {
-            animator.Play("F_Chasing");
-        }
-        else if (animator.GetFloat("AnimDistance") >= aggroRange)
-        {
-            animator.Play("F_Idle");
-        }
-    }
-    */
 
 }

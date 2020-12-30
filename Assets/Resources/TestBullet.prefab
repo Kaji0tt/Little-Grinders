@@ -115,8 +115,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  range: 7
   bullet_height: 0.02
-  damage: 1
+  damage: 5
+  icon: {fileID: 0}
+  los: 0
 --- !u!114 &4017818009230314480
 MonoBehaviour:
   m_ObjectHideFlags: 0

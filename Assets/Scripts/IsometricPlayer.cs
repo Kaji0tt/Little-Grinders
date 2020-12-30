@@ -125,19 +125,12 @@ public class IsometricPlayer : MonoBehaviour
         //Hier weiter machen - es muss abgefragt werden, ob es eine Fernkampfwaffe ist.
         if (Input.GetKey(KeyCode.Mouse0))
         {
-            RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (rangedWeapon == true && InLineOfSight())           //Kladaradatsch. Die Abfrage nach Spells sollte eine eigene Methode sein.
-                    CastSpell(hit.point);
-            }
+            Attack();
         }
     }
     private void Update()
     {
 
-        print(InLineOfSight());
 
         //UI Orb
         HpSlider.value = playerStats.Get_currentHp() / playerStats.Hp.Value;
@@ -231,15 +224,45 @@ public class IsometricPlayer : MonoBehaviour
         ui_HpOrbTxt.text = Mathf.RoundToInt(playerStats.Get_currentHp()) + "\n" + Mathf.RoundToInt(playerStats.Hp.Value);
         ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
     }
-    void CastSpell(Vector3 worldPos)
-    {
 
+    void Attack()
+    {
+        RaycastHit hit;
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (rangedWeapon == true && InLineOfSight())           //Kladaradatsch. Die Abfrage nach Spells sollte eine eigene Methode sein.
+                RangedAttack(hit.point);
+
+        }
+    }
+
+    public void CastSpell(int spellIndex)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
+    {
+        RaycastHit hit;
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            float dist = Vector3.Distance(hit.point, transform.position);
+            Spell spell = skillPrefab[spellIndex].GetComponent<Spell>();
+            if (dist <= spell.range)
+            {
+                Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
+            }
+            
+        }
+
+    }
+
+    void RangedAttack(Vector3 worldPos)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
+    {
+            /* --Wird wieder enabled, sobald die Skills hinzugefügt wurden--
             float dist = Vector3.Distance(worldPos, transform.position);
             if (dist <= playerStats.Range)
             {
                 Instantiate(skillPrefab[0], transform.position, Quaternion.identity);
             }
-
+            */
 
 
     }

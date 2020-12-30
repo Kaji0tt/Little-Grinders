@@ -17,9 +17,52 @@ public class UI_Manager : MonoBehaviour
 
     private Text tooltipText;
 
+    [SerializeField]
+    private Button[] actionButtons;
+
+    private Spell[] spell;
+
+
+    private IsometricPlayer isometricPlayer;
+
+    private KeyCode action1, action2, action3;
+
     private void Start()
     {
         tooltipText = tooltip.GetComponentInChildren<Text>();
+
+
+        action1 = KeyCode.Alpha1;
+
+        action2 = KeyCode.Alpha2;
+
+        action3 = KeyCode.Alpha3;
+
+
+        isometricPlayer = GetComponent<IsometricPlayer>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(action1))
+        {
+            ActionButtonOnClick(0);
+        }
+
+        if (Input.GetKeyDown(action2))
+        {
+
+        }
+
+        if (Input.GetKeyDown(action3))
+        {
+
+        }
+    }
+
+    private void ActionButtonOnClick(int btnIndex)
+    {
+        actionButtons[btnIndex].onClick.Invoke();
     }
 
     public void ShowItemTooltip(Vector3 position, Item item)

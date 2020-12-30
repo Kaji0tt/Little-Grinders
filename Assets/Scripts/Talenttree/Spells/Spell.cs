@@ -11,6 +11,10 @@ public class Spell : MonoBehaviour
     [SerializeField]
     private float speed;
 
+    //Range of the Spell
+    [SerializeField]
+    public float range;
+
     //Arc the Spell is flying in
     [SerializeField]
     private float bullet_height; //soll noch eingebaut werden, damit die projectiles in kurven fliegen.
@@ -28,6 +32,10 @@ public class Spell : MonoBehaviour
     [SerializeField]
     private Sprite icon;
 
+    //Does it need Line of Sight?
+    [SerializeField]
+    private bool los;
+
     private Transform target;
     private Vector3 spell_destination;
     private float timer;
@@ -39,7 +47,7 @@ public class Spell : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody>();
 
         RaycastHit[] hits;
-        //var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
         hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 100.0f);
 
         for (int i = 0; i < hits.Length; i++)
@@ -47,17 +55,15 @@ public class Spell : MonoBehaviour
 
             RaycastHit hit = hits[i];
             //print(hits[i].transform.name);
-            if (hit.transform.tag == "Floor")
-            {
-
+            if (hit.transform.tag == "Enemy") 
                 spell_destination = hit.point;
-            }
+            
+            else if (hit.transform.tag == "Floor")
+                spell_destination = hit.point;
         }
 
 
     }
-
-    // Target sollte der Punkt
 
     private void Awake()
     {
@@ -73,11 +79,17 @@ public class Spell : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float dist = Vector3.Distance(spell_destination, PlayerManager.instance.player.transform.position);
 
-        Vector3 direction = spell_destination - transform.position;
+        if ( dist <= range)
+        {
+            Vector3 direction = spell_destination - transform.position;
+            myRigidBody.velocity = (direction.normalized * speed);
+        }
+
 
         //direction = new Vector3 (direction.normalized.x, bullet_height, direction.normalized.z); 
-        myRigidBody.velocity = (direction.normalized * speed);
+
 
 
 
