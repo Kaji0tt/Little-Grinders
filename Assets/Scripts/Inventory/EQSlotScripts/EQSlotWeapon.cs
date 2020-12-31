@@ -93,9 +93,9 @@ public class EQSlotWeapon : MonoBehaviour
     {
         storedItem = item;
         int_slotBtn.StoreItem(item);
-        GetComponent<Image>().sprite = item.GetSprite;
+        GetComponent<Image>().sprite = item.icon;
         weaponAnim = GameObject.Find("WeaponAnimParent");
-        weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite;
+        weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
         playerStats = player.GetComponent<PlayerStats>();
         playerStats.Range = item.Range;
 

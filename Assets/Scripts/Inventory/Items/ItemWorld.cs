@@ -36,7 +36,7 @@ public class ItemWorld : MonoBehaviour
     {
         this.item = item;
         //Texture2D texture = item.GetSprite;
-        spriteRenderer.sprite = item.GetSprite;
+        spriteRenderer.sprite = item.icon;
  
 
     }

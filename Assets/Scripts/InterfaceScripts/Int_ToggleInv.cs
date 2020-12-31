@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Int_ToggleInv : MonoBehaviour
 {
-
+    /*
     public GameObject characterMenu, inventoryTab, skillTab;
 
     [Space]
@@ -25,6 +25,8 @@ public class Int_ToggleInv : MonoBehaviour
     void Update()
     {
      //   print(ToggleInv);
+
+        /*
         if (Input.GetKeyDown(KeyCode.E) && toggleInv==false)
         {
             toggleInv = true;
@@ -63,5 +65,7 @@ public class Int_ToggleInv : MonoBehaviour
                 
             }
         }
+        
     }
+    */
 }

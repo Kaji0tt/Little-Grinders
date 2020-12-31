@@ -25,7 +25,7 @@ public class EQSlotHose : MonoBehaviour
         {
             storedItem = item;
             int_slotBtn.StoreItem(item);
-            GetComponent<Image>().sprite = item.GetSprite;
+            GetComponent<Image>().sprite = item.icon;
             player = GameObject.Find("Charakter");
 
         }
@@ -34,7 +34,7 @@ public class EQSlotHose : MonoBehaviour
             Dequip();
             storedItem = item;
             int_slotBtn.storedItem = item;
-            GetComponent<Image>().sprite = item.GetSprite;
+            GetComponent<Image>().sprite = item.icon;
             player = GameObject.Find("Charakter");
         }
     }

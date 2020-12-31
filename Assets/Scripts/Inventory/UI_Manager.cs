@@ -25,18 +25,49 @@ public class UI_Manager : MonoBehaviour
 
     private IsometricPlayer isometricPlayer;
 
-    private KeyCode action1, action2, action3;
+    private KeyCode action1, action2, action3, action4, action5, inventoryKey, skillKey;
+
+    [SerializeField]
+    private CanvasGroup keybindMenu; //hier sollte später das komplette Hauptmenü drin liegen.
+
+
+    [SerializeField]
+    private CanvasGroup characterMenu; // character Menue, weitergegeben wird ebenfalls welches fenster auf ist.
+
+    [SerializeField]
+    private CanvasGroup inventoryTab;
+
+    [SerializeField]
+    private CanvasGroup skillTab;
+
+
+    //behinderte Methode die unter Menüs des Charakter Menüs zu deklarieren.
+    //public GameObject talentTree, inventoryMenu; //Muss auch über Canvas group geregelt werden, da zu beginn nicht aktivierte Spielobjekte einen Null-Error ergeben!
+
+    //private bool mouseInterface;
+
+    private bool skillTabOpen, inventoryTabOpen;
+
+
 
     private void Start()
     {
         tooltipText = tooltip.GetComponentInChildren<Text>();
 
-
+        //SetUseable(actionButtons[0], )
         action1 = KeyCode.Alpha1;
 
         action2 = KeyCode.Alpha2;
 
         action3 = KeyCode.Alpha3;
+
+        action4 = KeyCode.Alpha4;
+
+        action5 = KeyCode.Alpha5;
+
+        inventoryKey = KeyCode.E;
+
+        skillKey = KeyCode.P;
 
 
         isometricPlayer = GetComponent<IsometricPlayer>();
@@ -44,6 +75,11 @@ public class UI_Manager : MonoBehaviour
 
     private void Update()
     {
+        
+        //Interface Abfrage des Cursos sollte implementiert werden.
+
+        //Action-Bars
+
         if (Input.GetKeyDown(action1))
         {
             ActionButtonOnClick(0);
@@ -51,13 +87,59 @@ public class UI_Manager : MonoBehaviour
 
         if (Input.GetKeyDown(action2))
         {
-
+            ActionButtonOnClick(1);
         }
 
         if (Input.GetKeyDown(action3))
         {
+            ActionButtonOnClick(2);
+        }
+
+        if (Input.GetKeyDown(action4))
+        {
+            ActionButtonOnClick(3);
+        }
+
+        if (Input.GetKeyDown(action5))
+        {
+            ActionButtonOnClick(4);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OpenCloseMenu(keybindMenu);
+        }
+
+        //Interface
+
+        if (Input.GetKeyDown(skillKey))
+        {
+            OpenCloseMenu(skillTab);
+        }
+
+        if (Input.GetKeyDown(inventoryKey))
+        {
+            OpenCloseMenu(inventoryTab);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (skillTabOpen)
+            {
+                OpenCloseMenu(skillTab);
+                OpenCloseMenu(inventoryTab);
+            }
+
+
+            if (inventoryTabOpen)
+            {
+                OpenCloseMenu(inventoryTab);
+                OpenCloseMenu(skillTab);
+            }
 
         }
+
+
     }
 
     private void ActionButtonOnClick(int btnIndex)
@@ -97,4 +179,49 @@ public class UI_Manager : MonoBehaviour
     {
         tooltip.SetActive(false);
     }
+
+
+    public void OpenCloseMenu(CanvasGroup canvas)
+    {
+        canvas.alpha = canvas.alpha > 0 ? 0 : 1; 
+        canvas.blocksRaycasts = canvas.blocksRaycasts == true ? false : true;
+
+        //Extra Abfrage für Character Tab
+        if (canvas.name == "skillTab")
+        {
+            if(skillTabOpen)
+            {
+                skillTabOpen = false;
+                inventoryTabOpen = true;
+            }
+
+            else if (!skillTabOpen)
+            {
+                skillTabOpen = true;
+                inventoryTabOpen = false;
+            }
+
+
+        }
+
+        else if (canvas.name == "inventoryTab")
+        {
+            if(!inventoryTabOpen)
+            {
+                inventoryTabOpen = true;
+                skillTabOpen = false;
+            }
+
+
+            else if (inventoryTabOpen)
+            {
+                inventoryTabOpen = false;
+                skillTabOpen = true;
+            }
+
+        }
+
+    }
+
+
 }

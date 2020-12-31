@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spell : MonoBehaviour
+public class Spell : MonoBehaviour,  IUseable // IMoveable
 {
 
+
+
+    //Die Spell Klasse dient lediglich dem Geschoss selbst.. ggf. sollten Talente ebenfalls Spells sein, bzw. diese beeinflussen.
     private Rigidbody myRigidBody;
 
     //TravelTime of Spell
@@ -31,14 +34,29 @@ public class Spell : MonoBehaviour
     //The spell's icon
     [SerializeField]
     private Sprite icon;
+    //Sprite IMoveable.icon => icon;
+
+
+    [SerializeField]
+    private string spellName;
+
 
     //Does it need Line of Sight?
     [SerializeField]
-    private bool los;
+    public bool los;
 
     private Transform target;
     private Vector3 spell_destination;
     private float timer;
+
+
+    //Fragwürdig. Diese Klasse sieht derzeit eher aus wie eine BulletKlasse, aber mal schauen..
+    public void Use()
+    {
+        IsometricPlayer player = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
+        player.CastSpell(this);
+ 
+    }
 
     // Diese Datei wäre auch praktisch für z.B. Pfeile
     // Target sollte stets der erste Enemy sein, welcher sich im 3D Raum zwischen Mouse.ScreenPointToArray und Charakter befindet.
@@ -65,10 +83,6 @@ public class Spell : MonoBehaviour
 
     }
 
-    private void Awake()
-    {
-
-    }
 
     private void Update()
     {
@@ -112,7 +126,6 @@ public class Spell : MonoBehaviour
 
 
     }
-
 
 
 }

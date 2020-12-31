@@ -237,7 +237,10 @@ public class IsometricPlayer : MonoBehaviour
         }
     }
 
-    public void CastSpell(int spellIndex)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
+    // ---- RANGED ATTACK ----- Not implemented yet.
+
+    /*
+    public void AttackRange(int spellIndex)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
     {
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -245,13 +248,39 @@ public class IsometricPlayer : MonoBehaviour
         {
             float dist = Vector3.Distance(hit.point, transform.position);
             Spell spell = skillPrefab[spellIndex].GetComponent<Spell>();
-            if (dist <= spell.range)
+            if (dist <= spell.range && spell.los)
             {
+                if (InLineOfSight())
                 Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
             }
-            
+            else if (dist <= spell.range && spell.los == false)
+            {
+                Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
+            }           
         }
+    }
+    */
 
+
+    // ---- CAST SPELL -----
+    public void CastSpell(Spell spell)
+    {
+        RaycastHit hit;
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            float dist = Vector3.Distance(hit.point, transform.position);
+            //Spell spell = skillPrefab[spellIndex].GetComponent<Spell>();
+            if (dist <= spell.range && spell.los)
+            {
+                if (InLineOfSight()) ;
+                    //Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
+            }
+            else if (dist <= spell.range && spell.los == false)
+            {
+                //Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
+            }
+        }
     }
 
     void RangedAttack(Vector3 worldPos)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index

@@ -3,10 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Talent : MonoBehaviour
+public class Talent : MonoBehaviour, IMoveable
 {
 
-    private Image sprite; //Verwendet er, damit ausgewählte Talente / noch nicht skillbare Talente ausgegraut werden.
+    private Image image; //Verwendet er, damit ausgewählte Talente / noch nicht skillbare Talente ausgegraut werden.
+
+    
+    public Sprite icon
+    {
+        get
+        {
+            return image.sprite;
+        }
+    }
+    
+    //public string spellName => throw new System.NotImplementedException();
 
     [SerializeField]
     private Text countText;
@@ -20,19 +31,35 @@ public class Talent : MonoBehaviour
     [SerializeField]
     private Talent childTalent;
 
+    [SerializeField]
+    private bool active;
+
     //Die Weiterleitung zu anderen Talenten macht er in Abhängig von "Pfeilen", also wenn ein PfeilSprite auf eine andere Fähigkeit zeigt, bzw. sie einen Pfeil besitzt, dann wird das Folgetalent freigeschaltet.
     //Kp ob ich das so machen wollen würde, entsprechendes Video hier:
     // https://youtu.be/NEqaBBnAFfM?t=406
 
+    //Drag and Drop Magie
+    //https://youtu.be/ILaDr3CE7QY?t=615
+
+
+
+
+
 
     private void Awake()
     {
-        sprite = GetComponent<Image>();
+
+
+
+        image = GetComponent<Image>();
+
         countText.text = $"{currentCount}/{maxCount}";
 
 
         if (unlocked)
             Unlock();
+
+
     }
 
     public bool Click()
@@ -56,15 +83,20 @@ public class Talent : MonoBehaviour
 
     public void LockTalents()
     {
-        sprite.color = Color.grey;
+        image.color = Color.grey;
         countText.color = Color.grey;
     }
 
     public void Unlock()
     {
-        sprite.color = Color.white;
+        image.color = Color.white;
         countText.color = Color.white;
 
         unlocked = true;
+    }
+
+    private void OnMouseOver()
+    {
+
     }
 }

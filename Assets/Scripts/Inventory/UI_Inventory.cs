@@ -79,7 +79,7 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
             SlotRectTransform.anchoredPosition = new Vector2(x * SlotCellSize, y * SlotCellSize);
 
             Image image = SlotRectTransform.Find("image").GetComponent<Image>();
-            image.sprite = item.GetSprite;
+            image.sprite = item.icon;
             x++;
             if (x > 5)
             {

@@ -7,6 +7,7 @@ public class TalentTree : MonoBehaviour
 {
     private int points = 10;
 
+
     // Relevant wird nochmal: Welche Fähigkeiten sind zwar freigeschaltet, aber ausgegraut, sobald keine Verteilbaren punkte mehr da sind..
     // Wobei.. dann wären sie Verwendbar solange wir die Skillpunkte noch nicht gesetzt wurden, es sei denn ich mach eine currentCoutn != 0 Abfrage..
     // Jedenfalls, hier das Video: https://youtu.be/NEqaBBnAFfM?t=624

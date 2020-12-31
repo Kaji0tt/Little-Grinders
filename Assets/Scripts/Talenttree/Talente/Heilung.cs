@@ -2,11 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class Heilung : Talent, IPointerEnterHandler, IPointerExitHandler
+public class Heilung : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IUseable
+                                                                                                              //Skill
+                                                                                                              // -> In Abhängigkeit davon, ob es sich bei dem 
+                                                                                                              //Talent um eine Aktive Fähigkeit handelt, 
+                                                                                                              //sollt es ebenfalls von Spells geerbt werden.
 {
     [SerializeField]
     string description;
+
+
+    [SerializeField]
+    private string spellName;
+
+
+
+
+
+
     /*
     public override bool Click()
     {
@@ -32,4 +47,18 @@ public class Heilung : Talent, IPointerEnterHandler, IPointerExitHandler
     {
         UI_Manager.instance.HideTooltip();
     }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        HandScript.instance.TakeMoveable(this);
+    }
+
+    public void Use()
+    {
+
+        //Am Besten bastelst du eine neue Spell Klasse als Scriptable Object?
+        print("spell benutzt.");
+    }
+
+
 }
