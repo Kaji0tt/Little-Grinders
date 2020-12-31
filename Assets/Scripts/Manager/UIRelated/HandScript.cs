@@ -37,17 +37,25 @@ public class HandScript : MonoBehaviour
     private void Update()
     {
         image.transform.position = Input.mousePosition;
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && MyMoveable != null)
+        {
+            Put();
+        }
     }
 
     //Schauen ob diese Funktion wirklich benutzt werden muss. Falls ich im Talent OnDragEnd benutz, muss dies vielleicht dort geschehen.
 
     public IMoveable Put()
     {
+
         IMoveable tmp = MyMoveable;
 
         MyMoveable = null;
 
         image.color = new Color(0, 0, 0, 0);
+
+        //print("me got called");
 
         return tmp;
     }

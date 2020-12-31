@@ -19,6 +19,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
     void Start()
     {
         MyButton = GetComponent<Button>();
+        MyButton.image = GetComponent<Image>();
         MyButton.onClick.AddListener(OnClick);
     }
 
@@ -40,8 +41,8 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
     public void UpdateVisual()
     {
 
-        icon = HandScript.instance.Put().icon;
-        //icon.color = Color.white; 
+        MyButton.image.sprite = HandScript.instance.Put().icon;
+        MyButton.image.color = Color.white; 
     }
 
     public void SetUseable(IUseable useable)
@@ -69,7 +70,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
         {
 
             SetUseable(HandScript.instance.MyMoveable as IUseable);
-            //HandScript.instance.MyMoveable = null;
+            HandScript.instance.MyMoveable = null;
         }
     }
 }
