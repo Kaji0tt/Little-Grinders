@@ -68,7 +68,6 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
     {
         if (HandScript.instance.MyMoveable != null)
         {
-
             SetUseable(HandScript.instance.MyMoveable as IUseable);
             HandScript.instance.MyMoveable = null;
         }

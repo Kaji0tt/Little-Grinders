@@ -11,7 +11,8 @@ public class IsometricPlayer : MonoBehaviour
     //public float movementSpeed = 30f;
     public float SlowFactor;
     IsometricCharacterRenderer isoRenderer;
-    PlayerStats playerStats;
+    public PlayerStats playerStats { get; private set; }
+
     Rigidbody rbody;
     //EQSlotWeapon weapon;
     Vector3 forward, right;
@@ -128,9 +129,11 @@ public class IsometricPlayer : MonoBehaviour
             Attack();
         }
     }
+
+
     private void Update()
     {
-
+       
 
         //UI Orb
         HpSlider.value = playerStats.Get_currentHp() / playerStats.Hp.Value;
@@ -169,7 +172,7 @@ public class IsometricPlayer : MonoBehaviour
 
     public bool InLineOfSight()         //Abfrage, ob Spieler in LOS zum Geschoss / Spell ist.
     {
-
+        
         RaycastHit[] hits;
         hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 100.0f);
 
@@ -177,7 +180,6 @@ public class IsometricPlayer : MonoBehaviour
         {
 
             RaycastHit hit = hits[i];
-            //print(hits[i].transform.name);
             if (hit.transform.tag == "Floor")
             {
 
@@ -185,8 +187,6 @@ public class IsometricPlayer : MonoBehaviour
             }
         }
 
-        //Debug.DrawRay(transform.position, targetDirection, Color.red);
-        //DirectionCollider = Physics.Raycast(targetDirection, transform.position);
 
         RaycastHit dirCollider;
         int layerMask = 1 << 8;
@@ -194,12 +194,12 @@ public class IsometricPlayer : MonoBehaviour
             return true;
         else
             return false;
-
+        
     }
 
     void Zoom()
     {
-        //Versuch des Zoomens
+        //Ggf. sollten die Mausrad zoomies invertiert werden.
         //float _zoom = Camera.main.fieldOfView;
 
         float max, min;
@@ -265,6 +265,7 @@ public class IsometricPlayer : MonoBehaviour
     // ---- CAST SPELL -----
     public void CastSpell(Spell spell)
     {
+        /*
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
@@ -281,6 +282,7 @@ public class IsometricPlayer : MonoBehaviour
                 //Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
             }
         }
+        */
     }
 
     void RangedAttack(Vector3 worldPos)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
@@ -326,19 +328,5 @@ public class IsometricPlayer : MonoBehaviour
     {
         get { return inventory; }
     }
-    
-    /*
-    public void TakeDamage(float damage)
-    {
-        damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
-        damage = Mathf.Clamp(damage, 1, int.MaxValue);
-        Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
-        if (Hp.Value <= 0)
-            Die();
-
-    }
-    */
-
-
 
 }

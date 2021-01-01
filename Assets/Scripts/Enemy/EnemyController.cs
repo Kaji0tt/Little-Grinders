@@ -165,9 +165,9 @@ public class EnemyController : MonoBehaviour
         {
 
             spell = collider.GetComponent<Spell>();
-
+            /*
             TakeDamage(spell.damage, spell.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.
-
+            */
 
         }
     }

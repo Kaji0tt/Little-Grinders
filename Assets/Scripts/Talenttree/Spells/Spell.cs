@@ -1,13 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class Spell : MonoBehaviour,  IUseable // IMoveable
+public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IMoveable //MonoBehaviour,  IUseable // 
 {
+    [Header("Spell Eigenschaften")]
+    //What is the Spells Name?
+    [SerializeField]
+    private string spellName;
 
+    public string GetSpellName
+    {
+        get
+        {
+            return spellName;
+        }
+    }
 
+    //Description of the Spell
+    [SerializeField]
+    [TextArea]
+    private string description; 
+    
+    public string GetDescription
+    {
+        get
+        {
+            return description;
+        }
+    }
 
+    //How much CoolDown does this spell have?
+    [SerializeField]
+    private float spellCoolDown;
+
+    public float GetSpellCoolDown
+    {
+        get
+        {
+            return spellCoolDown;
+        }
+    }
+
+    //Is this an active Spell?
+    [SerializeField]
+    private bool active;
+
+    public bool onCoolDown;
+    private float coolDownTimer;
+    /*
     //Die Spell Klasse dient lediglich dem Geschoss selbst.. ggf. sollten Talente ebenfalls Spells sein, bzw. diese beeinflussen.
+    [SerializeField]
     private Rigidbody myRigidBody;
 
     //TravelTime of Spell
@@ -31,15 +76,6 @@ public class Spell : MonoBehaviour,  IUseable // IMoveable
     //[SerilizeField]
     //private float scaling;
 
-    //The spell's icon
-    [SerializeField]
-    private Sprite icon;
-    //Sprite IMoveable.icon => icon;
-
-
-    [SerializeField]
-    private string spellName;
-
 
     //Does it need Line of Sight?
     [SerializeField]
@@ -47,21 +83,36 @@ public class Spell : MonoBehaviour,  IUseable // IMoveable
 
     private Transform target;
     private Vector3 spell_destination;
-    private float timer;
 
+    */
 
     //Fragwürdig. Diese Klasse sieht derzeit eher aus wie eine BulletKlasse, aber mal schauen..
-    public void Use()
+
+    #region Interface Handling
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        IsometricPlayer player = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
-        player.CastSpell(this);
- 
+
+        UI_Manager.instance.ShowTooltip(new Vector2(Input.mousePosition.x - 10f, Input.mousePosition.y + 10f), GetDescription);
+
+
     }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        UI_Manager.instance.HideTooltip();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        HandScript.instance.TakeMoveable(this);
+    }
+    #endregion
 
     // Diese Datei wäre auch praktisch für z.B. Pfeile
     // Target sollte stets der erste Enemy sein, welcher sich im 3D Raum zwischen Mouse.ScreenPointToArray und Charakter befindet.
     void Start()
     {
+        /*
         myRigidBody = GetComponent<Rigidbody>();
 
         RaycastHit[] hits;
@@ -79,20 +130,37 @@ public class Spell : MonoBehaviour,  IUseable // IMoveable
             else if (hit.transform.tag == "Floor")
                 spell_destination = hit.point;
         }
-
+        */
 
     }
 
 
     private void Update()
     {
+        if(onCoolDown)
+        {
+            Image image = GetComponent<Image>();
+            image.color = new Color(0, 1, 0, 1);
+            coolDownTimer += Time.deltaTime;
+            if (coolDownTimer >= spellCoolDown)
+            {
+                image.color = Color.white;
+
+                coolDownTimer = 0;
+                onCoolDown = false;
+            }
+        }
+
+        /*
         timer += Time.deltaTime;
         if (timer >= 5)
             Destroy(gameObject);
+            */
     }
 
     private void FixedUpdate()
     {
+        /*
         float dist = Vector3.Distance(spell_destination, PlayerManager.instance.player.transform.position);
 
         if ( dist <= range)
@@ -100,32 +168,18 @@ public class Spell : MonoBehaviour,  IUseable // IMoveable
             Vector3 direction = spell_destination - transform.position;
             myRigidBody.velocity = (direction.normalized * speed);
         }
-
-
-        //direction = new Vector3 (direction.normalized.x, bullet_height, direction.normalized.z); 
-
-
-
-
-
-
-        //Hey Christoph, na. Ich hab da mal was vorbereitet. Hast du Lust einzustellen, dass die Flugbahn eine Parabel bildet? Also das die "Bullet" sozusagen in einer Bogenlampe fliegt?
-        // Idealerweise passiert das über myRigidBody.AddForce(x,y,z), weil damit die Physic des spiels mit einberechnet wird. 
-        //Masse, Speed und Bullet_Height lassen sich manuell einstellen im Inspektor.
-
-
+        */
     }
 
 
 
     private void OnTriggerEnter(Collider collider)
     {
-
+        /*
         if (collider.gameObject.tag != "Player" && collider.gameObject.tag == "Enemy")
             Destroy(gameObject);
 
-
+        */
     }
-
 
 }

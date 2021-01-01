@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Talent : MonoBehaviour, IMoveable
+public class Talent : MonoBehaviour
 {
 
     private Image image; //Verwendet er, damit ausgewählte Talente / noch nicht skillbare Talente ausgegraut werden.
@@ -31,8 +31,7 @@ public class Talent : MonoBehaviour, IMoveable
     [SerializeField]
     private Talent childTalent;
 
-    [SerializeField]
-    private bool active;
+
 
     //Die Weiterleitung zu anderen Talenten macht er in Abhängig von "Pfeilen", also wenn ein PfeilSprite auf eine andere Fähigkeit zeigt, bzw. sie einen Pfeil besitzt, dann wird das Folgetalent freigeschaltet.
     //Kp ob ich das so machen wollen würde, entsprechendes Video hier:
@@ -95,8 +94,5 @@ public class Talent : MonoBehaviour, IMoveable
         unlocked = true;
     }
 
-    private void OnMouseOver()
-    {
-
-    }
+    //Es sollte noch eingestellt werden, das Spells nur dann genutzt werden können, wenn currentCount >= 0 ist.
 }

@@ -49,9 +49,9 @@ public class PlayerStats : MonoBehaviour
     }
 
     private float maxHp;
-    public void Get_maxHp()
+    public float Get_maxHp()
     {
-        maxHp = Hp.Value;
+        return maxHp = Hp.Value;
     }
     public void Set_maxHp()
     {
@@ -102,7 +102,15 @@ public class PlayerStats : MonoBehaviour
 
     public void Heal (int healAmount)
     {
-        Set_currentHp(healAmount);
+        //Der Heal sollte gefixxed werden. So dass der healAmount nicht größer sein kann als die Differenz von currentHP zu maxHP.
+        if (healAmount + (int)Get_currentHp() >= (int)Get_maxHp())
+        {
+            healAmount =  (int)Get_maxHp() - (int)Get_currentHp();
+            print(healAmount);
+            Set_currentHp(healAmount);
+        }
+
+        else Set_currentHp(healAmount);
     }
 
     public int LevelUp_need()
