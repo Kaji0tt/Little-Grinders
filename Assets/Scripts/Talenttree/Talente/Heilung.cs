@@ -19,7 +19,7 @@ public class Heilung : Spell, IUseable
     {
 
         playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
-        if (!onCoolDown)
+        if (!onCoolDown && currentCount >= 1)
         {
 
 

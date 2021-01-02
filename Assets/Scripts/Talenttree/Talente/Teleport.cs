@@ -9,11 +9,12 @@ public class Teleport : Spell, IUseable
     IsometricPlayer player;
 
 
+
     public void Use()
     {
 
         player = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
-        if (!onCoolDown)
+        if (!onCoolDown && currentCount >= 1)
         {
 
             RaycastHit[] hits;

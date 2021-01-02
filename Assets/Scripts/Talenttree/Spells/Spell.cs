@@ -44,12 +44,16 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
         }
     }
 
+    Spell IMoveable.spell => this;
+
+
+
     //Is this an active Spell?
     [SerializeField]
     private bool active;
 
     public bool onCoolDown;
-    private float coolDownTimer;
+    public float coolDownTimer { get; private set; }
     /*
     //Die Spell Klasse dient lediglich dem Geschoss selbst.. ggf. sollten Talente ebenfalls Spells sein, bzw. diese beeinflussen.
     [SerializeField]
@@ -140,8 +144,9 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
         if(onCoolDown)
         {
             Image image = GetComponent<Image>();
-            image.color = new Color(0, 1, 0, 1);
+            image.color = Color.grey;
             coolDownTimer += Time.deltaTime;
+
             if (coolDownTimer >= spellCoolDown)
             {
                 image.color = Color.white;

@@ -6,8 +6,7 @@ using UnityEngine.UI;
 public class Talent : MonoBehaviour
 {
 
-    private Image image; //Verwendet er, damit ausgewählte Talente / noch nicht skillbare Talente ausgegraut werden.
-
+    public Image image;
     
     public Sprite icon
     {
@@ -24,7 +23,7 @@ public class Talent : MonoBehaviour
 
     [SerializeField]
     private int maxCount;
-    private int currentCount;
+    public int currentCount { get; private set; }
 
     public bool unlocked;
 

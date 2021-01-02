@@ -16,6 +16,8 @@ public class HandScript : MonoBehaviour
 
     private Image image;
 
+    private Spell spell;
+
     [SerializeField]
     private Vector3 offset;
 
@@ -25,6 +27,7 @@ public class HandScript : MonoBehaviour
     private void Start()
     {
         image = GetComponent<Image>();
+
     }
 
     public void TakeMoveable(IMoveable moveable)
@@ -54,8 +57,6 @@ public class HandScript : MonoBehaviour
         MyMoveable = null;
 
         image.color = new Color(0, 0, 0, 0);
-
-        //print("me got called");
 
         return tmp;
     }
