@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TalentTree : MonoBehaviour
 {
-    private int points = 10;
+    private int points = 11;
 
 
     // Relevant wird nochmal: Welche Fähigkeiten sind zwar freigeschaltet, aber ausgegraut, sobald keine Verteilbaren punkte mehr da sind..

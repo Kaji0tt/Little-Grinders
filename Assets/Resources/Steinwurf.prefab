@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4017818009230314484}
+  - component: {fileID: 775068862764483926}
   - component: {fileID: 4017818009230314485}
   - component: {fileID: 4017818009230314486}
-  - component: {fileID: 4017818009230314487}
   - component: {fileID: 4017818009230314480}
   - component: {fileID: 665735155113493916}
   m_Layer: 0
@@ -35,6 +35,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &775068862764483926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4017818009230314481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e88afaef0ecfd249bc69ddd26e94955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet_rigidbody: {fileID: 4017818009230314486}
+  destination: {x: 5.8284073, y: 0, z: 12.635432}
+  speed: 8
+  player_position: {x: 0.943188, y: 0.41757417, z: 13.67282}
 --- !u!212 &4017818009230314485
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -74,7 +90,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2645261354948954999, guid: 9829c7fd3cd4d3f4bb34ea0820121ea3,
+  m_Sprite: {fileID: -1608493749375777725, guid: 333ed419ba54e664aa81ea99e67b5baf,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,24 +118,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4017818009230314487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4017818009230314481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e115da16b4342a4aaa00982211063ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
-  range: 7
-  bullet_height: 0.02
-  damage: 5
-  icon: {fileID: 6248119667951494030, guid: 1dc4664f68c576843a3ebcc858d7fe6e, type: 3}
-  los: 1
 --- !u!114 &4017818009230314480
 MonoBehaviour:
   m_ObjectHideFlags: 0

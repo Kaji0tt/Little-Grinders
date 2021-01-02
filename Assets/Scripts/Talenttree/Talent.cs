@@ -16,7 +16,6 @@ public class Talent : MonoBehaviour
         }
     }
     
-    //public string spellName => throw new System.NotImplementedException();
 
     [SerializeField]
     private Text countText;
@@ -41,22 +40,15 @@ public class Talent : MonoBehaviour
 
 
 
-
-
-
     private void Awake()
     {
-
-
 
         image = GetComponent<Image>();
 
         countText.text = $"{currentCount}/{maxCount}";
 
-
         if (unlocked)
             Unlock();
-
 
     }
 
@@ -93,5 +85,4 @@ public class Talent : MonoBehaviour
         unlocked = true;
     }
 
-    //Es sollte noch eingestellt werden, das Spells nur dann genutzt werden können, wenn currentCount >= 0 ist.
 }

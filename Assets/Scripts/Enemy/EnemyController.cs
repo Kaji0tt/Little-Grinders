@@ -27,7 +27,11 @@ public class EnemyController : MonoBehaviour
     ItemDatabase itemDatabase;
     public GameObject hpBar;
     public Slider enemyHpSlider;
-    private Spell spell;
+
+    /// <summary>
+    /// Bullet Types - finde eine bessere Methode die entsprechenden Scripte abzurufen.
+    /// </summary>
+    //private Steinwurf steinwurf;
 
 
     ///-----Stat Stuff-----
@@ -164,10 +168,9 @@ public class EnemyController : MonoBehaviour
         if (collider.gameObject.tag == "Bullet") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
 
-            spell = collider.GetComponent<Spell>();
-            /*
-            TakeDamage(spell.damage, spell.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.
-            */
+            Steinwurf_Bullet steinwurf_bullet = collider.GetComponent<Steinwurf_Bullet>();
+            TakeDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.
+            
 
         }
     }
@@ -197,8 +200,9 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage, float range)
     {
-        
-        player_distance = Vector3.Distance(character_transform.position, transform.position);
+        print("should have taken damage of" + damage);
+        player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
+        print(player_distance);
         if (player_distance <= range)
         {
             damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
