@@ -24,7 +24,6 @@ public class EnemyController : MonoBehaviour
     CharacterCombat combat;
     IsometricPlayer isometricPlayer;
     private GameObject scriptController;
-    ItemDatabase itemDatabase;
     public GameObject hpBar;
     public Slider enemyHpSlider;
 
@@ -60,7 +59,6 @@ public class EnemyController : MonoBehaviour
     {
         combat = GetComponent<CharacterCombat>();
         scriptController = GameObject.FindWithTag("GameController");
-        itemDatabase = scriptController.GetComponent<ItemDatabase>();
         enemyAnimator = GetComponentInChildren<EnemyAnimator>();
         //animator = GetComponent<Animator>();
 
@@ -71,7 +69,6 @@ public class EnemyController : MonoBehaviour
 
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
         character_transform = PlayerManager.instance.player.transform;
-        //PlayerStats playerStats = destination.GetComponent<PlayerStats>();
 
         forward = Camera.main.transform.forward;
         forward.y = 0;
@@ -148,7 +145,7 @@ public class EnemyController : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
 
-        if (collider.gameObject.name == "DirectionCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
+        if (collider.gameObject.tag == "Player") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
             PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
             playerStats.attackCD -= Time.deltaTime;
@@ -200,9 +197,9 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage, float range)
     {
-        print("should have taken damage of" + damage);
+        //print("should have taken damage of" + damage);
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
-        print(player_distance);
+        //print(player_distance);
         if (player_distance <= range)
         {
             damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
@@ -226,7 +223,7 @@ public class EnemyController : MonoBehaviour
         playerStats.Set_xp(Experience);
 
         string _lootTable = lootTable.ToString();
-        itemDatabase.GetComponent<ItemDatabase>().GetWeightDrop(gameObject.transform.position);
+        ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
         Destroy(gameObject);
     }
 

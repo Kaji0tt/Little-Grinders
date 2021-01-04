@@ -9,7 +9,6 @@ public class MobsCamScript : MonoBehaviour
     UnityEngine.AI.NavMeshAgent agentDest;
     private Vector3 playerPosition;
 
-    private GameObject player;
 
     //Sorting Order Values
     private Vector3 CameraPosition;
@@ -18,26 +17,28 @@ public class MobsCamScript : MonoBehaviour
     private int sortingOrderBase = 5000;
     private SpriteRenderer sprite;
 
+    private Animator animator;
+
 
     void Start()
     {
-        sprite = GetComponent<SpriteRenderer>();
+
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        player = GameObject.Find("Charakter");
-        //player = GetComponent<PlayerStats>();
 
-
-
-
+        if (GetComponent<SpriteRenderer>() != null)
+            sprite = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
        transform.LookAt(Camera.main.transform);
 
-        CameraPosition = GameObject.Find("Camera").transform.position;
+        CameraPosition = CameraManager.instance.camera.transform.position;
         DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;
+
+        if(sprite != null)
         sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
+
 
         //11.09
         //Die Folgenden Lines of Code sollten wohl verwendet werden, um Attack Animationen / Kampf zu berechnen,

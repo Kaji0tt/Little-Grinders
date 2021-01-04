@@ -74,9 +74,9 @@ public class EQSlotWeapon : MonoBehaviour
 
     public void Dequip()
     {
-        player = GameObject.Find("Charakter");
 
-        inventory = player.GetComponent<IsometricPlayer>().Inventory;
+
+        inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
         isometricPlayer.Dequip(storedItem);

@@ -5,8 +5,8 @@ using UnityEngine;
 public class CharController : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField]
-    float moveSpeed = 0f;
+    //[SerializeField]
+    //float moveSpeed = 0f;
 
     Vector3 forward, right;
     Animator animator;

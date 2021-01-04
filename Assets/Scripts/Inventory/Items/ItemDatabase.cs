@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ItemDatabase : MonoBehaviour
 {
-    private static ItemDatabase instance;
+    public static ItemDatabase instance;
 
     //private enum LootTable;
     //Loottable loot;
@@ -91,11 +91,11 @@ public class ItemDatabase : MonoBehaviour
 
 
 
-        print(totalWeight);
+        //print(totalWeight);
         // Berechnung des Rolls
         percentSum = 0;
         int roll = Random.Range(0, 101);
-        print("Der Roll beträgt:" + roll);
+        //print("Der Roll beträgt:" + roll);
 
 
 

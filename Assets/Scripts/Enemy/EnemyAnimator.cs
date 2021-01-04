@@ -8,10 +8,6 @@ public class EnemyAnimator : MonoBehaviour
     private Animator animator;
 
 
-
-    //[SerializeField]
-    //public static readonly string[] staticDirections = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
-
     [SerializeField]
     public GameObject[] toAnimate;
 
@@ -22,55 +18,47 @@ public class EnemyAnimator : MonoBehaviour
 
     }
 
-    
+    //Wenn ich alles über einen einzelnen Animation-Controller steuern wollen würde, wäre die Lösung den State im Abhängigkeit vom Integer "objectToAnimate" zu bestimmen.
     public void AnimateMe(Vector2 inputVector, float player_distance, float attackRange, float aggroRange)
     {
-
-        objectToAnimate = SetAnimatedObject(inputVector);
-
-
-        if (objectToAnimate == 0)
+        if (toAnimate.Length != 0)
         {
-            toAnimate[0].SetActive(true);
-            toAnimate[1].SetActive(false);
-        }
-        else 
-        {
-            toAnimate[1].SetActive(true);
-            toAnimate[0].SetActive(false);
-        }
+            objectToAnimate = SetAnimatedObject(inputVector);
+
+            ToggleActiveObject(objectToAnimate);
 
 
+            animator = toAnimate[objectToAnimate].GetComponent<Animator>();
 
+            animator.SetFloat("AnimDistance", player_distance);
 
-        animator = toAnimate[objectToAnimate].GetComponent<Animator>();
-
-        animator.SetFloat("AnimDistance", player_distance);
-
-        if (animator.GetFloat("AnimDistance") <= attackRange)
-        {
-            animator.Play("Attacking");
-        }
-        else if (animator.GetFloat("AnimDistance") <= aggroRange)
-        {
-            animator.Play("Chasing");
-        }
-        else if (animator.GetFloat("AnimDistance") >= aggroRange)
-        {
-            animator.Play("Idle");
+            if (animator.GetFloat("AnimDistance") <= attackRange)
+            {
+                animator.Play("Attacking");
+            }
+            else if (animator.GetFloat("AnimDistance") <= aggroRange)
+            {
+                animator.Play("Chasing");
+            }
+            else if (animator.GetFloat("AnimDistance") >= aggroRange)
+            {
+                animator.Play("Idle");
+            }
         }
 
 
     }
 
 
-    public static int SetAnimatedObject(Vector2 dir)
+    //thanks inScope.
+
+    public int SetAnimatedObject(Vector2 dir)
     {
         //get the normalized direction
         Vector2 normDir = dir.normalized;
 
         //calculate how many degrees one slice is
-        float step = 360f / 2; // <- Diese Variabel verändern, wenn man einen Mob mit mehr als 2 Richtungen (Oben / Unten) animieren will.
+        float step = 360f / toAnimate.Length; // <- Diese Variabel verändern, wenn man einen Mob mit mehr als 2 Richtungen (Oben / Unten) animieren will.
 
         //calculate how many degress half a slice is.
         //we need this to offset the pie, so that the North (UP) slice is aligned in the center
@@ -99,4 +87,23 @@ public class EnemyAnimator : MonoBehaviour
         //der Return-Wert mir die Richtung zurück gibt (North, West, South, East)
     }
 
+    //Das sind Schleifen die in Runtime kontinuierlich abgerufen werden. Nicht gut. Finde bessere Methode.
+    void ToggleActiveObject(int objectToAnimate)
+    {
+
+        for (int i = 0; i < toAnimate.Length; i++)
+        {
+            if (i == objectToAnimate)
+            {
+                toAnimate[i].SetActive(true);
+                for(int z = 0; z < toAnimate.Length; z++)
+                {
+                    if (z != i)
+                        toAnimate[z].SetActive(false);
+                }
+            }
+
+
+        }
+    }
 }

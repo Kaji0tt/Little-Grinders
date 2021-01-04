@@ -9,7 +9,6 @@ public class IsometricPlayer : MonoBehaviour
 {
 
     //public float movementSpeed = 30f;
-    public float SlowFactor;
     IsometricCharacterRenderer isoRenderer;
     public PlayerStats playerStats { get; private set; }
 
@@ -37,8 +36,6 @@ public class IsometricPlayer : MonoBehaviour
 
 
     //Talente und Kampf-System
-    [SerializeField]
-    private GameObject[] skillPrefab;
     private Vector3 targetDirection;
 
     Transform enemy;
@@ -50,7 +47,6 @@ public class IsometricPlayer : MonoBehaviour
         rbody = GetComponent<Rigidbody>();
         isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
         playerStats = GetComponent<PlayerStats>();
-        //weapon = GetComponent<EQSlotWeapon>();
         rangedWeapon = false;
 
         //Isometric Camera
@@ -88,20 +84,15 @@ public class IsometricPlayer : MonoBehaviour
 
 
         //Spawning Random Items for Test purposes
+        ItemWorld.DropItem
+            (new Vector3(transform.position.x + 5, transform.position.y+0.2F, transform.position.z + 5),test_item);
         ItemWorld.SpawnItemWorld
-            (new Vector3(transform.position.x + 5, transform.position.y, transform.position.z + 5),test_item);
+            (new Vector3(transform.position.x + 1, transform.position.y+0.2F, transform.position.z + 1),test_item2);
         ItemWorld.SpawnItemWorld
-            (new Vector3(transform.position.x + 1, transform.position.y, transform.position.z + 1),test_item2);
-        ItemWorld.SpawnItemWorld
-            (new Vector3(transform.position.x + 6, transform.position.y, transform.position.z + 1),test_item3);
+            (new Vector3(transform.position.x + 6, transform.position.y+0.2F, transform.position.z + 1),test_item3);
 
         //itemDatabase.GetDrop(transform.position);
 
-    }
-
-    public Vector3 GetPosition()
-    {
-        return new Vector3(transform.position.x, transform.position.y-0.3f, transform.position.z);
     }
 
 
@@ -239,51 +230,6 @@ public class IsometricPlayer : MonoBehaviour
 
     // ---- RANGED ATTACK ----- Not implemented yet.
 
-    /*
-    public void AttackRange(int spellIndex)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
-    {
-        RaycastHit hit;
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit))
-        {
-            float dist = Vector3.Distance(hit.point, transform.position);
-            Spell spell = skillPrefab[spellIndex].GetComponent<Spell>();
-            if (dist <= spell.range && spell.los)
-            {
-                if (InLineOfSight())
-                Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
-            }
-            else if (dist <= spell.range && spell.los == false)
-            {
-                Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
-            }           
-        }
-    }
-    */
-
-
-    // ---- CAST SPELL -----
-    public void CastSpell(Spell spell)
-    {
-        /*
-        RaycastHit hit;
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit))
-        {
-            float dist = Vector3.Distance(hit.point, transform.position);
-            //Spell spell = skillPrefab[spellIndex].GetComponent<Spell>();
-            if (dist <= spell.range && spell.los)
-            {
-                if (InLineOfSight()) ;
-                    //Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
-            }
-            else if (dist <= spell.range && spell.los == false)
-            {
-                //Instantiate(skillPrefab[spellIndex], transform.position, Quaternion.identity);
-            }
-        }
-        */
-    }
 
     void RangedAttack(Vector3 worldPos)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
     {
