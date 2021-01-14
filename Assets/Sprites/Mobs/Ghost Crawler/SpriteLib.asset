@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: SpriteLib
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: Kopf
+    m_Hash: -1523306074
+    m_CategoryList:
+    - m_Name: Front
+      m_Hash: 1060785650
+      m_Sprite: {fileID: -7324502598273334247, guid: 6d49a617b86fdad4e9f928750d18d433,
+        type: 3}
+    - m_Name: Left
+      m_Hash: -631945130
+      m_Sprite: {fileID: -5375684921188327486, guid: 0a5d33dd99ae1eb4a87481005b1319c9,
+        type: 3}
+    - m_Name: Back
+      m_Hash: -839094775
+      m_Sprite: {fileID: -8818358191399209794, guid: 6e89e8419c519434eac77d345ec07301,
+        type: 3}
+    - m_Name: Right
+      m_Hash: 1963678224
+      m_Sprite: {fileID: -5658600376329915357, guid: ac04b002bc653b042b01ce87a814577e,
+        type: 3}
+  - m_Name: "K\xF6rper"
+    m_Hash: -522329882
+    m_CategoryList:
+    - m_Name: Front
+      m_Hash: 1060785650
+      m_Sprite: {fileID: -1668071031470624146, guid: 6d49a617b86fdad4e9f928750d18d433,
+        type: 3}
+    - m_Name: Left
+      m_Hash: -631945130
+      m_Sprite: {fileID: -3050153445924418682, guid: 0a5d33dd99ae1eb4a87481005b1319c9,
+        type: 3}
+    - m_Name: Back
+      m_Hash: -839094775
+      m_Sprite: {fileID: 8109219156849182574, guid: 6e89e8419c519434eac77d345ec07301,
+        type: 3}
+    - m_Name: Right
+      m_Hash: 1963678224
+      m_Sprite: {fileID: -1648990679959941661, guid: ac04b002bc653b042b01ce87a814577e,
+        type: 3}

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Nooow, this is going to suck balls deeply, but satisfy myself even more: https://www.youtube.com/watch?v=hUERvxcKt_I
 public class EnemyAnimator : MonoBehaviour
 {
     private Animator animator;
