@@ -84,13 +84,14 @@ public class IsometricPlayer : MonoBehaviour
 
 
         //Spawning Random Items for Test purposes
+        /*
         ItemWorld.DropItem
             (new Vector3(transform.position.x + 5, transform.position.y+0.2F, transform.position.z + 5),test_item);
         ItemWorld.SpawnItemWorld
             (new Vector3(transform.position.x + 1, transform.position.y+0.2F, transform.position.z + 1),test_item2);
         ItemWorld.SpawnItemWorld
             (new Vector3(transform.position.x + 6, transform.position.y+0.2F, transform.position.z + 1),test_item3);
-
+        */
         //itemDatabase.GetDrop(transform.position);
 
     }

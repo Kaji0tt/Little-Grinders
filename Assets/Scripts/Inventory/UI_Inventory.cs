@@ -72,11 +72,11 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
             };
             SlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
             {
-                print("we passed this");
+                //print("we passed this");
                 inventory.RemoveItem(item);
                 ItemWorld.DropItem(PlayerManager.instance.player.transform.position, item);
                 Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
-                print("successfull");
+                //print("successfull");
             };
 
             SlotRectTransform.anchoredPosition = new Vector2(x * SlotCellSize, y * SlotCellSize);

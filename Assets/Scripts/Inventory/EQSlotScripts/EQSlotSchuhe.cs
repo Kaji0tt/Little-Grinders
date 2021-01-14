@@ -22,9 +22,13 @@ public class EQSlotSchuhe : MonoBehaviour
     // 🗸Equipment.deeuip setzt PlayerStat Values zurück
 
 
+    // Wenn Kopf ausgerüstet, alles erhält Kopf außer Schuhe -> Kopf Print wird nur 1x wieder gegeben. Es scheint so, als seien alle anderen Slots zum Kopf.GameEvent triggered.
+    // Wenn Brust ausgerüstet, Null Error
+    // Wenn Waffe ausgerüstet, alles funktioniert richtig
+    // Wenn Schuhe ausgerüstet, alles funktioniert richtig
+
     public Item storedItem;
     private Inventory inventory;
-    private GameObject player;
     public IsometricPlayer isometricPlayer;
 
     private Int_SlotBtn int_slotBtn;
@@ -43,7 +47,7 @@ public class EQSlotSchuhe : MonoBehaviour
             storedItem = item;
             int_slotBtn.StoreItem(item);
             GetComponent<Image>().sprite = item.icon;
-            player = GameObject.Find("Charakter");
+
 
         }
         else
@@ -52,15 +56,15 @@ public class EQSlotSchuhe : MonoBehaviour
             storedItem = item;
             int_slotBtn.storedItem = item;
             GetComponent<Image>().sprite = item.icon;
-            player = GameObject.Find("Charakter");
+
         }
     }
 
     public void Dequip()
     {
-        player = GameObject.Find("Charakter");
+
         
-        inventory = player.GetComponent<IsometricPlayer>().Inventory;
+        inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
         isometricPlayer.Dequip(storedItem);

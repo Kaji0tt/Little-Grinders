@@ -18,7 +18,7 @@ public class GameEvents : MonoBehaviour
     public event Action<Item> equipWeapon;
     public event Action<Item> equipSchmuck;
 
-    private IsometricPlayer isometricPlayer;
+    //private IsometricPlayer isometricPlayer;
 
     
     public void EquipChanged(Item item)
@@ -44,7 +44,7 @@ public class GameEvents : MonoBehaviour
                 equipWeapon(item);
                 break;
             case ItemType.Consumable:
-                //Placeholder. Call for ItemDelte or something.
+                //Placeholder. Call for ItemDelte or something. --> Irgendwie, wird das irgendwo anders schon gemacht.
                 break;
 
         }

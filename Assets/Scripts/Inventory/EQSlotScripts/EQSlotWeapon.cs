@@ -30,23 +30,7 @@ public class EQSlotWeapon : MonoBehaviour
         if (storedItem == null)
         {
             EquipItem(item);
-            /*
-            storedItem = item;            
-            int_slotBtn.StoreItem(item);
-            GetComponent<Image>().sprite = item.GetSprite;
-            weaponAnim = GameObject.Find("WeaponAnimParent");
-            weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite;
-            playerStats = player.GetComponent<PlayerStats>();
-            playerStats.Range = item.Range;
 
-            if (item.RangedWeapon == true)
-                print("== klappt gut");
-            if (item.RangedWeapon == false)
-                print("ohne == klappt");
-
-            if(item.RangedWeapon)
-            isometricPlayer.rangedWeapon = true;
-            */
 
 
 
@@ -55,17 +39,6 @@ public class EQSlotWeapon : MonoBehaviour
         {
             Dequip();
             EquipItem(item);
-            /*
-            storedItem = item;
-            int_slotBtn.StoreItem(item);
-            GetComponent<Image>().sprite = item.GetSprite;
-            weaponAnim = GameObject.Find("WeaponAnimParent");
-            weaponAnim.GetComponent<SpriteRenderer>().sprite = item.GetSprite;
-            player = GameObject.Find("Charakter");
-            */
-
-
-
 
         }
 
@@ -98,7 +71,7 @@ public class EQSlotWeapon : MonoBehaviour
         weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
         playerStats = player.GetComponent<PlayerStats>();
         playerStats.Range = item.Range;
-
+        print("i got trigerred with " + item.ItemName);
 
 
         if (item.RangedWeapon)

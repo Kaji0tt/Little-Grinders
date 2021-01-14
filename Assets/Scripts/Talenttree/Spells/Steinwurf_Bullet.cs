@@ -74,4 +74,10 @@ public class Steinwurf_Bullet : MonoBehaviour
 
         
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag != "Player" && collision.gameObject.tag == "Floor")
+            Destroy(gameObject);
+    }
 }

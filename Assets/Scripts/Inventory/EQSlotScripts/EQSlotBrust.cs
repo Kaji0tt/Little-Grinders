@@ -5,11 +5,10 @@ using UnityEngine.UI;
 
 public class EQSlotBrust : MonoBehaviour
 {
-
     public Item storedItem;
     private Inventory inventory;
-    private GameObject player;
     public IsometricPlayer isometricPlayer;
+
     private Int_SlotBtn int_slotBtn;
 
     private void Start()
@@ -26,7 +25,7 @@ public class EQSlotBrust : MonoBehaviour
             storedItem = item;
             int_slotBtn.StoreItem(item);
             GetComponent<Image>().sprite = item.icon;
-            player = GameObject.Find("Charakter");  //?? Was mach ich hier eigentlich
+
 
         }
         else
@@ -35,15 +34,15 @@ public class EQSlotBrust : MonoBehaviour
             storedItem = item;
             int_slotBtn.storedItem = item;
             GetComponent<Image>().sprite = item.icon;
-            player = GameObject.Find("Charakter"); //?? Was mach ich hier eigentlich
+
         }
     }
 
     public void Dequip()
     {
-        player = GameObject.Find("Charakter");
 
-        inventory = player.GetComponent<IsometricPlayer>().Inventory;
+
+        inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
         inventory.AddItem(storedItem);
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
         isometricPlayer.Dequip(storedItem);
