@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class UI_Manager : MonoBehaviour
 {
@@ -25,10 +26,7 @@ public class UI_Manager : MonoBehaviour
 
     private IsometricPlayer isometricPlayer;
 
-    private KeyCode action1, action2, action3, action4, action5, inventoryKey, skillKey;
-
-    [SerializeField]
-    private CanvasGroup keybindMenu; //hier sollte später das komplette Hauptmenü drin liegen.
+    private KeyCode action1, action2, action3, action4, action5, inventoryKey, skillKey, mainMenuKey;
 
 
     [SerializeField]
@@ -40,6 +38,12 @@ public class UI_Manager : MonoBehaviour
     [SerializeField]
     private CanvasGroup skillTab;
 
+    [SerializeField]
+    private CanvasGroup mainMenu;  //hier sollte später das komplette Hauptmenü drin liegen.
+
+    [SerializeField]
+    private CanvasGroup actionBar;
+
 
     //behinderte Methode die unter Menüs des Charakter Menüs zu deklarieren.
     //public GameObject talentTree, inventoryMenu; //Muss auch über Canvas group geregelt werden, da zu beginn nicht aktivierte Spielobjekte einen Null-Error ergeben!
@@ -47,6 +51,8 @@ public class UI_Manager : MonoBehaviour
     //private bool mouseInterface;
 
     private bool skillTabOpen, inventoryTabOpen;
+
+    public static bool GameIsPaused = false;
 
 
 
@@ -68,6 +74,8 @@ public class UI_Manager : MonoBehaviour
         inventoryKey = KeyCode.E;
 
         skillKey = KeyCode.P;
+
+        mainMenuKey = KeyCode.Escape;
 
 
         isometricPlayer = GetComponent<IsometricPlayer>();
@@ -105,9 +113,17 @@ public class UI_Manager : MonoBehaviour
             ActionButtonOnClick(4);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(mainMenuKey))
         {
-            OpenCloseMenu(keybindMenu);
+
+            if (GameIsPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
         }
 
         //Interface
@@ -141,6 +157,32 @@ public class UI_Manager : MonoBehaviour
 
 
     }
+
+    private void Pause()
+    {
+        OpenCloseMenu(mainMenu);
+        Time.timeScale = 0f;
+        GameIsPaused = true;
+    }
+
+    public void Resume()
+    {
+        OpenCloseMenu(mainMenu);
+        Time.timeScale = 1f;
+        GameIsPaused = false;
+    }
+
+    public void OpenCloseMainMenu()
+    {
+        mainMenu.alpha = mainMenu.alpha > 0 ? 0 : 1;
+        mainMenu.blocksRaycasts = mainMenu.blocksRaycasts == true ? false : true;
+
+        actionBar.alpha = actionBar.alpha > 0 ? 0 : 1;
+        actionBar.blocksRaycasts = actionBar.blocksRaycasts == true ? false : true;
+
+
+    }
+    
 
     private void ActionButtonOnClick(int btnIndex)
     {
@@ -186,7 +228,8 @@ public class UI_Manager : MonoBehaviour
         canvas.alpha = canvas.alpha > 0 ? 0 : 1; 
         canvas.blocksRaycasts = canvas.blocksRaycasts == true ? false : true;
 
-        //Extra Abfrage für Character Tab
+
+        //Extra Abfrage für Character Tab, sollte in eigener Methode überarbeitet werden eigentlich.
         if (canvas.name == "skillTab")
         {
             if(skillTabOpen)

@@ -195,17 +195,17 @@ public class IsometricPlayer : MonoBehaviour
         //float _zoom = Camera.main.fieldOfView;
 
         float max, min;
-        max = 30.0f;
-        min = 15.0f;
+        max = 20.0f;
+        min = 10.0f;
 
-        if(Input.mouseScrollDelta.y < 0 &&  zoom > min)
+        if(Input.mouseScrollDelta.y > 0 &&  zoom > min)
         {
-            Camera.main.fieldOfView = Camera.main.fieldOfView + Input.mouseScrollDelta.y;
+            Camera.main.fieldOfView = Camera.main.fieldOfView - Input.mouseScrollDelta.y;
         }
 
-        if (Input.mouseScrollDelta.y > 0 && zoom < max)
+        if (Input.mouseScrollDelta.y < 0 && zoom < max)
         {
-            Camera.main.fieldOfView = Camera.main.fieldOfView + Input.mouseScrollDelta.y;
+            Camera.main.fieldOfView = Camera.main.fieldOfView - Input.mouseScrollDelta.y;
         }
         zoom = Camera.main.fieldOfView;
 
