@@ -4,16 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - EnvObj
   - EQ-Slot
   - Inv-Slot
   - Enemy
   - CharacterMenus
   - Floor
-  - Front
-  - Back
   - Bullet
   - AE-Pull
+  - DirCollider
+  - TutorialScript
   layers:
   - Default
   - TransparentFX

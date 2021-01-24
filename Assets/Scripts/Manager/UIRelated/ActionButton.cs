@@ -42,19 +42,21 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
     {
         if (MyMoveable != null && MyMoveable.spell.onCoolDown)
         {
+
             MyButton.image.color = Color.grey;
 
-            // Das Problem ist, dass der Action-Button nicht weiß um welche Instanz des Spell-Scripts es sich handelt.. glaub ich.
             cdButton.SetActive(true);
+
             cdText = cdButton.GetComponent<Text>();
+
             cdText.text = (MyMoveable.spell.GetSpellCoolDown - MyMoveable.spell.coolDownTimer).ToString("F1");
             
 
         }
         else if (MyMoveable != null && !MyMoveable.spell.onCoolDown)
         {
-            MyButton.image.color = Color.white;
 
+            MyButton.image.color = Color.white;
             
             cdButton.SetActive(false);
             
@@ -65,12 +67,14 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
     public void UpdateVisual()
     {
         MyButton.image.sprite = HandScript.instance.Put().icon;
+
         MyButton.image.color = Color.white; 
     }
 
     public void SetUseable(IUseable useable, IMoveable moveable)
     {
         this.MyMoveable = moveable;
+
         this.MyUseable = useable;
 
         UpdateVisual();

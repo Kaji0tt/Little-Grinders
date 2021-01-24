@@ -32,6 +32,13 @@ public class EQSlotWeapon : MonoBehaviour
             EquipItem(item);
 
 
+            //Line für Tutorial-Text
+            if (item.ItemID == "WP0001")
+            {
+                Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+                tutorialScript.ShowTutorial(5);
+
+            }
 
 
         }

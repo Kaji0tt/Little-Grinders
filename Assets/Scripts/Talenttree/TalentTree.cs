@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TalentTree : MonoBehaviour
 {
-    private int points = 11;
+    //private int points = 11;
 
 
     // Relevant wird nochmal: Welche Fähigkeiten sind zwar freigeschaltet, aber ausgegraut, sobald keine Verteilbaren punkte mehr da sind..
@@ -22,6 +22,7 @@ public class TalentTree : MonoBehaviour
     [SerializeField]
     private Text talentPointText;
 
+    /*
     public int CharPoints
     {
         get
@@ -34,11 +35,30 @@ public class TalentTree : MonoBehaviour
             UpdateTalentPointText();
         }
     }
+    */
 
     public void TryUseTalent(Talent talent)
     {
-        if (CharPoints > 0 && talent.Click())
-            CharPoints--;
+        #region "Tutorial"
+        if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && talent.Click() && PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() == 2)
+        {
+            PlayerManager.instance.player.GetComponent<PlayerStats>().Set_SkillPoints(-1);
+
+            Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+            tutorialScript.ShowTutorial(7);
+
+            UpdateTalentPointText();
+        }
+        #endregion
+
+
+        else if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && talent.Click())
+        {
+            PlayerManager.instance.player.GetComponent<PlayerStats>().Set_SkillPoints(-1);
+            UpdateTalentPointText();
+        }
+
+
     }
 
     void Start()
@@ -59,6 +79,6 @@ public class TalentTree : MonoBehaviour
 
     private void UpdateTalentPointText()
     {
-        talentPointText.text = points.ToString();
+        talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
     }
 }

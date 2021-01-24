@@ -124,7 +124,7 @@ public class EnemyController : MonoBehaviour
             }
 
             else
-                navMeshAgent.SetDestination(transform.position);
+                navMeshAgent = null;
         }
 
 
@@ -145,7 +145,7 @@ public class EnemyController : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
 
-        if (collider.gameObject.tag == "Player") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
+        if (collider.gameObject.tag == "DirCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
             PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
             playerStats.attackCD -= Time.deltaTime;

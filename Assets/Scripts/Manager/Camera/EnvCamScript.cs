@@ -23,9 +23,20 @@ public class EnvCamScript : MonoBehaviour
 
         for (int i = 0; i < no_children; i++)
         {
+
             child = this.gameObject.transform.GetChild(i);
-            sprite = child.GetComponent<SpriteRenderer>();
-            child.Rotate(25, 0, 0);
+            if(child.rotation.y == -1 || child.rotation.y == 1)
+            {
+                print("found go mit -180 oder 180");
+                sprite = child.GetComponent<SpriteRenderer>();
+                child.Rotate(-25, 0, 0);
+            }
+            else 
+            {
+                sprite = child.GetComponent<SpriteRenderer>();
+                child.Rotate(25, 0, 0);
+            }
+
 
         }
     }

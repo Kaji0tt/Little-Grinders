@@ -17,21 +17,15 @@ public class Heilung : Spell, IUseable
     //If its a Spell, which instantiate Prefabs like Bullets / Fireball, it should be called on Isometric Player with "player.CastSpell(this);"
     public void Use()
     {
-
+        
         playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
         if (!onCoolDown && currentCount >= 1)
         {
 
-
             playerStats.Heal((int)healAmount);
             
-
             onCoolDown = true;
         }
-
-
-
-
 
     }
 

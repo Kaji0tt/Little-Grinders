@@ -10,7 +10,7 @@ public class DirectionCollider : MonoBehaviour
     {
         instance = this;
     }
-    public GameObject directionCollider;
+    public GameObject dirCollider;
     #endregion
 
     public IsometricPlayer player;

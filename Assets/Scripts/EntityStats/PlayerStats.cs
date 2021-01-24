@@ -58,6 +58,22 @@ public class PlayerStats : MonoBehaviour
         maxHp = Hp.Value;
     }
 
+    [SerializeField]
+    private int skillPoints;
+
+    public int Get_SkillPoints()
+    {
+        return skillPoints;
+    }
+    public int Set_SkillPoints(int amount)
+    {
+        skillPoints = skillPoints + amount;
+        return skillPoints;
+    }
+
+
+
+
 
 
     public int level;
@@ -66,7 +82,18 @@ public class PlayerStats : MonoBehaviour
     public int Set_level(int new_Level)
     {
         xp = xp - LevelUp_need();
-        level = level + new_Level;return level;
+        level = level + new_Level;
+        Set_SkillPoints(1);
+        #region "Tutorial"
+        if (level == 2)
+        {
+            Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+            tutorialScript.ShowTutorial(6);
+
+        }
+        #endregion
+        return level;
+
     }
 
     public void Start()

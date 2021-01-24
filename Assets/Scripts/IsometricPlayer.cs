@@ -99,12 +99,18 @@ public class IsometricPlayer : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Changed Input Methods to Update, in hope of better CPU Usage.
 
-        if (Input.anyKey)
-        {
-            Move();
+        Move();
 
-        }
+
+    }
+
+
+    private void Update()
+    {
+
+        //Input Methods
         Zoom();
 
         if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
@@ -120,12 +126,7 @@ public class IsometricPlayer : MonoBehaviour
         {
             Attack();
         }
-    }
 
-
-    private void Update()
-    {
-       
 
         //UI Orb
         HpSlider.value = playerStats.Get_currentHp() / playerStats.Hp.Value;
@@ -246,17 +247,27 @@ public class IsometricPlayer : MonoBehaviour
     }
 
     private void OnTriggerStay(Collider collider)
-    {
+    {                                                           //Die Abfrage sollte noch verbessert werden.
         
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
         if (itemWorld != null && Input.GetKey(KeyCode.Q))
         {
             inventory.AddItem(itemWorld.GetItem());
             itemWorld.DestroySelf();
-        }
-        
 
-        
+
+            #region "Tutorial"
+            if(itemWorld.GetItem().ItemID == "WP0001")
+            {
+                Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+                tutorialScript.ShowTutorial(4);
+
+            }
+            #endregion
+        }
+
+
+
 
     }
 

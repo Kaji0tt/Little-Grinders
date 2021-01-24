@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2005570105555838403}
   - component: {fileID: 7100597264825816890}
   - component: {fileID: 6133335700350445290}
+  - component: {fileID: 6299889399132506308}
   m_Layer: 0
   m_Name: Truhe 1
   m_TagString: Untagged
@@ -113,3 +114,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.03, y: 0.72, z: 0.2}
   m_Center: {x: 0, y: 0.36, z: 0}
+--- !u!114 &6299889399132506308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005570105555838400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b309785ce7ccc27438fe32e9993ad4d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newSprite: {fileID: -7594309884363804855, guid: 0e3f1980cc3d3734c82c1d10c6602d85,
+    type: 3}
