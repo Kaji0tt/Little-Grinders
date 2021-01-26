@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EQSlotHose : MonoBehaviour
 {
-    public Item storedItem;
+    public static Item hose_Item;
     private Inventory inventory;
     public IsometricPlayer isometricPlayer;
 
@@ -20,19 +20,25 @@ public class EQSlotHose : MonoBehaviour
 
     public void equip(Item item)
     {
-        if (storedItem == null)
+        if (hose_Item == null)
         {
-            storedItem = item;
-            int_slotBtn.StoreItem(item);
-            GetComponent<Image>().sprite = item.icon;
+            hose_Item = item;
 
+            ItemSave.equippedItems.Add(item);
+
+            int_slotBtn.StoreItem(item);
+
+            GetComponent<Image>().sprite = item.icon;
 
         }
         else
         {
             Dequip();
-            storedItem = item;
+
+            hose_Item = item;
+
             int_slotBtn.storedItem = item;
+
             GetComponent<Image>().sprite = item.icon;
 
         }
@@ -41,19 +47,41 @@ public class EQSlotHose : MonoBehaviour
     public void Dequip()
     {
 
-
         inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-        inventory.AddItem(storedItem);
+
+        inventory.AddItem(hose_Item);
+
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-        isometricPlayer.Dequip(storedItem);
-        this.storedItem = null;
+
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(hose_Item);
+
+        ItemSave.equippedItems.Remove(hose_Item);
+
+        hose_Item = null;
+
         int_slotBtn.storedItem = null;
+
     }
 
 
     public void TaskOnClick()
     {
         Dequip();
+    }
+
+    public void LoadItem(Item item)
+    {
+        hose_Item = item;
+
+        ItemSave.equippedItems.Add(item);
+
+        item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
+
+        GetComponent<Image>().sprite = item.icon;
+
+        Int_SlotBtn int_slotBtn = gameObject.GetComponentInChildren<Int_SlotBtn>();
+        int_slotBtn.storedItem = item;
+
     }
 
 }

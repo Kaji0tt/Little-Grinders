@@ -147,7 +147,7 @@ public class EnemyController : MonoBehaviour
 
         if (collider.gameObject.tag == "DirCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
-            PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
             playerStats.attackCD -= Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {

@@ -4,16 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
+//Int_SlotBtn sollte mit IMoveable und IUseable ebenfalls arbeiten.
 public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Item storedItem;
 
-
-    private void Update()
-    {
-        //if (storedItem != null)
-        //print("storedItem: " + storedItem.ItemName + " derived from gameObject: " + gameObject.name);
-    }
     public void StoreItem(Item item)
     {
         storedItem = item;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EQSlotBrust : MonoBehaviour
 {
-    public Item storedItem;
+    public static Item brust_Item;
     private Inventory inventory;
     public IsometricPlayer isometricPlayer;
 
@@ -15,15 +15,20 @@ public class EQSlotBrust : MonoBehaviour
     {
         GameEvents.current.equipBrust += equip;
         int_slotBtn = GetComponent<Int_SlotBtn>();
+        //Debug.Log("On Start, i got loaded the following Item: " + brust_Item.ItemName + " with ID: " + brust_Item.ItemID);
     }
 
 
     public void equip(Item item)
     {
-        if (storedItem == null)
+        if (brust_Item == null)
         {
-            storedItem = item;
+            brust_Item = item;
+
+            ItemSave.equippedItems.Add(item);
+
             int_slotBtn.StoreItem(item);
+
             GetComponent<Image>().sprite = item.icon;
 
 
@@ -31,8 +36,11 @@ public class EQSlotBrust : MonoBehaviour
         else
         {
             Dequip();
-            storedItem = item;
+
+            brust_Item = item;
+
             int_slotBtn.storedItem = item;
+
             GetComponent<Image>().sprite = item.icon;
 
         }
@@ -43,10 +51,17 @@ public class EQSlotBrust : MonoBehaviour
 
 
         inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-        inventory.AddItem(storedItem);
+
+        inventory.AddItem(brust_Item);
+
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-        isometricPlayer.Dequip(storedItem);
-        this.storedItem = null;
+
+        isometricPlayer.Dequip(brust_Item);
+
+        ItemSave.equippedItems.Remove(brust_Item);
+
+        brust_Item = null;
+
         int_slotBtn.storedItem = null;
     }
 
@@ -56,4 +71,19 @@ public class EQSlotBrust : MonoBehaviour
         Dequip();
     }
 
+    public void LoadItem(Item item)
+    {
+        brust_Item = item;
+
+        ItemSave.equippedItems.Add(item);
+
+        item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
+
+        GetComponent<Image>().sprite = item.icon;
+
+
+        Int_SlotBtn int_slotBtn = gameObject.GetComponentInChildren<Int_SlotBtn>();
+        int_slotBtn.storedItem = item;
+
+    }
 }

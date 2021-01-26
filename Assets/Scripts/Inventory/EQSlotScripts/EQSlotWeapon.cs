@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class EQSlotWeapon : MonoBehaviour
 {
 
-    private Item storedItem;
+    public static Item weapon_Item;
     private Inventory inventory;
     private GameObject player, weaponAnim;
 
@@ -15,29 +15,36 @@ public class EQSlotWeapon : MonoBehaviour
 
     private Int_SlotBtn int_slotBtn;
 
+    private static bool tutorialPlayer = true;
+
+    private void Awake()
+    {
+
+    }
+    
+    
     private void Start()
     {
         GameEvents.current.equipWeapon += equip;
-        storedItem = null;
+
         int_slotBtn = GetComponent<Int_SlotBtn>();
-        player = PlayerManager.instance.player.gameObject;
-        isometricPlayer = player.GetComponent<IsometricPlayer>();
+
     }
 
 
     public void equip(Item item)
     {
-        if (storedItem == null)
+        if (weapon_Item == null)
         {
             EquipItem(item);
 
 
             //Line für Tutorial-Text
-            if (item.ItemID == "WP0001")
+            if (item.ItemID == "WP0001" && tutorialPlayer)
             {
                 Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
                 tutorialScript.ShowTutorial(5);
-
+                tutorialPlayer = false;
             }
 
 
@@ -57,28 +64,43 @@ public class EQSlotWeapon : MonoBehaviour
 
 
         inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-        inventory.AddItem(storedItem);
-        GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-        isometricPlayer.Dequip(storedItem);
-        weaponAnim.GetComponent<SpriteRenderer>().sprite = null;
 
-        if (storedItem.RangedWeapon)
+        inventory.AddItem(weapon_Item);
+
+        GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
+
+        isometricPlayer.Dequip(weapon_Item);
+
+        weaponAnim.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Blank_Icon");
+
+        if (weapon_Item.RangedWeapon)
             isometricPlayer.rangedWeapon = false;
 
-        this.storedItem = null;
+        ItemSave.equippedItems.Remove(weapon_Item);
+
+        weapon_Item = null;
+
+
         int_slotBtn.storedItem = null;
     }
 
     public void EquipItem(Item item)
     {
-        storedItem = item;
+        weapon_Item = item;
+
+        ItemSave.equippedItems.Add(item);
+
         int_slotBtn.StoreItem(item);
+
         GetComponent<Image>().sprite = item.icon;
+
         weaponAnim = GameObject.Find("WeaponAnimParent");
+
         weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
-        playerStats = player.GetComponent<PlayerStats>();
-        playerStats.Range = item.Range;
-        print("i got trigerred with " + item.ItemName);
+
+        //playerStats = player.GetComponent<PlayerStats>();
+
+        PlayerManager.instance.player.GetComponent<PlayerStats>().Range = item.Range;
 
 
         if (item.RangedWeapon)
@@ -90,4 +112,23 @@ public class EQSlotWeapon : MonoBehaviour
         Dequip();
     }
 
+
+    public void LoadItem(Item item)
+    {
+        weapon_Item = item;
+
+        ItemSave.equippedItems.Add(item);
+
+        item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
+
+        GetComponent<Image>().sprite = item.icon;
+
+        Int_SlotBtn int_slotBtn = gameObject.GetComponentInChildren<Int_SlotBtn>();
+        int_slotBtn.storedItem = item;
+
+        weaponAnim = GameObject.Find("WeaponAnimParent");
+
+        weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
+
+    }
 }

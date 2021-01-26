@@ -96,10 +96,6 @@ public class PlayerStats : MonoBehaviour
 
     }
 
-    public void Start()
-    {
-        //Folgender Funktion zum leveln initialisieren: y = log(​1+​x^​3)*​300/​2.5
-    }
     public void Update()
     {
         LevelUp_need();
@@ -108,7 +104,7 @@ public class PlayerStats : MonoBehaviour
 
     public void Awake()
     {
-        currentHp = Hp.Value;
+        //currentHp = Hp.Value;
         Set_xp(1);
         //Set_level(1);
     }
@@ -153,7 +149,20 @@ public class PlayerStats : MonoBehaviour
         Debug.Log(transform.name + "ist gestorben.");
     }
 
+    public void LoadScenePlayer()
+    {
+        PlayerSave data = SaveSystem.LoadPlayer();
 
+        /*
+        level = data.level;
+        //Hp.Va = data.Hp;
+        Armor.Value = data.Armor;
+        AttackPower = player.AttackPower.Value;
+        MovementSpeed = player.MovementSpeed.Value;
+        AttackSpeed = player.AttackSpeed.Value;
+        xp = player.xp;
+        */
+    }
 }
 
 

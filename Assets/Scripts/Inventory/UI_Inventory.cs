@@ -13,7 +13,10 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
     private Transform Int_Slot;
 
     private Inventory inventory;
+
     private IsometricPlayer charakter;
+
+    //private EQSlots eqSlots;
 
 
     private void Awake()
@@ -67,6 +70,7 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
                 inventory.UseItem(item);
                 inventory.RemoveItem(item);
                 GameEvents.current.EquipChanged(item);
+                //eqSlots.equip(item);
                 Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
 
             };

@@ -69,7 +69,7 @@ public class IsometricPlayer : MonoBehaviour
         uiHpOrb = GameObject.Find("HpOrbTxt");
         GameObject uiXp = GameObject.Find("XpText");
 
-
+        playerStats.Set_currentHp(playerStats.Get_maxHp());
 
         //PlayerStat Inventory - ***********Initialisieren von Texten**********
         ui_invHealthText = GameObject.Find("ui_invHp").GetComponent<Text>();

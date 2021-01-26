@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem 
 {
+
     public static void SavePlayer(PlayerStats player)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -35,4 +37,17 @@ public static class SaveSystem
             return null;
         }
     }
+
+    public static void SaveScenePlayer(PlayerStats player)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/player.scene";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        PlayerSave data = new PlayerSave(player);
+
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
 }

@@ -128,14 +128,15 @@ public class Enemy : MonoBehaviour
     {
         if (collider.gameObject.name == "DirectionCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
-            PlayerStats playerStats = destination.GetComponent<PlayerStats>();
-            playerStats.attackCD -= Time.deltaTime;
+            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+            float attackCD = playerStats.attackCD;
+            attackCD -= Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (playerStats.attackCD <= 0)
+                if (attackCD <= 0)
                 {
                     TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-                    playerStats.attackCD = 1f / playerStats.AttackSpeed.Value;
+                    attackCD = 1f / playerStats.AttackSpeed.Value;
                 }
             }
         }

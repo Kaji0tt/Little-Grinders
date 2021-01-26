@@ -27,10 +27,13 @@ public class EQSlotSchuhe : MonoBehaviour
     // Wenn Waffe ausgerüstet, alles funktioniert richtig
     // Wenn Schuhe ausgerüstet, alles funktioniert richtig
 
-    public Item storedItem;
+    public static Item schuhe_Item;
     private Inventory inventory;
     public IsometricPlayer isometricPlayer;
 
+
+    //Das Problem hinter Int_slotBtn ist, dass es ein Objekt ist, dessen es mehrere Instanzen gibt. OnSceneLoad weiß nicht, um welche Instanz es sich handelt.
+    //Deshalb darf int_slotBtn nicht gecalled werden, wenn es sich um das Laden von PlayerData handelt.
     private Int_SlotBtn int_slotBtn;
 
     private void Start()
@@ -42,19 +45,25 @@ public class EQSlotSchuhe : MonoBehaviour
 
     public void equip(Item item)
     {
-        if (storedItem == null)
+        if (schuhe_Item == null)
         {
-            storedItem = item;
-            int_slotBtn.StoreItem(item);
-            GetComponent<Image>().sprite = item.icon;
+            schuhe_Item = item;
 
+            ItemSave.equippedItems.Add(item);
+
+            int_slotBtn.StoreItem(item);
+
+            GetComponent<Image>().sprite = item.icon;
 
         }
         else
         {
             Dequip();
-            storedItem = item;
+
+            schuhe_Item = item;
+
             int_slotBtn.storedItem = item;
+
             GetComponent<Image>().sprite = item.icon;
 
         }
@@ -65,17 +74,39 @@ public class EQSlotSchuhe : MonoBehaviour
 
         
         inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-        inventory.AddItem(storedItem);
+
+        inventory.AddItem(schuhe_Item);
+
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-        isometricPlayer.Dequip(storedItem);
-        this.storedItem = null;
+
+        isometricPlayer.Dequip(schuhe_Item);
+
+        ItemSave.equippedItems.Remove(schuhe_Item);
+
+        schuhe_Item = null;
+
         int_slotBtn.storedItem = null;
+
     }
 
 
     public void TaskOnClick()
     {
         Dequip();
-    } 
+    }
 
+    public void LoadItem(Item item)
+    {
+        schuhe_Item = item;
+
+        ItemSave.equippedItems.Add(item);
+
+        item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
+
+        GetComponent<Image>().sprite = item.icon;
+
+        Int_SlotBtn int_slotBtn = gameObject.GetComponentInChildren<Int_SlotBtn>();
+        int_slotBtn.storedItem = item;
+
+    }
 }

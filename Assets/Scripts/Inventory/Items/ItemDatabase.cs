@@ -17,7 +17,7 @@ public class ItemDatabase : MonoBehaviour
     public List<Item> tier5;
 
 
-    private List<List<Item>> totalLoottable = new List<List<Item>>();
+    private static List<List<Item>> totalLoottable = new List<List<Item>>();
 
     List<Item> currentDropTable = new List<Item>();
 
@@ -180,6 +180,32 @@ public class ItemDatabase : MonoBehaviour
         if (result <= 0)
             result = result * -1;
         return result;
+    }
+
+    public static Item GetItemID(string ID)
+    {
+        print("Searching for Item of ID: " + ID);
+        for(int i = 0; i < totalLoottable.Count; i++)
+        {
+            
+            foreach(Item item in totalLoottable[i])
+            {
+                print("Searching in " + totalLoottable[i]);
+                if (item.ItemID == ID)
+                {
+                    Item foundItem = item;
+                    print("Found item: " + foundItem.ItemName);
+
+                    return foundItem;
+                }
+
+            }
+
+        }
+
+        Debug.Log("No item with ID: " + ID + " found.");
+
+        return null;
     }
 
 }

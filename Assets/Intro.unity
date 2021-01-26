@@ -11605,7 +11605,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0641d718accf8214fae99dbbe4cc1633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
   isometricPlayer: {fileID: 306612083}
 --- !u!114 &545448841
 MonoBehaviour:
@@ -18380,7 +18379,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3b9cd47653bd04ba55662f5f8f6922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
   isometricPlayer: {fileID: 306612083}
 --- !u!114 &887621162
 MonoBehaviour:
@@ -22234,7 +22232,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd1eac5456747e40a11d39bc76b1c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
   isometricPlayer: {fileID: 306612083}
 --- !u!114 &1070802551
 MonoBehaviour:
@@ -25876,7 +25873,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee0a073ba2e9444f8c2c5357fb4ab97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
   isometricPlayer: {fileID: 306612083}
 --- !u!114 &1236016282
 MonoBehaviour:
@@ -33045,7 +33041,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e57fc21261e0034d82f980a632f1cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
   isometricPlayer: {fileID: 306612083}
 --- !u!114 &1652136749
 MonoBehaviour:
@@ -42535,6 +42530,21 @@ PrefabInstance:
       propertyPath: tutorialBox
       value: 
       objectReference: {fileID: 57368841}
+    - target: {fileID: 1545352158, guid: 7d45b1b4757e8c44bb88e1163cba3165, type: 3}
+      propertyPath: debug1
+      value: 
+      objectReference: {fileID: 11400000, guid: cb930bad6b64a8341912eb0dbcabd060,
+        type: 2}
+    - target: {fileID: 1545352158, guid: 7d45b1b4757e8c44bb88e1163cba3165, type: 3}
+      propertyPath: debug2
+      value: 
+      objectReference: {fileID: 11400000, guid: a447dee49f255e64094c18a2fac92dba,
+        type: 2}
+    - target: {fileID: 1545352158, guid: 7d45b1b4757e8c44bb88e1163cba3165, type: 3}
+      propertyPath: debug3
+      value: 
+      objectReference: {fileID: 11400000, guid: e30a28fcb65b7a44eac88670b6eeac3d,
+        type: 2}
     - target: {fileID: 6865804071688173189, guid: 7d45b1b4757e8c44bb88e1163cba3165,
         type: 3}
       propertyPath: m_Name

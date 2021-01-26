@@ -11,6 +11,7 @@ public class TutorialLootBox : MonoBehaviour
 
     public Item firstItem;
 
+
     [SerializeField]
     Tutorial tutorialBox;
 
@@ -21,6 +22,7 @@ public class TutorialLootBox : MonoBehaviour
             lootBoxOpened = true;
             Vector3 spawnPos = new Vector3(gameObject.transform.position.x + 0.5f, gameObject.transform.position.y, gameObject.transform.position.z);
             ItemWorld.SpawnItemWorld(spawnPos, firstItem);
+
             LootBoxOpenedSprite();
         }
     }

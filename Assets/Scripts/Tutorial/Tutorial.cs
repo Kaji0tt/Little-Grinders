@@ -14,7 +14,7 @@ public class Tutorial : MonoBehaviour
 
     public void NextText()
     {
-        print("Tut Count ist " +tutorialTextCount);
+        //print("Tut Count ist " +tutorialTextCount);
         tutorialTxts[tutorialTextCount].SetActive(false);
         
         if (tutorialTextCount < 8)
@@ -23,7 +23,7 @@ public class Tutorial : MonoBehaviour
             if(tutorialTxts[tutorialTextCount] != null)
             tutorialTxts[tutorialTextCount].SetActive(true);
 
-            print("TutCount wurde durch OK auf " + tutorialTextCount + " erhöht.");
+            //print("TutCount wurde durch OK auf " + tutorialTextCount + " erhöht.");
 
         }
 
@@ -48,7 +48,7 @@ public class Tutorial : MonoBehaviour
         else
         {
             tutorialTxts[tutorialTextCount].SetActive(false);
-            print("Listen-Element " + tutCount + " wurde manuel abgerufen.");
+            //print("Listen-Element " + tutCount + " wurde manuel abgerufen.");
             tutorialTextCount = tutCount;
             tutorialTxts[tutCount].SetActive(true);
 
