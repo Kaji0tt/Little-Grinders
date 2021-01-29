@@ -12,6 +12,7 @@ public class TutorialLootBox : MonoBehaviour
     public Item firstItem;
 
 
+
     [SerializeField]
     Tutorial tutorialBox;
 

@@ -17,6 +17,10 @@ public class PlayerStats : MonoBehaviour
 {
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
 
+    /// <summary>
+    /// XP Stuff
+    /// </summary>
+
     public int xp;
     public int Get_xp()
     {
@@ -27,17 +31,23 @@ public class PlayerStats : MonoBehaviour
     {
         xp = xp + mod;
         if (xp >= LevelUp_need())
-            Set_level(1);
+            LevelUp();
         return xp;
     }
     public int xp_needed;
 
+
+    /// <summary>
+    /// Combat Values
+    /// </summary>
     public float attackCD = 0f;
+
     public int Range;
 
 
-
-
+    /// <summary>
+    /// HP-Stuff
+    /// </summary>
     private float currentHp;
     public float Get_currentHp()
     {
@@ -46,6 +56,11 @@ public class PlayerStats : MonoBehaviour
     public void Set_currentHp(float mod)
     {
         currentHp = currentHp + mod;
+    }
+
+    public void Load_currentHp(float value)
+    {
+        currentHp = value;
     }
 
     private float maxHp;
@@ -58,8 +73,12 @@ public class PlayerStats : MonoBehaviour
         maxHp = Hp.Value;
     }
 
+
+    /// <summary>
+    /// Skill-Point stuff
+    /// </summary>
     [SerializeField]
-    private int skillPoints;
+    private int skillPoints = 0;
 
     public int Get_SkillPoints()
     {
@@ -67,23 +86,30 @@ public class PlayerStats : MonoBehaviour
     }
     public int Set_SkillPoints(int amount)
     {
-        skillPoints = skillPoints + amount;
+        skillPoints = amount;
+        return skillPoints;
+    }
+    public int Decrease_SkillPoints(int amount)
+    {
+        skillPoints -= amount;
         return skillPoints;
     }
 
 
-
-
-
-
+    /// <summary>
+    /// Level-Stuff
+    /// </summary>
     public int level;
     public int Get_level()
     { return level;}
-    public int Set_level(int new_Level)
+    public int LevelUp()
     {
-        xp = xp - LevelUp_need();
-        level = level + new_Level;
-        Set_SkillPoints(1);
+        xp -= LevelUp_need();
+        level ++;
+        if(level >= 2)
+        skillPoints++;
+        //Der Call für Game.Event löst beim Start noch ein error aus, stört das spiel aber nicht.
+        GameEvents.current.LevelUp();
         #region "Tutorial"
         if (level == 2)
         {

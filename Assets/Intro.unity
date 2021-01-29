@@ -4077,7 +4077,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dirCollider: {fileID: 226492281}
-  player: {fileID: 306612083}
 --- !u!135 &226492283
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5713,7 +5712,7 @@ Transform:
   - {fileID: 1102088273}
   - {fileID: 920174704}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
 --- !u!1 &312699455
 GameObject:
@@ -6517,7 +6516,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &347755020
 GameObject:
@@ -15076,7 +15075,7 @@ RectTransform:
   - {fileID: 57368839}
   - {fileID: 1611204940}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -17527,8 +17526,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1785544958}
-        m_MethodName: ResumeGame
+      - m_Target: {fileID: 1910376166}
+        m_MethodName: SaveGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19918,7 +19917,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &953341770
 GameObject:
@@ -21858,6 +21857,56 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1046803631
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1046803633}
+  - component: {fileID: 1046803632}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1046803632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046803631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a50d1aa69ce160441957b7d79d7660f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brust: {fileID: 887621161}
+  hose: {fileID: 1236016281}
+  kopf: {fileID: 1652136748}
+  schmuck: {fileID: 1070802550}
+  schuhe: {fileID: 545448840}
+  weapon: {fileID: 93897085}
+  talentTree: {fileID: 2032866372}
+--- !u!4 &1046803633
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046803631}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.972985, y: 8.186192, z: 7.5858936}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1047643185
 GameObject:
   m_ObjectHideFlags: 0
@@ -22630,7 +22679,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: 30.61, z: 0}
 --- !u!1001 &1091236170
 PrefabInstance:
@@ -24001,7 +24050,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1162710056
 GameObject:
@@ -27280,8 +27329,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1785544958}
-        m_MethodName: ResumeGame
+      - m_Target: {fileID: 1910376166}
+        m_MethodName: LoadGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -28255,7 +28304,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10
+  m_Text: 0
 --- !u!114 &1368371826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31677,17 +31726,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1785544957}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1910376164}
         m_MethodName: SetActive
         m_Mode: 6
@@ -31698,6 +31736,17 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1785544957}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1581054568
 MonoBehaviour:
@@ -32900,7 +32949,7 @@ Transform:
   - {fileID: 500691048}
   - {fileID: 1059072577}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1648128380 stripped
 Transform:
@@ -36406,7 +36455,7 @@ Transform:
   - {fileID: 43132279}
   - {fileID: 623320020}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1824173931
 GameObject:
@@ -37806,6 +37855,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1910376165}
+  - component: {fileID: 1910376166}
   m_Layer: 5
   m_Name: SaveGameMenu
   m_TagString: Untagged
@@ -37835,6 +37885,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000061035156, y: 0.000030517578}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1910376166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910376164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4d5a5cdd9464ca4fb5e13da1f897fda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1916618181
 GameObject:
   m_ObjectHideFlags: 0
@@ -40035,6 +40097,7 @@ MonoBehaviour:
   - {fileID: 1855038886}
   defaultTalents:
   - {fileID: 998023937}
+  allTalents: []
   talentPointText: {fileID: 1368371825}
 --- !u!114 &2032866373
 MonoBehaviour:
@@ -42588,7 +42651,7 @@ PrefabInstance:
     - target: {fileID: 6865804071688173191, guid: 7d45b1b4757e8c44bb88e1163cba3165,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6865804071688173191, guid: 7d45b1b4757e8c44bb88e1163cba3165,
         type: 3}

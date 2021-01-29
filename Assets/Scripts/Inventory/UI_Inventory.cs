@@ -96,19 +96,6 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
 
         }
     }
-    /*
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Int_Slot.GetComponent<Int_SlotBtn>().ShowItem();
 
-        //Debug.Log("Enter");
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
-
-    }
-    */
 
 }

@@ -41,36 +41,7 @@ public class ItemSave
             }
         }
     }
-    /*
-    public void LoadEquippedItems(Item item)
-    {
-        switch (item.itemType)
-        {
-            case ItemType.Kopf:
-                equipKopf(item);
-                break;
-            case ItemType.Brust:
-                equipBrust(item);
-                break;
-            case ItemType.Beine:
-                equipHose(item);
-                break;
-            case ItemType.Schuhe:
-                equipSchuhe(item);
-                break;
-            case ItemType.Schmuck:
-                equipSchmuck(item);
-                break;
-            case ItemType.Weapon:
-                equipWeapon(item);
-                break;
-            case ItemType.Consumable:
-                //Placeholder. Call for ItemDelte or something. --> Irgendwie, wird das irgendwo anders schon gemacht.
-                break;
 
-        }
-    }
-    */
 
 
 }

@@ -14,56 +14,46 @@ public class TalentTree : MonoBehaviour
 
 
     [SerializeField]
-    private Talent[] talents;
+    public Talent[] talents;
 
     [SerializeField]
-    private Talent[] defaultTalents;
+    public Talent[] defaultTalents; 
+
+    [HideInInspector]
+    public Talent[] allTalents;
 
     [SerializeField]
     private Text talentPointText;
 
-    /*
-    public int CharPoints
-    {
-        get
-        {
-            return points;
-        }
-        set
-        {
-            points = value;
-            UpdateTalentPointText();
-        }
-    }
-    */
+    //public List<Talent> allTalents = new List<Talent>();
+
 
     public void TryUseTalent(Talent talent)
     {
-        #region "Tutorial"
-        if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && talent.Click() && PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() == 2)
+
+        if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && talent.Click())
         {
-            PlayerManager.instance.player.GetComponent<PlayerStats>().Set_SkillPoints(-1);
+            
+            #region "Tutorial"
+            if (PlayerManager.instance.player.GetComponent<PlayerStats>().level == 2)
+            {
+                Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+                tutorialScript.ShowTutorial(7);
 
-            Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-            tutorialScript.ShowTutorial(7);
-
+            }
+            #endregion
+            
+            PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
             UpdateTalentPointText();
         }
-        #endregion
-
-
-        else if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && talent.Click())
-        {
-            PlayerManager.instance.player.GetComponent<PlayerStats>().Set_SkillPoints(-1);
-            UpdateTalentPointText();
-        }
-
 
     }
 
     void Start()
     {
+        CalculateAllTalents();
         ResetTalents();
+        GameEvents.current.LevelUpdate += UpdateTalentPointText;
     }
 
 
@@ -77,8 +67,28 @@ public class TalentTree : MonoBehaviour
             talent.Unlock();
     }
 
-    private void UpdateTalentPointText()
+    public void UpdateTalentPointText()
     {
         talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
+        //Debug.Log(talentPointText.text);
     }
+
+    
+    void CalculateAllTalents()
+    {
+        List<Talent> allTalentsList = new List<Talent>();
+
+        foreach (Talent talent in defaultTalents)
+        {
+            allTalentsList.Add(talent);
+        }
+        foreach (Talent talent in talents)
+        {
+            allTalentsList.Add(talent);
+        }
+
+        allTalents = allTalentsList.ToArray();
+
+    }
+    
 }

@@ -8,14 +8,13 @@ public class EQSlotWeapon : MonoBehaviour
 
     public static Item weapon_Item;
     private Inventory inventory;
-    private GameObject player, weaponAnim;
+    private GameObject weaponAnim;
 
     public IsometricPlayer isometricPlayer;
-    private PlayerStats playerStats;
+
 
     private Int_SlotBtn int_slotBtn;
 
-    private static bool tutorialPlayer = true;
 
     private void Awake()
     {
@@ -40,11 +39,12 @@ public class EQSlotWeapon : MonoBehaviour
 
 
             //Line für Tutorial-Text
-            if (item.ItemID == "WP0001" && tutorialPlayer)
+            if (item.ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript") != null)
             {
                 Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+
                 tutorialScript.ShowTutorial(5);
-                tutorialPlayer = false;
+
             }
 
 

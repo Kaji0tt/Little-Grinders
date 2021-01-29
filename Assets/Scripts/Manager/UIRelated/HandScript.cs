@@ -61,16 +61,25 @@ public class HandScript : MonoBehaviour
         MyMoveable = null;
 
         image.color = new Color(0, 0, 0, 0);
+        
 
+        //Für Später: Die Reference zu eine
         #region "Tutorial"
         if (tutorialSkillMoveCheck == false)
         {
-            Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-            tutorialScript.ShowTutorial(8);
-            tutorialSkillMoveCheck = true;
+            if(GameObject.FindGameObjectWithTag("TutorialScript") != null)
+            {
+                Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+
+                tutorialScript.ShowTutorial(8);
+
+                tutorialSkillMoveCheck = true;
+            }
+
+
         }
         #endregion
-
+        
         return tmp;
     }
 

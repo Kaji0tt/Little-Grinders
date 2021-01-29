@@ -13,32 +13,35 @@ public class PlayerLoad : MonoBehaviour
     public EQSlotSchuhe schuhe;
     public EQSlotWeapon weapon;
 
-    private void Awake()    
+    [SerializeField]
+    private TalentTree talentTree;
+
+    private void Awake()
     {
-        LoadPlayer();
+
+        LoadScenePlayer();
     }
 
-    public void LoadPlayer()
+    public void LoadScenePlayer()
     {
-        PlayerSave data = SaveSystem.LoadPlayer();
+        PlayerSave data = SaveSystem.LoadScenePlayer();
 
+        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
-        print(data.weapon + " im Ladevorgang.");
+        playerStats.level = data.level;
+
+        playerStats.xp = data.xp;
+
+        playerStats.Load_currentHp(data.Hp);
 
         //Die Gegenstände werden initialisiert und neu angezogen.
-        if(data.brust != null)
-        {
-            brust.LoadItem(ItemDatabase.GetItemID(data.brust));
-            print("brust checked");
-        }
 
+        #region Load-Equipped Items
+        if (data.brust != null)
+            brust.LoadItem(ItemDatabase.GetItemID(data.brust));
 
         if (data.hose != null)
-        {
             hose.LoadItem(ItemDatabase.GetItemID(data.hose));
-            print("hose checked");
-        }
-
 
         if (data.kopf != null)
             kopf.LoadItem(ItemDatabase.GetItemID(data.kopf));
@@ -51,8 +54,54 @@ public class PlayerLoad : MonoBehaviour
 
         if (data.weapon != null)
             weapon.LoadItem(ItemDatabase.GetItemID(data.weapon));
+        #endregion
 
-        print("Items angezogen: " + ItemSave.equippedItems.Count);
+        //Skillpunkte werden geladen.
+
+        #region Load-Skillpoints
+
+        foreach (TalentSave savedTalent in data.talentsToBeSaved)
+        {
+            print(savedTalent.talentName + " " + savedTalent.talentPoints);
+
+            print(talentTree.defaultTalents[0].name + " aus dem Stanni tree mit " + talentTree.defaultTalents[0].currentCount + " geladen.");
+
+            for (int i = 0; i < talentTree.defaultTalents.Length; i++)
+            {
+                if (talentTree.defaultTalents[i].name == savedTalent.talentName)
+                {
+                    talentTree.defaultTalents[i].Set_currentCount(savedTalent.talentPoints);
+
+                    talentTree.defaultTalents[i].UpdateTalent();
+                }
+            }
+
+            for (int i = 0; i < talentTree.talents.Length; i++)
+            {
+                if (talentTree.talents[i].name == savedTalent.talentName)
+                {
+                    talentTree.talents[i].Set_currentCount(savedTalent.talentPoints);
+
+                    talentTree.talents[i].UpdateTalent();
+                }
+            }
+
+            talentTree.UpdateTalentPointText();
+
+        }
+        #endregion
+
+        // Inventar wird geladen.
+
+        foreach(string ID in data.inventorySave)
+        {
+
+            PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(ItemDatabase.GetItemID(ID));
+
+        }
 
     }
+
+
 }
+

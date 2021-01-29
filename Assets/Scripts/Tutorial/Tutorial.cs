@@ -14,7 +14,6 @@ public class Tutorial : MonoBehaviour
 
     public void NextText()
     {
-        //print("Tut Count ist " +tutorialTextCount);
         tutorialTxts[tutorialTextCount].SetActive(false);
         
         if (tutorialTextCount < 8)
@@ -22,8 +21,6 @@ public class Tutorial : MonoBehaviour
             tutorialTextCount++;
             if(tutorialTxts[tutorialTextCount] != null)
             tutorialTxts[tutorialTextCount].SetActive(true);
-
-            //print("TutCount wurde durch OK auf " + tutorialTextCount + " erhöht.");
 
         }
 

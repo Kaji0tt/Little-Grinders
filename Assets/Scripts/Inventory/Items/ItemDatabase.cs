@@ -95,25 +95,20 @@ public class ItemDatabase : MonoBehaviour
         // Berechnung des Rolls
         percentSum = 0;
         int roll = Random.Range(0, 101);
-        //print("Der Roll beträgt:" + roll);
 
-
-
-            //print("So viele Items könnten gedropped werden" + currentDropTable.Count);
-
-                foreach (Item item in currentDropTable)
-                {
+         foreach (Item item in currentDropTable)
+         {
                     
-                    percentSum += ((int)item.c_percent * 100) / totalWeight;
-                    //print( item.c_percent + "% wurde von dem Item " + item.ItemName + " hinzugefügt. Ergibt insgesamt " + percentSum + "%");
+              percentSum += ((int)item.c_percent * 100) / totalWeight;
+              //print( item.c_percent + "% wurde von dem Item " + item.ItemName + " hinzugefügt. Ergibt insgesamt " + percentSum + "%");
                     
-                    if (roll < percentSum)
-                    {
-                        position = position + new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
-                        ItemWorld.SpawnItemWorld(position, item);
-                        break;
-                    }
-                }
+              if (roll < percentSum)
+              {
+                    position = position + new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
+                    ItemWorld.SpawnItemWorld(position, item);
+                    break;
+              }
+         }
 
     }
 
@@ -184,16 +179,18 @@ public class ItemDatabase : MonoBehaviour
 
     public static Item GetItemID(string ID)
     {
-        print("Searching for Item of ID: " + ID);
+
         for(int i = 0; i < totalLoottable.Count; i++)
         {
             
             foreach(Item item in totalLoottable[i])
             {
                 print("Searching in " + totalLoottable[i]);
+
                 if (item.ItemID == ID)
                 {
                     Item foundItem = item;
+
                     print("Found item: " + foundItem.ItemName);
 
                     return foundItem;

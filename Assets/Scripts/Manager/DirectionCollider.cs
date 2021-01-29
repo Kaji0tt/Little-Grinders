@@ -13,13 +13,13 @@ public class DirectionCollider : MonoBehaviour
     public GameObject dirCollider;
     #endregion
 
-    public IsometricPlayer player;
+    
     private Vector3 right, forward;
 
 
     void Start()
     {
-        player = GetComponent<IsometricPlayer>();
+        IsometricPlayer player = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
 
         //Übernehmen der Kamera Achsen
         forward = Camera.main.transform.forward;

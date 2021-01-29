@@ -24,6 +24,11 @@ public class Talent : MonoBehaviour
     private int maxCount;
     public int currentCount { get; private set; }
 
+    public void Set_currentCount(int newCount)
+    {
+        currentCount = newCount;
+    }
+
     public bool unlocked;
 
     [SerializeField]
@@ -57,6 +62,7 @@ public class Talent : MonoBehaviour
         if (currentCount < maxCount && unlocked)
         {
             currentCount++;
+
             countText.text = $"{currentCount}/{maxCount}";
 
             if (currentCount == maxCount)
@@ -74,15 +80,28 @@ public class Talent : MonoBehaviour
     public void LockTalents()
     {
         image.color = Color.grey;
+
         countText.color = Color.grey;
     }
 
     public void Unlock()
     {
         image.color = Color.white;
+
         countText.color = Color.white;
 
         unlocked = true;
     }
+
+    public void UpdateTalent()
+    {
+        image = GetComponent<Image>();
+
+        countText.text = $"{currentCount}/{maxCount}";
+
+        if (unlocked)
+            Unlock();
+    }
+
 
 }

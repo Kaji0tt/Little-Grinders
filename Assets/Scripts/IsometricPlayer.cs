@@ -60,15 +60,16 @@ public class IsometricPlayer : MonoBehaviour
         inventory = new Inventory(UseItem);
         uiInventory.SetInventory(inventory);
         uiInventory.SetCharakter(this);
-        
+
 
         //PlayerStats & UI
-        uiInventoryTab = GameObject.Find("Inventory Tab");
+        //GameEvents.current.LevelUpdate += UpdateLevel;
+        uiInventoryTab = GameObject.Find("Inventory Tab");              
         ui_Level = GameObject.Find("LevelText").GetComponent<Text>();
         ui_Xp = GameObject.Find("XpText").GetComponent<Text>();
         uiHpOrb = GameObject.Find("HpOrbTxt");
         GameObject uiXp = GameObject.Find("XpText");
-
+        //////////////////////Das ist ja fucking eklig, finde eine Alternative um die Texte zu initialisieren zu suchen!!!!!
         playerStats.Set_currentHp(playerStats.Get_maxHp());
 
         //PlayerStat Inventory - ***********Initialisieren von Texten**********
@@ -80,22 +81,13 @@ public class IsometricPlayer : MonoBehaviour
         ui_invMovementSpeedText = GameObject.Find("ui_invMS").GetComponent<Text>();
         ui_HpOrbTxt = GameObject.Find("HpOrbTxt").GetComponent<Text>();
 
-
-
-
-        //Spawning Random Items for Test purposes
-        /*
-        ItemWorld.DropItem
-            (new Vector3(transform.position.x + 5, transform.position.y+0.2F, transform.position.z + 5),test_item);
-        ItemWorld.SpawnItemWorld
-            (new Vector3(transform.position.x + 1, transform.position.y+0.2F, transform.position.z + 1),test_item2);
-        ItemWorld.SpawnItemWorld
-            (new Vector3(transform.position.x + 6, transform.position.y+0.2F, transform.position.z + 1),test_item3);
-        */
-        //itemDatabase.GetDrop(transform.position);
-
     }
 
+    private void UpdateLevel()
+    {
+        //Wird eigentlich nciht gebraucht, da das Interface in Update neu geladen wird - vll aber überarbeitungswürdig.
+        //ui_Level.text = playerStats.level.ToString();
+    }
 
     void FixedUpdate()
     {

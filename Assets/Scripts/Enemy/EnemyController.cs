@@ -145,10 +145,17 @@ public class EnemyController : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
 
+
         if (collider.gameObject.tag == "DirCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
+            //Debug.Log("Colliding with DirCollider");
+
             PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+
             playerStats.attackCD -= Time.deltaTime;
+
+
+
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 if (playerStats.attackCD <= 0)
@@ -197,19 +204,19 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage, float range)
     {
-        //print("should have taken damage of" + damage);
+
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
-        //print(player_distance);
+
         if (player_distance <= range)
         {
             damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
+
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
+
             Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
-
-        //jetzt müsste eine Abfrage 
-
 
         if (Hp.Value <= 0)
             Die();

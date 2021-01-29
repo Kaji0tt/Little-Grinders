@@ -12,7 +12,7 @@ public class NextLevelScript : MonoBehaviour
     {
         if(collider.gameObject == PlayerColliderManager.instance.player_collider)
         {
-            SaveSystem.SavePlayer(PlayerManager.instance.player.GetComponent<PlayerStats>());
+            SaveSystem.SaveScenePlayer();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
             //Nach dem Game mit India hier den Player-Save callen. In der neuen Szene den entsprechenden PlayerSave laden - ez gg.

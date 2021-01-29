@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class NewBehaviourScript : MonoBehaviour
+public class SaveLoadMenu : MonoBehaviour
 {
     private void Awake()
     {
@@ -10,7 +11,7 @@ public class NewBehaviourScript : MonoBehaviour
     }
     public void SaveGame()
     {
-        //SaveSystem.SavePlayer(PlayerStats player);
+        SaveSystem.SavePlayer();
 
         // Kein Lust mehr, hier weiter schauen: 
         // https://www.youtube.com/watch?v=XOjd_qU2Ido&t=915s
@@ -18,6 +19,10 @@ public class NewBehaviourScript : MonoBehaviour
 
     public void LoadGame()
     {
+        PlayerSave data = SaveSystem.LoadPlayer();
 
+        SceneManager.LoadScene(data.scene);
+
+        SaveSystem.LoadPlayer();
     }
 }
