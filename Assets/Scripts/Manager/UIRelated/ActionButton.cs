@@ -71,6 +71,15 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
         MyButton.image.color = Color.white; 
     }
 
+    //Wurde eingefügt um ggf. ActionBars zu speichern.
+    /*
+    public void SetUseable(IMoveable moveable)
+    {
+        this.MyMoveable = moveable;
+
+        UpdateVisual();
+    }
+    */
     public void SetUseable(IUseable useable, IMoveable moveable)
     {
         this.MyMoveable = moveable;

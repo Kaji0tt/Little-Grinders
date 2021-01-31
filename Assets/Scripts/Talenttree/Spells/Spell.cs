@@ -32,6 +32,11 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
         }
     }
 
+    public void SetDescription(string newDes)
+    {
+        this.description = newDes;
+    }
+
     //How much CoolDown does this spell have?
     [SerializeField]
     private float spellCoolDown;
@@ -43,6 +48,8 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
             return spellCoolDown;
         }
     }
+
+    
 
     Spell IMoveable.spell => this;
 

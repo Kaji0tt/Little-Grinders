@@ -12,9 +12,9 @@ public class Lootbox : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        if (Input.GetKeyDown(KeyCode.Q) && collider.gameObject == PlayerManager.instance.player && lootBoxOpened == false)
+        if (Input.GetKeyDown(KeyCode.Q) && collider.gameObject == PlayerColliderManager.instance.player_collider && lootBoxOpened == false)
         {
-            print("got here!");
+            //print("got here!");
             lootBoxOpened = true;
             ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
             LootBoxOpenedSprite();

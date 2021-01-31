@@ -14,6 +14,8 @@ public class Scene_LoadNextScene : MonoBehaviour
         {
             SaveSystem.SaveScenePlayer();
 
+            PlayerPrefs.GetString("SceneLoad");
+
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
         }

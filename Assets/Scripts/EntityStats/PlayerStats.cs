@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
 Auch innerhalb dieser oder der erbenden Klassen den Wert der kleingeschriebenen Variablen nur per Getter und Setter manipulieren, damit fehlerhafte Inputs nicht weiterverarbeitet
@@ -88,10 +89,10 @@ public class PlayerStats : MonoBehaviour
     {
         return skillPoints;
     }
-    public int Set_SkillPoints(int amount)
+    public void Set_SkillPoints(int amount)
     {
         skillPoints = amount;
-        return skillPoints;
+       
     }
     public int Decrease_SkillPoints(int amount)
     {
@@ -176,7 +177,9 @@ public class PlayerStats : MonoBehaviour
 
     public virtual void Die()
     {
-        Debug.Log(transform.name + "ist gestorben.");
+        //Debug.Log(transform.name + "ist gestorben.");
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1f;
     }
 
 }

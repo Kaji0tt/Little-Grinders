@@ -31,6 +31,8 @@ public class PlayerLoad : MonoBehaviour
 
         playerStats.Load_currentHp(data.Hp);
 
+        playerStats.Set_SkillPoints(data.skillPoints);
+
         //Die Gegenstände werden initialisiert und neu angezogen.
 
         #region Load-Equipped Items
@@ -62,16 +64,21 @@ public class PlayerLoad : MonoBehaviour
         foreach (TalentSave savedTalent in data.talentsToBeSaved)
         {
 
-            for (int i = 0; i < talentTree.defaultTalents.Length; i++)
+            for (int i = 0; i < talentTree.allTalents.Length; i++)
             {
-                if (talentTree.defaultTalents[i].name == savedTalent.talentName)
+                if (talentTree.allTalents[i].name == savedTalent.talentName)
                 {
-                    talentTree.defaultTalents[i].Set_currentCount(savedTalent.talentPoints);
+                    talentTree.allTalents[i].Set_currentCount(savedTalent.talentPoints);
 
-                    talentTree.defaultTalents[i].UpdateTalent();
+                    talentTree.allTalents[i].unlocked = savedTalent.unlocked;
+
+                    talentTree.allTalents[i].UpdateTalent();
+
+
                 }
             }
 
+            /*
             for (int i = 0; i < talentTree.talents.Length; i++)
             {
                 if (talentTree.talents[i].name == savedTalent.talentName)
@@ -81,7 +88,7 @@ public class PlayerLoad : MonoBehaviour
                     talentTree.talents[i].UpdateTalent();
                 }
             }
-
+            */
             talentTree.UpdateTalentPointText();
 
         }
@@ -96,6 +103,27 @@ public class PlayerLoad : MonoBehaviour
 
         }
 
+        /// ActionButtons werden geladen
+        /// 
+        /*
+        ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
+        Talent[] spells = Object.FindObjectsOfType<Spell>();
+
+        for (int i = 0; i < data.savedActionButtons.Length; i++)
+        {
+            
+            foreach(Spell spell in spells)
+            {
+                if (data.savedActionButtons[i] == spell.name)
+                {
+                    actionButtons[i].SetUseable(spell);
+                }
+            }
+
+
+
+        }
+        */
     }
 
 

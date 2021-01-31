@@ -33,6 +33,12 @@ public class Steinwurf : Spell, IUseable
     private Transform target;
     private Vector3 spell_destination;
 
+    private void Awake()
+    {
+        SetDescription("Du wirfst einen Stein auf deinen Gegner und fügst " + damage + " Schaden zu");
+
+        damage = 5;
+    }
 
     public void Use()
     {

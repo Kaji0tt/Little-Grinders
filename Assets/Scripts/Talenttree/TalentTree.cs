@@ -52,6 +52,8 @@ public class TalentTree : MonoBehaviour
     void OnEnable()
     {
         PlayerStats.eventLevelUp += UpdateTalentPointText;
+
+
     }
 
     void OnDisable()
@@ -61,19 +63,44 @@ public class TalentTree : MonoBehaviour
 
     void Start()
     {
-        CalculateAllTalents();
-        ResetTalents();
+        if (PlayerPrefs.HasKey("Load") || PlayerPrefs.HasKey("SceneLoad"))
+        {
+            CalculateAllTalents();
+
+            UpdateTalentPointText();
+
+            foreach (Talent talent in allTalents)
+            {
+                if (talent.unlocked)
+                    talent.Unlock();
+                else
+                    talent.LockTalents();
+            }
+        }
+        else
+        {
+            ResetTalents();
+
+            CalculateAllTalents();
+
+            UpdateTalentPointText();
+        }
+
+
     }
 
 
     private void ResetTalents()
     {
-        UpdateTalentPointText();
+        print("Talents got resetted");
+
         foreach (Talent talent in talents)
             talent.LockTalents();
 
         foreach (Talent talent in defaultTalents)
             talent.Unlock();
+
+        UpdateTalentPointText();
     }
 
     public void UpdateTalentPointText()

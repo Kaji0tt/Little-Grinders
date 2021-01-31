@@ -22,6 +22,10 @@ public class PlayerSave
 
     public int MyScene;
 
+    public int skillPoints;
+
+    public string[] savedActionButtons;
+
     //Wird relevant, sobald wir mehrere SaveGames haben möchten. 
     public int loadIndex;
 
@@ -36,6 +40,8 @@ public class PlayerSave
         Hp = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_currentHp();
 
         xp = PlayerManager.instance.player.GetComponent<PlayerStats>().xp;
+
+        skillPoints = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints();
 
 
         /// Items Speichern
@@ -65,7 +71,7 @@ public class PlayerSave
 
         foreach (Talent talent in talentTree.allTalents)
         {
-            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount));
+            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked));
         }
 
         //Es muss noch herausgefunden werden, wie viele Talenttree-Skillpoints unverteilt sind und die abgespeichert werden!
@@ -90,6 +96,17 @@ public class PlayerSave
 
         // Wenn die richtige Szene bereits geladen ist, kann der Spielstand nicht wieder hergestellt werden, WorkAround derzeit: Haupt Menü -> Laden.
 
+        ///Action Buttons.
+        ///
+        /*
+        ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
+
+        for(int i = 0; i < actionButtons.Length; i++)
+        {
+            if (actionButtons[i].name != null) 
+            savedActionButtons[i] = actionButtons[i].name; 
+        }
+        */
         loadIndex = 1;
     }
 

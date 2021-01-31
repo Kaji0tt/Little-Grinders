@@ -11,11 +11,15 @@ public class TalentSave
     public int talentPoints { get; set; }
     
     
-    public TalentSave(string name, int points)
+    public TalentSave(string name, int points, bool unlocked)
     {
         this.talentName = name;
 
         this.talentPoints = points;
+
+        this.unlocked = unlocked;
     }
+
+    public bool unlocked { get; set; }
 
 }

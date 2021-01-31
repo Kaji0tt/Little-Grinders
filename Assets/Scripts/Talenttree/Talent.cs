@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,7 +33,7 @@ public class Talent : MonoBehaviour
     public bool unlocked;
 
     [SerializeField]
-    private Talent childTalent;
+    private Talent[] childTalent;
 
 
 
@@ -55,7 +56,10 @@ public class Talent : MonoBehaviour
         if (unlocked)
             Unlock();
 
+        //CheckIfUnlocked();
+
     }
+
 
     public bool Click()
     {
@@ -67,9 +71,11 @@ public class Talent : MonoBehaviour
 
             if (currentCount == maxCount)
             {
-                if (childTalent != null)
+                for (int i = 0; i < childTalent.Length; i++)
                 {
-                    childTalent.Unlock();
+                    if (childTalent[i] != null)
+                        childTalent[i].Unlock();
+
                 }
             }
             return true;

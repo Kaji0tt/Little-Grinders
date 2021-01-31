@@ -27,6 +27,8 @@ public class Scene_OnSceneLoad : MonoBehaviour
 
             playerload.LoadPlayer(data);
 
+            PlayerPrefs.DeleteKey("SceneLoad");
+
             sceneGotLoaded = true;
 
 
