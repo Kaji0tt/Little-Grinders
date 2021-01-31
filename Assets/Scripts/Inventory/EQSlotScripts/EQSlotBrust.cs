@@ -68,7 +68,8 @@ public class EQSlotBrust : MonoBehaviour
 
     public void TaskOnClick()
     {
-        Dequip();
+        if (brust_Item != null)
+            Dequip();
     }
 
     public void LoadItem(Item item)

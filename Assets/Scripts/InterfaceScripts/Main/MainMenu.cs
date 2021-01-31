@@ -12,8 +12,15 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        print("Game quitted");
-        Application.Quit();
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            Application.Quit();
+
+        else
+        {
+            SceneManager.LoadScene(0);
+            Time.timeScale = 1f;
+        }
+
     }
 
     public void ResumeGame()

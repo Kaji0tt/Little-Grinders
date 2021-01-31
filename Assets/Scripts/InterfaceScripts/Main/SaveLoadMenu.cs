@@ -5,24 +5,29 @@ using UnityEngine.SceneManagement;
 
 public class SaveLoadMenu : MonoBehaviour
 {
+    //public LoadFromMenu loadFromMenu;
     private void Awake()
     {
-        //player
+
+
     }
     public void SaveGame()
     {
         SaveSystem.SavePlayer();
 
-        // Kein Lust mehr, hier weiter schauen: 
-        // https://www.youtube.com/watch?v=XOjd_qU2Ido&t=915s
     }
 
     public void LoadGame()
     {
+        //Should not be here.
+        Time.timeScale = 1f;
+
         PlayerSave data = SaveSystem.LoadPlayer();
 
-        SceneManager.LoadScene(data.scene);
+        //Der Int wird im späteren Verlauf den Status des gewählen SavedGames reflektieren, damit man mehrere Saves haben kann.
+        PlayerPrefs.SetInt("Load", 1);
 
-        SaveSystem.LoadPlayer();
+        SceneManager.LoadScene(data.MyScene);
+
     }
 }

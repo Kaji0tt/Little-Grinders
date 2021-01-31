@@ -179,13 +179,13 @@ public class ItemDatabase : MonoBehaviour
 
     public static Item GetItemID(string ID)
     {
+        Debug.Log("Searching for item with ID: " + ID);
 
         for(int i = 0; i < totalLoottable.Count; i++)
         {
             
             foreach(Item item in totalLoottable[i])
             {
-                print("Searching in " + totalLoottable[i]);
 
                 if (item.ItemID == ID)
                 {

@@ -18,7 +18,6 @@ public class GameEvents : MonoBehaviour
     public event Action<Item> equipWeapon;
     public event Action<Item> equipSchmuck;
 
-    public event Action LevelUpdate;
     //private IsometricPlayer isometricPlayer;
 
     
@@ -52,8 +51,5 @@ public class GameEvents : MonoBehaviour
 
     }
 
-    public void LevelUp()
-    {
-        LevelUpdate();
-    }
+
 }

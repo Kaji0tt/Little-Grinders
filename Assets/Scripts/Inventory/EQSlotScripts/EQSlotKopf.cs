@@ -67,7 +67,8 @@ public class EQSlotKopf : MonoBehaviour
 
     public void TaskOnClick()
     {
-        Dequip();
+        if (kopf_Item != null)
+            Dequip();
     }
 
     public void LoadItem(Item item)

@@ -5685,7 +5685,6 @@ MonoBehaviour:
   AttackSpeed:
     BaseValue: 1
   xp: 0
-  xp_needed: 0
   attackCD: 1
   Range: 0
   skillPoints: 0
@@ -21866,7 +21865,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1046803633}
-  - component: {fileID: 1046803632}
   m_Layer: 0
   m_Name: SaveManager
   m_TagString: Untagged
@@ -21874,25 +21872,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1046803632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1046803631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a50d1aa69ce160441957b7d79d7660f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brust: {fileID: 887621161}
-  hose: {fileID: 1236016281}
-  kopf: {fileID: 1652136748}
-  schmuck: {fileID: 1070802550}
-  schuhe: {fileID: 545448840}
-  weapon: {fileID: 93897085}
-  talentTree: {fileID: 2032866372}
 --- !u!4 &1046803633
 Transform:
   m_ObjectHideFlags: 0
@@ -30557,15 +30536,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1489625890}
+  - component: {fileID: 1489625884}
   - component: {fileID: 1489625889}
   - component: {fileID: 1489625888}
   - component: {fileID: 1489625887}
   - component: {fileID: 1489625886}
   - component: {fileID: 1489625885}
-  - component: {fileID: 1489625884}
   - component: {fileID: 1489625883}
   - component: {fileID: 1489625882}
   - component: {fileID: 1489625891}
+  - component: {fileID: 1489625892}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: GameController
@@ -30740,6 +30720,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player_collider: {fileID: 1102088272}
+--- !u!114 &1489625892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489625881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a50d1aa69ce160441957b7d79d7660f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1497881973 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 593099760082136484, guid: b77a841af3221a64b94e385532598662,

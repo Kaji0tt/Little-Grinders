@@ -69,7 +69,7 @@ public class IsometricPlayer : MonoBehaviour
         ui_Xp = GameObject.Find("XpText").GetComponent<Text>();
         uiHpOrb = GameObject.Find("HpOrbTxt");
         GameObject uiXp = GameObject.Find("XpText");
-        //////////////////////Das ist ja fucking eklig, finde eine Alternative um die Texte zu initialisieren zu suchen!!!!!
+        //////////////////////Das ist ja fucking eklig, finde eine Alternative um die Texte zu initialisieren!!!!!
         playerStats.Set_currentHp(playerStats.Get_maxHp());
 
         //PlayerStat Inventory - ***********Initialisieren von Texten**********
@@ -249,7 +249,7 @@ public class IsometricPlayer : MonoBehaviour
 
 
             #region "Tutorial"
-            if(itemWorld.GetItem().ItemID == "WP0001")
+            if(itemWorld.GetItem().ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>() != null)
             {
                 Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
                 tutorialScript.ShowTutorial(4);

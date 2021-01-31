@@ -66,7 +66,8 @@ public class EQSlotHose : MonoBehaviour
 
     public void TaskOnClick()
     {
-        Dequip();
+        if (hose_Item != null)
+            Dequip();
     }
 
     public void LoadItem(Item item)

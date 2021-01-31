@@ -54,7 +54,10 @@ public class UI_Manager : MonoBehaviour
 
     public static bool GameIsPaused = false;
 
-
+    private void OnEnable()
+    {
+        GameIsPaused = false;
+    }
 
     private void Start()
     {

@@ -49,11 +49,20 @@ public class TalentTree : MonoBehaviour
 
     }
 
+    void OnEnable()
+    {
+        PlayerStats.eventLevelUp += UpdateTalentPointText;
+    }
+
+    void OnDisable()
+    {
+        PlayerStats.eventLevelUp -= UpdateTalentPointText;
+    }
+
     void Start()
     {
         CalculateAllTalents();
         ResetTalents();
-        GameEvents.current.LevelUpdate += UpdateTalentPointText;
     }
 
 
@@ -69,8 +78,10 @@ public class TalentTree : MonoBehaviour
 
     public void UpdateTalentPointText()
     {
+        
+        if(PlayerManager.instance.player != null)
         talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
-        //Debug.Log(talentPointText.text);
+
     }
 
     

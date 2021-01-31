@@ -92,7 +92,8 @@ public class EQSlotSchuhe : MonoBehaviour
 
     public void TaskOnClick()
     {
-        Dequip();
+        if (schuhe_Item != null)
+            Dequip();
     }
 
     public void LoadItem(Item item)

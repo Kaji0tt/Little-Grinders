@@ -20,12 +20,12 @@ public class PlayerSave
 
     public List<string> inventorySave = new List<string>();
 
-    public int scene;
-    void Awake()
-    {
+    public int MyScene;
+
+    //Wird relevant, sobald wir mehrere SaveGames haben möchten. 
+    public int loadIndex;
 
 
-    }
 
 
 
@@ -41,6 +41,8 @@ public class PlayerSave
         /// Items Speichern
         /// 
         ItemSave.SaveEquippedItems();
+
+        //Die Brust scheint nicht richtig geladen zu werden, zumindest wird andauerd ein weißes Hemd geladen, obwohl andere Brust ausgestattet.
 
         if (ItemSave.brust != null) brust = ItemSave.brust;
 
@@ -66,6 +68,9 @@ public class PlayerSave
             talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount));
         }
 
+        //Es muss noch herausgefunden werden, wie viele Talenttree-Skillpoints unverteilt sind und die abgespeichert werden!
+
+
 
         ///Inventar speichern.
         ///
@@ -81,8 +86,11 @@ public class PlayerSave
 
         ///Szene Speichern.
         ///
-        scene = SceneManager.GetActiveScene().buildIndex;
+        MyScene = SceneManager.GetActiveScene().buildIndex;
 
+        // Wenn die richtige Szene bereits geladen ist, kann der Spielstand nicht wieder hergestellt werden, WorkAround derzeit: Haupt Menü -> Laden.
+
+        loadIndex = 1;
     }
 
    

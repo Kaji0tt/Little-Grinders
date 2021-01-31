@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ public class PlayerStats : MonoBehaviour
 {
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
 
+
+    public static event Action eventLevelUp;
+
     /// <summary>
     /// XP Stuff
     /// </summary>
@@ -34,7 +38,7 @@ public class PlayerStats : MonoBehaviour
             LevelUp();
         return xp;
     }
-    public int xp_needed;
+    //public int xp_needed;
 
 
     /// <summary>
@@ -99,7 +103,7 @@ public class PlayerStats : MonoBehaviour
     /// <summary>
     /// Level-Stuff
     /// </summary>
-    public int level;
+    public int level = 1;
     public int Get_level()
     { return level;}
     public int LevelUp()
@@ -109,7 +113,7 @@ public class PlayerStats : MonoBehaviour
         if(level >= 2)
         skillPoints++;
         //Der Call für Game.Event löst beim Start noch ein error aus, stört das spiel aber nicht.
-        GameEvents.current.LevelUp();
+        eventLevelUp?.Invoke();
         #region "Tutorial"
         if (level == 2)
         {
@@ -128,7 +132,7 @@ public class PlayerStats : MonoBehaviour
     }
 
 
-    public void Awake()
+    public void Start()
     {
         //currentHp = Hp.Value;
         Set_xp(1);
@@ -175,20 +179,6 @@ public class PlayerStats : MonoBehaviour
         Debug.Log(transform.name + "ist gestorben.");
     }
 
-    public void LoadScenePlayer()
-    {
-        PlayerSave data = SaveSystem.LoadPlayer();
-
-        /*
-        level = data.level;
-        //Hp.Va = data.Hp;
-        Armor.Value = data.Armor;
-        AttackPower = player.AttackPower.Value;
-        MovementSpeed = player.MovementSpeed.Value;
-        AttackSpeed = player.AttackSpeed.Value;
-        xp = player.xp;
-        */
-    }
 }
 
 

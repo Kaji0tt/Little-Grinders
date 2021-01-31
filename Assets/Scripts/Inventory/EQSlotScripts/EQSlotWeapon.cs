@@ -109,7 +109,8 @@ public class EQSlotWeapon : MonoBehaviour
 
     public void TaskOnClick()
     {
-        Dequip();
+        if (weapon_Item != null)
+            Dequip();
     }
 
 

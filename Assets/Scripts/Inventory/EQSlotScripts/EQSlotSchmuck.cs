@@ -47,7 +47,7 @@ public class EQSlotSchmuck : MonoBehaviour
 
     public void Dequip()
     {
-
+        
 
         inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
 
@@ -68,6 +68,7 @@ public class EQSlotSchmuck : MonoBehaviour
 
     public void TaskOnClick()
     {
+        if(schmuck_Item != null)
         Dequip();
     }
     public void LoadItem(Item item)

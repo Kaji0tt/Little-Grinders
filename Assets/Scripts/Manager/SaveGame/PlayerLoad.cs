@@ -4,27 +4,24 @@ using UnityEngine;
 
 public class PlayerLoad : MonoBehaviour
 {
-
-    //Ich weiß zwar, dass das ganz schön Spaghetti ist und ich einfach eine EQSlot Klasse schreiben sollte - ich tu's jetzt aber trotzdem nicht.
-    public EQSlotBrust brust;
-    public EQSlotHose hose;
-    public EQSlotKopf kopf;
-    public EQSlotSchmuck schmuck;
-    public EQSlotSchuhe schuhe;
-    public EQSlotWeapon weapon;
-
-    [SerializeField]
-    private TalentTree talentTree;
-
-    private void Awake()
+    void Start()
     {
+        if (PlayerPrefs.HasKey("Load"))
+        {
+            PlayerSave data = SaveSystem.LoadPlayer();
 
-        LoadScenePlayer();
+            PlayerLoad playerLoad = FindObjectOfType<PlayerLoad>();
+
+            playerLoad.LoadPlayer(data);
+
+            PlayerPrefs.DeleteKey("Load");
+
+        }
     }
 
-    public void LoadScenePlayer()
+    public void LoadPlayer(PlayerSave data)
     {
-        PlayerSave data = SaveSystem.LoadScenePlayer();
+        //PlayerSave data = SaveSystem.LoadScenePlayer();
 
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
@@ -38,33 +35,32 @@ public class PlayerLoad : MonoBehaviour
 
         #region Load-Equipped Items
         if (data.brust != null)
-            brust.LoadItem(ItemDatabase.GetItemID(data.brust));
+            FindObjectOfType<EQSlotBrust>().LoadItem(ItemDatabase.GetItemID(data.brust));
 
         if (data.hose != null)
-            hose.LoadItem(ItemDatabase.GetItemID(data.hose));
+            FindObjectOfType<EQSlotHose>().LoadItem(ItemDatabase.GetItemID(data.hose));
 
         if (data.kopf != null)
-            kopf.LoadItem(ItemDatabase.GetItemID(data.kopf));
+            FindObjectOfType<EQSlotKopf>().LoadItem(ItemDatabase.GetItemID(data.kopf));
 
         if (data.schuhe != null)
-            schuhe.LoadItem(ItemDatabase.GetItemID(data.schuhe));
+            FindObjectOfType<EQSlotSchuhe>().LoadItem(ItemDatabase.GetItemID(data.schuhe));
 
         if (data.schmuck != null)
-            schmuck.LoadItem(ItemDatabase.GetItemID(data.schmuck));
+            FindObjectOfType<EQSlotSchmuck>().LoadItem(ItemDatabase.GetItemID(data.schmuck));
 
         if (data.weapon != null)
-            weapon.LoadItem(ItemDatabase.GetItemID(data.weapon));
+            FindObjectOfType<EQSlotWeapon>().LoadItem(ItemDatabase.GetItemID(data.weapon));
         #endregion
 
         //Skillpunkte werden geladen.
 
         #region Load-Skillpoints
 
+        TalentTree talentTree = FindObjectOfType<TalentTree>();
+
         foreach (TalentSave savedTalent in data.talentsToBeSaved)
         {
-            print(savedTalent.talentName + " " + savedTalent.talentPoints);
-
-            print(talentTree.defaultTalents[0].name + " aus dem Stanni tree mit " + talentTree.defaultTalents[0].currentCount + " geladen.");
 
             for (int i = 0; i < talentTree.defaultTalents.Length; i++)
             {
