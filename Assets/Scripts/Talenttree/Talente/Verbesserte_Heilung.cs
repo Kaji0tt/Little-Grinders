@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Verbesserte_Heilung : Spell
 {
-    public Heilung heilung;
+    //public Heilung heilung;
+
 
     //Dies sollte keinesfalls über Update geschehen! Finde lieber ein Workaround, damit das alles CPU schonender wird.
-    private void Update()
+
+    private void Awake()
     {
-
-        heilung.healAmount += currentCount * 2;
-
-
+        SetDescription("Erhöht die verursachte Heilung je Skillpunkt um 1% des maximalen Lebens.");
     }
+
+
+
 }

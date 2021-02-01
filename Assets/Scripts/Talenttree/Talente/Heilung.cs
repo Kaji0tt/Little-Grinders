@@ -14,7 +14,14 @@ public class Heilung : Spell, IUseable
 
     PlayerStats playerStats;
 
+    Verbesserte_Heilung verbesserte_Heilung;
+
     //If its a Spell, which instantiate Prefabs like Bullets / Fireball, it should be called on Isometric Player with "player.CastSpell(this);"
+
+    void Start()
+    {
+        verbesserte_Heilung = FindObjectOfType<Verbesserte_Heilung>();
+    }
     public void Use()
     {
         
@@ -22,6 +29,11 @@ public class Heilung : Spell, IUseable
         if (!onCoolDown && currentCount >= 1)
         {
 
+            if(verbesserte_Heilung.currentCount != 0)
+            {
+                playerStats.Heal((int)healAmount + Mathf.RoundToInt((playerStats.Hp.Value / 100) * verbesserte_Heilung.currentCount));
+            }
+            else
             playerStats.Heal((int)healAmount);
             
             onCoolDown = true;

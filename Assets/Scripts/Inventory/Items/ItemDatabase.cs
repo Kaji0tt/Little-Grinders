@@ -50,7 +50,6 @@ public class ItemDatabase : MonoBehaviour
 
         int level = playerStats.Get_level();
 
-
         currentDropTable.Clear();
 
         totalWeight = 0;
@@ -97,15 +96,17 @@ public class ItemDatabase : MonoBehaviour
         int roll = Random.Range(0, 101);
 
          foreach (Item item in currentDropTable)
-         {
-                    
+         {                    
               percentSum += ((int)item.c_percent * 100) / totalWeight;
-              //print( item.c_percent + "% wurde von dem Item " + item.ItemName + " hinzugefügt. Ergibt insgesamt " + percentSum + "%");
                     
               if (roll < percentSum)
               {
                     position = position + new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
+
+                    //ItemRolls.CalculateRolls(item);
+
                     ItemWorld.SpawnItemWorld(position, item);
+
                     break;
               }
          }
@@ -130,6 +131,7 @@ public class ItemDatabase : MonoBehaviour
             foreach (Item item in totalLoottable[lootTable +1])
             {
                 item.c_percent = item.percent / 2;
+
                 totalWeight += item.percent / 2;
 
                 currentDropTable.Add(item);
@@ -160,6 +162,7 @@ public class ItemDatabase : MonoBehaviour
             foreach (Item item in totalLoottable[lootTable - 2])
             {
                 item.c_percent = item.percent / 3;
+
                 totalWeight += item.percent / 3;
 
                 currentDropTable.Add(item);
