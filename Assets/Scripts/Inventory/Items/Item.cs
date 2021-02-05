@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public enum ItemType {Kopf, Brust, Beine, Schuhe, Schmuck, Weapon, Consumable}
-public enum ItemRarity {Standard, Selten, Rar, Episch, Einzigartig}
+//public enum ItemRarity {Unbrauchbar, Gewöhnlich, Ungewöhnlich, Selten, Episch, Legendär}
 
 [CreateAssetMenu(fileName = "Item0000", menuName = "Assets/Item")]
 public class Item : ScriptableObject, IDescribable
@@ -15,7 +15,8 @@ public class Item : ScriptableObject, IDescribable
     public string ItemDescription;
     [SerializeField]
     public ItemType itemType;
-    public ItemRarity itemRarity;   // Not used yet. For further Information to implement the infleunce of itemRarity check: https://www.youtube.com/watch?v=dvSYloBxzrU
+    [HideInInspector]
+    public string itemRarity;   // [Currently gettin Implemented]: https://www.youtube.com/watch?v=dvSYloBxzrU
     public int Range;
     public bool RangedWeapon;
     public Sprite icon;        //scale item.sprite always to correct size, for ItemWorld to Spawn it in according size aswell. either here or in itemworld
@@ -87,8 +88,8 @@ public class Item : ScriptableObject, IDescribable
         if (m6p != null) playerStats.MovementSpeed.AddModifier(m6p);
 
 
-
-
+        //Implementierung von Special Effekten
+        
 
 
     }
@@ -108,6 +109,8 @@ public class Item : ScriptableObject, IDescribable
         if (m4p != null) playerStats.AbilityPower.RemoveModifier(m4p);
         if (m5p != null) playerStats.AttackSpeed.RemoveModifier(m5p);
         if (m6p != null) playerStats.MovementSpeed.RemoveModifier(m6p);
+
+        //Implementierung von Special Effekten
 
     }
 

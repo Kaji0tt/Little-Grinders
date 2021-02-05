@@ -196,13 +196,13 @@ public class UI_Manager : MonoBehaviour
     {
  
         tooltip.SetActive(true);
-        //tooltip.GetComponentInChildren<GameObject>().SetActive(true);
+
         tooltip.transform.position = position;
-        //print("you got here");
+
         if (item != null)
         {
-            //print("and for some suspicious reason you got here aswell. Hi there" + item.ItemName);
-            //tooltipText = tooltip.GetComponentInChildren<Text>();
+
+            //In dieser Line sollten in Dependency of item.Rarity <color> Hexes definiert werden. (Geschlossen um item.ItemName)
 
             tooltipText.text = "<b>"+item.ItemName + "</b>\n"+ item.ItemDescription + "\n\n" + item.GetValueDescription();
         }

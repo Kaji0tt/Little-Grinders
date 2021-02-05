@@ -5477,7 +5477,6 @@ MonoBehaviour:
   spellCoolDown: 0
   active: 0
   onCoolDown: 0
-  heilung: {fileID: 192225090}
 --- !u!114 &285881510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30864,6 +30863,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1489625890}
+  - component: {fileID: 1489625893}
   - component: {fileID: 1489625884}
   - component: {fileID: 1489625889}
   - component: {fileID: 1489625888}
@@ -31060,6 +31060,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50d1aa69ce160441957b7d79d7660f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1489625893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489625881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28532e31c0e8a4344b872fcbe861f1d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wLegendaryRolls:
+  - {fileID: 11400000, guid: 62922b5e0e5651a4ebba5ecbfbbbfbf3, type: 2}
+  wEpicRolls: []
+  wRareRolls: []
+  wUncommonRolls: []
+  wUnbrauchbarRolls: []
+  _unbrauchbar: 20
+  _usual: 33
+  _uncommon: 26
+  _rare: 15
+  _epic: 5
+  _legendary: 1
 --- !u!1 &1493238143
 GameObject:
   m_ObjectHideFlags: 0

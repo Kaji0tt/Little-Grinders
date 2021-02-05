@@ -87,20 +87,7 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
-        {
-            TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
-            statText[1].text = Mathf.RoundToInt(Hp.Value) + "/" + Mathf.RoundToInt(maxHp);
-            statText[0].text = level.ToString();
-        }
-        else
-        {
-            TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
-
-            statText[1].text = " ";
-            statText[0].text = " ";
-        }
 
         navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -120,7 +107,6 @@ public class EnemyController : MonoBehaviour
 
         else
         {
-
             if (player_distance <= aggroRange || pulled)
             {
                 SetDestination();
@@ -152,7 +138,31 @@ public class EnemyController : MonoBehaviour
 
         enemyHpSlider.value = Hp.Value / maxHp;
         if (Hp.Value < maxHp)
+        {
             hpBar.SetActive(true);
+
+            if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
+            {
+                TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
+
+                {
+                    statText[1].text = Mathf.RoundToInt(Hp.Value) + "/" + Mathf.RoundToInt(maxHp);
+                    statText[0].text = level.ToString();
+                }
+            }
+            else
+            {
+                TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
+
+                {
+                    statText[1].text = " ";
+                    statText[0].text = " ";
+                }
+
+            }
+
+        }
+
 
         if (Hp.Value <= 0)
             Destroy(gameObject);
