@@ -25,7 +25,7 @@ public class EQSlotBrust : MonoBehaviour
         {
             brust_Item = item;
 
-            ItemSave.equippedItems.Add(item);
+            //PlayerManager.instance.player.equippedItems.Add(item);
 
             int_slotBtn.StoreItem(item);
 
@@ -58,7 +58,7 @@ public class EQSlotBrust : MonoBehaviour
 
         isometricPlayer.Dequip(brust_Item);
 
-        ItemSave.equippedItems.Remove(brust_Item);
+        //ItemSave.equippedItems.Remove(brust_Item);
 
         brust_Item = null;
 
@@ -78,7 +78,7 @@ public class EQSlotBrust : MonoBehaviour
 
         brust_Item = item;
 
-        ItemSave.equippedItems.Add(item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
 
         item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
 

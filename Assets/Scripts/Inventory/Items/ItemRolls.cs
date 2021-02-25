@@ -325,7 +325,7 @@ public class ItemRolls : MonoBehaviour
 
         SetRarity(item, rarity);
 
-        print(mods.Count);
+        //print(mods.Count);
         
         foreach (ItemModsData mod in mods)
         {

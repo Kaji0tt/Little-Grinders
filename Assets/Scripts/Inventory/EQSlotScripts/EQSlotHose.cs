@@ -24,7 +24,7 @@ public class EQSlotHose : MonoBehaviour
         {
             hose_Item = item;
 
-            ItemSave.equippedItems.Add(item);
+            //ItemSave.equippedItems.Add(item);
 
             int_slotBtn.StoreItem(item);
 
@@ -55,7 +55,7 @@ public class EQSlotHose : MonoBehaviour
 
         PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(hose_Item);
 
-        ItemSave.equippedItems.Remove(hose_Item);
+        //ItemSave.equippedItems.Remove(hose_Item);
 
         hose_Item = null;
 
@@ -74,7 +74,7 @@ public class EQSlotHose : MonoBehaviour
     {
         hose_Item = item;
 
-        ItemSave.equippedItems.Add(item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
 
         item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
 

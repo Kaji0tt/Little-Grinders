@@ -24,7 +24,7 @@ public class EQSlotSchmuck : MonoBehaviour
         {
             schmuck_Item = item;
 
-            ItemSave.equippedItems.Add(item);
+            //ItemSave.equippedItems.Add(item);
 
             int_slotBtn.StoreItem(item);
 
@@ -57,7 +57,7 @@ public class EQSlotSchmuck : MonoBehaviour
 
         isometricPlayer.Dequip(schmuck_Item);
 
-        ItemSave.equippedItems.Remove(schmuck_Item);
+        //ItemSave.equippedItems.Remove(schmuck_Item);
 
         schmuck_Item = null;
 
@@ -75,7 +75,7 @@ public class EQSlotSchmuck : MonoBehaviour
     {
         schmuck_Item = item;
 
-        ItemSave.equippedItems.Add(item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
 
         item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
 

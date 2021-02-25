@@ -6,9 +6,9 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
  
-    public event EventHandler OnItemListChanged;
+    public event EventHandler OnItemListChanged; //Würde man für Equip nicht brauchen, da einzelne GO
     public List<ItemInstance> itemList;
-    private Action<ItemInstance> useItemAction;
+    private Action<ItemInstance> useItemAction; //Würde man brauchen, falls man aktive Fähigkeiten auf den Items haben möchte.
     private GameEvents current;
 
 
@@ -22,8 +22,21 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(ItemInstance item)
     {
-        if (itemList.Count <= 15)  // hier nochmal prüfen, aber irgendwie so die inv größe regeln
+        if (itemList.Count <= 15)  // InvGröße: das war schlau von MonkeyDev, lediglich das Interface anpassen
         {
+            /*
+            if(item.itemType == ItemType.Consumable) //Ggf. gleiches für Currency hinzufügen, außerhalb von Inventory.
+            {
+                bool itemAlreadyInInventory = false;
+                foreach (ItemInstance itemInInventory in itemList)
+                {
+                    if (itemInInventory.ItemID == item.ItemID)
+                    {
+                        itemInInventory.amount += item.amount;
+                    }
+                }
+            }
+            */
             itemList.Add(item);
             OnItemListChanged?.Invoke(this, EventArgs.Empty);
 

@@ -76,7 +76,7 @@ public class EQSlotWeapon : MonoBehaviour
         if (weapon_Item.RangedWeapon)
             isometricPlayer.rangedWeapon = false;
 
-        ItemSave.equippedItems.Remove(weapon_Item);
+        //ItemSave.equippedItems.Remove(weapon_Item);
 
         weapon_Item = null;
 
@@ -88,7 +88,7 @@ public class EQSlotWeapon : MonoBehaviour
     {
         weapon_Item = item;
 
-        ItemSave.equippedItems.Add(item);
+        //ItemSave.equippedItems.Add(item);
 
         int_slotBtn.StoreItem(item);
 
@@ -118,7 +118,7 @@ public class EQSlotWeapon : MonoBehaviour
     {
         weapon_Item = item;
 
-        ItemSave.equippedItems.Add(item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
 
         item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
 

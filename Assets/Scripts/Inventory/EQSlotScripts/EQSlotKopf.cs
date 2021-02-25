@@ -22,7 +22,7 @@ public class EQSlotKopf : MonoBehaviour
         {
             kopf_Item = item;
 
-            ItemSave.equippedItems.Add(item);
+            //ItemSave.equippedItems.Add(item);
 
             int_slotBtn.StoreItem(item);
 
@@ -54,7 +54,7 @@ public class EQSlotKopf : MonoBehaviour
 
         PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(kopf_Item);
 
-        ItemSave.equippedItems.Remove(kopf_Item);
+        //ItemSave.equippedItems.Remove(kopf_Item);
 
         kopf_Item = null;
 
@@ -73,7 +73,7 @@ public class EQSlotKopf : MonoBehaviour
     {
         kopf_Item = item;
 
-        ItemSave.equippedItems.Add(item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
 
         item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
 

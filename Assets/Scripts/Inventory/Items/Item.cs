@@ -102,7 +102,13 @@ public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
     [HideInInspector]
     public List<ItemModsData> addedItemMods = new List<ItemModsData>(); //??
 
+    [HideInInspector]
+    public int amount = 1;
 
+    private IMoveable MyMoveable;
+
+    private IUseable MyUseAble;
+      
     //Wird eigentlich nicht verwendet, sollte aber im Konstruktor gecalled werden.
     //public ItemModsData[] myItemMods; 
 
@@ -112,7 +118,12 @@ public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
         ItemName = item.ItemName;
         ItemDescription = item.ItemDescription;
         itemType = item.itemType;
-
+        /*
+        if(itemType == ItemType.Consumable)
+        {
+            MyUseAble = this;
+        }
+        */
         //ItemRarity wird ausgelassen, da es erst im Roll berechnet wird.
 
         Range = item.Range;
@@ -193,6 +204,12 @@ public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
 
     }
 
+    /* Incoming
+    public void Use()
+    {
+        
+    }
+    */
     public void Equip(PlayerStats playerStats)
     {
         //Derzeit werden nur die Boni von den Mods equipped.

@@ -21,7 +21,18 @@ public class IsometricPlayer : MonoBehaviour
 
     // Item Management
     private Inventory inventory;
+    public List<ItemInstance> equippedItems = new List<ItemInstance>(); //Beim Load wird Player neu geladen, also doch nicht. Aber was ist am schlauesten?
+    /// <summary>
+    /// Eigene Classe Vorteile:
+    /// Ausgerüstete Items könnten Aktive Fähigkeiten haben - voll cool.
+    /// Einzelne Liste:
+    /// Einfach.
+    /// </summary>
+
+    //private EquippedItems equippedItems;
+    
     [SerializeField] private UI_Inventory uiInventory;
+
 
     // Item which spawns upon load:
     public Item test_item, test_item2, test_item3;
@@ -57,7 +68,7 @@ public class IsometricPlayer : MonoBehaviour
 
         
         //Item Management
-        inventory = new Inventory(UseItem);
+        inventory = new Inventory(UseItem);//UseItem = Welche Methode wird in Isometric Player bei Nutzung ausgelöst.
         uiInventory.SetInventory(inventory);
         uiInventory.SetCharakter(this);
 
@@ -267,11 +278,13 @@ public class IsometricPlayer : MonoBehaviour
     private void UseItem(ItemInstance item)
     {
         item.Equip(playerStats);
+        equippedItems.Add(item);
 
     }
     public void Dequip (ItemInstance item)
     {
         item.Unequip(playerStats);
+        equippedItems.Remove(item);
     }
     
     public Inventory Inventory

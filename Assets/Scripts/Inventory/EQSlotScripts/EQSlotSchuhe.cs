@@ -49,7 +49,7 @@ public class EQSlotSchuhe : MonoBehaviour
         {
             schuhe_Item = item;
 
-            ItemSave.equippedItems.Add(item);
+            //ItemSave.equippedItems.Add(item);
 
             int_slotBtn.StoreItem(item);
 
@@ -81,7 +81,7 @@ public class EQSlotSchuhe : MonoBehaviour
 
         isometricPlayer.Dequip(schuhe_Item);
 
-        ItemSave.equippedItems.Remove(schuhe_Item);
+        //ItemSave.equippedItems.Remove(schuhe_Item);
 
         schuhe_Item = null;
 
@@ -100,7 +100,7 @@ public class EQSlotSchuhe : MonoBehaviour
     {
         schuhe_Item = item;
 
-        ItemSave.equippedItems.Add(item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
 
         item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
 

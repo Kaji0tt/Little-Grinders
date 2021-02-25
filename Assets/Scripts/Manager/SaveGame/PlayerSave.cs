@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class PlayerSave
 {
+
+    /// <summary>
+    /// Player Save
+    /// </summary>
+
     public int level;
 
     public float Hp, maxHp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
@@ -14,13 +19,20 @@ public class PlayerSave
 
     public int xp;
 
+
+    /// <summary>
+    /// Item Save
+    /// </summary>
+
+    //EQ SLOTS
+
     public string brust, hose, kopf, schmuck, schuhe, weapon;
+
     public string brust_r, hose_r, kopf_r, schmuck_r, schuhe_r, weapon_r;
 
-    public List<ItemModsData> modsBrust, modsHose, modsKopf, modsSchmuck, modsSchuhe, modsWeapon;
+    public List<ItemModsData> modsBrust = new List<ItemModsData>(), modsHose = new List<ItemModsData>(), modsKopf = new List<ItemModsData>(), modsSchmuck = new List<ItemModsData>(), modsSchuhe = new List<ItemModsData>(), modsWeapon = new List<ItemModsData>();
 
-    public List<TalentSave> talentsToBeSaved = new List<TalentSave>();
-
+    //Inventory
 
     public List<ItemModsData>[] inventoryItemMods;
 
@@ -28,18 +40,26 @@ public class PlayerSave
 
     public List<string> inventorySave = new List<string>();
 
-    //public List<string> inventoryItemMods;
 
-    public int MyScene;
+    /// <summary>
+    /// Talents Save
+    /// </summary>
+
+    public List<TalentSave> talentsToBeSaved = new List<TalentSave>();
 
     public int skillPoints;
 
     public string[] savedActionButtons;
 
-    //public string[] itemMods;
 
-    //Wird relevant, sobald wir mehrere SaveGames haben möchten. 
+    /// <summary>
+    /// Scene Save
+    /// </summary>
+
     public int loadIndex;
+
+    public int MyScene;
+
 
 
 
@@ -47,6 +67,7 @@ public class PlayerSave
 
     public PlayerSave()
     {
+        ///Player Speichern
         level = PlayerManager.instance.player.GetComponent<PlayerStats>().level;
 
         Hp = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_currentHp();
@@ -57,76 +78,102 @@ public class PlayerSave
 
 
         /// Items Speichern
-        /// 
         #region Items
-        ItemSave.SaveEquippedItems();
-
-        //Die Brust scheint nicht richtig geladen zu werden, zumindest wird andauerd ein weißes Hemd geladen, obwohl andere Brust ausgestattet.
-
-        if (ItemSave.brust != null)
+        foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems)
         {
-            brust = ItemSave.brust; //Gewollte Logik: Speichere String für ID, speichere List of ItemMods
-                                    //Lade Item by ID, add Mods by List
-            brust_r = ItemSave.brust_r;
+            switch (item.itemType)
+            {
+                case ItemType.Kopf:
 
-            modsBrust = ItemSave.modsBrust;
+                    kopf = item.ItemID;
 
-        }
+                    kopf_r = item.itemRarity;
 
-        if (ItemSave.hose != null)
-        {
-            hose = ItemSave.hose;
+                    foreach (ItemModsData mod in item.addedItemMods)
+                    {
+                        modsKopf.Add(mod);
+                    }
 
-            hose_r = ItemSave.hose_r;
 
-            modsHose = ItemSave.modsHose;
+                    break;
 
-        }
+                case ItemType.Brust:
 
-        if (ItemSave.kopf != null)
-        {
-            kopf = ItemSave.kopf;
+                    brust = item.ItemID;
 
-            kopf_r = ItemSave.kopf_r;
+                    brust_r = item.itemRarity;
 
-            modsKopf = ItemSave.modsKopf;
+                    foreach (ItemModsData mod in item.addedItemMods)
+                    {
 
-        }
+                        modsBrust.Add(mod);
+                    }
 
-        if (ItemSave.schmuck != null)
-        {
-            schmuck = ItemSave.schmuck;
+                    break;
 
-            schmuck_r = ItemSave.schmuck_r;
+                case ItemType.Beine:
 
-            modsSchmuck = ItemSave.modsSchmuck;
+                    hose = item.ItemID;
 
-        }
+                    hose_r = item.itemRarity;
 
-        if (ItemSave.schuhe != null)
-        {
-            schuhe = ItemSave.schuhe;
 
-            schuhe_r = ItemSave.schuhe_r;
+                    foreach (ItemModsData mod in item.addedItemMods)
+                    {
+                        modsHose.Add(mod);
+                    }
 
-            modsSchuhe = ItemSave.modsSchuhe;
+                    break;
 
-        }
+                case ItemType.Schuhe:
 
-        if (ItemSave.weapon != null)
-        {
-            weapon = ItemSave.weapon;
+                    schuhe = item.ItemID;
 
-            weapon_r = ItemSave.weapon_r;
+                    schuhe_r = item.itemRarity;
 
-            modsWeapon = ItemSave.modsWeapon;
+                    foreach (ItemModsData mod in item.addedItemMods)
+                    {
+                        modsSchuhe.Add(mod);
+                    }
 
+                    break;
+
+                case ItemType.Schmuck:
+
+                    schmuck = item.ItemID;
+
+                    schmuck_r = item.itemRarity;
+
+                    foreach (ItemModsData mod in item.addedItemMods)
+                    {
+                        modsSchmuck.Add(mod);
+                    }
+
+                    break;
+
+                case ItemType.Weapon:
+
+                    weapon = item.ItemID;
+
+                    weapon_r = item.itemRarity;
+
+                    foreach (ItemModsData mod in item.addedItemMods)
+                    {
+                        
+                        modsWeapon.Add(mod);
+                    }
+
+                    break;
+                case ItemType.Consumable:
+                    //Placeholder. Call for ItemDelte or something. --> Irgendwie, wird das irgendwo anders schon gemacht.
+                    break;
+
+            }
         }
         #endregion;
 
 
         ///Skill-Points speichern.
-        ///
 
         TalentTree talentTree = GameObject.Find("TalentTree").GetComponent<TalentTree>();
 
@@ -140,14 +187,8 @@ public class PlayerSave
 
 
         ///Inventar speichern.
-        ///
-        //Inventory inventory = PlayerManager.instance.player.GetComponent<Inventory>();
-        //PlayerManager.instance.player.GetComponent<Inventory>();
 
         Debug.Log(PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList());
-
-
-        //Logik-Gedanke: Erstelle Array von Listen(ItemModsData) in Größe des Inventares -> Foreach
 
         inventoryItemMods = new List<ItemModsData>[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
 
@@ -166,15 +207,6 @@ public class PlayerSave
             currentItem += 1;
 
         }
-
-        string[] inventorySaveArr = inventorySave.ToArray();
-
-        //inventoryItemMods = new List<string>();
-
-        /*foreach (ItemModsData modData in item.addedItemMods)
-        {
-            inventoryItemMods.Add(modData.id);
-        }*/
 
         ///Szene Speichern.
         ///
@@ -196,5 +228,5 @@ public class PlayerSave
         loadIndex = 1;
     }
 
-   
+
 }
