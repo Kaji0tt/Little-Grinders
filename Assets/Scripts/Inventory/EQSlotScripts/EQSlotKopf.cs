@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class EQSlotKopf : MonoBehaviour
 {
-    public static Item kopf_Item;
+    public static ItemInstance kopf_Item;
     private Inventory inventory;
     public IsometricPlayer isometricPlayer;
 
@@ -18,7 +16,7 @@ public class EQSlotKopf : MonoBehaviour
     }
 
 
-    public void equip(Item item)
+    public void equip(ItemInstance item)
     {
         if (kopf_Item == null)
         {
@@ -71,7 +69,7 @@ public class EQSlotKopf : MonoBehaviour
             Dequip();
     }
 
-    public void LoadItem(Item item)
+    public void LoadItem(ItemInstance item)
     {
         kopf_Item = item;
 

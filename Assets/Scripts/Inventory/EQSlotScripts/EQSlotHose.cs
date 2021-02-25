@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EQSlotHose : MonoBehaviour
 {
-    public static Item hose_Item;
+    public static ItemInstance hose_Item;
     private Inventory inventory;
     public IsometricPlayer isometricPlayer;
 
@@ -18,7 +18,7 @@ public class EQSlotHose : MonoBehaviour
     }
 
 
-    public void equip(Item item)
+    public void equip(ItemInstance item)
     {
         if (hose_Item == null)
         {
@@ -70,7 +70,7 @@ public class EQSlotHose : MonoBehaviour
             Dequip();
     }
 
-    public void LoadItem(Item item)
+    public void LoadItem(ItemInstance item)
     {
         hose_Item = item;
 

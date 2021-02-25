@@ -1986,7 +1986,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76909352b433b594cbbed097a3ad840c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
+  storedItem:
+    ItemID: 
+    ItemName: 
+    ItemDescription: 
+    ItemValueInfo: 
+    itemType: 0
+    itemRarity: 
+    Range: 0
+    RangedWeapon: 0
+    percent: 0
+    hp: 0
+    armor: 0
+    attackPower: 0
+    abilityPower: 0
+    flatValues: 
+    p_hp: 0
+    p_armor: 0
+    p_attackPower: 0
+    p_abilityPower: 0
+    p_attackSpeed: 0
+    p_movementSpeed: 0
+    percentValues: []
+    c_hp: 0
+    c_percent: 0
+    addedItemMods: []
 --- !u!114 &93897087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11859,7 +11883,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76909352b433b594cbbed097a3ad840c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
+  storedItem:
+    ItemID: 
+    ItemName: 
+    ItemDescription: 
+    ItemValueInfo: 
+    itemType: 0
+    itemRarity: 
+    Range: 0
+    RangedWeapon: 0
+    percent: 0
+    hp: 0
+    armor: 0
+    attackPower: 0
+    abilityPower: 0
+    flatValues: 
+    p_hp: 0
+    p_armor: 0
+    p_attackPower: 0
+    p_abilityPower: 0
+    p_attackSpeed: 0
+    p_movementSpeed: 0
+    percentValues: []
+    c_hp: 0
+    c_percent: 0
+    addedItemMods: []
 --- !u!114 &545448840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18711,7 +18759,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76909352b433b594cbbed097a3ad840c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
+  storedItem:
+    ItemID: 
+    ItemName: 
+    ItemDescription: 
+    ItemValueInfo: 
+    itemType: 0
+    itemRarity: 
+    Range: 0
+    RangedWeapon: 0
+    percent: 0
+    hp: 0
+    armor: 0
+    attackPower: 0
+    abilityPower: 0
+    flatValues: 
+    p_hp: 0
+    p_armor: 0
+    p_attackPower: 0
+    p_abilityPower: 0
+    p_attackSpeed: 0
+    p_movementSpeed: 0
+    percentValues: []
+    c_hp: 0
+    c_percent: 0
+    addedItemMods: []
 --- !u!114 &887621161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22540,7 +22612,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76909352b433b594cbbed097a3ad840c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
+  storedItem:
+    ItemID: 
+    ItemName: 
+    ItemDescription: 
+    ItemValueInfo: 
+    itemType: 0
+    itemRarity: 
+    Range: 0
+    RangedWeapon: 0
+    percent: 0
+    hp: 0
+    armor: 0
+    attackPower: 0
+    abilityPower: 0
+    flatValues: 
+    p_hp: 0
+    p_armor: 0
+    p_attackPower: 0
+    p_abilityPower: 0
+    p_attackSpeed: 0
+    p_movementSpeed: 0
+    percentValues: []
+    c_hp: 0
+    c_percent: 0
+    addedItemMods: []
 --- !u!114 &1070802550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26241,7 +26337,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76909352b433b594cbbed097a3ad840c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
+  storedItem:
+    ItemID: 
+    ItemName: 
+    ItemDescription: 
+    ItemValueInfo: 
+    itemType: 0
+    itemRarity: 
+    Range: 0
+    RangedWeapon: 0
+    percent: 0
+    hp: 0
+    armor: 0
+    attackPower: 0
+    abilityPower: 0
+    flatValues: 
+    p_hp: 0
+    p_armor: 0
+    p_attackPower: 0
+    p_abilityPower: 0
+    p_attackSpeed: 0
+    p_movementSpeed: 0
+    percentValues: []
+    c_hp: 0
+    c_percent: 0
+    addedItemMods: []
 --- !u!114 &1236016281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30865,7 +30985,6 @@ GameObject:
   - component: {fileID: 1489625890}
   - component: {fileID: 1489625893}
   - component: {fileID: 1489625884}
-  - component: {fileID: 1489625889}
   - component: {fileID: 1489625888}
   - component: {fileID: 1489625887}
   - component: {fileID: 1489625886}
@@ -30931,6 +31050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6338073954262964f95b0b70543ef1a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemRolls: {fileID: 1489625893}
   tier1:
   - {fileID: 11400000, guid: 2428f44ffe24971438bc675471445815, type: 2}
   - {fileID: 11400000, guid: b8d28d6c3c100a7459109c5a668f8ed1, type: 2}
@@ -31009,18 +31129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc98318064aee74cb08a25a51384b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1489625889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1489625881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b114c8176e064f46a240b13572dfc2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1489625890
 Transform:
   m_ObjectHideFlags: 0
@@ -31074,10 +31182,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wLegendaryRolls:
   - {fileID: 11400000, guid: 62922b5e0e5651a4ebba5ecbfbbbfbf3, type: 2}
-  wEpicRolls: []
-  wRareRolls: []
-  wUncommonRolls: []
-  wUnbrauchbarRolls: []
+  wEpicRolls:
+  - {fileID: 11400000, guid: 4df3394230a4abe408d1a59c6991bacf, type: 2}
+  wRareRolls:
+  - {fileID: 11400000, guid: 0345cec3e21e0634997505f1b88f3303, type: 2}
+  wUncommonRolls:
+  - {fileID: 11400000, guid: f3bc1fd16d1845e47a0e216af1a29353, type: 2}
+  wUnbrauchbarRolls:
+  - {fileID: 11400000, guid: 5a803bc07cb2043409a8f4efbf148d85, type: 2}
   _unbrauchbar: 20
   _usual: 33
   _uncommon: 26
@@ -32427,7 +32539,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 7.6849995
+  m_padding: 7.6526003
   m_canvasRenderer: {fileID: 1587728348}
   m_TextComponent: {fileID: 366839297}
   m_materialReferenceIndex: 1
@@ -33543,7 +33655,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76909352b433b594cbbed097a3ad840c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
+  storedItem:
+    ItemID: 
+    ItemName: 
+    ItemDescription: 
+    ItemValueInfo: 
+    itemType: 0
+    itemRarity: 
+    Range: 0
+    RangedWeapon: 0
+    percent: 0
+    hp: 0
+    armor: 0
+    attackPower: 0
+    abilityPower: 0
+    flatValues: 
+    p_hp: 0
+    p_armor: 0
+    p_attackPower: 0
+    p_abilityPower: 0
+    p_attackSpeed: 0
+    p_movementSpeed: 0
+    percentValues: []
+    c_hp: 0
+    c_percent: 0
+    addedItemMods: []
 --- !u!114 &1652136750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41748,7 +41884,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76909352b433b594cbbed097a3ad840c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedItem: {fileID: 0}
+  storedItem:
+    ItemID: 
+    ItemName: 
+    ItemDescription: 
+    ItemValueInfo: 
+    itemType: 0
+    itemRarity: 
+    Range: 0
+    RangedWeapon: 0
+    percent: 0
+    hp: 0
+    armor: 0
+    attackPower: 0
+    abilityPower: 0
+    flatValues: 
+    p_hp: 0
+    p_armor: 0
+    p_attackPower: 0
+    p_abilityPower: 0
+    p_attackSpeed: 0
+    p_movementSpeed: 0
+    percentValues: []
+    c_hp: 0
+    c_percent: 0
+    addedItemMods: []
 --- !u!114 &2092130700
 MonoBehaviour:
   m_ObjectHideFlags: 0

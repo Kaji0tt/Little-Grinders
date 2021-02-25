@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EQSlotBrust : MonoBehaviour
 {
-    public static Item brust_Item;
+    public static ItemInstance brust_Item;
     private Inventory inventory;
     public IsometricPlayer isometricPlayer;
 
@@ -19,7 +19,7 @@ public class EQSlotBrust : MonoBehaviour
     }
 
 
-    public void equip(Item item)
+    public void equip(ItemInstance item)
     {
         if (brust_Item == null)
         {
@@ -72,8 +72,10 @@ public class EQSlotBrust : MonoBehaviour
             Dequip();
     }
 
-    public void LoadItem(Item item)
+    public void LoadItem(ItemInstance item)
     {
+        //Find Item by ID?
+
         brust_Item = item;
 
         ItemSave.equippedItems.Add(item);

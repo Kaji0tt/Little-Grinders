@@ -37,22 +37,22 @@ public class PlayerLoad : MonoBehaviour
 
         #region Load-Equipped Items
         if (data.brust != null)
-            FindObjectOfType<EQSlotBrust>().LoadItem(ItemDatabase.GetItemID(data.brust));
+            FindObjectOfType<EQSlotBrust>().LoadItem(ItemRolls.GetItemStats(data.brust, data.modsBrust, data.brust_r));
 
         if (data.hose != null)
-            FindObjectOfType<EQSlotHose>().LoadItem(ItemDatabase.GetItemID(data.hose));
+            FindObjectOfType<EQSlotHose>().LoadItem(ItemRolls.GetItemStats(data.hose, data.modsHose, data.hose_r));
 
         if (data.kopf != null)
-            FindObjectOfType<EQSlotKopf>().LoadItem(ItemDatabase.GetItemID(data.kopf));
+            FindObjectOfType<EQSlotKopf>().LoadItem(ItemRolls.GetItemStats(data.kopf, data.modsKopf, data.kopf_r));
 
         if (data.schuhe != null)
-            FindObjectOfType<EQSlotSchuhe>().LoadItem(ItemDatabase.GetItemID(data.schuhe));
+            FindObjectOfType<EQSlotSchuhe>().LoadItem(ItemRolls.GetItemStats(data.schuhe, data.modsSchuhe, data.schuhe_r));
 
         if (data.schmuck != null)
-            FindObjectOfType<EQSlotSchmuck>().LoadItem(ItemDatabase.GetItemID(data.schmuck));
+            FindObjectOfType<EQSlotSchmuck>().LoadItem(ItemRolls.GetItemStats(data.schmuck, data.modsSchmuck, data.schmuck_r));
 
         if (data.weapon != null)
-            FindObjectOfType<EQSlotWeapon>().LoadItem(ItemDatabase.GetItemID(data.weapon));
+            FindObjectOfType<EQSlotWeapon>().LoadItem(ItemRolls.GetItemStats(data.weapon, data.modsWeapon, data.weapon_r));
         #endregion
 
         //Skillpunkte werden geladen.
@@ -73,8 +73,6 @@ public class PlayerLoad : MonoBehaviour
                     talentTree.allTalents[i].unlocked = savedTalent.unlocked;
 
                     talentTree.allTalents[i].UpdateTalent();
-
-
                 }
             }
 
@@ -96,10 +94,14 @@ public class PlayerLoad : MonoBehaviour
 
         // Inventar wird geladen.
 
-        foreach(string ID in data.inventorySave)
+        int currentItem = 0;
+
+        foreach(string item in data.inventorySave)
         {
 
-            PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(ItemDatabase.GetItemID(ID));
+            PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(ItemRolls.GetItemStats(item, data.inventoryItemMods[currentItem], data.inventoryItemRarity[currentItem]));
+
+            currentItem += 1;
 
         }
 

@@ -45,6 +45,8 @@ public class UI_Manager : MonoBehaviour
     private CanvasGroup actionBar;
 
 
+    //private hexcolor;
+
     //behinderte Methode die unter Menüs des Charakter Menüs zu deklarieren.
     //public GameObject talentTree, inventoryMenu; //Muss auch über Canvas group geregelt werden, da zu beginn nicht aktivierte Spielobjekte einen Null-Error ergeben!
 
@@ -192,7 +194,7 @@ public class UI_Manager : MonoBehaviour
         actionButtons[btnIndex].onClick.Invoke();
     }
 
-    public void ShowItemTooltip(Vector3 position, Item item)
+    public void ShowItemTooltip(Vector3 position, ItemInstance item)
     {
  
         tooltip.SetActive(true);
@@ -201,10 +203,28 @@ public class UI_Manager : MonoBehaviour
 
         if (item != null)
         {
-
+            string color = string.Empty;
             //In dieser Line sollten in Dependency of item.Rarity <color> Hexes definiert werden. (Geschlossen um item.ItemName)
+            if (item.itemRarity == "Legendär")
+                color = "#db8535";
 
-            tooltipText.text = "<b>"+item.ItemName + "</b>\n"+ item.ItemDescription + "\n\n" + item.GetValueDescription();
+            if (item.itemRarity == "Episch")
+                color = "#783391";
+
+            if (item.itemRarity == "Selten")
+                color = "#282b8f";
+
+            if (item.itemRarity == "Ungewöhnlich")
+                color = "#30bf4f";
+
+            if (item.itemRarity == "Gewöhnlich")
+                color = "#c9c9c9";
+
+            if (item.itemRarity == "Unbrauchbar")
+                color = "#8c6d6d";
+
+            
+            tooltipText.text = string.Format("<b><color={0}> {1} </color></b>\n{2}\n{3}", color, item.ItemName, item.ItemDescription, item.ItemValueInfo);
         }
     }
 

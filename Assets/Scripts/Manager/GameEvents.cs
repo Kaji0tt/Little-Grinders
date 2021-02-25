@@ -11,17 +11,17 @@ public class GameEvents : MonoBehaviour
     {
         current = this;
     }
-    public event Action<Item> equipSchuhe;
-    public event Action<Item> equipHose;
-    public event Action<Item> equipBrust;
-    public event Action<Item> equipKopf;
-    public event Action<Item> equipWeapon;
-    public event Action<Item> equipSchmuck;
+    public event Action<ItemInstance> equipSchuhe;
+    public event Action<ItemInstance> equipHose;
+    public event Action<ItemInstance> equipBrust;
+    public event Action<ItemInstance> equipKopf;
+    public event Action<ItemInstance> equipWeapon;
+    public event Action<ItemInstance> equipSchmuck;
 
     //private IsometricPlayer isometricPlayer;
 
     
-    public void EquipChanged(Item item)
+    public void EquipChanged(ItemInstance item)
     {
         switch (item.itemType)
         {

@@ -58,7 +58,7 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
         int x = 0;
         int y = 0;
         float SlotCellSize = 50f;
-        foreach (Item item in inventory.GetItemList())
+        foreach (ItemInstance item in inventory.GetItemList())
         {
 
             RectTransform SlotRectTransform = Instantiate(Int_Slot, Int_Inventory).GetComponent<RectTransform>();

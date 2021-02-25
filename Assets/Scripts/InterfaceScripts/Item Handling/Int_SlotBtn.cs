@@ -8,9 +8,9 @@ using UnityEngine.UI;
 //Int_SlotBtn sollte mit IMoveable und IUseable ebenfalls arbeiten.
 public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Item storedItem;
+    public ItemInstance storedItem;
 
-    public void StoreItem(Item item)
+    public void StoreItem(ItemInstance item)
     {
         storedItem = item;
 

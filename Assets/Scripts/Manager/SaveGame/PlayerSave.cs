@@ -15,16 +15,28 @@ public class PlayerSave
     public int xp;
 
     public string brust, hose, kopf, schmuck, schuhe, weapon;
+    public string brust_r, hose_r, kopf_r, schmuck_r, schuhe_r, weapon_r;
+
+    public List<ItemModsData> modsBrust, modsHose, modsKopf, modsSchmuck, modsSchuhe, modsWeapon;
 
     public List<TalentSave> talentsToBeSaved = new List<TalentSave>();
 
+
+    public List<ItemModsData>[] inventoryItemMods;
+
+    public string[] inventoryItemRarity;
+
     public List<string> inventorySave = new List<string>();
+
+    //public List<string> inventoryItemMods;
 
     public int MyScene;
 
     public int skillPoints;
 
     public string[] savedActionButtons;
+
+    //public string[] itemMods;
 
     //Wird relevant, sobald wir mehrere SaveGames haben möchten. 
     public int loadIndex;
@@ -46,22 +58,71 @@ public class PlayerSave
 
         /// Items Speichern
         /// 
+        #region Items
         ItemSave.SaveEquippedItems();
 
         //Die Brust scheint nicht richtig geladen zu werden, zumindest wird andauerd ein weißes Hemd geladen, obwohl andere Brust ausgestattet.
 
-        if (ItemSave.brust != null) brust = ItemSave.brust;
+        if (ItemSave.brust != null)
+        {
+            brust = ItemSave.brust; //Gewollte Logik: Speichere String für ID, speichere List of ItemMods
+                                    //Lade Item by ID, add Mods by List
+            brust_r = ItemSave.brust_r;
 
-        if (ItemSave.hose != null) hose = ItemSave.hose;
+            modsBrust = ItemSave.modsBrust;
 
-        if (ItemSave.kopf != null) kopf = ItemSave.kopf;
+        }
 
-        if (ItemSave.schmuck != null) schmuck = ItemSave.schmuck;
+        if (ItemSave.hose != null)
+        {
+            hose = ItemSave.hose;
 
-        if (ItemSave.schuhe != null) schuhe = ItemSave.schuhe;
+            hose_r = ItemSave.hose_r;
 
-        if (ItemSave.weapon != null) weapon = ItemSave.weapon;
+            modsHose = ItemSave.modsHose;
 
+        }
+
+        if (ItemSave.kopf != null)
+        {
+            kopf = ItemSave.kopf;
+
+            kopf_r = ItemSave.kopf_r;
+
+            modsKopf = ItemSave.modsKopf;
+
+        }
+
+        if (ItemSave.schmuck != null)
+        {
+            schmuck = ItemSave.schmuck;
+
+            schmuck_r = ItemSave.schmuck_r;
+
+            modsSchmuck = ItemSave.modsSchmuck;
+
+        }
+
+        if (ItemSave.schuhe != null)
+        {
+            schuhe = ItemSave.schuhe;
+
+            schuhe_r = ItemSave.schuhe_r;
+
+            modsSchuhe = ItemSave.modsSchuhe;
+
+        }
+
+        if (ItemSave.weapon != null)
+        {
+            weapon = ItemSave.weapon;
+
+            weapon_r = ItemSave.weapon_r;
+
+            modsWeapon = ItemSave.modsWeapon;
+
+        }
+        #endregion;
 
 
         ///Skill-Points speichern.
@@ -81,14 +142,39 @@ public class PlayerSave
         ///Inventar speichern.
         ///
         //Inventory inventory = PlayerManager.instance.player.GetComponent<Inventory>();
-        PlayerManager.instance.player.GetComponent<Inventory>();
+        //PlayerManager.instance.player.GetComponent<Inventory>();
 
         Debug.Log(PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList());
 
-        foreach (Item item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList())
+
+        //Logik-Gedanke: Erstelle Array von Listen(ItemModsData) in Größe des Inventares -> Foreach
+
+        inventoryItemMods = new List<ItemModsData>[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
+
+        inventoryItemRarity = new string[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
+
+        int currentItem = 0;
+
+        foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList())
         {
             inventorySave.Add(item.ItemID);
+
+            inventoryItemMods[currentItem] = item.addedItemMods;
+
+            inventoryItemRarity[currentItem] = item.itemRarity;
+
+            currentItem += 1;
+
         }
+
+        string[] inventorySaveArr = inventorySave.ToArray();
+
+        //inventoryItemMods = new List<string>();
+
+        /*foreach (ItemModsData modData in item.addedItemMods)
+        {
+            inventoryItemMods.Add(modData.id);
+        }*/
 
         ///Szene Speichern.
         ///

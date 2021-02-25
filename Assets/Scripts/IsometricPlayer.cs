@@ -264,14 +264,14 @@ public class IsometricPlayer : MonoBehaviour
     }
 
     
-    private void UseItem(Item item)
+    private void UseItem(ItemInstance item)
     {
         item.Equip(playerStats);
 
     }
-    public void Dequip (Item item)
+    public void Dequip (ItemInstance item)
     {
-        item.Unequip(playerStats, item);
+        item.Unequip(playerStats);
     }
     
     public Inventory Inventory

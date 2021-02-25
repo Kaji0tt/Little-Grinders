@@ -6,7 +6,7 @@ public enum ItemType {Kopf, Brust, Beine, Schuhe, Schmuck, Weapon, Consumable}
 //public enum ItemRarity {Unbrauchbar, Gewöhnlich, Ungewöhnlich, Selten, Episch, Legendär}
 
 [CreateAssetMenu(fileName = "Item0000", menuName = "Assets/Item")]
-public class Item : ScriptableObject, IDescribable
+public class Item : ScriptableObject
 {
     [Header("Details")]
     public string ItemID;
@@ -29,6 +29,8 @@ public class Item : ScriptableObject, IDescribable
     public int attackPower;
     public int abilityPower;
 
+
+
     [Space]
     [Header("Prozent-Werte")]
     public float p_hp;
@@ -44,100 +46,246 @@ public class Item : ScriptableObject, IDescribable
 
     [HideInInspector]
     public float c_percent;
+   
+}
 
-    private string[] modStrings = new string[] {"Hp" ,"Armor" , "Attack Power", "Ability Power", "p_hp", "p_armor", "p_attackPower", "p_abilityPower", "p_attackSpeed", "p_movemenSpeed" };
+[Serializable]
+public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
+{
+
+    public string ItemID;
+    public string ItemName;
+    public string ItemDescription;
+    public string ItemValueInfo;
+    public ItemType itemType;
+    public string itemRarity = "Gewöhnlich";   // [Currently gettin Implemented]: https://www.youtube.com/watch?v=dvSYloBxzrU
+
+    public int Range;
+    public bool RangedWeapon;
+    public Sprite icon { get; private set; }       
+    public int percent;
 
 
-    //private List<StatModifier> itemModifiers = new List<StatModifier>(); //Mit einer Liste wäre bestimmt entspannter, dafür bin ich aber zu dumm.
-    //Kein Bock mich jetzt nochmal mit der Syntax zu befassen, wenn das Ziel so nah ist.
-    private StatModifier m1, m2, m3, m4, m5, m1p, m2p, m3p, m4p, m5p, m6p, m1c;
+    //Flat Values
+    public int hp;
+    public int armor;
+    public int attackPower;
+    public int abilityPower;
+
+    public int[] flatValues = new int[4];
+
+
+    //Percent Values
+    public float p_hp;
+    public float p_armor;
+    public float p_attackPower;
+    public float p_abilityPower;
+    public float p_attackSpeed;
+    public float p_movementSpeed;
+
+    public float[] percentValues = new float[6];
+
+
+
+    public int c_hp;
+
+    [HideInInspector]
+    public float c_percent;
+
+    //Store StatModifiers
+    private StatModifier[] flatStatMods = new StatModifier[4];
+    private StatModifier[] percentStatMods = new StatModifier[6];
+
+    //Store finalStringInfo
+    private string[] modStrings = new string[10];
+
+    [HideInInspector]
+    public List<ItemModsData> addedItemMods = new List<ItemModsData>(); //??
+
+
+    //Wird eigentlich nicht verwendet, sollte aber im Konstruktor gecalled werden.
+    //public ItemModsData[] myItemMods; 
+
+    public ItemInstance(Item item)
+    {
+        ItemID = item.ItemID;
+        ItemName = item.ItemName;
+        ItemDescription = item.ItemDescription;
+        itemType = item.itemType;
+
+        //ItemRarity wird ausgelassen, da es erst im Roll berechnet wird.
+
+        Range = item.Range;
+        RangedWeapon = item.RangedWeapon;
+        icon = item.icon;
+        percent = item.percent;
+
+        //Derzeit werden nur die Boni von den Mods equipped.
+        #region CloneItem
+        //Write Array for FlatValues
+        if (item.hp != 0)
+        {
+            flatValues[0] = item.hp;
+            hp = flatValues[0];
+        }
+        if (item.armor != 0)
+        {
+            flatValues[1] = item.armor;
+            armor = flatValues[1];
+        }
+        if (item.attackPower != 0)
+        {
+            flatValues[2] = item.attackPower;
+            attackPower = flatValues[2];
+        }
+
+        if (item.abilityPower != 0)
+        {
+            flatValues[3] = item.abilityPower;
+            abilityPower = flatValues[3];
+        }
+
+        //Write Array for PercentValues
+        if (item.p_hp != 0)
+        {
+            percentValues[0] = item.p_hp;
+            p_hp = percentValues[0];
+        }
+
+        if (item.p_armor != 0)
+        {
+            percentValues[1] = item.p_armor;
+            p_armor = percentValues[1];
+        }
+
+        if (item.p_attackPower != 0)
+        {
+            percentValues[2] = item.p_attackPower;
+            p_attackPower = percentValues[2];
+        }
+
+        if (item.p_abilityPower != 0)
+        {
+            percentValues[3] = item.p_abilityPower;
+            p_abilityPower = percentValues[3];
+        }
+
+        if (item.p_attackSpeed != 0)
+        {
+            percentValues[4] = item.p_attackSpeed;
+            p_attackSpeed = item.p_attackSpeed;
+        }
+
+        if (item.p_movementSpeed != 0)
+        {
+            percentValues[5] = item.p_movementSpeed;
+            p_movementSpeed = item.p_movementSpeed;
+        }
+        #endregion
+
+        //SetValueDescription(this);
+
+
+        //Die Rolls müssen in der ItemInstance gecalled werden.
+
+
+
+
+    }
 
     public void Equip(PlayerStats playerStats)
     {
-        //Store Modifiers
-        if (hp !=0)             {m1 = new StatModifier(hp, StatModType.Flat, this);} //Add HP Only if the Item is an Consumeable. -> Rather create CurrentHP=Hp.Value variable for HP Management.
-        if (armor != 0)         {m2 = new StatModifier(armor, StatModType.Flat, this);}
-        if (attackPower != 0)   {m3 = new StatModifier(attackPower, StatModType.Flat, this);}
-        if (abilityPower != 0)  {m4 = new StatModifier(abilityPower, StatModType.Flat, this);}
+        //Derzeit werden nur die Boni von den Mods equipped.
+        for (int i = 0; i < flatValues.Length; i++)
+        {
+            //Store Modifiers wird nicht von ItemRolls berührt
+            flatStatMods[i] = new StatModifier(flatValues[i], StatModType.Flat, this);
+        }
 
 
+        for (int i = 0; i < percentValues.Length; i++)
+        {
+            percentStatMods[i] = new StatModifier(percentValues[i], StatModType.PercentAdd, this);
+        }
 
-        if (p_hp != 0)              {m1p = new StatModifier(p_hp, StatModType.PercentAdd, this);}
-        if (p_armor != 0)           {m2p = new StatModifier(p_armor, StatModType.PercentAdd, this);}
-        if (p_attackPower != 0)     {m3p = new StatModifier(p_attackPower, StatModType.PercentAdd, this);}
-        if (p_abilityPower != 0)    {m4p = new StatModifier(p_abilityPower, StatModType.PercentAdd, this);}
-        if (p_attackSpeed != 0)     {m5p = new StatModifier(p_attackSpeed, StatModType.PercentAdd, this);} //Ich glaub damit würde was nicht stimmen, da AttackSpeed als Flat int durch 1 addiert wird.
-        if (p_movementSpeed != 0)   {m6p = new StatModifier(p_movementSpeed, StatModType.PercentAdd, this);}
 
         if (c_hp != 0)
-            playerStats.Heal(c_hp); 
+            playerStats.Heal(c_hp);
 
 
         //Add Modifiers to Character
-        if (m1 != null)playerStats.Hp.AddModifier(m1);
-        if (m2 != null)playerStats.Armor.AddModifier(m2);
-        if (m3 != null)playerStats.AttackPower.AddModifier(m3);
-        if (m4 != null)playerStats.AbilityPower.AddModifier(m4);
+        if (flatStatMods[0] != null) playerStats.Hp.AddModifier(flatStatMods[0]);
+        if (flatStatMods[1] != null) playerStats.Armor.AddModifier(flatStatMods[1]);
+        if (flatStatMods[2] != null) playerStats.AttackPower.AddModifier(flatStatMods[2]);
+        if (flatStatMods[3] != null) playerStats.AbilityPower.AddModifier(flatStatMods[3]);
 
 
-        if (m1p != null) playerStats.Hp.AddModifier(m1p);
-        if (m2p != null) playerStats.Armor.AddModifier(m2p);
-        if (m3p != null) playerStats.AttackPower.AddModifier(m3p);
-        if (m4p != null) playerStats.AbilityPower.AddModifier(m4p);
-        if (m5p != null) playerStats.AttackSpeed.AddModifier(m5p);
-        if (m6p != null) playerStats.MovementSpeed.AddModifier(m6p);
+        if (percentStatMods[0] != null) playerStats.Hp.AddModifier(percentStatMods[0]);
+        if (percentStatMods[1] != null) playerStats.Armor.AddModifier(percentStatMods[1]);
+        if (percentStatMods[2] != null) playerStats.AttackPower.AddModifier(percentStatMods[2]);
+        if (percentStatMods[3] != null) playerStats.AbilityPower.AddModifier(percentStatMods[3]);
+        if (percentStatMods[4] != null) playerStats.AttackSpeed.AddModifier(percentStatMods[4]);
+        if (percentStatMods[5] != null) playerStats.MovementSpeed.AddModifier(percentStatMods[5]);
 
 
         //Implementierung von Special Effekten
+
+
+    }
+
+    public void Unequip(PlayerStats playerStats)
+    {
+
+        if (flatStatMods[0] != null) playerStats.Hp.RemoveModifier(flatStatMods[0]);
+        if (flatStatMods[1] != null) playerStats.Armor.RemoveModifier(flatStatMods[1]);
+        if (flatStatMods[2] != null) playerStats.AttackPower.RemoveModifier(flatStatMods[2]);
+        if (flatStatMods[3] != null) playerStats.AbilityPower.RemoveModifier(flatStatMods[3]);
+
+
+        if (percentStatMods[0] != null) playerStats.Hp.RemoveModifier(percentStatMods[0]);
+        if (percentStatMods[1] != null) playerStats.Armor.RemoveModifier(percentStatMods[1]);
+        if (percentStatMods[2] != null) playerStats.AttackPower.RemoveModifier(percentStatMods[2]);
+        if (percentStatMods[3] != null) playerStats.AbilityPower.RemoveModifier(percentStatMods[3]);
+        if (percentStatMods[4] != null) playerStats.AttackSpeed.RemoveModifier(percentStatMods[4]);
+        if (percentStatMods[5] != null) playerStats.MovementSpeed.RemoveModifier(percentStatMods[5]);
+
+        //Implementierung von Special Effekten
+    }
+
+    public void SetValueDescription(ItemInstance item)
+    {
+        if (item.flatValues[0] != 0) item.modStrings[0] = "\nHp: " +                                item.flatValues[0]; else item.modStrings[0] = "";
+        if (item.flatValues[1] != 0) item.modStrings[1] = "\nArmor: " +                             item.flatValues[1]; else item.modStrings[1] = "";
+        if (item.flatValues[2] != 0) item.modStrings[2] = "\nAttack Power: " +                      item.flatValues[2]; else item.modStrings[2] = "";
+        if (item.flatValues[3] != 0) item.modStrings[3] = "\nAbility Power: " +                     item.flatValues[3]; else item.modStrings[3] = "";
+        if (item.percentValues[0] != 0) item.modStrings[4] = "\nErhöht HP um " +                    item.percentValues[0] * 100 + "%"; else item.modStrings[4] = "";
+        if (item.percentValues[1] != 0) item.modStrings[5] = "\nErhöht Armor um " +                 item.percentValues[1] * 100 + "%"; else item.modStrings[5] = "";
+        if (item.percentValues[2] != 0) item.modStrings[6] = "\nErhöht Attack Power um " +          item.percentValues[2] * 100 + "%"; else item.modStrings[6] = "";
+        if (item.percentValues[3] != 0) item.modStrings[7] = "\nErhöht Ability Power um " +         item.percentValues[3] * 100 + "%"; else item.modStrings[7] = "";
+        if (item.percentValues[4] != 0) item.modStrings[8] = "\nErhöht Attack Speed um " +          item.percentValues[4] * 100 + "%"; else item.modStrings[8] = "";
+        if (item.percentValues[5] != 0) item.modStrings[9] = "\nErhöht deinen Movementspeed um " +  item.percentValues[5] * 100 + "%"; else item.modStrings[9] = "";
+
         
-
-
-    }
-
-    public void Unequip (PlayerStats playerStats, Item item)
-    {
-
-        if (m1 != null) playerStats.Hp.RemoveModifier(m1);
-        if (m2 != null) playerStats.Armor.RemoveModifier(m2);
-        if (m3 != null) playerStats.AttackPower.RemoveModifier(m3);
-        if (m4 != null) playerStats.AbilityPower.RemoveModifier(m4);
-
-
-        if (m1p != null) playerStats.Hp.RemoveModifier(m1p);
-        if (m2p != null) playerStats.Armor.RemoveModifier(m2p);
-        if (m3p != null) playerStats.AttackPower.RemoveModifier(m3p);
-        if (m4p != null) playerStats.AbilityPower.RemoveModifier(m4p);
-        if (m5p != null) playerStats.AttackSpeed.RemoveModifier(m5p);
-        if (m6p != null) playerStats.MovementSpeed.RemoveModifier(m6p);
-
-        //Implementierung von Special Effekten
-
-    }
-
-    public string GetValueDescription()
-    {
-
-        if (hp != 0) modStrings[0] = "\nHp: " + hp; else modStrings[0] = "";
-        if (armor != 0) modStrings[1] = "\nArmor: " + armor; else modStrings[1] = "";
-        if (attackPower != 0) modStrings[2] = "\nAttack Power: " + attackPower; else modStrings[2] = "";
-        if (abilityPower != 0) modStrings[3] = "\nAbility Power: " + abilityPower; else modStrings[3] = "";
-        if (p_hp != 0) modStrings[4] = "\nErhöht HP um " + p_hp * 100 + "%"; else modStrings[4] = "";
-        if (p_armor != 0) modStrings[5] = "\nErhöht Armor um " + p_armor * 100 + "%"; else modStrings[5] = "";
-        if (p_attackPower != 0) modStrings[6] = "\nErhöht Attack Power um " + p_attackPower * 100 + "%"; else modStrings[6] = "";
-        if (p_abilityPower != 0) modStrings[7] = "\nErhöht Ability Power um " + p_abilityPower * 100 + "%"; else modStrings[7] = "";
-        if (p_attackSpeed != 0) modStrings[8] = "\nErhöht Attack Speed um " + p_attackSpeed * 100 + "%"; else modStrings[8] = "";
-        if (p_movementSpeed != 0) modStrings[9] = "\nErhöht deinen Movementspeed um " + p_movementSpeed * 100 + "%"; else modStrings[9] = "";
-
         string finalString;
         finalString = modStrings[0] + modStrings[1] + modStrings[2] + modStrings[3] + modStrings[4] + modStrings[5] + modStrings[6] + modStrings[7] + modStrings[8] + modStrings[9];
 
-        return finalString;
+        Debug.Log("Es wurde ein Item Namens: " + item.ItemName + " generiert, mit den Values of: " + finalString);
+
+        this.ItemValueInfo = finalString;
+        //return finalString;
     }
 
-    public string GetDescription()
+    
+    public ItemModsData[] SaveItemMods(ItemInstance item)
     {
-        return "Über GetDescription soll Rarität ausgewertet werden.";
+        ItemModsData[] myArray = item.addedItemMods.ToArray();
+
+        return myArray;
+
     }
+
+    
+
 }
 
 

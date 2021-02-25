@@ -13,6 +13,7 @@ public class SaveLoadMenu : MonoBehaviour
     }
     public void SaveGame()
     {
+
         SaveSystem.SavePlayer();
 
     }
@@ -21,6 +22,8 @@ public class SaveLoadMenu : MonoBehaviour
     {
         //Should not be here.
         Time.timeScale = 1f;
+
+
 
         PlayerSave data = SaveSystem.LoadPlayer();
 

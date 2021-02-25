@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class EQSlotWeapon : MonoBehaviour
 {
 
-    public static Item weapon_Item;
+    public static ItemInstance weapon_Item;
     private Inventory inventory;
     private GameObject weaponAnim;
 
@@ -31,7 +31,7 @@ public class EQSlotWeapon : MonoBehaviour
     }
 
 
-    public void equip(Item item)
+    public void equip(ItemInstance item)
     {
         if (weapon_Item == null)
         {
@@ -84,7 +84,7 @@ public class EQSlotWeapon : MonoBehaviour
         int_slotBtn.storedItem = null;
     }
 
-    public void EquipItem(Item item)
+    public void EquipItem(ItemInstance item)
     {
         weapon_Item = item;
 
@@ -114,7 +114,7 @@ public class EQSlotWeapon : MonoBehaviour
     }
 
 
-    public void LoadItem(Item item)
+    public void LoadItem(ItemInstance item)
     {
         weapon_Item = item;
 

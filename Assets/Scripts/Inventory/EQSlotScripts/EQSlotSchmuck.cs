@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EQSlotSchmuck : MonoBehaviour
 {
-    public static Item schmuck_Item;
+    public static ItemInstance schmuck_Item;
     private Inventory inventory;
     public IsometricPlayer isometricPlayer;
 
@@ -18,7 +18,7 @@ public class EQSlotSchmuck : MonoBehaviour
     }
 
 
-    public void equip(Item item)
+    public void equip(ItemInstance item)
     {
         if (schmuck_Item == null)
         {
@@ -71,10 +71,10 @@ public class EQSlotSchmuck : MonoBehaviour
         if(schmuck_Item != null)
         Dequip();
     }
-    public void LoadItem(Item item)
+    public void LoadItem(ItemInstance item)
     {
         schmuck_Item = item;
-        
+
         ItemSave.equippedItems.Add(item);
 
         item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());

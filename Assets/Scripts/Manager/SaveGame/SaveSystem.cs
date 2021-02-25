@@ -54,6 +54,7 @@ public static class SaveSystem
     public static PlayerSave LoadScenePlayer()
     {
         string path = Application.persistentDataPath + "/player.scene";
+
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -69,7 +70,9 @@ public static class SaveSystem
         else
         {
             Debug.LogError("Save file not found in " + path);
+
             return null;
+
         }
     }
 

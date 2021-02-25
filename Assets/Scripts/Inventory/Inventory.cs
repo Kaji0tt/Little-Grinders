@@ -7,20 +7,20 @@ public class Inventory : MonoBehaviour
 {
  
     public event EventHandler OnItemListChanged;
-    public List<Item> itemList;
-    private Action<Item> useItemAction;
+    public List<ItemInstance> itemList;
+    private Action<ItemInstance> useItemAction;
     private GameEvents current;
 
 
 
-    public Inventory(Action<Item> useItemAction)
+    public Inventory(Action<ItemInstance> useItemAction)
     {
         this.useItemAction = useItemAction;
 
-        itemList = new List<Item>();
+        itemList = new List<ItemInstance>();
     }
 
-    public void AddItem(Item item)
+    public void AddItem(ItemInstance item)
     {
         if (itemList.Count <= 15)  // hier nochmal prüfen, aber irgendwie so die inv größe regeln
         {
@@ -32,18 +32,18 @@ public class Inventory : MonoBehaviour
     }
 
 
-    public void RemoveItem(Item item)
+    public void RemoveItem(ItemInstance item)
     {
         itemList.Remove(item);
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void UseItem(Item item)
+    public void UseItem(ItemInstance item)
     {
         useItemAction(item);
     }
 
-    public List<Item> GetItemList()
+    public List<ItemInstance> GetItemList()
     {
         return itemList;
 

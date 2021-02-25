@@ -27,7 +27,7 @@ public class EQSlotSchuhe : MonoBehaviour
     // Wenn Waffe ausgerüstet, alles funktioniert richtig
     // Wenn Schuhe ausgerüstet, alles funktioniert richtig
 
-    public static Item schuhe_Item;
+    public static ItemInstance schuhe_Item;
     private Inventory inventory;
     public IsometricPlayer isometricPlayer;
 
@@ -43,7 +43,7 @@ public class EQSlotSchuhe : MonoBehaviour
     }
 
 
-    public void equip(Item item)
+    public void equip(ItemInstance item)
     {
         if (schuhe_Item == null)
         {
@@ -96,7 +96,7 @@ public class EQSlotSchuhe : MonoBehaviour
             Dequip();
     }
 
-    public void LoadItem(Item item)
+    public void LoadItem(ItemInstance item)
     {
         schuhe_Item = item;
 

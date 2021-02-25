@@ -7,6 +7,7 @@ public class ItemDatabase : MonoBehaviour
 {
     public static ItemDatabase instance;
 
+    public ItemRolls itemRolls;
     //private enum LootTable;
     //Loottable loot;
 
@@ -103,9 +104,15 @@ public class ItemDatabase : MonoBehaviour
               {
                     position = position + new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
 
-                    //ItemRolls.CalculateRolls(item);
 
-                    ItemWorld.SpawnItemWorld(position, item);
+
+                    //Hier liegt ein Fehler, da ich die ItemInstance rolledItem anziehe, ziehe ich lediglich die "Mods" an, ziehe ich die new ItemInstance direkt an, 
+                    //ziehe ich lediglich das BaseItem an.
+                    //ItemInstance rolledItem = itemRolls.CalculateRolls(new ItemInstance(item));
+
+                    //Debug.Log(rolledItem.itemRarity);
+
+                    ItemWorld.SpawnItemWorld(position, itemRolls.CalculateRolls(new ItemInstance(item)));
 
                     break;
               }
@@ -194,6 +201,7 @@ public class ItemDatabase : MonoBehaviour
                 {
                     Item foundItem = item;
 
+                    //Es sollten nun Instanzen von Items geladen werden. Mit dieser Loop werden die Items der SO gefunden, nicht jedoch die Instanzen.
                     print("Found item: " + foundItem.ItemName);
 
                     return foundItem;

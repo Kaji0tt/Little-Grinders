@@ -22,7 +22,7 @@ public class TutorialLootBox : MonoBehaviour
         {
             lootBoxOpened = true;
             Vector3 spawnPos = new Vector3(gameObject.transform.position.x + 0.5f, gameObject.transform.position.y, gameObject.transform.position.z);
-            ItemWorld.SpawnItemWorld(spawnPos, firstItem);
+            ItemWorld.SpawnItemWorld(spawnPos, new ItemInstance(firstItem));
 
             LootBoxOpenedSprite();
         }

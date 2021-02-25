@@ -7,7 +7,7 @@ using UnityEditor;
 public class ItemWorld : MonoBehaviour
 {
 
-    private Item item;
+    private ItemInstance item;
 
     private SpriteRenderer spriteRenderer;
    
@@ -16,7 +16,7 @@ public class ItemWorld : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public static ItemWorld SpawnItemWorld(Vector3 position, Item item)
+    public static ItemWorld SpawnItemWorld(Vector3 position, ItemInstance item)
     {
         Transform transform = Instantiate(ItemAssets.Instance.pfItemWorld, position, Quaternion.identity);
 
@@ -27,14 +27,14 @@ public class ItemWorld : MonoBehaviour
         return itemWorld;
     }
 
-    public static ItemWorld DropItem(Vector3 dropPosition, Item item)
+    public static ItemWorld DropItem(Vector3 dropPosition, ItemInstance item)
     {
 
         ItemWorld itemWorld = SpawnItemWorld(dropPosition, item);
             return itemWorld;
     }
 
-    public void SetItem(Item item)
+    public void SetItem(ItemInstance item)
     {
         this.item = item;
         //Texture2D texture = item.GetSprite;
@@ -42,7 +42,7 @@ public class ItemWorld : MonoBehaviour
  
 
     }
-    public Item GetItem ()
+    public ItemInstance GetItem ()
     {
         return item;
     }
