@@ -8,8 +8,6 @@ public class Teleport : Spell, IUseable
 
     IsometricPlayer player;
 
-
-
     public void Use()
     {
 
@@ -43,6 +41,20 @@ public class Teleport : Spell, IUseable
 
             onCoolDown = true;
         }
+    }
+    public bool IsOnCooldown()
+    {
+        return onCoolDown;
+    }
+
+    public float GetCooldown()
+    {
+        return GetSpellCoolDown;
+    }
+
+    public float CooldownTimer()
+    {
+        return coolDownTimer;
     }
 
 }

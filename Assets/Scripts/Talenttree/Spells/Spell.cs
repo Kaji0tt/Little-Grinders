@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IMoveable //MonoBehaviour,  IUseable // 
+public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IMoveable //MonoBehaviour , IUseable// 
 {
     [Header("Spell Eigenschaften")]
     //What is the Spells Name?
@@ -51,7 +51,7 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
 
     
 
-    Spell IMoveable.spell => this;
+    //Spell IMoveable.spell => this;
 
 
 
@@ -61,43 +61,8 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
 
     public bool onCoolDown;
     public float coolDownTimer { get; private set; }
-    /*
-    //Die Spell Klasse dient lediglich dem Geschoss selbst.. ggf. sollten Talente ebenfalls Spells sein, bzw. diese beeinflussen.
-    [SerializeField]
-    private Rigidbody myRigidBody;
-
-    //TravelTime of Spell
-    [SerializeField]
-    private float speed;
-
-    //Range of the Spell
-    [SerializeField]
-    public float range;
-
-    //Arc the Spell is flying in
-    [SerializeField]
-    private float bullet_height; //soll noch eingebaut werden, damit die projectiles in kurven fliegen.
 
 
-    //Damage of the Spell. Should be scaling with Ability Power later on.
-    [SerializeField]
-    public float damage;
-
-    // Scaling of AP
-    //[SerilizeField]
-    //private float scaling;
-
-
-    //Does it need Line of Sight?
-    [SerializeField]
-    public bool los;
-
-    private Transform target;
-    private Vector3 spell_destination;
-
-    */
-
-    //Fragwürdig. Diese Klasse sieht derzeit eher aus wie eine BulletKlasse, aber mal schauen..
 
     #region Interface Handling
     public void OnPointerEnter(PointerEventData eventData)

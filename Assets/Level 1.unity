@@ -2054,7 +2054,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 66400280}
   m_LocalRotation: {x: -0.3535534, y: -0.3535534, z: 0.14644662, w: 0.8535535}
-  m_LocalPosition: {x: -0.053, y: 0.085, z: -0.016}
+  m_LocalPosition: {x: 0, y: 0.225, z: -0.007}
   m_LocalScale: {x: 0.46666667, y: 0.46666667, z: 0.46666667}
   m_Children: []
   m_Father: {fileID: 1817240041}
@@ -2071,8 +2071,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.04
-  m_Center: {x: -0.16, y: -0.37, z: -0.34}
+  m_Radius: 0.09
+  m_Center: {x: -0.16, y: -0.34, z: -0.23}
 --- !u!208 &66400283
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -2080,7 +2080,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 66400280}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 0
   m_Extents: {x: 0.38, y: 0.75, z: 0.38}
@@ -14407,6 +14407,7 @@ MonoBehaviour:
     c_hp: 0
     c_percent: 0
     addedItemMods: []
+    amount: 0
 --- !u!1001 &486961963
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21211,6 +21212,7 @@ MonoBehaviour:
     c_hp: 0
     c_percent: 0
     addedItemMods: []
+    amount: 0
 --- !u!4 &748463842 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7839687458832828457, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
@@ -24114,6 +24116,7 @@ MonoBehaviour:
     c_hp: 0
     c_percent: 0
     addedItemMods: []
+    amount: 0
 --- !u!222 &836026773
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -27350,6 +27353,7 @@ MonoBehaviour:
     c_hp: 0
     c_percent: 0
     addedItemMods: []
+    amount: 0
 --- !u!1 &946251260
 GameObject:
   m_ObjectHideFlags: 0
@@ -33068,6 +33072,7 @@ MonoBehaviour:
     c_hp: 0
     c_percent: 0
     addedItemMods: []
+    amount: 0
 --- !u!1 &1130168609
 GameObject:
   m_ObjectHideFlags: 0
@@ -51979,6 +51984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangedWeapon: 0
+  equippedItems: []
   uiInventory: {fileID: 1478674764}
   test_item: {fileID: 11400000, guid: 46ed7f78bac7973478ea999ad57e8276, type: 2}
   test_item2: {fileID: 11400000, guid: 46177b1529ef2ed46b49494f8927936a, type: 2}
@@ -52062,7 +52068,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1817240036}
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0.41, y: 0.394, z: 13.026}
+  m_LocalPosition: {x: 0.41, y: 0.017, z: 13.026}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 700284363}
@@ -56897,6 +56903,7 @@ MonoBehaviour:
     c_hp: 0
     c_percent: 0
     addedItemMods: []
+    amount: 0
 --- !u!1 &1959428364
 GameObject:
   m_ObjectHideFlags: 0
@@ -60436,6 +60443,7 @@ MonoBehaviour:
     c_hp: 0
     c_percent: 0
     addedItemMods: []
+    amount: 0
 --- !u!1 &2068979239
 GameObject:
   m_ObjectHideFlags: 0

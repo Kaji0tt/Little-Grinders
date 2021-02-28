@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public enum ItemType {Kopf, Brust, Beine, Schuhe, Schmuck, Weapon, Consumable}
 //public enum ItemRarity {Unbrauchbar, Gewöhnlich, Ungewöhnlich, Selten, Episch, Legendär}
@@ -50,7 +51,7 @@ public class Item : ScriptableObject
 }
 
 [Serializable]
-public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
+public class ItemInstance :  IMoveable//Da muss mir nochmal bei
 {
 
     public string ItemID;
@@ -97,7 +98,7 @@ public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
     private StatModifier[] percentStatMods = new StatModifier[6];
 
     //Store finalStringInfo
-    private string[] modStrings = new string[10];
+    private string[] modStrings = new string[11];
 
     [HideInInspector]
     public List<ItemModsData> addedItemMods = new List<ItemModsData>(); //??
@@ -118,12 +119,12 @@ public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
         ItemName = item.ItemName;
         ItemDescription = item.ItemDescription;
         itemType = item.itemType;
-        /*
+        
         if(itemType == ItemType.Consumable)
         {
-            MyUseAble = this;
+            //MyUseAble = (IUseable)this;
         }
-        */
+        
         //ItemRarity wird ausgelassen, da es erst im Roll berechnet wird.
 
         Range = item.Range;
@@ -192,9 +193,14 @@ public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
             percentValues[5] = item.p_movementSpeed;
             p_movementSpeed = item.p_movementSpeed;
         }
+
+        if (item.c_hp != 0)
+        {
+            c_hp = item.c_hp;
+        }
         #endregion
 
-        //SetValueDescription(this);
+        SetValueDescription(this);
 
 
         //Die Rolls müssen in der ItemInstance gecalled werden.
@@ -282,9 +288,9 @@ public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
         if (item.percentValues[4] != 0) item.modStrings[8] = "\nErhöht Attack Speed um " +          item.percentValues[4] * 100 + "%"; else item.modStrings[8] = "";
         if (item.percentValues[5] != 0) item.modStrings[9] = "\nErhöht deinen Movementspeed um " +  item.percentValues[5] * 100 + "%"; else item.modStrings[9] = "";
 
-        
+        if (item.c_hp != 0) item.modStrings[10] = "\nHeilt den Spieler um " +                       item.c_hp  + " Lebenspunkte"; else item.modStrings[10] = "";
         string finalString;
-        finalString = modStrings[0] + modStrings[1] + modStrings[2] + modStrings[3] + modStrings[4] + modStrings[5] + modStrings[6] + modStrings[7] + modStrings[8] + modStrings[9];
+        finalString = modStrings[0] + modStrings[1] + modStrings[2] + modStrings[3] + modStrings[4] + modStrings[5] + modStrings[6] + modStrings[7] + modStrings[8] + modStrings[9] + modStrings[10];
 
         Debug.Log("Es wurde ein Item Namens: " + item.ItemName + " generiert, mit den Values of: " + finalString);
 
@@ -300,8 +306,6 @@ public class ItemInstance //Voerst kein IDescribable, da nicht verwendet.
         return myArray;
 
     }
-
-    
 
 }
 

@@ -46,7 +46,7 @@ public class DirectionCollider : MonoBehaviour
         direction = Vector3.ClampMagnitude(direction, 1);
         direction = direction.normalized;
 
-        if (direction.magnitude > .5f)
+        if (direction.magnitude > .3f)
             transform.position = PlayerManager.instance.player.transform.position + direction;
 
     }

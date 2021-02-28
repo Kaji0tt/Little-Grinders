@@ -180,7 +180,7 @@ public class EnemyController : MonoBehaviour
     {
 
 
-        if (collider.gameObject.tag == "DirCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
+        if (collider.gameObject == DirectionCollider.instance.dirCollider) // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
             //Debug.Log("Colliding with DirCollider");
 
@@ -189,14 +189,16 @@ public class EnemyController : MonoBehaviour
             playerStats.attackCD -= Time.deltaTime;
 
 
-
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (playerStats.attackCD <= 0) 
             {
-                if (playerStats.attackCD <= 0)
+
+                if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
                     playerStats.attackCD = 1f / playerStats.AttackSpeed.Value;
+
                 }
+                
             }
         }
     }
@@ -207,8 +209,8 @@ public class EnemyController : MonoBehaviour
         {
 
             Steinwurf_Bullet steinwurf_bullet = collider.GetComponent<Steinwurf_Bullet>();
-            TakeDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.
-            
+
+            TakeDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.         
 
         }
     }
@@ -223,7 +225,9 @@ public class EnemyController : MonoBehaviour
 
             // Hier wird die "Blickrichtung" bestimmt, welche sich an dem Charakter orientiert.
             Vector3 Direction = character_transform.transform.position - transform.position;
+
             Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
+
             inputVector = Vector2.ClampMagnitude(inputVector, 1);
 
             if (animated == false) 

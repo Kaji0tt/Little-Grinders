@@ -41,5 +41,19 @@ public class Heilung : Spell, IUseable
 
     }
 
+    public bool IsOnCooldown()
+    {
+        return onCoolDown;
+    }
+
+    public float CooldownTimer()
+    {
+        return coolDownTimer;
+    }
+
+    public float GetCooldown()
+    {
+        return GetSpellCoolDown;
+    }
 
 }

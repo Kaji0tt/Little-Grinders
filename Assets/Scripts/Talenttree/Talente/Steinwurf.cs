@@ -90,5 +90,18 @@ public class Steinwurf : Spell, IUseable
         }
     }
 
+    public bool IsOnCooldown()
+    {
+        return onCoolDown;
+    }
 
+    public float GetCooldown()
+    {
+        return GetSpellCoolDown;
+    }
+
+    public float CooldownTimer()
+    {
+        return coolDownTimer;
+    }
 }

@@ -35,7 +35,7 @@ public class TalentTree : MonoBehaviour
         {
             
             #region "Tutorial"
-            if (PlayerManager.instance.player.GetComponent<PlayerStats>().level == 2)
+            if (PlayerManager.instance.player.GetComponent<PlayerStats>().level == 2 && GameObject.FindGameObjectWithTag("TutorialScript") != null)
             {
                 Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
                 tutorialScript.ShowTutorial(7);

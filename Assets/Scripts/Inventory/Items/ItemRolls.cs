@@ -37,9 +37,9 @@ public class ItemRolls : MonoBehaviour
 
     
     [HideInInspector]
-    public float _unbrauchbar = 20, _usual = 33, _uncommon = 26, _rare = 15, _epic = 5, _legendary = 1;
+    private float _usual = 400, _unbrauchbar = 250, _uncommon = 150, _rare = 100, _epic = 80, _legendary = 20;
 
-    private string[] rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich", "Selten", "Episch", "Legendär" };
+    private string[] rarity = new string[] { "Gewöhnlich", "Unbrauchbar", "Ungewöhnlich", "Selten", "Episch", "Legendär" };
 
     private float[] rarityChances = new float[6];
 
@@ -79,7 +79,7 @@ public class ItemRolls : MonoBehaviour
         {
             rarityChances = new float[] { _usual, _unbrauchbar, _uncommon, _rare, _epic, _legendary };
 
-            int roll = Random.Range(0, 101);
+            int roll = Random.Range(0, 1001);
 
             float rollSum = 0;
 
@@ -87,6 +87,8 @@ public class ItemRolls : MonoBehaviour
 
             for (int i = 0; i < rarityChances.Length; i++)
             {
+
+                print("Adding " + rarityChances[i] + " to the rollSum of " + rollSum);
 
                 rollSum += rarityChances[i];
 
@@ -109,6 +111,7 @@ public class ItemRolls : MonoBehaviour
         return null;
     }
 
+    //NOT in use currently.
     private ItemInstance DefineRolls(ItemInstance item)
     {
         switch (item.itemRarity)
@@ -125,7 +128,9 @@ public class ItemRolls : MonoBehaviour
 
             case "Gewöhnlich":
 
-                //Since a usual Roll would not roll any Modifiers, skip this Case.
+                //Since a usual Roll would not roll any Modifiers, skip this Case and just set the Description.
+
+                item.SetValueDescription(item);
 
                 break;
 
@@ -175,6 +180,7 @@ public class ItemRolls : MonoBehaviour
 
     }
 
+    //NOT in use currently.
     private ItemInstance PickRarityOfRoll(ItemInstance item, float[] _rarityChances, string[] rarity)
     {
         //In dependency of float[]_rarityChances.Length, calculate the totalWeight of all possible Rolls.
@@ -258,6 +264,9 @@ public class ItemRolls : MonoBehaviour
 
             if (rarityOfRoll == "Gewöhnlich")
             {
+
+                item.SetValueDescription(item);
+
                 return item;
             }
 
@@ -281,7 +290,7 @@ public class ItemRolls : MonoBehaviour
 
     private static ItemInstance AddMods(ItemModsData mods, ItemInstance item)
     {
-        Debug.Log("Item Rolls hat versucht Mods auf die ItemInstanz " + item.ItemName + " hinzuzufügen");
+        //Debug.Log("Item Rolls hat versucht Mods auf die ItemInstanz " + item.ItemName + " hinzuzufügen");
             
 
         for(int i = 0; i < mods.flatValues.Length; i++)
@@ -291,12 +300,12 @@ public class ItemRolls : MonoBehaviour
         for (int i = 0; i < mods.percentValues.Length; i++)
             item.percentValues[i] += mods.percentValues[i];
         /*
-            Berechnung geht, Description fehlt noch.
+            Berechnung geht, Description fehlt noch bei Standard Items.
 
         */
             item.ItemName += mods.name;
 
-        Debug.Log("Füge den Mod:" + mods.name + " hinzu.");
+        //Debug.Log("Füge den Mod:" + mods.name + " hinzu.");
             item.addedItemMods.Add(mods);
         
             item.SetValueDescription(item);

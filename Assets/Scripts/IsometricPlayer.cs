@@ -8,7 +8,7 @@ using System;
 public class IsometricPlayer : MonoBehaviour
 {
 
-    //public float movementSpeed = 30f;
+
     IsometricCharacterRenderer isoRenderer;
     public PlayerStats playerStats { get; private set; }
 
@@ -49,8 +49,20 @@ public class IsometricPlayer : MonoBehaviour
     //Talente und Kampf-System
     private Vector3 targetDirection;
 
-    Transform enemy;
-    private GameObject Schuhe, Hose, Brust, Kopf, Weapon, Schmuck;
+    //Idle Rotation
+    private float time;
+
+    public float idleRotSpeed = 10;
+
+    private float xrotClamp = 15;
+
+    private float yrotClamp = 50;
+
+    private float idleFOVClamp = 40;
+
+    private bool idle = false;
+
+
 
 
     private void Awake()
@@ -94,27 +106,55 @@ public class IsometricPlayer : MonoBehaviour
 
     }
 
-    private void UpdateLevel()
-    {
-        //Wird eigentlich nciht gebraucht, da das Interface in Update neu geladen wird - vll aber überarbeitungswürdig.
-        //ui_Level.text = playerStats.level.ToString();
-    }
-
     void FixedUpdate()
     {
-        //Changed Input Methods to Update, in hope of better CPU Usage.
+
 
         Move();
 
+        if (!Input.anyKey)
+            time = time + 1;
+        else if (idle)
+        {
+            time = 0;
+            transform.rotation = Quaternion.Euler(45,0,0);
+            Camera.main.fieldOfView = 15;
+            idle = false;
+        }
+
+
+
+        if (time >= 1000)
+            IdleRotation();
 
     }
 
+
+    private void IdleRotation()
+    {
+        idle = true;
+
+        if (transform.eulerAngles.x > xrotClamp)
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x - 1 / idleRotSpeed, transform.eulerAngles.y, transform.eulerAngles.z); 
+
+        if (transform.rotation.y > -yrotClamp)
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 1 / idleRotSpeed, transform.eulerAngles.z);
+
+        else if (transform.rotation.y > yrotClamp)
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y - 1 / idleRotSpeed, transform.eulerAngles.z);
+
+        if (Camera.main.fieldOfView < idleFOVClamp)
+            Camera.main.fieldOfView += idleRotSpeed * Time.deltaTime / 3;
+
+        
+
+    }
 
     private void Update()
     {
 
         //Input Methods
-        Zoom();
+
 
         if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
             ShowStatText();
@@ -124,7 +164,7 @@ public class IsometricPlayer : MonoBehaviour
             ui_Xp.text = "";
         }
 
-        //Hier weiter machen - es muss abgefragt werden, ob es eine Fernkampfwaffe ist.
+
         if (Input.GetKey(KeyCode.Mouse0))
         {
             Attack();
@@ -193,27 +233,6 @@ public class IsometricPlayer : MonoBehaviour
         
     }
 
-    void Zoom()
-    {
-        //Ggf. sollten die Mausrad zoomies invertiert werden.
-        //float _zoom = Camera.main.fieldOfView;
-
-        float max, min;
-        max = 20.0f;
-        min = 10.0f;
-
-        if(Input.mouseScrollDelta.y > 0 &&  zoom > min)
-        {
-            Camera.main.fieldOfView = Camera.main.fieldOfView - Input.mouseScrollDelta.y;
-        }
-
-        if (Input.mouseScrollDelta.y < 0 && zoom < max)
-        {
-            Camera.main.fieldOfView = Camera.main.fieldOfView - Input.mouseScrollDelta.y;
-        }
-        zoom = Camera.main.fieldOfView;
-
-    }
     void ShowStatText() 
     {
         uiHpOrb.SetActive(true);

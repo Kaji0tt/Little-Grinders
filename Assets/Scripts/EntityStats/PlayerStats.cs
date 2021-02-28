@@ -166,9 +166,9 @@ public class PlayerStats : MonoBehaviour
 
     public virtual void Die()
     {
-        //Debug.Log(transform.name + "ist gestorben.");
-        SceneManager.LoadScene(0);
-        Time.timeScale = 1f;
+        Debug.Log(transform.name + "ist gestorben.");
+        //SceneManager.LoadScene(0);
+        //Time.timeScale = 1f;
     }
 
 }
