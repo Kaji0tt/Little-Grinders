@@ -6,7 +6,14 @@ using UnityEngine.UI;
 public class TalentTree : MonoBehaviour
 {
     //private int points = 11;
+    #region Singleton
+    public static TalentTree instance;
+    private void Awake()
+    {
+        instance = this;
 
+    }
+    #endregion
 
     // Relevant wird nochmal: Welche Fähigkeiten sind zwar freigeschaltet, aber ausgegraut, sobald keine Verteilbaren punkte mehr da sind..
     // Wobei.. dann wären sie Verwendbar solange wir die Skillpunkte noch nicht gesetzt wurden, es sei denn ich mach eine currentCoutn != 0 Abfrage..

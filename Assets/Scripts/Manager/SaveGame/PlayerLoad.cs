@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerLoad : MonoBehaviour
@@ -107,13 +108,27 @@ public class PlayerLoad : MonoBehaviour
 
         /// ActionButtons werden geladen
         /// 
-        /*
-        ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
-        Talent[] spells = Object.FindObjectsOfType<Spell>();
+        
+        ActionButton[] actionButtons = FindObjectsOfType<ActionButton>();
+        //Talent[] spells = Object.FindObjectsOfType<Spell>();
 
         for (int i = 0; i < data.savedActionButtons.Length; i++)
         {
-            
+            if(data.savedActionButtons[i] != null)
+            {
+                
+                foreach (Spell spell in TalentTree.instance.allTalents.OfType<Spell>())
+                {
+                    if (spell.GetSpellName == data.savedActionButtons[i])
+                    {
+                        actionButtons[i].LoadUseable(spell, spell);
+                    }
+
+                }
+
+            }
+            // Is it possible to refer to a class, inherting form another from its parent class?
+            /*
             foreach(Spell spell in spells)
             {
                 if (data.savedActionButtons[i] == spell.name)
@@ -121,11 +136,11 @@ public class PlayerLoad : MonoBehaviour
                     actionButtons[i].SetUseable(spell);
                 }
             }
-
+            */
 
 
         }
-        */
+        
     }
 
 

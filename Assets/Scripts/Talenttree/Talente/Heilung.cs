@@ -22,7 +22,7 @@ public class Heilung : Spell, IUseable
     {
         verbesserte_Heilung = FindObjectOfType<Verbesserte_Heilung>();
     }
-    public void Use()
+    public override void Use()
     {
         
         playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
@@ -41,17 +41,17 @@ public class Heilung : Spell, IUseable
 
     }
 
-    public bool IsOnCooldown()
+    public override bool IsOnCooldown()
     {
         return onCoolDown;
     }
 
-    public float CooldownTimer()
+    public override float CooldownTimer()
     {
         return coolDownTimer;
     }
 
-    public float GetCooldown()
+    public override float GetCooldown()
     {
         return GetSpellCoolDown;
     }

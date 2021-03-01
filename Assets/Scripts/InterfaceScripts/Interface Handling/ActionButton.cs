@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ActionButton : MonoBehaviour, IPointerEnterHandler
 {
     //IUseable sollte ich später auch noch hinzufügen für die Potions... außerdem müssen Potions Stackbar sein.
-    private IUseable MyUseable;
+    public IUseable MyUseable { get; private set; }
 
     private IMoveable MyMoveable;
 
@@ -66,6 +66,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
 
     public void UpdateVisual()
     {
+
         MyButton.image.sprite = HandScript.instance.Put().icon;
 
         MyButton.image.color = Color.white; 
@@ -80,13 +81,23 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
         UpdateVisual();
     }
     */
-    public void SetUseable(IUseable useable, IMoveable moveable)
+    public void SetUseable(IUseable useable)
     {
-        this.MyMoveable = moveable;
+        //this.MyMoveable = moveable;
 
         this.MyUseable = useable;
 
         UpdateVisual();
+    }
+
+    public void LoadUseable(IUseable useable, IMoveable moveable)
+    {
+        this.MyUseable = useable;
+
+        MyButton.image.sprite = moveable.icon;
+
+        MyButton.image.color = Color.white;
+
     }
 
     //On POinter ClickHandler ist wohl lediglich für das Spellbook wichtig, welches wir über den TalentTree umgangen haben.
@@ -105,7 +116,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
     {
         if (HandScript.instance.MyMoveable != null)
         {
-            SetUseable(HandScript.instance.MyMoveable as IUseable, HandScript.instance.MyMoveable);
+            SetUseable(HandScript.instance.MyMoveable as IUseable);
             HandScript.instance.MyMoveable = null;
         }
     }

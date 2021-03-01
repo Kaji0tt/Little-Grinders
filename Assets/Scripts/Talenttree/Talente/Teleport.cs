@@ -8,7 +8,7 @@ public class Teleport : Spell, IUseable
 
     IsometricPlayer player;
 
-    public void Use()
+    public override void Use()
     {
 
         player = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
@@ -42,17 +42,17 @@ public class Teleport : Spell, IUseable
             onCoolDown = true;
         }
     }
-    public bool IsOnCooldown()
+    public override bool IsOnCooldown()
     {
         return onCoolDown;
     }
 
-    public float GetCooldown()
+    public override float GetCooldown()
     {
         return GetSpellCoolDown;
     }
 
-    public float CooldownTimer()
+    public override float CooldownTimer()
     {
         return coolDownTimer;
     }

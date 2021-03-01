@@ -49,7 +49,19 @@ public class PlayerSave
 
     public int skillPoints;
 
-    public string[] savedActionButtons;
+
+
+    /// <summary>
+    /// Action Buttons
+    /// </summary>
+
+    public string[] savedActionButtons { get; set; }
+
+    //public bool IsItem { get; set; } Not yet Implemented
+
+    
+
+    public int[] savedActionButtonIndex  { get; set; }
 
 
     /// <summary>
@@ -59,6 +71,7 @@ public class PlayerSave
     public int loadIndex;
 
     public int MyScene;
+
 
 
 
@@ -216,15 +229,34 @@ public class PlayerSave
 
         ///Action Buttons.
         ///
-        /*
+
+
+
         ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
+
+        savedActionButtons = new string[5]; // Ggf. hier anknüpfen, sobald man Items auch safen kann. Man könnte das MyUseable as ItemInstance saven
+
+        savedActionButtonIndex = new int[5];
+
+        Debug.Log("actionButtons" + actionButtons.Length);
+
+        Debug.Log("saved ACtionButtons " + savedActionButtons.Length);
 
         for(int i = 0; i < actionButtons.Length; i++)
         {
-            if (actionButtons[i].name != null) 
-            savedActionButtons[i] = actionButtons[i].name; 
+            Debug.Log("Looking at Slot: " + actionButtons[i]);
+            if (actionButtons[i].MyUseable != null)
+            {
+
+                Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtons[i]);
+
+                savedActionButtons[i] = (actionButtons[i].MyUseable as Spell).GetSpellName;
+
+                savedActionButtonIndex[i] = i;
+            }
+
         }
-        */
+        
         loadIndex = 1;
     }
 

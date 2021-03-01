@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IMoveable //MonoBehaviour , IUseable// 
+
+public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IMoveable, IUseable //MonoBehaviour ,// 
 {
     [Header("Spell Eigenschaften")]
     //What is the Spells Name?
@@ -159,4 +159,23 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
         */
     }
 
+    public virtual void Use()
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual bool IsOnCooldown()
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual float GetCooldown()
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual float CooldownTimer()
+    {
+        throw new NotImplementedException();
+    }
 }
