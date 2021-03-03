@@ -5449,10 +5449,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothSpeed: 0.125
-  offset: {x: -4.39, y: 4.59, z: 9.23}
-  minZoom: 5
-  maxZoom: 25
-  zoomSpeed: 4
+  min: 10
+  max: 20
 --- !u!1 &191335743
 GameObject:
   m_ObjectHideFlags: 0
@@ -34346,7 +34344,7 @@ GameObject:
   - component: {fileID: 1183768233}
   - component: {fileID: 1183768232}
   m_Layer: 5
-  m_Name: CD
+  m_Name: CD5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51991,6 +51989,7 @@ MonoBehaviour:
   test_item3: {fileID: 11400000, guid: 2428f44ffe24971438bc675471445815, type: 2}
   HpSlider: {fileID: 38373140}
   XpSlider: {fileID: 1420727273}
+  idleRotSpeed: 10
 --- !u!95 &1817240039
 Animator:
   serializedVersion: 3
@@ -56343,6 +56342,7 @@ MonoBehaviour:
   - {fileID: 1938486191}
   - {fileID: 1877978714}
   - {fileID: 839539580}
+  toggleCam: 0
   characterMenu: {fileID: 229795905}
   inventoryTab: {fileID: 1508944426}
   skillTab: {fileID: 552271333}
@@ -56410,12 +56410,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f3bc1fd16d1845e47a0e216af1a29353, type: 2}
   wUnbrauchbarRolls:
   - {fileID: 11400000, guid: 5a803bc07cb2043409a8f4efbf148d85, type: 2}
-  _unbrauchbar: 20
-  _usual: 33
-  _uncommon: 26
-  _rare: 15
-  _epic: 5
-  _legendary: 1
 --- !u!1 &1944735508
 GameObject:
   m_ObjectHideFlags: 0

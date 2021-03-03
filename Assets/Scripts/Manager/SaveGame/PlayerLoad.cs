@@ -112,21 +112,24 @@ public class PlayerLoad : MonoBehaviour
         ActionButton[] actionButtons = FindObjectsOfType<ActionButton>();
         //Talent[] spells = Object.FindObjectsOfType<Spell>();
 
-        for (int i = 0; i < data.savedActionButtons.Length; i++)
+
+        foreach (ActionButton slot in actionButtons)
         {
-            if(data.savedActionButtons[i] != null)
-            {
-                
-                foreach (Spell spell in TalentTree.instance.allTalents.OfType<Spell>())
-                {
-                    if (spell.GetSpellName == data.savedActionButtons[i])
-                    {
-                        actionButtons[i].LoadUseable(spell, spell);
-                    }
+            if (slot.gameObject.name == "ActionButton1")
+                LoadActionbarSlot(0, slot, data);
 
-                }
+            if (slot.gameObject.name == "ActionButton2")
+                LoadActionbarSlot(1, slot, data);
 
-            }
+            if (slot.gameObject.name == "ActionButton3")
+                LoadActionbarSlot(2, slot, data);
+
+            if (slot.gameObject.name == "ActionButton4")
+                LoadActionbarSlot(3, slot, data);
+
+            if (slot.gameObject.name == "ActionButton5")
+                LoadActionbarSlot(4, slot, data);
+        }
             // Is it possible to refer to a class, inherting form another from its parent class?
             /*
             foreach(Spell spell in spells)
@@ -139,8 +142,26 @@ public class PlayerLoad : MonoBehaviour
             */
 
 
-        }
         
+        
+    }
+
+    void LoadActionbarSlot(int i, ActionButton slot, PlayerSave data)
+    {
+        if (data.savedActionButtons[i] != null)
+        {
+            Debug.Log("you got here");
+
+            foreach (Spell spell in TalentTree.instance.allTalents.OfType<Spell>())
+            {
+                if (spell.GetSpellName == data.savedActionButtons[i])
+                {
+                    slot.LoadUseable(spell, spell);
+                }
+
+            }
+
+        }
     }
 
 

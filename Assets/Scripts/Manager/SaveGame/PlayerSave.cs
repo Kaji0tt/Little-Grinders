@@ -242,23 +242,40 @@ public class PlayerSave
 
         Debug.Log("saved ACtionButtons " + savedActionButtons.Length);
 
-        for(int i = 0; i < actionButtons.Length; i++)
-        {
-            Debug.Log("Looking at Slot: " + actionButtons[i]);
-            if (actionButtons[i].MyUseable != null)
+            foreach(ActionButton slot in actionButtons)
             {
+                if (slot.gameObject.name == "ActionButton1")
+                    SaveActionbarSlot(1, slot);
 
-                Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtons[i]);
+                if (slot.gameObject.name == "ActionButton2")
+                    SaveActionbarSlot(2, slot);
 
-                savedActionButtons[i] = (actionButtons[i].MyUseable as Spell).GetSpellName;
+                if (slot.gameObject.name == "ActionButton3")
+                    SaveActionbarSlot(3, slot);
 
-                savedActionButtonIndex[i] = i;
+                if (slot.gameObject.name == "ActionButton4")
+                    SaveActionbarSlot(4, slot);
+
+                if (slot.gameObject.name == "ActionButton5")
+                    SaveActionbarSlot(5, slot);
+
             }
 
-        }
         
         loadIndex = 1;
     }
 
+    private void SaveActionbarSlot(int i, ActionButton slot)
+    {
+        if (slot.MyUseable != null)
+        {
+            savedActionButtonIndex[i-1] = i;
 
+            Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtonIndex[i]);
+
+            savedActionButtons[i-1] = (slot.MyUseable as Spell).GetSpellName;
+
+
+        }
+    }
 }
