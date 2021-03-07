@@ -124,7 +124,7 @@ public class IsometricPlayer : MonoBehaviour
 
 
 
-        if (time >= 1000)
+        if (time >= 1500)
             IdleRotation();
 
     }
@@ -272,20 +272,26 @@ public class IsometricPlayer : MonoBehaviour
     {                                                           //Die Abfrage sollte noch verbessert werden.
         
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
-        if (itemWorld != null && Input.GetKey(KeyCode.Q))
+        if (itemWorld != null && Input.GetKey(UI_Manager.instance.pickKey))
         {
-            inventory.AddItem(itemWorld.GetItem());
-            itemWorld.DestroySelf();
-
-
-            #region "Tutorial"
-            if(itemWorld.GetItem().ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>() != null)
+            if(inventory.itemList.Count <= 14)
             {
-                Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-                tutorialScript.ShowTutorial(4);
+                inventory.AddItem(itemWorld.GetItem());
+                itemWorld.DestroySelf();
 
+                #region "Tutorial"
+                if (itemWorld.GetItem().ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>() != null)
+                {
+                    Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+                    tutorialScript.ShowTutorial(4);
+
+                }
+                #endregion
             }
-            #endregion
+
+
+
+
         }
 
 

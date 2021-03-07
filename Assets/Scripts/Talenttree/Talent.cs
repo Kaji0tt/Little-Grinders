@@ -7,6 +7,24 @@ using UnityEngine.UI;
 public class Talent : MonoBehaviour
 {
 
+    //Description of the Spell
+    [SerializeField]
+    [TextArea]
+    private string description;
+
+    public string GetDescription
+    {
+        get
+        {
+            return description;
+        }
+    }
+    
+    public virtual void SetDescription(string newDes)
+    {
+        this.description = newDes;
+    }
+    
     public Image image;
     
     public Sprite icon

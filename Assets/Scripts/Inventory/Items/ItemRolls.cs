@@ -52,7 +52,7 @@ public class ItemRolls : MonoBehaviour
 
     public ItemInstance CalculateRolls(ItemInstance item)
     {
-        print(item.ItemName + " is going to get calculated");
+
         RollRarity(item);
 
         //Fix Roll
@@ -83,19 +83,13 @@ public class ItemRolls : MonoBehaviour
 
             float rollSum = 0;
 
-            print("rolled " + roll + " for the Item Rarity of " + item.ItemName);
-
             for (int i = 0; i < rarityChances.Length; i++)
             {
-
-                print("Adding " + rarityChances[i] + " to the rollSum of " + rollSum);
 
                 rollSum += rarityChances[i];
 
                 if (rollSum >= roll)
                 {
-                    print("rolled item rarity: " + rarity[i] + ", at a value of: " + rollSum + " which picked " + rarityChances[i] + " for the item " + item.ItemName);
-
                     item.itemRarity = rarity[i];
 
                     return item;

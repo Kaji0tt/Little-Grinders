@@ -55,4 +55,45 @@ public class MainMenu : MonoBehaviour
     }
 
 
+
+    // Sound Option Interface Settings
+    public void SetMusicVolume(float newValue) //Set of Values should be configured in UI_Manager.cs, setting of source.volume should be conf
+    {
+
+        AudioManager.instance.SetMusicVolume(newValue);
+
+    }
+
+    public void SetInterfaceVolume(float newValue) 
+    {
+
+        AudioManager.instance.SetInterfaceVolume(newValue);
+
+    }
+
+    public void SetEntitiesVolume(float newValue) 
+    {
+
+        AudioManager.instance.SetEntitiesVolume(newValue);
+
+    }
+
+    public void SetEffectVolume(float newValue) 
+    {
+
+        AudioManager.instance.SetEffectVolume(newValue);
+
+    }
+
+    public void SetAtmosphereVolume(float newValue) 
+    {
+
+        AudioManager.instance.SetAtmosphereVolume(newValue);
+
+    }
+
+
+
+
+
 }

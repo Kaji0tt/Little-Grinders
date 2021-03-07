@@ -28,7 +28,8 @@ public class UI_Manager : MonoBehaviour
 
     private KeyCode action1, action2, action3, action4, action5, inventoryKey, skillKey, mainMenuKey;
 
-    public KeyCode toggleCam;
+
+    public KeyCode toggleCam, pickKey;
 
     [SerializeField]
     private CanvasGroup characterMenu; // character Menue, weitergegeben wird ebenfalls welches fenster auf ist.
@@ -83,7 +84,9 @@ public class UI_Manager : MonoBehaviour
 
         mainMenuKey = KeyCode.Escape;
 
-        toggleCam = KeyCode.T;
+        pickKey = KeyCode.Q;
+
+        toggleCam = KeyCode.T; // Not used.
 
 
         isometricPlayer = GetComponent<IsometricPlayer>();

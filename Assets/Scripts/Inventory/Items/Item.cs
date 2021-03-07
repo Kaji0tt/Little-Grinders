@@ -292,8 +292,6 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         string finalString;
         finalString = modStrings[0] + modStrings[1] + modStrings[2] + modStrings[3] + modStrings[4] + modStrings[5] + modStrings[6] + modStrings[7] + modStrings[8] + modStrings[9] + modStrings[10];
 
-        Debug.Log("Es wurde ein Item Namens: " + item.ItemName + " generiert, mit den Values of: " + finalString);
-
         this.ItemValueInfo = finalString;
         //return finalString;
     }

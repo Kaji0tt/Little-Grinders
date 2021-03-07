@@ -31,7 +31,7 @@ public class Heilung : Spell, IUseable
 
             if(verbesserte_Heilung.currentCount != 0)
             {
-                playerStats.Heal((int)healAmount + Mathf.RoundToInt((playerStats.Hp.Value / 100) * verbesserte_Heilung.currentCount));
+                playerStats.Heal((int)healAmount + Mathf.RoundToInt((playerStats.Hp.Value / 50) * verbesserte_Heilung.currentCount));
             }
             else
             playerStats.Heal((int)healAmount);

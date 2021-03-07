@@ -13,6 +13,7 @@ public class DirectionCollider : MonoBehaviour
     public GameObject dirCollider;
     #endregion
 
+    private float attackCD = 0;
     
     private Vector3 right, forward;
 
@@ -47,33 +48,37 @@ public class DirectionCollider : MonoBehaviour
         direction = direction.normalized;
 
         if (direction.magnitude > .3f)
-            transform.position = PlayerManager.instance.player.transform.position + direction;
+            transform.position = new Vector3(PlayerManager.instance.player.transform.position.x, PlayerManager.instance.player.transform.position.y, PlayerManager.instance.player.transform.position.z)
+                                 + direction;
 
     }
 
-    /* Vielleicht das ganze im Enemy abfragen?
-    private void OnTriggerStay(Collider collider)
+    //Bleibt die Frage, ob es schlauer ist im Enemy.cs oder im DirCollider die TakeDamage abfrage zu callen.
+    /*
+    private void OnTriggerStay(Collider enemy)
     {
 
-        //Falls im DirectionCollider eine Instanz von Enemy steckt, führe Angriff aus.
-        GameObject collidedGO = collider.gameObject;
-        //Enemy enemy = collidedGO.GetComponent<Enemy>();
-        //print(enemy.Hp.Value);
-        print(collidedGO.name);
-        if (collidedGO.CompareTag("Enemy"))
+        if (enemy.gameObject.tag == "Enemy")
         {
-            Enemy enemy = collidedGO.GetComponent<Enemy>();
-            print(enemy.Hp.Value);
-            player.attackCD -= Time.deltaTime;
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+
+            attackCD -= Time.deltaTime;
+
+            if (attackCD <= 0)
             {
-                if (player.attackCD <= 0)
+
+                if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    enemy.GetComponent<Enemy>().TakeDamage(player.AttackPower.Value, player.Range);
-                    player.attackCD = 1f / player.AttackSpeed.Value;
+                    //print(enemy.gameObject.name);
+                    //print(enemy.gameObject.GetComponent<EnemyController>().Hp.Value);
+                    enemy.gameObject.GetComponentInParent<EnemyController>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+
+                    attackCD = 1f / playerStats.AttackSpeed.Value;
                 }
+
             }
-            
+
+
         }
     }
     */

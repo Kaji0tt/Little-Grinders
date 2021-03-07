@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class MusicVol : MonoBehaviour
 {
+    /*
     public Slider musicVolSlider;
     AudioSource musicVol;
 
@@ -44,4 +45,5 @@ public class MusicVol : MonoBehaviour
         musicVolSlider = sliderObj.GetComponent<Slider>();
         foundNewSlider = true;
     }
+    */
 }

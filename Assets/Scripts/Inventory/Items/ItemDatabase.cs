@@ -106,11 +106,7 @@ public class ItemDatabase : MonoBehaviour
 
 
 
-                    //Hier liegt ein Fehler, da ich die ItemInstance rolledItem anziehe, ziehe ich lediglich die "Mods" an, ziehe ich die new ItemInstance direkt an, 
-                    //ziehe ich lediglich das BaseItem an.
-                    //ItemInstance rolledItem = itemRolls.CalculateRolls(new ItemInstance(item));
-
-                    //Debug.Log(rolledItem.itemRarity);
+                    print("Item: " + item.ItemName + " was choosen.");
 
                     ItemWorld.SpawnItemWorld(position, itemRolls.CalculateRolls(new ItemInstance(item)));
 

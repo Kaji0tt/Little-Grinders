@@ -99,8 +99,6 @@ public class TalentTree : MonoBehaviour
 
     private void ResetTalents()
     {
-        print("Talents got resetted");
-
         foreach (Talent talent in talents)
             talent.LockTalents();
 

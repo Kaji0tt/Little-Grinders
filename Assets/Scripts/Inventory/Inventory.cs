@@ -22,7 +22,7 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(ItemInstance item)
     {
-        if (itemList.Count <= 15)  // InvGröße: das war schlau von MonkeyDev, lediglich das Interface anpassen
+        if (itemList.Count <= 14)  // InvGröße: das war schlau von MonkeyDev, lediglich das Interface anpassen
         {
             /*
             if(item.itemType == ItemType.Consumable) //Ggf. gleiches für Currency hinzufügen, außerhalb von Inventory.

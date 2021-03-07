@@ -167,6 +167,7 @@ public class PlayerStats : MonoBehaviour
     public virtual void Die()
     {
         Debug.Log(transform.name + "ist gestorben.");
+        AudioManager.instance.Play("Dead2");
         //SceneManager.LoadScene(0);
         //Time.timeScale = 1f;
     }

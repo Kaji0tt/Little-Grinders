@@ -150,7 +150,6 @@ public class PlayerLoad : MonoBehaviour
     {
         if (data.savedActionButtons[i] != null)
         {
-            Debug.Log("you got here");
 
             foreach (Spell spell in TalentTree.instance.allTalents.OfType<Spell>())
             {

@@ -43,6 +43,7 @@ public class EnemyController : MonoBehaviour
     TextMeshProUGUI[] statText;
 
     private float attackCD = 0f;
+    private float p_attackCD = 0f;
     private float maxHp;
     [Space]
     public int Experience;
@@ -175,34 +176,35 @@ public class EnemyController : MonoBehaviour
 
     }
 
-
+    //Eigentlich müsste die p_attackCD pro Instanz unterschiedlich sein, aber da das zu funktionieren scheint. Bleibt das so.
     private void OnTriggerStay(Collider collider)
     {
 
-
-        if (collider.gameObject == DirectionCollider.instance.dirCollider) // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
+        if (collider.gameObject == DirectionCollider.instance.dirCollider) 
         {
-            //Debug.Log("Colliding with DirCollider");
 
             PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
-            playerStats.attackCD -= Time.deltaTime;
+
+            p_attackCD -= Time.deltaTime;
 
 
-            if (playerStats.attackCD <= 0) 
-            {
-
-                if (Input.GetKeyDown(KeyCode.Mouse0))
+                if (p_attackCD <= 0)
                 {
-                    TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-                    playerStats.attackCD = 1f / playerStats.AttackSpeed.Value;
 
-                }
-                
-            }
+                    if (Input.GetKeyDown(KeyCode.Mouse0))
+                    {
+
+                        TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+
+                        p_attackCD = 1f / playerStats.AttackSpeed.Value;
+                    }
+
+                }            
+
         }
     }
-
+    
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.tag == "Bullet") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?

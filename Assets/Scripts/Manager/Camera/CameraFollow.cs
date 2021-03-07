@@ -41,7 +41,7 @@ public class CameraFollow : MonoBehaviour
     private void Update()
     {
 
-        if (Input.mouseScrollDelta.y != 0)
+        if (Input.mouseScrollDelta.y != 0 && Time.timeScale == 1f)
             Zoom();
 
         //if (Input.GetKeyDown(UI_Manager.instance.toggleCam))
