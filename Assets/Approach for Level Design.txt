@@ -1,0 +1,14 @@
+
+Radusek — heute um 22:50 Uhr
+As you have some procedural generation based on some seed, you recreate the whole thing again as if it was the first time it is being created and then you have to load all the things that have changed between the "clean" and the saved state. That's how I would approach it, but it all depends on what you can and cannot modify in that world. Sometimes it might be more benefitable to just record all the differences, sometimes you might want to serialize everything yourself and save it in a file
+
+Kaji0tt — heute um 22:52 Uhr
+actually, there currently is nothing the player is supposed to be able to modify - maybe something like a "hide-out" later on, which would be a different scene then
+
+sirkarpfen — heute um 22:53 Uhr
+What Radusek said! Also i would not use scenes to load stuff. you could group sprites together in chunks, or just make a bunch of big sprites and randomly choose from them
+or use procedural generation, like Radusek mentioned
+just serialize them or group them all together with their coordinates in a Dictionary or scriptable object or something similar you can serialize
+
+Kaji0tt — heute um 22:57 Uhr
+i see, so i could write own data for each "tile" that has been generated and then, corresponding to the load, it could read those files

@@ -6,11 +6,13 @@ using UnityEngine;
 public class IsometricCharacterRenderer : MonoBehaviour
 {
 
+
+
     public static readonly string[] staticDirections = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
     public static readonly string[] runDirections = { "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
     public static readonly string[] runNPCDirections = {"Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
 
-    public static readonly string[] weaponSwing = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
+    public static readonly string[] weaponSwing = { "Attack_N", "Attack_NW", "Attack_W", "Attack_SW", "Attack_S", "Attack_SE", "Attack_E", "Attack_NE" };
     Animator animator;
     int lastDirection;
 
@@ -24,38 +26,40 @@ public class IsometricCharacterRenderer : MonoBehaviour
 
     public void SetDirection(Vector2 direction){
 
-        //use the Run states by default
+
         string[] directionArray = null;
 
-        //measure the magnitude of the input.
+
         if (direction.magnitude < .01f && transform.name != "WeaponAnim")  //<- Damit wurde die Waffe animiert. Muss eh überarbeitet werden.
-        //if (Input.GetKeyDown(KeyCode.Mouse1))
-        //if (direction.magnitude < .01f)
         {
-            //if we are basically standing still, we'll use the Static states
-            //we won't be able to calculate a direction if the user isn't pressing one, anyway!
+
             directionArray = staticDirections;
 
+            print("if 1");
         }
 
         
         else if (Input.GetKey(KeyCode.Mouse0)  && transform.name == "WeaponAnim")
         {
+
             directionArray = weaponSwing;
+
+            print("if 2");
+
         }
         
 
-
         else
         {
-            //we can calculate which direction we are going in
-            //use DirectionToIndex to get the index of the slice from the direction vector
-            //save the answer to lastDirection
             directionArray = runDirections;
+
             lastDirection = DirectionToIndex(direction, 8);
+
+            print("else");
+
         }
 
-        //tell the animator to play the requested state
+
         animator.Play(directionArray[lastDirection]);
     }
 

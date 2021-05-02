@@ -84,7 +84,6 @@ public class IsometricPlayer : MonoBehaviour
         uiInventory.SetInventory(inventory);
         uiInventory.SetCharakter(this);
 
-
         //PlayerStats & UI
         //GameEvents.current.LevelUpdate += UpdateLevel;
         uiInventoryTab = GameObject.Find("Inventory Tab");              
@@ -124,7 +123,7 @@ public class IsometricPlayer : MonoBehaviour
 
 
 
-        if (time >= 1500)
+        if (time >= 2000)
             IdleRotation();
 
     }
@@ -180,7 +179,7 @@ public class IsometricPlayer : MonoBehaviour
 
 
 
-        //Input
+        //Input & WalkAnimation
         float horizontalInput = Input.GetAxis("HorizontalKey");
         float verticalInput = Input.GetAxis("VerticalKey");
         Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
@@ -242,6 +241,29 @@ public class IsometricPlayer : MonoBehaviour
 
     void Attack()
     {
+
+
+        //Play Animation
+
+
+        //Detect all enemies in rage of attack
+
+
+
+        //Apply Damage
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
@@ -250,6 +272,8 @@ public class IsometricPlayer : MonoBehaviour
                 RangedAttack(hit.point);
 
         }
+        */
+
     }
 
     // ---- RANGED ATTACK ----- Not implemented yet.

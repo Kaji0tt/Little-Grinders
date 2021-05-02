@@ -1229,9 +1229,9 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 57368838}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 0
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!114 &57368841
 MonoBehaviour:
@@ -10703,8 +10703,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1307886151}
   m_HandleRect: {fileID: 1307886150}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.46374434
+  m_Value: 0.9999999
+  m_Size: 0.46374422
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14020,12 +14020,13 @@ SpriteRenderer:
   m_SortingLayerID: 1784732549
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9e157cec2d5b95d44a101b12b6aa4b52, type: 3}
+  m_Sprite: {fileID: -590705844669056729, guid: 49ba478eb0b56784ea728d4165ef457b,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.24, y: 0.24}
+  m_Size: {x: 0.248, y: 0.248}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

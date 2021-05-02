@@ -45,10 +45,6 @@ public class ItemRolls : MonoBehaviour
 
     private float[] _rarityChances;
 
-    private void Awake()
-    {
-
-    }
 
     public ItemInstance CalculateRolls(ItemInstance item)
     {
