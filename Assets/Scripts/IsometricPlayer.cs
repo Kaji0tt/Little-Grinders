@@ -52,6 +52,7 @@ public class IsometricPlayer : MonoBehaviour
 
     //Talente und Kampf-System
     private Vector3 targetDirection;
+    private float combatStanceTime;
 
     //Idle Rotation
     private float idle_time;
@@ -169,11 +170,34 @@ public class IsometricPlayer : MonoBehaviour
             ui_Xp.text = "";
         }
 
-
-        if (Input.GetKey(KeyCode.Mouse0))
+        // Falls wir uns nicht bereits im Attack befinden, führe Angriff aus.
+        if (Input.GetKey(KeyCode.Mouse0) && weaponGameObject.gameObject.GetComponent<Animator>().GetBool("isAttacking") == false)
         {
+            //Setze den Timer für die Combat-Stance zurück.
+            combatStanceTime = 1; // Später, attackSpeed länge.
+
+            //Führe Angriff aus.
             Attack();
         }
+
+        // Solange wir uns noch im Intervall des Combats befinden, soll die Zeit der Combat-Stance reduziert werden.
+        else if (combatStanceTime >= 0)
+        {
+            combatStanceTime -= Time.deltaTime;
+
+            //Setze die Combat-Stance des Iso-Renderers auf True, damit dieser die Animationen währe "isAttacking" nicht mehrfach versucht abzuspielen.
+            isoRenderer.inCombatStance = true;
+        }
+
+        //Sobald die Combat-Stance Zeit abgelaufen ist, setzen wir den Animator zurück, um erneut animiert werden zu können.
+        if (combatStanceTime <= 0)
+        {
+            weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", false);
+
+            //Setze die Combat-Stance des Iso-Renderers zurück, um erneut für Attack-Animation bereit zu sein.
+            isoRenderer.inCombatStance = false;
+        }
+
 
 
         //UI Orb
@@ -251,8 +275,10 @@ public class IsometricPlayer : MonoBehaviour
     //Starten der Combat Stance
     void Attack()
     {
+
         //Play Animation - > Animation-Speed = AttackSpeed vom Schwert.
-        weaponGameObject.gameObject.GetComponent<Animator>().SetFloat("isAttacking", 1f);
+        weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
+
 
 
 

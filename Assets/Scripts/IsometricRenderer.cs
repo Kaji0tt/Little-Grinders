@@ -16,12 +16,13 @@ public class IsometricRenderer : MonoBehaviour
     int lastDirection;
 
     //Setze Zeit für die Combat-Stance (später sollte diese vom AttackSpeed des Schwertes beeinflusst werden.)
-    float attackTime = 1;
+    public bool inCombatStance;
 
     private void Awake()
     {
         //cache the animator component
         animator = GetComponent<Animator>();
+        inCombatStance = false;
     }
 
 
@@ -56,16 +57,9 @@ public class IsometricRenderer : MonoBehaviour
     {
         string[] directionArray = null;
 
-        attackTime -= Time.deltaTime;
-
-        print(attackTime);
-
         //Falls die Combat-Stance des Charakters im Animation-Controller ist #IsometricPlayer.Attack(), führe folgende Animationen aus.
-        if (weaponAnim.GetFloat("isAttacking") <= 0)
+        if (weaponAnim.GetBool("isAttacking") == true && inCombatStance == false)
         {
-            //Ziehe Time.deltaTime ab, der "CD" wäre somit von der größe von attackTime abhängig, welche man über zusätzliche Parameter beeinflussen könnte.
-            //Derzeit sind alle Attack-Clips ohnehin 1 Sekunde lang.
-            attackTime = weaponAnim.GetFloat("isAttacking");
 
             //Aktiviere den Animation-Controller, falls dieser deaktivert war.
             weaponAnim.enabled = true;
@@ -77,13 +71,15 @@ public class IsometricRenderer : MonoBehaviour
             lastDirection = DirectionToIndex(direction, 8);
 
             //Spiele die Animation über entsprechenden Integer im AnimationController ab.
-            weaponAnim.SetInteger("directionInt", lastDirection);
+            weaponAnim.SetTrigger(directionArray[lastDirection]);
 
         }
+
 
         //Falls der Character nicht am Angreifen ist #IsometricPlayer.Attack(), führe die Standrad-Waffenanimation aus.
         else if (weaponAnim.GetBool("isAttacking") == false)
         {
+
             //Falls sich der Charakter nicht bewegt, soll die Animation des Schwertes ebenfalls stillstehen.
             if(direction.magnitude < 0.1f)
             {
@@ -105,8 +101,8 @@ public class IsometricRenderer : MonoBehaviour
             }
         }
 
-        //Deaktiviere die Combat-Stance
-        weaponAnim.SetFloat("isAttacking", -attackTime);
+        print(weaponAnim.GetBool("isAttacking"));
+
     }
 
     public void SetNPCDirection(Vector2 direction)
