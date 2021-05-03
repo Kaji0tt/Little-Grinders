@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class IsometricCharacterRenderer : MonoBehaviour
+//Alle Objekte die isometrisch dargestellt werden, werden in 8 Slices eingeteilt um korrekt in der Isometrie angezeigt zu werden.
+public class IsometricRenderer : MonoBehaviour
 {
-
 
 
     public static readonly string[] staticDirections = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
@@ -16,6 +15,8 @@ public class IsometricCharacterRenderer : MonoBehaviour
     Animator animator;
     int lastDirection;
 
+    //Setze Zeit für die Combat-Stance (später sollte diese vom AttackSpeed des Schwertes beeinflusst werden.)
+    float attackTime = 1;
 
     private void Awake()
     {
@@ -30,24 +31,13 @@ public class IsometricCharacterRenderer : MonoBehaviour
         string[] directionArray = null;
 
 
-        if (direction.magnitude < .01f && transform.name != "WeaponAnim")  //<- Damit wurde die Waffe animiert. Muss eh überarbeitet werden.
-        {
+        if (direction.magnitude < .01f)
+        { 
 
             directionArray = staticDirections;
 
-            print("if 1");
-        }
 
-        
-        else if (Input.GetKey(KeyCode.Mouse0)  && transform.name == "WeaponAnim")
-        {
-
-            directionArray = weaponSwing;
-
-            print("if 2");
-
-        }
-        
+        }        
 
         else
         {
@@ -55,12 +45,68 @@ public class IsometricCharacterRenderer : MonoBehaviour
 
             lastDirection = DirectionToIndex(direction, 8);
 
-            print("else");
-
         }
 
 
         animator.Play(directionArray[lastDirection]);
+    }
+
+    //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll animiert werden.
+    public void SetWeaponDirection(Vector2 direction, Animator weaponAnim)
+    {
+        string[] directionArray = null;
+
+        attackTime -= Time.deltaTime;
+
+        print(attackTime);
+
+        //Falls die Combat-Stance des Charakters im Animation-Controller ist #IsometricPlayer.Attack(), führe folgende Animationen aus.
+        if (weaponAnim.GetFloat("isAttacking") <= 0)
+        {
+            //Ziehe Time.deltaTime ab, der "CD" wäre somit von der größe von attackTime abhängig, welche man über zusätzliche Parameter beeinflussen könnte.
+            //Derzeit sind alle Attack-Clips ohnehin 1 Sekunde lang.
+            attackTime = weaponAnim.GetFloat("isAttacking");
+
+            //Aktiviere den Animation-Controller, falls dieser deaktivert war.
+            weaponAnim.enabled = true;
+
+            //Wähle entsprechende AnimationsArray aus
+            directionArray = weaponSwing;
+
+            //Berechne die Richtung/Stance der Animation über DirectionToIndex
+            lastDirection = DirectionToIndex(direction, 8);
+
+            //Spiele die Animation über entsprechenden Integer im AnimationController ab.
+            weaponAnim.SetInteger("directionInt", lastDirection);
+
+        }
+
+        //Falls der Character nicht am Angreifen ist #IsometricPlayer.Attack(), führe die Standrad-Waffenanimation aus.
+        else if (weaponAnim.GetBool("isAttacking") == false)
+        {
+            //Falls sich der Charakter nicht bewegt, soll die Animation des Schwertes ebenfalls stillstehen.
+            if(direction.magnitude < 0.1f)
+            {
+                weaponAnim.enabled = false;
+            }
+
+            else
+            {
+                weaponAnim.enabled = true;
+
+                //Wähle entsprechende AnimationsArray aus
+                directionArray = runDirections;
+
+                //Berechne die Richtung der Animation
+                lastDirection = DirectionToIndex(direction, 8);
+
+                //Spiele die Animation ab.
+                weaponAnim.Play(directionArray[lastDirection]);
+            }
+        }
+
+        //Deaktiviere die Combat-Stance
+        weaponAnim.SetFloat("isAttacking", -attackTime);
     }
 
     public void SetNPCDirection(Vector2 direction)

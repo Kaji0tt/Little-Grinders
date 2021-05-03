@@ -8,8 +8,12 @@ using System;
 public class IsometricPlayer : MonoBehaviour
 {
 
+    //Animation
+    IsometricRenderer isoRenderer;
+    [SerializeField]
+    private GameObject weaponGameObject;
+    private Vector2 inputVector;
 
-    IsometricCharacterRenderer isoRenderer;
     public PlayerStats playerStats { get; private set; }
 
     Rigidbody rbody;
@@ -50,7 +54,7 @@ public class IsometricPlayer : MonoBehaviour
     private Vector3 targetDirection;
 
     //Idle Rotation
-    private float time;
+    private float idle_time;
 
     public float idleRotSpeed = 10;
 
@@ -68,7 +72,7 @@ public class IsometricPlayer : MonoBehaviour
     private void Awake()
     {
         rbody = GetComponent<Rigidbody>();
-        isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
+        isoRenderer = GetComponentInChildren<IsometricRenderer>();
         playerStats = GetComponent<PlayerStats>();
         rangedWeapon = false;
 
@@ -105,6 +109,7 @@ public class IsometricPlayer : MonoBehaviour
 
     }
 
+    //Fixed Update wird gecalled, vor der physikalischen Berechning innerhalb eines Frames.
     void FixedUpdate()
     {
 
@@ -112,10 +117,10 @@ public class IsometricPlayer : MonoBehaviour
         Move();
 
         if (!Input.anyKey)
-            time = time + 1;
+            idle_time = idle_time + 1;
         else if (idle)
         {
-            time = 0;
+            idle_time = 0;
             transform.rotation = Quaternion.Euler(45,0,0);
             Camera.main.fieldOfView = 15;
             idle = false;
@@ -123,7 +128,7 @@ public class IsometricPlayer : MonoBehaviour
 
 
 
-        if (time >= 2000)
+        if (idle_time >= 2000)
             IdleRotation();
 
     }
@@ -149,6 +154,7 @@ public class IsometricPlayer : MonoBehaviour
 
     }
 
+    //Wird jeden Frame berechnet.
     private void Update()
     {
 
@@ -182,9 +188,10 @@ public class IsometricPlayer : MonoBehaviour
         //Input & WalkAnimation
         float horizontalInput = Input.GetAxis("HorizontalKey");
         float verticalInput = Input.GetAxis("VerticalKey");
-        Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
+        inputVector = new Vector2(horizontalInput, verticalInput);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
         isoRenderer.SetDirection(inputVector);
+        isoRenderer.SetWeaponDirection(inputVector, weaponGameObject.GetComponent<Animator>());
 
         //print(inputVector);
         //Define Inventory Tab Values   ********schreiben von Interface Texten*********
@@ -196,6 +203,8 @@ public class IsometricPlayer : MonoBehaviour
         ui_invMovementSpeedText.text = "Movement: " + playerStats.MovementSpeed.Value;
 
     }
+
+    //Bewege den Charakter über die HorizontalKeys / VerticalKeys aus den ProjectSettings
     void Move()
     {
 
@@ -239,13 +248,15 @@ public class IsometricPlayer : MonoBehaviour
         ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
     }
 
+    //Starten der Combat Stance
     void Attack()
     {
+        //Play Animation - > Animation-Speed = AttackSpeed vom Schwert.
+        weaponGameObject.gameObject.GetComponent<Animator>().SetFloat("isAttacking", 1f);
 
 
-        //Play Animation
 
-
+        //weaponGameObject.GetComponent<Animator>().Rebind();
         //Detect all enemies in rage of attack
 
 

@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
     Transform character_transform;
 
     NavMeshAgent navMeshAgent;
-    IsometricCharacterRenderer isoRenderer;
+    IsometricRenderer isoRenderer;
     //private Animator animator;
     private EnemyAnimator enemyAnimator;
     public bool animated;
@@ -82,7 +82,7 @@ public class EnemyController : MonoBehaviour
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
         if (animated == false)
-        isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
+        isoRenderer = GetComponentInChildren<IsometricRenderer>();
     }
 
 

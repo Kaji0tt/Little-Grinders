@@ -6916,6 +6916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0038be263d74d9b95eb7a5862c9f4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponGameObject: {fileID: 756602939}
   rangedWeapon: 0
   equippedItems: []
   uiInventory: {fileID: 594793834}
@@ -10703,8 +10704,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1307886151}
   m_HandleRect: {fileID: 1307886150}
   m_Direction: 2
-  m_Value: 0.9999999
-  m_Size: 0.46374422
+  m_Value: 1
+  m_Size: 0.4637443
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13934,7 +13935,6 @@ GameObject:
   - component: {fileID: 529154532}
   - component: {fileID: 529154535}
   - component: {fileID: 529154534}
-  - component: {fileID: 529154533}
   m_Layer: 0
   m_Name: WeaponAnimParent
   m_TagString: Untagged
@@ -13956,18 +13956,6 @@ Transform:
   m_Father: {fileID: 756602940}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &529154533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 529154531}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dcc5368da5346c48a9ba14da0645b3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &529154534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19874,7 +19862,6 @@ GameObject:
   - component: {fileID: 756602940}
   - component: {fileID: 756602943}
   - component: {fileID: 756602942}
-  - component: {fileID: 756602941}
   m_Layer: 0
   m_Name: WeaponAnim
   m_TagString: Untagged
@@ -19897,18 +19884,6 @@ Transform:
   m_Father: {fileID: 306612090}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &756602941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 756602939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0631f36ac84554335b5b1f70f25312fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &756602942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19918,7 +19893,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 756602939}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dcc5368da5346c48a9ba14da0645b3a, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d9a64e0cfb3dc749816f6544a70bd9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!95 &756602943

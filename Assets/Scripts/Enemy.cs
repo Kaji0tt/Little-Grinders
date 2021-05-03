@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     Transform destination;
 
     NavMeshAgent navMeshAgent;
-    IsometricCharacterRenderer isoRenderer;
+    IsometricRenderer isoRenderer;
 
 
     ///----Combat Variables-----
@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
-        isoRenderer = GetComponentInChildren<IsometricCharacterRenderer>();
+        isoRenderer = GetComponentInChildren<IsometricRenderer>();
     }
 
 
