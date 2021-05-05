@@ -50,6 +50,7 @@ public class Item : ScriptableObject
    
 }
 
+//Erstelle eine ItemInstance, welche Serialized werden kann und aus dem ScriptableObject mit den oben genannten Variabeln ausgelesen wird.
 [Serializable]
 public class ItemInstance :  IMoveable//Da muss mir nochmal bei
 {
@@ -113,6 +114,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
     //Wird eigentlich nicht verwendet, sollte aber im Konstruktor gecalled werden.
     //public ItemModsData[] myItemMods; 
 
+    //Klone die vom SO geerbten Daten in die Instanz des Items
     public ItemInstance(Item item)
     {
         ItemID = item.ItemID;
@@ -120,6 +122,8 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         ItemDescription = item.ItemDescription;
         itemType = item.itemType;
         
+
+        //Noch nicht implementiert. Das Interface MyUseAble wird wichtig, wenn wir aktive Fähigkeiten oder Tränke über die ActionBar abrufen können wollen.
         if(itemType == ItemType.Consumable)
         {
             //MyUseAble = (IUseable)this;
@@ -210,12 +214,14 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
 
     }
 
-    /* Incoming
+    /* Incoming - Use soll es ermöglichen, aktive Fähigkeiten auf den Items zu besitzen, welche über die ActionBar gecastet werden sollen.
     public void Use()
     {
         
     }
     */
+
+    //Wird gecalled, wenn das Item im Inventar angeklickt wird. Dadurch werden die Stats den playerStats hinzugefügt.
     public void Equip(PlayerStats playerStats)
     {
         //Derzeit werden nur die Boni von den Mods equipped.
@@ -256,6 +262,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
 
     }
 
+    //Wird gecalled, wenn die ausgerüsteten Items angeklickt werden. Zuständig hierfür sind die Klassen #EQSlot[Kopf, Schuhe, ...], welche in den entsprechenden InterfaceObjekten im Canvas liegen.
     public void Unequip(PlayerStats playerStats)
     {
 
@@ -275,6 +282,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         //Implementierung von Special Effekten
     }
 
+    //Schreibe die Beschreibung für den Tooltip
     public void SetValueDescription(ItemInstance item)
     {
         if (item.flatValues[0] != 0) item.modStrings[0] = "\nHp: " +                                item.flatValues[0]; else item.modStrings[0] = "";
@@ -296,7 +304,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         //return finalString;
     }
 
-    
+    //Serialize information about Item and its Mods (not used currently)
     public ItemModsData[] SaveItemMods(ItemInstance item)
     {
         ItemModsData[] myArray = item.addedItemMods.ToArray();

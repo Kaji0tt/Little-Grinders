@@ -171,15 +171,11 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    void ShowStatText()
-    {
-
-    }
 
     //Eigentlich müsste die p_attackCD pro Instanz unterschiedlich sein, aber da das zu funktionieren scheint. Bleibt das so.
     private void OnTriggerStay(Collider collider)
     {
-
+        /*
         if (collider.gameObject == DirectionCollider.instance.dirCollider) 
         {
 
@@ -203,13 +199,15 @@ public class EnemyController : MonoBehaviour
                 }            
 
         }
+        */
     }
     
+    //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.tag == "Bullet") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
-
+            //Derzeit müssten die entsprechenden Bullet-Scripts hier abgefragt werden, dats stupid.
             Steinwurf_Bullet steinwurf_bullet = collider.GetComponent<Steinwurf_Bullet>();
 
             TakeDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.         
@@ -271,6 +269,7 @@ public class EnemyController : MonoBehaviour
 
         string _lootTable = lootTable.ToString();
         ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
+
         Destroy(gameObject);
     }
 

@@ -9,7 +9,9 @@ public enum LootTable { tier1, tier2, tier3, tier4, tier5 }
 
 public class Enemy : MonoBehaviour
 {
-
+    //Ich konnte auf anhieb jetzt kein Objekt finden, welches mit Enemy.cs läuft. Sicherheitshalber erstmal da lassen.
+    //05.05.21
+    /*
     [SerializeField]
     Transform destination;
 
@@ -126,6 +128,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
+        /*
         if (collider.gameObject.name == "DirectionCollider") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
             PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
@@ -140,6 +143,7 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+        
     }
 
     private void SetDestination()
@@ -186,4 +190,5 @@ public class Enemy : MonoBehaviour
         itemDatabase.GetComponent<ItemDatabase>().GetWeightDrop(gameObject.transform.position);   
         Destroy(gameObject);
     }
+    */
 }

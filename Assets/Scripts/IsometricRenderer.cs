@@ -101,8 +101,6 @@ public class IsometricRenderer : MonoBehaviour
             }
         }
 
-        print(weaponAnim.GetBool("isAttacking"));
-
     }
 
     public void SetNPCDirection(Vector2 direction)

@@ -17,6 +17,8 @@ public class DirectionCollider : MonoBehaviour
     
     private Vector3 right, forward;
 
+    public List<EnemyController> collidingEnemyControllers = new List<EnemyController>();
+
 
     void Start()
     {
@@ -54,33 +56,36 @@ public class DirectionCollider : MonoBehaviour
     }
 
     //Bleibt die Frage, ob es schlauer ist im Enemy.cs oder im DirCollider die TakeDamage abfrage zu callen.
-    /*
-    private void OnTriggerStay(Collider enemy)
+    
+
+ 
+    private void OnTriggerEnter(Collider collider)
     {
+        //collidingEnemys = Collider.FindObjectsOfType<Enemy>();
 
-        if (enemy.gameObject.tag == "Enemy")
+        if(collider.gameObject.tag == "Enemy")
         {
-            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
-            attackCD -= Time.deltaTime;
-
-            if (attackCD <= 0)
-            {
-
-                if (Input.GetKeyDown(KeyCode.Mouse0))
-                {
-                    //print(enemy.gameObject.name);
-                    //print(enemy.gameObject.GetComponent<EnemyController>().Hp.Value);
-                    enemy.gameObject.GetComponentInParent<EnemyController>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-
-                    attackCD = 1f / playerStats.AttackSpeed.Value;
-                }
-
-            }
-
+            if(!collidingEnemyControllers.Contains(collider.gameObject.GetComponentInParent<EnemyController>()))
+            collidingEnemyControllers.Add(collider.gameObject.GetComponentInParent<EnemyController>());
 
         }
+        
     }
-    */
+
+
+    private void OnTriggerExit(Collider collider)
+    {
+
+        if (collider.gameObject.tag == "Enemy")
+        {
+            if(collidingEnemyControllers.Contains(collider.gameObject.GetComponentInParent<EnemyController>()))
+            collidingEnemyControllers.Remove(collider.gameObject.GetComponentInParent<EnemyController>());
+        }
+
+    }
+    
+
+
 
 }

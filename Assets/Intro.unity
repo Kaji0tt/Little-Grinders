@@ -5259,6 +5259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dirCollider: {fileID: 226492281}
+  collidingEnemyControllers: []
 --- !u!135 &226492283
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6951,6 +6952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0631f36ac84554335b5b1f70f25312fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inCombatStance: 0
 --- !u!95 &306612086
 Animator:
   serializedVersion: 3
@@ -10704,8 +10706,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1307886151}
   m_HandleRect: {fileID: 1307886150}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.4637443
+  m_Value: 0.9999999
+  m_Size: 0.46374425
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13949,13 +13951,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529154531}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.004}
+  m_LocalRotation: {x: 0.10448776, y: -0.03987621, z: -0.31762293, w: 0.94159853}
+  m_LocalPosition: {x: 0.012, y: 0.025, z: -0.004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 756602940}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 9.872001, y: -8.2560005, z: -37.995003}
 --- !u!114 &529154534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14008,16 +14010,15 @@ SpriteRenderer:
   m_SortingLayerID: 1784732549
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: -590705844669056729, guid: 49ba478eb0b56784ea728d4165ef457b,
-    type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.248, y: 0.248}
+  m_Size: {x: 0.224, y: 0.248}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &529442136
@@ -19877,7 +19878,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756602939}
   m_LocalRotation: {x: -0.3535534, y: -0.3535534, z: 0.14644662, w: 0.8535535}
-  m_LocalPosition: {x: 0, y: 0.075, z: 0.075}
+  m_LocalPosition: {x: -0.016, y: 0.081, z: 0.081}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 529154532}
@@ -37952,7 +37953,6 @@ GameObject:
   - component: {fileID: 1489625885}
   - component: {fileID: 1489625883}
   - component: {fileID: 1489625882}
-  - component: {fileID: 1489625891}
   - component: {fileID: 1489625892}
   m_Layer: 0
   m_Name: ScriptController
@@ -38121,19 +38121,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1489625891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1489625881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b28545c4d027a40b82c5e0b619a85b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player_collider: {fileID: 1102088272}
 --- !u!114 &1489625892
 MonoBehaviour:
   m_ObjectHideFlags: 0
