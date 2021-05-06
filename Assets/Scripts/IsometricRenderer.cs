@@ -29,8 +29,7 @@ public class IsometricRenderer : MonoBehaviour
     public void SetDirection(Vector2 direction){
 
 
-        string[] directionArray = null;
-
+        string[] directionArray; //= null;
 
         if (direction.magnitude < .01f)
         { 
@@ -55,7 +54,7 @@ public class IsometricRenderer : MonoBehaviour
     //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll animiert werden.
     public void SetWeaponDirection(Vector2 direction, Animator weaponAnim)
     {
-        string[] directionArray = null;
+        string[] directionArray; //= null;
 
         //Falls die Combat-Stance des Charakters im Animation-Controller ist #IsometricPlayer.Attack(), führe folgende Animationen aus.
         if (weaponAnim.GetBool("isAttacking") == true && inCombatStance == false)
@@ -66,9 +65,6 @@ public class IsometricRenderer : MonoBehaviour
 
             //Wähle entsprechende AnimationsArray aus
             directionArray = weaponSwing;
-
-            //Berechne die Richtung/Stance der Animation über DirectionToIndex
-            lastDirection = DirectionToIndex(direction, 8);
 
             //Spiele die Animation über entsprechenden Integer im AnimationController ab.
             weaponAnim.SetTrigger(directionArray[lastDirection]);
@@ -92,9 +88,6 @@ public class IsometricRenderer : MonoBehaviour
 
                 //Wähle entsprechende AnimationsArray aus
                 directionArray = runDirections;
-
-                //Berechne die Richtung der Animation
-                lastDirection = DirectionToIndex(direction, 8);
 
                 //Spiele die Animation ab.
                 weaponAnim.Play(directionArray[lastDirection]);

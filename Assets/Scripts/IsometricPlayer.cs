@@ -192,7 +192,7 @@ public class IsometricPlayer : MonoBehaviour
         //Input Methods
 
 
-        if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
+        if (Input.GetKey(KeyCode.LeftShift))  //Sollte über Menü einstellbar sein #UI_Manager
             ShowStatText();
         else
         {
@@ -200,6 +200,7 @@ public class IsometricPlayer : MonoBehaviour
             ui_Xp.text = "";
         }
 
+        #region Komplizierte Abfrage für den Attack und die Combat-Stance
         // Falls wir uns nicht bereits im Attack befinden, führe Angriff aus.
         if (Input.GetKey(KeyCode.Mouse0) && weaponGameObject.gameObject.GetComponent<Animator>().GetBool("isAttacking") == false)
         {
@@ -227,7 +228,7 @@ public class IsometricPlayer : MonoBehaviour
             //Setze die Combat-Stance des Iso-Renderers zurück, um erneut für Attack-Animation bereit zu sein.
             isoRenderer.inCombatStance = false;
         }
-
+        #endregion
 
 
         //UI Orb
@@ -333,15 +334,16 @@ public class IsometricPlayer : MonoBehaviour
 
 
     // ---- RANGED ATTACK ----- Not implemented yet.
-    void RangedAttack(Vector3 worldPos)        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
+    void RangedAttack(Vector3 worldPos)        
     {
-            /* --Wird wieder enabled, sobald die Skills hinzugefügt wurden--
-            float dist = Vector3.Distance(worldPos, transform.position);
-            if (dist <= playerStats.Range)
-            {
-                Instantiate(skillPrefab[0], transform.position, Quaternion.identity);
-            }
-            */
+        //Derzeit benutzen wir das für Fernkampf. Schau hier: https://youtu.be/wntKVHVwXnc?t=642 für Infos bzgl. Spell Index
+        /* --Wird wieder enabled, sobald die Skills hinzugefügt wurden--
+        float dist = Vector3.Distance(worldPos, transform.position);
+        if (dist <= playerStats.Range)
+        {
+            Instantiate(skillPrefab[0], transform.position, Quaternion.identity);
+        }
+        */
 
     }
 

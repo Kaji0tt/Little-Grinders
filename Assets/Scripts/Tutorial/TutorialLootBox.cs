@@ -17,10 +17,6 @@ public class TutorialLootBox : MonoBehaviour
     [SerializeField]
     Tutorial tutorialBox;
 
-    private void Update()
-    {
-        Debug.Log(PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>());
-    }
 
     private void OnTriggerStay(Collider collider)
     {
