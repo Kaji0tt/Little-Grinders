@@ -11,7 +11,7 @@ public class Scene_LoadNextScene : MonoBehaviour
     private void OnTriggerEnter(Collider collider)
     {
         //Um auf den Spieler zuzugreifen, muss auf diesen mit PlayerManager.instance.play referiert werden.
-        if(collider.gameObject == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
+        if(collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
         {
             SaveSystem.SaveScenePlayer();
 

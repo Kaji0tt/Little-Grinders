@@ -21,7 +21,7 @@ public class Scene_OnSceneLoad : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && sceneGotLoaded == false)
+        if (collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && sceneGotLoaded == false)
         {
 
             PlayerLoad playerload = FindObjectOfType<PlayerLoad>();
