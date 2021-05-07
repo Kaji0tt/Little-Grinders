@@ -27,261 +27,235 @@ public class ItemRolls : MonoBehaviour
     private static ItemModsData[] allMods;
     //----Gedanke, bzw. logische Struktur - umgangsprachlich:
 
-    // --- item.Rarity:                 Die Rarity wird ausgewürfelt, sie bestimmen die Wahrscheinlichkeiten der Rolls 
-    // 20% Chance - Crap-Rarity,        
-    // 33% Chance - Keine Rarity,
-    // 26% Chance - Ungewöhnlich,
-    // 15% Chance - Selten,
-    // 5%  Chance - Episch,
-    // 1%  Chance - Legendär.
+    private string[] rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich", "Selten", "Episch", "Legendär" };
 
-    
-    [HideInInspector]
-    private float _usual = 400, _unbrauchbar = 250, _uncommon = 150, _rare = 100, _epic = 80, _legendary = 20;
-
-    private string[] rarity = new string[] { "Gewöhnlich", "Unbrauchbar", "Ungewöhnlich", "Selten", "Episch", "Legendär" };
-
-    private float[] rarityChances = new float[6];
+    private int[] rarityChances = new int[5];
 
     private float[] _rarityChances;
 
+    #region New Concept for Item-Rools
+    ///--- Rarity of Item ---
+    ///
+    /// RollRarity()
+    ///By a Chance of (15% * Level-Modifier * Map-Modifier)  Item will drop as Uncommon,
+    ///By a Chance of (10% * Level-Modifier * Map-Modifier)  Uncommon Item will become a Rare,
+    ///By a Chance of (5% * Level-Modifier * Map Modifier)   Rare Item will become an Epic,
+    ///By a Chance of (1% * Level-Modifier * Map-Modifier)   Epic Item will become a Legendary
+    ///
+    /// -> This System will allow to add a global Modifier to percentage, scaling by Player-Level or Map-Level
+    ///    E.g.: If player is level 10, these scales will improve by 1,1. If player is Level 20, this scale will improve by 1,2
 
-    public ItemInstance CalculateRolls(ItemInstance item)
+    ///--- Quantity of Rolls ---
+    ///
+    /// As an Item rolls its Rarity, it will have 1 guaranteed Mod of Type of rolled Rarity.
+    /// It then should roll how many additonal Rolls there might be. 
+    /// 
+    /// RollQuantity()
+    ///By a Chance of       (20% * Level-Modifier * Map-Modifier) Item will have an additional Roll, resulting in:        2 Rolls
+    ///then, by a Chance of (15% * Level-Modifier * Map-Modifier) Item will have another additional Roll, resultin in:    3 Rolls
+    ///then, by a Chance of (10% * Level-Modifier * Map Modifier) Item will have another additional Roll, resulting in:   4 Rolls
+    ///then, by a Chance of (5%  * Level-Modifier * Map Modifier)  Item will have another additional Roll,resulting in:   5 Rolls
+    ///then, by a Chance of (1%  * Level-Modifier * Map Modifier)  Item will have another additional Roll,resulting in:   6 Rolls, which should be the highest possible Amount of Rolls.
+    ///
+    /// Every single Roll should then RollRarity(), where the additional Rolls may only Roll below the Rarity of Item, //including BadRolls.
+    #endregion
+
+
+    //private float _usual = 400, _unbrauchbar = 250, _uncommon = 150, _rare = 100, _epic = 80, _legendary = 20;
+    private float uncommon = 200, rare = 100, epic = 50, legendary = 10;
+
+    private float badroll = 155;
+
+    [HideInInspector]
+    public float levelModifier, worldModifier, bossModifier;
+
+    public ItemInstance RollItem(ItemInstance item)
     {
+        //If the Item is not a Consumable
+        if (item.itemType != ItemType.Consumable)
+        {
+            //Roll the rarity of the Item with no dependency (0) so it might get every rarity and safe it to 
+            int currentItemRarity = RollRarity(5);
 
-        RollRarity(item);
+            print("Es wurde die Seltenheitsstufe: " + currentItemRarity + " ausgwählt.");
+
+            item.itemRarity = rarity[currentItemRarity];
+
+            PickASingleRoll(currentItemRarity);
+
+            int numberOfRolls = RollQuantity();
+
+            ItemMods[] allRolledMods = new ItemMods[numberOfRolls];
+
+            print(allRolledMods.Length);
+
+            foreach(ItemMods mods in allRolledMods)
+            {
+
+                AddMods(PickASingleRoll(RollRarity(currentItemRarity)), item);
+            }
+
+        }
+
+
+
+        //Set the Rarity of the Item, if its not a Consumable
+        //if(item.itemType != ItemType.Consumable)
+        //item.itemRarity = rarity[RollRarity(item)];
 
         //Fix Roll
-        PickASingleRoll(item, item.itemRarity);
-
-
-        //Die ROlls fixen wir später.
-        /*
-        int numberOfRolls = Random.Range(0, 6);
-
-        for (int i = 0; i < numberOfRolls; i++)
-        {
-            DefineRolls(item);
-        }
-        */
+        //PickASingleRoll(item, item.itemRarity);
 
 
         return item;
     }
 
-    private ItemInstance RollRarity(ItemInstance item)
+    private string SetRarity()
     {
-        if(item.itemType != ItemType.Consumable)
+        
+        return "hi";
+    }
+
+    //Problem: Der Roll soll anwendbar sowohl auf Items, als auch Mods sein.
+    //Wenn die Item
+    
+    private int RollRarity(int fixedRarity)
+    {
+        //Bestimme den Level-Modifier anhand des Spieler-Levels
+        levelModifier = 1 + 1 * (PlayerManager.instance.player.GetComponent<PlayerStats>().level / 10);
+
+        //Bestimme den Map-Modifier anhand des Welt-Levels (Maps not implemented yet.)
+        // worldModifier = 1 + 1 * (MapLevel / 10)
+
+        //Da wir ein neues Item mit einer fixedRarity von 5 in den Roll geben, kann als itemRarity nicht ein "Unbrauchbaren" Standardwert gesetzt werden. Somit bleibt diese Option nur für Mods.
+        if (Random.Range(0, 1001) <= badroll - 10 * levelModifier && fixedRarity != 5 && fixedRarity > 1)
         {
-            rarityChances = new float[] { _usual, _unbrauchbar, _uncommon, _rare, _epic, _legendary };
-
-            int roll = Random.Range(0, 1001);
-
-            float rollSum = 0;
-
-            for (int i = 0; i < rarityChances.Length; i++)
+            //Wenn das Item ungewöhnlich ist, darf kein Roll diese Raritätsstufe überschreiten.
+            if (Random.Range(0, 1001) <= uncommon * levelModifier && fixedRarity > 1) // Falls ( Random <= Uncommon && Seltenheitsstufe nicht über Uncommon)
             {
-
-                rollSum += rarityChances[i];
-
-                if (rollSum >= roll)
+                //Wenn das Item rare ist, darf kein Roll diese Raritätsstufe überschreiten.
+                if (Random.Range(0, 1001) <= rare * levelModifier && fixedRarity > 2)
                 {
-                    item.itemRarity = rarity[i];
-
-                    return item;
-
+                    //Wenn das Item episch ist, darf kein Roll diese Raritätsstufe überschreiten.
+                    if (Random.Range(0, 1001) <= epic * levelModifier && fixedRarity > 3)
+                    {
+                        //Ein Item, das Legendär ist, darf keine weitere Legendären Rolls erhalten, und darf diese Raritätsstufe nicht erneut überschreiten. 
+                        if (Random.Range(0, 1001) <= legendary * levelModifier && fixedRarity > 4)
+                        {
+                            return 5; //Denkfehler, ein Item das die Rarity Ungewöhnlich erhalten hat, wird stets all Rolls bekommen können, da es im Umkehrschluss auch stets unter dem Schwellenwert liegt.
+                        }
+                        else
+                            return 4;
+                    }
+                    else
+                        return 3;
                 }
-
+                else
+                    return 2;
             }
+            else
+                return 1;
         }
-
-
-        Debug.Log("Could not correctly set Rarity.Roll for " + item.ItemName);
-
-        return null;
+        else
+            return 0;
     }
 
-    //NOT in use currently.
-    private ItemInstance DefineRolls(ItemInstance item)
+    //Geht sicher noch hübscher, do dis.
+    private int RollQuantity()
     {
-        switch (item.itemRarity)
+        //Würfel eine Raritätsstufe.
+        if (Random.Range(0, 1001) <= uncommon * levelModifier)
         {
-            case "Unbrauchbar":
 
-                _rarityChances = new float[] { _unbrauchbar, _usual, _uncommon, _rare, _epic };
-
-                rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich", "Selten", "Episch" };
-
-                PickRarityOfRoll(item, _rarityChances, rarity);
-
-                break;
-
-            case "Gewöhnlich":
-
-                //Since a usual Roll would not roll any Modifiers, skip this Case and just set the Description.
-
-                item.SetValueDescription(item);
-
-                break;
-
-            case "Ungewöhnlich":
-
-                _rarityChances = new float[] { _unbrauchbar, _usual, _uncommon };
-
-                rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich" };
-
-                PickRarityOfRoll(item, _rarityChances, rarity);
-
-                break;
-
-            case "Selten":
-
-                _rarityChances = new float[] { _unbrauchbar, _usual, _uncommon, _rare };
-
-                rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich", "Selten" };
-
-                PickRarityOfRoll(item, _rarityChances, rarity);
-
-                break;
-
-            case "Episch":
-
-                _rarityChances = new float[] { _unbrauchbar, _usual, _uncommon, _rare, _epic };
-
-                rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich", "Selten", "Episch" };
-
-                PickRarityOfRoll(item, _rarityChances, rarity);
-
-                break;
-
-            case "Legendär":
-
-                _rarityChances = new float[] { _usual, _uncommon, _rare, _epic, _legendary };
-
-                rarity = new string[] { "Gewöhnlich", "Ungewöhnlich", "Selten", "Episch", "Legendär" };
-
-                PickRarityOfRoll(item, _rarityChances, rarity);
-
-                break;
-
-        }
-
-        return (item);
-
-    }
-
-    //NOT in use currently.
-    private ItemInstance PickRarityOfRoll(ItemInstance item, float[] _rarityChances, string[] rarity)
-    {
-        //In dependency of float[]_rarityChances.Length, calculate the totalWeight of all possible Rolls.
-
-        float totalPossibleRollWeight = 0;
-
-        for (int i = 0; i < _rarityChances.Length; i++)
-        {
-            totalPossibleRollWeight += _rarityChances[i];
-        }
-
-        //Roll the Rarity of given Roll and pick a List/Array to get Roll from
-
-        int roll = Random.Range(0, Mathf.RoundToInt(totalPossibleRollWeight)+1);
-
-        float rollSum = 0;
-
-        for (int i = 0; i < _rarityChances.Length; i++)
-        {
-            rollSum += _rarityChances[i];           
-
-            if (roll >= totalPossibleRollWeight)
+            if (Random.Range(0, 1001) <= uncommon * levelModifier)
             {
 
-                PickASingleRoll(item, rarity[i]);
+                if (Random.Range(0, 1001) <= rare * levelModifier)
+                {
 
-                return item;
+                    if (Random.Range(0, 1001) <= rare * levelModifier)
+                    {
 
+                        if(Random.Range(0, 10001) <= epic * levelModifier)
+                        {
+                            return 6;
+                        }
+                        else
+                        return 5;
+                    }
+                    else
+                    return 4;
+                }
+                else
+                return 3;
             }
+            else
+            return 2;
 
         }
-
-        Debug.Log("Could not generate a Rarity Roll for item: " + item.ItemName);
-
-        return null;
+        else
+        return 1;      
     }
 
-    private ItemInstance PickASingleRoll(ItemInstance item, string rarityOfRoll)
+
+//Es wäre eigentlich schlauer, wenn PickASingleRoll nicht ein Item zurück gibt, sondern ItemModsData. Dann könnte oben der Array aus ItemMods entsprechende ItemModsData generieren.
+    private ItemModsData PickASingleRoll(int rarityOfRoll)
     {
-        if(item.itemType != ItemType.Consumable)
-        {
-            if (rarityOfRoll == "Legendär")
+
+            if (rarityOfRoll == 5)
             {
                 int randomRoll = Random.Range(0, wLegendaryRolls.Length);
 
-                AddMods(new ItemModsData(wLegendaryRolls[randomRoll]), item);
-
-                return item;
+                return new ItemModsData(wLegendaryRolls[randomRoll]);
 
             }
 
-            if (rarityOfRoll == "Episch")
+            if (rarityOfRoll == 4)
             {
                 int randomRoll = Random.Range(0, wEpicRolls.Length);
 
-                AddMods(new ItemModsData(wEpicRolls[randomRoll]), item);
-
-                return item;
+                return new ItemModsData(wEpicRolls[randomRoll]);
 
             }
 
-            if (rarityOfRoll == "Selten")
+            if (rarityOfRoll == 3)
             {
                 int randomRoll = Random.Range(0, wRareRolls.Length);
 
-                AddMods(new ItemModsData(wRareRolls[randomRoll]), item);
-
-                return item;
+                return new ItemModsData(wRareRolls[randomRoll]);
 
             }
 
-            if (rarityOfRoll == "Ungewöhnlich")
+            if (rarityOfRoll == 2)
             {
                 int randomRoll = Random.Range(0, wUncommonRolls.Length);
 
-                AddMods(new ItemModsData(wUncommonRolls[randomRoll]), item);
-
-                return item;
+                return new ItemModsData(wUncommonRolls[randomRoll]);
 
             }
 
-            if (rarityOfRoll == "Gewöhnlich")
+            if (rarityOfRoll == 1)
             {
 
-                item.SetValueDescription(item);
-
-                return item;
+                return null;
             }
 
-            if (rarityOfRoll == "Unbrauchbar")
+            if (rarityOfRoll == 0)
             {
                 int randomRoll = Random.Range(0, wUncommonRolls.Length);
 
-                AddMods(new ItemModsData(wUnbrauchbarRolls[randomRoll]), item);
-
-                return item;
+                return new ItemModsData(wUnbrauchbarRolls[randomRoll]);
 
             }
-        }
-
-
-
-            return item;
         
+
+            return null;        
 
     }
 
     private static ItemInstance AddMods(ItemModsData mods, ItemInstance item)
     {
-        //Debug.Log("Item Rolls hat versucht Mods auf die ItemInstanz " + item.ItemName + " hinzuzufügen");
-            
+        //Schreibe Flat und Percent Values der Mods auf das Item
 
         for(int i = 0; i < mods.flatValues.Length; i++)
             item.flatValues[i] += mods.flatValues[i];
@@ -289,17 +263,17 @@ public class ItemRolls : MonoBehaviour
 
         for (int i = 0; i < mods.percentValues.Length; i++)
             item.percentValues[i] += mods.percentValues[i];
-        /*
-            Berechnung geht, Description fehlt noch bei Standard Items.
 
-        */
+
+        //Schreibe den Namen des Items.
             item.ItemName += mods.name;
 
-        //Debug.Log("Füge den Mod:" + mods.name + " hinzu.");
+        //Füge den Mod:" + mods.name + " hinzu.
             item.addedItemMods.Add(mods);
         
             item.SetValueDescription(item);
 
+        //Gebe das Item zurück.
         return item;
         
     }
@@ -310,31 +284,24 @@ public class ItemRolls : MonoBehaviour
 
         return item;
     }
-    //Lebenstränke können derzeit nicht konsumiert werden.
 
-    //Rarity wird nicht in "AddMods" generiert sondern im Vorfeld. Das generiert in Farbfehler in der Anzeige nach dem laden.
-    //Mods werden beim speichern mehrfach geladen, kummulieren also.
-
-    //Tatsächlich werden alle Added-Mods in der itemInstance abgespeichert.. wahrscheinlich liegt der fehler in dem setzen der Display&Rarity Daten.
-
+    //Ist vorallem für das Laden wichtig, damit das "Flat-Item" mit den entsprechend abgespeicherten Mods generiert wird.
     public static ItemInstance GetItemStats(string ID, List<ItemModsData> mods, string rarity)
     {
-
+        //Erstelle eine ItemInstance, welche aus der Datenbank anhand der ID ausgelesen wird.
         ItemInstance item = new ItemInstance(ItemDatabase.GetItemID(ID));
 
+        //Setze die Rarität des Items entsprechend des gespeicherten Strings.
         SetRarity(item, rarity);
 
-        //print(mods.Count);
-        
+        //Füge die entsprechenden Mods, welche abgespeichert wurden, dem Item hinzu.
         foreach (ItemModsData mod in mods)
         {
             AddMods(mod, item);
         }
         
+        //Gebe das Item zurück.
         return item;
- 
-
-        //ItemInstance.AddMods(modsItemDatabase.GetItemID(ID);
 
         
     }

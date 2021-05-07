@@ -108,7 +108,7 @@ public class ItemDatabase : MonoBehaviour
 
                     print("Item: " + item.ItemName + " was choosen.");
 
-                    ItemWorld.SpawnItemWorld(position, itemRolls.CalculateRolls(new ItemInstance(item)));
+                    ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(new ItemInstance(item)));
 
                     break;
               }
