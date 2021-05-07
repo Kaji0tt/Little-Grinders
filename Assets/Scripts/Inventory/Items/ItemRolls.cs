@@ -115,7 +115,7 @@ public class ItemRolls : MonoBehaviour
     private int RollRarity(int fixedRarity)
     {
         //Bestimme den Level-Modifier anhand des Spieler-Levels
-        levelModifier = 1 + 1 * (PlayerManager.instance.player.GetComponent<PlayerStats>().level / 10);
+        levelModifier = 1 + 1 * (PlayerManager.instance.player.GetComponent<PlayerStats>().level / 100);
 
         //Bestimme den Map-Modifier anhand des Welt-Levels (Maps not implemented yet.)
         // worldModifier = 1 + 1 * (MapLevel / 10)
