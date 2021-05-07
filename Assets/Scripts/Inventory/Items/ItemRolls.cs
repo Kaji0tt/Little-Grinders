@@ -29,7 +29,7 @@ public class ItemRolls : MonoBehaviour
 
     private string[] rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich", "Selten", "Episch", "Legendär" };
 
-    private int[] rarityChances = new int[5];
+    private int[] rarityChances = new int[6];
 
     private float[] _rarityChances;
 
@@ -37,8 +37,8 @@ public class ItemRolls : MonoBehaviour
     ///--- Rarity of Item ---
     ///
     /// RollRarity()
-    ///By a Chance of (15% * Level-Modifier * Map-Modifier)  Item will drop as Uncommon,
-    ///By a Chance of (10% * Level-Modifier * Map-Modifier)  Uncommon Item will become a Rare,
+    ///By a Chance of (20% * Level-Modifier * Map-Modifier)  Item will drop as Uncommon,
+    ///By a Chance of (15% * Level-Modifier * Map-Modifier)  Uncommon Item will become a Rare,
     ///By a Chance of (5% * Level-Modifier * Map Modifier)   Rare Item will become an Epic,
     ///By a Chance of (1% * Level-Modifier * Map-Modifier)   Epic Item will become a Legendary
     ///
@@ -62,9 +62,9 @@ public class ItemRolls : MonoBehaviour
 
 
     //private float _usual = 400, _unbrauchbar = 250, _uncommon = 150, _rare = 100, _epic = 80, _legendary = 20;
-    private float uncommon = 200, rare = 100, epic = 50, legendary = 10;
+    private float uncommon = 200, rare = 150, epic = 50, legendary = 10;
 
-    private float badroll = 155;
+    private float badroll = 155; 
 
     [HideInInspector]
     public float levelModifier, worldModifier, bossModifier;
@@ -74,37 +74,29 @@ public class ItemRolls : MonoBehaviour
         //If the Item is not a Consumable
         if (item.itemType != ItemType.Consumable)
         {
-            //Roll the rarity of the Item with no dependency (0) so it might get every rarity and safe it to 
-            int currentItemRarity = RollRarity(5);
+            //Roll the rarity of the Item with no dependency (5) so it might get every rarity.
+            int currentItemRarity = RollRarity(6);
 
-            print("Es wurde die Seltenheitsstufe: " + currentItemRarity + " ausgwählt.");
-
+            //Set the Rarity of the item.
             item.itemRarity = rarity[currentItemRarity];
 
+            //Pick a Single Roll of itemRarity Type
             PickASingleRoll(currentItemRarity);
 
-            int numberOfRolls = RollQuantity();
+            //Roll how many Mods the Item might have, with the Modifier of the currentItemRarity
+            int numberOfRolls = RollQuantity(currentItemRarity);
 
             ItemMods[] allRolledMods = new ItemMods[numberOfRolls];
 
-            print(allRolledMods.Length);
-
             foreach(ItemMods mods in allRolledMods)
             {
-
+                //Foreach Mod ( pick a Single Roll ( at Random where ( the Mod-Rarity might only be below Item-Rarity )) and add it to the item)
                 AddMods(PickASingleRoll(RollRarity(currentItemRarity)), item);
             }
 
         }
 
 
-
-        //Set the Rarity of the Item, if its not a Consumable
-        //if(item.itemType != ItemType.Consumable)
-        //item.itemRarity = rarity[RollRarity(item)];
-
-        //Fix Roll
-        //PickASingleRoll(item, item.itemRarity);
 
 
         return item;
@@ -117,6 +109,7 @@ public class ItemRolls : MonoBehaviour
     }
 
     //Problem: Der Roll soll anwendbar sowohl auf Items, als auch Mods sein.
+
     //Wenn die Item
     
     private int RollRarity(int fixedRarity)
@@ -128,21 +121,72 @@ public class ItemRolls : MonoBehaviour
         // worldModifier = 1 + 1 * (MapLevel / 10)
 
         //Da wir ein neues Item mit einer fixedRarity von 5 in den Roll geben, kann als itemRarity nicht ein "Unbrauchbaren" Standardwert gesetzt werden. Somit bleibt diese Option nur für Mods.
-        if (Random.Range(0, 1001) <= badroll - 10 * levelModifier && fixedRarity != 5 && fixedRarity > 1)
+        if ((Random.Range(0, 1001) >= (badroll - 10 * levelModifier)) && (fixedRarity > 0)) //IF True -> (0 = Badroll)
         {
             //Wenn das Item ungewöhnlich ist, darf kein Roll diese Raritätsstufe überschreiten.
-            if (Random.Range(0, 1001) <= uncommon * levelModifier && fixedRarity > 1) // Falls ( Random <= Uncommon && Seltenheitsstufe nicht über Uncommon)
+            if ((Random.Range(0, 1001) <= (uncommon * levelModifier)) && (fixedRarity > 1)) // IF True -> (1 = GEWÖHNLICH)
             {
                 //Wenn das Item rare ist, darf kein Roll diese Raritätsstufe überschreiten.
-                if (Random.Range(0, 1001) <= rare * levelModifier && fixedRarity > 2)
+                if ((Random.Range(0, 1001) <= (rare * levelModifier)) && (fixedRarity > 2))
                 {
                     //Wenn das Item episch ist, darf kein Roll diese Raritätsstufe überschreiten.
-                    if (Random.Range(0, 1001) <= epic * levelModifier && fixedRarity > 3)
+                    if ((Random.Range(0, 1001) <= (epic * levelModifier)) && (fixedRarity > 3))
                     {
                         //Ein Item, das Legendär ist, darf keine weitere Legendären Rolls erhalten, und darf diese Raritätsstufe nicht erneut überschreiten. 
-                        if (Random.Range(0, 1001) <= legendary * levelModifier && fixedRarity > 4)
+                        if ((Random.Range(0, 1001) <= (legendary * levelModifier)) && (fixedRarity > 4))
                         {
-                            return 5; //Denkfehler, ein Item das die Rarity Ungewöhnlich erhalten hat, wird stets all Rolls bekommen können, da es im Umkehrschluss auch stets unter dem Schwellenwert liegt.
+                            //rarity[5]=Legendary
+                            return 5; 
+                        }
+                        //Ansonsten: rarity[4]=Epic
+                        else
+                            return 4;
+                    }
+                    //Ansonsten: rarity[3]=Rare
+                    else
+                        return 3;
+                }
+                //Ansonsten: rarity[2]=Uncommon 
+                else
+                    return 2;
+            }
+            //Ansonsten: rarity[1]=Gewöhnlich // No Mod
+            else
+                return 1;
+        }
+        //Ansonsten: rarity[0]=Unbrauchbar
+        else
+            return 0;
+    }
+
+    //Die Menge der Rolls wird nicht nur über die Standardwerte berechnet, sondern skaliert mit der Raritätsstufe des Items.
+    private int RollQuantity(int rarityModifier)
+    {
+        //Das Item darf nur Mods erhalten, wenn es nicht von der Seltenheitsstuffe "Gewöhnlich" ist.
+        if (rarityModifier != 1)
+
+            //Würfel die Menge der zusätzlichen Modifier.
+            if (Random.Range(0, 1001) <= uncommon * levelModifier * rarityModifier / 2)
+            {
+
+                //Beispiel: Chance Minimum 2 zusätzliche Rolls zu erhalten, bei Spielerstufe 100 bei einem Item der Rarität Episch.
+                //          150 * 2 * 3 / 2 = 450
+                //          Mit 45% Wahrscheinlichkeit, würde ein episches Item auf Level 100 mit 2 oder mehr zusätzlichen Rolls generiert werden.
+                if (Random.Range(0, 1001) <= rare * levelModifier * rarityModifier / 2)
+                {
+
+                    if (Random.Range(0, 1001) <= rare * levelModifier * rarityModifier / 2)
+                    {
+
+                        if (Random.Range(0, 1001) <= epic * levelModifier * rarityModifier / 2)
+                        {
+
+                            if (Random.Range(0, 10001) <= legendary * levelModifier * rarityModifier / 2)
+                            {
+                                return 6;
+                            }
+                            else
+                                return 5;
                         }
                         else
                             return 4;
@@ -152,49 +196,11 @@ public class ItemRolls : MonoBehaviour
                 }
                 else
                     return 2;
+
             }
             else
                 return 1;
-        }
-        else
-            return 0;
-    }
-
-    //Geht sicher noch hübscher, do dis.
-    private int RollQuantity()
-    {
-        //Würfel eine Raritätsstufe.
-        if (Random.Range(0, 1001) <= uncommon * levelModifier)
-        {
-
-            if (Random.Range(0, 1001) <= uncommon * levelModifier)
-            {
-
-                if (Random.Range(0, 1001) <= rare * levelModifier)
-                {
-
-                    if (Random.Range(0, 1001) <= rare * levelModifier)
-                    {
-
-                        if(Random.Range(0, 10001) <= epic * levelModifier)
-                        {
-                            return 6;
-                        }
-                        else
-                        return 5;
-                    }
-                    else
-                    return 4;
-                }
-                else
-                return 3;
-            }
-            else
-            return 2;
-
-        }
-        else
-        return 1;      
+        else return 0;
     }
 
 
