@@ -12,8 +12,6 @@ public class DirectionCollider : MonoBehaviour
     }
     public GameObject dirCollider;
     #endregion
-
-    private float attackCD = 0;
     
     private Vector3 right, forward;
 

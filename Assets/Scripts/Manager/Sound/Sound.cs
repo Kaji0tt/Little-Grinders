@@ -11,6 +11,7 @@ public class Sound
 
     public AudioClip clip;
 
+    [HideInInspector]
     public SoundType soundType;
 
     [Range(0f, 1f)]

@@ -63,7 +63,7 @@ public class MainMenu : MonoBehaviour
         AudioManager.instance.SetMusicVolume(newValue);
 
     }
-
+    /*
     public void SetInterfaceVolume(float newValue) 
     {
 
@@ -92,7 +92,7 @@ public class MainMenu : MonoBehaviour
 
     }
 
-
+    */
 
 
 

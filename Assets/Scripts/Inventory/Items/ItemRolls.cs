@@ -24,7 +24,7 @@ public class ItemRolls : MonoBehaviour
 
     public ItemMods[] wUnbrauchbarRolls;
 
-    private static ItemModsData[] allMods;
+    private ItemModsData[] allMods;
     //----Gedanke, bzw. logische Struktur - umgangsprachlich:
 
     private string[] rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich", "Selten", "Episch", "Legendär" };
@@ -75,24 +75,43 @@ public class ItemRolls : MonoBehaviour
         if (item.itemType != ItemType.Consumable)
         {
             //Roll the rarity of the Item with no dependency (5) so it might get every rarity.
-            int currentItemRarity = RollRarity(6);
+            int currentItemRarity = RollRarity(6, "item");
 
             //Set the Rarity of the item.
             item.itemRarity = rarity[currentItemRarity];
 
-            //Pick a Single Roll of itemRarity Type
-            PickASingleRoll(currentItemRarity);
+            //If item is not of Common-Rarity, pick a Single Roll of itemRarity Type and add it to the item.
+            if (currentItemRarity != 1)
+            AddMods(PickASingleRoll(currentItemRarity), item); 
 
-            //Roll how many Mods the Item might have, with the Modifier of the currentItemRarity
+            //Roll how many Mods the Item might have, with the Modifier of the currentItemRarity. 
+            //Note that in RollQuantity, item will only roll additional Mods, if its above "Common".
             int numberOfRolls = RollQuantity(currentItemRarity);
 
-            ItemMods[] allRolledMods = new ItemMods[numberOfRolls];
+            print("The item rolled with: " + numberOfRolls + " additional Mods, by a rarity of " + currentItemRarity);
 
-            foreach(ItemMods mods in allRolledMods)
+            //Populate Mods-Array by the rolled Quantity of Mods
+            ItemModsData[] allMods = new ItemModsData[numberOfRolls];
+
+            //Downscale the possible rarity of Mods by 1 of ItemRarity
+            if (currentItemRarity > 0)
+                currentItemRarity  -= 1;
+
+            //Create a Mod for each ItemModsData in Array allMods
+            for (int i = 0; i <= allMods.Length -1; i++ )
             {
-                //Foreach Mod ( pick a Single Roll ( at Random where ( the Mod-Rarity might only be below Item-Rarity )) and add it to the item)
-                AddMods(PickASingleRoll(RollRarity(currentItemRarity)), item);
+
+                //Roll the Rarity of each Mod, capped at below the rarity of the Item
+                allMods[i] = PickASingleRoll(RollRarity(currentItemRarity, "mod"));
             }
+
+            foreach(ItemModsData mod in allMods)
+            {
+                //Foreach Mod, add according Values to the Item, if its not null. Null-Mods may occur, if the itemRarity is of type "Uncommon"
+                if (mod != null) 
+                    AddMods(mod, item);
+            }
+
 
         }
 
@@ -112,7 +131,7 @@ public class ItemRolls : MonoBehaviour
 
     //Wenn die Item
     
-    private int RollRarity(int fixedRarity)
+    private int RollRarity(int fixedRarity, string type)
     {
         //Bestimme den Level-Modifier anhand des Spieler-Levels
         levelModifier = 1 + 1 * (PlayerManager.instance.player.GetComponent<PlayerStats>().level / 100);
@@ -120,21 +139,31 @@ public class ItemRolls : MonoBehaviour
         //Bestimme den Map-Modifier anhand des Welt-Levels (Maps not implemented yet.)
         // worldModifier = 1 + 1 * (MapLevel / 10)
 
+
         //Da wir ein neues Item mit einer fixedRarity von 5 in den Roll geben, kann als itemRarity nicht ein "Unbrauchbaren" Standardwert gesetzt werden. Somit bleibt diese Option nur für Mods.
-        if ((Random.Range(0, 1001) >= (badroll - 10 * levelModifier)) && (fixedRarity > 0)) //IF True -> (0 = Badroll)
+        if ((Random.Range(0, 1001) >= (badroll - 10 * levelModifier)) && (fixedRarity > 0)) 
         {
-            //Wenn das Item ungewöhnlich ist, darf kein Roll diese Raritätsstufe überschreiten.
-            if ((Random.Range(0, 1001) <= (uncommon * levelModifier)) && (fixedRarity > 1)) // IF True -> (1 = GEWÖHNLICH)
+            if (type != "mod")
+                print("Passed the Bad Rarity, rolling for an Uncommon! /n Rarity is currently Common.");
+            else
+                print("Items only of type Uncommon can't roll additional mods but badrolls, resultung in Null;");
+
+            //Wenn das Item gewöhnlich ist, darf kein Roll diese Raritätsstufe überschreiten. Falls es sich um ein Mod handelt, der gewürfelt wird, wird die Abfrage geskipped.
+            if ((Random.Range(0, 1001) <= uncommon * levelModifier || type == "mod") && (fixedRarity > 1))
             {
+                print("Passed the Uncommon Rarity, rolling for a Rare! /n Rarity is currently Uncommon.");
                 //Wenn das Item rare ist, darf kein Roll diese Raritätsstufe überschreiten.
                 if ((Random.Range(0, 1001) <= (rare * levelModifier)) && (fixedRarity > 2))
                 {
+                    print("Passed the Rare Rarity, rolling for an Epic! /n Rarity is currently Rare.");
                     //Wenn das Item episch ist, darf kein Roll diese Raritätsstufe überschreiten.
                     if ((Random.Range(0, 1001) <= (epic * levelModifier)) && (fixedRarity > 3))
                     {
+                        print("Passed the Epic Rarity, rolling for a Legendary! /n Rarity is currently Epic.");
                         //Ein Item, das Legendär ist, darf keine weitere Legendären Rolls erhalten, und darf diese Raritätsstufe nicht erneut überschreiten. 
-                        if ((Random.Range(0, 1001) <= (legendary * levelModifier)) && (fixedRarity > 4))
+                        if ((Random.Range(0, 1001) <= (legendary * levelModifier) || type != "mod") && (fixedRarity > 4))
                         {
+                            print("Congrats! Rolled a Legendary!");
                             //rarity[5]=Legendary
                             return 5; 
                         }
@@ -150,7 +179,7 @@ public class ItemRolls : MonoBehaviour
                 else
                     return 2;
             }
-            //Ansonsten: rarity[1]=Gewöhnlich // No Mod
+            //Ansonsten: rarity[1]=Gewöhnlich // No Mods
             else
                 return 1;
         }
@@ -162,8 +191,8 @@ public class ItemRolls : MonoBehaviour
     //Die Menge der Rolls wird nicht nur über die Standardwerte berechnet, sondern skaliert mit der Raritätsstufe des Items.
     private int RollQuantity(int rarityModifier)
     {
-        //Das Item darf nur Mods erhalten, wenn es nicht von der Seltenheitsstuffe "Gewöhnlich" ist.
-        if (rarityModifier != 1)
+        //Das Item darf nur zusätzliche Mods erhalten, wenn es nicht von der Seltenheitsstuffe "Unbrauchbar", "Gewöhnlich" oder "Ungewöhnlich" ist.
+        if (rarityModifier > 2)
 
             //Würfel die Menge der zusätzlichen Modifier.
             if (Random.Range(0, 1001) <= uncommon * levelModifier * rarityModifier / 2)

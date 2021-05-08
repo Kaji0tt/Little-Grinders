@@ -33184,12 +33184,9 @@ MonoBehaviour:
   weaponGameObject: {fileID: 487395891}
   rangedWeapon: 0
   equippedItems: []
-  uiInventory: {fileID: 0}
-  test_item: {fileID: 11400000, guid: 46ed7f78bac7973478ea999ad57e8276, type: 2}
-  test_item2: {fileID: 11400000, guid: 46177b1529ef2ed46b49494f8927936a, type: 2}
-  test_item3: {fileID: 11400000, guid: 2428f44ffe24971438bc675471445815, type: 2}
-  HpSlider: {fileID: 0}
-  XpSlider: {fileID: 0}
+  uiInventory: {fileID: 1478674764}
+  HpSlider: {fileID: 38373140}
+  XpSlider: {fileID: 1420727273}
   idleRotSpeed: 10
 --- !u!54 &977074813
 Rigidbody:
@@ -33244,7 +33241,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 977074807}
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 1.47, y: 0.025, z: 12.69}
+  m_LocalPosition: {x: 0.7, y: 0.025, z: 12.69}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 487395894}
@@ -52364,7 +52361,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 314956410}
   m_HandleRect: {fileID: 314956409}
   m_Direction: 2
-  m_Value: 1.0000001
+  m_Value: 1
   m_Size: 0.46374434
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -66627,6 +66624,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f3bc1fd16d1845e47a0e216af1a29353, type: 2}
   wUnbrauchbarRolls:
   - {fileID: 11400000, guid: 5a803bc07cb2043409a8f4efbf148d85, type: 2}
+  levelModifier: 0
+  worldModifier: 0
+  bossModifier: 0
 --- !u!1 &1944735508
 GameObject:
   m_ObjectHideFlags: 0
