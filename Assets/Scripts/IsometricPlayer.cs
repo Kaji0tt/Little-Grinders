@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
-using System;
 
 public class IsometricPlayer : MonoBehaviour
 {
@@ -209,6 +206,7 @@ public class IsometricPlayer : MonoBehaviour
 
             //Führe Angriff aus.
             Attack();
+                
         }
 
         // Solange wir uns noch im Intervall des Combats befinden, soll die Zeit der Combat-Stance reduziert werden.
@@ -318,8 +316,12 @@ public class IsometricPlayer : MonoBehaviour
         //Play Animation - > Animation-Speed = AttackSpeed vom Schwert.
         weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
 
-        //Play Sound -> Incoming.
+        //Play Sound -> Incoming.        
+        string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3" };
 
+        if(AudioManager.instance != null)
+        AudioManager.instance.Play(attackSounds[Random.Range(0, 3)]);
+        
 
         //Detect all enemies in rage of attack by #DirectionCollider
         foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)

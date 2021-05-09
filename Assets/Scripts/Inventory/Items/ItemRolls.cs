@@ -141,7 +141,7 @@ public class ItemRolls : MonoBehaviour
 
 
         //Da wir ein neues Item mit einer fixedRarity von 5 in den Roll geben, kann als itemRarity nicht ein "Unbrauchbaren" Standardwert gesetzt werden. Somit bleibt diese Option nur für Mods.
-        if ((Random.Range(0, 1001) >= (badroll - 10 * levelModifier)) && (fixedRarity > 0)) 
+        if ((Random.Range(1, 1000) >= (badroll - 10 * levelModifier)) && (fixedRarity > 0)) 
         {
             if (type != "mod")
                 print("Passed the Bad Rarity, rolling for an Uncommon! /n Rarity is currently Common.");
@@ -149,19 +149,19 @@ public class ItemRolls : MonoBehaviour
                 print("Items only of type Uncommon can't roll additional mods but badrolls, resultung in Null;");
 
             //Wenn das Item gewöhnlich ist, darf kein Roll diese Raritätsstufe überschreiten. Falls es sich um ein Mod handelt, der gewürfelt wird, wird die Abfrage geskipped.
-            if ((Random.Range(0, 1001) <= uncommon * levelModifier || type == "mod") && (fixedRarity > 1))
+            if ((Random.Range(1, 1000) <= uncommon * levelModifier || type == "mod") && (fixedRarity > 1))
             {
                 print("Passed the Uncommon Rarity, rolling for a Rare! /n Rarity is currently Uncommon.");
                 //Wenn das Item rare ist, darf kein Roll diese Raritätsstufe überschreiten.
-                if ((Random.Range(0, 1001) <= (rare * levelModifier)) && (fixedRarity > 2))
+                if ((Random.Range(1, 1000) <= (rare * levelModifier)) && (fixedRarity > 2))
                 {
                     print("Passed the Rare Rarity, rolling for an Epic! /n Rarity is currently Rare.");
                     //Wenn das Item episch ist, darf kein Roll diese Raritätsstufe überschreiten.
-                    if ((Random.Range(0, 1001) <= (epic * levelModifier)) && (fixedRarity > 3))
+                    if ((Random.Range(1, 1000) <= (epic * levelModifier)) && (fixedRarity > 3))
                     {
                         print("Passed the Epic Rarity, rolling for a Legendary! /n Rarity is currently Epic.");
                         //Ein Item, das Legendär ist, darf keine weitere Legendären Rolls erhalten, und darf diese Raritätsstufe nicht erneut überschreiten. 
-                        if ((Random.Range(0, 1001) <= (legendary * levelModifier) || type != "mod") && (fixedRarity > 4))
+                        if ((Random.Range(1, 1000) <= (legendary * levelModifier) || type != "mod") && (fixedRarity > 4))
                         {
                             print("Congrats! Rolled a Legendary!");
                             //rarity[5]=Legendary
@@ -201,16 +201,16 @@ public class ItemRolls : MonoBehaviour
                 //Beispiel: Chance Minimum 2 zusätzliche Rolls zu erhalten, bei Spielerstufe 100 bei einem Item der Rarität Episch.
                 //          150 * 2 * 3 / 2 = 450
                 //          Mit 45% Wahrscheinlichkeit, würde ein episches Item auf Level 100 mit 2 oder mehr zusätzlichen Rolls generiert werden.
-                if (Random.Range(0, 1001) <= rare * levelModifier * rarityModifier / 2)
+                if (Random.Range(1, 1000) <= rare * levelModifier * rarityModifier / 2)
                 {
 
-                    if (Random.Range(0, 1001) <= rare * levelModifier * rarityModifier / 2)
+                    if (Random.Range(1, 1000) <= rare * levelModifier * rarityModifier / 2)
                     {
 
-                        if (Random.Range(0, 1001) <= epic * levelModifier * rarityModifier / 2)
+                        if (Random.Range(1, 1000) <= epic * levelModifier * rarityModifier / 2)
                         {
 
-                            if (Random.Range(0, 10001) <= legendary * levelModifier * rarityModifier / 2)
+                            if (Random.Range(1, 10000) <= legendary * levelModifier * rarityModifier / 2)
                             {
                                 return 6;
                             }

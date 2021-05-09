@@ -38,7 +38,13 @@ public class DirectionCollider : MonoBehaviour
             Move();
 
         }
-        
+
+        //Das is noch nicht perfekt, aber OnTriggerExit() funktioniert nicht richtig, 
+        //um die entsprechenden Listeneinträge zu entfernen. Deshalb dafür noch WorkAround finden.
+        foreach (EnemyController enemy in collidingEnemyControllers)
+            if (enemy == null)
+                collidingEnemyControllers.Remove(enemy);
+
     }
 
     private void Move()
@@ -47,14 +53,16 @@ public class DirectionCollider : MonoBehaviour
         direction = Vector3.ClampMagnitude(direction, 1);
         direction = direction.normalized;
 
+        //Wenn der Charakter sich mit mehr als 0,3f bewegt,
         if (direction.magnitude > .3f)
+            //Setze die Position des DirColliders auf die des Charakters, + direction
             transform.position = new Vector3(PlayerManager.instance.player.transform.position.x, PlayerManager.instance.player.transform.position.y, PlayerManager.instance.player.transform.position.z)
                                  + direction;
 
     }
 
     //Bleibt die Frage, ob es schlauer ist im Enemy.cs oder im DirCollider die TakeDamage abfrage zu callen.
-    
+
 
  
     private void OnTriggerEnter(Collider collider)

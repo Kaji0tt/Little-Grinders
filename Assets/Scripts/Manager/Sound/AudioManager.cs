@@ -81,13 +81,13 @@ public class AudioManager : MonoBehaviour
 
     private void AwakeSetSliders()
     {
-        /*
+        
         musicSounds = new List<Sound>();
         entitieSounds = new List<Sound>();
         interfaceSounds = new List<Sound>();
         effectSounds = new List<Sound>();
         atmosphereSounds = new List<Sound>();
-        */
+        
         if (musicSlider != null)
             musicSlider.value = PlayerPrefs.GetFloat("musicVol");
 

@@ -543,6 +543,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 961852500}
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuBack2
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &83700731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1459,6 +1470,17 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 961852500}
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: PauseExit
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &214982805
@@ -3540,6 +3562,17 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 961852500}
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuBack1
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &493120944
@@ -5813,6 +5846,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 961852500}
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuBack1
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &826540365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6777,6 +6821,12 @@ MonoBehaviour:
     volume: 0.5
     loop: 0
     source: {fileID: 0}
+  - name: PauseExit
+    clip: {fileID: 8300000, guid: 432685028b4e3a9449d63832f655d244, type: 3}
+    soundType: 0
+    volume: 0.5
+    loop: 0
+    source: {fileID: 0}
   musicSounds:
   - name: MainMusic
     clip: {fileID: 8300000, guid: 3b4f6fb68692d85419c7294678770eff, type: 3}
@@ -6786,7 +6836,25 @@ MonoBehaviour:
     source: {fileID: 0}
   entitieSounds: []
   atmosphereSounds: []
-  effectSounds: []
+  effectSounds:
+  - name: Attack1
+    clip: {fileID: 8300000, guid: 91e41bc1af60f4648a8e2ba0284e3bb1, type: 3}
+    soundType: 0
+    volume: 0.3
+    loop: 0
+    source: {fileID: 0}
+  - name: Attack2
+    clip: {fileID: 8300000, guid: a3a930e4a22533e43bf4f851ed8096d7, type: 3}
+    soundType: 0
+    volume: 0.3
+    loop: 0
+    source: {fileID: 0}
+  - name: Attack3
+    clip: {fileID: 8300000, guid: 6c72a86200508a64fa39234bbef96db3, type: 3}
+    soundType: 0
+    volume: 0.3
+    loop: 0
+    source: {fileID: 0}
   sounds:
   - name: Dead2
     clip: {fileID: 8300000, guid: f0f7c46ec8050e249916939ff77c5292, type: 3}
@@ -7688,6 +7756,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 961852500}
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuBack2
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1036568332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8501,6 +8580,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 961852500}
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuBack2
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1130712101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8650,7 +8740,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: MenuBack1
+          m_StringArgument: MenuBack2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1142825733
@@ -9078,7 +9168,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Menu - Select
+          m_StringArgument: MenuSelect
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1216936933
@@ -11294,6 +11384,17 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 961852500}
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuBack1
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1439464485
@@ -14053,6 +14154,17 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 961852500}
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuBack2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1818696254
