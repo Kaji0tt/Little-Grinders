@@ -11,4 +11,5 @@ The character unlocks not only new modifiers for his items while leveling up, bu
 unlocks new map-themes and item-concepts. By this,this arcade grinder is supposed to be
 driven by the players curiosity.                                                                    
 └───────────────────────────────────────────────┘
+                              
                               Looten und Leveln!
