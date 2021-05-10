@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Relike der Anfänge. Die EQSlots sind mit das erste komplexere, was je programmiert wurde in diesem Spiel, und sind deshalb der absolute Inbegriff des Spaghetti-Monsters.
 public class EQSlotWeapon : MonoBehaviour
 {
 
     public static ItemInstance weapon_Item;
-    private Inventory inventory;
+
     private GameObject weaponAnim;
-
-    public IsometricPlayer isometricPlayer;
-
 
     private Int_SlotBtn int_slotBtn;
 
@@ -63,20 +61,16 @@ public class EQSlotWeapon : MonoBehaviour
     {
 
 
-        inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-
-        inventory.AddItem(weapon_Item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(weapon_Item);
 
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
 
-        isometricPlayer.Dequip(weapon_Item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(weapon_Item);
 
         weaponAnim.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Blank_Icon");
 
         if (weapon_Item.RangedWeapon)
-            isometricPlayer.rangedWeapon = false;
-
-        //ItemSave.equippedItems.Remove(weapon_Item);
+            PlayerManager.instance.player.GetComponent<IsometricPlayer>().rangedWeapon = false;
 
         weapon_Item = null;
 
@@ -104,7 +98,7 @@ public class EQSlotWeapon : MonoBehaviour
 
 
         if (item.RangedWeapon)
-            isometricPlayer.rangedWeapon = true;
+            PlayerManager.instance.player.GetComponent<IsometricPlayer>().rangedWeapon = true;
     }
 
     public void TaskOnClick()

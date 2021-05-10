@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DirectionCollider : MonoBehaviour
@@ -41,9 +42,16 @@ public class DirectionCollider : MonoBehaviour
 
         //Das is noch nicht perfekt, aber OnTriggerExit() funktioniert nicht richtig, 
         //um die entsprechenden Listeneinträge zu entfernen. Deshalb dafür noch WorkAround finden.
-        foreach (EnemyController enemy in collidingEnemyControllers)
-            if (enemy == null)
+        for(int i = 0; i < collidingEnemyControllers.Count; i++)
+        {
+            if(collidingEnemyControllers.ElementAt(i) == null)
+            {
+                EnemyController enemy = collidingEnemyControllers.ElementAt(i);
                 collidingEnemyControllers.Remove(enemy);
+            }
+
+        }
+
 
     }
 

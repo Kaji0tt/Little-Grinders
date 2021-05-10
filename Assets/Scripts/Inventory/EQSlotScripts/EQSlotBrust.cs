@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class EQSlotBrust : MonoBehaviour
 {
     public static ItemInstance brust_Item;
-    private Inventory inventory;
-    public IsometricPlayer isometricPlayer;
 
     private Int_SlotBtn int_slotBtn;
 
@@ -50,13 +48,11 @@ public class EQSlotBrust : MonoBehaviour
     {
 
 
-        inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-
-        inventory.AddItem(brust_Item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(brust_Item);
 
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
 
-        isometricPlayer.Dequip(brust_Item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(brust_Item);
 
         //ItemSave.equippedItems.Remove(brust_Item);
 

@@ -256,7 +256,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         if (percentStatMods[4] != null) playerStats.AttackSpeed.AddModifier(percentStatMods[4]);
         if (percentStatMods[5] != null) playerStats.MovementSpeed.AddModifier(percentStatMods[5]);
 
-
+        if (Range != 0) playerStats.Range += Range;
         //Implementierung von Special Effekten
 
 
@@ -279,6 +279,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         if (percentStatMods[4] != null) playerStats.AttackSpeed.RemoveModifier(percentStatMods[4]);
         if (percentStatMods[5] != null) playerStats.MovementSpeed.RemoveModifier(percentStatMods[5]);
 
+        if (Range != 0) playerStats.Range -= Range;
         //Implementierung von Special Effekten
     }
 

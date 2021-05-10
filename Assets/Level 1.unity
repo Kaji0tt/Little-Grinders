@@ -16895,7 +16895,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd1eac5456747e40a11d39bc76b1c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isometricPlayer: {fileID: 0}
 --- !u!114 &486898809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24812,7 +24811,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0ba23188049f749bee8c59866f9d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isometricPlayer: {fileID: 0}
 --- !u!114 &747871635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31731,7 +31729,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0641d718accf8214fae99dbbe4cc1633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isometricPlayer: {fileID: 0}
 --- !u!114 &945392677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38061,7 +38058,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3b9cd47653bd04ba55662f5f8f6922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isometricPlayer: {fileID: 0}
 --- !u!114 &1128603014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52361,8 +52357,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 314956410}
   m_HandleRect: {fileID: 314956409}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.46374434
+  m_Value: 0.9999999
+  m_Size: 0.46374425
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -67162,7 +67158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee0a073ba2e9444f8c2c5357fb4ab97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isometricPlayer: {fileID: 0}
 --- !u!114 &1958390607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68829,6 +68824,7 @@ GameObject:
   - component: {fileID: 2017943880}
   - component: {fileID: 2017943882}
   - component: {fileID: 2017943881}
+  - component: {fileID: 2017943883}
   m_Layer: 5
   m_Name: HUD-img
   m_TagString: Untagged
@@ -68892,6 +68888,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017943879}
   m_CullTransparentMesh: 0
+--- !u!114 &2017943883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017943879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee2fbcdec116b343b591d4a655a51ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2023107740 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7839687458832828457, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
@@ -71166,7 +71174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e57fc21261e0034d82f980a632f1cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isometricPlayer: {fileID: 0}
 --- !u!114 &2068098667
 MonoBehaviour:
   m_ObjectHideFlags: 0

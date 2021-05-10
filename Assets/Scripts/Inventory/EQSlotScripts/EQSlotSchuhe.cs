@@ -21,15 +21,7 @@ public class EQSlotSchuhe : MonoBehaviour
     // 🗸Equipment.deeuip packt das entsprechende Item zurück ins Inventory
     // 🗸Equipment.deeuip setzt PlayerStat Values zurück
 
-
-    // Wenn Kopf ausgerüstet, alles erhält Kopf außer Schuhe -> Kopf Print wird nur 1x wieder gegeben. Es scheint so, als seien alle anderen Slots zum Kopf.GameEvent triggered.
-    // Wenn Brust ausgerüstet, Null Error
-    // Wenn Waffe ausgerüstet, alles funktioniert richtig
-    // Wenn Schuhe ausgerüstet, alles funktioniert richtig
-
     public static ItemInstance schuhe_Item;
-    private Inventory inventory;
-    public IsometricPlayer isometricPlayer;
 
 
     //Das Problem hinter Int_slotBtn ist, dass es ein Objekt ist, dessen es mehrere Instanzen gibt. OnSceneLoad weiß nicht, um welche Instanz es sich handelt.
@@ -73,13 +65,11 @@ public class EQSlotSchuhe : MonoBehaviour
     {
 
         
-        inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-
-        inventory.AddItem(schuhe_Item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(schuhe_Item);
 
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
 
-        isometricPlayer.Dequip(schuhe_Item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(schuhe_Item);
 
         //ItemSave.equippedItems.Remove(schuhe_Item);
 

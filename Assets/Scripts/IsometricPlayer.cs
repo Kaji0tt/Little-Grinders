@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class IsometricPlayer : MonoBehaviour
 {
@@ -187,8 +188,6 @@ public class IsometricPlayer : MonoBehaviour
     {
 
         //Input Methods
-
-
         if (Input.GetKey(KeyCode.LeftShift))  //Sollte über Menü einstellbar sein #UI_Manager
             ShowStatText();
         else
@@ -197,37 +196,8 @@ public class IsometricPlayer : MonoBehaviour
             ui_Xp.text = "";
         }
 
-        #region Komplizierte Abfrage für den Attack und die Combat-Stance
-        // Falls wir uns nicht bereits im Attack befinden, führe Angriff aus.
-        if (Input.GetKey(KeyCode.Mouse0) && weaponGameObject.gameObject.GetComponent<Animator>().GetBool("isAttacking") == false)
-        {
-            //Setze den Timer für die Combat-Stance zurück.
-            combatStanceTime = 1; // Später, attackSpeed länge.
 
-            //Führe Angriff aus.
-            Attack();
-                
-        }
-
-        // Solange wir uns noch im Intervall des Combats befinden, soll die Zeit der Combat-Stance reduziert werden.
-        else if (combatStanceTime >= 0)
-        {
-            combatStanceTime -= Time.deltaTime;
-
-            //Setze die Combat-Stance des Iso-Renderers auf True, damit dieser die Animationen währe "isAttacking" nicht mehrfach versucht abzuspielen.
-            isoRenderer.inCombatStance = true;
-        }
-
-        //Sobald die Combat-Stance Zeit abgelaufen ist, setzen wir den Animator zurück, um erneut animiert werden zu können.
-        if (combatStanceTime <= 0)
-        {
-            weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", false);
-
-            //Setze die Combat-Stance des Iso-Renderers zurück, um erneut für Attack-Animation bereit zu sein.
-            isoRenderer.inCombatStance = false;
-        }
-        #endregion
-
+        PlayerCombatStance();
 
         //UI Orb
         HpSlider.value = playerStats.Get_currentHp() / playerStats.Hp.Value;
@@ -271,9 +241,112 @@ public class IsometricPlayer : MonoBehaviour
 
     }
 
-    public bool InLineOfSight()         //Abfrage, ob Spieler in LOS zum Geschoss / Spell ist.
+    //Funktion um das erweiterte UI einzublenden (Statistiken)
+    void ShowStatText()
     {
-        
+        //Aktiviere entsprechende UI Elemente und schreibe diese.
+        uiHpOrb.SetActive(true);
+        ui_HpOrbTxt.text = Mathf.RoundToInt(playerStats.Get_currentHp()) + "\n" + Mathf.RoundToInt(playerStats.Hp.Value);
+        ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
+    }
+
+    void PlayerCombatStance()
+    {
+        // Falls wir uns nicht bereits im Attack befinden und sich die Maus nicht über dem UI befindet, führe Angriff aus.
+        if (Input.GetKey(KeyCode.Mouse0) && weaponGameObject.gameObject.GetComponent<Animator>().GetBool("isAttacking") == false && !IsMouseOverUIWithIgnores())
+        {
+            //Setze den Timer für die Combat-Stance zurück.
+            combatStanceTime = 1; // Später, attackSpeed länge.
+
+            //Führe Angriff aus.
+            Attack();
+
+        }
+
+        // Solange wir uns noch im Intervall des Combats befinden, soll die Zeit der Combat-Stance reduziert werden.
+        else if (combatStanceTime >= 0)
+        {
+            combatStanceTime -= Time.deltaTime;
+
+            //Setze die Combat-Stance des Iso-Renderers auf True, damit dieser die Animationen währe "isAttacking" nicht mehrfach versucht abzuspielen.
+            isoRenderer.inCombatStance = true;
+        }
+
+        //Sobald die Combat-Stance Zeit abgelaufen ist, setzen wir den Animator zurück, um erneut animiert werden zu können.
+        if (combatStanceTime <= 0)
+        {
+            weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", false);
+
+            //Setze die Combat-Stance des Iso-Renderers zurück, um erneut für Attack-Animation bereit zu sein.
+            isoRenderer.inCombatStance = false;
+        }
+    }
+
+    //Prüft, ob sich die Maus über einem UI-Element befindet.
+    private bool IsMouseOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    private bool IsMouseOverUIWithIgnores() //C @CodeMonkey
+    {
+        //Erstelle eine lokale Variabel von der Position der Maus
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = Input.mousePosition;
+
+        //Erstelle eine Liste aus Raycast-Daten
+        List<RaycastResult> raycastResultList = new List<RaycastResult>();
+
+        //Erstelle Raycasts von der Position der Maus und speichere ihre Ergebnisse in der Liste
+        EventSystem.current.RaycastAll(pointerEventData, raycastResultList);
+
+        //Filter die Liste auf vom Raycast getroffene Objekte und entferne jene, welche das ClickThrough Skript besitzen.
+        for (int i = 0; i < raycastResultList.Count; i++)
+        {
+            if (raycastResultList[i].gameObject.GetComponent<ClickThrough>() != null)
+            {
+                raycastResultList.RemoveAt(i);
+                    i--;
+            }
+        }
+
+        return raycastResultList.Count > 0;
+    }
+
+    //Starten der Combat Stance
+    void Attack()
+    {
+
+        //*** ANIMATION *** - > Animation-Speed = AttackSpeed vom Schwert.
+        weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
+
+
+        //*** SOUND ***    
+        string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };
+
+        //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
+        if(AudioManager.instance != null)
+
+        //Play a Sound at random.
+        AudioManager.instance.Play(attackSounds[Random.Range(0, 5)]);
+
+
+        //*** COLLISION***
+        //Detect all enemies in rage of attack by #DirectionCollider
+        foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
+        {
+            //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
+            if (enemy != null)
+                enemy.TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+
+        }
+
+    }
+
+    //Abfrage, ob Spieler in LOS zum Geschoss / Spell ist.
+    public bool InLineOfSight() 
+    {
+
         //Generiere einen Raycast Array, der all Collider abspeichert, durch die er geht - der Rayc wird von der Camera zur Mouse-Position im 3D Raum gecasted.
         RaycastHit[] hits;
         hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 100.0f);
@@ -297,43 +370,8 @@ public class IsometricPlayer : MonoBehaviour
             return true;
         else
             return false;
-        
-    }
-
-    //Funktion um das erweiterte UI einzublenden (Statistiken)
-    void ShowStatText() 
-    {
-        //Aktiviere entsprechende UI Elemente und schreibe diese.
-        uiHpOrb.SetActive(true);
-        ui_HpOrbTxt.text = Mathf.RoundToInt(playerStats.Get_currentHp()) + "\n" + Mathf.RoundToInt(playerStats.Hp.Value);
-        ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
-    }
-
-    //Starten der Combat Stance
-    void Attack()
-    {
-
-        //Play Animation - > Animation-Speed = AttackSpeed vom Schwert.
-        weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
-
-        //Play Sound -> Incoming.        
-        string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3" };
-
-        if(AudioManager.instance != null)
-        AudioManager.instance.Play(attackSounds[Random.Range(0, 3)]);
-        
-
-        //Detect all enemies in rage of attack by #DirectionCollider
-        foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
-        {
-            //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
-            if (enemy != null)
-                enemy.TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-
-        }
 
     }
-
 
     // ---- RANGED ATTACK ----- Not implemented yet.
     void RangedAttack(Vector3 worldPos)        

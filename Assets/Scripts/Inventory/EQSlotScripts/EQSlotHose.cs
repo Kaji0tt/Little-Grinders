@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class EQSlotHose : MonoBehaviour
 {
     public static ItemInstance hose_Item;
-    private Inventory inventory;
-    public IsometricPlayer isometricPlayer;
 
     private Int_SlotBtn int_slotBtn;
 
@@ -47,9 +45,7 @@ public class EQSlotHose : MonoBehaviour
     public void Dequip()
     {
 
-        inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-
-        inventory.AddItem(hose_Item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(hose_Item);
 
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
 

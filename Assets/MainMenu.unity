@@ -6838,21 +6838,45 @@ MonoBehaviour:
   atmosphereSounds: []
   effectSounds:
   - name: Attack1
-    clip: {fileID: 8300000, guid: 91e41bc1af60f4648a8e2ba0284e3bb1, type: 3}
+    clip: {fileID: 8300000, guid: 81fa90a75ac0e504e861c37ca35dbf8e, type: 3}
     soundType: 0
-    volume: 0.3
+    volume: 0.25
     loop: 0
     source: {fileID: 0}
   - name: Attack2
-    clip: {fileID: 8300000, guid: a3a930e4a22533e43bf4f851ed8096d7, type: 3}
+    clip: {fileID: 8300000, guid: 0672731383179f14ebbc700bea34d411, type: 3}
     soundType: 0
-    volume: 0.3
+    volume: 0.25
     loop: 0
     source: {fileID: 0}
   - name: Attack3
-    clip: {fileID: 8300000, guid: 6c72a86200508a64fa39234bbef96db3, type: 3}
+    clip: {fileID: 8300000, guid: de523a83ff73e5145b12ba7a576fa70d, type: 3}
     soundType: 0
-    volume: 0.3
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Attack4
+    clip: {fileID: 8300000, guid: cbb2e2c6b0df16549830400356c32cb9, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Attack5
+    clip: {fileID: 8300000, guid: 56f1ced72d8000c44a027a728b09dcb7, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Attack6
+    clip: {fileID: 8300000, guid: 3a4aa609b70d59f43a8c5cf3761f758f, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Attack7
+    clip: {fileID: 8300000, guid: 3a4aa609b70d59f43a8c5cf3761f758f, type: 3}
+    soundType: 0
+    volume: 0.25
     loop: 0
     source: {fileID: 0}
   sounds:

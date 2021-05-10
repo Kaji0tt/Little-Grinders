@@ -4,8 +4,6 @@ using UnityEngine.UI;
 public class EQSlotKopf : MonoBehaviour
 {
     public static ItemInstance kopf_Item;
-    private Inventory inventory;
-    public IsometricPlayer isometricPlayer;
 
     private Int_SlotBtn int_slotBtn;
 
@@ -46,9 +44,7 @@ public class EQSlotKopf : MonoBehaviour
     {
 
 
-        inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-
-        inventory.AddItem(kopf_Item);
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(kopf_Item);
 
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
 
