@@ -316,30 +316,33 @@ public class IsometricPlayer : MonoBehaviour
     //Starten der Combat Stance
     void Attack()
     {
-
-        //*** ANIMATION *** - > Animation-Speed = AttackSpeed vom Schwert.
-        weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
-
-
-        //*** SOUND ***    
-        string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };
-
-        //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-        if(AudioManager.instance != null)
-
-        //Play a Sound at random.
-        AudioManager.instance.Play(attackSounds[Random.Range(0, 5)]);
-
-
-        //*** COLLISION***
-        //Detect all enemies in rage of attack by #DirectionCollider
-        foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
+        //Prüfe, ob überhaupt eine Waffe angelegt ist, bevor angegriffen wird.
+        if (playerStats.Range != 0)
         {
-            //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
-            if (enemy != null)
-                enemy.TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+            //*** ANIMATION *** - > Animation-Speed = AttackSpeed vom Schwert.
+            weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
 
+
+            //*** SOUND ***    
+            string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };
+
+            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
+            if (AudioManager.instance != null)
+
+                //Play a Sound at random.
+                AudioManager.instance.Play(attackSounds[Random.Range(0, 5)]);
+
+
+            //*** COLLISION***
+            //Detect all enemies in rage of attack by #DirectionCollider
+            foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
+            {
+                //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
+                if (enemy != null)
+                    enemy.TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+            }
         }
+
 
     }
 

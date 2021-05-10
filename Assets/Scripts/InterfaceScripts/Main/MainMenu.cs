@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public CanvasGroup mainMenu, saveMenu, optionsMenu, roadMenu;
+    public CanvasGroup mainMenu, saveMenu, optionsMenu, roadMenu, whiteBackground;
     public void PlayGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -33,6 +33,7 @@ public class MainMenu : MonoBehaviour
     public void ToggleMainMenu()
     {
         mainMenu.alpha = mainMenu.alpha > 0 ? 0 : 1;
+        if(whiteBackground != null)whiteBackground.alpha = whiteBackground.alpha > 0 ? 0 : 1;
         mainMenu.blocksRaycasts = mainMenu.blocksRaycasts == true ? false : true;
     }
 
@@ -61,39 +62,25 @@ public class MainMenu : MonoBehaviour
     {
 
         AudioManager.instance.SetMusicVolume(newValue);
-
     }
-    /*
+    
     public void SetInterfaceVolume(float newValue) 
     {
 
         AudioManager.instance.SetInterfaceVolume(newValue);
-
     }
 
-    public void SetEntitiesVolume(float newValue) 
-    {
-
-        AudioManager.instance.SetEntitiesVolume(newValue);
-
-    }
-
-    public void SetEffectVolume(float newValue) 
-    {
-
-        AudioManager.instance.SetEffectVolume(newValue);
-
-    }
 
     public void SetAtmosphereVolume(float newValue) 
     {
 
         AudioManager.instance.SetAtmosphereVolume(newValue);
-
     }
+    public void SetEffectVolume(float newValue)
+    {
 
-    */
-
+        AudioManager.instance.SetEffectVolume(newValue);
+    }
 
 
 }

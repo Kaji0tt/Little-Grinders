@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum SoundType { Interface, Entities, Music, Atmosphere, Effect}
+public enum SoundType { Interface, Music, Atmosphere, Effect}
 [System.Serializable]
 public class Sound 
 {

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class AudioManager : MonoBehaviour
 {
     //Definieren, welche Sounds es gibt, für mehr Übersicht im Inspektor.
-    public List<Sound> interfaceSounds, musicSounds, entitieSounds, atmosphereSounds, effectSounds;
+    public List<Sound> interfaceSounds, musicSounds, atmosphereSounds, effectSounds;
 
     //Das Array Sounds, welches alle vorhergehenden Listen ordnet.
 
@@ -18,7 +18,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
 
     //Slider Initialisieren, welche über Unity und Ingame für die Optionen dienen.
-    public Slider interfaceSlider, musicSlider, entitieSlider, atmosphereSlider, effectSlider;
+    public Slider interfaceSlider, musicSlider, atmosphereSlider, effectSlider;
 
     void Awake()
     {
@@ -35,7 +35,7 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         //Erstelle einen Array aus Sound-Listen, um diese in der finalen "Sounds" Liste zu speichern.
-        List<Sound>[] allSounds = new List<Sound>[] { interfaceSounds, musicSounds, entitieSounds, atmosphereSounds, effectSounds };
+        List<Sound>[] allSounds = new List<Sound>[] { interfaceSounds, musicSounds, atmosphereSounds, effectSounds };
         PopulateSounds(allSounds);
 
         //Falls eine neue Szene geladen wird:
@@ -60,7 +60,25 @@ public class AudioManager : MonoBehaviour
             {
                 s.source.volume = PlayerPrefs.GetFloat("musicVol");
                 musicSounds.Add(s);               
-            }            
+            }
+
+            if (s.soundType == SoundType.Atmosphere)
+            {
+                s.source.volume = PlayerPrefs.GetFloat("atmosphereVol");
+                atmosphereSounds.Add(s);
+            }
+
+            if (s.soundType == SoundType.Interface)
+            {
+                s.source.volume = PlayerPrefs.GetFloat("interfaceVol");
+                interfaceSounds.Add(s);
+            }
+
+            if (s.soundType == SoundType.Effect)
+            {
+                s.source.volume = PlayerPrefs.GetFloat("effectVol");
+                effectSounds.Add(s);
+            }
         }
     }
 
@@ -74,7 +92,28 @@ public class AudioManager : MonoBehaviour
                 musicSlider = go.GetComponent<Slider>();
 
                 musicSlider.value = PlayerPrefs.GetFloat("musicVol");
-            }            
+            }
+
+            if (go.name == "InterfaceSlider")
+            {
+                interfaceSlider = go.GetComponent<Slider>();
+
+                interfaceSlider.value = PlayerPrefs.GetFloat("interfaceVol");
+            }
+
+            if (go.name == "AtmosphereSlider")
+            {
+                atmosphereSlider = go.GetComponent<Slider>();
+
+                atmosphereSlider.value = PlayerPrefs.GetFloat("atmosphereVol");
+            }
+
+            if (go.name == "EffectSlider")
+            {
+                effectSlider = go.GetComponent<Slider>();
+
+                effectSlider.value = PlayerPrefs.GetFloat("effectVol");
+            }
         }
         
     }
@@ -83,16 +122,12 @@ public class AudioManager : MonoBehaviour
     {
         
         musicSounds = new List<Sound>();
-        entitieSounds = new List<Sound>();
         interfaceSounds = new List<Sound>();
         effectSounds = new List<Sound>();
         atmosphereSounds = new List<Sound>();
         
         if (musicSlider != null)
             musicSlider.value = PlayerPrefs.GetFloat("musicVol");
-
-        if (entitieSlider != null)
-            entitieSlider.value = PlayerPrefs.GetFloat("entitieVol");
 
         if (interfaceSlider != null)
             interfaceSlider.value = PlayerPrefs.GetFloat("interfaceVol");
@@ -121,10 +156,8 @@ public class AudioManager : MonoBehaviour
                 if (i == 1)
                     sound.soundType = SoundType.Music;
                 if (i == 2)
-                    sound.soundType = SoundType.Entities;
-                if (i == 3)
                     sound.soundType = SoundType.Atmosphere;
-                if (i == 4)
+                if (i == 3)
                     sound.soundType = SoundType.Effect;
 
             }
@@ -168,10 +201,9 @@ public class AudioManager : MonoBehaviour
         foreach(Sound s in musicSounds)
         {
             s.source.volume = musicSlider.value;
-        }
-        
+        }        
     }
-    /*
+    
     internal void SetInterfaceVolume(float newValue)
     {
         interfaceSlider.value = newValue;
@@ -180,25 +212,12 @@ public class AudioManager : MonoBehaviour
 
 
         if (interfaceSounds.Count != 0)
-            foreach (Sound s in musicSounds)
+            foreach (Sound s in interfaceSounds)
             {
                 s.source.volume = interfaceSlider.value;
             }
     }
 
-    internal void SetEntitiesVolume(float newValue)
-    {
-        entitieSlider.value = newValue;
-
-        PlayerPrefs.SetFloat("entitieVol", newValue);
-
-
-        if (entitieSounds.Count != 0)
-            foreach (Sound s in entitieSounds)
-            {
-                s.source.volume = entitieSlider.value;
-            }
-    }
     internal void SetAtmosphereVolume(float newValue)
     {
         atmosphereSlider.value = newValue;
@@ -225,6 +244,6 @@ public class AudioManager : MonoBehaviour
                 s.source.volume = effectSlider.value;
             }
     }
-    */
+    
     #endregion
 }
