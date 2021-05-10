@@ -1,7 +1,7 @@
 # Little-Grinders
 
 
-┌────────────────────────── ### Game Concept ### 
+┌───── ### Game Concept ### 
 
 Little Grinders is supposed to be an endless Arcade-Grinder with no Level-Cap at all 
 For this, everything in the game is set to scale by player and map level.               
