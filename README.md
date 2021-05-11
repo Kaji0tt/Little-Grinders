@@ -14,7 +14,15 @@ driven by the players curiosity.
                               
                               Looten und Leveln!
 
-┌───── ### Open Project's ### 
+┌───── ### Open-Art Project's ### 
+
 - Sprite Librarys für gerüstete Items und animierten Spieler, ggf. Fritz
 - Lightning & Shadows
-- Map Scaling, Map in General
+- Einheitliches Interface Design im Sketchy-Paper Style, ggf. Lukas
+- Landscape Sprites, ggf. Hannah
+- Icons
+
+
+┌───── ### Open-Script Project's ### 
+- Map Scaling, Maps in General
+- Skills & Abilitys
