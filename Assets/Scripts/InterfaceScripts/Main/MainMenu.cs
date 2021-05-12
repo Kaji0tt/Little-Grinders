@@ -56,7 +56,7 @@ public class MainMenu : MonoBehaviour
     }
 
 
-
+    
     // Sound Option Interface Settings
     public void SetMusicVolume(float newValue) //Set of Values should be configured in UI_Manager.cs, setting of source.volume should be conf
     {
@@ -81,6 +81,6 @@ public class MainMenu : MonoBehaviour
 
         AudioManager.instance.SetEffectVolume(newValue);
     }
-
+    
 
 }

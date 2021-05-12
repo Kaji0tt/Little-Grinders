@@ -121,12 +121,6 @@ public class ItemRolls : MonoBehaviour
         return item;
     }
 
-    private string SetRarity()
-    {
-        
-        return "hi";
-    }
-
     //Problem: Der Roll soll anwendbar sowohl auf Items, als auch Mods sein.
 
     //Wenn die Item

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using System;
+using TMPro;
 
 public class UI_Manager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UI_Manager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
     }
     #endregion
     [SerializeField]
@@ -31,8 +33,6 @@ public class UI_Manager : MonoBehaviour
 
     public KeyCode toggleCam, pickKey;
 
-    [SerializeField]
-    private CanvasGroup characterMenu; // character Menue, weitergegeben wird ebenfalls welches fenster auf ist.
 
     [SerializeField]
     private CanvasGroup inventoryTab;
@@ -47,7 +47,7 @@ public class UI_Manager : MonoBehaviour
     private CanvasGroup actionBar;
 
 
-    //private hexcolor;
+
 
     //behinderte Methode die unter Menüs des Charakter Menüs zu deklarieren.
     //public GameObject talentTree, inventoryMenu; //Muss auch über Canvas group geregelt werden, da zu beginn nicht aktivierte Spielobjekte einen Null-Error ergeben!
@@ -63,8 +63,12 @@ public class UI_Manager : MonoBehaviour
         GameIsPaused = false;
     }
 
+
     private void Start()
     {
+
+        
+
         tooltipText = tooltip.GetComponentInChildren<Text>();
 
         //SetUseable(actionButtons[0], )
@@ -148,26 +152,6 @@ public class UI_Manager : MonoBehaviour
         {
             OpenCloseMenu(inventoryTab);
         }
-
-        //Derzeit soll das Inventar nicht mit Tab zum Skilltree geändert werden, dafür wird dieser wohl zu komplex werden.
-        /*
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (skillTabOpen)
-            {
-                OpenCloseMenu(skillTab);
-                OpenCloseMenu(inventoryTab);
-            }
-
-
-            if (inventoryTabOpen)
-            {
-                OpenCloseMenu(inventoryTab);
-                OpenCloseMenu(skillTab);
-            }
-
-        }
-        */
 
     }
 
@@ -298,6 +282,7 @@ public class UI_Manager : MonoBehaviour
         */
 
     }
+
 
 
 }

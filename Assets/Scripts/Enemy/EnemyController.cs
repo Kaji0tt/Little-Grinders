@@ -117,12 +117,26 @@ public class EnemyController : MonoBehaviour
                 {
 
                     PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+
                     attackCD -= Time.deltaTime;
+
                     if (playerStats != null)
                     {
                         if (attackCD <= 0)
                         {
+                            
+                            //Sound-Array mit den dazugehörigen Sound-Namen
+                            string[] hitSounds = new string[] { "Mob_ZombieAttack1", "Mob_ZombieAttack2", "Mob_ZombieAttack3" };
+
+                            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
+                            if (AudioManager.instance != null)
+
+                                //Play a Sound at random.
+                                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+                            
+
                             playerStats.TakeDamage(AttackPower.Value);
+
                             attackCD = 1f / AttackSpeed.Value;
                         }
                     }
@@ -252,6 +266,17 @@ public class EnemyController : MonoBehaviour
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
 
             Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+
+            
+            //Sound-Array mit den dazugehörigen Sound-Namen
+            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
+
+            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
+            if (AudioManager.instance != null)
+
+                //Play a Sound at random.
+                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+            
 
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }

@@ -26,6 +26,8 @@ public class EQSlotWeapon : MonoBehaviour
 
         int_slotBtn = GetComponent<Int_SlotBtn>();
 
+        weaponAnim = GameObject.Find("WeaponAnimParent");
+
     }
 
 
@@ -87,8 +89,6 @@ public class EQSlotWeapon : MonoBehaviour
         int_slotBtn.StoreItem(item);
 
         GetComponent<Image>().sprite = item.icon;
-
-        weaponAnim = GameObject.Find("WeaponAnimParent");
 
         weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
 

@@ -1109,8 +1109,8 @@ GameObject:
   - component: {fileID: 127254503}
   - component: {fileID: 127254502}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: DOWN
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1177,7 +1177,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 127254503}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: DOWN
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &127254503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1601,8 +1612,8 @@ GameObject:
   - component: {fileID: 204589387}
   - component: {fileID: 204589386}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: SLOT2
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1669,7 +1680,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 204589387}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SLOT2
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &204589387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1971,7 +1993,7 @@ GameObject:
   - component: {fileID: 223144086}
   - component: {fileID: 223144085}
   m_Layer: 5
-  m_Name: SLOT4
+  m_Name: SLOT4_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3315,7 +3337,7 @@ GameObject:
   - component: {fileID: 405040989}
   - component: {fileID: 405040988}
   m_Layer: 5
-  m_Name: UP
+  m_Name: UP_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3712,7 +3734,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'RoadMap
 
-    PreAlpha v0.1'
+    PreAlpha v0.2'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0051f117921e8e8418d8ed41753dba4f, type: 2}
   m_sharedMaterial: {fileID: 7572188749982920899, guid: 0051f117921e8e8418d8ed41753dba4f,
@@ -3825,7 +3847,7 @@ GameObject:
   - component: {fileID: 464504313}
   - component: {fileID: 464504312}
   m_Layer: 5
-  m_Name: STATS
+  m_Name: STATS_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4171,7 +4193,7 @@ GameObject:
   - component: {fileID: 500159641}
   - component: {fileID: 500159640}
   m_Layer: 5
-  m_Name: SLOT3
+  m_Name: SLOT3_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4496,8 +4518,8 @@ GameObject:
   - component: {fileID: 576005445}
   - component: {fileID: 576005444}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: SLOT4
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4564,7 +4586,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 576005445}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SLOT4
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &576005445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4767,7 +4800,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 5.6, y: 188.25}
+  m_AnchoredPosition: {x: 5.6, y: 188}
   m_SizeDelta: {x: 231.49, y: 51.35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &617957385
@@ -5001,7 +5034,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 37.25}
+  m_AnchoredPosition: {x: 0, y: 37}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &658404687
@@ -5124,8 +5157,9 @@ MonoBehaviour:
   m_text: "+ Add Drop Sounds in coherence of Rolls\n+ Add Talent-Tree Skills \n(Talent
     Tree is Subject to Change)\n+ Add more 2D animated Mobs and Mobs in General\n+Add
     2D Visuals for Player\n+Add Sound-Design (Danke Jotti & Rink)\n+Add Power-Scaling
-    in dependency of Player-Level for Mobs\n+Add KeyBind Options\n+Add procedual
-    generated Maps"
+    in dependency of Player-Level for Mobs\n+Set KeyBind Options to actually bind
+    Keys\n+Fix Scaling of MainMenu\n+Add procedual generated Maps\n+Fix all Bugs
+    left behind."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5170,7 +5204,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 341
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -5194,12 +5228,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0.009942869}
   m_textInfo:
     textComponent: {fileID: 661723776}
-    characterCount: 323
+    characterCount: 397
     spriteCount: 0
-    spaceCount: 54
-    wordCount: 51
+    spaceCount: 67
+    wordCount: 64
     linkCount: 0
-    lineCount: 10
+    lineCount: 12
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -5418,8 +5452,8 @@ GameObject:
   - component: {fileID: 716139559}
   - component: {fileID: 716139558}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: SLOT1
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5486,7 +5520,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 716139559}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SLOT1
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &716139559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5536,7 +5581,7 @@ GameObject:
   - component: {fileID: 741063218}
   - component: {fileID: 741063217}
   m_Layer: 5
-  m_Name: MAP
+  m_Name: MAP_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5694,7 +5739,7 @@ GameObject:
   - component: {fileID: 771329458}
   - component: {fileID: 771329457}
   m_Layer: 5
-  m_Name: PICK
+  m_Name: PICK_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6828,8 +6873,8 @@ GameObject:
   - component: {fileID: 887019890}
   - component: {fileID: 887019889}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: SLOT3
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6896,7 +6941,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 887019890}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SLOT3
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &887019890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7446,8 +7502,8 @@ GameObject:
   - component: {fileID: 946593091}
   - component: {fileID: 946593090}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: PICK
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7514,7 +7570,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 946593091}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: PICK
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &946593091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7663,6 +7730,78 @@ MonoBehaviour:
     volume: 0.25
     loop: 0
     source: {fileID: 0}
+  - name: Mob_ZombieHit1
+    clip: {fileID: 8300000, guid: e48925e89102da34da425bca0837983f, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Mob_ZombieHit2
+    clip: {fileID: 8300000, guid: eb4d12047fff05a4597426479b812f2c, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Mob_ZombieHit3
+    clip: {fileID: 8300000, guid: 78d99c65cb71a5b44b29ba2ea849147c, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Mob_ZombieAttack1
+    clip: {fileID: 8300000, guid: b232b9be23406d7448c5f0feb2d4a2c3, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Mob_ZombieAttack2
+    clip: {fileID: 8300000, guid: d1c89eb578792854b9e9b480917d54b8, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Mob_ZombieAttack3
+    clip: {fileID: 8300000, guid: a1dee85520651f342b7b90b487c3373c, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Dead2
+    clip: {fileID: 8300000, guid: f0f7c46ec8050e249916939ff77c5292, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Drop_Uncommon
+    clip: {fileID: 8300000, guid: bb14512e4eb2d5844a0da71dc614d525, type: 3}
+    soundType: 0
+    volume: 0.5
+    loop: 0
+    source: {fileID: 0}
+  - name: Drop_Rare
+    clip: {fileID: 8300000, guid: c505b43310fb38b44811778454f59476, type: 3}
+    soundType: 0
+    volume: 0.5
+    loop: 0
+    source: {fileID: 0}
+  - name: Drop_Epic
+    clip: {fileID: 8300000, guid: 04cf1ed637f1fb644baac8c28724952f, type: 3}
+    soundType: 0
+    volume: 0.6
+    loop: 0
+    source: {fileID: 0}
+  - name: Drop_Legendary
+    clip: {fileID: 8300000, guid: 91bab7d0cfadee74fac4764035b30f3c, type: 3}
+    soundType: 0
+    volume: 0.65
+    loop: 0
+    source: {fileID: 0}
+  - name: None
+    clip: {fileID: 8300000, guid: 3a4aa609b70d59f43a8c5cf3761f758f, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
   sounds: []
   interfaceSlider: {fileID: 1065741200}
   musicSlider: {fileID: 855593263}
@@ -7768,7 +7907,7 @@ GameObject:
   - component: {fileID: 971435154}
   - component: {fileID: 971435153}
   m_Layer: 5
-  m_Name: DOWN
+  m_Name: DOWN_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8278,8 +8417,8 @@ GameObject:
   - component: {fileID: 999125018}
   - component: {fileID: 999125017}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: RIGHT
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8346,7 +8485,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 999125018}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: RIGHT
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &999125018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9966,8 +10116,8 @@ GameObject:
   - component: {fileID: 1157616465}
   - component: {fileID: 1157616464}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: LEFT
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10034,7 +10184,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1157616465}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: LEFT
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1157616465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10567,7 +10728,7 @@ GameObject:
   - component: {fileID: 1259958620}
   - component: {fileID: 1259958619}
   m_Layer: 5
-  m_Name: SLOT5
+  m_Name: SLOT5_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10884,8 +11045,8 @@ GameObject:
   - component: {fileID: 1276283528}
   - component: {fileID: 1276283527}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: SLOT5
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10952,7 +11113,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1276283528}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SLOT5
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1276283528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11023,10 +11195,10 @@ RectTransform:
   m_Father: {fileID: 1925669146}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 66.1}
-  m_SizeDelta: {x: 1822.1238, y: 1182.1406}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 66}
+  m_SizeDelta: {x: -69.87622, y: 102.140625}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1276834238
 MonoBehaviour:
@@ -11456,6 +11628,7 @@ GameObject:
   - component: {fileID: 1300116309}
   - component: {fileID: 1300116308}
   - component: {fileID: 1300116310}
+  - component: {fileID: 1300116311}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: Untagged
@@ -11501,6 +11674,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a999e1bc58d8a8a4fbc2e792d0484625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1300116311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300116307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a7fadc474a647488524567b7556f17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1300290822
 GameObject:
   m_ObjectHideFlags: 0
@@ -11513,7 +11698,7 @@ GameObject:
   - component: {fileID: 1300290825}
   - component: {fileID: 1300290824}
   m_Layer: 5
-  m_Name: SKILLS
+  m_Name: SKILLS_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12212,7 +12397,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -2, y: -355.75}
+  m_AnchoredPosition: {x: -2, y: -356}
   m_SizeDelta: {x: 200, y: 52.700012}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1344726162
@@ -12572,8 +12757,8 @@ GameObject:
   - component: {fileID: 1381354293}
   - component: {fileID: 1381354292}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: SKILLS
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12640,7 +12825,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1381354293}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SKILLS
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1381354293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13404,7 +13600,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 18.17, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -144, y: 52.75}
+  m_AnchoredPosition: {x: -144, y: 53}
   m_SizeDelta: {x: 159.6, y: 50.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1547588407
@@ -13522,8 +13718,8 @@ GameObject:
   - component: {fileID: 1555404455}
   - component: {fileID: 1555404454}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: UP
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13590,7 +13786,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1555404455}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: UP
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1555404455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14841,8 +15048,8 @@ GameObject:
   - component: {fileID: 1703128922}
   - component: {fileID: 1703128921}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: STATS
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14909,7 +15116,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1703128922}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: STATS
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1703128922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15347,7 +15565,7 @@ GameObject:
   - component: {fileID: 1734338765}
   - component: {fileID: 1734338764}
   m_Layer: 5
-  m_Name: SLOT1
+  m_Name: SLOT1_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15505,7 +15723,7 @@ GameObject:
   - component: {fileID: 1775052177}
   - component: {fileID: 1775052176}
   m_Layer: 5
-  m_Name: LEFT
+  m_Name: LEFT_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16522,7 +16740,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 3.5, y: -125.9}
+  m_AnchoredPosition: {x: 4, y: -126}
   m_SizeDelta: {x: -1079.0654, y: 125.52472}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1876060657
@@ -16830,8 +17048,8 @@ GameObject:
   - component: {fileID: 1881414566}
   - component: {fileID: 1881414565}
   m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
+  m_Name: MAP
+  m_TagString: KeyControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16898,7 +17116,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1881414566}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1300116311}
+        m_MethodName: KeyBindOnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MAP
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1881414566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17337,7 +17566,7 @@ GameObject:
   - component: {fileID: 1906785622}
   - component: {fileID: 1906785621}
   m_Layer: 5
-  m_Name: RIGHT
+  m_Name: RIGHT_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17690,7 +17919,7 @@ GameObject:
   - component: {fileID: 1931040926}
   - component: {fileID: 1931040925}
   m_Layer: 5
-  m_Name: SLOT2
+  m_Name: SLOT2_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

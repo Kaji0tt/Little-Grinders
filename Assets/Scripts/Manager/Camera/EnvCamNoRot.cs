@@ -34,17 +34,27 @@ public class EnvCamNoRot : MonoBehaviour
     {
         no_children = this.gameObject.transform.childCount;
 
+        //Folgender Abschnitt soll für sämtliche Child-GameObjekte angewandt werden.
         for (int i = 0; i < no_children; i++)
         {
             child = this.gameObject.transform.GetChild(i);
-            //print(child.name);
+
             sprite = child.GetComponent<SpriteRenderer>();
-            //child.LookAt(Camera.main.transform); //LookAt ist fragwürdig, es würde mehr Illusion von 3D erzeugt werden ohne LookAt
-            //Rather: Automatische Rotation bis Grad x° für mehr Tiefe.
+
+            //Enable Shadow Casting for the Sprite
+            sprite.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            
+            //---  LookAt wurde vorerst Disabled, macht Perspektivisch wenig Sinn ---
+            //child.LookAt(Camera.main.transform); 
             //child.Rotate(0, 25, 0);                           
 
+            //Finde Position der Kamera
             CameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+
+            //Berechne Abstand zur Kamera
             float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
+
+            //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
             sprite.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
             sprite.sortingLayerName = "Umgebung_col Layer";
         }

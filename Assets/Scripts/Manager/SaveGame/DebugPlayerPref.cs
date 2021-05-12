@@ -8,5 +8,21 @@ public class DebugPlayerPref : MonoBehaviour
     void Awake()
     {
         PlayerPrefs.DeleteKey("Load");
+
+        if(PlayerPrefs.GetFloat("musicVol") == 0)
+            PlayerPrefs.SetFloat("musicVol", 0.5f);
+
+        if (PlayerPrefs.GetFloat("atmosphereVol") == 0)
+            PlayerPrefs.SetFloat("atmosphereVol", 0.5f);
+
+        if (PlayerPrefs.GetFloat("effectVol") == 0)
+            PlayerPrefs.SetFloat("effectVol", 0.5f);
+
+        if (PlayerPrefs.GetFloat("interfaceVol") == 0)
+            PlayerPrefs.SetFloat("interfaceVol", 0.5f);
+
+        if (PlayerPrefs.GetFloat("musicVol") == 0)
+            PlayerPrefs.SetFloat("musicVol", 0.5f);
+
     }
 }
