@@ -17,7 +17,7 @@ driven by the players curiosity.
 ┌───── ### Open-Art Project's ### 
 
 - Sprite Librarys für gerüstete Items und animierten Spieler, ggf. Fritz
-- Lightning & Shadows
+- Lightning & Shadows (Jotti)
 - Einheitliches Interface Design im Sketchy-Paper Style, ggf. Lukas
 - Landscape Sprites, ggf. Hannah
 - Icons
