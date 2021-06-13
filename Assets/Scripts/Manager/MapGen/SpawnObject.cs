@@ -2,22 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WorldType { plains, jungle };
 
 //Schritt 1: What Type of Map is this? Array [1 - x]
-//Schritt 2: Choose Objects to Spawn (Small Env, Big Env, Border) of Type [1 - x]
+//Schritt 2: Choose Objects to Spawn (Small Env, Big Env, Border, Path) of Type [1 - x]
 //Schritt 3: Spawn Random Objects of according Arrays [1 - z] and "safe [1 - z]" - wie?
 public class SpawnObject : MonoBehaviour
 {
     private EnvCamNoRot layerScripts;
 
     //Die Anzahl an Welttypen
-    public enum WorldType { plains, jungle };
-    
+    //private WorldType worldType;
+
+    //Später: Gewisse Welttypen sind erst ab einem bestimmten Spielerlevel verfügbar {Wüste ab level 15, Bosslayer ab level 20, [... oder, analog gestaltete Story Maps]
+
     //Die Prefabs, welche spawnen dürfen.
 
-    public GameObject[] objectsPlains;
+    [SerializeField]
+    public GameObject[] ObjectsPlains { get; private set; }
 
-    public GameObject[] objectsJungle;
+    [SerializeField]
+    public GameObject[] ObjectsJungle { get; private set; }
 
 
     //Values, zum Speichern
@@ -25,15 +30,17 @@ public class SpawnObject : MonoBehaviour
 
     private void Start()
     {
+        /*
         System.Array values = System.Enum.GetValues(typeof(WorldType));
-        WorldType randomWorldType = (WorldType)values.GetValue(Random.Range(0, values.Length)); //Out of Array Fehler
 
-        print(randomWorldType);
+        //worldType = (WorldType)values.GetValue(Random.Range(0, values.Length)); //Out of Array Fehler
+
+        //print(worldType);
 
 
-        int rnd = Random.Range(0, objectsPlains.Length);
+        int rnd = Random.Range(0, ObjectsPlains.Length);
 
-        var myTransform = Instantiate(objectsPlains[rnd], transform.position, Quaternion.identity);
+        var myTransform = Instantiate(ObjectsPlains[rnd], transform.position, Quaternion.identity);
 
         //rnd sollte in einer Variable gespeichert werden, damit diese serialized werden kann. 
         
@@ -50,5 +57,6 @@ public class SpawnObject : MonoBehaviour
         Destroy(this.gameObject);
 
         //layerScripts.LayerSprites();
+        */
     }
 }

@@ -15,6 +15,9 @@ public class Scene_LoadNextScene : MonoBehaviour
         {
             SaveSystem.SaveScenePlayer();
 
+            //ÜBERGANGSWEISE - beim Wechseln der Szene speichert der Spielstand automatisch.
+            SaveSystem.SavePlayer();
+
             //PlayerPrefs können in Unity direkt für das Projekt eingestellt werden. Diese bestehen aus Dateien, welche in System-Verzeichnissen gespeichert werden und deshalb beständig sind.
             PlayerPrefs.GetString("SceneLoad");
 

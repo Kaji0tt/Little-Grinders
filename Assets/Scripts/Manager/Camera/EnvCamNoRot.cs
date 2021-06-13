@@ -19,13 +19,19 @@ public class EnvCamNoRot : MonoBehaviour
     void Start()
     {
 
-
+        no_children = this.gameObject.transform.childCount;
 
         for (int i = 0; i < no_children; i++)
         {
             child = this.gameObject.transform.GetChild(i);
+
+
             sprite = child.GetComponent<SpriteRenderer>();
             //child.Rotate(25, 0, 0);
+
+            if (sprite)
+                //Setze das Tag, damit CameraFollow.cs weiß, welche GO's zwischen Spieler und Kamera liegen für Transparenz.
+                child.gameObject.tag = "Env";
 
         }
     }
@@ -39,28 +45,35 @@ public class EnvCamNoRot : MonoBehaviour
         {
             child = this.gameObject.transform.GetChild(i);
 
+
+
             sprite = child.GetComponent<SpriteRenderer>();
+            if(sprite)
+            {
+                //Enable Shadow Casting for the Sprite
+                sprite.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 
-            //Enable Shadow Casting for the Sprite
-            sprite.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-            
-            //---  LookAt wurde vorerst Disabled, macht Perspektivisch wenig Sinn ---
-            //child.LookAt(Camera.main.transform); 
-            //child.Rotate(0, 25, 0);                           
+                //---  LookAt wurde vorerst Disabled, macht Perspektivisch wenig Sinn ---
+                //child.LookAt(Camera.main.transform); 
+                //child.Rotate(0, 25, 0);                           
 
-            //Finde Position der Kamera
-            CameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+                //Finde Position der Kamera
+                CameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
 
-            //Berechne Abstand zur Kamera
-            float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
+                //Berechne Abstand zur Kamera
+                float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
 
-            //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
-            sprite.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
-            sprite.sortingLayerName = "Umgebung_col Layer";
+                //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
+                sprite.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
+                sprite.sortingLayerName = "Umgebung_col Layer";
+            }
+
         }
 
     }
-    
+
+
+
     //LayerSprites war ein Ansatz für das Layering im Aufbau von ProcedualMap Generation
     /*
     public void LayerSprites()

@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class EnvCamScript : MonoBehaviour
 {
+    //Position der Kamera
     private Vector3 CameraPosition;
+
+    //Strecke zwischen dem Spielobjekt und der Kamera
     private float DistSelfCamera;
 
+    //Der Standardvalue der Sorting Order.
     [SerializeField]
     private int sortingOrderBase = 5000;
     public int sO_OffSet;
@@ -15,6 +19,9 @@ public class EnvCamScript : MonoBehaviour
 
     private int no_children;
     private Transform child;
+
+    //Collider, also Spielobjekte der Umgebung, welche vom Raycast getroffen werden
+    List<RaycastHit> hitsList = new List<RaycastHit>();
 
     void Start()
     {
@@ -56,6 +63,8 @@ public class EnvCamScript : MonoBehaviour
             sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera) + sO_OffSet;
             sprite.sortingLayerName = "Umgebung_col Layer";
         }
+
+
 
     }
 }

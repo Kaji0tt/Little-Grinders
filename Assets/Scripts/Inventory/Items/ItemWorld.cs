@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using CodeMonkey.Utils;
 using UnityEditor;
 
@@ -12,12 +13,19 @@ public class ItemWorld : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     private Light lightSource;
-   
+
+    private Renderer itemWorldRend;
+
+    [SerializeField]
+    private float m_Hue, m_Saturation, m_Value;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         lightSource = GetComponentInChildren<Light>();
+
+        itemWorldRend = GetComponent<Renderer>();
 
     }
 
@@ -45,15 +53,23 @@ public class ItemWorld : MonoBehaviour
 
         spriteRenderer.sprite = item.icon;
 
+
+
         if (item.itemRarity == "Unbrauchbar")
         {
+            itemWorldRend.material.SetColor("_Color", Color.HSVToRGB(m_Hue, m_Saturation, m_Value));
+
+            
             lightSource.color = new Color(1, 0, 0, 0.2f);
-            lightSource.range = 1.5f;
-            lightSource.intensity = 0.5f;
+            lightSource.range = 0.2f;
+            lightSource.intensity = 0.005f;
+            
         }
 
         if (item.itemRarity == "Gewöhnlich")
         {
+            itemWorldRend.material.SetColor("_Color", Color.white);
+
             lightSource.color = new Color(0, 1, 0, 0.5f);
             lightSource.range = 0f;
             lightSource.intensity = 0f;
@@ -61,9 +77,12 @@ public class ItemWorld : MonoBehaviour
 
         if (item.itemRarity == "Ungewöhnlich")
         {
+            itemWorldRend.material.SetColor("_Color", Color.HSVToRGB(m_Hue, m_Saturation, m_Value));
+            itemWorldRend.material.SetFloat("_OffSet", 0.001f);
+
             lightSource.color = new Color(0,1,0,0.5f);
-            lightSource.range = 1.5f;
-            lightSource.intensity = 1f;
+            lightSource.range = 1f;
+            lightSource.intensity = 0.01f;
 
             if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Uncommon");
@@ -72,9 +91,12 @@ public class ItemWorld : MonoBehaviour
 
         if (item.itemRarity == "Selten")
         {
+            itemWorldRend.material.SetColor("_Color", Color.HSVToRGB(m_Hue, m_Saturation, m_Value));
+            itemWorldRend.material.SetFloat("_OffSet", 0.0015f);
+
             lightSource.color = Color.blue;
-            lightSource.range = 2f;
-            lightSource.intensity = 1.5f;
+            lightSource.range = 1f;
+            lightSource.intensity = 0.1f;
 
             if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Rare");
@@ -83,9 +105,12 @@ public class ItemWorld : MonoBehaviour
 
         if (item.itemRarity == "Episch")
         {
+            itemWorldRend.material.SetColor("_Color", Color.magenta);
+            itemWorldRend.material.SetFloat("_OffSet", 0.002f);
+
             lightSource.color = Color.magenta;
-            lightSource.range = 2f;
-            lightSource.intensity = 2f;
+            lightSource.range = 1f;
+            lightSource.intensity = 0.5f;
 
             if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Epic");
@@ -94,9 +119,12 @@ public class ItemWorld : MonoBehaviour
 
         if (item.itemRarity == "Legendär")
         {
+            itemWorldRend.material.SetColor("_Color", new Color(0.54f, 0.32f, 0.13f, 1));
+            itemWorldRend.material.SetFloat("_OffSet", 0.005f);
+
             lightSource.color = new Color(0.54f, 0.32f, 0.13f, 1);
-            lightSource.range = 3f;
-            lightSource.intensity = 2.5f;
+            lightSource.range = 1f;
+            lightSource.intensity = 1f;
 
             if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Legendary");
