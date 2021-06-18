@@ -94,7 +94,7 @@ public class IsometricPlayer : MonoBehaviour
     #endregion
 
     // Item which spawns upon load:
-    //public Item test_item, test_item2, test_item3;
+    public Item test_item, test_item2, test_item3;
 
     private void Awake()
     {
@@ -134,6 +134,12 @@ public class IsometricPlayer : MonoBehaviour
         ui_invMovementSpeedText = GameObject.Find("ui_invMS").GetComponent<Text>();
         ui_HpOrbTxt = GameObject.Find("HpOrbTxt").GetComponent<Text>();
 
+
+        /*
+        ItemWorld.SpawnItemWorld(transform.position, new ItemInstance(test_item));
+        ItemWorld.SpawnItemWorld(new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), new ItemInstance(test_item));
+        ItemWorld.SpawnItemWorld(new Vector3(transform.position.x, transform.position.y, transform.position.z + .5f), new ItemInstance(test_item));
+        */
     }
 
     //Fixed Update wird gecalled, vor der physikalischen Berechning innerhalb eines Frames.

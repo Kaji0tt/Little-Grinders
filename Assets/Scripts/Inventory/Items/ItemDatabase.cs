@@ -102,7 +102,7 @@ public class ItemDatabase : MonoBehaviour
                     
               if (roll < percentSum)
               {
-                    position = position + new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
+                    position = position + new Vector3(Random.Range(-.5f, .5f), .5f, Random.Range(-.5f, .5f));
 
 
 

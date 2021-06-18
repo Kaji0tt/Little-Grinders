@@ -100,8 +100,7 @@ public class EnemyController : MonoBehaviour
 
         player_distance = Vector3.Distance(character_transform.position, transform.position);
 
-
-
+        //Verarbeitung für ikAnimated Enemys
         inputVector.x = character_transform.transform.position.x - transform.position.x;
         inputVector.y = character_transform.transform.position.z - transform.position.z;
         if (ikAnimated == true)
@@ -113,13 +112,15 @@ public class EnemyController : MonoBehaviour
             if (player_distance <= aggroRange || pulled)
             {
                 //Setze die Agent.StoppingDistance gleich mit der AttackRange des Mobs
-                navMeshAgent.stoppingDistance = attackRange / 2;
+                navMeshAgent.stoppingDistance = attackRange - .3f;
 
                 //Setze das Target des Mobs und starte "chasing"
                 SetDestination();
 
+                //print(navMeshAgent.velocity);
+
                 //Falls die Spieler-Distanz kleiner ist, als die Attack Range
-                if (player_distance <= navMeshAgent.stoppingDistance)
+                if (player_distance < attackRange && navMeshAgent.velocity == Vector3.zero)
                 {
                     //Setze "inCombatStance" des Iso-Renderers dieser Klasse auf true
                     isoRenderer.inCombatStance = true;
@@ -131,6 +132,7 @@ public class EnemyController : MonoBehaviour
                 }
 
                 else
+                    //Setze Combat-Stance zurück
                     isoRenderer.inCombatStance = false;
             }
 

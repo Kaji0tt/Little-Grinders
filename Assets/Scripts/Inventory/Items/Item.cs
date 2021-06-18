@@ -110,6 +110,8 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
     private IMoveable MyMoveable;
 
     private IUseable MyUseAble;
+
+    private bool isStackable;
       
     //Wird eigentlich nicht verwendet, sollte aber im Konstruktor gecalled werden.
     //public ItemModsData[] myItemMods; 
@@ -127,6 +129,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         if(itemType == ItemType.Consumable)
         {
             //MyUseAble = (IUseable)this;
+            isStackable = true;
         }
         
         //ItemRarity wird ausgelassen, da es erst im Roll berechnet wird.

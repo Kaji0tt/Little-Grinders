@@ -69,6 +69,7 @@ public class CameraFollow : MonoBehaviour
         if (raycastHits.ToList().Count != 0)
         foreach (RaycastHit hit in raycastHits.ToList())
         {
+            
             SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
 
             if (spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 

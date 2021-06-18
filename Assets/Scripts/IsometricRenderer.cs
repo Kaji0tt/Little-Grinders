@@ -118,6 +118,8 @@ public class IsometricRenderer : MonoBehaviour
         //use the Run states by default
         string[] directionArray = null;
 
+
+        
         //measure the magnitude of the input.
         if (direction.magnitude < .01f)
         {
@@ -193,7 +195,7 @@ public class IsometricRenderer : MonoBehaviour
         //this will return the angle between dir and North.
         float angle = Vector2.SignedAngle(Vector2.up, normDir);
         //add the halfslice offset
-        angle += halfstep;
+        //angle += halfstep;
         //if angle is negative, then let's make it positive by adding 360 to wrap it around.
         if (angle < 0){
             angle += 360;

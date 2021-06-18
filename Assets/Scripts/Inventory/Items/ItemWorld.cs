@@ -54,7 +54,7 @@ public class ItemWorld : MonoBehaviour
         spriteRenderer.sprite = item.icon;
 
 
-
+        #region GFX Settings for Rarities
         if (item.itemRarity == "Unbrauchbar")
         {
             itemWorldRend.material.SetColor("_Color", Color.HSVToRGB(m_Hue, m_Saturation, m_Value));
@@ -129,7 +129,7 @@ public class ItemWorld : MonoBehaviour
             if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Legendary");
         }
-
+        #endregion
 
 
 
