@@ -33,6 +33,7 @@ public class Inventory : MonoBehaviour
                     //HIer morgen weiter machen.
                     if (itemInInventory.ItemID == item.ItemID)
                     {
+                        
                         itemInInventory.amount += item.amount;
 
                         itemAlreadyInInventory = true;

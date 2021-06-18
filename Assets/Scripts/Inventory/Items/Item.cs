@@ -44,10 +44,14 @@ public class Item : ScriptableObject
     [Space]
     [Header("Consumables")]
     public int c_hp;
+    public bool usable;
 
     [HideInInspector]
     public float c_percent;
-   
+
+
+    public Spell itemAction;
+
 }
 
 //Erstelle eine ItemInstance, welche Serialized werden kann und aus dem ScriptableObject mit den oben genannten Variabeln ausgelesen wird.
@@ -91,6 +95,10 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
 
     public int c_hp;
 
+    public bool useable;
+
+    public Spell itemAction;
+
     [HideInInspector]
     public float c_percent;
 
@@ -111,7 +119,6 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
 
     private IUseable MyUseAble;
 
-    private bool isStackable;
       
     //Wird eigentlich nicht verwendet, sollte aber im Konstruktor gecalled werden.
     //public ItemModsData[] myItemMods; 
@@ -128,8 +135,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         //Noch nicht implementiert. Das Interface MyUseAble wird wichtig, wenn wir aktive Fähigkeiten oder Tränke über die ActionBar abrufen können wollen.
         if(itemType == ItemType.Consumable)
         {
-            //MyUseAble = (IUseable)this;
-            isStackable = true;
+            MyMoveable = this;
         }
         
         //ItemRarity wird ausgelassen, da es erst im Roll berechnet wird.
@@ -205,6 +211,12 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         {
             c_hp = item.c_hp;
         }
+
+        if(useable)
+        {
+            useable = true;
+            itemAction = item.itemAction;
+        }
         #endregion
 
         SetValueDescription(this);
@@ -240,9 +252,11 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
             percentStatMods[i] = new StatModifier(percentValues[i], StatModType.PercentAdd, this);
         }
 
-
         if (c_hp != 0)
             playerStats.Heal(c_hp);
+
+        if(useable)
+
 
 
         //Add Modifiers to Character
