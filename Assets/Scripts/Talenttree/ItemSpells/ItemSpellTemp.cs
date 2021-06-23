@@ -1,14 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "ItemSpell", menuName = "Assets/ItemSpell")]
-public class ItemSpellTemp : Spell, IUseable
+public class ItemSpell
 {
-    [Header("Werte dieses Spells")]
-    public float healAmount;
+    [SerializeField]
+    [TextArea]
+    private string description;
 
-    public string description;
+    private bool onCoolDown;
+
+    public float coolDown;
+
+    private Image image;
+}
+/*
+public class ItemSpellTemp : IMoveable, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IUseable
+{
+    [SerializeField]
+    [TextArea]
+    private string description;
+
+    public string GetDescription
+    {
+        get
+        {
+            return description;
+        }
+    }
+
+    Image image (Item item)
+    {
+        return item.icon;
+    }
+
+    public Sprite icon
+    {
+        get 
+        {
+            return item.icon;
+        }
+
+    }
+
+    public float
 
     //If its a Spell, which instantiate Prefabs like Bullets / Fireball, it should be called on Isometric Player with "player.CastSpell(this);"
 
@@ -16,26 +54,42 @@ public class ItemSpellTemp : Spell, IUseable
     {
 
     }
-    public override void Use()
+    public void Use()
     {
 
 
 
     }
 
-    public override bool IsOnCooldown()
+    public bool IsOnCooldown()
     {
         return onCoolDown;
     }
 
-    public override float CooldownTimer()
+    public float CooldownTimer()
     {
-        return coolDownTimer;
+        return coolDown;
     }
 
-    public override float GetCooldown()
+    public float GetCooldown()
     {
-        return GetSpellCoolDown;
+        return CooldownTimer;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
     }
 
 }
+*/

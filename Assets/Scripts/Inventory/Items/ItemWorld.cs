@@ -57,10 +57,10 @@ public class ItemWorld : MonoBehaviour
         #region GFX Settings for Rarities
         if (item.itemRarity == "Unbrauchbar")
         {
-            itemWorldRend.material.SetColor("_Color", Color.HSVToRGB(m_Hue, m_Saturation, m_Value));
 
+            itemWorldRend.material.SetColor("_Color", Color.red);
             
-            lightSource.color = new Color(1, 0, 0, 0.2f);
+            lightSource.color = new Color(1, 0, 0, 0.5f);
             lightSource.range = 0.2f;
             lightSource.intensity = 0.005f;
             
@@ -70,15 +70,16 @@ public class ItemWorld : MonoBehaviour
         {
             itemWorldRend.material.SetColor("_Color", Color.white);
 
-            lightSource.color = new Color(0, 1, 0, 0.5f);
+            lightSource.color = new Color(0, 1, 0, 0.2f);
             lightSource.range = 0f;
             lightSource.intensity = 0f;
         }
 
         if (item.itemRarity == "Ungewöhnlich")
         {
-            itemWorldRend.material.SetColor("_Color", Color.HSVToRGB(m_Hue, m_Saturation, m_Value));
-            itemWorldRend.material.SetFloat("_OffSet", 0.001f);
+            //DynamicGI.SetEmissive(itemWorldRend, new Color(1f, 0.1f, 0.5f, 1.0f) * 1);
+            itemWorldRend.material.SetColor("_Color", Color.green);
+            itemWorldRend.material.SetFloat("_OffSet", 0.0010f);
 
             lightSource.color = new Color(0,1,0,0.5f);
             lightSource.range = 1f;
@@ -91,7 +92,7 @@ public class ItemWorld : MonoBehaviour
 
         if (item.itemRarity == "Selten")
         {
-            itemWorldRend.material.SetColor("_Color", Color.HSVToRGB(m_Hue, m_Saturation, m_Value));
+            itemWorldRend.material.SetColor("_Color", Color.blue);
             itemWorldRend.material.SetFloat("_OffSet", 0.0015f);
 
             lightSource.color = Color.blue;
@@ -106,7 +107,7 @@ public class ItemWorld : MonoBehaviour
         if (item.itemRarity == "Episch")
         {
             itemWorldRend.material.SetColor("_Color", Color.magenta);
-            itemWorldRend.material.SetFloat("_OffSet", 0.002f);
+            itemWorldRend.material.SetFloat("_OffSet", 0.8f);
 
             lightSource.color = Color.magenta;
             lightSource.range = 1f;
@@ -120,7 +121,7 @@ public class ItemWorld : MonoBehaviour
         if (item.itemRarity == "Legendär")
         {
             itemWorldRend.material.SetColor("_Color", new Color(0.54f, 0.32f, 0.13f, 1));
-            itemWorldRend.material.SetFloat("_OffSet", 0.005f);
+            itemWorldRend.material.SetFloat("_OffSet", 1f);
 
             lightSource.color = new Color(0.54f, 0.32f, 0.13f, 1);
             lightSource.range = 1f;

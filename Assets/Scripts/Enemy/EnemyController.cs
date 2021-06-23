@@ -304,8 +304,8 @@ public class EnemyController : MonoBehaviour
             //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
             if (AudioManager.instance != null)
 
-                //Play a Sound at random.
-                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+            //Play a Sound at random.
+            AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
             
 
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.

@@ -19,7 +19,6 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
         }
     }
 
-
     /*
     public override void SetDescription(string newDes)
     {
