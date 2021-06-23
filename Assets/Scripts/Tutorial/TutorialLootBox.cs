@@ -23,7 +23,9 @@ public class TutorialLootBox : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && lootBoxOpened == false)
         {
             lootBoxOpened = true;
+
             Vector3 spawnPos = new Vector3(gameObject.transform.position.x + 0.5f, gameObject.transform.position.y, gameObject.transform.position.z);
+
             ItemWorld.SpawnItemWorld(spawnPos, new ItemInstance(firstItem));
 
             LootBoxOpenedSprite();

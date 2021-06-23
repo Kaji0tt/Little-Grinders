@@ -1,12 +1,81 @@
 fileFormatVersion: 2
 guid: 989a6b8edef52c1408aee9c6e7ef125e
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 4249213154514128195
+    second: Small Plant Collections_0
+  - first:
+      213: -4407328519655392293
+    second: Small Plant Collections_1
+  - first:
+      213: 1484373640450838169
+    second: Small Plant Collections_2
+  - first:
+      213: -9091021975724385873
+    second: Small Plant Collections_3
+  - first:
+      213: -6350751467682356803
+    second: Small Plant Collections_4
+  - first:
+      213: -7253281451747955106
+    second: Small Plant Collections_5
+  - first:
+      213: 5150317777189528239
+    second: Small Plant Collections_6
+  - first:
+      213: -7439767461697116370
+    second: Small Plant Collections_7
+  - first:
+      213: 374064775002695087
+    second: Small Plant Collections_8
+  - first:
+      213: 4604566881027377009
+    second: Small Plant Collections_9
+  - first:
+      213: -1909517580699038485
+    second: Small Plant Collections_10
+  - first:
+      213: -2157417921747582449
+    second: Small Plant Collections_11
+  - first:
+      213: -865599879596901364
+    second: Small Plant Collections_12
+  - first:
+      213: 1086147131058797329
+    second: Small Plant Collections_13
+  - first:
+      213: 1539783604552982138
+    second: Small Plant Collections_14
+  - first:
+      213: 129570631082453810
+    second: Small Plant Collections_15
+  - first:
+      213: -5798432307962129202
+    second: Small Plant Collections_16
+  - first:
+      213: -7861992613343440325
+    second: Small Plant Collections_17
+  - first:
+      213: -2750535658371701649
+    second: Small Plant Collections_18
+  - first:
+      213: 4090343788756603432
+    second: Small Plant Collections_19
+  - first:
+      213: 1258852339511347308
+    second: Small Plant Collections_20
+  - first:
+      213: -8585666206339100343
+    second: Small Plant Collections_21
+  - first:
+      213: -5353834186580932904
+    second: Small Plant Collections_22
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -34,24 +103,24 @@ TextureImporter:
     filterMode: -1
     aniso: -1
     mipBias: -100
-    wrapU: -1
-    wrapV: -1
+    wrapU: 1
+    wrapV: 1
     wrapW: -1
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   maxTextureSizeSet: 0
@@ -71,13 +140,508 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Small Plant Collections_0
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 767
+        width: 336
+        height: 201
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34d4bb9c9dc38fa30800000000000000
+      internalID: 4249213154514128195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_1
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 551
+        width: 343
+        height: 289
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdbfd79ff0606d2c0800000000000000
+      internalID: -4407328519655392293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_2
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 835
+        width: 219
+        height: 133
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99e860126fd899410800000000000000
+      internalID: 1484373640450838169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_3
+      rect:
+        serializedVersion: 2
+        x: 1398
+        y: 691
+        width: 97
+        height: 156
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa99dabeda336d180800000000000000
+      internalID: -9091021975724385873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_4
+      rect:
+        serializedVersion: 2
+        x: 1551
+        y: 725
+        width: 226
+        height: 205
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db1a00810399dd7a0800000000000000
+      internalID: -6350751467682356803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_5
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 657
+        width: 5
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5e22acf2fa275b90800000000000000
+      internalID: -7253281451747955106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_6
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 445
+        width: 310
+        height: 296
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa2e2c51bba997740800000000000000
+      internalID: 5150317777189528239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_7
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 564
+        width: 94
+        height: 165
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e27a80249e2a0c890800000000000000
+      internalID: -7439767461697116370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_8
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 520
+        width: 445
+        height: 310
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa5a5055ee1f03500800000000000000
+      internalID: 374064775002695087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_9
+      rect:
+        serializedVersion: 2
+        x: 1626
+        y: 559
+        width: 177
+        height: 151
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1774a28ae25b6ef30800000000000000
+      internalID: 4604566881027377009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_10
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 261
+        width: 367
+        height: 257
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bec021e90e70085e0800000000000000
+      internalID: -1909517580699038485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_11
+      rect:
+        serializedVersion: 2
+        x: 732
+        y: 2
+        width: 568
+        height: 519
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f028c26a4df4f02e0800000000000000
+      internalID: -2157417921747582449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_12
+      rect:
+        serializedVersion: 2
+        x: 1329
+        y: 389
+        width: 164
+        height: 196
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0c7103ee75ccf3f0800000000000000
+      internalID: -865599879596901364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_13
+      rect:
+        serializedVersion: 2
+        x: 1538
+        y: 353
+        width: 245
+        height: 149
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11bb190af05c21f00800000000000000
+      internalID: 1086147131058797329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_14
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 124
+        width: 251
+        height: 256
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7ed95cb7096e5510800000000000000
+      internalID: 1539783604552982138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_15
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 254
+        width: 72
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23b2efe6dc35cc100800000000000000
+      internalID: 129570631082453810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_16
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 183
+        width: 158
+        height: 145
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec4d4cd8984d78fa0800000000000000
+      internalID: -5798432307962129202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_17
+      rect:
+        serializedVersion: 2
+        x: 1652
+        y: 67
+        width: 213
+        height: 226
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b325bee6f5794e290800000000000000
+      internalID: -7861992613343440325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_18
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 3
+        width: 213
+        height: 155
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f64a5b4446224d9d0800000000000000
+      internalID: -2750535658371701649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_19
+      rect:
+        serializedVersion: 2
+        x: 1468
+        y: 145
+        width: 4
+        height: 5
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 822101a1102d3c830800000000000000
+      internalID: 4090343788756603432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_20
+      rect:
+        serializedVersion: 2
+        x: 1478
+        y: 146
+        width: 4
+        height: 5
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c684e397887587110800000000000000
+      internalID: 1258852339511347308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_21
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 27
+        width: 226
+        height: 117
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 941151bf21699d880800000000000000
+      internalID: -8585666206339100343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small Plant Collections_22
+      rect:
+        serializedVersion: 2
+        x: 1355
+        y: 24
+        width: 24
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d640825c2c53b5b0800000000000000
+      internalID: -5353834186580932904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 

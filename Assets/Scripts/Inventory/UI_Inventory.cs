@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using CodeMonkey.Utils;
+using TMPro;
 
 public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitHandler
 {
@@ -67,8 +68,18 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
 
             SlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
             {
-                inventory.UseItem(item);
-                inventory.RemoveItem(item);
+                if(item.itemType == ItemType.Consumable)
+                {
+                    ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemID(item.ItemID));
+                    inventory.UseItem(duplicateItem);
+                    inventory.RemoveItem(duplicateItem);
+                }
+                else
+                {
+                    inventory.UseItem(item);
+                    inventory.RemoveItem(item);
+                }
+
                 GameEvents.current.EquipChanged(item);
                 //eqSlots.equip(item);
                 Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
@@ -76,9 +87,18 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
             };
             SlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
             {
-                //print("we passed this");
-                inventory.RemoveItem(item);
-                ItemWorld.DropItem(PlayerManager.instance.player.transform.position, item);
+                if(item.itemType == ItemType.Consumable)
+                {
+                    ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemID(item.ItemID));
+                    inventory.RemoveItem(duplicateItem);
+                    ItemWorld.DropItem(PlayerManager.instance.player.transform.position, duplicateItem);
+                }
+                else
+                {
+                    inventory.RemoveItem(item);
+                    ItemWorld.DropItem(PlayerManager.instance.player.transform.position, item);
+                }
+
                 Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
                 //print("successfull");
             };
@@ -87,6 +107,15 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
 
             Image image = SlotRectTransform.Find("image").GetComponent<Image>();
             image.sprite = item.icon;
+
+            //Finde das TMPro Element und dessen Text um den Amount anzuzeigen.
+            TextMeshProUGUI uiText = SlotRectTransform.Find("amount").GetComponent<TextMeshProUGUI>();
+
+            if (item.amount > 1)
+                uiText.SetText(item.amount.ToString());
+            else
+                uiText.SetText("");
+
             x++;
             if (x > 5)
             {

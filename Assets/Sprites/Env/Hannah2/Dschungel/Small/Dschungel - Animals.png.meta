@@ -1,12 +1,54 @@
 fileFormatVersion: 2
 guid: 547f7fefff2f70846934c5bd380126a0
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 5829680620549389783
+    second: Dschungel - Animals_0
+  - first:
+      213: 7240175787889886933
+    second: Dschungel - Animals_1
+  - first:
+      213: 1283561622889121288
+    second: Dschungel - Animals_2
+  - first:
+      213: 3331378833870933983
+    second: Dschungel - Animals_3
+  - first:
+      213: -935902499270679509
+    second: Dschungel - Animals_4
+  - first:
+      213: -811190466537742030
+    second: Dschungel - Animals_5
+  - first:
+      213: -5847242070595402990
+    second: Dschungel - Animals_6
+  - first:
+      213: 3663689392764241555
+    second: Dschungel - Animals_7
+  - first:
+      213: -5887103124273232856
+    second: Dschungel - Animals_8
+  - first:
+      213: -4039280977537196287
+    second: Dschungel - Animals_9
+  - first:
+      213: 8015148556144858168
+    second: Dschungel - Animals_10
+  - first:
+      213: 1997110824857125895
+    second: Dschungel - Animals_11
+  - first:
+      213: -1891731761491727748
+    second: Dschungel - Animals_12
+  - first:
+      213: 2342204385300376766
+    second: Dschungel - Animals_13
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -34,24 +76,24 @@ TextureImporter:
     filterMode: -1
     aniso: -1
     mipBias: -100
-    wrapU: -1
-    wrapV: -1
+    wrapU: 1
+    wrapV: 1
     wrapW: -1
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   maxTextureSizeSet: 0
@@ -71,13 +113,319 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Dschungel - Animals_0
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 645
+        width: 121
+        height: 249
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7dd33dd23af27e050800000000000000
+      internalID: 5829680620549389783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_1
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 257
+        width: 101
+        height: 578
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d68f8cd4854a7460800000000000000
+      internalID: 7240175787889886933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_2
+      rect:
+        serializedVersion: 2
+        x: 889
+        y: 399
+        width: 74
+        height: 441
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80641a3de7020d110800000000000000
+      internalID: 1283561622889121288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_3
+      rect:
+        serializedVersion: 2
+        x: 1087
+        y: 86
+        width: 94
+        height: 755
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdfc125266f6b3e20800000000000000
+      internalID: 3331378833870933983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_4
+      rect:
+        serializedVersion: 2
+        x: 1317
+        y: 73
+        width: 132
+        height: 803
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b242292b2a10303f0800000000000000
+      internalID: -935902499270679509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_5
+      rect:
+        serializedVersion: 2
+        x: 1599
+        y: 533
+        width: 154
+        height: 138
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 231a5dc81921eb4f0800000000000000
+      internalID: -811190466537742030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_6
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 227
+        width: 93
+        height: 365
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 213017a115c6adea0800000000000000
+      internalID: -5847242070595402990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_7
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 295
+        width: 231
+        height: 257
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3964417771a08d230800000000000000
+      internalID: 3663689392764241555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_8
+      rect:
+        serializedVersion: 2
+        x: 1437
+        y: 504
+        width: 120
+        height: 85
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8240a9156eecc4ea0800000000000000
+      internalID: -5887103124273232856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_9
+      rect:
+        serializedVersion: 2
+        x: 1615
+        y: 418
+        width: 133
+        height: 97
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10f17e91a5791f7c0800000000000000
+      internalID: -4039280977537196287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_10
+      rect:
+        serializedVersion: 2
+        x: 1491
+        y: 421
+        width: 55
+        height: 53
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 834dffe45278b3f60800000000000000
+      internalID: 8015148556144858168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_11
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 51
+        width: 188
+        height: 277
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70442bcc6b927bb10800000000000000
+      internalID: 1997110824857125895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_12
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 88
+        width: 117
+        height: 130
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7a26f95cf73fb5e0800000000000000
+      internalID: -1891731761491727748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dschungel - Animals_13
+      rect:
+        serializedVersion: 2
+        x: 1413
+        y: 81
+        width: 331
+        height: 212
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebce0399a7e218020800000000000000
+      internalID: 2342204385300376766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 

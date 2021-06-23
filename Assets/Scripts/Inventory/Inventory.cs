@@ -24,20 +24,32 @@ public class Inventory : MonoBehaviour
     {
         if (itemList.Count <= 14)  // InvGröße: das war schlau von MonkeyDev, lediglich das Interface anpassen
         {
-            /*
+            
             if(item.itemType == ItemType.Consumable) //Ggf. gleiches für Currency hinzufügen, außerhalb von Inventory.
             {
                 bool itemAlreadyInInventory = false;
                 foreach (ItemInstance itemInInventory in itemList)
                 {
+                    //HIer morgen weiter machen.
                     if (itemInInventory.ItemID == item.ItemID)
                     {
+                        
                         itemInInventory.amount += item.amount;
+
+                        itemAlreadyInInventory = true;
                     }
                 }
+
+                if (!itemAlreadyInInventory)
+                {
+                    itemList.Add(item);
+                }
             }
-            */
-            itemList.Add(item);
+            else
+            {
+                itemList.Add(item);
+            }
+
             OnItemListChanged?.Invoke(this, EventArgs.Empty);
 
         }
@@ -47,7 +59,27 @@ public class Inventory : MonoBehaviour
 
     public void RemoveItem(ItemInstance item)
     {
+        if(item.itemType == ItemType.Consumable)
+        {
+            ItemInstance itemInInventory = null;
+
+            foreach (ItemInstance inventoryItem in itemList)
+            {
+                if(inventoryItem.ItemID == item.ItemID)
+                {
+                    inventoryItem.amount -= item.amount;
+
+                    itemInInventory = inventoryItem;
+                }
+            }
+            if (itemInInventory != null && itemInInventory.amount <= 0)
+            {
+                itemList.Remove(itemInInventory);
+            }
+        }
+        else
         itemList.Remove(item);
+
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 

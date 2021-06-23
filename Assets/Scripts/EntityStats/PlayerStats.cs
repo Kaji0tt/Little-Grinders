@@ -8,7 +8,6 @@ public class PlayerStats : MonoBehaviour
 {
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
 
-
     public static event Action eventLevelUp;
 
     /// <summary>

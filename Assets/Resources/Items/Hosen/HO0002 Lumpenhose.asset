@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemID: HO0002
   ItemName: Lumpenhose
-  ItemDescription: Hosen sind gesellschaftlich angesehen. Dies weniger, aber besser
-    als keine.
+  ItemDescription: 'Die Gesellschaft reagiert besser auf Menschen, \n welche eine
+    Hose tragen.
+
+'
   itemType: 2
   itemRarity: 
   Range: 0
@@ -33,4 +35,4 @@ MonoBehaviour:
   p_attackSpeed: 0
   p_movementSpeed: 0
   c_hp: 0
-  c_percent: 0
+  c_percent: 10

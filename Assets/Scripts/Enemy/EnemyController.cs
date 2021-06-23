@@ -9,22 +9,24 @@ using TMPro;
 
 public class EnemyController : MonoBehaviour
 {
-
-    [SerializeField]
+    //Create Variabel for the Player (through PlayerManager Singleton)
     Transform character_transform;
 
+    //Create Reference to currents GO Agent
     NavMeshAgent navMeshAgent;
+
+    //Create Reference to currents GO isoRenderer
     IsometricRenderer isoRenderer;
-    //private Animator animator;
+
+    //Create Reference to Animator, for the case its not Animated by the IsometricRenderer, but by IK
     private EnemyAnimator enemyAnimator;
-    public bool animated;
+
+    //For the if Statement of above condition, wether its isometricRendered or rendered by IK
+    public bool ikAnimated;
 
 
     ///----Combat Variables-----
-    ///
-    CharacterCombat combat;
-    IsometricPlayer isometricPlayer;
-    private GameObject scriptController;
+    /// Gameobject's to depict the enemys status'
     public GameObject hpBar;
     public Slider enemyHpSlider;
 
@@ -35,12 +37,11 @@ public class EnemyController : MonoBehaviour
 
 
     ///-----Stat Stuff-----
+    ///Reference to Stats used for Combat
     [Space]
     public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
 
     public int level;
-
-    TextMeshProUGUI[] statText;
 
     private float attackCD = 0f;
     private float p_attackCD = 0f;
@@ -53,19 +54,24 @@ public class EnemyController : MonoBehaviour
 
 
     ///----Position/Ziel/Direction----
+    ///Controller Variables
     Vector3 forward, right;
     private float player_distance;
-    private Vector3 targetVector;
     Vector2 inputVector;
     public bool pulled;
 
+    //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
+    void OnDrawGizmosSelected ()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, aggroRange);
+    }
 
     void Start()
     {
-        combat = GetComponent<CharacterCombat>();
-        scriptController = GameObject.FindWithTag("GameController");
+        //IK-Animated Objects currently have theire Animators connected in GO's in dependecy of their position in relation to player.position
+        //the according GO (e.g. looking down, looking up) is activated. For this, we need to find the according animators of the activated GO's
         enemyAnimator = GetComponentInChildren<EnemyAnimator>();
-        //animator = GetComponent<Animator>();
 
         //UI Display
         TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
@@ -81,7 +87,7 @@ public class EnemyController : MonoBehaviour
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
-        if (animated == false)
+        if (ikAnimated == false)
         isoRenderer = GetComponentInChildren<IsometricRenderer>();
     }
 
@@ -94,57 +100,48 @@ public class EnemyController : MonoBehaviour
 
         player_distance = Vector3.Distance(character_transform.position, transform.position);
 
-
-
+        //Verarbeitung für ikAnimated Enemys
         inputVector.x = character_transform.transform.position.x - transform.position.x;
         inputVector.y = character_transform.transform.position.z - transform.position.z;
-        if (animated == true)
+        if (ikAnimated == true)
             enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
 
-        if (navMeshAgent == null)
-        {
-            Debug.LogError("The Nav Mesh agent Component is not attached to " + gameObject.name);
-        }
 
         else
         {
             if (player_distance <= aggroRange || pulled)
             {
+                //Setze die Agent.StoppingDistance gleich mit der AttackRange des Mobs
+                navMeshAgent.stoppingDistance = attackRange - .3f;
+
+                //Setze das Target des Mobs und starte "chasing"
                 SetDestination();
 
+                //print(navMeshAgent.velocity);
 
-                if (player_distance <= attackRange)
+                //Falls die Spieler-Distanz kleiner ist, als die Attack Range
+                if (player_distance < attackRange && navMeshAgent.velocity == Vector3.zero)
                 {
+                    //Setze "inCombatStance" des Iso-Renderers dieser Klasse auf true
+                    isoRenderer.inCombatStance = true;
 
-                    PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+                    //Attack the Target
+                    Attack();
 
-                    attackCD -= Time.deltaTime;
 
-                    if (playerStats != null)
-                    {
-                        if (attackCD <= 0)
-                        {
-                            
-                            //Sound-Array mit den dazugehörigen Sound-Namen
-                            string[] hitSounds = new string[] { "Mob_ZombieAttack1", "Mob_ZombieAttack2", "Mob_ZombieAttack3" };
-
-                            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-                            if (AudioManager.instance != null)
-
-                                //Play a Sound at random.
-                                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
-                            
-
-                            playerStats.TakeDamage(AttackPower.Value);
-
-                            attackCD = 1f / AttackSpeed.Value;
-                        }
-                    }
                 }
+
+                else
+                    //Setze Combat-Stance zurück
+                    isoRenderer.inCombatStance = false;
             }
 
             else
-                navMeshAgent = null;
+            {
+                navMeshAgent.SetDestination(transform.position);
+                isoRenderer.SetNPCDirection(new Vector2(0, 0));
+            }
+
         }
 
 
@@ -183,6 +180,61 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
         #endregion
 
+    }
+
+    private void SetDestination()
+    {
+        if (character_transform != null)
+        {
+
+            navMeshAgent.SetDestination(character_transform.transform.position);
+
+            // Hier wird die "Blickrichtung" bestimmt, welche sich an dem Charakter orientiert.
+            Vector3 Direction = character_transform.transform.position - transform.position;
+
+            Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
+
+            inputVector = Vector2.ClampMagnitude(inputVector, 1);
+
+            if (ikAnimated == false)
+                isoRenderer.SetNPCDirection(inputVector);
+
+            //irgendwo hier ist noch n kleiner fehler
+
+
+        }
+    }
+
+    private void Attack()
+    {
+
+
+        PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+
+        attackCD -= Time.deltaTime;
+
+        if (playerStats != null)
+        {
+            if (attackCD <= 0)
+            {
+
+                //Sound-Array mit den dazugehörigen Sound-Namen
+                string[] hitSounds = new string[] { "Mob_ZombieAttack1", "Mob_ZombieAttack2", "Mob_ZombieAttack3" };
+
+                //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
+                if (AudioManager.instance != null)
+
+                    //Play a Sound at random.
+                    AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+
+                //Füge dem Spieler Schaden entsprechend der AttackPower hinzu.
+                playerStats.TakeDamage(AttackPower.Value);
+
+                //Der Versuch einen AttackSpeed zu integrieren
+                attackCD = 1f / AttackSpeed.Value;
+
+            }
+        }
     }
 
 
@@ -230,29 +282,7 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    private void SetDestination()
-    {
-        if (character_transform != null)
-        {
 
-            navMeshAgent.SetDestination(character_transform.transform.position);
-
-            // Hier wird die "Blickrichtung" bestimmt, welche sich an dem Charakter orientiert.
-            Vector3 Direction = character_transform.transform.position - transform.position;
-
-            Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
-
-            inputVector = Vector2.ClampMagnitude(inputVector, 1);
-
-            if (animated == false) 
-            isoRenderer.SetNPCDirection(inputVector);
-
-
-            //irgendwo hier ist noch n kleiner fehler
-
-
-        }
-    }
 
     public void TakeDamage(float damage, float range)
     {
@@ -274,8 +304,8 @@ public class EnemyController : MonoBehaviour
             //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
             if (AudioManager.instance != null)
 
-                //Play a Sound at random.
-                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+            //Play a Sound at random.
+            AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
             
 
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
