@@ -66,10 +66,12 @@ public class CameraFollow : MonoBehaviour
             raycastHits[i].collider.transform.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         }
         */
-        if (raycastHits.ToList().Count != 0)
+        //if (raycastHits.ToList().Count != 0)
+        //Still random 
+
         foreach (RaycastHit hit in raycastHits.ToList())
         {
-            
+
             SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
 
             if (spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
@@ -78,6 +80,8 @@ public class CameraFollow : MonoBehaviour
 
                 //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
             }
+            
+
         }
 
         Vector3 CameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;

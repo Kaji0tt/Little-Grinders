@@ -102,11 +102,9 @@ public class ItemDatabase : MonoBehaviour
                     
               if (roll < percentSum)
               {
-                    position = position + new Vector3(Random.Range(-.5f, .5f), .5f, Random.Range(-.5f, .5f));
+                    position = position + new Vector3(Random.Range(-.5f, .5f), .1f, Random.Range(-.5f, .5f));
 
-
-
-                    print("Item: " + item.ItemName + " was choosen.");
+                    //print("Item: " + item.ItemName + " was choosen.");
 
                     ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(new ItemInstance(item)));
 
@@ -185,7 +183,7 @@ public class ItemDatabase : MonoBehaviour
 
     public static Item GetItemID(string ID)
     {
-        Debug.Log("Searching for item with ID: " + ID);
+        //Debug.Log("Searching for item with ID: " + ID);
 
         for(int i = 0; i < totalLoottable.Count; i++)
         {
@@ -198,7 +196,7 @@ public class ItemDatabase : MonoBehaviour
                     Item foundItem = item;
 
                     //Es sollten nun Instanzen von Items geladen werden. Mit dieser Loop werden die Items der SO gefunden, nicht jedoch die Instanzen.
-                    print("Found item: " + foundItem.ItemName);
+                    //print("Found item: " + foundItem.ItemName);
 
                     return foundItem;
                 }

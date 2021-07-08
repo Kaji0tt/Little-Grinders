@@ -5,9 +5,9 @@ using UnityEngine;
 public class MobsCamScript : MonoBehaviour
 {
     //Agent Stat Values
-    UnityEngine.AI.NavMeshAgent agent;
-    UnityEngine.AI.NavMeshAgent agentDest;
-    private Vector3 playerPosition;
+    //UnityEngine.AI.NavMeshAgent agent;
+    //UnityEngine.AI.NavMeshAgent agentDest;
+    //private Vector3 playerPosition;
 
 
     //Sorting Order Values
@@ -23,7 +23,7 @@ public class MobsCamScript : MonoBehaviour
     void Start()
     {
 
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        //agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         if (GetComponent<SpriteRenderer>() != null)
             sprite = GetComponent<SpriteRenderer>();
@@ -31,7 +31,7 @@ public class MobsCamScript : MonoBehaviour
 
     void Update()
     {
-       transform.LookAt(Camera.main.transform);
+       //transform.LookAt(Camera.main.transform);
 
         CameraPosition = CameraManager.instance.camera.transform.position;
         DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;

@@ -82,11 +82,14 @@ public class EnemyController : MonoBehaviour
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
         character_transform = PlayerManager.instance.player.transform;
 
+
+        //Adapt the Isometric-Camera angles
         forward = Camera.main.transform.forward;
         forward.y = 0;
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
+        //Ask, if this is an IK-Animated enemy
         if (ikAnimated == false)
         isoRenderer = GetComponentInChildren<IsometricRenderer>();
     }
@@ -112,12 +115,11 @@ public class EnemyController : MonoBehaviour
             if (player_distance <= aggroRange || pulled)
             {
                 //Setze die Agent.StoppingDistance gleich mit der AttackRange des Mobs
-                navMeshAgent.stoppingDistance = attackRange - .3f;
+                //If the StoppingDistance is smaller then the attackRange, faster mobs may attack while the player is running away
+                navMeshAgent.stoppingDistance = attackRange / 2;
 
                 //Setze das Target des Mobs und starte "chasing"
                 SetDestination();
-
-                //print(navMeshAgent.velocity);
 
                 //Falls die Spieler-Distanz kleiner ist, als die Attack Range
                 if (player_distance < attackRange && navMeshAgent.velocity == Vector3.zero)
@@ -208,9 +210,10 @@ public class EnemyController : MonoBehaviour
     private void Attack()
     {
 
-
+        //Fetch the Playerstats of the player
         PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
 
+        //Countdown for the Auto-Attack Cooldown
         attackCD -= Time.deltaTime;
 
         if (playerStats != null)

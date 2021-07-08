@@ -72,6 +72,11 @@ public class PlayerSave
 
     public int MyScene;
 
+    public List<MapSave> exploredMaps;
+
+    public MapSave currentMap;
+
+    public string lastSpawnpoint;
 
 
 
@@ -81,17 +86,102 @@ public class PlayerSave
     public PlayerSave()
     {
         ///Player Speichern
-        level = PlayerManager.instance.player.GetComponent<PlayerStats>().level;
-
-        Hp = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_currentHp();
-
-        xp = PlayerManager.instance.player.GetComponent<PlayerStats>().xp;
-
-        skillPoints = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints();
-
+        SaveThePlayer();
 
         /// Items Speichern
-        #region Items
+        SaveTheItems();
+
+        ///Skill-Points speichern.
+        SaveTheTalents(); //Es muss noch herausgefunden werden, wie viele Talenttree-Skillpoints unverteilt sind und die abgespeichert werden!
+
+        ///Inventar speichern.
+        SaveTheInventory();
+
+        ///Action Buttons.
+        SaveTheActionButtons();
+
+        ///Szene Speichern.
+        ///not rly necessary with procedural map design?
+        //MyScene = SceneManager.GetActiveScene().buildIndex;
+        
+        loadIndex = 1;
+
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+            MyScene = 2;
+        else MyScene = 1;
+
+        exploredMaps = GlobalMap.exploredMaps;
+
+        currentMap = GlobalMap.GetCurrentMap();
+
+        lastSpawnpoint = GlobalMap.lastSpawnpoint;
+    }
+
+    private void SaveTheActionButtons()
+    {
+        ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
+
+        savedActionButtons = new string[5]; // Ggf. hier anknüpfen, sobald man Items auch safen kann. Man könnte das MyUseable as ItemInstance saven
+
+        savedActionButtonIndex = new int[5];
+
+        //Debug.Log("actionButtons" + actionButtons.Length);
+
+        //Debug.Log("saved ACtionButtons " + savedActionButtons.Length);
+
+        foreach (ActionButton slot in actionButtons)
+        {
+            if (slot.gameObject.name == "ActionButton1")
+                SaveActionbarSlot(1, slot);
+
+            if (slot.gameObject.name == "ActionButton2")
+                SaveActionbarSlot(2, slot);
+
+            if (slot.gameObject.name == "ActionButton3")
+                SaveActionbarSlot(3, slot);
+
+            if (slot.gameObject.name == "ActionButton4")
+                SaveActionbarSlot(4, slot);
+
+            if (slot.gameObject.name == "ActionButton5")
+                SaveActionbarSlot(5, slot);
+
+        }
+    }
+
+    private void SaveTheInventory()
+    {
+        inventoryItemMods = new List<ItemModsData>[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
+
+        inventoryItemRarity = new string[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
+
+        int currentItem = 0;
+
+        foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList())
+        {
+            inventorySave.Add(item.ItemID);
+
+            inventoryItemMods[currentItem] = item.addedItemMods;
+
+            inventoryItemRarity[currentItem] = item.itemRarity;
+
+            currentItem += 1;
+
+        }
+    }
+
+    private void SaveTheTalents()
+    {
+        TalentTree talentTree = GameObject.Find("TalentTree").GetComponent<TalentTree>();
+
+        foreach (Talent talent in talentTree.allTalents)
+        {
+            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked));
+        }
+    }
+
+    private void SaveTheItems()
+    {
         foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems)
         {
             switch (item.itemType)
@@ -172,7 +262,7 @@ public class PlayerSave
 
                     foreach (ItemModsData mod in item.addedItemMods)
                     {
-                        
+
                         modsWeapon.Add(mod);
                     }
 
@@ -183,86 +273,17 @@ public class PlayerSave
 
             }
         }
-        #endregion;
+    }
 
+    private void SaveThePlayer()
+    {
+        level = PlayerManager.instance.player.GetComponent<PlayerStats>().level;
 
-        ///Skill-Points speichern.
+        Hp = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_currentHp();
 
-        TalentTree talentTree = GameObject.Find("TalentTree").GetComponent<TalentTree>();
+        xp = PlayerManager.instance.player.GetComponent<PlayerStats>().xp;
 
-        foreach (Talent talent in talentTree.allTalents)
-        {
-            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked));
-        }
-
-        //Es muss noch herausgefunden werden, wie viele Talenttree-Skillpoints unverteilt sind und die abgespeichert werden!
-
-
-
-        ///Inventar speichern.
-
-        Debug.Log(PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList());
-
-        inventoryItemMods = new List<ItemModsData>[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
-
-        inventoryItemRarity = new string[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
-
-        int currentItem = 0;
-
-        foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList())
-        {
-            inventorySave.Add(item.ItemID);
-
-            inventoryItemMods[currentItem] = item.addedItemMods;
-
-            inventoryItemRarity[currentItem] = item.itemRarity;
-
-            currentItem += 1;
-
-        }
-
-        ///Szene Speichern.
-        ///
-        MyScene = SceneManager.GetActiveScene().buildIndex;
-
-        // Wenn die richtige Szene bereits geladen ist, kann der Spielstand nicht wieder hergestellt werden, WorkAround derzeit: Haupt Menü -> Laden.
-
-        ///Action Buttons.
-        ///
-
-
-
-        ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
-
-        savedActionButtons = new string[5]; // Ggf. hier anknüpfen, sobald man Items auch safen kann. Man könnte das MyUseable as ItemInstance saven
-
-        savedActionButtonIndex = new int[5];
-
-        Debug.Log("actionButtons" + actionButtons.Length);
-
-        Debug.Log("saved ACtionButtons " + savedActionButtons.Length);
-
-            foreach(ActionButton slot in actionButtons)
-            {
-                if (slot.gameObject.name == "ActionButton1")
-                    SaveActionbarSlot(1, slot);
-
-                if (slot.gameObject.name == "ActionButton2")
-                    SaveActionbarSlot(2, slot);
-
-                if (slot.gameObject.name == "ActionButton3")
-                    SaveActionbarSlot(3, slot);
-
-                if (slot.gameObject.name == "ActionButton4")
-                    SaveActionbarSlot(4, slot);
-
-                if (slot.gameObject.name == "ActionButton5")
-                    SaveActionbarSlot(5, slot);
-
-            }
-
-        
-        loadIndex = 1;
+        skillPoints = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints();
     }
 
     private void SaveActionbarSlot(int i, ActionButton slot)
@@ -271,7 +292,7 @@ public class PlayerSave
         {
             savedActionButtonIndex[i-1] = i;
 
-            Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtonIndex[i]);
+            //Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtonIndex[i]);
 
             savedActionButtons[i-1] = (slot.MyUseable as Spell).GetSpellName;
 

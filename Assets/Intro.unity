@@ -7170,16 +7170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0038be263d74d9b95eb7a5862c9f4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponGameObject: {fileID: 756602939}
   rangedWeapon: 0
   equippedItems: []
-  uiInventory: {fileID: 594793834}
-  HpSlider: {fileID: 2136588990}
-  XpSlider: {fileID: 1097197969}
   idleRotSpeed: 10
-  test_item: {fileID: 11400000, guid: a25f24bf889bc344983faa636d0e5aee, type: 2}
-  test_item2: {fileID: 0}
-  test_item3: {fileID: 0}
 --- !u!114 &306612084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10750,7 +10743,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1307886151}
   m_HandleRect: {fileID: 1307886150}
   m_Direction: 2
-  m_Value: 1.0000001
+  m_Value: 1
   m_Size: 0.46374425
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -29360,7 +29353,7 @@ GameObject:
   - component: {fileID: 1097197970}
   - component: {fileID: 1097197969}
   m_Layer: 5
-  m_Name: XP-Bar
+  m_Name: XpBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

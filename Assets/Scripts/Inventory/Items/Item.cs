@@ -64,7 +64,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
     public string ItemDescription;
     public string ItemValueInfo;
     public ItemType itemType;
-    public string itemRarity = "Gewöhnlich";   // [Currently gettin Implemented]: https://www.youtube.com/watch?v=dvSYloBxzrU
+    public string itemRarity = "Gewöhnlich";
 
     public int Range;
     public bool RangedWeapon;

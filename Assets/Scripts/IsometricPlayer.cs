@@ -11,7 +11,6 @@ public class IsometricPlayer : MonoBehaviour
     IsometricRenderer isoRenderer;
 
     //Wird im Inspektor eingestellt, um das Game-Objekt der Waffe und dessen Animator zu erkennen.
-    [SerializeField]
     private GameObject weaponGameObject;
 
     //Wichtig, um die Sprites entsprechend der Isometrie für die Animationen zu kalkulieren
@@ -38,7 +37,7 @@ public class IsometricPlayer : MonoBehaviour
 
     public List<ItemInstance> equippedItems = new List<ItemInstance>();
 
-    [SerializeField] private UI_Inventory uiInventory;
+    //[SerializeField] private UI_Inventory uiInventory;
 
     /// <summary>
     /// 
@@ -56,7 +55,7 @@ public class IsometricPlayer : MonoBehaviour
 
     GameObject uiInventoryTab, uiHpOrb;
     private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText, ui_Level, ui_Xp, ui_HpOrbTxt;
-    public Slider HpSlider, XpSlider;
+    private Slider HpSlider, XpSlider;
     private float maxHP;
 
     #endregion
@@ -94,7 +93,7 @@ public class IsometricPlayer : MonoBehaviour
     #endregion
 
     // Item which spawns upon load:
-    public Item test_item, test_item2, test_item3;
+    //public Item test_item, test_item2, test_item3;
 
     private void Awake()
     {
@@ -108,10 +107,12 @@ public class IsometricPlayer : MonoBehaviour
         forward.y = 0;
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
+        weaponGameObject = GameObject.Find("WeaponAnim");
 
-        
+
         //Item Management
         inventory = new Inventory(UseItem);//UseItem = Welche Methode wird in Isometric Player bei Nutzung ausgelöst.
+        UI_Inventory uiInventory = GameObject.Find("UI_Inventory").GetComponent<UI_Inventory>();
         uiInventory.SetInventory(inventory);
         uiInventory.SetCharakter(this);
 
@@ -121,6 +122,8 @@ public class IsometricPlayer : MonoBehaviour
         ui_Level = GameObject.Find("LevelText").GetComponent<Text>();
         ui_Xp = GameObject.Find("XpText").GetComponent<Text>();
         uiHpOrb = GameObject.Find("HpOrbTxt");
+        HpSlider = GameObject.Find("HpOrb").GetComponent<Slider>();
+        XpSlider = GameObject.Find("XpBar").GetComponent<Slider>();
         GameObject uiXp = GameObject.Find("XpText");
         //////////////////////Das ist ja fucking eklig, finde eine Alternative um die Texte zu initialisieren!!!!!
         playerStats.Set_currentHp(playerStats.Get_maxHp());
@@ -150,7 +153,7 @@ public class IsometricPlayer : MonoBehaviour
         Move();
 
         //Falls kein Input kommt, zählt die Idle_Time pro Frame 1 hoch
-        if (!Input.anyKey)
+        if (!Input.anyKey && !Input.anyKeyDown)
             idle_time = idle_time + 1;
         else if (idle)
         {
@@ -163,13 +166,13 @@ public class IsometricPlayer : MonoBehaviour
 
         //Falls die Idle-Time einen definierten 
         if (idle_time >= 2000)
-            IdleRotation();
+            StartIdleRotation();
 
     }
 
 
     //Idle Rotation Funktion
-    private void IdleRotation()
+    private void StartIdleRotation()
     {
         idle = true;
 

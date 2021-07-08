@@ -1,65 +1,86 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerLoad : MonoBehaviour
 {
-    void Start()
+
+    public void LoadPlayer(PlayerSave data)
     {
-        if (PlayerPrefs.HasKey("Load"))
+        LoadPlayerStats(data);
+
+        //Die Gegenstände werden initialisiert und neu angezogen.
+        LoadEquippedItems(data);
+
+        //Skillpunkte werden geladen.
+        LoadSkillPoints(data);
+
+        // Inventar wird geladen.
+        LoadInventory(data);
+
+        // ActionButtons werden geladen.
+        LoadActionbar(data);
+
+        //Map-Daten werden geladen. 
+        //Hier nochmal bei - Logik fehler.
+        if(SceneManager.GetActiveScene().buildIndex != 2)
+        LoadGlobalMap(data);
+
+        
+    }
+
+    private void LoadActionbar(PlayerSave data)
+    {
+        ActionButton[] actionButtons = FindObjectsOfType<ActionButton>();
+
+        foreach (ActionButton slot in actionButtons)
         {
-            PlayerSave data = SaveSystem.LoadPlayer();
+            if (slot.gameObject.name == "ActionButton1")
+                LoadActionbarSlot(0, slot, data);
 
-            PlayerLoad playerLoad = FindObjectOfType<PlayerLoad>();
+            if (slot.gameObject.name == "ActionButton2")
+                LoadActionbarSlot(1, slot, data);
 
-            playerLoad.LoadPlayer(data);
+            if (slot.gameObject.name == "ActionButton3")
+                LoadActionbarSlot(2, slot, data);
 
-            PlayerPrefs.DeleteKey("Load");
+            if (slot.gameObject.name == "ActionButton4")
+                LoadActionbarSlot(3, slot, data);
+
+            if (slot.gameObject.name == "ActionButton5")
+                LoadActionbarSlot(4, slot, data);
+        }
+        // Is it possible to refer to a class, inherting form another from its parent class?
+        /*
+        foreach(Spell spell in spells)
+        {
+            if (data.savedActionButtons[i] == spell.name)
+            {
+                actionButtons[i].SetUseable(spell);
+            }
+        }
+        */
+    }
+
+    private void LoadInventory(PlayerSave data)
+    {
+        int currentItem = 0;
+
+        foreach (string item in data.inventorySave)
+        {
+
+            PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(ItemRolls.GetItemStats(item, data.inventoryItemMods[currentItem], data.inventoryItemRarity[currentItem]));
+
+            currentItem += 1;
 
         }
     }
 
-    public void LoadPlayer(PlayerSave data)
+    private void LoadSkillPoints(PlayerSave data)
     {
-        //PlayerSave data = SaveSystem.LoadScenePlayer();
-
-        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
-
-        playerStats.level = data.level;
-
-        playerStats.xp = data.xp;
-
-        playerStats.Load_currentHp(data.Hp);
-
-        playerStats.Set_SkillPoints(data.skillPoints);
-
-        //Die Gegenstände werden initialisiert und neu angezogen.
-
-        #region Load-Equipped Items
-        if (data.brust != null)
-            FindObjectOfType<EQSlotBrust>().LoadItem(ItemRolls.GetItemStats(data.brust, data.modsBrust, data.brust_r));
-
-        if (data.hose != null)
-            FindObjectOfType<EQSlotHose>().LoadItem(ItemRolls.GetItemStats(data.hose, data.modsHose, data.hose_r));
-
-        if (data.kopf != null)
-            FindObjectOfType<EQSlotKopf>().LoadItem(ItemRolls.GetItemStats(data.kopf, data.modsKopf, data.kopf_r));
-
-        if (data.schuhe != null)
-            FindObjectOfType<EQSlotSchuhe>().LoadItem(ItemRolls.GetItemStats(data.schuhe, data.modsSchuhe, data.schuhe_r));
-
-        if (data.schmuck != null)
-            FindObjectOfType<EQSlotSchmuck>().LoadItem(ItemRolls.GetItemStats(data.schmuck, data.modsSchmuck, data.schmuck_r));
-
-        if (data.weapon != null)
-            FindObjectOfType<EQSlotWeapon>().LoadItem(ItemRolls.GetItemStats(data.weapon, data.modsWeapon, data.weapon_r));
-        #endregion
-
-        //Skillpunkte werden geladen.
-
-        #region Load-Skillpoints
-
         TalentTree talentTree = FindObjectOfType<TalentTree>();
 
         foreach (TalentSave savedTalent in data.talentsToBeSaved)
@@ -91,59 +112,47 @@ public class PlayerLoad : MonoBehaviour
             talentTree.UpdateTalentPointText();
 
         }
-        #endregion
+    }
 
-        // Inventar wird geladen.
+    private void LoadEquippedItems(PlayerSave data)
+    {
+        if (data.brust != null)
+            FindObjectOfType<EQSlotBrust>().LoadItem(ItemRolls.GetItemStats(data.brust, data.modsBrust, data.brust_r));
 
-        int currentItem = 0;
+        if (data.hose != null)
+            FindObjectOfType<EQSlotHose>().LoadItem(ItemRolls.GetItemStats(data.hose, data.modsHose, data.hose_r));
 
-        foreach(string item in data.inventorySave)
-        {
+        if (data.kopf != null)
+            FindObjectOfType<EQSlotKopf>().LoadItem(ItemRolls.GetItemStats(data.kopf, data.modsKopf, data.kopf_r));
 
-            PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(ItemRolls.GetItemStats(item, data.inventoryItemMods[currentItem], data.inventoryItemRarity[currentItem]));
+        if (data.schuhe != null)
+            FindObjectOfType<EQSlotSchuhe>().LoadItem(ItemRolls.GetItemStats(data.schuhe, data.modsSchuhe, data.schuhe_r));
 
-            currentItem += 1;
+        if (data.schmuck != null)
+            FindObjectOfType<EQSlotSchmuck>().LoadItem(ItemRolls.GetItemStats(data.schmuck, data.modsSchmuck, data.schmuck_r));
 
-        }
+        if (data.weapon != null)
+            FindObjectOfType<EQSlotWeapon>().LoadItem(ItemRolls.GetItemStats(data.weapon, data.modsWeapon, data.weapon_r));
+    }
 
-        /// ActionButtons werden geladen
-        /// 
-        
-        ActionButton[] actionButtons = FindObjectsOfType<ActionButton>();
-        //Talent[] spells = Object.FindObjectsOfType<Spell>();
+    private void LoadPlayerStats(PlayerSave data)
+    {
+        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
+        playerStats.level = data.level;
 
-        foreach (ActionButton slot in actionButtons)
-        {
-            if (slot.gameObject.name == "ActionButton1")
-                LoadActionbarSlot(0, slot, data);
+        playerStats.xp = data.xp;
 
-            if (slot.gameObject.name == "ActionButton2")
-                LoadActionbarSlot(1, slot, data);
+        playerStats.Load_currentHp(data.Hp);
 
-            if (slot.gameObject.name == "ActionButton3")
-                LoadActionbarSlot(2, slot, data);
+        playerStats.Set_SkillPoints(data.skillPoints);
+    }
 
-            if (slot.gameObject.name == "ActionButton4")
-                LoadActionbarSlot(3, slot, data);
+    private void LoadGlobalMap(PlayerSave data)
+    {
+        GlobalMap.exploredMaps = data.exploredMaps;
 
-            if (slot.gameObject.name == "ActionButton5")
-                LoadActionbarSlot(4, slot, data);
-        }
-            // Is it possible to refer to a class, inherting form another from its parent class?
-            /*
-            foreach(Spell spell in spells)
-            {
-                if (data.savedActionButtons[i] == spell.name)
-                {
-                    actionButtons[i].SetUseable(spell);
-                }
-            }
-            */
-
-
-        
-        
+        MapGenHandler.instance.LoadMap(data.currentMap, data.lastSpawnpoint);
     }
 
     void LoadActionbarSlot(int i, ActionButton slot, PlayerSave data)

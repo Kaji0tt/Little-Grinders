@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,19 +12,81 @@ public class Scene_LoadNextScene : MonoBehaviour
     private void OnTriggerEnter(Collider collider)
     {
         //Um auf den Spieler zuzugreifen, muss auf diesen mit PlayerManager.instance.play referiert werden.
-        if(collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
+        if (collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
         {
             SaveSystem.SaveScenePlayer();
 
             //ÜBERGANGSWEISE - beim Wechseln der Szene speichert der Spielstand automatisch.
             SaveSystem.SavePlayer();
 
-            //PlayerPrefs können in Unity direkt für das Projekt eingestellt werden. Diese bestehen aus Dateien, welche in System-Verzeichnissen gespeichert werden und deshalb beständig sind.
-            PlayerPrefs.GetString("SceneLoad");
+            //Setze einen String, falls es sich wirklich um einen Szene übergang handelt und nicht um Wechsel der Karte / aus dem Menü.
+            //PlayerPrefs.GetString("SceneLoad");
 
-            //Lade die nächste Szene im BuildIndex -> Muss überarbeitet werden, sobald es die "Map" gibt á la: LoadScene(A5 oder G19) - entsprechend der Kachel auf der Karte
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
+
+            //Lade die nächste Szene, solange wir nicht in der Prozeduralen Szene für Maps sind.
+            if (SceneManager.GetActiveScene().buildIndex != 2)
+            {
+
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                PlayerPrefs.SetInt("MapX", 0);
+                PlayerPrefs.SetInt("MapY", 0);
+
+            }
+
+
+            else
+            {
+                LoadNextMap(gameObject.name);
+            }
+        }
+    }
+
+    private void LoadNextMap(string exitDirection)
+    {
+        switch (exitDirection)
+        {
+            case "ExitRight":
+                PlayerPrefs.SetInt("MapX", PlayerPrefs.GetInt("MapX") + 1);
+                PlayerPrefs.SetInt("MapY", PlayerPrefs.GetInt("MapY") + 0);
+
+                MapGenHandler.instance.ResetThisMap();
+                MapGenHandler.instance.ScanForExploredMaps("SpawnLeft");
+                GlobalMap.SetCurrentMap();
+
+                break;
+
+            case "ExitLeft":
+                PlayerPrefs.SetInt("MapX", PlayerPrefs.GetInt("MapX") - 1);
+                PlayerPrefs.SetInt("MapY", PlayerPrefs.GetInt("MapY") + 0);
+
+                MapGenHandler.instance.ResetThisMap();
+                MapGenHandler.instance.ScanForExploredMaps("SpawnRight");
+                GlobalMap.SetCurrentMap();
+
+                break;
+
+            case "ExitTop":
+                PlayerPrefs.SetInt("MapX", PlayerPrefs.GetInt("MapX") + 0);
+                PlayerPrefs.SetInt("MapY", PlayerPrefs.GetInt("MapY") + 1);
+
+                MapGenHandler.instance.ResetThisMap();
+                MapGenHandler.instance.ScanForExploredMaps("SpawnBot");
+                GlobalMap.SetCurrentMap();
+
+                break;
+
+            case "ExitBot":
+                PlayerPrefs.SetInt("MapX", PlayerPrefs.GetInt("MapX") + 0);
+                PlayerPrefs.SetInt("MapY", PlayerPrefs.GetInt("MapY") - 1);
+
+                MapGenHandler.instance.ResetThisMap();
+                MapGenHandler.instance.ScanForExploredMaps("SpawnTop");
+                GlobalMap.SetCurrentMap();
+
+                break;
+
+            default: break;
         }
     }
 }
