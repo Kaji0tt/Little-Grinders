@@ -105,7 +105,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!195 &7164954657055753790
 NavMeshAgent:
@@ -120,7 +120,7 @@ NavMeshAgent:
   m_Speed: 0.5
   m_Acceleration: 20
   avoidancePriority: 50
-  m_AngularSpeed: 90
+  m_AngularSpeed: 0
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -142,8 +142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ikAnimated: 0
-  hpBar: {fileID: 0}
-  enemyHpSlider: {fileID: 0}
+  hpBar: {fileID: 7164954658741026143}
+  enemyHpSlider: {fileID: 7164954657212124049}
   Hp:
     BaseValue: 70
   Armor:
@@ -778,7 +778,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7164954658659641909}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.002, y: 0.189, z: -0.043}
+  m_LocalPosition: {x: 0.006, y: 0.189, z: -0.003}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 7164954657055753789}
@@ -795,7 +795,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.35
+  m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7164954658741026143
 GameObject:

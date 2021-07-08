@@ -17,6 +17,8 @@ public static class SaveSystem
 
         formatter.Serialize(stream, data);
         stream.Close();
+
+        Debug.Log("SAVE TROUBLESHOOT -- player.xxs saved");
     }
 
     public static PlayerSave LoadPlayer ()
@@ -30,15 +32,19 @@ public static class SaveSystem
             PlayerSave data = formatter.Deserialize(stream) as PlayerSave;
             stream.Close();
 
+            Debug.Log("SAVE TROUBLESHOOT -- player.xxs loaded");
+
             return data;
         }
         else
         {
             Debug.LogError("Save file not found in " + path);
+
             return null;
         }
     }
 
+    
     public static void SaveScenePlayer()
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -69,11 +75,12 @@ public static class SaveSystem
         }
         else
         {
+
             Debug.LogError("Save file not found in " + path);
 
             return null;
 
         }
     }
-
+    
 }

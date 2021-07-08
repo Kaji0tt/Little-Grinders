@@ -143,10 +143,10 @@ public class AudioManager : MonoBehaviour
     {
         for (int i = 0; i < soundList.Length; i++)
         {
-            print(i + " count: " + soundList[i].Count);
+            //print(i + " count: " + soundList[i].Count);
             foreach (Sound sound in soundList[i])
             {
-                print("Sound: " + sound.name + " added to sounds List");
+                //print("Sound: " + sound.name + " added to sounds List");
 
                 sounds.Add(sound);
 

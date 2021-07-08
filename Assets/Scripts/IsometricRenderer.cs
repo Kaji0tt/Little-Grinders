@@ -15,9 +15,9 @@ public class IsometricRenderer : MonoBehaviour
 
 
     //Arrays for NPC's which only have 4 Directions
-    public static readonly string[] runNPC4Directions = { "Run NW", "Run SW", "Run SE", "Run NE" };
-    public static readonly string[] static4Directions = { "Static NW", "Static SW", "Static SE", "Static NE" };
-    public static readonly string[] attack4Directions = { "Attack NW", "Attack SW", "Attack SE", "Attack NE" };
+    public static readonly string[] runNPC4Directions = { "Run NE", "Run SE", "Run SW", "Run NW" };
+    public static readonly string[] static4Directions = { "Static NE", "Static SE", "Static SW", "Static NW" };
+    public static readonly string[] attack4Directions = { "Attack NE", "Attack SE", "Attack SW", "Attack NW" };
 
     public static readonly string[] weaponSwing = { "Attack_N", "Attack_NW", "Attack_W", "Attack_SW", "Attack_S", "Attack_SE", "Attack_E", "Attack_NE" };
     Animator animator;
