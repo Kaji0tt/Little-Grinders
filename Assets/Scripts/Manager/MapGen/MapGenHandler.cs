@@ -1,5 +1,6 @@
 ﻿using UnityEditor.AI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapGenHandler : MonoBehaviour
 {
@@ -25,57 +26,58 @@ public class MapGenHandler : MonoBehaviour
 
     void Start()
     {
-
+        /*
         PlayerPrefs.SetInt("MapX", 0);
         PlayerPrefs.SetInt("MapY", 0);
 
         CreateANewMap("SpawnRight"); //ggf. CreateANewMap(SpielerPosition);
+        */
 
-        print(GlobalMap.exploredMaps.Count + " Maps are currently explored. We are moving on " + GlobalMap.GetCurrentMap().mapIndexX + "," + GlobalMap.GetCurrentMap().mapIndexY);
+        //If the Player enters the World-Map Scene, it should load its current save.
+        Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
+
+        print(GlobalMap.exploredMaps.Count + " Maps are currently explored. We are moving on " + GlobalMap.GetNextMap().mapIndexX + "," + GlobalMap.GetNextMap().mapIndexY);
 
 
     }
 
     public void CreateANewMap(string playerSpawn)
     {
+        //Create a new Map Layout
         DefineFieldArray();
         CreateMapLayout();
         AssigneFieldType();
         LoadPrefabs(playerSpawn);
+
+        //Build NavMesh for Enemys
         NavMeshBuilder.BuildNavMesh();
 
-        if(!Scene_OnSceneLoad.sceneGotLoaded)
+        //Check if the Player is currently in the World-Map Scene. If not, we dont need to Load the PlayerFiles, because the scene is rebuilding itself.
+        if(SceneManager.GetActiveScene().buildIndex != 2)
         Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
 
         SaveThisMap();
-        GlobalMap.SetCurrentMap();
     }
 
-    public void ScanForExploredMaps(string spawnPoint)
-    {
-        if (GlobalMap.GetCurrentMap() != null)
-            LoadMap(GlobalMap.GetCurrentMap(), spawnPoint);
-        else
-            CreateANewMap(spawnPoint);
-    }
+
 
     public void LoadMap(MapSave map, string spawnPoint)
     {
-
+        //Load existing Map Layout from Save file
         for (int i = 0; i < 81; i++)
         {
             fieldsPosObj[i].GetComponent<FieldPos>().Type = map.fieldType[i];
         }
-
         LoadPrefabs(spawnPoint);
 
-
-
+        //Build NavMesh for Enemys
         NavMeshBuilder.BuildNavMesh();
 
-        if (!Scene_OnSceneLoad.sceneGotLoaded)
+        //Check if the Player is currently in the World-Map Scene. If not, we dont need to Load the PlayerFiles, because the scene is rebuilding itself.
+        if (SceneManager.GetActiveScene().buildIndex != 2)
             Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
-        GlobalMap.SetCurrentMap();
+
+        Debug.Log("Map loaded from Save Data");
 
     }
 
@@ -311,7 +313,7 @@ public class MapGenHandler : MonoBehaviour
             }
         }
 
-        Debug.Log("Map Loaded");
+        Debug.Log("Map Generated");
     }
 
     private void AssigneFieldType()
@@ -369,9 +371,12 @@ public class MapGenHandler : MonoBehaviour
 
     private void SaveThisMap()
     {
-        print((PlayerPrefs.GetInt("MapX")) + ", " + (PlayerPrefs.GetInt("MapY")));
+        print("Next GlobalMap position:" + GlobalMap.currentPosition);
 
-        new MapSave();
+        MapSave newMap = new MapSave();
+
+        GlobalMap.currentMap = newMap;
+
     }
 
     /*

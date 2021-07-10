@@ -78,6 +78,8 @@ public class PlayerSave
 
     public string lastSpawnpoint;
 
+    public float globalMapX; public float globalMapY;
+
 
 
 
@@ -106,15 +108,25 @@ public class PlayerSave
         
         loadIndex = 1;
 
+        ///Save GlobalMap Settings
+        SaveTheGlobalMap();
+
+    }
+
+    private void SaveTheGlobalMap()
+    {
         if (SceneManager.GetActiveScene().buildIndex == 2)
             MyScene = 2;
         else MyScene = 1;
 
         exploredMaps = GlobalMap.exploredMaps;
 
-        currentMap = GlobalMap.GetCurrentMap();
+        currentMap = GlobalMap.currentMap;
 
         lastSpawnpoint = GlobalMap.lastSpawnpoint;
+
+        globalMapX = GlobalMap.currentPosition.x; globalMapY = GlobalMap.currentPosition.y;
+
     }
 
     private void SaveTheActionButtons()

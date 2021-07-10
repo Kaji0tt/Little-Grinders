@@ -7,8 +7,8 @@ using UnityEngine;
 public class MapSave
 {
     //MapSave muss wissen:
-    public int mapIndexX;
-    public int mapIndexY;
+    public float mapIndexX;
+    public float mapIndexY;
 
     //public bool[][] isMapExplored = new bool[][] { };
 
@@ -43,15 +43,15 @@ public class MapSave
     {
         Debug.Log("Map should get constructed");
         //Save the Map Coordinates
-        mapIndexX = PlayerPrefs.GetInt("MapX");
-        mapIndexY = PlayerPrefs.GetInt("MapY");
+        mapIndexX = GlobalMap.currentPosition.x;
+        mapIndexY = GlobalMap.currentPosition.y;
 
         //Save the FieldLayout
         for(int i = 0; i < 81; i++)
         {       
             fieldType[i] = MapGenHandler.instance.fieldPosSave[i].GetComponent<FieldPos>().Type;
 
-            Debug.Log(fieldType[i]);
+            //Debug.Log(fieldType[i]);
         }
         
         GlobalMap.AddCurrentMapToExploredMaps(this);
@@ -68,6 +68,9 @@ public static class GlobalMap
     //Current Map the Player is moving on. Set on every SceneLoad / MapSwap (Scene_OnSceneLoad.cs)
     public static MapSave currentMap;
 
+    //The current Position of WorldChunks/Cordinates loaded
+    public static Vector2 currentPosition;
+
     //Saving the last SpawnPoint, the player entered the Map in.
     public static string lastSpawnpoint;
 
@@ -82,24 +85,36 @@ public static class GlobalMap
         return new Vector2(map.mapIndexX, map.mapIndexY);
     }
 
-    //To seperate Methods to Set and Get Current Maps. Because, why not.
-    public static void SetCurrentMap()
-    {
-        currentMap = GetCurrentMap();
-    }
-
-    public static MapSave GetCurrentMap()
+    public static MapSave GetNextMap()
     {
         foreach (MapSave map in exploredMaps)
         {
-            if (map.mapIndexX == PlayerPrefs.GetInt("MapX") && map.mapIndexY == PlayerPrefs.GetInt("MapY"))
+            if (map.mapIndexX == currentPosition.x && map.mapIndexY == currentPosition.y)
             {
+                MapGenHandler.instance.LoadMap(map, lastSpawnpoint);
+
                 return map;
             }
 
         }
 
+        if (lastSpawnpoint != null)
+            MapGenHandler.instance.CreateANewMap(lastSpawnpoint);
+        else
+            MapGenHandler.instance.CreateANewMap("SpawnRight");
+
         return null;
+    }
+
+    public static bool ScanIfNextMapIsExplored()
+    {
+        if (GetNextMap() != null)
+            return true;
+
+        //MapGenHandler.instance.LoadMap(GetCurrentMap(), lastSpawnpoint);
+        else
+            return false;
+            //
     }
 
 }

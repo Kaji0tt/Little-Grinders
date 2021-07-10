@@ -32,5 +32,7 @@ public class SaveLoadMenu : MonoBehaviour
 
         SceneManager.LoadScene(data.MyScene);
 
+        //FindObjectOfType<PlayerLoad>().LoadPlayer(data);
+
     }
 }

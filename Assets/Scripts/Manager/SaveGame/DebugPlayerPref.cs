@@ -24,5 +24,7 @@ public class DebugPlayerPref : MonoBehaviour
         if (PlayerPrefs.GetFloat("musicVol") == 0)
             PlayerPrefs.SetFloat("musicVol", 0.5f);
 
+        PlayerPrefs.DeleteKey("MapX"); PlayerPrefs.DeleteKey("MapY");
+
     }
 }

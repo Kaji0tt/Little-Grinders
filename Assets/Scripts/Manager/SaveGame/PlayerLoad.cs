@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class PlayerLoad : MonoBehaviour
 {
-
     public void LoadPlayer(PlayerSave data)
     {
         LoadPlayerStats(data);
@@ -30,6 +29,23 @@ public class PlayerLoad : MonoBehaviour
         LoadGlobalMap(data);
 
         
+    }
+
+    public void LoadScenePlayer(PlayerSave data)
+    {
+        LoadPlayerStats(data);
+
+        //Die Gegenstände werden initialisiert und neu angezogen.
+        LoadEquippedItems(data);
+
+        //Skillpunkte werden geladen.
+        LoadSkillPoints(data);
+
+        // Inventar wird geladen.
+        LoadInventory(data);
+
+        // ActionButtons werden geladen.
+        LoadActionbar(data);
     }
 
     private void LoadActionbar(PlayerSave data)
@@ -152,7 +168,12 @@ public class PlayerLoad : MonoBehaviour
     {
         GlobalMap.exploredMaps = data.exploredMaps;
 
+        GlobalMap.currentMap = data.currentMap;
+
+        GlobalMap.currentPosition = new Vector2(data.globalMapX, data.globalMapY);
+
         MapGenHandler.instance.LoadMap(data.currentMap, data.lastSpawnpoint);
+
     }
 
     void LoadActionbarSlot(int i, ActionButton slot, PlayerSave data)
