@@ -24,6 +24,7 @@ public class MapGenHandler : MonoBehaviour
 
     //public FieldType[] saveFieldTypes { private set; get; }
 
+
     void Start()
     {
         /*
@@ -37,6 +38,8 @@ public class MapGenHandler : MonoBehaviour
         Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
 
         print(GlobalMap.exploredMaps.Count + " Maps are currently explored. We are moving on " + GlobalMap.GetNextMap().mapIndexX + "," + GlobalMap.GetNextMap().mapIndexY);
+
+
 
 
     }

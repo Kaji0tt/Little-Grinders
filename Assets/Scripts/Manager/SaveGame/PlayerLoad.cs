@@ -46,6 +46,14 @@ public class PlayerLoad : MonoBehaviour
 
         // ActionButtons werden geladen.
         LoadActionbar(data);
+
+        // LoadCurrentMap
+        LoadCurrentMap(data);
+    }
+
+    private void LoadCurrentMap(PlayerSave data)
+    {
+        MapGenHandler.instance.LoadMap(data.currentMap, data.lastSpawnpoint);
     }
 
     private void LoadActionbar(PlayerSave data)
