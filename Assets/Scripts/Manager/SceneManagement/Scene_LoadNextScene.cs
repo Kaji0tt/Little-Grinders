@@ -14,7 +14,7 @@ public class Scene_LoadNextScene : MonoBehaviour
         //Um auf den Spieler zuzugreifen, muss auf diesen mit PlayerManager.instance.play referiert werden.
         if (collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
         {
-            SaveSystem.SaveScenePlayer();
+            //SaveSystem.SaveScenePlayer();
 
             //ÜBERGANGSWEISE - beim Wechseln der Szene speichert der Spielstand automatisch.
             SaveSystem.SavePlayer();
@@ -29,64 +29,65 @@ public class Scene_LoadNextScene : MonoBehaviour
             {
 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                PlayerPrefs.SetInt("MapX", 0);
-                PlayerPrefs.SetInt("MapY", 0);
 
             }
 
 
             else
             {
-                LoadNextMap(gameObject.name);
+                ScanExitDirection(gameObject.name);
             }
         }
     }
 
-    private void LoadNextMap(string exitDirection)
+    private void ScanExitDirection(string exitDirection)
     {
         switch (exitDirection)
         {
             case "ExitRight":
-                PlayerPrefs.SetInt("MapX", PlayerPrefs.GetInt("MapX") + 1);
-                PlayerPrefs.SetInt("MapY", PlayerPrefs.GetInt("MapY") + 0);
 
-                MapGenHandler.instance.ResetThisMap();
-                MapGenHandler.instance.ScanForExploredMaps("SpawnLeft");
-                GlobalMap.SetCurrentMap();
+                GlobalMap.currentPosition = new Vector2(GlobalMap.currentPosition.x + 1, GlobalMap.currentPosition.y);
+
+                LoadNextMap("SpawnLeft");
 
                 break;
 
             case "ExitLeft":
-                PlayerPrefs.SetInt("MapX", PlayerPrefs.GetInt("MapX") - 1);
-                PlayerPrefs.SetInt("MapY", PlayerPrefs.GetInt("MapY") + 0);
 
-                MapGenHandler.instance.ResetThisMap();
-                MapGenHandler.instance.ScanForExploredMaps("SpawnRight");
-                GlobalMap.SetCurrentMap();
+                GlobalMap.currentPosition = new Vector2(GlobalMap.currentPosition.x - 1, GlobalMap.currentPosition.y);
+
+                LoadNextMap("SpawnRight");
 
                 break;
 
             case "ExitTop":
-                PlayerPrefs.SetInt("MapX", PlayerPrefs.GetInt("MapX") + 0);
-                PlayerPrefs.SetInt("MapY", PlayerPrefs.GetInt("MapY") + 1);
 
-                MapGenHandler.instance.ResetThisMap();
-                MapGenHandler.instance.ScanForExploredMaps("SpawnBot");
-                GlobalMap.SetCurrentMap();
+                GlobalMap.currentPosition = new Vector2(GlobalMap.currentPosition.x, GlobalMap.currentPosition.y + 1);
+
+                LoadNextMap("SpawnBot");
 
                 break;
 
             case "ExitBot":
-                PlayerPrefs.SetInt("MapX", PlayerPrefs.GetInt("MapX") + 0);
-                PlayerPrefs.SetInt("MapY", PlayerPrefs.GetInt("MapY") - 1);
 
-                MapGenHandler.instance.ResetThisMap();
-                MapGenHandler.instance.ScanForExploredMaps("SpawnTop");
-                GlobalMap.SetCurrentMap();
+                GlobalMap.currentPosition = new Vector2(GlobalMap.currentPosition.x, GlobalMap.currentPosition.y - 1);
+
+                LoadNextMap("SpawnTop");
 
                 break;
 
             default: break;
         }
+    }
+
+    private void LoadNextMap(string nextSpawnpoint)
+    {
+
+        MapGenHandler.instance.ResetThisMap();
+
+        GlobalMap.lastSpawnpoint = nextSpawnpoint;
+
+        GlobalMap.GetNextMap();
+
     }
 }

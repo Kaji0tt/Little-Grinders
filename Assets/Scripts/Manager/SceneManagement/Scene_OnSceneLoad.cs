@@ -6,35 +6,27 @@ using UnityEngine;
 //Dazu dient diese Klasse, welche mit einem Collider im Eingangsbereich plaziert wird und nur einmalig geladen werden kann.
 public class Scene_OnSceneLoad
 {
-    
-    //private bool playerGotLoaded = false;
-    public static void LoadScenePlayer(PlayerLoad playerload)
+    /*
+    public bool sceneGotLoaded = false;
+
+    public void LoadScenePlayer(PlayerLoad playerload)
     {
+        
 
         PlayerSave data = SaveSystem.LoadPlayer();
 
         playerload.LoadPlayer(data);
 
-        //PlayerPrefs.DeleteKey("SceneLoad");
-
-        //playerGotLoaded = true;
+        
 
     }
-    
-    
-    public static bool sceneGotLoaded = false;
-
-    
-    void Awake()
-    {
-        //Falls in den PlayerPrefs der String Load aktiviert wurde, deaktiviere den entsprechenden Bool.
-        if(PlayerPrefs.HasKey("Load"))
-        {
-            sceneGotLoaded = true;
-        }
-    }
+    */
     
 
+
+ 
+    
+    /*
 
     public static void LoadPlayer(PlayerLoad playerload)
     {
@@ -54,5 +46,5 @@ public class Scene_OnSceneLoad
 
         }
     }
-    
+    */
 }

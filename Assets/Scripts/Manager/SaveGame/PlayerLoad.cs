@@ -25,12 +25,29 @@ public class PlayerLoad : MonoBehaviour
         LoadActionbar(data);
 
         //Map-Daten werden geladen. 
-        //Hier nochmal bei - Logik fehler.
-        if(SceneManager.GetActiveScene().buildIndex != 2)
+        if(data.currentMap != null)
         LoadGlobalMap(data);
-
         
     }
+    /*
+    public void LoadScenePlayer(PlayerSave data)
+    {
+        LoadPlayerStats(data);
+
+        //Die Gegenstände werden initialisiert und neu angezogen.
+        LoadEquippedItems(data);
+
+        //Skillpunkte werden geladen.
+        LoadSkillPoints(data);
+
+        // Inventar wird geladen.
+        LoadInventory(data);
+
+        // ActionButtons werden geladen.
+        LoadActionbar(data);
+
+    }
+    */
 
     private void LoadActionbar(PlayerSave data)
     {
@@ -152,7 +169,10 @@ public class PlayerLoad : MonoBehaviour
     {
         GlobalMap.exploredMaps = data.exploredMaps;
 
-        MapGenHandler.instance.LoadMap(data.currentMap, data.lastSpawnpoint);
+        GlobalMap.currentMap = data.currentMap;
+
+        GlobalMap.currentPosition = new Vector2(data.globalMapX, data.globalMapY);
+
     }
 
     void LoadActionbarSlot(int i, ActionButton slot, PlayerSave data)

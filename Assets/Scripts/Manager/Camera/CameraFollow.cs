@@ -71,15 +71,18 @@ public class CameraFollow : MonoBehaviour
 
         foreach (RaycastHit hit in raycastHits.ToList())
         {
-
-            SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
-
-            if (spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
+            if(hit.collider.transform.GetComponent<SpriteRenderer>() != null)
             {
-                spriterend.color = new Color(1, 1, 1, 1);
+                SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
 
-                //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
+                if (spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
+                {
+                    spriterend.color = new Color(1, 1, 1, 1);
+
+                    //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
+                }
             }
+
             
 
         }

@@ -70,13 +70,15 @@ public class PlayerSave
 
     public int loadIndex;
 
-    public int MyScene;
+    public int MyScene = 1;
 
     public List<MapSave> exploredMaps;
 
     public MapSave currentMap;
 
     public string lastSpawnpoint;
+
+    public float globalMapX; public float globalMapY;
 
 
 
@@ -106,15 +108,25 @@ public class PlayerSave
         
         loadIndex = 1;
 
-        if (SceneManager.GetActiveScene().buildIndex == 2)
-            MyScene = 2;
-        else MyScene = 1;
+        ///Save GlobalMap Settings
+        if(SceneManager.GetActiveScene().buildIndex != 1)
+        SaveTheGlobalMap();
+
+    }
+
+    private void SaveTheGlobalMap()
+    {
+        //GlobalMap only gets saved as the player is in Scene 2.
+        MyScene = 2;
 
         exploredMaps = GlobalMap.exploredMaps;
 
-        currentMap = GlobalMap.GetCurrentMap();
+        currentMap = GlobalMap.currentMap;
 
         lastSpawnpoint = GlobalMap.lastSpawnpoint;
+
+        globalMapX = GlobalMap.currentPosition.x; globalMapY = GlobalMap.currentPosition.y;
+
     }
 
     private void SaveTheActionButtons()
