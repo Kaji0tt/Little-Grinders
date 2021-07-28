@@ -14,7 +14,7 @@ public class Scene_LoadNextScene : MonoBehaviour
         //Um auf den Spieler zuzugreifen, muss auf diesen mit PlayerManager.instance.play referiert werden.
         if (collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
         {
-            SaveSystem.SaveScenePlayer();
+            //SaveSystem.SaveScenePlayer();
 
             //ÜBERGANGSWEISE - beim Wechseln der Szene speichert der Spielstand automatisch.
             SaveSystem.SavePlayer();

@@ -70,7 +70,7 @@ public class PlayerSave
 
     public int loadIndex;
 
-    public int MyScene;
+    public int MyScene = 1;
 
     public List<MapSave> exploredMaps;
 
@@ -109,15 +109,15 @@ public class PlayerSave
         loadIndex = 1;
 
         ///Save GlobalMap Settings
+        if(SceneManager.GetActiveScene().buildIndex != 1)
         SaveTheGlobalMap();
 
     }
 
     private void SaveTheGlobalMap()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 2)
-            MyScene = 2;
-        else MyScene = 1;
+        //GlobalMap only gets saved as the player is in Scene 2.
+        MyScene = 2;
 
         exploredMaps = GlobalMap.exploredMaps;
 

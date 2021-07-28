@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerLoad : MonoBehaviour
 {
+
     public void LoadPlayer(PlayerSave data)
     {
         LoadPlayerStats(data);
@@ -24,13 +25,11 @@ public class PlayerLoad : MonoBehaviour
         LoadActionbar(data);
 
         //Map-Daten werden geladen. 
-        //Hier nochmal bei - Logik fehler.
-        if(SceneManager.GetActiveScene().buildIndex != 2)
+        if(data.currentMap != null)
         LoadGlobalMap(data);
-
         
     }
-
+    /*
     public void LoadScenePlayer(PlayerSave data)
     {
         LoadPlayerStats(data);
@@ -47,14 +46,8 @@ public class PlayerLoad : MonoBehaviour
         // ActionButtons werden geladen.
         LoadActionbar(data);
 
-        // LoadCurrentMap
-        LoadCurrentMap(data);
     }
-
-    private void LoadCurrentMap(PlayerSave data)
-    {
-        MapGenHandler.instance.LoadMap(data.currentMap, data.lastSpawnpoint);
-    }
+    */
 
     private void LoadActionbar(PlayerSave data)
     {
@@ -179,8 +172,6 @@ public class PlayerLoad : MonoBehaviour
         GlobalMap.currentMap = data.currentMap;
 
         GlobalMap.currentPosition = new Vector2(data.globalMapX, data.globalMapY);
-
-        MapGenHandler.instance.LoadMap(data.currentMap, data.lastSpawnpoint);
 
     }
 

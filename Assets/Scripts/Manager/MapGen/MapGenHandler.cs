@@ -27,17 +27,42 @@ public class MapGenHandler : MonoBehaviour
 
     void Start()
     {
-        /*
-        PlayerPrefs.SetInt("MapX", 0);
-        PlayerPrefs.SetInt("MapY", 0);
-
-        CreateANewMap("SpawnRight"); //ggf. CreateANewMap(SpielerPosition);
-        */
 
         //If the Player enters the World-Map Scene, it should load its current save.
-        Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
+        if (!PlayerPrefs.HasKey("Load"))
+        {
+            PlayerLoad playerLoad = FindObjectOfType<PlayerLoad>();
 
-        print(GlobalMap.exploredMaps.Count + " Maps are currently explored. We are moving on " + GlobalMap.GetNextMap().mapIndexX + "," + GlobalMap.GetNextMap().mapIndexY);
+            PlayerSave data = SaveSystem.LoadPlayer();
+
+            CreateANewMap("SpawnRight");
+
+            playerLoad.LoadPlayer(data);
+
+            print("Start load from MapGenHandler enabled");
+        }
+        //else it should load the data.
+        else
+        {
+
+            PlayerLoad playerLoad = FindObjectOfType<PlayerLoad>();
+
+            PlayerSave data = SaveSystem.LoadPlayer();
+
+            if(data.lastSpawnpoint == null)
+            LoadMap(data.currentMap, "SpawnRight");
+
+            else
+            LoadMap(data.currentMap, data.lastSpawnpoint);
+
+            playerLoad.LoadPlayer(data);
+
+            PlayerPrefs.DeleteKey("Load");
+
+        }
+
+
+        //print(GlobalMap.exploredMaps.Count + " Maps are currently explored. We are moving on " + GlobalMap.GetNextMap().mapIndexX + "," + GlobalMap.GetNextMap().mapIndexY);
 
 
 
@@ -55,9 +80,6 @@ public class MapGenHandler : MonoBehaviour
         //Build NavMesh for Enemys
         NavMeshBuilder.BuildNavMesh();
 
-        //Check if the Player is currently in the World-Map Scene. If not, we dont need to Load the PlayerFiles, because the scene is rebuilding itself.
-        if(SceneManager.GetActiveScene().buildIndex != 2)
-        Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
 
         SaveThisMap();
     }
@@ -77,8 +99,8 @@ public class MapGenHandler : MonoBehaviour
         NavMeshBuilder.BuildNavMesh();
 
         //Check if the Player is currently in the World-Map Scene. If not, we dont need to Load the PlayerFiles, because the scene is rebuilding itself.
-        if (SceneManager.GetActiveScene().buildIndex != 2)
-            Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
+        //if (SceneManager.GetActiveScene().buildIndex != 2)
+        //    Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
 
         Debug.Log("Map loaded from Save Data");
 

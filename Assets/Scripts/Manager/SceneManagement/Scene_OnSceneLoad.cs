@@ -6,25 +6,27 @@ using UnityEngine;
 //Dazu dient diese Klasse, welche mit einem Collider im Eingangsbereich plaziert wird und nur einmalig geladen werden kann.
 public class Scene_OnSceneLoad
 {
-    public static bool sceneGotLoaded = false;
+    /*
+    public bool sceneGotLoaded = false;
 
-    public static void LoadScenePlayer(PlayerLoad playerload)
+    public void LoadScenePlayer(PlayerLoad playerload)
     {
+        
 
         PlayerSave data = SaveSystem.LoadPlayer();
 
-        playerload.LoadScenePlayer(data);
+        playerload.LoadPlayer(data);
 
-
+        
 
     }
-    
+    */
     
 
 
  
     
-
+    /*
 
     public static void LoadPlayer(PlayerLoad playerload)
     {
@@ -44,5 +46,5 @@ public class Scene_OnSceneLoad
 
         }
     }
-    
+    */
 }
