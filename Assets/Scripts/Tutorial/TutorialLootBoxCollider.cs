@@ -10,11 +10,12 @@ public class TutorialLootBoxCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-
+        /*
         if(collider.gameObject.tag == "Player" && gotTriggered == false)
         {
             gotTriggered = true;
             tutorialScript.ShowTutorial(2);
         }
+        */
     }
 }

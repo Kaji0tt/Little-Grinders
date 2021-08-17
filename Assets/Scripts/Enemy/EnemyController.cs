@@ -47,7 +47,7 @@ public class EnemyController : MonoBehaviour
     private float p_attackCD = 0f;
     private float maxHp;
     [Space]
-    public int Experience;
+    public int experience;
     public float aggroRange = 5f, attackRange;
     //private PlayerStats playerStats;
     public LootTable lootTable;
@@ -92,8 +92,35 @@ public class EnemyController : MonoBehaviour
         //Ask, if this is an IK-Animated enemy
         if (ikAnimated == false)
         isoRenderer = GetComponentInChildren<IsometricRenderer>();
+
+        //Recalculate BaseStats in dependency of Map-Level
+        CalculateMobStats();
     }
 
+    private void CalculateMobStats()
+    {
+        //Alles noch nicht durchdacht, für pre alpha 0.3 solls reichen.
+        if(GlobalMap.instance != null)
+        {
+            level = level + GlobalMap.instance.currentMap.mapLevel;
+
+            if (level > GlobalMap.instance.currentMap.mapLevel)
+            {
+                Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
+                //Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 0.01f), StatModType.PercentMult));
+                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / GlobalMap.instance.currentMap.mapLevel) * 2, StatModType.Flat));
+                AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
+
+                print("modifiers of mobs should have been added, resulting in:" + Hp.Value + " for Hp on " + gameObject.name + ". AttackPower: " + AttackPower.Value);
+            }
+
+            maxHp = Hp.Value;
+
+            experience += GlobalMap.instance.currentMap.mapLevel * 10;
+
+        }
+        
+    }
 
     void Update()
     {
@@ -147,9 +174,12 @@ public class EnemyController : MonoBehaviour
         }
 
 
+        CalculateHPCanvas();
 
-        #region Hp-Bar
+    }
 
+    private void CalculateHPCanvas()
+    {
         enemyHpSlider.value = Hp.Value / maxHp;
         if (Hp.Value < maxHp)
         {
@@ -180,8 +210,6 @@ public class EnemyController : MonoBehaviour
 
         if (Hp.Value <= 0)
             Destroy(gameObject);
-        #endregion
-
     }
 
     private void SetDestination()
@@ -279,7 +307,7 @@ public class EnemyController : MonoBehaviour
             //Derzeit müssten die entsprechenden Bullet-Scripts hier abgefragt werden, dats stupid.
             Steinwurf_Bullet steinwurf_bullet = collider.GetComponent<Steinwurf_Bullet>();
 
-            TakeDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.         
+            TakeDirectDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.         
 
         }
     }
@@ -318,16 +346,45 @@ public class EnemyController : MonoBehaviour
             Die();
     }
 
+    public void TakeDirectDamage(float damage, float range)
+    {
+        player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
+
+        if (player_distance <= range)
+        {
+
+            Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+
+            //Sound-Array mit den dazugehörigen Sound-Namen
+            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
+
+            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
+            if (AudioManager.instance != null)
+
+            //Play a Sound at random.
+            AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+
+            pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
+        }
+
+        if (Hp.Value <= 0)
+            Die();
+    }
+
 
     public void Die()
     {
-
         PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
-        playerStats.Set_xp(Experience);
+        playerStats.Set_xp(experience);
 
-        string _lootTable = lootTable.ToString();
-        ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
+        if(level > 1)
+            for(int i = 0; i <= level/2; i++)
+            {
+                ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
+            }
 
+
+        Destroy(this);
         Destroy(gameObject);
     }
 

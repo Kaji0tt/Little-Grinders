@@ -31,9 +31,9 @@ public class MobsCamScript : MonoBehaviour
 
     void Update()
     {
-       //transform.LookAt(Camera.main.transform);
+        //transform.LookAt(Camera.main.transform);
 
-        CameraPosition = CameraManager.instance.camera.transform.position;
+        CameraPosition = CameraManager.instance.mainCam.transform.position;
         DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;
 
         if(sprite != null)

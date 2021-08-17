@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class KeyManager : MonoBehaviour
 {
@@ -13,9 +14,16 @@ public class KeyManager : MonoBehaviour
     {
         get
         {
-            if(instance == null)
+            KeyManager[] instances = FindObjectsOfType<KeyManager>();
+
+            if (instance == null)
             {
-                instance = FindObjectOfType<KeyManager>();
+
+                instance = instances[0];
+            }
+            if (instances.Length > 1)
+            {
+                Destroy(instances[1]);
             }
 
             return instance;
@@ -28,11 +36,10 @@ public class KeyManager : MonoBehaviour
 
     private string bindName;
 
-    private GameObject[] keybindButtons;
+    public string[] keyNames = { "UP", "LEFT", "DOWN", "RIGHT", "STATS", "SKILLS", "PICK", "MAP", "SLOT1", "SLOT2", "SLOT3", "SLOT4", "SLOT5" };
 
     void Awake()
     {
-        keybindButtons = GameObject.FindGameObjectsWithTag("KeyControl");
 
         //Der KeyManager muss Szeneübergreifen bestehen bleiben.
         DontDestroyOnLoad(gameObject);
@@ -45,6 +52,11 @@ public class KeyManager : MonoBehaviour
 
         ActionBinds = new Dictionary<string, KeyCode>();
 
+
+
+        //Possibly use Playerprefs on BindKey - e.g. PlayerPrefs.SetInt(key, KeyCode-to-number);
+        //Then on load or start, if(PlayerPrefs.GetKey(key)), BindKey(PlayerPrefs.GetKey)
+        //else do this assignment called below.
         BindKey("UP", KeyCode.W);
         BindKey("LEFT", KeyCode.A);
         BindKey("DOWN", KeyCode.S);
@@ -60,7 +72,10 @@ public class KeyManager : MonoBehaviour
         BindKey("SLOT3", KeyCode.Alpha3);
         BindKey("SLOT4", KeyCode.Alpha4);
         BindKey("SLOT5", KeyCode.Alpha5);
+
     }
+
+
 
     public void BindKey(string key, KeyCode keyBind)
     {
@@ -73,7 +88,7 @@ public class KeyManager : MonoBehaviour
         {
             currentDictionary.Add(key, keyBind);
 
-            UpdateKeyText(key, keyBind);
+            UI_Manager.instance.UpdateKeyText(key, keyBind);
 
         }
         else if(currentDictionary.ContainsValue(keyBind))
@@ -82,29 +97,18 @@ public class KeyManager : MonoBehaviour
 
             currentDictionary[myKey] = KeyCode.None;
 
-            UpdateKeyText(key, KeyCode.None);
+            UI_Manager.instance.UpdateKeyText(key, KeyCode.None);
 
         }
 
         currentDictionary[key] = keyBind;
 
-        UpdateKeyText(key, keyBind);
+        UI_Manager.instance.UpdateKeyText(key, keyBind);
 
         bindName = string.Empty;
     }
 
-    public void UpdateKeyText(string key, KeyCode code)
-    {
-        TextMeshProUGUI tmp = Array.Find(keybindButtons, x => x.name == key).GetComponentInChildren<TextMeshProUGUI>();
 
-        if(code.ToString().Contains("Alpha"))
-        {
-            tmp.text = code.ToString().Substring(5);
-        }
-        else
-        tmp.text = code.ToString();
-
-    }
 
     public void KeyBindOnClick(string bindName)
     {

@@ -14,80 +14,91 @@ public class Scene_LoadNextScene : MonoBehaviour
         //Um auf den Spieler zuzugreifen, muss auf diesen mit PlayerManager.instance.play referiert werden.
         if (collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
         {
-            //SaveSystem.SaveScenePlayer();
 
-            //ÜBERGANGSWEISE - beim Wechseln der Szene speichert der Spielstand automatisch.
-            SaveSystem.SavePlayer();
-
-            //Setze einen String, falls es sich wirklich um einen Szene übergang handelt und nicht um Wechsel der Karte / aus dem Menü.
-            //PlayerPrefs.GetString("SceneLoad");
-
-
-
-            //Lade die nächste Szene, solange wir nicht in der Prozeduralen Szene für Maps sind.
+            //Wenn wir im Tutorial sind (buildIndex 1), erschaffe eine Map und füge sie der GlobalMap Instanz hinzu.
             if (SceneManager.GetActiveScene().buildIndex != 2)
             {
+                //MapSave newMap = new MapSave();
 
+                //GlobalMap.instance.AddNewMap(newMap);
+
+                //Setze lastSpawnpoint auf Left
+                //GlobalMap.instance.lastSpawnpoint = "SpawnRight";
+
+                //Speichere anschließend den Spieler
+                SaveSystem.SavePlayer();
+
+                //Lade die nächste Szene
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
             }
 
 
+            //Falls der Spieler den Collider zum MapWechsel berührt, während er bereits in der Prozeduralen Szene ist, ScanExitDirection
             else
             {
-                ScanExitDirection(gameObject.name);
+                SaveSystem.SavePlayer();
+
+                LoadNextMap(ScanExitDirection(gameObject.name));
+
             }
         }
     }
 
-    private void ScanExitDirection(string exitDirection)
+    private string ScanExitDirection(string exitDirection)
     {
         switch (exitDirection)
         {
             case "ExitRight":
 
-                GlobalMap.currentPosition = new Vector2(GlobalMap.currentPosition.x + 1, GlobalMap.currentPosition.y);
+                GlobalMap.instance.currentPosition = new Vector2(GlobalMap.instance.currentPosition.x + 1, GlobalMap.instance.currentPosition.y);
 
-                LoadNextMap("SpawnLeft");
+                return("SpawnLeft");
 
-                break;
 
             case "ExitLeft":
 
-                GlobalMap.currentPosition = new Vector2(GlobalMap.currentPosition.x - 1, GlobalMap.currentPosition.y);
+                GlobalMap.instance.currentPosition = new Vector2(GlobalMap.instance.currentPosition.x - 1, GlobalMap.instance.currentPosition.y);
 
-                LoadNextMap("SpawnRight");
-
-                break;
+                return("SpawnRight");
 
             case "ExitTop":
 
-                GlobalMap.currentPosition = new Vector2(GlobalMap.currentPosition.x, GlobalMap.currentPosition.y + 1);
+                GlobalMap.instance.currentPosition = new Vector2(GlobalMap.instance.currentPosition.x, GlobalMap.instance.currentPosition.y + 1);
 
-                LoadNextMap("SpawnBot");
-
-                break;
+                return("SpawnBot");
 
             case "ExitBot":
 
-                GlobalMap.currentPosition = new Vector2(GlobalMap.currentPosition.x, GlobalMap.currentPosition.y - 1);
+                GlobalMap.instance.currentPosition = new Vector2(GlobalMap.instance.currentPosition.x, GlobalMap.instance.currentPosition.y - 1);
 
-                LoadNextMap("SpawnTop");
+                return("SpawnTop");
 
-                break;
+             
 
-            default: break;
+            default: return("SpawnRight");
         }
     }
 
     private void LoadNextMap(string nextSpawnpoint)
     {
+        //Setting the globalMap to safe nextSpawnpoint as lasSpawnpoint for Save & Load purposes.
+        GlobalMap.instance.lastSpawnpoint = nextSpawnpoint;
 
+        //Reset the Map
         MapGenHandler.instance.ResetThisMap();
 
-        GlobalMap.lastSpawnpoint = nextSpawnpoint;
+        //Play Next Map Sound at Random
+        if(AudioManager.instance != null)
+        {
+            string[] nextMapSound = { "NextMap1", "NextMap2" };
+            AudioManager.instance.Play(nextMapSound[UnityEngine.Random.Range(0, 2)]);
 
-        GlobalMap.GetNextMap();
+        }
+
+        //Tell the MaGenHandler to either create a NewMap, if its not explored yet or Load the explored one.
+        MapGenHandler.instance.LoadMap(GlobalMap.instance.ScanIfNextMapIsExplored(), nextSpawnpoint);
+
 
     }
 }

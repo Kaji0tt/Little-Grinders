@@ -33,7 +33,7 @@ public class IsometricPlayer : MonoBehaviour
     #endregion
 
     #region Implementation - Item und Inventory
-    private Inventory inventory;
+    public Inventory inventory { get; private set; }
 
     public List<ItemInstance> equippedItems = new List<ItemInstance>();
 
@@ -89,6 +89,8 @@ public class IsometricPlayer : MonoBehaviour
 
     //Bool um zu überprüfen, ob der Spieler noch AFK ist.
     private bool idle = false;
+
+    public float userFOV;
 
     #endregion
 
@@ -148,20 +150,27 @@ public class IsometricPlayer : MonoBehaviour
     //Fixed Update wird gecalled, vor der physikalischen Berechning innerhalb eines Frames.
     void FixedUpdate()
     {
-
+        MapView();
 
         Move();
 
         //Falls kein Input kommt, zählt die Idle_Time pro Frame 1 hoch
-        if (!Input.anyKey && !Input.anyKeyDown)
-            idle_time = idle_time + 1;
-        else if (idle)
+        if (!Input.anyKey)
         {
+            //userFOV = Camera.main.fieldOfView;
+            idle_time = idle_time + 1;
+        }
+
+        //Falls wir uns im Idle-State befindet, nun jedoch eine Taste gedrückt wird (also !Input.anyKey (nicht keine Taste gedrückt wird) springen wir zum spieler zurück.
+        else if (idle && !Input.GetKey(UI_Manager.instance.toggleCamKey))
+        {        
             idle_time = 0;
             transform.rotation = Quaternion.Euler(45,0,0);
-            Camera.main.fieldOfView = 15;
-            idle = false;
+            Camera.main.fieldOfView = userFOV;
+            idle = false;           
         }
+       
+
 
 
         //Falls die Idle-Time einen definierten 
@@ -185,11 +194,30 @@ public class IsometricPlayer : MonoBehaviour
         else if (transform.rotation.y > yrotClamp)
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y - 1 / idleRotSpeed, transform.eulerAngles.z);
 
-        if (Camera.main.fieldOfView < idleFOVClamp)
-            Camera.main.fieldOfView += idleRotSpeed * Time.deltaTime / 3;
+        if (CameraManager.instance.mainCam.fieldOfView < idleFOVClamp)
+            CameraManager.instance.mainCam.fieldOfView += idleRotSpeed * Time.deltaTime / 3;
 
         
 
+    }
+
+    private void MapView()
+    {
+        if (Input.GetKey(UI_Manager.instance.toggleCamKey))
+        {
+            if (CameraManager.instance.mainCamGO.activeSelf)
+            {
+                CameraManager.instance.mainCamGO.SetActive(false);
+                CameraManager.instance.mapCamGO.SetActive(true);
+            }
+        }
+        else
+        {   //Brutal ist das hässlich bruder, ganz dringend beim CameraManager 
+            CameraManager.instance.mainCamGO.SetActive(true);
+            if(userFOV <= 20 && userFOV >= 10)
+                CameraManager.instance.mainCam.fieldOfView = userFOV;
+            CameraManager.instance.mapCamGO.SetActive(false);
+        }
     }
 
     //Wird jeden Frame berechnet.
@@ -206,6 +234,8 @@ public class IsometricPlayer : MonoBehaviour
         }
 
 
+
+
         PlayerCombatStance();
 
         //UI Orb
@@ -213,6 +243,10 @@ public class IsometricPlayer : MonoBehaviour
         XpSlider.maxValue = playerStats.LevelUp_need(); //irgendwie unschön, vll kann man Max.Value einmalig einstellen, nachdem man levelUp gekommen ist.
         XpSlider.value = playerStats.xp;
         ui_Level.text = playerStats.level.ToString();
+        PPVolumeManager.instance.LowHealthPP(HpSlider.value);
+
+        //Postprocessing for LowHealth
+
 
 
 
@@ -246,7 +280,8 @@ public class IsometricPlayer : MonoBehaviour
         ActualSpeed = Vector3.ClampMagnitude(ActualSpeed, 1);
 
         //Bewege den Rigidbody anhand des Vectors, multipliziert durch MovementSpeed
-        rbody.AddForce(ActualSpeed * playerStats.MovementSpeed.Value, ForceMode.Force);
+        //rbody.AddForce(ActualSpeed * playerStats.MovementSpeed.Value, ForceMode.Force);
+        rbody.MovePosition(transform.position + Time.deltaTime * ActualSpeed * playerStats.MovementSpeed.Value);
 
     }
 
@@ -265,7 +300,7 @@ public class IsometricPlayer : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0) && weaponGameObject.gameObject.GetComponent<Animator>().GetBool("isAttacking") == false && !IsMouseOverUIWithIgnores())
         {
             //Setze den Timer für die Combat-Stance zurück.
-            combatStanceTime = 1; // Später, attackSpeed länge.
+            combatStanceTime = 1 / playerStats.AttackSpeed.Value; // Später, attackSpeed länge.
 
             //Führe Angriff aus.
             Attack();
@@ -420,12 +455,14 @@ public class IsometricPlayer : MonoBehaviour
                 itemWorld.DestroySelf();
 
                 #region "Tutorial"
+                /*
                 if (itemWorld.GetItem().ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>() != null)
                 {
                     Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
                     tutorialScript.ShowTutorial(4);
 
                 }
+                */
                 #endregion
             }
 

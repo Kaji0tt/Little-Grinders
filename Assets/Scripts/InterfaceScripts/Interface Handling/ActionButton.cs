@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ActionButton : MonoBehaviour, IPointerEnterHandler
+public class ActionButton : MonoBehaviour, IPointerEnterHandler //IEndDragHandler
 {
     //IUseable sollte ich später auch noch hinzufügen für die Potions... außerdem müssen Potions Stackbar sein.
     public IUseable MyUseable { get; private set; }
@@ -19,7 +21,8 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
 
     public GameObject cdButton;
     private Text cdText;
-    
+
+
 
     void Start()
     {
@@ -30,12 +33,12 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
 
     public void OnClick()
     {
-        
+
         if (MyUseable != null)
         {
             MyUseable.Use();
         }
-        
+
     }
 
     void Update()
@@ -50,17 +53,18 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
             cdText = cdButton.GetComponent<Text>();
 
             cdText.text = (MyUseable.GetCooldown() - MyUseable.CooldownTimer()).ToString("F1");
-            
+
 
         }
         else if (MyUseable != null && !MyUseable.IsOnCooldown())
         {
 
             MyButton.image.color = Color.white;
-            
+
             cdButton.SetActive(false);
-            
+
         }
+
 
     }
 
@@ -69,7 +73,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
 
         MyButton.image.sprite = HandScript.instance.Put().icon;
 
-        MyButton.image.color = Color.white; 
+        MyButton.image.color = Color.white;
     }
 
     //Wurde eingefügt um ggf. ActionBars zu speichern.
@@ -90,14 +94,37 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
         UpdateVisual();
     }
 
-    public void LoadUseable(IUseable useable, IMoveable moveable)
+    public void LoadSpellUseable(Spell spell)
     {
-        this.MyUseable = useable;
+        //this.MyUseable = useable;
 
-        MyButton.image.sprite = moveable.icon;
+        MyUseable = spell;
+
+        MyMoveable = spell;
+
+        MyButton = GetComponent<Button>();
+
+        MyButton.image.sprite = spell.icon;
 
         MyButton.image.color = Color.white;
 
+    }
+
+    internal void LoadItemUseable(Item item)
+    {
+        Inventory inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
+
+        ItemInstance interfaceItem = inventory.itemList.FirstOrDefault(x => x.ItemID == item.ItemID);
+
+        MyUseable = interfaceItem;
+
+        MyMoveable = interfaceItem;
+
+        MyButton = GetComponent<Button>();
+
+        MyButton.image.sprite = interfaceItem.icon;
+
+        MyButton.image.color = Color.white;
     }
 
     //On POinter ClickHandler ist wohl lediglich für das Spellbook wichtig, welches wir über den TalentTree umgangen haben.
@@ -117,7 +144,19 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler
         if (HandScript.instance.MyMoveable != null)
         {
             SetUseable(HandScript.instance.MyMoveable as IUseable);
-            HandScript.instance.MyMoveable = null;
+            MyMoveable = HandScript.instance.Put();
+            //HandScript.instance.MyMoveable = null;
         }
+
+        /*
+        if(Input.GetKey(KeyCode.Mouse1))
+        {
+            MyMoveable = null;
+            MyUseable = null;
+            image = null;
+        }
+        */
+
     }
+
 }

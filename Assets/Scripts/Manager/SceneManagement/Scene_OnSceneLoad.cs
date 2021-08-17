@@ -4,7 +4,7 @@ using UnityEngine;
 
 //Falls der Spieler eine neue Szene lädt, muss dem Spiel vermittelt werden, dass entsprechende Dateien aus dem Systemordner ausgelesen werden müssen.
 //Dazu dient diese Klasse, welche mit einem Collider im Eingangsbereich plaziert wird und nur einmalig geladen werden kann.
-public class Scene_OnSceneLoad
+public class Scene_OnSceneLoad : MonoBehaviour
 {
     /*
     public bool sceneGotLoaded = false;

@@ -1,7 +1,9 @@
-﻿using UnityEditor.AI;
+﻿using UnityEngine.AI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//The MapGenHandler is the may Class in the Second-Scene (Procedual Map-Generation) and is used to coordinate FieldLayouts and Create them.
+//It is also managing the Save-Load functionality for explored maps, for yet unknown reasons.
 public class MapGenHandler : MonoBehaviour
 {
     #region Singleton
@@ -12,6 +14,9 @@ public class MapGenHandler : MonoBehaviour
     }
     #endregion
 
+
+    [SerializeField]
+    NavMeshSurface navMeshSurface;
 
     [SerializeField]
     private GameObject[] fieldsPosObj;
@@ -39,8 +44,9 @@ public class MapGenHandler : MonoBehaviour
 
             playerLoad.LoadPlayer(data);
 
-            print("Start load from MapGenHandler enabled");
+            print("Loaded playerLoad automaticly and created a new Map, from within the first Scene (No PlayerPref Key: Load found)");
         }
+
         //else it should load the data.
         else
         {
@@ -49,23 +55,31 @@ public class MapGenHandler : MonoBehaviour
 
             PlayerSave data = SaveSystem.LoadPlayer();
 
-            if(data.lastSpawnpoint == null)
-            LoadMap(data.currentMap, "SpawnRight");
+            playerLoad.LoadPlayer(data);
+
+            if (data.currentMap == null)
+            {
+                print("creating a new Map, since data.currentMap == null");
+                CreateANewMap("SpawnRight");
+            }
 
             else
-            LoadMap(data.currentMap, data.lastSpawnpoint);
+            {
+                //Load the Map from data. Load the last Spawnpoint from data - it is from within the second scene only used, to teleport the character transform.
+                //see LoadPrefabs for this function, since im to stupid to call it from elsewhere.
+                LoadMap(data.currentMap, data.lastSpawnpoint);
 
-            playerLoad.LoadPlayer(data);
+            }
 
             PlayerPrefs.DeleteKey("Load");
 
+            UI_GlobalMap.instance.CalculateExploredMaps();
+
+            print("Loaded with Key: Load (Should be called, when loaded from menu )");
+
         }
 
-
         //print(GlobalMap.exploredMaps.Count + " Maps are currently explored. We are moving on " + GlobalMap.GetNextMap().mapIndexX + "," + GlobalMap.GetNextMap().mapIndexY);
-
-
-
 
     }
 
@@ -78,31 +92,44 @@ public class MapGenHandler : MonoBehaviour
         LoadPrefabs(playerSpawn);
 
         //Build NavMesh for Enemys
-        NavMeshBuilder.BuildNavMesh();
+        navMeshSurface.BuildNavMesh();
 
-
-        SaveThisMap();
+        //tell global map about the newly created map
+        GlobalMap.instance.CreateAndSaveNewMap();
     }
 
 
 
     public void LoadMap(MapSave map, string spawnPoint)
     {
-        //Load existing Map Layout from Save file
-        for (int i = 0; i < 81; i++)
+        if(map != null)
         {
-            fieldsPosObj[i].GetComponent<FieldPos>().Type = map.fieldType[i];
+            //Load existing Map Layout from Save file
+            for (int i = 0; i < 81; i++)
+            {
+                fieldsPosObj[i].GetComponent<FieldPos>().Type = map.fieldType[i];
+            }
+
+            GlobalMap.instance.Set_CurrentMap(map);
+
+            LoadPrefabs(spawnPoint);
+
+            //Build NavMesh for Enemys
+            navMeshSurface.BuildNavMesh();
+
+            Debug.Log("Map loaded from Save Data or GlobalMap");
         }
-        LoadPrefabs(spawnPoint);
 
-        //Build NavMesh for Enemys
-        NavMeshBuilder.BuildNavMesh();
+        else
+        {
+            Debug.Log("Creating new Map, since it was not yet explored.");
 
-        //Check if the Player is currently in the World-Map Scene. If not, we dont need to Load the PlayerFiles, because the scene is rebuilding itself.
-        //if (SceneManager.GetActiveScene().buildIndex != 2)
-        //    Scene_OnSceneLoad.LoadScenePlayer(FindObjectOfType<PlayerLoad>());
+            CreateANewMap(spawnPoint);
+        }
 
-        Debug.Log("Map loaded from Save Data");
+
+
+
 
     }
 
@@ -124,6 +151,21 @@ public class MapGenHandler : MonoBehaviour
         {
             Destroy(mobParentObj.transform.GetChild(i).gameObject);
         }
+
+        if(GameObject.FindGameObjectsWithTag("SpawnedItems") != null)
+        {
+            GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("SpawnedItems");
+
+            for (int i = 0; i < spawnedItems.Length; i++)
+            {
+            Destroy(spawnedItems[i]);
+            }
+            
+        }
+
+
+
+
 
         //Destroy all OutSideVegLoader Prefab Instances
         OutsideVegLoader[] outsideVegPrefabs = FindObjectsOfType<OutsideVegLoader>(); 
@@ -394,30 +436,9 @@ public class MapGenHandler : MonoBehaviour
 
     }
 
-    private void SaveThisMap()
+    public void RebuildNavMesh()
     {
-        print("Next GlobalMap position:" + GlobalMap.currentPosition);
-
-        MapSave newMap = new MapSave();
-
-        GlobalMap.currentMap = newMap;
-
+        navMeshSurface.BuildNavMesh();
     }
-
-    /*
-    private void LoadPlayer()
-    {
-
-         PlayerLoad playerload = FindObjectOfType<PlayerLoad>();
-
-         //print(playerload.gameObject.name + " got the playerLoad comp, we should be loading now!");
-
-         PlayerSave data = SaveSystem.LoadPlayer();
-
-         playerload.LoadPlayer(data);
-
-         PlayerPrefs.DeleteKey("SceneLoad");
-
-    }
-    */
+    
 }

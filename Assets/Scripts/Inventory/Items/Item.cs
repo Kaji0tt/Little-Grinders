@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public enum ItemType {Kopf, Brust, Beine, Schuhe, Schmuck, Weapon, Consumable}
 //public enum ItemRarity {Unbrauchbar, Gewöhnlich, Ungewöhnlich, Selten, Episch, Legendär}
@@ -22,6 +23,7 @@ public class Item : ScriptableObject
     public bool RangedWeapon;
     public Sprite icon;        //scale item.sprite always to correct size, for ItemWorld to Spawn it in according size aswell. either here or in itemworld
     public int percent;
+    public int baseLevel;
 
     [Space]
     [Header("Flat-Werte")]
@@ -52,11 +54,13 @@ public class Item : ScriptableObject
 
     public Spell itemAction;
 
+
+
 }
 
 //Erstelle eine ItemInstance, welche Serialized werden kann und aus dem ScriptableObject mit den oben genannten Variabeln ausgelesen wird.
 [Serializable]
-public class ItemInstance :  IMoveable//Da muss mir nochmal bei
+public class ItemInstance :  IMoveable, IUseable
 {
 
     public string ItemID;
@@ -70,6 +74,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
     public bool RangedWeapon;
     public Sprite icon { get; private set; }       
     public int percent;
+    public int baseLevel;
 
 
     //Flat Values
@@ -144,6 +149,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         RangedWeapon = item.RangedWeapon;
         icon = item.icon;
         percent = item.percent;
+        baseLevel = item.baseLevel;
 
         //Derzeit werden nur die Boni von den Mods equipped.
         #region CloneItem
@@ -229,6 +235,8 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
 
     }
 
+
+
     /* Incoming - Use soll es ermöglichen, aktive Fähigkeiten auf den Items zu besitzen, welche über die ActionBar gecastet werden sollen.
     public void Use()
     {
@@ -255,7 +263,7 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
         if (c_hp != 0)
             playerStats.Heal(c_hp);
 
-        if(useable)
+        //if(useable)
 
 
 
@@ -331,6 +339,52 @@ public class ItemInstance :  IMoveable//Da muss mir nochmal bei
 
     }
 
+    public void Use()
+    {
+        Inventory inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
+        
+        if (this.itemType == ItemType.Consumable)
+        {
+            if (inventory.itemList.Contains(this))
+            {
+                PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.RemoveItem(this);
+                PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.UseItem(this);
+            };
+
+        };
+
+
+    }
+
+    public bool IsOnCooldown()
+    {
+        if (this.itemType == ItemType.Consumable)
+        {
+            return false;
+        };
+
+        return false;
+    }
+
+    public float GetCooldown()
+    {
+        if (this.itemType == ItemType.Consumable)
+        {
+            return 0;
+        };
+
+        return 0;
+    }
+
+    public float CooldownTimer()
+    {
+        if (this.itemType == ItemType.Consumable)
+        {
+            return 0;
+        };
+
+        return 0;
+    }
 }
 
 

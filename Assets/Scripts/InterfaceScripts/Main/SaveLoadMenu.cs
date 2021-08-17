@@ -15,6 +15,7 @@ public class SaveLoadMenu : MonoBehaviour
     {
 
         SaveSystem.SavePlayer();
+        LogScript.instance.ShowLog("The Game has been saved!");
 
     }
 
@@ -32,7 +33,7 @@ public class SaveLoadMenu : MonoBehaviour
 
         SceneManager.LoadScene(data.MyScene);
 
-        FindObjectOfType<PlayerLoad>().LoadPlayer(data);
+        //FindObjectOfType<PlayerLoad>().LoadPlayer(data);
 
     }
 }

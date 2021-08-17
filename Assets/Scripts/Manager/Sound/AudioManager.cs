@@ -20,6 +20,12 @@ public class AudioManager : MonoBehaviour
     //Slider Initialisieren, welche über Unity und Ingame für die Optionen dienen.
     public Slider interfaceSlider, musicSlider, atmosphereSlider, effectSlider;
 
+    private bool atmoPlaying = false;
+
+    float timeStamp;
+
+    bool musicPlaying = false;
+
     void Awake()
     {
         //Singleton Anweisung, zur globalen Reference AudioManager.instance
@@ -169,6 +175,47 @@ public class AudioManager : MonoBehaviour
         Play("MainMusic");
     }
 
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            if (!atmoPlaying)
+            {
+                Play("ForestNight");
+                atmoPlaying = true;
+            }
+        }
+        else
+            atmoPlaying = false;
+
+
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+            MusicManagement();
+    }
+
+    private void MusicManagement()
+    {
+        float intervall = 65f;
+
+        timeStamp += Time.deltaTime;
+
+        if(timeStamp >= intervall && !musicPlaying)
+        {
+            int rnd = UnityEngine.Random.Range(1, 5);
+            if(rnd == 1)
+            {
+                //Hier sollte nachher auf ein Array verwiesen werden, mit unterschiedlichen Tracks von Mirco
+                Play("MainMusic");
+                musicPlaying = true;
+            }
+            else
+            {
+                timeStamp = 0;
+                musicPlaying = false;
+            }
+
+        }
+    }
 
     public void Play(string name)
     {

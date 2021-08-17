@@ -20,6 +20,12 @@ public class PrefabCollection : MonoBehaviour
     public GameObject[] groundTexture;
     [SerializeField]
     public GameObject[] exitColliders;
+    [SerializeField]
+    private GameObject[] interactablesPF;
+
+
+
+    List<GameObject> possibleMobs = new List<GameObject>();
 
     public GameObject GetRandomSmalGreenPF()
     {
@@ -43,11 +49,26 @@ public class PrefabCollection : MonoBehaviour
     }
     public GameObject GetRandomEnemie()
     {
-        return enemiesPF[Random.Range(0, enemiesPF.Length)];
+        possibleMobs.Clear();
+
+        foreach(GameObject mob in enemiesPF)
+        {
+            if(mob.GetComponent<EnemyController>().level <= GlobalMap.instance.currentMap.mapLevel+1)
+            {
+                possibleMobs.Add(mob);
+            }
+        }
+
+        return possibleMobs[Random.Range(0, possibleMobs.Count)];
     }
     public GameObject GetRandomGroundTexture()
     {
         return groundTexture[Random.Range(0, groundTexture.Length)];
+    }
+
+    public GameObject GetRandomInteractable()
+    {
+        return interactablesPF[Random.Range(0, interactablesPF.Length)];
     }
 
 }

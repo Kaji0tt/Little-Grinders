@@ -55,123 +55,70 @@ public class ItemDatabase : MonoBehaviour
 
         totalWeight = 0;
 
-        int dropRange = 2;
+        //int dropRange = 2;
 
-        int dropTable = 0;
+        //int dropTable = (int)Mathf.Floor(level / WorldModifiers.instance.dropTableTierRange);
 
-            if (level <= dropRange)
-            {
-                calculateTotalWeight(dropTable);
-                dropTable = 0;
-            }
+        CalculateTotalWeight(playerStats);
 
-            else if (level <= dropRange * 2)
-            {
-                calculateTotalWeight(dropTable);
-                dropTable =  1;
-            }
+        currentDropTable.Sort(CompareItemPercents);
 
-            else if (level <= dropRange * 3)
-            {
-                calculateTotalWeight(dropTable);
-                dropTable = 2;
-            }
-
-            else if (level <= dropRange * 4)
-            {
-                calculateTotalWeight(dropTable);
-                dropTable = 3;
-            }
-
-            else if (level <= dropRange * 5)
-            {
-                calculateTotalWeight(dropTable);
-                dropTable = 4;
-            }
-
-
-
-        //print(totalWeight);
         // Berechnung des Rolls
         percentSum = 0;
-        int roll = Random.Range(0, 101);
+        int roll = Random.Range(0, totalWeight);
 
-         foreach (Item item in currentDropTable)
-         {                    
-              percentSum += ((int)item.c_percent * 100) / totalWeight;
-                    
-              if (roll < percentSum)
-              {
-                    position = position + new Vector3(Random.Range(-.5f, .5f), .1f, Random.Range(-.5f, .5f));
+        foreach (Item item in currentDropTable)
+        {
+            percentSum += (int)item.c_percent;//((int)item.c_percent * 100) / totalWeight;
 
-                    //print("Item: " + item.ItemName + " was choosen.");
+            if (roll < percentSum)
+            {
+                position = position + new Vector3(Random.Range(-.5f, .5f), .1f, Random.Range(-.5f, .5f));
 
-                    ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(new ItemInstance(item)));
+                //print("Item: " + item.ItemName + " was choosen.");
 
-                    break;
-              }
-         }
+                ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(new ItemInstance(item)));
+
+                break;
+            }
+        }
 
     }
 
-    int calculateTotalWeight(int lootTable)
+    int CalculateTotalWeight(PlayerStats playerStats)
     {
-
-        foreach (Item item in totalLoottable[lootTable])
+        foreach (List<Item> itemList in totalLoottable)
         {
-            item.c_percent = item.percent; //Nochmal nachsehen. item.c_percent scheint falsch weiter gegeben zu werden (e.g. 10% = 8% im Roll, wtf)
-            totalWeight += item.percent;
+            foreach (Item item in itemList)
+            {
+                //Berechne den Einfluss des Spielerleves in Abhängigkeit vom Baselevel des Items
+                float levelInfluence = Mathf.Clamp01((float)playerStats.level / (float)item.baseLevel);
 
-            currentDropTable.Add(item);
+                //An dieser Stelle sollte zu einem späteren Zeitpunkt weitere Modifier errechnet werden, oder dies geschieht in WorldModifiers direkt.
+                //float mapInfluence
 
+                //Speichere das errechnete Gewicht in neuer Variabel, um das original Item nicht zu modifizieren. Da wir mit int's arbeiten, 100 um mehr Varianz zu erhalten.
+                item.c_percent = item.percent  * levelInfluence;
 
+                //Füge das errechnete Gewicht des Items zum komplett Gewicht hinzu
+                totalWeight += (int)item.c_percent;
+
+                currentDropTable.Add(item);
+            }
         }
 
+        //Errechne eine 66% Chance, das nichts gedropped wird.
+        totalWeight = ((totalWeight / 100) * 300);
 
-        if (totalLoottable[lootTable +1] != null)
-            foreach (Item item in totalLoottable[lootTable +1])
-            {
-                item.c_percent = item.percent / 2;
-
-                totalWeight += item.percent / 2;
-
-                currentDropTable.Add(item);
-
-            }
-
-        if (totalLoottable[lootTable + 2] != null)
-            foreach (Item item in totalLoottable[lootTable + 2])
-            {
-                item.c_percent = item.percent / 3;
-                totalWeight += item.percent / 3;
-
-                currentDropTable.Add(item);
-
-            }
-
-        if (lootTable >= 1)
-            foreach (Item item in totalLoottable[lootTable -1])
-            {
-                item.c_percent = item.percent / 2;
-                totalWeight += item.percent / 2;
-
-                currentDropTable.Add(item);
-
-            }
-
-        if (lootTable >= 2)
-            foreach (Item item in totalLoottable[lootTable - 2])
-            {
-                item.c_percent = item.percent / 3;
-
-                totalWeight += item.percent / 3;
-
-                currentDropTable.Add(item);
-
-            }
 
         return totalWeight;
     }
+
+    public int CompareItemPercents(Item item1, Item item2)
+    {
+        return item2.c_percent.CompareTo(item1.c_percent);
+    }
+
 
     public float PosDiff(float nr1, float nr2)
     {

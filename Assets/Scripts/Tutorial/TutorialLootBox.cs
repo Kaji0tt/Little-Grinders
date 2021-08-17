@@ -36,11 +36,13 @@ public class TutorialLootBox : MonoBehaviour
     {
         if (lootBoxOpened)
         {
-            sprite = this.gameObject.GetComponent<SpriteRenderer>();
+            sprite = this.gameObject.GetComponentInParent<SpriteRenderer>();
             sprite.sprite = newSprite;
+            /*
             if(tutorialShowed == false)
             tutorialBox.ShowTutorial(3);
             tutorialShowed = true;
+            */
         }
 
     }

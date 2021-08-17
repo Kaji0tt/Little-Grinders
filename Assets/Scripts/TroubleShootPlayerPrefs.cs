@@ -8,17 +8,17 @@ public class TroubleShootPlayerPrefs : MonoBehaviour
     // Start is called before the first frame update
     public void DebugPlayerPrefsCords()
     {
-        Debug.Log("Current PlayerPref Cords:" + GlobalMap.currentPosition);
+        Debug.Log("Current PlayerPref Cords:" + GlobalMap.instance.currentPosition);
 
     }
 
     public void DebugGlobalMapCurrentMap()
     {
-        Debug.Log("GlobalMap.GetCurrentMap Cords:" + GlobalMap.GetMapCoordinates(GlobalMap.currentMap));
+        Debug.Log("GlobalMap.GetCurrentMap Cords:" + GlobalMap.instance.GetMapCoordinates(GlobalMap.instance.currentMap));
     }
 
     public void DebugGlobalMapCurrentMapVariabel()
     {
-        Debug.Log("GlobalMap.currentMap Cords:" + GlobalMap.currentMap.mapIndexX + GlobalMap.currentMap.mapIndexY);
+        Debug.Log("GlobalMap.currentMap Cords:" + GlobalMap.instance.currentMap.mapIndexX + GlobalMap.instance.currentMap.mapIndexY);
     }
 }

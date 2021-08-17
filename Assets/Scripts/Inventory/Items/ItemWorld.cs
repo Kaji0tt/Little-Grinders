@@ -54,10 +54,9 @@ public class ItemWorld : MonoBehaviour
         spriteRenderer.sprite = item.icon;
 
 
-        #region GFX Settings for Rarities
+        #region GFX & Audio Settings for Rarities
         if (item.itemRarity == "Unbrauchbar")
         {
-
             itemWorldRend.material.SetColor("_Color", Color.red);
             
             lightSource.color = new Color(1, 0, 0, 0.5f);
@@ -68,6 +67,7 @@ public class ItemWorld : MonoBehaviour
 
         if (item.itemRarity == "Gewöhnlich")
         {
+
             itemWorldRend.material.SetColor("_Color", Color.white);
 
             lightSource.color = new Color(0, 1, 0, 0.2f);
@@ -77,6 +77,7 @@ public class ItemWorld : MonoBehaviour
 
         if (item.itemRarity == "Ungewöhnlich")
         {
+
             //DynamicGI.SetEmissive(itemWorldRend, new Color(1f, 0.1f, 0.5f, 1.0f) * 1);
             itemWorldRend.material.SetColor("_Color", Color.green);
             itemWorldRend.material.SetFloat("_OffSet", 0.0010f);
@@ -85,7 +86,6 @@ public class ItemWorld : MonoBehaviour
             lightSource.range = 1f;
             lightSource.intensity = 0.01f;
 
-            if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Uncommon");
         }
 
@@ -99,7 +99,6 @@ public class ItemWorld : MonoBehaviour
             lightSource.range = 1f;
             lightSource.intensity = 0.1f;
 
-            if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Rare");
         }
 
@@ -113,7 +112,6 @@ public class ItemWorld : MonoBehaviour
             lightSource.range = 1f;
             lightSource.intensity = 0.5f;
 
-            if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Epic");
         }
 
@@ -127,7 +125,6 @@ public class ItemWorld : MonoBehaviour
             lightSource.range = 1f;
             lightSource.intensity = 1f;
 
-            if (AudioManager.instance != null)
                 AudioManager.instance.Play("Drop_Legendary");
         }
         #endregion

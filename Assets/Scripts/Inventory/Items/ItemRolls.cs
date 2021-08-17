@@ -8,7 +8,7 @@ public class ItemRolls : MonoBehaviour
 
     public ItemMods[] wLegendaryRolls;
 
-    //private string[] waffenRollsEpic = new string[] { "Essenzpeiniger", "Weltenzerstörer", "aus Titanium geschaffen", "von Titanen gerfertigt", "im Seelenfeuer geschmiedet" };
+    //private string[] waffenRollsEpic = new string[] { "Essenzpeiniger", "Weltenzerstörer", "aus Mithril geschaffen", "von Titanen gerfertigt", "im Seelenfeuer geschmiedet" };
 
     public ItemMods[] wEpicRolls;
 
@@ -146,15 +146,18 @@ public class ItemRolls : MonoBehaviour
             if ((Random.Range(1, 1000) <= uncommon * levelModifier || type == "mod") && (fixedRarity > 1))
             {
                 print("Passed the Uncommon Rarity, rolling for a Rare! /n Rarity is currently Uncommon.");
+
                 //Wenn das Item rare ist, darf kein Roll diese Raritätsstufe überschreiten.
                 if ((Random.Range(1, 1000) <= (rare * levelModifier)) && (fixedRarity > 2))
                 {
                     print("Passed the Rare Rarity, rolling for an Epic! /n Rarity is currently Rare.");
                     //Wenn das Item episch ist, darf kein Roll diese Raritätsstufe überschreiten.
+
                     if ((Random.Range(1, 1000) <= (epic * levelModifier)) && (fixedRarity > 3))
                     {
                         print("Passed the Epic Rarity, rolling for a Legendary! /n Rarity is currently Epic.");
                         //Ein Item, das Legendär ist, darf keine weitere Legendären Rolls erhalten, und darf diese Raritätsstufe nicht erneut überschreiten. 
+
                         if ((Random.Range(1, 1000) <= (legendary * levelModifier) || type != "mod") && (fixedRarity > 4))
                         {
                             print("Congrats! Rolled a Legendary!");

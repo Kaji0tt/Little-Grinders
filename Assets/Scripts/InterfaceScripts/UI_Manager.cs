@@ -11,9 +11,15 @@ public class UI_Manager : MonoBehaviour
     public static UI_Manager instance;
     private void Awake()
     {
+        UI_Manager[] sceneInstances = FindObjectsOfType<UI_Manager>();
+        if(sceneInstances.Length >= 2)
+        {
+            Destroy(sceneInstances[0]);
+        }
         instance = this;
 
     }
+
     #endregion
     [SerializeField]
     private GameObject tooltip;
@@ -23,15 +29,15 @@ public class UI_Manager : MonoBehaviour
     [SerializeField]
     private Button[] actionButtons;
 
-    private Spell[] spell;
-
 
     private IsometricPlayer isometricPlayer;
 
-    private KeyCode action1, action2, action3, action4, action5, inventoryKey, skillKey, mainMenuKey;
+    private KeyCode mainMenuKey;
 
 
-    public KeyCode toggleCam, pickKey;
+    public KeyCode toggleCamKey, pickKey;
+
+    private GameObject[] keyBindButtons;
 
 
     [SerializeField]
@@ -46,84 +52,76 @@ public class UI_Manager : MonoBehaviour
     [SerializeField]
     private CanvasGroup actionBar;
 
+    [SerializeField]
+    private CanvasGroup mapTab;
 
 
+    private List<KeyCode> keyCodes = new List<KeyCode>();
 
-    //behinderte Methode die unter Menüs des Charakter Menüs zu deklarieren.
-    //public GameObject talentTree, inventoryMenu; //Muss auch über Canvas group geregelt werden, da zu beginn nicht aktivierte Spielobjekte einen Null-Error ergeben!
-
-    //private bool mouseInterface;
-
-    private bool skillTabOpen, inventoryTabOpen;
+    private string bindName;
 
     public static bool GameIsPaused = false;
 
     private void OnEnable()
     {
         GameIsPaused = false;
+        keyBindButtons = GameObject.FindGameObjectsWithTag("KeyBindings");
     }
 
 
     private void Start()
     {
-
-        
-
+        if(tooltip != null)
         tooltipText = tooltip.GetComponentInChildren<Text>();
-
-        //SetUseable(actionButtons[0], )
-        action1 = KeyCode.Alpha1;
-
-        action2 = KeyCode.Alpha2;
-
-        action3 = KeyCode.Alpha3;
-
-        action4 = KeyCode.Alpha4;
-
-        action5 = KeyCode.Alpha5;
-
-        inventoryKey = KeyCode.E;
-
-        skillKey = KeyCode.P;
 
         mainMenuKey = KeyCode.Escape;
 
-        pickKey = KeyCode.Q;
+        pickKey = KeyManager.MyInstance.Keybinds["PICK"];
 
-        toggleCam = KeyCode.T; // Not used.
+        toggleCamKey = KeyCode.Tab;
 
 
         isometricPlayer = GetComponent<IsometricPlayer>();
+
+        RefreshKeyBindText();
+
+    }
+
+    private void RefreshKeyBindText()
+    {
+        foreach(KeyValuePair<string, KeyCode> kvp in KeyManager.MyInstance.Keybinds)
+        {
+            UpdateKeyText(kvp.Key, kvp.Value);
+        }
     }
 
     private void Update()
     {
-        
-        //Interface Abfrage des Cursos sollte implementiert werden.
+            //Interface Abfrage des Cursos sollte implementiert werden.
 
-        //Action-Bars
+            //Action-Bars
 
-        if (Input.GetKeyDown(action1))
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT1"]) && !GameIsPaused)
         {
             ActionButtonOnClick(0);
         }
 
-        if (Input.GetKeyDown(action2))
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT2"]) && !GameIsPaused)
         {
             ActionButtonOnClick(1);
         }
 
-        if (Input.GetKeyDown(action3))
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT3"]) && !GameIsPaused)
         {
             ActionButtonOnClick(2);
         }
 
-        if (Input.GetKeyDown(action4))
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT4"]) && !GameIsPaused)
         {
             ActionButtonOnClick(3);
         }
 
-        if (Input.GetKeyDown(action5))
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT5"]) && !GameIsPaused)
         {
             ActionButtonOnClick(4);
         }
@@ -143,14 +141,28 @@ public class UI_Manager : MonoBehaviour
 
         //Interface
 
-        if (Input.GetKeyDown(skillKey))
+        if (Input.GetKeyDown(KeyManager.MyInstance.Keybinds["SKILLS"]) && !GameIsPaused)
         {
             OpenCloseMenu(skillTab);
+            if (skillTab.alpha == 0)
+                AudioManager.instance.Play("OpenSkills");
+            else
+                AudioManager.instance.Play("CloseMenu");
+            
         }
 
-        if (Input.GetKeyDown(inventoryKey))
+        if (Input.GetKeyDown(KeyManager.MyInstance.Keybinds["STATS"]) && !GameIsPaused)
         {
             OpenCloseMenu(inventoryTab);
+        }
+
+        if (Input.GetKeyDown(KeyManager.MyInstance.Keybinds["MAP"]) && !GameIsPaused)
+        {
+            OpenCloseMenu(mapTab);
+            if (mapTab.alpha == 0)
+                AudioManager.instance.Play("OpenMap");
+            else
+                AudioManager.instance.Play("CloseMenu");
         }
 
     }
@@ -243,46 +255,21 @@ public class UI_Manager : MonoBehaviour
         canvas.alpha = canvas.alpha > 0 ? 0 : 1; 
         canvas.blocksRaycasts = canvas.blocksRaycasts == true ? false : true;
 
-
-        //Extra Abfrage für Character Tab, sollte in eigener Methode überarbeitet werden eigentlich.
-        /* Ausgegliedert am 10.05.21
-        if (canvas.name == "skillTab")
-        {
-            if(skillTabOpen)
-            {
-                skillTabOpen = false;
-                inventoryTabOpen = true;
-            }
-
-            else if (!skillTabOpen)
-            {
-                skillTabOpen = true;
-                inventoryTabOpen = false;
-            }
-
-
-        }
-
-        else if (canvas.name == "inventoryTab")
-        {
-            if(!inventoryTabOpen)
-            {
-                inventoryTabOpen = true;
-                skillTabOpen = false;
-            }
-
-
-            else if (inventoryTabOpen)
-            {
-                inventoryTabOpen = false;
-                skillTabOpen = true;
-            }
-
-        }
-        */
-
     }
 
+    //Es sollte noch geschaut werden, inwiefern das UI nach Szenen-Wechsel gespeichert werden kann.
+    public void UpdateKeyText(string key, KeyCode code)
+    {
+        TextMeshProUGUI tmp = Array.Find(keyBindButtons, x => x.name == key).GetComponentInChildren<TextMeshProUGUI>();
+
+        if (code.ToString().Contains("Alpha"))
+        {
+            tmp.text = code.ToString().Substring(5);
+        }
+        else
+            tmp.text = code.ToString();
+
+    }
 
 
 }

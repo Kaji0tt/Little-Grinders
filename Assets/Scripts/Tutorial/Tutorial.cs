@@ -37,6 +37,7 @@ public class Tutorial : MonoBehaviour
 
     public void ShowTutorial(int tutCount)
     {
+        /*
         if (tutorialTextCount == tutCount)
         {
             tutorialBox.alpha = tutorialBox.alpha > 0 ? 0 : 1;
@@ -50,7 +51,7 @@ public class Tutorial : MonoBehaviour
             tutorialTxts[tutCount].SetActive(true);
 
         }
-
+        */
     }
 
 }

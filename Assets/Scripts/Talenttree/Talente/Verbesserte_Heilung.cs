@@ -9,6 +9,11 @@ public class Verbesserte_Heilung : Talent, IPointerEnterHandler, IPointerExitHan
 
 
     //Dies sollte keinesfalls über Update geschehen! Finde lieber ein Workaround, damit das alles CPU schonender wird.
+
+    void Start()
+    {
+        SetDescription("Heilung heilt pro Skillpunkt zusätzlich um 2% des maximalen Lebens.");
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
 

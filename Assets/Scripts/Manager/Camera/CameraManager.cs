@@ -11,5 +11,10 @@ public class CameraManager : MonoBehaviour
         instance = this;
     }
     #endregion
-    public GameObject camera;
+    public GameObject mainCamGO;
+    public GameObject mapCamGO;
+
+    public Camera mainCam;
+    public Camera mapCam;
+
 }

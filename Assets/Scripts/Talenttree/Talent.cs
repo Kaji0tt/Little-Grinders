@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Talent : MonoBehaviour
+
+public class Talent : MonoBehaviour, IMoveable
 {
 
     //Description of the Spell

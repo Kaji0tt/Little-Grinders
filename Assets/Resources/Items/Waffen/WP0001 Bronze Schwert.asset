@@ -21,6 +21,7 @@ MonoBehaviour:
   RangedWeapon: 0
   icon: {fileID: -590705844669056729, guid: 49ba478eb0b56784ea728d4165ef457b, type: 3}
   percent: 15
+  baseLevel: 2
   hp: 0
   armor: 0
   attackPower: 5
@@ -32,4 +33,6 @@ MonoBehaviour:
   p_attackSpeed: 0
   p_movementSpeed: 0
   c_hp: 0
+  usable: 0
   c_percent: 10
+  itemAction: {fileID: 0}

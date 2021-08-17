@@ -210,6 +210,36 @@ Transform:
   m_Father: {fileID: 6882676378761750235}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &267991000005879356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8721773384922642243}
+  m_Layer: 0
+  m_Name: InteractableSpawnPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 2800000, guid: 8063050a249eef441beb8cbbd04c086c, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8721773384922642243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267991000005879356}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.18, y: 0.1, z: 3.88}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1259357207046137904}
+  m_RootOrder: 21
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &360987392582023378
 GameObject:
   m_ObjectHideFlags: 0
@@ -3805,6 +3835,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 0
+--- !u!1 &3966162176129842978
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6458331258282432665}
+  m_Layer: 0
+  m_Name: InteractableSpawnPos (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 2800000, guid: 8063050a249eef441beb8cbbd04c086c, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6458331258282432665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3966162176129842978}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.07, y: 0.1, z: 3.02}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1259357207046137904}
+  m_RootOrder: 23
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4013634661146059875
 GameObject:
   m_ObjectHideFlags: 0
@@ -4415,6 +4475,9 @@ Transform:
   - {fileID: 7484183418874847427}
   - {fileID: 2653270288860393149}
   - {fileID: 7652466630648590206}
+  - {fileID: 8721773384922642243}
+  - {fileID: 8603523434675331392}
+  - {fileID: 6458331258282432665}
   m_Father: {fileID: 6882676378761750235}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4896,6 +4959,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1259357207046137904}
   m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5624336229652587413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8603523434675331392}
+  m_Layer: 0
+  m_Name: InteractableSpawnPos (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 2800000, guid: 8063050a249eef441beb8cbbd04c086c, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8603523434675331392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624336229652587413}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.93, y: 0.1, z: -2.54}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1259357207046137904}
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5654956457082700855
 GameObject:
@@ -7657,6 +7750,10 @@ MonoBehaviour:
   - {fileID: 3689054206276012827}
   - {fileID: 5027565162869308434}
   - {fileID: 5812566887930370583}
+  interactableCollection:
+  - {fileID: 267991000005879356}
+  - {fileID: 5624336229652587413}
+  - {fileID: 3966162176129842978}
   prefabCollection: {fileID: 0}
 --- !u!1 &8928065728189182961
 GameObject:
