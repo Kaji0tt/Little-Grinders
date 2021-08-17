@@ -44,7 +44,7 @@ public class MapGenHandler : MonoBehaviour
 
             playerLoad.LoadPlayer(data);
 
-            print("Loaded playerLoad automaticly and created a new Map, from within the first Scene (No PlayerPref Key: Load found)");
+            LogScript.instance.ShowLog("Loaded playerLoad automaticly and created a new Map, \n from within the first Scene (No PlayerPref Key: Load found)");
         }
 
         //else it should load the data.
@@ -59,7 +59,7 @@ public class MapGenHandler : MonoBehaviour
 
             if (data.currentMap == null)
             {
-                print("creating a new Map, since data.currentMap == null");
+                LogScript.instance.ShowLog("creating a new Map, \n since data.currentMap == null");
                 CreateANewMap("SpawnRight");
             }
 
@@ -75,7 +75,7 @@ public class MapGenHandler : MonoBehaviour
 
             UI_GlobalMap.instance.CalculateExploredMaps();
 
-            print("Loaded with Key: Load (Should be called, when loaded from menu )");
+            LogScript.instance.ShowLog("Loaded with Key: Load (Should be called, when loaded from menu )");
 
         }
 
