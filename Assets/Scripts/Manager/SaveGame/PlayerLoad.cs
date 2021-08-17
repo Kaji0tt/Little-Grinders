@@ -167,11 +167,19 @@ public class PlayerLoad : MonoBehaviour
 
     private void LoadGlobalMap(PlayerSave data)
     {
-        GlobalMap.exploredMaps = data.exploredMaps;
+        if (data.exploredMaps.Count != 0)
+        {
+            print("GlobalMap should be loading: " + data.exploredMaps.Count + " maps.");
+            GlobalMap.instance.exploredMaps = data.exploredMaps;
 
-        GlobalMap.currentMap = data.currentMap;
+            GlobalMap.instance.Set_CurrentMap(data.currentMap);
 
-        GlobalMap.currentPosition = new Vector2(data.globalMapX, data.globalMapY);
+            GlobalMap.instance.lastSpawnpoint = data.lastSpawnpoint;
+
+        }
+        else
+            print("something is wrong with the playerlaod");
+
 
     }
 
@@ -184,12 +192,18 @@ public class PlayerLoad : MonoBehaviour
             {
                 if (spell.GetSpellName == data.savedActionButtons[i])
                 {
-                    slot.LoadUseable(spell, spell);
+                    slot.LoadSpellUseable(spell);
                 }
+
 
             }
 
+            if(ItemDatabase.GetItemID(data.savedActionButtons[i]) != null)
+            {
+                slot.LoadItemUseable(ItemDatabase.GetItemID(data.savedActionButtons[i]));
+            }
         }
+
     }
 
 

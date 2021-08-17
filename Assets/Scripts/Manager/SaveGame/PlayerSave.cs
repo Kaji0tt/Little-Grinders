@@ -7,9 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerSave
 {
 
-    /// <summary>
-    /// Player Save
-    /// </summary>
+    #region PlayerSave
 
     public int level;
 
@@ -18,11 +16,9 @@ public class PlayerSave
     public float[] position;
 
     public int xp;
+    #endregion
 
-
-    /// <summary>
-    /// Item Save
-    /// </summary>
+    #region ItemSave
 
     //EQ SLOTS
 
@@ -40,33 +36,27 @@ public class PlayerSave
 
     public List<string> inventorySave = new List<string>();
 
+    #endregion
 
-    /// <summary>
-    /// Talents Save
-    /// </summary>
+    #region TalentsToBeSaved
 
     public List<TalentSave> talentsToBeSaved = new List<TalentSave>();
 
     public int skillPoints;
 
+    #endregion
 
-
-    /// <summary>
-    /// Action Buttons
-    /// </summary>
+    #region ActionsButtons
 
     public string[] savedActionButtons { get; set; }
 
-    //public bool IsItem { get; set; } Not yet Implemented
-
-    
+    //public bool IsItem { get; set; } Not yet Implemented  
 
     public int[] savedActionButtonIndex  { get; set; }
 
+    #endregion
 
-    /// <summary>
-    /// Scene Save
-    /// </summary>
+    #region SceneSave
 
     public int loadIndex;
 
@@ -81,7 +71,13 @@ public class PlayerSave
     public float globalMapX; public float globalMapY;
 
 
+    #endregion
 
+    #region KeybindSave
+
+
+
+    #endregion
 
 
 
@@ -103,8 +99,7 @@ public class PlayerSave
         SaveTheActionButtons();
 
         ///Szene Speichern.
-        ///not rly necessary with procedural map design?
-        //MyScene = SceneManager.GetActiveScene().buildIndex;
+        SaveKeyBinds();
         
         loadIndex = 1;
 
@@ -114,18 +109,22 @@ public class PlayerSave
 
     }
 
+    private void SaveKeyBinds()
+    {
+    }
+
     private void SaveTheGlobalMap()
     {
         //GlobalMap only gets saved as the player is in Scene 2.
         MyScene = 2;
 
-        exploredMaps = GlobalMap.exploredMaps;
+        exploredMaps = GlobalMap.instance.exploredMaps;
 
-        currentMap = GlobalMap.currentMap;
+        currentMap = GlobalMap.instance.currentMap;
 
-        lastSpawnpoint = GlobalMap.lastSpawnpoint;
+        lastSpawnpoint = GlobalMap.instance.lastSpawnpoint;
 
-        globalMapX = GlobalMap.currentPosition.x; globalMapY = GlobalMap.currentPosition.y;
+        globalMapX = GlobalMap.instance.currentPosition.x; globalMapY = GlobalMap.instance.currentPosition.y;
 
     }
 
@@ -305,8 +304,14 @@ public class PlayerSave
             savedActionButtonIndex[i-1] = i;
 
             //Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtonIndex[i]);
-
-            savedActionButtons[i-1] = (slot.MyUseable as Spell).GetSpellName;
+            if((slot.MyUseable is Spell))
+            {
+                savedActionButtons[i - 1] = (slot.MyUseable as Spell).GetSpellName;
+            }
+            else if (slot.MyUseable is ItemInstance)
+            {
+                savedActionButtons[i - 1] = (slot.MyUseable as ItemInstance).ItemID;
+            }
 
 
         }

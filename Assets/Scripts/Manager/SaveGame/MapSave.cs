@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
-public class MapSave
+public class MapSave 
 {
     //MapSave muss wissen:
     public float mapIndexX;
@@ -12,9 +13,11 @@ public class MapSave
 
     //public bool[][] isMapExplored = new bool[][] { };
 
-
+    public bool gotTeleporter;
     //Map Level
+    public int mapLevel;
 
+    private float mapScaling = 5;
     //Map Theme
 
     //Special Map??
@@ -41,80 +44,41 @@ public class MapSave
     ///
     public MapSave()
     {
-        Debug.Log("Map should get constructed");
+        //CalculateMapLevel();
+
+
         //Save the Map Coordinates
-        mapIndexX = GlobalMap.currentPosition.x;
-        mapIndexY = GlobalMap.currentPosition.y;
+        if(GlobalMap.instance != null)
+        {
+            mapIndexX = GlobalMap.instance.currentPosition.x;
+            mapIndexY = GlobalMap.instance.currentPosition.y;
 
-        //Save the FieldLayout
-        for(int i = 0; i < 81; i++)
-        {       
-            fieldType[i] = MapGenHandler.instance.fieldPosSave[i].GetComponent<FieldPos>().Type;
+            mapLevel = (int)Mathf.Max(GlobalMap.instance.currentPosition.x, GlobalMap.instance.currentPosition.y);
+        }
 
-            //Debug.Log(fieldType[i]);
+        gotTeleporter = false;
+
+
+        //GlobalMap.instance.AddNewMap(this);
+
+        //Debug.Log("There currently are " + GlobalMap.instance.exploredMaps.Count + " Maps explored.");
+    }
+
+    private void CalculateMapLevel()
+    {
+        ///There should be a global Variable, which increases everytime the player hits a certain level.
+        ///Also, this should be accessable and written each time the player loads the game.
+        ///On Awake, get the player Level then recallculate the globalModifier.
+
+        
+        if (GlobalMap.instance.currentPosition.x > mapScaling || GlobalMap.instance.currentPosition.y > mapScaling)
+        {
+            mapLevel += 1;
         }
         
-        GlobalMap.AddCurrentMapToExploredMaps(this);
-
-        Debug.Log("There currently are " + GlobalMap.exploredMaps.Count + " Maps explored.");
     }
+
+
 }
 
-public static class GlobalMap
-{
-    //List of explored Map. Each MapSave that is constructed will be added to this List.
-    public static List<MapSave> exploredMaps = new List<MapSave>();
 
-    //Current Map the Player is moving on. Set on every SceneLoad / MapSwap (Scene_OnSceneLoad.cs)
-    public static MapSave currentMap;
-
-    //The current Position of WorldChunks/Cordinates loaded
-    public static Vector2 currentPosition;
-
-    //Saving the last SpawnPoint, the player entered the Map in.
-    public static string lastSpawnpoint;
-
-    public static void AddCurrentMapToExploredMaps(MapSave map)
-    {
-        exploredMaps.Add(map);
-    }
-
-    //Currently not used Method to get the Coordinates of a specific map.
-    public static Vector2 GetMapCoordinates(MapSave map)
-    {
-        return new Vector2(map.mapIndexX, map.mapIndexY);
-    }
-
-    public static MapSave GetNextMap()
-    {
-        foreach (MapSave map in exploredMaps)
-        {
-            if (map.mapIndexX == currentPosition.x && map.mapIndexY == currentPosition.y)
-            {
-                MapGenHandler.instance.LoadMap(map, lastSpawnpoint);
-
-                return map;
-            }
-
-        }
-
-        if (lastSpawnpoint != null)
-            MapGenHandler.instance.CreateANewMap(lastSpawnpoint);
-        else
-            MapGenHandler.instance.CreateANewMap("SpawnRight");
-
-        return null;
-    }
-
-    public static bool ScanIfNextMapIsExplored()
-    {
-        if (GetNextMap() != null)
-            return true;
-
-        //MapGenHandler.instance.LoadMap(GetCurrentMap(), lastSpawnpoint);
-        else
-            return false;
-            //
-    }
-
-}

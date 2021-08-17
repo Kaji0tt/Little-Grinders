@@ -31,6 +31,11 @@ using UnityEngine;
 
 public class MobStats : MonoBehaviour
 {
+    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
+
+
+
+    /*
     [SerializeField]
     private int level;
     [SerializeField]
@@ -124,5 +129,5 @@ public class MobStats : MonoBehaviour
     {
         
     }
-    
+    */
 }

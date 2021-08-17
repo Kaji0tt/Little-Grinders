@@ -16,7 +16,7 @@ public class HandScript : MonoBehaviour
 
     private Image image;
 
-    private Spell spell;
+    //private Spell spell;
 
     [SerializeField]
     private Vector3 offset;
@@ -45,26 +45,36 @@ public class HandScript : MonoBehaviour
     {
         image.transform.position = Input.mousePosition;
 
-        if (Input.GetKeyDown(KeyCode.Mouse1) && MyMoveable != null)
+        
+        if (Input.GetKeyDown(KeyCode.Mouse1) && MyMoveable != null || Input.GetKeyUp(KeyCode.Mouse1) && MyMoveable != null)
         {
             Put();
         }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0) && MyMoveable != null)
+        {
+            Put();
+        }
+
     }
 
     //Schauen ob diese Funktion wirklich benutzt werden muss. Falls ich im Talent OnDragEnd benutz, muss dies vielleicht dort geschehen.
 
     public IMoveable Put()
     {
-
+        //Wenn Put() gecalled wird, gebe das Item, welches im Handscript liegt, aus über tmp MyMoveable
         IMoveable tmp = MyMoveable;
 
         MyMoveable = null;
 
         image.color = new Color(0, 0, 0, 0);
-        
 
-        //Für Später: Die Reference zu eine
+        //image.sprite = null;
+
+
+        //Currently disabled since i destroyed the Tutorial GameObject lulz
         #region "Tutorial"
+        /*
         if (tutorialSkillMoveCheck == false)
         {
             if(GameObject.FindGameObjectWithTag("TutorialScript") != null)
@@ -78,8 +88,9 @@ public class HandScript : MonoBehaviour
 
 
         }
+             */
         #endregion
-        
+
         return tmp;
     }
 

@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ba51bb1a52e080438d503f6c26878b3, type: 3}
-  m_Name: Weapon_Mod3001
+  m_Name: Mod3003
   m_EditorClassIdentifier: 
-  modRarity: 2
-  ModName: ', aus Eryx'
-  ModID: Mod3001
-  hp: 0
-  armor: 0
-  attackPower: 5
-  abilityPower: 5
+  modRarity: 0
+  ModName: ", von Shawn gek\xFCsst"
+  ModID: 3003
+  hp: -15
+  armor: 5
+  attackPower: 10
+  abilityPower: 0
   p_hp: 0
   p_armor: 0
   p_attackPower: 0
-  p_abilityPower: 0.05
+  p_abilityPower: 0
   p_attackSpeed: 0
-  p_movementSpeed: 0.05
+  p_movementSpeed: 0

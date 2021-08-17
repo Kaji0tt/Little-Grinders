@@ -35,9 +35,11 @@ public class Steinwurf : Spell, IUseable
 
     private void Awake()
     {
+        damage = 5;
+
         SetDescription("Du wirfst einen Stein auf deinen Gegner und fügst " + damage + " Schaden zu");
 
-        damage = 5;
+
     }
 
     public override void Use()
@@ -68,6 +70,10 @@ public class Steinwurf : Spell, IUseable
                         bullet.InstantiateMe(this, hit.point);
 
                         Instantiate(projectile, PlayerManager.instance.player.transform.position, Quaternion.identity);
+
+                        //Play Bullet Sound
+                        string[] bulletSound = { "Wurf1", "Wurf2", "Wurf3" };
+                        AudioManager.instance.Play(bulletSound[Random.Range(0, 3)]);
 
                     }
 

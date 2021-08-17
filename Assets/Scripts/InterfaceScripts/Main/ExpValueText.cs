@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ValueText : MonoBehaviour
+public class ExpValueText : MonoBehaviour
 {
     public GameObject xpBar;
     private Slider xpBarValue;

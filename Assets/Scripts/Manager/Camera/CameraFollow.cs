@@ -69,21 +69,26 @@ public class CameraFollow : MonoBehaviour
         //if (raycastHits.ToList().Count != 0)
         //Still random 
 
+        //List<RaycastHit> storedRaycasts = raycastHits.ToList();
+
         foreach (RaycastHit hit in raycastHits.ToList())
         {
-            if(hit.collider.transform.GetComponent<SpriteRenderer>() != null)
+
+            if(hit.collider != null)
             {
-                SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
-
-                if (spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
+                if (hit.collider.transform.GetComponent<SpriteRenderer>() != null)
                 {
-                    spriterend.color = new Color(1, 1, 1, 1);
+                    SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
 
-                    //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
+                    if (spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
+                    {
+                        spriterend.color = new Color(1, 1, 1, 1);
+
+                        //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
+                    }
                 }
             }
 
-            
 
         }
 
@@ -142,14 +147,18 @@ public class CameraFollow : MonoBehaviour
 
         if (Input.mouseScrollDelta.y > 0 && zoom > min)
         {
-            Camera.main.fieldOfView = Camera.main.fieldOfView - Input.mouseScrollDelta.y;
+            CameraManager.instance.mainCam.fieldOfView = CameraManager.instance.mainCam.fieldOfView - Input.mouseScrollDelta.y;
+            //PlayerManager.instance.player.GetComponent<IsometricPlayer>().userFOV = CameraManager.instance.mainCam.fieldOfView;
         }
 
         if (Input.mouseScrollDelta.y < 0 && zoom < max)
         {
-            Camera.main.fieldOfView = Camera.main.fieldOfView - Input.mouseScrollDelta.y;
+            CameraManager.instance.mainCam.fieldOfView = CameraManager.instance.mainCam.fieldOfView - Input.mouseScrollDelta.y;
+            //PlayerManager.instance.player.GetComponent<IsometricPlayer>().userFOV = CameraManager.instance.mainCam.fieldOfView;
         }
-        zoom = Camera.main.fieldOfView;
+        zoom = CameraManager.instance.mainCam.fieldOfView;
+
+        PlayerManager.instance.player.GetComponent<IsometricPlayer>().userFOV = zoom;
 
     }
 

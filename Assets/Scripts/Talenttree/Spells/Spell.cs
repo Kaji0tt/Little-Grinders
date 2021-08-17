@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IMoveable, IUseable
+public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IMoveable, IUseable, IEndDragHandler
 {
     [Header("Spell Eigenschaften")]
     //What is the Spells Name?
@@ -41,12 +41,6 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
 
     //Spell IMoveable.spell => this;
 
-
-
-    //Is this an active Spell?
-    [SerializeField]
-    private bool passive;
-
     public bool onCoolDown;
     public float coolDownTimer { get; private set; }
 
@@ -70,12 +64,18 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
     {
         HandScript.instance.TakeMoveable(this);
     }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        HandScript.instance.Put();
+    }
     #endregion
 
 
 
     private void Update()
     {
+
         if(onCoolDown)
         {
             Image image = GetComponent<Image>();
@@ -93,6 +93,7 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
 
 
     }
+
 
     public virtual void Use()
     {
@@ -113,4 +114,6 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
     {
         throw new NotImplementedException();
     }
+
+
 }

@@ -1054,7 +1054,7 @@ GameObject:
   - component: {fileID: 127254502}
   m_Layer: 5
   m_Name: DOWN
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1619,7 +1619,7 @@ GameObject:
   - component: {fileID: 204589386}
   m_Layer: 5
   m_Name: SLOT2
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2169,7 +2169,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10}
+  m_AnchoredPosition: {x: 0, y: -10.000122}
   m_SizeDelta: {x: 100, y: -744}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &283737639
@@ -4384,7 +4384,7 @@ GameObject:
   - component: {fileID: 576005444}
   m_Layer: 5
   m_Name: SLOT4
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4802,9 +4802,9 @@ RectTransform:
   m_Father: {fileID: 1925669146}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1345, y: 934.99994}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 408, y: 394.99994}
   m_SizeDelta: {x: 23, y: 43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &639499154
@@ -5281,7 +5281,7 @@ GameObject:
   - component: {fileID: 716139558}
   m_Layer: 5
   m_Name: SLOT1
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6742,7 +6742,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &880608697
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6791,7 +6791,7 @@ GameObject:
   - component: {fileID: 887019889}
   m_Layer: 5
   m_Name: SLOT3
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7381,7 +7381,7 @@ GameObject:
   - component: {fileID: 946593090}
   m_Layer: 5
   m_Name: PICK
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7560,14 +7560,50 @@ MonoBehaviour:
     volume: 0.5
     loop: 0
     source: {fileID: 0}
+  - name: NextMap1
+    clip: {fileID: 8300000, guid: c0ecc82eda6980845a3a6c192ae503e7, type: 3}
+    soundType: 0
+    volume: 0.5
+    loop: 0
+    source: {fileID: 0}
+  - name: OpenMap
+    clip: {fileID: 8300000, guid: c2ad265e604980942a6e7d70442b5301, type: 3}
+    soundType: 0
+    volume: 0.5
+    loop: 0
+    source: {fileID: 0}
+  - name: OpenSkills
+    clip: {fileID: 8300000, guid: 2ec7ab929eccea843b1e7f9b0d14231c, type: 3}
+    soundType: 0
+    volume: 0.5
+    loop: 0
+    source: {fileID: 0}
+  - name: CloseMenu
+    clip: {fileID: 8300000, guid: 9ef1226981086cd4e94706275e44125b, type: 3}
+    soundType: 0
+    volume: 0.5
+    loop: 0
+    source: {fileID: 0}
+  - name: NextMap2
+    clip: {fileID: 8300000, guid: a4a2e7af94c152e419988e945f19fd09, type: 3}
+    soundType: 0
+    volume: 0.5
+    loop: 0
+    source: {fileID: 0}
   musicSounds:
   - name: MainMusic
-    clip: {fileID: 8300000, guid: 3b4f6fb68692d85419c7294678770eff, type: 3}
+    clip: {fileID: 8300000, guid: 6056162f10accb6448834419ca37a70b, type: 3}
     soundType: 0
     volume: 1
     loop: 0
     source: {fileID: 0}
-  atmosphereSounds: []
+  atmosphereSounds:
+  - name: ForestNight
+    clip: {fileID: 8300000, guid: 9442ea32cb156164fb3c7abc91c6ea20, type: 3}
+    soundType: 0
+    volume: 1
+    loop: 1
+    source: {fileID: 0}
   effectSounds:
   - name: Attack1
     clip: {fileID: 8300000, guid: 81fa90a75ac0e504e861c37ca35dbf8e, type: 3}
@@ -7656,29 +7692,65 @@ MonoBehaviour:
   - name: Drop_Uncommon
     clip: {fileID: 8300000, guid: bb14512e4eb2d5844a0da71dc614d525, type: 3}
     soundType: 0
-    volume: 0.5
+    volume: 0.859
     loop: 0
     source: {fileID: 0}
   - name: Drop_Rare
     clip: {fileID: 8300000, guid: c505b43310fb38b44811778454f59476, type: 3}
     soundType: 0
-    volume: 0.5
+    volume: 0.925
     loop: 0
     source: {fileID: 0}
   - name: Drop_Epic
     clip: {fileID: 8300000, guid: 04cf1ed637f1fb644baac8c28724952f, type: 3}
     soundType: 0
-    volume: 0.6
+    volume: 1
     loop: 0
     source: {fileID: 0}
   - name: Drop_Legendary
     clip: {fileID: 8300000, guid: 91bab7d0cfadee74fac4764035b30f3c, type: 3}
     soundType: 0
-    volume: 0.65
+    volume: 1
     loop: 0
     source: {fileID: 0}
-  - name: None
-    clip: {fileID: 8300000, guid: 3a4aa609b70d59f43a8c5cf3761f758f, type: 3}
+  - name: Wurf1
+    clip: {fileID: 8300000, guid: eab57ec5e8b2e184ba6676fb6c9b2a25, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Wurf2
+    clip: {fileID: 8300000, guid: 18d79d8deaf8f484d81098466ed7dbf7, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: Wurf3
+    clip: {fileID: 8300000, guid: c5a09eaf3a4a2fa46b3acc0f9e16d4bc, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: HealSpell
+    clip: {fileID: 8300000, guid: 7be474c62e3ff3f4e85ea08df4e2e4e9, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: TeleportSpell
+    clip: {fileID: 8300000, guid: c12e2820197390f419e955d426ad8997, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: TotemCall
+    clip: {fileID: 8300000, guid: a1c38225fcd312b4983e05c001289338, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
+  - name: TotemClear
+    clip: {fileID: 8300000, guid: bdfe3ced67d22c246a7bcb8749cfc604, type: 3}
     soundType: 0
     volume: 0.25
     loop: 0
@@ -8258,7 +8330,7 @@ GameObject:
   - component: {fileID: 999125017}
   m_Layer: 5
   m_Name: RIGHT
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9919,7 +9991,7 @@ GameObject:
   - component: {fileID: 1157616464}
   m_Layer: 5
   m_Name: LEFT
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11004,7 +11076,7 @@ GameObject:
   - component: {fileID: 1276283527}
   m_Layer: 5
   m_Name: SLOT5
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11548,6 +11620,7 @@ GameObject:
   - component: {fileID: 1300116308}
   - component: {fileID: 1300116310}
   - component: {fileID: 1300116311}
+  - component: {fileID: 1300116312}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: Untagged
@@ -11605,6 +11678,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a7fadc474a647488524567b7556f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keyNames:
+  - UP
+  - LEFT
+  - DOWN
+  - RIGHT
+  - STATS
+  - SKILLS
+  - PICK
+  - MAP
+  - SLOT1
+  - SLOT2
+  - SLOT3
+  - SLOT4
+  - SLOT5
+--- !u!114 &1300116312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300116307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e3b5c06d2d1ba14ca747cb9d5a7ce89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltip: {fileID: 0}
+  actionButtons: []
+  toggleCamKey: 0
+  pickKey: 0
+  inventoryTab: {fileID: 0}
+  skillTab: {fileID: 0}
+  mainMenu: {fileID: 0}
+  actionBar: {fileID: 0}
+  mapTab: {fileID: 0}
 --- !u!1 &1300290822
 GameObject:
   m_ObjectHideFlags: 0
@@ -12620,7 +12728,7 @@ GameObject:
   - component: {fileID: 1381354292}
   m_Layer: 5
   m_Name: SKILLS
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13552,7 +13660,7 @@ GameObject:
   - component: {fileID: 1555404454}
   m_Layer: 5
   m_Name: UP
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14755,7 +14863,7 @@ GameObject:
   - component: {fileID: 1703128921}
   m_Layer: 5
   m_Name: STATS
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16413,6 +16521,7 @@ GameObject:
   - component: {fileID: 1876060659}
   - component: {fileID: 1876060658}
   - component: {fileID: 1876060657}
+  - component: {fileID: 1876060660}
   m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
@@ -16436,8 +16545,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4, y: -126}
-  m_SizeDelta: {x: -1079.0654, y: 125.52472}
+  m_AnchoredPosition: {x: 4, y: -136}
+  m_SizeDelta: {x: -1031.0654, y: 125.52472}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1876060657
 MonoBehaviour:
@@ -16552,6 +16661,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1876060655}
   m_CullTransparentMesh: 0
+--- !u!223 &1876060660
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876060655}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1879872747
 GameObject:
   m_ObjectHideFlags: 0
@@ -16701,7 +16831,7 @@ GameObject:
   - component: {fileID: 1881414565}
   m_Layer: 5
   m_Name: MAP
-  m_TagString: KeyControl
+  m_TagString: KeyBindings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18742,9 +18872,9 @@ RectTransform:
   m_Father: {fileID: 1925669146}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1405, y: 874}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 468, y: 334}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2133788723

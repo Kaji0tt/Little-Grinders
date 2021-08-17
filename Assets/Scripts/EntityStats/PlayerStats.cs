@@ -106,8 +106,10 @@ public class PlayerStats : MonoBehaviour
         #region "Tutorial"
         if (level == 2)
         {
+            /* Currently disabled due to destroy of TutorialGameObject
             Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
             tutorialScript.ShowTutorial(6);
+            */
 
         }
         #endregion
@@ -148,7 +150,7 @@ public class PlayerStats : MonoBehaviour
         if (healAmount + (int)Get_currentHp() >= (int)Get_maxHp())
         {
             healAmount =  (int)Get_maxHp() - (int)Get_currentHp();
-            print(healAmount);
+
             Set_currentHp(healAmount);
         }
 

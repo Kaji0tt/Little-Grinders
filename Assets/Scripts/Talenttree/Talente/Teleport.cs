@@ -35,6 +35,8 @@ public class Teleport : Spell, IUseable
                         player.transform.position = hit.point;
                     }
                     else player.transform.position = destination;
+
+                    AudioManager.instance.Play("TeleportSpell");
                 }
 
             }
@@ -58,3 +60,4 @@ public class Teleport : Spell, IUseable
     }
 
 }
+

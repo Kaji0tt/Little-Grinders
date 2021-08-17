@@ -23,9 +23,12 @@ public class OutsideVegLoader : MonoBehaviour
     [Header("Entities")]
     public GameObject characterSpawn;
     [SerializeField] private GameObject[] entitieSpawn;
+    [SerializeField] private GameObject[] interactableCollection;
 
 
     [SerializeField] private PrefabCollection prefabCollection;
+
+
 
     private GameObject envParentObj;
     private GameObject groundParentObj;
@@ -33,6 +36,8 @@ public class OutsideVegLoader : MonoBehaviour
 
     //Stuff for Saving
     private int[] allSpawnPoints;
+
+
     void Awake()
     {
         prefabCollection = GameObject.Find("PrefabCollection").GetComponent<PrefabCollection>();
@@ -121,7 +126,7 @@ public class OutsideVegLoader : MonoBehaviour
 
         //LoadRoadTexture();
         //LoadRandomGroundTexture();
-        //LoadEnemies();
+        LoadEnemies(20);
     }
     
     public void LoadNoVegField()
@@ -134,8 +139,14 @@ public class OutsideVegLoader : MonoBehaviour
 
         //LoadRandomGroundTexture();
 
-        LoadEnemies();
+        LoadEnemies(3);
+
+
+        LoadInteractable();
     }
+
+
+
     public void LoadLowVegField()
     {
         LoadLowTopVeg();
@@ -677,28 +688,33 @@ public class OutsideVegLoader : MonoBehaviour
     #endregion
 
     #region EntitieSpawn
-    private void LoadCharakter()
-    {
-        PlayerManager.instance.player.transform.position = characterSpawn.transform.position;
-    }
 
-    private void LoadEnemies()
+
+    private void LoadEnemies(int chance)
     {
+        GameObject parentObj = GameObject.Find("MobParent");
+
         for (int i = 0; i < entitieSpawn.Length; i++)
         {
-            if (Random.Range(0, 3) == 1)
+            if (Random.Range(0, chance) == 1)
             {
                 Instantiate(prefabCollection.GetRandomEnemie(), entitieSpawn[i].transform.position,
-                    Quaternion.identity).transform.SetParent(GameObject.Find("MobParent").transform);
+                    Quaternion.identity).transform.SetParent(parentObj.transform);
             }
             Destroy(entitieSpawn[i]);
         }
     }
     #endregion
 
-
-    void SaveField()
+    private void LoadInteractable()
     {
-
+        for (int i = 0; i < interactableCollection.Length; i++)
+        {
+            if(Random.Range(0, 15) == 1)
+            {
+                Instantiate(prefabCollection.GetRandomInteractable(), interactableCollection[i].transform.position,
+                    Quaternion.identity).transform.SetParent(envParentObj.transform);
+            }
+        }
     }
 }

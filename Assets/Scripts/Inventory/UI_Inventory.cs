@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using CodeMonkey.Utils;
 using TMPro;
 
-public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitHandler
+public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private Transform Int_Inventory;
@@ -102,6 +102,13 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
                 Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
                 //print("successfull");
             };
+            SlotRectTransform.GetComponent<Button_UI>().MouseDownOnceFunc = () =>
+            {
+                if (item.itemType == ItemType.Consumable)
+                {
+                    HandScript.instance.TakeMoveable(item);
+                }
+            };
 
             SlotRectTransform.anchoredPosition = new Vector2(x * SlotCellSize, y * SlotCellSize);
 
@@ -125,6 +132,5 @@ public class UI_Inventory : MonoBehaviour//, IPointerEnterHandler, IPointerExitH
 
         }
     }
-
 
 }
