@@ -375,16 +375,17 @@ public class EnemyController : MonoBehaviour
     public void Die()
     {
         PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+
         playerStats.Set_xp(experience);
 
-        if(level > 1)
+        if(level >= 1)
             for(int i = 0; i <= level/2; i++)
             {
                 ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
             }
 
-
         Destroy(this);
+
         Destroy(gameObject);
     }
 

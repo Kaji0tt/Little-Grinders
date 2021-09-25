@@ -13,6 +13,8 @@ public class Inter_Portal : Interactable
         }
 
         GlobalMap.instance.currentMap.gotTeleporter = true;
+
+        UI_GlobalMap.instance.CalculateExploredMaps();
         //später muss hier auch eingefügt werden, dass sich der Current MapSave um einen Teleport erweitert. Dieser muss so hinterlegt / abgespeichert werden,
         //dass dieser auch im Load an exakter Position neu spawned.
     }

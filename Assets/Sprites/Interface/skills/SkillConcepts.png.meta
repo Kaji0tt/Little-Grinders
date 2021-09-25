@@ -1097,6 +1097,27 @@ TextureImporter:
   - first:
       213: -127957735793094396
     second: SkillConcepts_364
+  - first:
+      213: -4954129204115224026
+    second: SkillConcepts_365
+  - first:
+      213: 437553648497019642
+    second: SkillConcepts_366
+  - first:
+      213: -518731673284780702
+    second: SkillConcepts_367
+  - first:
+      213: 328904041230823039
+    second: SkillConcepts_368
+  - first:
+      213: 3540363445617045095
+    second: SkillConcepts_369
+  - first:
+      213: 1861882243805988804
+    second: SkillConcepts_370
+  - first:
+      213: 7282740466343937941
+    second: SkillConcepts_371
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -1118,6 +1139,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1126,12 +1148,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -1149,9 +1171,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -2220,7 +2245,7 @@ TextureImporter:
         height: 61
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 7, y: 7, z: 6, w: 6}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -5262,7 +5287,7 @@ TextureImporter:
         x: 745
         y: 514
         width: 52
-        height: 59
+        height: 58
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7338,10 +7363,10 @@ TextureImporter:
       name: SkillConcepts_293
       rect:
         serializedVersion: 2
-        x: 748
+        x: 750
         y: 330
-        width: 53
-        height: 54
+        width: 51
+        height: 57
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7653,10 +7678,10 @@ TextureImporter:
       name: SkillConcepts_308
       rect:
         serializedVersion: 2
-        x: 1076
-        y: 228
-        width: 187
-        height: 76
+        x: 500
+        y: 235
+        width: 85
+        height: 69
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7674,10 +7699,10 @@ TextureImporter:
       name: SkillConcepts_309
       rect:
         serializedVersion: 2
-        x: 1345
-        y: 276
-        width: 15
-        height: 33
+        x: 831
+        y: 263
+        width: 48
+        height: 54
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7695,10 +7720,10 @@ TextureImporter:
       name: SkillConcepts_310
       rect:
         serializedVersion: 2
-        x: 1320
-        y: 294
-        width: 9
-        height: 8
+        x: 1076
+        y: 228
+        width: 187
+        height: 76
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7716,10 +7741,10 @@ TextureImporter:
       name: SkillConcepts_311
       rect:
         serializedVersion: 2
-        x: 485
-        y: 241
-        width: 31
-        height: 42
+        x: 1345
+        y: 276
+        width: 15
+        height: 33
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7737,10 +7762,10 @@ TextureImporter:
       name: SkillConcepts_312
       rect:
         serializedVersion: 2
-        x: 512
-        y: 235
-        width: 73
-        height: 53
+        x: 1320
+        y: 294
+        width: 9
+        height: 8
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7758,10 +7783,10 @@ TextureImporter:
       name: SkillConcepts_313
       rect:
         serializedVersion: 2
-        x: 616
-        y: 228
-        width: 67
-        height: 52
+        x: 485
+        y: 241
+        width: 31
+        height: 42
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7779,10 +7804,10 @@ TextureImporter:
       name: SkillConcepts_314
       rect:
         serializedVersion: 2
-        x: 1293
-        y: 273
-        width: 12
-        height: 15
+        x: 616
+        y: 228
+        width: 67
+        height: 54
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7800,9 +7825,9 @@ TextureImporter:
       name: SkillConcepts_315
       rect:
         serializedVersion: 2
-        x: 1306
-        y: 275
-        width: 25
+        x: 1293
+        y: 273
+        width: 12
         height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -7821,9 +7846,9 @@ TextureImporter:
       name: SkillConcepts_316
       rect:
         serializedVersion: 2
-        x: 1330
-        y: 274
-        width: 14
+        x: 1306
+        y: 275
+        width: 25
         height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -7842,10 +7867,10 @@ TextureImporter:
       name: SkillConcepts_317
       rect:
         serializedVersion: 2
-        x: 97
-        y: 194
-        width: 51
-        height: 60
+        x: 1330
+        y: 274
+        width: 14
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7863,10 +7888,10 @@ TextureImporter:
       name: SkillConcepts_318
       rect:
         serializedVersion: 2
-        x: 174
-        y: 195
-        width: 55
-        height: 61
+        x: 97
+        y: 201
+        width: 51
+        height: 53
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7884,10 +7909,10 @@ TextureImporter:
       name: SkillConcepts_319
       rect:
         serializedVersion: 2
-        x: 231
+        x: 174
         y: 195
-        width: 186
-        height: 80
+        width: 55
+        height: 61
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7905,10 +7930,10 @@ TextureImporter:
       name: SkillConcepts_320
       rect:
         serializedVersion: 2
-        x: 419
-        y: 241
-        width: 41
-        height: 18
+        x: 231
+        y: 195
+        width: 186
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7926,10 +7951,10 @@ TextureImporter:
       name: SkillConcepts_321
       rect:
         serializedVersion: 2
-        x: 893
-        y: 243
-        width: 12
-        height: 15
+        x: 419
+        y: 241
+        width: 41
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7947,10 +7972,10 @@ TextureImporter:
       name: SkillConcepts_322
       rect:
         serializedVersion: 2
-        x: 906
-        y: 246
-        width: 11
-        height: 13
+        x: 893
+        y: 243
+        width: 12
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7968,10 +7993,10 @@ TextureImporter:
       name: SkillConcepts_323
       rect:
         serializedVersion: 2
-        x: 918
-        y: 248
-        width: 20
-        height: 20
+        x: 906
+        y: 246
+        width: 11
+        height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -7989,10 +8014,10 @@ TextureImporter:
       name: SkillConcepts_324
       rect:
         serializedVersion: 2
-        x: 956
-        y: 231
-        width: 30
-        height: 34
+        x: 918
+        y: 248
+        width: 20
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8010,10 +8035,10 @@ TextureImporter:
       name: SkillConcepts_325
       rect:
         serializedVersion: 2
-        x: 986
+        x: 956
         y: 231
-        width: 13
-        height: 23
+        width: 30
+        height: 34
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8031,8 +8056,8 @@ TextureImporter:
       name: SkillConcepts_326
       rect:
         serializedVersion: 2
-        x: 1000
-        y: 241
+        x: 986
+        y: 231
         width: 13
         height: 23
       alignment: 0
@@ -8052,10 +8077,10 @@ TextureImporter:
       name: SkillConcepts_327
       rect:
         serializedVersion: 2
-        x: 1031
-        y: 252
-        width: 14
-        height: 13
+        x: 1000
+        y: 241
+        width: 13
+        height: 23
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8073,10 +8098,10 @@ TextureImporter:
       name: SkillConcepts_328
       rect:
         serializedVersion: 2
-        x: 1039
-        y: 241
-        width: 16
-        height: 19
+        x: 1031
+        y: 252
+        width: 14
+        height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8094,10 +8119,10 @@ TextureImporter:
       name: SkillConcepts_329
       rect:
         serializedVersion: 2
-        x: 1048
-        y: 223
-        width: 13
-        height: 30
+        x: 1039
+        y: 241
+        width: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8115,10 +8140,10 @@ TextureImporter:
       name: SkillConcepts_330
       rect:
         serializedVersion: 2
-        x: 1277
-        y: 248
-        width: 34
-        height: 15
+        x: 1048
+        y: 223
+        width: 13
+        height: 30
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8136,10 +8161,10 @@ TextureImporter:
       name: SkillConcepts_331
       rect:
         serializedVersion: 2
-        x: 817
-        y: 173
-        width: 220
-        height: 51
+        x: 1277
+        y: 248
+        width: 34
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8157,10 +8182,10 @@ TextureImporter:
       name: SkillConcepts_332
       rect:
         serializedVersion: 2
-        x: 893
-        y: 220
-        width: 6
-        height: 11
+        x: 687
+        y: 193
+        width: 50
+        height: 57
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8178,10 +8203,10 @@ TextureImporter:
       name: SkillConcepts_333
       rect:
         serializedVersion: 2
-        x: 908
-        y: 215
-        width: 5
-        height: 16
+        x: 817
+        y: 173
+        width: 220
+        height: 51
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8199,10 +8224,10 @@ TextureImporter:
       name: SkillConcepts_334
       rect:
         serializedVersion: 2
-        x: 954
+        x: 893
         y: 220
         width: 6
-        height: 10
+        height: 11
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8220,10 +8245,10 @@ TextureImporter:
       name: SkillConcepts_335
       rect:
         serializedVersion: 2
-        x: 997
-        y: 220
-        width: 24
-        height: 14
+        x: 908
+        y: 215
+        width: 5
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8241,10 +8266,10 @@ TextureImporter:
       name: SkillConcepts_336
       rect:
         serializedVersion: 2
-        x: 1035
-        y: 103
-        width: 240
-        height: 122
+        x: 954
+        y: 220
+        width: 6
+        height: 10
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8262,10 +8287,10 @@ TextureImporter:
       name: SkillConcepts_337
       rect:
         serializedVersion: 2
-        x: 1037
-        y: 222
-        width: 4
-        height: 18
+        x: 997
+        y: 220
+        width: 24
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8283,10 +8308,10 @@ TextureImporter:
       name: SkillConcepts_338
       rect:
         serializedVersion: 2
-        x: 279
-        y: 192
-        width: 36
-        height: 23
+        x: 1035
+        y: 103
+        width: 240
+        height: 122
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8304,10 +8329,10 @@ TextureImporter:
       name: SkillConcepts_339
       rect:
         serializedVersion: 2
-        x: 342
-        y: 194
-        width: 23
-        height: 25
+        x: 1037
+        y: 222
+        width: 4
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8325,10 +8350,10 @@ TextureImporter:
       name: SkillConcepts_340
       rect:
         serializedVersion: 2
-        x: 1295
-        y: 137
-        width: 149
-        height: 65
+        x: 279
+        y: 192
+        width: 36
+        height: 23
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8346,10 +8371,10 @@ TextureImporter:
       name: SkillConcepts_341
       rect:
         serializedVersion: 2
-        x: 753
-        y: 113
-        width: 54
-        height: 59
+        x: 342
+        y: 162
+        width: 23
+        height: 57
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8367,10 +8392,10 @@ TextureImporter:
       name: SkillConcepts_342
       rect:
         serializedVersion: 2
-        x: 834
-        y: 107
-        width: 60
-        height: 61
+        x: 531
+        y: 140
+        width: 50
+        height: 54
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8388,10 +8413,10 @@ TextureImporter:
       name: SkillConcepts_343
       rect:
         serializedVersion: 2
-        x: 899
-        y: 109
-        width: 86
-        height: 70
+        x: 612
+        y: 141
+        width: 55
+        height: 61
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8409,10 +8434,10 @@ TextureImporter:
       name: SkillConcepts_344
       rect:
         serializedVersion: 2
-        x: 987
-        y: 145
-        width: 16
-        height: 32
+        x: 753
+        y: 113
+        width: 54
+        height: 59
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8430,10 +8455,10 @@ TextureImporter:
       name: SkillConcepts_345
       rect:
         serializedVersion: 2
-        x: 996
-        y: 140
-        width: 72
-        height: 34
+        x: 834
+        y: 107
+        width: 60
+        height: 61
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8451,10 +8476,10 @@ TextureImporter:
       name: SkillConcepts_346
       rect:
         serializedVersion: 2
-        x: 990
-        y: 92
-        width: 70
-        height: 48
+        x: 899
+        y: 109
+        width: 86
+        height: 70
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8472,10 +8497,10 @@ TextureImporter:
       name: SkillConcepts_347
       rect:
         serializedVersion: 2
-        x: 1117
-        y: 101
-        width: 18
-        height: 20
+        x: 987
+        y: 145
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8493,10 +8518,10 @@ TextureImporter:
       name: SkillConcepts_348
       rect:
         serializedVersion: 2
-        x: 1198
-        y: 109
-        width: 78
-        height: 29
+        x: 996
+        y: 140
+        width: 72
+        height: 34
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8514,10 +8539,10 @@ TextureImporter:
       name: SkillConcepts_349
       rect:
         serializedVersion: 2
-        x: 1277
-        y: 112
-        width: 40
-        height: 28
+        x: 1295
+        y: 137
+        width: 149
+        height: 65
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8535,10 +8560,10 @@ TextureImporter:
       name: SkillConcepts_350
       rect:
         serializedVersion: 2
-        x: 907
-        y: 76
-        width: 53
-        height: 31
+        x: 400
+        y: 61
+        width: 50
+        height: 56
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8556,10 +8581,10 @@ TextureImporter:
       name: SkillConcepts_351
       rect:
         serializedVersion: 2
-        x: 935
-        y: 62
-        width: 8
-        height: 15
+        x: 613
+        y: 72
+        width: 58
+        height: 56
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8577,10 +8602,10 @@ TextureImporter:
       name: SkillConcepts_352
       rect:
         serializedVersion: 2
-        x: 951
-        y: 70
-        width: 13
-        height: 8
+        x: 990
+        y: 92
+        width: 70
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8598,10 +8623,10 @@ TextureImporter:
       name: SkillConcepts_353
       rect:
         serializedVersion: 2
-        x: 962
-        y: 58
-        width: 12
-        height: 19
+        x: 1117
+        y: 101
+        width: 18
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8619,10 +8644,10 @@ TextureImporter:
       name: SkillConcepts_354
       rect:
         serializedVersion: 2
-        x: 974
-        y: 80
-        width: 61
-        height: 22
+        x: 1198
+        y: 109
+        width: 78
+        height: 29
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8640,10 +8665,10 @@ TextureImporter:
       name: SkillConcepts_355
       rect:
         serializedVersion: 2
-        x: 1036
-        y: 62
-        width: 94
-        height: 45
+        x: 1277
+        y: 112
+        width: 40
+        height: 28
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8661,10 +8686,10 @@ TextureImporter:
       name: SkillConcepts_356
       rect:
         serializedVersion: 2
-        x: 1139
-        y: 77
-        width: 43
-        height: 19
+        x: 295
+        y: 71
+        width: 16
+        height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8682,10 +8707,10 @@ TextureImporter:
       name: SkillConcepts_357
       rect:
         serializedVersion: 2
-        x: 1203
-        y: 69
-        width: 10
-        height: 9
+        x: 765
+        y: 35
+        width: 50
+        height: 57
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8703,10 +8728,10 @@ TextureImporter:
       name: SkillConcepts_358
       rect:
         serializedVersion: 2
-        x: 1209
-        y: 57
-        width: 25
-        height: 25
+        x: 884
+        y: 31
+        width: 53
+        height: 56
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8724,10 +8749,10 @@ TextureImporter:
       name: SkillConcepts_359
       rect:
         serializedVersion: 2
-        x: 1236
-        y: 69
-        width: 12
-        height: 12
+        x: 974
+        y: 80
+        width: 61
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8745,10 +8770,10 @@ TextureImporter:
       name: SkillConcepts_360
       rect:
         serializedVersion: 2
-        x: 1249
-        y: 65
-        width: 10
-        height: 29
+        x: 1036
+        y: 62
+        width: 94
+        height: 45
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8766,10 +8791,10 @@ TextureImporter:
       name: SkillConcepts_361
       rect:
         serializedVersion: 2
-        x: 978
-        y: 69
-        width: 5
-        height: 6
+        x: 1139
+        y: 77
+        width: 43
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8787,10 +8812,10 @@ TextureImporter:
       name: SkillConcepts_362
       rect:
         serializedVersion: 2
-        x: 1022
-        y: 68
-        width: 18
-        height: 5
+        x: 1209
+        y: 57
+        width: 25
+        height: 25
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8808,10 +8833,10 @@ TextureImporter:
       name: SkillConcepts_363
       rect:
         serializedVersion: 2
-        x: 1010
-        y: 62
-        width: 5
-        height: 7
+        x: 1236
+        y: 69
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8829,6 +8854,153 @@ TextureImporter:
       name: SkillConcepts_364
       rect:
         serializedVersion: 2
+        x: 1249
+        y: 65
+        width: 10
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4011ac30e17693ef0800000000000000
+      internalID: -127957735793094396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillConcepts_365
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 70
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62ac259acb56f3bb0800000000000000
+      internalID: -4954129204115224026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillConcepts_366
+      rect:
+        serializedVersion: 2
+        x: 962
+        y: 58
+        width: 12
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afa47dc99b0821600800000000000000
+      internalID: 437553648497019642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillConcepts_367
+      rect:
+        serializedVersion: 2
+        x: 978
+        y: 69
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26ddd10aa481dc8f0800000000000000
+      internalID: -518731673284780702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillConcepts_368
+      rect:
+        serializedVersion: 2
+        x: 1022
+        y: 68
+        width: 18
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7ee0ce9b70809400800000000000000
+      internalID: 328904041230823039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillConcepts_369
+      rect:
+        serializedVersion: 2
+        x: 1203
+        y: 69
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76e28cfcbc5e12130800000000000000
+      internalID: 3540363445617045095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillConcepts_370
+      rect:
+        serializedVersion: 2
+        x: 1010
+        y: 62
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c7c9ab390cb6d910800000000000000
+      internalID: 1861882243805988804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillConcepts_371
+      rect:
+        serializedVersion: 2
         x: 1092
         y: 48
         width: 11
@@ -8840,8 +9012,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4011ac30e17693ef0800000000000000
-      internalID: -127957735793094396
+      spriteID: 5970bc75edd711560800000000000000
+      internalID: 7282740466343937941
       vertices: []
       indices: 
       edges: []

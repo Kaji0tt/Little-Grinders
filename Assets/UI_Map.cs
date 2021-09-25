@@ -14,6 +14,8 @@ public class UI_Map : MonoBehaviour, IPointerEnterHandler, IDescribable, IPointe
 
     public bool gotTeleporter { get; private set; }
 
+    private bool isLoading = false;
+
     public void PopulateMap(MapSave map)
     {
         mapCords = new Vector2(map.mapIndexX, map.mapIndexY);
@@ -33,9 +35,9 @@ public class UI_Map : MonoBehaviour, IPointerEnterHandler, IDescribable, IPointe
 
     private void ChangeSprite()
     {
-        Renderer rend = this.gameObject.GetComponent<Renderer>();
+        Image image = GetComponent<Image>();
 
-        rend.material.color = Color.magenta;
+        image.color =  Color.magenta;
 
     }
 
@@ -52,8 +54,13 @@ public class UI_Map : MonoBehaviour, IPointerEnterHandler, IDescribable, IPointe
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(gotTeleporter)
-        MapGenHandler.instance.LoadMap(GlobalMap.instance.GetMapByCords(mapCords), GlobalMap.instance.lastSpawnpoint);
+        if(gotTeleporter && !isLoading)
+        {
+            MapGenHandler.instance.ResetThisMap();
+            MapGenHandler.instance.LoadMap(GlobalMap.instance.GetMapByCords(mapCords), GlobalMap.instance.lastSpawnpoint);
+            isLoading = true;
+        }
+
     }
 
     public void OnPointerExit(PointerEventData eventData)

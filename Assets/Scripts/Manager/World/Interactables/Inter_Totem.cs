@@ -22,6 +22,10 @@ public class Inter_Totem : Interactable
 
     private float timeStamp;
 
+    private float intervall = 0.5f;
+
+    private bool soundPlayed = false;
+
 
     private void Start()
     {
@@ -74,12 +78,14 @@ public class Inter_Totem : Interactable
 
             if (summonedMobs.Length == 0)
             {
-                if (AudioManager.instance != null)
+                if (AudioManager.instance != null && !soundPlayed)
+                {
                     AudioManager.instance.Play("TotemClear");
+                    soundPlayed = true;
+                }
 
-                PlayerManager.instance.player.GetComponent<PlayerStats>().Set_xp(200);
 
-                float intervall = 0.5f;
+                PlayerManager.instance.player.GetComponent<PlayerStats>().Set_xp(20);
 
                 timeStamp += Time.deltaTime;
 

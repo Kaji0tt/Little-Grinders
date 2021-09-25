@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b95acfd6bf6c5e479bfd7d937d42a15, type: 3}
+  m_Name: SH0003 Fellstiefel
+  m_EditorClassIdentifier: 
+  ItemID: SH0003
+  ItemName: Fellstiefel
+  ItemDescription: "Sehr bequem, sehr gem\xFCtlich."
+  itemType: 3
+  itemRarity: 
+  Range: 0
+  RangedWeapon: 0
+  icon: {fileID: -2607322854936278140, guid: 379681b701916a341a49aa18a68f2130, type: 3}
+  percent: 15
+  baseLevel: 30
+  hp: 15
+  armor: 5
+  attackPower: 0
+  abilityPower: 0
+  p_hp: 0.01
+  p_armor: 0
+  p_attackPower: 0
+  p_abilityPower: 0
+  p_attackSpeed: 0
+  p_movementSpeed: 0.01
+  c_hp: 0
+  usable: 0
+  c_percent: 0
+  itemAction: {fileID: 0}

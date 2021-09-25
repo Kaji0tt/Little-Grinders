@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
 
+public enum TalentType { None, Life, Void, Combat }
 public class TalentTree : MonoBehaviour
 {
     //private int points = 11;
@@ -12,16 +15,23 @@ public class TalentTree : MonoBehaviour
     {
         instance = this;
 
+        talents = FindObjectsOfType<Talent>();
+
+        CalculateAllTalents();
+
+        ResetTalents();
+
+        DrawTalentTreeLines();
+
+        UpdateTalentPointText();
+
     }
     #endregion
 
-    // Relevant wird nochmal: Welche Fähigkeiten sind zwar freigeschaltet, aber ausgegraut, sobald keine Verteilbaren punkte mehr da sind..
-    // Wobei.. dann wären sie Verwendbar solange wir die Skillpunkte noch nicht gesetzt wurden, es sei denn ich mach eine currentCoutn != 0 Abfrage..
-    // Jedenfalls, hier das Video: https://youtu.be/NEqaBBnAFfM?t=624
+    public Transform talentLineParent;
 
 
-    [SerializeField]
-    public Talent[] talents;
+    public Talent[] talents { get; private set; }
 
     [SerializeField]
     public Talent[] defaultTalents; 
@@ -32,15 +42,26 @@ public class TalentTree : MonoBehaviour
     [SerializeField]
     private Text talentPointText;
 
-    //public List<Talent> allTalents = new List<Talent>();
-
+    //Für jedes Talent, welches gesetzt wurde, erhöhe die talentTypePoins
+    [HideInInspector]
+    public int voidPoints = 0;
+    [HideInInspector]
+    public int lifePoints = 0;
+    [HideInInspector]
+    public int combatPoints = 0;
+    [HideInInspector]
+    public List<Talent> voidTalents = new List<Talent>();
+    [HideInInspector]
+    public List<Talent> lifeTalents = new List<Talent>();
+    [HideInInspector]
+    public List<Talent> combatTalents = new List<Talent>();
 
     public void TryUseTalent(Talent talent)
     {
 
         if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && talent.Click())
         {
-            
+            talent.IncreaseTalentTypePoins(talent);
             #region "Tutorial"
             if (PlayerManager.instance.player.GetComponent<PlayerStats>().level == 2 && GameObject.FindGameObjectWithTag("TutorialScript") != null)
             {
@@ -49,10 +70,18 @@ public class TalentTree : MonoBehaviour
 
             }
             #endregion
+
+            
+            if (talent is ISmallTalent smallTalent)
+            {
+                smallTalent.PassiveEffect();
+            }
             
             PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
             UpdateTalentPointText();
         }
+
+
 
     }
 
@@ -68,36 +97,9 @@ public class TalentTree : MonoBehaviour
         PlayerStats.eventLevelUp -= UpdateTalentPointText;
     }
 
-    void Start()
-    {
-        if (PlayerPrefs.HasKey("Load") || PlayerPrefs.HasKey("SceneLoad"))
-        {
-            CalculateAllTalents();
 
-            UpdateTalentPointText();
-
-            foreach (Talent talent in allTalents)
-            {
-                if (talent.unlocked)
-                    talent.Unlock();
-                else
-                    talent.LockTalents();
-            }
-        }
-        else
-        {
-            ResetTalents();
-
-            CalculateAllTalents();
-
-            UpdateTalentPointText();
-        }
-
-
-    }
-
-
-    private void ResetTalents()
+    
+    public void ResetTalents()
     {
         foreach (Talent talent in talents)
             talent.LockTalents();
@@ -115,7 +117,6 @@ public class TalentTree : MonoBehaviour
         talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
 
     }
-
     
     void CalculateAllTalents()
     {
@@ -123,15 +124,77 @@ public class TalentTree : MonoBehaviour
 
         foreach (Talent talent in defaultTalents)
         {
+
             allTalentsList.Add(talent);
+
         }
         foreach (Talent talent in talents)
         {
+
             allTalentsList.Add(talent);
+
+        }
+
+        foreach(Talent talent in talents)
+        {
+            if (talent.talentType == TalentType.Void)
+                voidTalents.Add(talent);
+
+            if (talent.talentType == TalentType.Combat)
+                combatTalents.Add(talent);
+
+            if (talent.talentType == TalentType.Life)
+                lifeTalents.Add(talent);
         }
 
         allTalents = allTalentsList.ToArray();
 
     }
-    
+
+    //Funktion um die Verbindungen zwischen den Talenten herzustellen
+    //UILineRenderer currently creates Null-Reference on Start, however the interface is drawn accordingly.
+    private void DrawTalentTreeLines()
+    {
+        foreach (Talent talent in allTalents)
+        {
+            //Erschaffe ein neues GO für die Talent-Tree Line
+            GameObject gameObject = new GameObject("_TalentLine", typeof(UILineRenderer));
+
+            //Setze Parent des GO für vernünftiges UI Layering
+            gameObject.transform.SetParent(talentLineParent, false);
+
+            //Füge UILineRendere der Unity.UI.Extensions hinzu
+            UILineRenderer lineRend = gameObject.GetComponent<UILineRenderer>();
+
+            //Setze Farbe der Talent-Linie
+            lineRend.color = new Color(.3f, .3f, .3f, .5f);
+
+            //Setze den Ankerpunkt der Talent-Linie nach Rechts-Unten
+            RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
+
+            rectTrans.anchorMin = new Vector2(0, 0);
+            rectTrans.anchorMax = new Vector2(0, 0);
+
+            //Erstelle eine Liste der Positionen der Talente
+            List<Vector2> childTalPos = new List<Vector2>();
+
+            //Füge den Ursprung hinzu (Das Talent, welches Verbindungen zu den Kinder-Talenten aufbauen soll) - .5 um mittig positioniert zu werden.
+            childTalPos.Add(talent.GetComponent<RectTransform>().anchoredPosition + talent.GetComponent<RectTransform>().sizeDelta * .5f);
+
+            //Für jedes Kinder-Talent soll der Liste neue Positionen hinzugefügt werden, aus welchen später die Talent-Linien erstellt werden.
+            foreach (Talent childTalent in talent.childTalent)
+            {
+
+                //Es müssten stets zwei Punkte hinzugefügt werden, die Mitte das Kinder-Talents und die des Ursprung-Talents (childTalent + talent)
+                childTalPos.Add(childTalent.GetComponent<RectTransform>().anchoredPosition + childTalent.GetComponent<RectTransform>().sizeDelta * .5f);
+                childTalPos.Add(talent.GetComponent<RectTransform>().anchoredPosition + childTalent.GetComponent<RectTransform>().sizeDelta * .5f);
+
+            }
+
+            //Füge die Liste dem erschaffenen GO mit UILineRenderer Komponente hinzu
+            lineRend.Points = childTalPos.ToArray();
+
+        }
+    }
+
 }

@@ -44,6 +44,10 @@ public class PlayerSave
 
     public int skillPoints;
 
+    public int savedLP;
+    public int savedCP;
+    public int savedVP;
+
     #endregion
 
     #region ActionsButtons
@@ -183,12 +187,22 @@ public class PlayerSave
 
     private void SaveTheTalents()
     {
-        TalentTree talentTree = GameObject.Find("TalentTree").GetComponent<TalentTree>();
+        //TalentTree talentTree = GameObject.Find("TalentTree").GetComponent<TalentTree>();
 
-        foreach (Talent talent in talentTree.allTalents)
+        Talent[] allTalents = Object.FindObjectsOfType<Talent>();
+
+        foreach (Talent talent in allTalents)
         {
             talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked));
         }
+
+        TalentTree talentTree = Object.FindObjectOfType<TalentTree>();
+
+        savedLP = talentTree.lifePoints;
+
+        savedCP = talentTree.combatPoints;
+
+        savedVP = talentTree.voidPoints;
     }
 
     private void SaveTheItems()
