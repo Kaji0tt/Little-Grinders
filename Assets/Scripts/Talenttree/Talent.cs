@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 
-public class Talent : MonoBehaviour, IMoveable
+public class Talent : MonoBehaviour, IMoveable, IPointerClickHandler
 {
+
+    public TalentType talentType;
 
     //Description of the Spell
     [SerializeField]
@@ -36,7 +39,6 @@ public class Talent : MonoBehaviour, IMoveable
         }
     }
     
-
     [SerializeField]
     private Text countText;
 
@@ -51,10 +53,13 @@ public class Talent : MonoBehaviour, IMoveable
 
     public bool unlocked;
 
-    [SerializeField]
-    private Talent[] childTalent;
+    //[SerializeField]
+    public Talent[] childTalent;
 
+    //Wie viele Punkte in TalentType sind nötig, für dieses Talent?
+    public int requiredTypePoints;
 
+    private int collectedTypePoints;
 
     //Die Weiterleitung zu anderen Talenten macht er in Abhängig von "Pfeilen", also wenn ein PfeilSprite auf eine andere Fähigkeit zeigt, bzw. sie einen Pfeil besitzt, dann wird das Folgetalent freigeschaltet.
     //Kp ob ich das so machen wollen würde, entsprechendes Video hier:
@@ -75,16 +80,19 @@ public class Talent : MonoBehaviour, IMoveable
         if (unlocked)
             Unlock();
 
+        //UpdateTalentTypePoins();
         //CheckIfUnlocked();
 
-    }
 
+    }
 
     public bool Click()
     {
         if (currentCount < maxCount && unlocked)
         {
             currentCount++;
+
+
 
             countText.text = $"{currentCount}/{maxCount}";
 
@@ -101,6 +109,8 @@ public class Talent : MonoBehaviour, IMoveable
         }
         return false;
     }
+
+
 
     public void LockTalents()
     {
@@ -128,5 +138,61 @@ public class Talent : MonoBehaviour, IMoveable
             Unlock();
     }
 
+    public void IncreaseTalentTypePoins(Talent talent)
+    {
+        switch (talent.talentType)
+        {
+            case TalentType.Life:
 
+                TalentTree.instance.lifePoints++;
+                foreach (Talent lT in TalentTree.instance.lifeTalents)
+                {
+                        lT.collectedTypePoints = TalentTree.instance.lifePoints;
+
+                    if (lT.collectedTypePoints == lT.requiredTypePoints && lT is Spell)
+                        lT.Unlock();
+                }
+
+
+
+                break;
+
+            case TalentType.Combat:
+
+                TalentTree.instance.combatPoints++;
+                foreach (Talent cT in TalentTree.instance.combatTalents)
+                {
+                        cT.collectedTypePoints = TalentTree.instance.combatPoints;
+
+                    if (cT.collectedTypePoints == cT.requiredTypePoints && cT is Spell)
+                        cT.Unlock();
+                }
+
+                break;
+
+            case TalentType.Void:
+
+                TalentTree.instance.voidPoints++;
+                foreach(Talent vT in TalentTree.instance.voidTalents)
+                {
+                        vT.collectedTypePoints = TalentTree.instance.voidPoints;
+
+                    if (vT.collectedTypePoints == vT.requiredTypePoints && vT is Spell)
+                        vT.Unlock();
+                }
+
+
+                break;
+
+
+        }
+    }
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        TalentTree.instance.TryUseTalent(this);
+        
+
+    }
 }

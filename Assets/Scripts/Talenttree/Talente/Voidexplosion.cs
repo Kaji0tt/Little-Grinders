@@ -10,13 +10,15 @@ public class Voidexplosion : Spell, IUseable
     [SerializeField]
     private float damage = 8;
 
+    imp_Voidexplosion improved;
+
     IsometricPlayer player;
 
     void Start()
     {
         player = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
 
-        SetDescription("Verursacht im Radius von " + radius + " um den Spieler herum " + damage + player.playerStats.AbilityPower.Value * 0.7f + " Schaden. (8 + 70% AP)");
+        SetDescription("Verursacht im Radius von " + radius + " um den Spieler herum \n" + damage + player.playerStats.AbilityPower.Value * 0.7f + " Schaden. (8 + 70% AP)");
     }
 
     public override void Use()
@@ -33,7 +35,7 @@ public class Voidexplosion : Spell, IUseable
                 if (hitCollider.transform.tag == "Enemy")
                 {
 
-                    hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage(damage + player.playerStats.AbilityPower.Value * 0.7f, radius);
+                    hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage(damage + player.playerStats.AbilityPower.Value * 0.7f, radius + improved.currentCount);
 
 
                 }

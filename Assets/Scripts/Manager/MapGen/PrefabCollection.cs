@@ -53,10 +53,18 @@ public class PrefabCollection : MonoBehaviour
 
         foreach(GameObject mob in enemiesPF)
         {
-            if(mob.GetComponent<EnemyController>().level <= GlobalMap.instance.currentMap.mapLevel+1)
+            if (GlobalMap.instance.currentMap != null)
             {
-                possibleMobs.Add(mob);
+                //print("current map is not null");
+                if (mob.GetComponent<EnemyController>().level -1 <= GlobalMap.instance.currentMap.mapLevel)
+                {
+                    //print("adding mob: " + mob.name);
+                    possibleMobs.Add(mob);
+                }
             }
+            else
+                possibleMobs.Add(enemiesPF[1]);
+
         }
 
         return possibleMobs[Random.Range(0, possibleMobs.Count)];

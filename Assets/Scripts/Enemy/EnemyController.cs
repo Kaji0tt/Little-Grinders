@@ -108,7 +108,7 @@ public class EnemyController : MonoBehaviour
             {
                 Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
                 //Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 0.01f), StatModType.PercentMult));
-                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / GlobalMap.instance.currentMap.mapLevel) * 2, StatModType.Flat));
+                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel +1)), StatModType.Flat));
                 AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
 
                 print("modifiers of mobs should have been added, resulting in:" + Hp.Value + " for Hp on " + gameObject.name + ". AttackPower: " + AttackPower.Value);
@@ -375,16 +375,17 @@ public class EnemyController : MonoBehaviour
     public void Die()
     {
         PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+
         playerStats.Set_xp(experience);
 
-        if(level > 1)
+        if(level >= 1)
             for(int i = 0; i <= level/2; i++)
             {
                 ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
             }
 
-
         Destroy(this);
+
         Destroy(gameObject);
     }
 

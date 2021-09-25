@@ -100,33 +100,47 @@ public class PlayerLoad : MonoBehaviour
     {
         TalentTree talentTree = FindObjectOfType<TalentTree>();
 
+        talentTree.ResetTalents();
+
         foreach (TalentSave savedTalent in data.talentsToBeSaved)
         {
-
-            for (int i = 0; i < talentTree.allTalents.Length; i++)
-            {
-                if (talentTree.allTalents[i].name == savedTalent.talentName)
-                {
-                    talentTree.allTalents[i].Set_currentCount(savedTalent.talentPoints);
-
-                    talentTree.allTalents[i].unlocked = savedTalent.unlocked;
-
-                    talentTree.allTalents[i].UpdateTalent();
-                }
-            }
-
-            /*
+            Debug.Log("loading Talent: " + savedTalent.talentName + " loading it for " + talentTree.gameObject.name);
             for (int i = 0; i < talentTree.talents.Length; i++)
             {
                 if (talentTree.talents[i].name == savedTalent.talentName)
                 {
                     talentTree.talents[i].Set_currentCount(savedTalent.talentPoints);
 
+                    talentTree.talents[i].unlocked = savedTalent.unlocked;
+
                     talentTree.talents[i].UpdateTalent();
                 }
             }
-            */
+
+            foreach(Talent talent in talentTree.talents)
+            {
+                if (talent.unlocked)
+                {
+                    if(talent is ISmallTalent smallTalent)
+                    {
+                        smallTalent.PassiveEffect();
+                    }
+                    talent.Unlock();
+                }
+
+                else
+                {
+                    talent.LockTalents();
+                }
+
+            }
             talentTree.UpdateTalentPointText();
+
+            talentTree.voidPoints = data.savedVP; 
+            
+            talentTree.lifePoints = data.savedLP; 
+            
+            talentTree.combatPoints = data.savedCP;
 
         }
     }
@@ -188,7 +202,7 @@ public class PlayerLoad : MonoBehaviour
         if (data.savedActionButtons[i] != null)
         {
 
-            foreach (Spell spell in TalentTree.instance.allTalents.OfType<Spell>())
+            foreach (Spell spell in TalentTree.instance.talents.OfType<Spell>())
             {
                 if (spell.GetSpellName == data.savedActionButtons[i])
                 {

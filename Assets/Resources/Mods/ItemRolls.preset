@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ItemRolls
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 28532e31c0e8a4344b872fcbe861f1d7,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: wLegendaryRolls.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: wLegendaryRolls.Array.data[0]
+    value: 
+    objectReference: {fileID: 11400000, guid: 62922b5e0e5651a4ebba5ecbfbbbfbf3, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wLegendaryRolls.Array.data[1]
+    value: 
+    objectReference: {fileID: 11400000, guid: ace63cf4080f0714ebba1d60f04fbcb9, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wEpicRolls.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: wEpicRolls.Array.data[0]
+    value: 
+    objectReference: {fileID: 11400000, guid: 4df3394230a4abe408d1a59c6991bacf, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wEpicRolls.Array.data[1]
+    value: 
+    objectReference: {fileID: 11400000, guid: 1b4ceb43e4a365046bb15ac66285065b, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wRareRolls.Array.size
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: wRareRolls.Array.data[0]
+    value: 
+    objectReference: {fileID: 11400000, guid: 0345cec3e21e0634997505f1b88f3303, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wRareRolls.Array.data[1]
+    value: 
+    objectReference: {fileID: 11400000, guid: d84443bbd45046c4a9dd3e3c94a7fe3e, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wRareRolls.Array.data[2]
+    value: 
+    objectReference: {fileID: 11400000, guid: b6df6d9023109d146b6e4327a59d1558, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wUncommonRolls.Array.size
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: wUncommonRolls.Array.data[0]
+    value: 
+    objectReference: {fileID: 11400000, guid: f3bc1fd16d1845e47a0e216af1a29353, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wUncommonRolls.Array.data[1]
+    value: 
+    objectReference: {fileID: 11400000, guid: abb2abb7c68c4b34a972f4c4453c0960, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wUncommonRolls.Array.data[2]
+    value: 
+    objectReference: {fileID: 11400000, guid: 97d10d3304c278941bbfbf70dc0d1082, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wUnbrauchbarRolls.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: wUnbrauchbarRolls.Array.data[0]
+    value: 
+    objectReference: {fileID: 11400000, guid: 5a803bc07cb2043409a8f4efbf148d85, type: 2}
+  - target: {fileID: 0}
+    propertyPath: wUnbrauchbarRolls.Array.data[1]
+    value: 
+    objectReference: {fileID: 11400000, guid: f787d7e5e9ea3254db1b530de5742a20, type: 2}
+  - target: {fileID: 0}
+    propertyPath: levelModifier
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: worldModifier
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bossModifier
+    value: 0
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []

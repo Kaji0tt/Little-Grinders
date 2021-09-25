@@ -50,10 +50,14 @@ public class MapSave
         //Save the Map Coordinates
         if(GlobalMap.instance != null)
         {
-            mapIndexX = GlobalMap.instance.currentPosition.x;
-            mapIndexY = GlobalMap.instance.currentPosition.y;
+            Vector2 v2 = GlobalMap.instance.currentPosition;
 
-            mapLevel = (int)Mathf.Max(GlobalMap.instance.currentPosition.x, GlobalMap.instance.currentPosition.y);
+            mapIndexX = v2.x;
+            mapIndexY = v2.y;
+
+
+            mapLevel = Mathf.Abs(v2.x) > Mathf.Abs(v2.y) ? (int)Mathf.Abs(v2.x) : (int)Mathf.Abs(v2.y);
+
         }
 
         gotTeleporter = false;
