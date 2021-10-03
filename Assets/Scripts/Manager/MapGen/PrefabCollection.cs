@@ -2,8 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WorldType
+{
+    Forest = 0,
+    Jungle = 1,
+    Desert = 2,
+}
+
 public class PrefabCollection : MonoBehaviour
 {
+    #region Singleton
+    public static PrefabCollection instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+    #endregion
+
     [SerializeField]
     private GameObject[] smalGreenPF;
     [SerializeField]
@@ -23,13 +38,124 @@ public class PrefabCollection : MonoBehaviour
     [SerializeField]
     private GameObject[] interactablesPF;
 
+    public WorldType worldType;
+
 
 
     List<GameObject> possibleMobs = new List<GameObject>();
 
+    //Collection of all possible themes.
+    public List<PrefabTheme> themeCollection = new List<PrefabTheme>();
+
+    //Private collection of themes
+    private List<PrefabTheme> possibleThemes = new List<PrefabTheme>();
+
+    //Create a List of PrefabCollections,
+    //in dependency of MapRoll, populate the prefabs 
+    public void PopulatePrefabCollection(string playerSpawn)
+    {
+        possibleThemes.Clear();
+
+        //possibleThemes.Add(themeCollection[0]);
+        //Prüfe in der Liste der Themes, welche anhand des Global-Map-Levels zur Verfügung stehen und füge sie einer tempListe hinzu.
+        foreach (PrefabTheme theme in themeCollection)
+        {
+            if(GlobalMap.instance.currentMap != null)
+            if (theme.requiredLevel <= GlobalMap.instance.currentMap.mapLevel)
+            {
+                possibleThemes.Add(theme);
+            }
+
+        }
+
+        //Würfel ein zufälliges Theme aus
+        int themeInt = Random.Range(0, possibleThemes.Count);
+
+
+
+        //Write WorldType to public Enum for saving purposes.
+        if(themeInt == 0) { worldType = WorldType.Forest; }
+        if(themeInt == 1) { worldType = WorldType.Jungle; }
+        if(themeInt == 2) { worldType = WorldType.Desert; }
+
+
+        //possible themes count seems to be buggy, theme int + worldType seem to be working.
+        print("The count of possible MapThemes: " + possibleThemes.Count + ". The themeInt that has been rolled: " + themeInt + ", resulting in WorldType: " + worldType.ToString());
+
+
+
+        //Populate the PrefabCollection with the theme that has been rolled.
+        //Problem - if the themeInt rolls for themeType = Forest, the Prefabs are not recalculated to the Forest prefabs.
+        if(possibleThemes.Find(x => x.themeType == worldType))
+        {
+            print("Found a Theme in possibleThemes with according worldType, should be resetting the Prefabs.");
+
+            smalGreenPF = null;
+            smalGreenPF = possibleThemes.Find(x => x.themeType == worldType).smalGreenPF;
+
+            midGreenPF = null;
+            midGreenPF = possibleThemes.Find(x => x.themeType == worldType).midGreenPF;
+
+            highGreenPF = null;
+            highGreenPF = possibleThemes.Find(x => x.themeType == worldType).highGreenPF;
+
+            horizntalFencePF = null;
+            horizntalFencePF = possibleThemes.Find(x => x.themeType == worldType).horizntalFencePF;
+
+            verticalFencePF = null;
+            verticalFencePF = possibleThemes.Find(x => x.themeType == worldType).verticalFencePF;
+
+            enemiesPF = null;
+            enemiesPF = possibleThemes.Find(x => x.themeType == worldType).enemiesPF;
+            //interactablesPF = possibleThemes[themeInt].interactablesPF;
+        }
+        /*
+        if (possibleThemes.Count >= 1)
+        {
+            smalGreenPF = null;
+            smalGreenPF = possibleThemes[themeInt].smalGreenPF;
+
+            midGreenPF = null;
+            midGreenPF = possibleThemes[themeInt].midGreenPF;
+
+            highGreenPF = null;
+            highGreenPF = possibleThemes[themeInt].highGreenPF;
+
+            horizntalFencePF = null;
+            horizntalFencePF = possibleThemes[themeInt].horizntalFencePF;
+
+            verticalFencePF = null;
+            verticalFencePF = possibleThemes[themeInt].verticalFencePF;
+
+            enemiesPF = null;
+            enemiesPF = possibleThemes[themeInt].enemiesPF;
+            //interactablesPF = possibleThemes[themeInt].interactablesPF;
+        }
+        */
+
+        MapGenHandler.instance.CreateANewMap2(playerSpawn);
+
+
+    }
+
+    public void LoadPrefabCollection(MapSave map)
+    {
+        
+        //Populate the PrefabCollection with the theme that was saved on Map.
+        smalGreenPF = themeCollection[(int)map.mapTheme].smalGreenPF;
+        midGreenPF = themeCollection[(int)map.mapTheme].midGreenPF;
+        highGreenPF = themeCollection[(int)map.mapTheme].highGreenPF;
+        horizntalFencePF = themeCollection[(int)map.mapTheme].horizntalFencePF;
+        verticalFencePF = themeCollection[(int)map.mapTheme].verticalFencePF;
+        enemiesPF = themeCollection[(int)map.mapTheme].enemiesPF;
+        interactablesPF = themeCollection[(int)map.mapTheme].interactablesPF;
+
+    }
+
     public GameObject GetRandomSmalGreenPF()
     {
         return smalGreenPF[Random.Range(0, smalGreenPF.Length)];
+
     }
     public GameObject GetRandomMidGreenPF()
     {

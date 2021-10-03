@@ -18,8 +18,9 @@ public class MapSave
     public int mapLevel;
 
     private float mapScaling = 5;
-    //Map Theme
 
+    //Map Theme
+    public WorldType mapTheme;
     //Special Map??
 
     //---> Specific OutSideVeg Prefabs <---
@@ -61,6 +62,9 @@ public class MapSave
         }
 
         gotTeleporter = false;
+
+        if(PrefabCollection.instance != null)
+        mapTheme = PrefabCollection.instance.worldType;
 
 
         //GlobalMap.instance.AddNewMap(this);
