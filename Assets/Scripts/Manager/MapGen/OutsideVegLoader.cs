@@ -40,7 +40,7 @@ public class OutsideVegLoader : MonoBehaviour
 
     void Awake()
     {
-        prefabCollection = GameObject.Find("PrefabCollection").GetComponent<PrefabCollection>();
+        prefabCollection = PrefabCollection.instance;
         envParentObj = GameObject.Find("EnvParent");
         groundParentObj = GameObject.Find("GroundParent");
 

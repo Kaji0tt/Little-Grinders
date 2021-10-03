@@ -29,6 +29,9 @@ public class Heilung : Spell, IUseable
     [SerializeField]
     VoidHeilung voidHeilung;
 
+    [SerializeField]
+    CombatHeilung_Max combatHeilungMax;
+
     LifeHeilung_Max lifeHeilungMax;
 
     public bool healActivated { get; private set;  }
@@ -79,9 +82,11 @@ public class Heilung : Spell, IUseable
         //print("update got called");
         if (healActivated)
         {
+            //print(healTimer);
+
             if (lifeHeilungMax.currentCount != 0)
                 healDuration = healDuration * 2;
-            //print("skillActivated");
+
             healTimer += Time.deltaTime;
             healDuration -= Time.deltaTime;
             //coolDownTimer -= Time.deltaTime;
@@ -96,7 +101,13 @@ public class Heilung : Spell, IUseable
             {
                 healDuration = 10;
 
+                //Falls Combat-Ultimate geskilled wurde, wird dieses beim Auslaufen der Heilung hier aktiviert.
+                if (combatHeilungMax.currentCount != 0)
+                    combatHeilungMax.ActivateArmorDamage(this);
+
                 healActivated = false;
+
+                healTimer = 0;
 
                 //onCoolDown = false;
 
@@ -119,6 +130,7 @@ public class Heilung : Spell, IUseable
         if (verbesserte_Heilung.currentCount == 0)
         {
             playerStats.Heal((int)healAmount + ((int)playerStats.AbilityPower.Value / 10));
+
         }
         else
         {
@@ -127,6 +139,7 @@ public class Heilung : Spell, IUseable
 
         if (voidHeilung.currentCount != 0)
             voidHeilung.ActivateTick(this);
+
         
     }
 

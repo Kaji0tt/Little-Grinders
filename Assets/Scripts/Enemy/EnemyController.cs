@@ -111,7 +111,8 @@ public class EnemyController : MonoBehaviour
                 Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel +1)), StatModType.Flat));
                 AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
 
-                print("modifiers of mobs should have been added, resulting in:" + Hp.Value + " for Hp on " + gameObject.name + ". AttackPower: " + AttackPower.Value);
+                //Print do double-check the values of increasing modifiers.
+                //print("modifiers of mobs should have been added, resulting in:" + Hp.Value + " for Hp on " + gameObject.name + ". AttackPower: " + AttackPower.Value);
             }
 
             maxHp = Hp.Value;

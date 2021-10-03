@@ -85,6 +85,14 @@ public class MapGenHandler : MonoBehaviour
 
     public void CreateANewMap(string playerSpawn)
     {
+        //Roll the Theme of the Map and Populate the PrefabCollection accordingly.
+        PrefabCollection.instance.PopulatePrefabCollection(playerSpawn);
+
+
+    }
+
+    public void CreateANewMap2(string playerSpawn)
+    {
         //Create a new Map Layout
         DefineFieldArray();
         CreateMapLayout();
@@ -98,12 +106,13 @@ public class MapGenHandler : MonoBehaviour
         GlobalMap.instance.CreateAndSaveNewMap();
     }
 
-
-
     public void LoadMap(MapSave map, string spawnPoint)
     {
         if(map != null)
         {
+            //Load the according theme to Prefab-Collection
+            PrefabCollection.instance.LoadPrefabCollection(map);
+
             //Load existing Map Layout from Save file
             for (int i = 0; i < 81; i++)
             {
@@ -380,7 +389,7 @@ public class MapGenHandler : MonoBehaviour
             }
         }
 
-        Debug.Log("Map Generated");
+        //Debug.Log("Map-Layout Generated");
     }
 
     private void AssigneFieldType()
@@ -399,6 +408,10 @@ public class MapGenHandler : MonoBehaviour
 
             var field = Instantiate(fieldPF, fieldsPosObj[i].transform.position, Quaternion.identity);
             
+
+            //if (fieldPosObj[i].Type = LowVeg)
+            // dann, if(Random.Range (0, 3) == 0)
+            //          PrefabCollection.PreBuildArea(Random.Range(0, PreBuildArea.Length))
             field.GetComponent<OutsideVegLoader>().LoadFieldType(fieldsPosObj[i].GetComponent<FieldPos>().Type);
 
             //Debug.Log("Those Types are Loaded: " + fieldsPosObj[i].GetComponent<FieldPos>().Type);

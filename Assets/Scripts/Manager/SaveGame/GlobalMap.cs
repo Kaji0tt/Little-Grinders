@@ -72,7 +72,7 @@ public class GlobalMap : MonoBehaviour
         return null;
     }
 
-    public  void CreateAndSaveNewMap()
+    public void CreateAndSaveNewMap()
     {
 
         MapSave newMap = new MapSave();

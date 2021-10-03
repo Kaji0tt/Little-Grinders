@@ -52,29 +52,23 @@ public class CameraFollow : MonoBehaviour
         if (Input.mouseScrollDelta.y != 0 && Time.timeScale == 1f)
             Zoom();
 
-        //Es gibt derzeit noch den Bug, dass wenn ein Item gedropped ist, dieses vom Raycast erwischt wird. ItemWorld sollte vom RaycastAll ignoriert werden. Dazu sollte ItemWorld auf einem eigenen Layer liegen, bzw. einen Tag besitzen, welchen der Raycast ignoriert.
+        //Vector3 CameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
 
-        //RaycastHit[] hits;
-        //hits = Physics.RaycastAll(player.transform.position, dirToCamera, distToCamera);
+        //Berechne Abstand zur Kamera
+        float distSelfCamera = (PlayerManager.instance.player.transform.position - CameraManager.instance.activeCam.transform.position).sqrMagnitude;
 
-        //Alles, was in der Variable raycastHits liegt, soll intransparent werden.
-        /*
-        if (raycastHits.Length != 0)
-        for(int i = 0; i < raycastHits.Length; i++)
-        {
-            if(raycastHits[i].collider.transform.GetComponent<SpriteRenderer>() != null && raycastHits[i].collider.transform.gameObject.tag == "Env")
-            raycastHits[i].collider.transform.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-        }
-        */
-        //if (raycastHits.ToList().Count != 0)
-        //Still random 
-
-        //List<RaycastHit> storedRaycasts = raycastHits.ToList();
+        
 
         foreach (RaycastHit hit in raycastHits.ToList())
         {
 
-            if(hit.collider != null)
+
+            if(hit.collider == null)
+            {
+                //Work-Around für hit.collier == null - im Prinzip, fährt er mit dem Code dann fort. Scheint zu gehen.
+                raycastHits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), distSelfCamera);
+            }
+            else
             {
                 if (hit.collider.transform.GetComponent<SpriteRenderer>() != null)
                 {
@@ -91,11 +85,6 @@ public class CameraFollow : MonoBehaviour
 
 
         }
-
-        Vector3 CameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
-
-        //Berechne Abstand zur Kamera
-        float distSelfCamera = (PlayerManager.instance.player.transform.position - CameraPosition).sqrMagnitude;
 
         //Populate die Variabel anhand von Kameraausrichtung neu.
         raycastHits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), distSelfCamera);
@@ -116,7 +105,7 @@ public class CameraFollow : MonoBehaviour
                 }
             }
 
-        /*
+        
         if(raycastHits.Length != 0)
         for (int i = 0; i < raycastHits.Length; i++)
         {
@@ -132,7 +121,7 @@ public class CameraFollow : MonoBehaviour
             }
 
         }          
-        */
+        
     }
 
 

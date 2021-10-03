@@ -360,7 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newSprite: {fileID: -7594309884363804855, guid: 0e3f1980cc3d3734c82c1d10c6602d85,
     type: 3}
-  firstItem: {fileID: 11400000, guid: b8d28d6c3c100a7459109c5a668f8ed1, type: 2}
+  firstItem: {fileID: 11400000, guid: 67bab1835c15ab841979a4857b840472, type: 2}
   tutorialBox: {fileID: 0}
 --- !u!1 &7440011
 GameObject:
@@ -8710,6 +8710,8 @@ MonoBehaviour:
   spellName: Heilung
   spellCoolDown: 20
   onCoolDown: 0
+  voidHeilung: {fileID: 1344327630}
+  combatHeilungMax: {fileID: 1645049010}
 --- !u!114 &326339655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48379,7 +48381,6 @@ MonoBehaviour:
   unlocked: 0
   childTalent: []
   requiredTypePoints: 0
-  heilung: {fileID: 326339654}
 --- !u!114 &1645049011
 MonoBehaviour:
   m_ObjectHideFlags: 0

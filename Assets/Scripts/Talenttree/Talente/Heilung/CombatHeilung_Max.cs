@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,10 @@ using UnityEngine.EventSystems;
 
 public class CombatHeilung_Max : Talent, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField]
-    Heilung heilung;
 
     PlayerStats playerStats;
+
+
 
     bool damageApplied;
     public void OnPointerEnter(PointerEventData eventData)
@@ -26,35 +27,30 @@ public class CombatHeilung_Max : Talent, IPointerEnterHandler, IPointerExitHandl
         playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
         SetDescription("Wenn der Heilungseffekt von Heilung ausläuft, verursachst du deinen doppelten Rüstungswert als Schaden. Radius: 1");
+
+        damageApplied = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    internal void ActivateArmorDamage(Heilung heilung)
     {
-        if(currentCount != 0)
+
+            
+        Collider[] hitColliders = Physics.OverlapSphere(PlayerManager.instance.player.transform.position, 1);
+
+        foreach (Collider hitCollider in hitColliders)
         {
-            if (heilung.healDuration >= 0 && !damageApplied)
+
+            if (hitCollider.transform.tag == "Enemy")
             {
-                Collider[] hitColliders = Physics.OverlapSphere(PlayerManager.instance.player.transform.position, 1);
-
-                foreach (Collider hitCollider in hitColliders)
-                {
-
-                    if (hitCollider.transform.tag == "Enemy")
-                    {
-                        float damage = playerStats.Armor.Value * 2;
+                float damage = playerStats.Armor.Value * 2;
 
 
-                        hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage((int)(damage), 1);
+                hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage((int)(damage), 1);
 
-                        damageApplied = true;
+                damageApplied = true;
 
-                    }
-
-                }
             }
-            else if (heilung.healDuration <= 0)
-                damageApplied = false;
+
         }
 
     }
