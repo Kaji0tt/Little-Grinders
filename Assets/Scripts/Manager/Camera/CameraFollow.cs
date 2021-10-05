@@ -115,7 +115,7 @@ public class CameraFollow : MonoBehaviour
 
             if(spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
             {
-                spriterend.color = new Color(1, 1, 1, 0.7f);
+                spriterend.color = new Color(1, 1, 1, 0.3f);
 
                 //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
             }

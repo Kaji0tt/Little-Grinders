@@ -38,6 +38,9 @@ public class PrefabCollection : MonoBehaviour
     [SerializeField]
     private GameObject[] interactablesPF;
 
+    //Vorgebaute Tiles für Low-Veg-Fields
+    public GameObject[] preBuildTiles;
+
     public WorldType worldType;
 
 
@@ -52,7 +55,7 @@ public class PrefabCollection : MonoBehaviour
 
     //Create a List of PrefabCollections,
     //in dependency of MapRoll, populate the prefabs 
-    public void PopulatePrefabCollection(string playerSpawn)
+    public void PopulatePrefabCollection()
     {
         possibleThemes.Clear();
 
@@ -63,24 +66,15 @@ public class PrefabCollection : MonoBehaviour
             if(GlobalMap.instance.currentMap != null)
             if (theme.requiredLevel <= GlobalMap.instance.currentMap.mapLevel)
             {
+                //Im Editor dient die Prefab-Collection als Datenbank für alle Verfügbaren Themes. Verfügar sollen aber nur jene sein, 
+                //welche im Levelbereich des Spielers liegen.
                 possibleThemes.Add(theme);
             }
 
         }
 
         //Würfel ein zufälliges Theme aus
-        int themeInt = Random.Range(0, possibleThemes.Count);
-
-
-
-        //Write WorldType to public Enum for saving purposes.
-        if(themeInt == 0) { worldType = WorldType.Forest; }
-        if(themeInt == 1) { worldType = WorldType.Jungle; }
-        if(themeInt == 2) { worldType = WorldType.Desert; }
-
-
-        //possible themes count seems to be buggy, theme int + worldType seem to be working.
-        print("The count of possible MapThemes: " + possibleThemes.Count + ". The themeInt that has been rolled: " + themeInt + ", resulting in WorldType: " + worldType.ToString());
+        worldType = (WorldType)Random.Range(0, possibleThemes.Count);
 
 
 
@@ -108,47 +102,59 @@ public class PrefabCollection : MonoBehaviour
             enemiesPF = null;
             enemiesPF = possibleThemes.Find(x => x.themeType == worldType).enemiesPF;
             //interactablesPF = possibleThemes[themeInt].interactablesPF;
+
+            if (possibleThemes.Find(x => x.themeType == worldType).preBuildTiles.Length > 0)
+            {
+                preBuildTiles = null;
+                preBuildTiles = themeCollection.Find(x => x.themeType == worldType).preBuildTiles;
+            }
         }
-        /*
-        if (possibleThemes.Count >= 1)
-        {
-            smalGreenPF = null;
-            smalGreenPF = possibleThemes[themeInt].smalGreenPF;
 
-            midGreenPF = null;
-            midGreenPF = possibleThemes[themeInt].midGreenPF;
 
-            highGreenPF = null;
-            highGreenPF = possibleThemes[themeInt].highGreenPF;
-
-            horizntalFencePF = null;
-            horizntalFencePF = possibleThemes[themeInt].horizntalFencePF;
-
-            verticalFencePF = null;
-            verticalFencePF = possibleThemes[themeInt].verticalFencePF;
-
-            enemiesPF = null;
-            enemiesPF = possibleThemes[themeInt].enemiesPF;
-            //interactablesPF = possibleThemes[themeInt].interactablesPF;
-        }
-        */
-
-        MapGenHandler.instance.CreateANewMap2(playerSpawn);
+        //MapGenHandler.instance.CreateANewMap2(playerSpawn);
 
 
     }
 
-    public void LoadPrefabCollection(MapSave map)
+    public void PopulatePrefabCollection(MapSave map)
     {
-        
-        //Populate the PrefabCollection with the theme that was saved on Map.
-        smalGreenPF = themeCollection[(int)map.mapTheme].smalGreenPF;
-        midGreenPF = themeCollection[(int)map.mapTheme].midGreenPF;
-        highGreenPF = themeCollection[(int)map.mapTheme].highGreenPF;
-        horizntalFencePF = themeCollection[(int)map.mapTheme].horizntalFencePF;
-        verticalFencePF = themeCollection[(int)map.mapTheme].verticalFencePF;
-        enemiesPF = themeCollection[(int)map.mapTheme].enemiesPF;
-        interactablesPF = themeCollection[(int)map.mapTheme].interactablesPF;
+
+        if (themeCollection.Find(x => x.themeType == map.mapTheme))
+        {
+            print("Found a Theme in possibleThemes with according worldType, should be resetting the Prefabs.");
+
+            smalGreenPF = null;
+            smalGreenPF = themeCollection.Find(x => x.themeType == map.mapTheme).smalGreenPF;
+
+            midGreenPF = null;
+            midGreenPF = themeCollection.Find(x => x.themeType == map.mapTheme).midGreenPF;
+
+            highGreenPF = null;
+            highGreenPF = themeCollection.Find(x => x.themeType == map.mapTheme).highGreenPF;
+
+            horizntalFencePF = null;
+            horizntalFencePF = themeCollection.Find(x => x.themeType == map.mapTheme).horizntalFencePF;
+
+            verticalFencePF = null;
+            verticalFencePF = themeCollection.Find(x => x.themeType == map.mapTheme).verticalFencePF;
+
+            enemiesPF = null;
+            enemiesPF = themeCollection.Find(x => x.themeType == map.mapTheme).enemiesPF;
+            //interactablesPF = possibleThemes[themeInt].interactablesPF;
+
+
+            //Falls es vorgebaute Tiles gibt, lade diese.
+            if(themeCollection.Find(x => x.themeType == map.mapTheme).preBuildTiles.Length > 0)
+            {
+                preBuildTiles = null;
+                preBuildTiles = themeCollection.Find(x => x.themeType == map.mapTheme).preBuildTiles;
+            }
+            else
+            {
+                preBuildTiles = null;
+            }
+
+        }
 
     }
 
@@ -203,6 +209,14 @@ public class PrefabCollection : MonoBehaviour
     public GameObject GetRandomInteractable()
     {
         return interactablesPF[Random.Range(0, interactablesPF.Length)];
+    }
+
+    public GameObject GetRandomPreBuildTile()
+    {
+        print("The length of the current Pre-Build Tiles is: " + preBuildTiles.Length);
+        return preBuildTiles[Random.Range(0, preBuildTiles.Length)];
+
+
     }
 
 }
