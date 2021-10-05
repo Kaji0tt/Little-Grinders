@@ -101,15 +101,16 @@ public class PlayerStats : MonoBehaviour
         level ++;
         if(level >= 2)
         skillPoints++;
-        //Der Call für Game.Event löst beim Start noch ein error aus, stört das spiel aber nicht.
+
         eventLevelUp?.Invoke();
         #region "Tutorial"
-        if (level == 2)
+        if (level >= 2)
         {
             /* Currently disabled due to destroy of TutorialGameObject
             Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
             tutorialScript.ShowTutorial(6);
             */
+            AudioManager.instance.Play("Level-UP");
 
         }
         #endregion

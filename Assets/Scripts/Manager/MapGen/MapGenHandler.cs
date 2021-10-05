@@ -11,6 +11,7 @@ public class MapGenHandler : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
     }
     #endregion
 
@@ -24,6 +25,10 @@ public class MapGenHandler : MonoBehaviour
     private GameObject fieldPF;
 
     private int[][] fieldsArray;
+
+    public GameObject envParentObj;
+    public GameObject groundParentObj;
+    public GameObject mobParentObj;
 
     public GameObject[] fieldPosSave { get { return fieldsPosObj; } private set { fieldsPosObj = value; } }
 
@@ -86,13 +91,8 @@ public class MapGenHandler : MonoBehaviour
     public void CreateANewMap(string playerSpawn)
     {
         //Roll the Theme of the Map and Populate the PrefabCollection accordingly.
-        PrefabCollection.instance.PopulatePrefabCollection(playerSpawn);
+        PrefabCollection.instance.PopulatePrefabCollection();
 
-
-    }
-
-    public void CreateANewMap2(string playerSpawn)
-    {
         //Create a new Map Layout
         DefineFieldArray();
         CreateMapLayout();
@@ -104,14 +104,17 @@ public class MapGenHandler : MonoBehaviour
 
         //tell global map about the newly created map
         GlobalMap.instance.CreateAndSaveNewMap();
+
+
     }
+
 
     public void LoadMap(MapSave map, string spawnPoint)
     {
         if(map != null)
         {
             //Load the according theme to Prefab-Collection
-            PrefabCollection.instance.LoadPrefabCollection(map);
+            PrefabCollection.instance.PopulatePrefabCollection(map);
 
             //Load existing Map Layout from Save file
             for (int i = 0; i < 81; i++)
@@ -407,12 +410,25 @@ public class MapGenHandler : MonoBehaviour
         {
 
             var field = Instantiate(fieldPF, fieldsPosObj[i].transform.position, Quaternion.identity);
-            
 
-            //if (fieldPosObj[i].Type = LowVeg)
-            // dann, if(Random.Range (0, 3) == 0)
-            //          PrefabCollection.PreBuildArea(Random.Range(0, PreBuildArea.Length))
-            field.GetComponent<OutsideVegLoader>().LoadFieldType(fieldsPosObj[i].GetComponent<FieldPos>().Type);
+
+            //Falls es sich um ein Low-Veg Field handelt, fülle dieses bei gegebener Chance mit einem vorgebauten Tile
+            if (Random.Range(0, 3) == 1 && fieldsPosObj[i].GetComponent<FieldPos>().Type == FieldType.LowVeg)
+            {
+                //Prüfe ob es für das entsprechende Theme überhaupt PreBuildTiles gibt, ansonsten Skip.
+                if (PrefabCollection.instance.preBuildTiles.Length > 0)
+                {
+                    Instantiate(PrefabCollection.instance.GetRandomPreBuildTile(), fieldsPosObj[i].transform.position, Quaternion.identity).transform.SetParent(envParentObj.transform);
+                    
+                    //Setze den Type, damit dieser abgespeichert werden kann.
+                    fieldsPosObj[i].GetComponent<FieldPos>().Type = FieldType.PreBuildTile;
+                }
+
+            }
+
+            else
+                //Ansonsten fülle die Field-Pos in Abhängigkeit ihres Typs mit zufälligen Prefabs. 
+                field.GetComponent<OutsideVegLoader>().LoadFieldType(fieldsPosObj[i].GetComponent<FieldPos>().Type);
 
             //Debug.Log("Those Types are Loaded: " + fieldsPosObj[i].GetComponent<FieldPos>().Type);
             //Set the Player Position in dependency of FieldPos.Type and field.characterSpawn position.

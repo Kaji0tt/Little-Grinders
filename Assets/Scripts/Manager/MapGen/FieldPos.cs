@@ -23,6 +23,7 @@ public enum FieldType
     OutsideLeft = 17,
     OutsideRight = 18,
     OutsideCorner = 19,
+    PreBuildTile = 20,
 }
 
 public class FieldPos : MonoBehaviour

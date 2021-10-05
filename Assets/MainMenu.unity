@@ -7788,6 +7788,12 @@ MonoBehaviour:
     volume: 0.25
     loop: 0
     source: {fileID: 0}
+  - name: Level-UP
+    clip: {fileID: 8300000, guid: f5c447305a45da64fa5e0635260d6eab, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
   sounds: []
   interfaceSlider: {fileID: 1065741200}
   musicSlider: {fileID: 855593263}
@@ -10779,8 +10785,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 920448030}
   m_HandleRect: {fileID: 920448029}
   m_Direction: 2
-  m_Value: 0.98106784
-  m_Size: 0.5758503
+  m_Value: 0.981068
+  m_Size: 0.57585037
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

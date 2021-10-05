@@ -26,7 +26,7 @@ public class OutsideVegLoader : MonoBehaviour
     [SerializeField] private GameObject[] interactableCollection;
 
 
-    [SerializeField] private PrefabCollection prefabCollection;
+    private PrefabCollection prefabCollection;
 
 
 
@@ -41,8 +41,8 @@ public class OutsideVegLoader : MonoBehaviour
     void Awake()
     {
         prefabCollection = PrefabCollection.instance;
-        envParentObj = GameObject.Find("EnvParent");
-        groundParentObj = GameObject.Find("GroundParent");
+        envParentObj = MapGenHandler.instance.envParentObj;
+        groundParentObj = MapGenHandler.instance.groundParentObj;
 
     }
 
@@ -102,11 +102,15 @@ public class OutsideVegLoader : MonoBehaviour
             case FieldType.OutsideCorner:
                 LoadHighVegField();
                 break;
+            case FieldType.PreBuildTile:
+                LoadPreBuildTile();
+                break;
             default:
                 break;
         }
 
     }
+
     #endregion
 
     /// <summary>
@@ -149,21 +153,28 @@ public class OutsideVegLoader : MonoBehaviour
 
     public void LoadLowVegField()
     {
+
         LoadLowTopVeg();
         LoadLowBotVeg();
         LoadLowLeftVeg();
         LoadLowRightVeg();
         LoadLowCenterVeg();
 
-
-        
         LoadMidTopVeg();
         LoadMidBotVeg();
         LoadMidLeftVeg();
         LoadMidRightVeg();
         LoadMidCenterVeg();
 
+
+
         //LoadRandomGroundTexture();
+    }
+
+    private void LoadPreBuildTile()
+    {
+       //Currently, the PreBuild Tiles are generated in the MapGenHandler, since only the MapGenHandler knows the transform order of the FieldPositions,
+       //which is needed in reference for the PreBuildTile to know where to be placed.
     }
     public void LoadHighVegField()
     {
