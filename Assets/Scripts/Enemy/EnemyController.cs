@@ -6,7 +6,14 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 using TMPro;
 
+//Diese Klasse sollte eine Parent-Klasse für alle Mob-Typen werden. Das heißt, alle Variabeln, welche hier angegeben werden,
+//müssen allübergreifend sein.
 
+//Tochter Klassen könnten sein: E_Ranged, E_Caster, E_Sprinter, E_Summoner etc.
+//Diese Differenzieren sich in:
+//Override Attack
+//Override Pulled
+//Override TakeDamage
 public class EnemyController : MonoBehaviour
 {
     //Create Variabel for the Player (through PlayerManager Singleton)

@@ -377,6 +377,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollConflictManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RangeSlider.cs" />
+    <Compile Include="Assets\Prefabs\Management\PreBuildTiles\PreBuildSpawns.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CurlyUI\CUIText.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\FieldPos.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Scroller\MovementDirection.cs" />
@@ -391,7 +392,6 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_HealFountain.cs" />
-    <Compile Include="Assets\Prefabs\Management\PreBuildTiles\PreBuildSpawns.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIAdditive.shader" />
