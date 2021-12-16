@@ -14,6 +14,7 @@ using TMPro;
 //Override Attack
 //Override Pulled
 //Override TakeDamage
+
 public class EnemyController : MonoBehaviour
 {
     //Create Variabel for the Player (through PlayerManager Singleton)
@@ -23,7 +24,7 @@ public class EnemyController : MonoBehaviour
     NavMeshAgent navMeshAgent;
 
     //Create Reference to currents GO isoRenderer
-    IsometricRenderer isoRenderer;
+    public IsometricRenderer isoRenderer;
 
     //Create Reference to Animator, for the case its not Animated by the IsometricRenderer, but by IK
     private EnemyAnimator enemyAnimator;
@@ -133,12 +134,22 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
 
+        CheckForAggro();
 
+
+
+        CalculateHPCanvas();
+
+    }
+
+    public virtual void CheckForAggro()
+    {
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         player_distance = Vector3.Distance(character_transform.position, transform.position);
 
         //Verarbeitung für ikAnimated Enemys
+        //Presumably the ikAnimated Enemys are not going to be supported on the long run.
         inputVector.x = character_transform.transform.position.x - transform.position.x;
         inputVector.y = character_transform.transform.position.z - transform.position.z;
         if (ikAnimated == true)
@@ -180,10 +191,6 @@ public class EnemyController : MonoBehaviour
             }
 
         }
-
-
-        CalculateHPCanvas();
-
     }
 
     private void CalculateHPCanvas()
@@ -220,7 +227,7 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void SetDestination()
+    public void SetDestination()
     {
         if (character_transform != null)
         {
@@ -243,7 +250,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void Attack()
+    public virtual void Attack()
     {
 
         //Fetch the Playerstats of the player
@@ -323,18 +330,18 @@ public class EnemyController : MonoBehaviour
 
 
 
-    public void TakeDamage(float damage, float range)
+    public void TakeDamage(float incoming_damage, float range_radius_ofDMG)
     {
 
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
-        if (player_distance <= range)
+        if (player_distance <= range_radius_ofDMG)
         {
-            damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
+            incoming_damage = 10 * (incoming_damage * incoming_damage) / (Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
 
-            damage = Mathf.Clamp(damage, 1, int.MaxValue);
+            incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
 
-            Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             
             //Sound-Array mit den dazugehörigen Sound-Namen
@@ -354,14 +361,14 @@ public class EnemyController : MonoBehaviour
             Die();
     }
 
-    public void TakeDirectDamage(float damage, float range)
+    public void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
     {
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
-        if (player_distance <= range)
+        if (player_distance <= range_radius_ofDMG)
         {
 
-            Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             //Sound-Array mit den dazugehörigen Sound-Namen
             string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };

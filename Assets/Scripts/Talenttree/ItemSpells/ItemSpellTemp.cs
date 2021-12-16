@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "ItemSpell", menuName = "Assets/ItemSpell")]
+//[CreateAssetMenu(fileName = "ItemSpell", menuName = "Assets/ItemSpell")]
 public class ItemSpell
 {
     [SerializeField]

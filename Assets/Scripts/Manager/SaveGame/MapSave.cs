@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [System.Serializable]
-public class MapSave 
+public class MapSave
 {
     //MapSave muss wissen:
     public float mapIndexX;
@@ -28,17 +28,17 @@ public class MapSave
     //Field Type
     public FieldType[] fieldType = new FieldType[81];
 
-    ///Auf der Weltkarte gesehen, wo befinden wir uns? Zunächst (0,0), sobald der Spieler den Rand erreicht, wird der entsprechende Vektor überarbeitet.
-    ///Wird die Variabel sein, von welcher aus die Interface Map geladen wird
-    ///Dazu würden sich ggf. zwei Int-Werte in den PlayerPrefs setzen lassen
-    //FieldLayout(x,y)
+    //To Save Mobs, declare an enum for every type of Mob. 
+    //For Enemy[] loadedEnemies FindObjectsOfType<Enemy>
 
-    ///Welcher MapTile ist wie und wo gespawnt? (NoVeg, LowVeg, HighVeg, Road, Exits etc.)
-    ///Wir müssen wissen, welches Field welchen Tile zugewiesen bekommen hat.
-    //Bool isSomethingSpawned[] und Int spawnedGameObject[]
-    ///Einen Array aus allen SpawnPoints erstellen. Falls auf diesem Array etwas gespawned ist, muss auslesbar sein, was dort gespawned ist.
-    ///Falls(isSomethingSpawned[i])
-    ///InstantiatespawnedGameObject[]
+
+
+    //public float [][][] enemyPosition;
+
+
+    ///If we start to use the "SaveLevelPrefab" Method shared by OneWheelStudio, we should be using 
+    ///following enum LevelObjectTypes: "Env, Enemies, Tiles"
+    ///After Save, those types could be loaded as childs to according parent GameObjects.
     ///
 
     ///Im Prinzip muss es eine Funktion geben, welche FieldPos[] der 
@@ -51,33 +51,29 @@ public class MapSave
         //Save the Map Coordinates
         if(GlobalMap.instance != null)
         {
+            //Fetch the current coordinates of the Global Map and save them to serializable floats
             Vector2 v2 = GlobalMap.instance.currentPosition;
 
             mapIndexX = v2.x;
             mapIndexY = v2.y;
 
-
+            //Calculate Map-Level in dependency of floats
             mapLevel = Mathf.Abs(v2.x) > Mathf.Abs(v2.y) ? (int)Mathf.Abs(v2.x) : (int)Mathf.Abs(v2.y);
 
         }
 
         gotTeleporter = false;
 
+        //Fetch the current Theme and save it
         if(PrefabCollection.instance != null)
         mapTheme = PrefabCollection.instance.worldType;
 
-
-        //GlobalMap.instance.AddNewMap(this);
-
-        //Debug.Log("There currently are " + GlobalMap.instance.exploredMaps.Count + " Maps explored.");
     }
+
+
 
     private void CalculateMapLevel()
     {
-        ///There should be a global Variable, which increases everytime the player hits a certain level.
-        ///Also, this should be accessable and written each time the player loads the game.
-        ///On Awake, get the player Level then recallculate the globalModifier.
-
         
         if (GlobalMap.instance.currentPosition.x > mapScaling || GlobalMap.instance.currentPosition.y > mapScaling)
         {

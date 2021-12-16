@@ -703,14 +703,13 @@ public class OutsideVegLoader : MonoBehaviour
 
     private void LoadEnemies(int chance)
     {
-        GameObject parentObj = GameObject.Find("MobParent");
 
         for (int i = 0; i < entitieSpawn.Length; i++)
         {
             if (Random.Range(0, chance) == 1)
             {
                 Instantiate(prefabCollection.GetRandomEnemie(), entitieSpawn[i].transform.position,
-                    Quaternion.identity).transform.SetParent(parentObj.transform);
+                    Quaternion.identity).transform.SetParent(MapGenHandler.instance.mobParentObj.transform);
             }
             Destroy(entitieSpawn[i]);
         }

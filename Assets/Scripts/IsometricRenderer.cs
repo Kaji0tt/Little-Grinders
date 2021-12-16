@@ -33,6 +33,8 @@ public class IsometricRenderer : MonoBehaviour
     //Setze Zeit für die Combat-Stance (später sollte diese vom AttackSpeed des Schwertes beeinflusst werden.)
     public bool inCombatStance;
 
+
+
     private void Awake()
     {
         //cache the animator component

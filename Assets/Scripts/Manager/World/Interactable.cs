@@ -13,7 +13,7 @@ public class Interactable : MonoBehaviour
     public Sprite newSprite;
 
     //Abfrage für eine geöffnete Truhe
-    private bool interactableUsed = false;
+    public bool interactableUsed = false;
 
 
     private void OnTriggerStay(Collider collider)

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7943412552912887482}
   - component: {fileID: 7943412552912887481}
   - component: {fileID: 7943412552912887480}
-  - component: {fileID: 7943412552912887484}
   - component: {fileID: 7943412552912887485}
   m_Layer: 0
   m_Name: Baum1
@@ -49,6 +48,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -97,18 +97,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sortingOrderBase: 5000
---- !u!114 &7943412552912887484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7943412552912887111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f3bf5e3a93215e4f9f3587afcbadc2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &7943412552912887485
 SphereCollider:
   m_ObjectHideFlags: 0
