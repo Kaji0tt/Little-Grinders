@@ -80,6 +80,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_MagneticInfiniteScroll.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CurvedLayout.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Enemy Types\E_Caster.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\IScrollSnap.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewContext.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\MonoSpacing.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\NonDrawingGraphic.cs" />
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotHose.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\SoftMaskScript.cs" />
+    <Compile Include="Assets\Scripts\RemoveMissingSCript.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\EnvCamScript.cs" />
     <Compile Include="Assets\Scripts\Talenttree\Talente\Heilung\Verbesserte_Heilung.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardStack2D.cs" />
@@ -227,6 +229,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\VerticalScrollSnap.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\TalentSave.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ActionButton.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Enemy Types\_projectile.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\Events\HSVChangedEvent.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\SaveSystem.cs" />
@@ -1194,6 +1197,12 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

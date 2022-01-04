@@ -145,6 +145,8 @@ public class PlayerStats : MonoBehaviour
 
     }
 
+    //Ggf. TakeDirectDamage hinzufügen? Oder TakeMagicDamage oder ähnliches? Bis dahin wird Schaden lediglich abzgl. Armor abgerechnet.
+
     public void Heal (int healAmount)
     {
         //Der Heal sollte gefixxed werden. So dass der healAmount nicht größer sein kann als die Differenz von currentHP zu maxHP.

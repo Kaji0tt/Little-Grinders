@@ -14,6 +14,7 @@ using TMPro;
 //Override Attack
 //Override Pulled
 //Override TakeDamage
+
 public class EnemyController : MonoBehaviour
 {
     //Create Variabel for the Player (through PlayerManager Singleton)
@@ -23,7 +24,7 @@ public class EnemyController : MonoBehaviour
     NavMeshAgent navMeshAgent;
 
     //Create Reference to currents GO isoRenderer
-    IsometricRenderer isoRenderer;
+    public IsometricRenderer isoRenderer;
 
     //Create Reference to Animator, for the case its not Animated by the IsometricRenderer, but by IK
     private EnemyAnimator enemyAnimator;
@@ -50,8 +51,7 @@ public class EnemyController : MonoBehaviour
 
     public int level;
 
-    private float attackCD = 0f;
-    private float p_attackCD = 0f;
+    public virtual float attackCD { get; private set; }
     private float maxHp;
     [Space]
     public int experience;
@@ -63,12 +63,12 @@ public class EnemyController : MonoBehaviour
     ///----Position/Ziel/Direction----
     ///Controller Variables
     Vector3 forward, right;
-    private float player_distance;
+    public virtual float player_distance { get; private set; }
     Vector2 inputVector;
     public bool pulled;
 
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
-    void OnDrawGizmosSelected ()
+    void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, aggroRange);
@@ -98,7 +98,7 @@ public class EnemyController : MonoBehaviour
 
         //Ask, if this is an IK-Animated enemy
         if (ikAnimated == false)
-        isoRenderer = GetComponentInChildren<IsometricRenderer>();
+            isoRenderer = GetComponentInChildren<IsometricRenderer>();
 
         //Recalculate BaseStats in dependency of Map-Level
         CalculateMobStats();
@@ -107,7 +107,7 @@ public class EnemyController : MonoBehaviour
     private void CalculateMobStats()
     {
         //Alles noch nicht durchdacht, für pre alpha 0.3 solls reichen.
-        if(GlobalMap.instance != null)
+        if (GlobalMap.instance != null)
         {
             level = level + GlobalMap.instance.currentMap.mapLevel;
 
@@ -115,7 +115,7 @@ public class EnemyController : MonoBehaviour
             {
                 Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
                 //Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 0.01f), StatModType.PercentMult));
-                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel +1)), StatModType.Flat));
+                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel + 1)), StatModType.Flat));
                 AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
 
                 //Print do double-check the values of increasing modifiers.
@@ -127,18 +127,29 @@ public class EnemyController : MonoBehaviour
             experience += GlobalMap.instance.currentMap.mapLevel * 10;
 
         }
-        
+
     }
 
     void Update()
     {
 
+        CheckForAggro();
 
+        CalculateHPCanvas();
+
+        //print(transform.name + player_distance);
+
+    }
+
+
+    public virtual void CheckForAggro()
+    {
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         player_distance = Vector3.Distance(character_transform.position, transform.position);
 
         //Verarbeitung für ikAnimated Enemys
+        //Presumably the ikAnimated Enemys are not going to be supported on the long run.
         inputVector.x = character_transform.transform.position.x - transform.position.x;
         inputVector.y = character_transform.transform.position.z - transform.position.z;
         if (ikAnimated == true)
@@ -180,10 +191,19 @@ public class EnemyController : MonoBehaviour
             }
 
         }
+    }
 
 
-        CalculateHPCanvas();
 
+    public Vector2 CalculatePlayerDirection()
+    {
+        Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
+
+        Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
+
+        inputVector = Vector2.ClampMagnitude(inputVector, 1);
+
+        return inputVector;
     }
 
     private void CalculateHPCanvas()
@@ -220,7 +240,7 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void SetDestination()
+    public void SetDestination()
     {
         if (character_transform != null)
         {
@@ -243,7 +263,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void Attack()
+    public virtual void Attack()
     {
 
         //Fetch the Playerstats of the player
@@ -277,35 +297,6 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    //Eigentlich müsste die p_attackCD pro Instanz unterschiedlich sein, aber da das zu funktionieren scheint. Bleibt das so.
-    private void OnTriggerStay(Collider collider)
-    {
-        /*
-        if (collider.gameObject == DirectionCollider.instance.dirCollider) 
-        {
-
-            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
-
-
-            p_attackCD -= Time.deltaTime;
-
-
-                if (p_attackCD <= 0)
-                {
-
-                    if (Input.GetKeyDown(KeyCode.Mouse0))
-                    {
-
-                        TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-
-                        p_attackCD = 1f / playerStats.AttackSpeed.Value;
-                    }
-
-                }            
-
-        }
-        */
-    }
     
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.
     private void OnTriggerEnter(Collider collider)
@@ -323,18 +314,18 @@ public class EnemyController : MonoBehaviour
 
 
 
-    public void TakeDamage(float damage, float range)
+    public void TakeDamage(float incoming_damage, float range_radius_ofDMG)
     {
 
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
-        if (player_distance <= range)
+        if (player_distance <= range_radius_ofDMG)
         {
-            damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
+            incoming_damage = 10 * (incoming_damage * incoming_damage) / (Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
 
-            damage = Mathf.Clamp(damage, 1, int.MaxValue);
+            incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
 
-            Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             
             //Sound-Array mit den dazugehörigen Sound-Namen
@@ -354,14 +345,14 @@ public class EnemyController : MonoBehaviour
             Die();
     }
 
-    public void TakeDirectDamage(float damage, float range)
+    public void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
     {
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
-        if (player_distance <= range)
+        if (player_distance <= range_radius_ofDMG)
         {
 
-            Hp.AddModifier(new StatModifier(-damage, StatModType.Flat));
+            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             //Sound-Array mit den dazugehörigen Sound-Namen
             string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };

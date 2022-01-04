@@ -10,7 +10,6 @@ public class TutorialLootBox : MonoBehaviour
     SpriteRenderer sprite;
     public Sprite newSprite;
     private bool lootBoxOpened = false;
-    private bool tutorialShowed = false;
 
 
     [SerializeField]

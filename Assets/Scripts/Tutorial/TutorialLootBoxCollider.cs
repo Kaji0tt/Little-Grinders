@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 
 public class TutorialLootBoxCollider : MonoBehaviour
 {
-    private bool gotTriggered = false;
     public Tutorial tutorialScript;
 
     private void OnTriggerEnter(Collider collider)

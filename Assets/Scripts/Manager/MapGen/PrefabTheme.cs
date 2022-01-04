@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+//Diese Klasse dient der Zuweisung eines Themen Spiel-Objekts in der ProceduralMapTheme.
+//Aus dem entsprechenden Spiel-Objekt werden dann die Arrays mit möglichen Umgebungselementen ausgelesen.
 public class PrefabTheme : MonoBehaviour
 {
     //Kleine Umgebungsobjekte

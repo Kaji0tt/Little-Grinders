@@ -90,4 +90,6 @@ public class GlobalMap : MonoBehaviour
 
         OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);
     }
+
+
 }

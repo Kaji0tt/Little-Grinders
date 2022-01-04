@@ -17,7 +17,7 @@ public class DirectionCollider : MonoBehaviour
     private Vector3 right, forward;
 
     public List<EnemyController> collidingEnemyControllers = new List<EnemyController>();
-
+    //public List<GameObject> collidingEnemyControllers = new List<GameObject>();
 
     void Start()
     {
@@ -64,8 +64,7 @@ public class DirectionCollider : MonoBehaviour
         //Wenn der Charakter sich mit mehr als 0,3f bewegt,
         if (direction.magnitude > .3f)
             //Setze die Position des DirColliders auf die des Charakters, + direction
-            transform.position = new Vector3(PlayerManager.instance.player.transform.position.x, PlayerManager.instance.player.transform.position.y, PlayerManager.instance.player.transform.position.z)
-                                 + direction;
+            transform.position = PlayerManager.instance.player.transform.position + direction;
 
     }
 

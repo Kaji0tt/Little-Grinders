@@ -8,6 +8,15 @@ public enum WorldType
     Jungle = 1,
     Desert = 2,
 }
+/*
+public enum LevelObjectType
+{
+    Env,
+    Enemy,
+    Interactable,
+    Tile,
+}
+*/
 
 public class PrefabCollection : MonoBehaviour
 {
@@ -87,17 +96,24 @@ public class PrefabCollection : MonoBehaviour
             smalGreenPF = null;
             smalGreenPF = possibleThemes.Find(x => x.themeType == worldType).smalGreenPF;
 
+
+
             midGreenPF = null;
             midGreenPF = possibleThemes.Find(x => x.themeType == worldType).midGreenPF;
+
+
 
             highGreenPF = null;
             highGreenPF = possibleThemes.Find(x => x.themeType == worldType).highGreenPF;
 
+
             horizntalFencePF = null;
             horizntalFencePF = possibleThemes.Find(x => x.themeType == worldType).horizntalFencePF;
 
+
             verticalFencePF = null;
             verticalFencePF = possibleThemes.Find(x => x.themeType == worldType).verticalFencePF;
+
 
             enemiesPF = null;
             enemiesPF = possibleThemes.Find(x => x.themeType == worldType).enemiesPF;
@@ -166,23 +182,29 @@ public class PrefabCollection : MonoBehaviour
     public GameObject GetRandomMidGreenPF()
     {
         return midGreenPF[Random.Range(0, midGreenPF.Length)];
+
     }
     public GameObject GetRandomHighGreenPF()
     {
         return highGreenPF[Random.Range(0, highGreenPF.Length)];
+
     }
     public GameObject GetRandomHFencePFPF()
     {
         return horizntalFencePF[Random.Range(0, horizntalFencePF.Length)];
+
     }
     public GameObject GetRandomVFencePFPF()
     {
         return verticalFencePF[Random.Range(0, verticalFencePF.Length)];
+
+
     }
     public GameObject GetRandomEnemie()
     {
         possibleMobs.Clear();
 
+        //If-Statement, der prüft, ob entsprechende Mobs überhaupt ein ausreichendes Level haben, um in diesem Szenario zu spawnen.
         foreach(GameObject mob in enemiesPF)
         {
             if (GlobalMap.instance.currentMap != null)
@@ -209,11 +231,13 @@ public class PrefabCollection : MonoBehaviour
     public GameObject GetRandomInteractable()
     {
         return interactablesPF[Random.Range(0, interactablesPF.Length)];
+
     }
 
     public GameObject GetRandomPreBuildTile()
     {
         print("The length of the current Pre-Build Tiles is: " + preBuildTiles.Length);
+
         return preBuildTiles[Random.Range(0, preBuildTiles.Length)];
 
 

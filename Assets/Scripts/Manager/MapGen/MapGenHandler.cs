@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//The MapGenHandler is the may Class in the Second-Scene (Procedual Map-Generation) and is used to coordinate FieldLayouts and Create them.
+//The MapGenHandler is the main Class in the Second-Scene (Procedual Map-Generation) and is used to coordinate FieldLayouts and Create them.
 //It is also managing the Save-Load functionality for explored maps, for yet unknown reasons.
 public class MapGenHandler : MonoBehaviour
 {
@@ -101,6 +101,9 @@ public class MapGenHandler : MonoBehaviour
 
         //Build NavMesh for Enemys
         navMeshSurface.BuildNavMesh();
+
+        //FOR TOMOROW
+        //SaveLevelObjects();
 
         //tell global map about the newly created map
         GlobalMap.instance.CreateAndSaveNewMap();
@@ -464,6 +467,21 @@ public class MapGenHandler : MonoBehaviour
         }
 
     }
+
+    //Define Entities on Current Map
+    /*
+    private void SaveLevelObjects()
+    {
+        DeclareLevelObject[] objectsToSave = GameObject.FindObjectsOfType<DeclareLevelObject>();
+
+        foreach (DeclareLevelObject levelObject in objectsToSave)
+        {
+            levelObject.obj_v3x = levelObject.gameObject.transform.position.x;
+            levelObject.obj_v3y = levelObject.gameObject.transform.position.y;
+            levelObject.obj_v3z = levelObject.gameObject.transform.position.z;
+        }
+    }
+    */
 
     public void RebuildNavMesh()
     {

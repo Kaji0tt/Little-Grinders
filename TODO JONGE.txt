@@ -1,6 +1,6 @@
 Bug Found: 
 
-
+[ ] !Mehrere Speicherstände!
 [ ] - Größtes Manko: Collider Abfrage ist buggy. (tw. fixed)
 [ ] - Zu Beginn des Spiels muss das mit der Heilung überarbeitet werden - ggf. Trankhöhe droppen oder Heilungsbrunnen die per Zufall spawnen können / Truhen
 
@@ -20,7 +20,7 @@ Bug Found:
 
 [x] - Zoomeinstellungen -> Rotation mit Hotkey
 [x] - Nach der Map Ansicht, bzw. Idle Ansicht ist FOV zu hoch. Muss zwischengespeichert werden.
-[ ] - In der MapView ist der AudioListener ausgeschaltet - außerdem ist das etwas OP mit ner Camera als Map View (man würde Interactables zu schnell sehen)
+[x] - In der MapView ist der AudioListener ausgeschaltet - außerdem ist das etwas OP mit ner Camera als Map View (man würde Interactables zu schnell sehen)
 	Kann sich später drum gekümmert werden.
 
 [x] - AttackSpeed!
@@ -35,15 +35,16 @@ Vorm nächsten Release eigentlich:
 [ ] - TalentTree:
 Konzept Sketch izz da
 
-[ ] - Maps sind bei denen Verbugged?
 
 
-[ ] MapModifier für Drops,
+[ ] Buggy Map Interface
 [x] MapLevel sind maximal Buggy,
-[ ] Level Sound
+[x] Level Sound
 [ ] Drop Sounds lauter
 [ ] Teleport Sound -> Insgesamt, Cast Times einbauen
 [ ] - Mit Tab Kartenwechsel führt zu Anzeige und Attack Bug bei feindlichen Mobs.
+
+[-] MapModifier für Drops,
 
 
 
