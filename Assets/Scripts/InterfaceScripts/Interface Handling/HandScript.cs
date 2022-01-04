@@ -23,8 +23,6 @@ public class HandScript : MonoBehaviour
 
     public bool onActionBar;
 
-    //Bool für Tutorial
-    private bool tutorialSkillMoveCheck = false;
 
 
 
@@ -69,27 +67,6 @@ public class HandScript : MonoBehaviour
 
         image.color = new Color(0, 0, 0, 0);
 
-        //image.sprite = null;
-
-
-        //Currently disabled since i destroyed the Tutorial GameObject lulz
-        #region "Tutorial"
-        /*
-        if (tutorialSkillMoveCheck == false)
-        {
-            if(GameObject.FindGameObjectWithTag("TutorialScript") != null)
-            {
-                Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-
-                tutorialScript.ShowTutorial(8);
-
-                tutorialSkillMoveCheck = true;
-            }
-
-
-        }
-             */
-        #endregion
 
         return tmp;
     }

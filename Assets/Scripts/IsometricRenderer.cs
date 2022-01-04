@@ -19,19 +19,31 @@ public class IsometricRenderer : MonoBehaviour
     public static readonly string[] static4Directions = { "Static NE", "Static SE", "Static SW", "Static NW" };
     public static readonly string[] attack4Directions = { "Attack NE", "Attack SE", "Attack SW", "Attack NW" };
 
+
+    //Array created for Weapon Animation, once upon a time i didnt know about programming & logical structure.
     public static readonly string[] weaponSwing = { "Attack_N", "Attack_NW", "Attack_W", "Attack_SW", "Attack_S", "Attack_SE", "Attack_E", "Attack_NE" };
+
+    //The animator the IsoRenderer refers to. Typically attached to the animated GameObject, e.g. the Enemy.
     Animator animator;
+
+    //int to clalculate and safe the last direction of view.
     int lastDirection;
 
+    #region isoType für 8 oder 4 Directions. Könnte überflüssig sein, ggf. später säubern.
     //Create an Enum to Set number of Isometric Directions
     private enum IsoType { eightDir, forDir }
 
     //Set the Value of above Enum for Isometric Directions
     [SerializeField]
     IsoType isoType;
+    #endregion
 
     //Setze Zeit für die Combat-Stance (später sollte diese vom AttackSpeed des Schwertes beeinflusst werden.)
     public bool inCombatStance;
+
+    //Die ^ inCombatStance scheint nicht ganz sinnig zu sein. Eher sollte eine Funktion "Play" her, in der beliebige Animationen gespielt werden können.
+    //Entsprechende, manuell gschaltete Animationen werden wichtig, sobald NPC's Casts oder Fähigkeiten besitzen.
+    public static readonly string[] castAnimations = { "CastNE", "CastSE", "CastSW", "CastNW" };
 
 
 
@@ -126,7 +138,6 @@ public class IsometricRenderer : MonoBehaviour
         if (direction.magnitude < .01f)
         {
             //if we are basically standing still, we'll use the Static states
-            //we won't be able to calculate a direction if the user isn't pressing one, anyway!
 
             //check what type of iso this GO has
             if (isoType == IsoType.eightDir)
@@ -179,13 +190,24 @@ public class IsometricRenderer : MonoBehaviour
         animator.Play(directionArray[lastDirection]);
     }
 
+    public void AnimateCast(Vector2 direction)
+    {
+
+        lastDirection = DirectionToIndex(direction, 4);
+
+        animator.Play(castAnimations[lastDirection]);
+
+    }
+
 
 
     //helper functions
 
     //this function converts a Vector2 direction to an index to a slice around a circle
     //this goes in a counter-clockwise direction.
-    public static int DirectionToIndex(Vector2 dir, int sliceCount){
+
+    //why would this be static? cant remember, lets make it nonstatic, so i might acces it from enemy-controller scripts.
+    public int DirectionToIndex(Vector2 dir, int sliceCount){
         //get the normalized direction
         Vector2 normDir = dir.normalized;
         //calculate how many degrees one slice is

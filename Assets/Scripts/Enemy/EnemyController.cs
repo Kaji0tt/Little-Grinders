@@ -51,8 +51,7 @@ public class EnemyController : MonoBehaviour
 
     public int level;
 
-    private float attackCD = 0f;
-    private float p_attackCD = 0f;
+    public virtual float attackCD { get; private set; }
     private float maxHp;
     [Space]
     public int experience;
@@ -64,12 +63,12 @@ public class EnemyController : MonoBehaviour
     ///----Position/Ziel/Direction----
     ///Controller Variables
     Vector3 forward, right;
-    private float player_distance;
+    public virtual float player_distance { get; private set; }
     Vector2 inputVector;
     public bool pulled;
 
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
-    void OnDrawGizmosSelected ()
+    void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, aggroRange);
@@ -99,7 +98,7 @@ public class EnemyController : MonoBehaviour
 
         //Ask, if this is an IK-Animated enemy
         if (ikAnimated == false)
-        isoRenderer = GetComponentInChildren<IsometricRenderer>();
+            isoRenderer = GetComponentInChildren<IsometricRenderer>();
 
         //Recalculate BaseStats in dependency of Map-Level
         CalculateMobStats();
@@ -108,7 +107,7 @@ public class EnemyController : MonoBehaviour
     private void CalculateMobStats()
     {
         //Alles noch nicht durchdacht, für pre alpha 0.3 solls reichen.
-        if(GlobalMap.instance != null)
+        if (GlobalMap.instance != null)
         {
             level = level + GlobalMap.instance.currentMap.mapLevel;
 
@@ -116,7 +115,7 @@ public class EnemyController : MonoBehaviour
             {
                 Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
                 //Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 0.01f), StatModType.PercentMult));
-                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel +1)), StatModType.Flat));
+                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel + 1)), StatModType.Flat));
                 AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
 
                 //Print do double-check the values of increasing modifiers.
@@ -128,7 +127,7 @@ public class EnemyController : MonoBehaviour
             experience += GlobalMap.instance.currentMap.mapLevel * 10;
 
         }
-        
+
     }
 
     void Update()
@@ -136,11 +135,12 @@ public class EnemyController : MonoBehaviour
 
         CheckForAggro();
 
-
-
         CalculateHPCanvas();
 
+        //print(transform.name + player_distance);
+
     }
+
 
     public virtual void CheckForAggro()
     {
@@ -191,6 +191,19 @@ public class EnemyController : MonoBehaviour
             }
 
         }
+    }
+
+
+
+    public Vector2 CalculatePlayerDirection()
+    {
+        Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
+
+        Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
+
+        inputVector = Vector2.ClampMagnitude(inputVector, 1);
+
+        return inputVector;
     }
 
     private void CalculateHPCanvas()
@@ -284,35 +297,6 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    //Eigentlich müsste die p_attackCD pro Instanz unterschiedlich sein, aber da das zu funktionieren scheint. Bleibt das so.
-    private void OnTriggerStay(Collider collider)
-    {
-        /*
-        if (collider.gameObject == DirectionCollider.instance.dirCollider) 
-        {
-
-            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
-
-
-            p_attackCD -= Time.deltaTime;
-
-
-                if (p_attackCD <= 0)
-                {
-
-                    if (Input.GetKeyDown(KeyCode.Mouse0))
-                    {
-
-                        TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-
-                        p_attackCD = 1f / playerStats.AttackSpeed.Value;
-                    }
-
-                }            
-
-        }
-        */
-    }
     
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.
     private void OnTriggerEnter(Collider collider)

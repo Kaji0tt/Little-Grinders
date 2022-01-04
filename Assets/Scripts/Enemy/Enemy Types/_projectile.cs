@@ -61,7 +61,7 @@ public class _projectile : MonoBehaviour
 
     private void ProjectileFlightByDirection()
     {
-        print(_pDirection.normalized);
+        //print(_pDirection.normalized);
         _pRbody.velocity = (_pDirection.normalized * _pSpeed);
     }
 

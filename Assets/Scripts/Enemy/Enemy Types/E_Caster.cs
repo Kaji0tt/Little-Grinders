@@ -12,12 +12,25 @@ public class E_Caster : EnemyController
     [SerializeField]
     private float projectileDamage;
 
-    private NavMeshAgent _EnavMeshAgent;
+    private NavMeshAgent casterNavMeshAgent;
 
-    private float _Eplayer_distance;
+    new private float player_distance;
 
-    private float _EattackCD = 2;
-    private float _Ecrnt_attackCD;
+    new public float attackCD = 2;
+
+    private float crnt_attackCD;
+
+
+
+    [Header("Animation Settings")]
+
+    private bool attackStarted;
+
+    public float animationProjectileDelay = 0.5f;
+
+    public float projectileOriginY = 0.5f;
+
+    public float projectileOffsetXY = 0.5f;
 
     //private IsometricRenderer isoRenderer;
 
@@ -28,74 +41,60 @@ public class E_Caster : EnemyController
 
     public override void CheckForAggro()
     {
-        _EnavMeshAgent = GetComponent<NavMeshAgent>();
+        casterNavMeshAgent = GetComponent<NavMeshAgent>();
 
-        _Eplayer_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
+        player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
-
-        if (_Eplayer_distance <= aggroRange || pulled)
+        if (player_distance <= aggroRange || pulled)
         {
             //Setze die Agent.StoppingDistance gleich mit der AttackRange des Mobs
             //If the StoppingDistance is smaller then the attackRange, faster mobs may attack while the player is running away
             //navMeshAgent.stoppingDistance = attackRange / 2;
-            _EnavMeshAgent.stoppingDistance = attackRange;
+            casterNavMeshAgent.stoppingDistance = attackRange;
 
-            //Setze das Target des Mobs und starte "chasing"
-            //SetDestination(); -
-            if (attackRange < aggroRange)
-                //isoRenderer.SetNPCDirection(SetDestination());
-                SetDestination();
-            else if (attackRange >= aggroRange)
-                isoRenderer.SetNPCDirection(new Vector2(0, 0));
 
             //Falls die Spieler-Distanz kleiner ist, als die Attack Range
-            if (_Eplayer_distance < attackRange && _EnavMeshAgent.velocity == Vector3.zero)
+            if (player_distance < attackRange && casterNavMeshAgent.velocity == Vector3.zero)
             {
-                //Setze "inCombatStance" des Iso-Renderers dieser Klasse auf true
-                isoRenderer.inCombatStance = true;
-
-                //Attack the Target
                 Attack();
-
-
             }
-
-            else
-                //Setze Combat-Stance zurück
-                isoRenderer.inCombatStance = false;
-        }
-
-        else
-        {
-            _EnavMeshAgent.SetDestination(transform.position);
-            isoRenderer.SetNPCDirection(new Vector2(0, 0));
-        }
-
-        
+        }      
     }
 
 
     public override void Attack()
     {
-        //base.Attack();
-        _Ecrnt_attackCD -= Time.deltaTime;
-        //Falls Attack-CD <= 0, Instantiate Projectile(transform.position)
-        if(_Ecrnt_attackCD <= 0)
-        {
-            _Ecrnt_attackCD = _EattackCD;
+        crnt_attackCD -= Time.deltaTime;
 
-            if (MapGenHandler.instance != null)
-            Instantiate(projectile, new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z), Quaternion.identity, MapGenHandler.instance.envParentObj.transform).GetComponent<_projectile>()._pDamage = projectileDamage;
-            else
-                Instantiate(projectile, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), Quaternion.identity, GameObject.Find("IntroTruhe Variant").transform).GetComponent<_projectile>()._pDamage = projectileDamage; ;
+        if(crnt_attackCD <= 0)
+        {
+
+            isoRenderer.AnimateCast(CalculatePlayerDirection());
+
+            crnt_attackCD = attackCD;
+
+            attackStarted = true;
+
         }
 
+        if(crnt_attackCD <= attackCD - animationProjectileDelay && attackStarted)
+        {
+            InstantiateProjectile();
 
-        //Das Projektil sollte in void Start haben: direction = (PlayerManager.instance.player.transform.position - transform.position)
-
-            //Falls Projektil berührt Collider mit Tag Player, GameObject.Destroy, Player.TakeDamage(projectile DMG);
-            //Else, falls Projektil berührt Collider mit Tag ENV, GameObject.Destroy
-
+            attackStarted = false;
+        }
 
     }
+
+    private void InstantiateProjectile()
+    {
+        //Calculate the Direction of the Player and Offset the Origin of the Projectile by "projectileOffsetXY"
+        if(isoRenderer.DirectionToIndex(CalculatePlayerDirection(), 4) < 2)
+        Instantiate(projectile, new Vector3(transform.position.x + projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform).GetComponent<_projectile>()._pDamage = projectileDamage;
+
+        else
+        Instantiate(projectile, new Vector3(transform.position.x - projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform).GetComponent<_projectile>()._pDamage = projectileDamage;
+    }
+
+
 }
