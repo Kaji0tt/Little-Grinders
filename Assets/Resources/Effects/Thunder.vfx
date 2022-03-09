@@ -18,9 +18,9 @@ MonoBehaviour:
   uiBounds:
     serializedVersion: 2
     x: 941
-    y: -190
+    y: -111
     width: 425
-    height: 1142
+    height: 1063
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children:
   - {fileID: 8926484042661614556}
-  m_UIPosition: {x: 941, y: -190}
+  m_UIPosition: {x: 941, y: -111}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -152,7 +152,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 58.52
+      m_SerializableObject: 72.9
     m_Space: 2147483647
   m_Property:
     name: Rate
@@ -582,7 +582,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":0.0,"y":1.9700000286102296,"z":0.0}}'
+      m_SerializableObject: '{"vector":{"x":-0.20999999344348908,"y":-0.11999999731779099,"z":1.0}}'
     m_Space: 0
   m_Property:
     name: A
@@ -752,7 +752,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":0.20999999344348908,"y":0.6299999952316284,"z":0.11999999731779099}}'
+      m_SerializableObject: '{"vector":{"x":0.20999999344348908,"y":0.11999999731779099,"z":0.7400000095367432}}'
     m_Space: 0
   m_Property:
     name: B

@@ -8,6 +8,8 @@ public class _projectile : MonoBehaviour
 {
     private Vector3 _pDirection;
 
+    private Quaternion _pRotation;
+
     public bool _pSpecialEffect;
 
     [HideInInspector]
@@ -18,6 +20,8 @@ public class _projectile : MonoBehaviour
     //public float _pYOffSet;
 
     public ParticleSystem _hitParticles;
+
+    public GameObject _hitEnvParticles;
 
     private Rigidbody _pRbody;
 
@@ -63,6 +67,11 @@ public class _projectile : MonoBehaviour
     {
         //print(_pDirection.normalized);
         _pRbody.velocity = (_pDirection.normalized * _pSpeed);
+
+        _pRotation = Quaternion.LookRotation(_pDirection);
+        transform.localRotation = Quaternion.Lerp(transform.rotation, _pRotation, 1);
+        transform.Rotate(new Vector3(-90, 0, 0));
+        
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -83,11 +92,10 @@ public class _projectile : MonoBehaviour
         }
         else if (collider.gameObject.tag == "Env")
         {
+            Instantiate(_hitEnvParticles, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
-
-
-
+//muss frei bleiben hier.
     }
 
     public virtual void ApplySpecialEffect()

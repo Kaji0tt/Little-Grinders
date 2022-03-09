@@ -379,6 +379,7 @@ public class IsometricPlayer : MonoBehaviour
 
             //*** COLLISION***
             //Detect all enemies in rage of attack by #DirectionCollider
+            //Da wir nicht länger ausschließlich die EnemyController Klasse verwenden, ergibt es mehr Sinn hier eine alternative zu finden.
             foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
             {
                 //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
@@ -442,28 +443,21 @@ public class IsometricPlayer : MonoBehaviour
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
 
         //Falls ein entsprechender Collider gefunden wurde und die pickKey Taste (Default Q) gedrück wurde
+
+        //Hier ist noch ein Fehler - beziehen wir uns auf den UI-Manager Key, wird das Item doppel aufgesammelt.
         if (itemWorld != null && Input.GetKey(UI_Manager.instance.pickKey))
+        //if (itemWorld != null && Input.GetKey(KeyCode.Q)) 
         {
 
             //Falls noch Platz im Inventar ist
             if(inventory.itemList.Count <= 14)
             {
+                print("we have ben here once");
                 //Füge Item zum Inventar hinzu
                 inventory.AddItem(itemWorld.GetItem());
 
                 //Zerstöre den Collider
                 itemWorld.DestroySelf();
-
-                #region "Tutorial"
-                /*
-                if (itemWorld.GetItem().ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>() != null)
-                {
-                    Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-                    tutorialScript.ShowTutorial(4);
-
-                }
-                */
-                #endregion
             }
 
         }

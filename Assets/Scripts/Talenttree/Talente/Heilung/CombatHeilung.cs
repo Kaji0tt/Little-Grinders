@@ -12,7 +12,7 @@ public class CombatHeilung : Talent, IPointerEnterHandler, IPointerExitHandler
     bool armorgained;
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UI_Manager.instance.ShowTooltip(new Vector2(Input.mousePosition.x - 10f, Input.mousePosition.y + 10f), GetDescription);
+        UI_Manager.instance.ShowTooltip(new Vector2(Input.mousePosition.x, Input.mousePosition.y), GetDescription, this.gameObject);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -46,7 +46,7 @@ public class CombatHeilung : Talent, IPointerEnterHandler, IPointerExitHandler
 
     void Start()
     {
-        SetDescription("Während die Heilung aktiviert ist, erhältst du (10/20/30) extra Armor.");
+        SetDescription("Während die Heilung aktiviert ist,\n erhältst du (10/20/30) extra Armor.");
 
         heilung = FindObjectOfType<Heilung>();
 

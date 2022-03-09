@@ -62,6 +62,8 @@ public class UI_Manager : MonoBehaviour
 
     public static bool GameIsPaused = false;
 
+
+
     private void OnEnable()
     {
         GameIsPaused = false;
@@ -232,16 +234,32 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-    public void ShowTooltip(Vector3 position, string description)
+    public void ShowTooltip(Vector3 position, string description, GameObject obj)
     {
+        //RectTransform rect = tooltip.GetComponent<RectTransform>();
 
-        tooltip.SetActive(true);
-        tooltip.transform.position = position;
 
         if (description != null)
         {
             tooltipText.text = description;
         }
+
+        Vector2 newPos = new Vector2(obj.transform.position.x, obj.transform.position.y);
+
+
+        /*
+        if (tooltip.GetComponent<Tooltip>().IsFullyOnScreen())
+        {
+            rect.pivot = new Vector2(0, 1);
+        }
+        else
+            rect.pivot = new Vector2(1, 0);
+        */
+
+        tooltip.transform.position = newPos;
+
+        tooltip.SetActive(true);
+
     }
 
     public void HideTooltip()

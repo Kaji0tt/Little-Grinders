@@ -43,7 +43,7 @@ public class UI_Map : MonoBehaviour, IPointerEnterHandler, IDescribable, IPointe
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UI_Manager.instance.ShowTooltip(eventData.position, GetDescription());
+        UI_Manager.instance.ShowTooltip(eventData.position, GetDescription(), gameObject);
     }
 
     public string GetDescription()

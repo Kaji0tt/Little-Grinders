@@ -18,7 +18,7 @@ using TMPro;
 public class EnemyController : MonoBehaviour
 {
     //Create Variabel for the Player (through PlayerManager Singleton)
-    Transform character_transform;
+    //Transform character_transform;
 
     //Create Reference to currents GO Agent
     NavMeshAgent navMeshAgent;
@@ -87,7 +87,6 @@ public class EnemyController : MonoBehaviour
 
 
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
-        character_transform = PlayerManager.instance.player.transform;
 
 
         //Adapt the Isometric-Camera angles
@@ -137,8 +136,6 @@ public class EnemyController : MonoBehaviour
 
         CalculateHPCanvas();
 
-        //print(transform.name + player_distance);
-
     }
 
 
@@ -146,12 +143,12 @@ public class EnemyController : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
 
-        player_distance = Vector3.Distance(character_transform.position, transform.position);
+        player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
         //Verarbeitung für ikAnimated Enemys
         //Presumably the ikAnimated Enemys are not going to be supported on the long run.
-        inputVector.x = character_transform.transform.position.x - transform.position.x;
-        inputVector.y = character_transform.transform.position.z - transform.position.z;
+        inputVector.x = PlayerManager.instance.player.transform.position.x - transform.position.x;
+        inputVector.y = PlayerManager.instance.player.transform.position.z - transform.position.z;
         if (ikAnimated == true)
             enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
 
@@ -208,9 +205,15 @@ public class EnemyController : MonoBehaviour
 
     private void CalculateHPCanvas()
     {
+        //Re-Calculate maxHp - this seems necessary, since inherting Classes do not seem to run EnemyContrller Start Functions to initialize certain values.
+        if (maxHp == 0)
+            maxHp = Hp.Value;
+
         enemyHpSlider.value = Hp.Value / maxHp;
+
         if (Hp.Value < maxHp)
         {
+
             hpBar.SetActive(true);
 
             if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
@@ -242,13 +245,13 @@ public class EnemyController : MonoBehaviour
 
     public void SetDestination()
     {
-        if (character_transform != null)
+        if (PlayerManager.instance.player.transform != null)
         {
 
-            navMeshAgent.SetDestination(character_transform.transform.position);
+            navMeshAgent.SetDestination(PlayerManager.instance.player.transform.position);
 
             // Hier wird die "Blickrichtung" bestimmt, welche sich an dem Charakter orientiert.
-            Vector3 Direction = character_transform.transform.position - transform.position;
+            Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
 
             Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
 
@@ -267,7 +270,7 @@ public class EnemyController : MonoBehaviour
     {
 
         //Fetch the Playerstats of the player
-        PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+        PlayerStats playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
 
         //Countdown for the Auto-Attack Cooldown
         attackCD -= Time.deltaTime;
@@ -299,7 +302,7 @@ public class EnemyController : MonoBehaviour
 
     
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.
-    private void OnTriggerEnter(Collider collider)
+    public virtual void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.tag == "Bullet") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
@@ -308,6 +311,19 @@ public class EnemyController : MonoBehaviour
 
             TakeDirectDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.         
 
+        }
+
+        if (collider.gameObject.tag == "DirCollider")
+        {
+            collider.gameObject.GetComponent<DirectionCollider>().collidingEnemyControllers.Add(this);
+        }
+    }
+
+    public virtual void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.tag == "DirCollider")
+        {
+            collider.gameObject.GetComponent<DirectionCollider>().collidingEnemyControllers.Remove(this);
         }
     }
 
@@ -345,7 +361,7 @@ public class EnemyController : MonoBehaviour
             Die();
     }
 
-    public void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
+    public virtual void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
     {
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
@@ -373,7 +389,7 @@ public class EnemyController : MonoBehaviour
 
     public void Die()
     {
-        PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
         playerStats.Set_xp(experience);
 

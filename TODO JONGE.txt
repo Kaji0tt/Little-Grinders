@@ -1,8 +1,54 @@
 Bug Found: 
 
 [ ] !Mehrere Speicherstände!
+
+[ ] - Keybinds können lediglich vom Hauptmenü geändert werden.
+
+
+[ ] - Machen das Tränke, sobald sie einmal in die Leiste gezogen wurden, überprüfen ob diese noch im Inventar sind.
+
+--- Intro Map ---
+[ ] - Man Gestände doppelt ein?
+[ ] - TalentPoints werden nicht richtig aktualisiert.
+
+
+
+
+
+[ ] - TalentTree:
+Konzept Sketch izz da
+
+
+
+[ ] Buggy Map Interface - Scaling & Scrolling anpassen.
+
+[x] Level Sound - geht besser.
+[ ] Drop Sounds lauter
+[ ] Teleport Sound -> Insgesamt, Cast Times einbauen
+[ ] - Mit Tab Kartenwechsel führt zu Anzeige und Attack Bug bei feindlichen Mobs.
+
+[-] MapModifier für Drops,
+
+ ___________________________
+|_______OLD & DONE:_________|
+
 [ ] - Größtes Manko: Collider Abfrage ist buggy. (tw. fixed)
-[ ] - Zu Beginn des Spiels muss das mit der Heilung überarbeitet werden - ggf. Trankhöhe droppen oder Heilungsbrunnen die per Zufall spawnen können / Truhen
+
+[x] MapLevel sind maximal Buggy,
+
+Vorm nächsten Release eigentlich:
+[x] - Spieler scheinen die Maps ausgiebig zu beginn zu erkunden -> Heilbrunnen einfügen!
+[x] - Fixxen, dass Mobs stärker Scalen
+[x] - Maps ein vernünftiges Sprite schenken. Außerdem das Border dings anpassen.
+
+[x] - Berechnung von Stats ersichtlich gestalten
+
+[x] - Zoomeinstellungen -> Rotation mit Hotkey
+[x] - Nach der Map Ansicht, bzw. Idle Ansicht ist FOV zu hoch. Muss zwischengespeichert werden.
+[x] - In der MapView ist der AudioListener ausgeschaltet - außerdem ist das etwas OP mit ner Camera als Map View (man würde Interactables zu schnell sehen)
+	Kann sich später drum gekümmert werden.
+
+[x] - AttackSpeed!
 
 [x] - Tränke in die Leiste packbar machen.
 [x] - Wenn ein Trank in der Actionbar liegt, kann die Szene nicht gespeichert / gewechselt werden.
@@ -14,37 +60,3 @@ Bug Found:
 [x] - Gfx für LowHealth
 
 [x] - Keybinds
-[ ] - Keybinds können lediglich vom Hauptmenü geändert werden.
-
-[x] - Berechnung von Stats ersichtlich gestalten
-
-[x] - Zoomeinstellungen -> Rotation mit Hotkey
-[x] - Nach der Map Ansicht, bzw. Idle Ansicht ist FOV zu hoch. Muss zwischengespeichert werden.
-[x] - In der MapView ist der AudioListener ausgeschaltet - außerdem ist das etwas OP mit ner Camera als Map View (man würde Interactables zu schnell sehen)
-	Kann sich später drum gekümmert werden.
-
-[x] - AttackSpeed!
-
-
-Vorm nächsten Release eigentlich:
-[x] - Spieler scheinen die Maps ausgiebig zu beginn zu erkunden -> Heilbrunnen einfügen!
-[x] - Fixxen, dass Mobs stärker Scalen
-[x] - Maps ein vernünftiges Sprite schenken. Außerdem das Border dings anpassen.
-
-
-[ ] - TalentTree:
-Konzept Sketch izz da
-
-
-
-[ ] Buggy Map Interface
-[x] MapLevel sind maximal Buggy,
-[x] Level Sound
-[ ] Drop Sounds lauter
-[ ] Teleport Sound -> Insgesamt, Cast Times einbauen
-[ ] - Mit Tab Kartenwechsel führt zu Anzeige und Attack Bug bei feindlichen Mobs.
-
-[-] MapModifier für Drops,
-
-
-

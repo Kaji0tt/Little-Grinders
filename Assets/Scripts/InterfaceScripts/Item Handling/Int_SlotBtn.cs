@@ -18,7 +18,7 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void ShowItem()
     {                                                                                                         
-        UI_Manager.instance.ShowItemTooltip(new Vector2(Input.mousePosition.x - 10f, Input.mousePosition.y + 10f), storedItem);
+        UI_Manager.instance.ShowItemTooltip(new Vector2(Input.mousePosition.x - 15f, Input.mousePosition.y + 15f), storedItem);
     }
 
     public void HideItem()

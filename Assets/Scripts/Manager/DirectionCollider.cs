@@ -52,6 +52,8 @@ public class DirectionCollider : MonoBehaviour
 
         }
 
+        //print(collidingEnemyControllers.Count());
+
 
     }
 
@@ -71,7 +73,7 @@ public class DirectionCollider : MonoBehaviour
     //Bleibt die Frage, ob es schlauer ist im Enemy.cs oder im DirCollider die TakeDamage abfrage zu callen.
 
 
- 
+ /*
     private void OnTriggerEnter(Collider collider)
     {
         //collidingEnemys = Collider.FindObjectsOfType<Enemy>();
@@ -80,7 +82,13 @@ public class DirectionCollider : MonoBehaviour
         {
 
             if(!collidingEnemyControllers.Contains(collider.gameObject.GetComponentInParent<EnemyController>()))
+            {
+
+            }
             collidingEnemyControllers.Add(collider.gameObject.GetComponentInParent<EnemyController>());
+
+
+
 
         }
         
@@ -97,7 +105,7 @@ public class DirectionCollider : MonoBehaviour
         }
 
     }
-    
+    */
 
 
 

@@ -17,7 +17,6 @@ public class ItemDatabase : MonoBehaviour
     public List<Item> tier4;
     public List<Item> tier5;
 
-
     private static List<List<Item>> totalLoottable = new List<List<Item>>();
 
     List<Item> currentDropTable = new List<Item>();

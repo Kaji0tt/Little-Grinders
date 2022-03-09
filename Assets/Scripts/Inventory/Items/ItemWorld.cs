@@ -31,6 +31,8 @@ public class ItemWorld : MonoBehaviour
 
     public static ItemWorld SpawnItemWorld(Vector3 position, ItemInstance item)
     {
+        print("item got dropped");
+
         Transform transform = Instantiate(ItemAssets.Instance.pfItemWorld, position, Quaternion.identity);
 
         ItemWorld itemWorld = transform.GetComponent<ItemWorld>();
@@ -42,7 +44,6 @@ public class ItemWorld : MonoBehaviour
 
     public static ItemWorld DropItem(Vector3 dropPosition, ItemInstance item)
     {
-
         ItemWorld itemWorld = SpawnItemWorld(dropPosition, item);
             return itemWorld;
     }

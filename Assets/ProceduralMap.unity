@@ -24527,6 +24527,7 @@ GameObject:
   - component: {fileID: 1415786014}
   - component: {fileID: 1415786013}
   - component: {fileID: 1415786012}
+  - component: {fileID: 1415786016}
   m_Layer: 5
   m_Name: Tooltip
   m_TagString: Untagged
@@ -24632,6 +24633,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1415786010}
   m_CullTransparentMesh: 0
+--- !u!114 &1415786016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415786010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df7ee60c58a2bc468b0c8913272e98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 848485330}
 --- !u!1 &1419097065
 GameObject:
   m_ObjectHideFlags: 0
@@ -28753,7 +28767,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1232569105}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.46374422
+  m_Size: 0.46374425
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
