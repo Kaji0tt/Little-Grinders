@@ -119,6 +119,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Manager\World\WorldModifiers.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RescalingPanels\RescalePanel.cs" />
+    <Compile Include="Assets\Scripts\Talenttree\Spells\AbilityTalent.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ClickThrough.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\CameraManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_TweenScale.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\PPIViewer.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MetaStats\CharStats.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\UIVerticalScroller.cs" />
+    <Compile Include="Assets\Scripts\Talenttree\Spells\Ability.cs" />
     <Compile Include="Assets\Scripts\Inventory\SortingOrderCanvas.cs" />
     <Compile Include="Assets\Sprites\Charakter\Equipment\WeaponAC.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\MapSave.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Scroller\Scroller.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionUpdater.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\SelectionBox\IBoxSelectable.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\Tooltip.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\IUseable.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionTimer.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UIPolygon.cs" />
@@ -395,6 +398,7 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_HealFountain.cs" />
+    <Compile Include="Assets\Scripts\Talenttree\Spells\Heal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIAdditive.shader" />
@@ -1108,6 +1112,9 @@
     <Reference Include="Unity.Animation.Rigging.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Animation.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
     </Reference>
@@ -1122,6 +1129,9 @@
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
@@ -1197,12 +1207,6 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualEffectGraph.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualEffectGraph.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

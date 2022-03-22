@@ -8,10 +8,10 @@ public class IsometricPlayer : MonoBehaviour
     #region Implementation - Basic 
 
     //Klasse, welche Isometrische Darstellungen kalkuliert.
-    IsometricRenderer isoRenderer;
+    public IsometricRenderer isoRenderer;
 
     //Wird im Inspektor eingestellt, um das Game-Objekt der Waffe und dessen Animator zu erkennen.
-    private GameObject weaponGameObject;
+    public GameObject weaponGameObject; 
 
     //Wichtig, um die Sprites entsprechend der Isometrie für die Animationen zu kalkulieren
     private Vector2 inputVector;
@@ -235,7 +235,6 @@ public class IsometricPlayer : MonoBehaviour
 
 
 
-
         PlayerCombatStance();
 
         //UI Orb
@@ -257,7 +256,7 @@ public class IsometricPlayer : MonoBehaviour
         inputVector = new Vector2(horizontalInput, verticalInput);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
         isoRenderer.SetDirection(inputVector);
-        isoRenderer.SetWeaponDirection(inputVector, weaponGameObject.GetComponent<Animator>());
+        isoRenderer.SetWeaponDirection(DirectionCollider.instance.dirVector, weaponGameObject.GetComponent<Animator>());
 
         //print(inputVector);
         //Define Inventory Tab Values   ********schreiben von Interface Texten*********
@@ -379,6 +378,7 @@ public class IsometricPlayer : MonoBehaviour
 
             //*** COLLISION***
             //Detect all enemies in rage of attack by #DirectionCollider
+            //Da wir nicht länger ausschließlich die EnemyController Klasse verwenden, ergibt es mehr Sinn hier eine alternative zu finden.
             foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
             {
                 //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
@@ -434,7 +434,7 @@ public class IsometricPlayer : MonoBehaviour
 
     }
 
-
+    /*
     private void OnTriggerStay(Collider collider)
     {                                                           //Die Abfrage sollte noch verbessert werden.
         
@@ -442,7 +442,10 @@ public class IsometricPlayer : MonoBehaviour
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
 
         //Falls ein entsprechender Collider gefunden wurde und die pickKey Taste (Default Q) gedrück wurde
+
+        //Hier ist noch ein Fehler - beziehen wir uns auf den UI-Manager Key, wird das Item doppel aufgesammelt.
         if (itemWorld != null && Input.GetKey(UI_Manager.instance.pickKey))
+        //if (itemWorld != null && Input.GetKey(KeyCode.Q)) 
         {
 
             //Falls noch Platz im Inventar ist
@@ -453,23 +456,12 @@ public class IsometricPlayer : MonoBehaviour
 
                 //Zerstöre den Collider
                 itemWorld.DestroySelf();
-
-                #region "Tutorial"
-                /*
-                if (itemWorld.GetItem().ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>() != null)
-                {
-                    Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-                    tutorialScript.ShowTutorial(4);
-
-                }
-                */
-                #endregion
             }
 
         }
 
     }
-
+    */
     
     private void UseItem(ItemInstance item)
     {

@@ -62,6 +62,8 @@ public class UI_Manager : MonoBehaviour
 
     public static bool GameIsPaused = false;
 
+
+
     private void OnEnable()
     {
         GameIsPaused = false;
@@ -145,8 +147,10 @@ public class UI_Manager : MonoBehaviour
         {
             OpenCloseMenu(skillTab);
             if (skillTab.alpha == 0)
+                if(AudioManager.instance != null)
                 AudioManager.instance.Play("OpenSkills");
             else
+                if(AudioManager.instance != null)
                 AudioManager.instance.Play("CloseMenu");
             
         }
@@ -160,8 +164,10 @@ public class UI_Manager : MonoBehaviour
         {
             OpenCloseMenu(mapTab);
             if (mapTab.alpha == 0)
+                if(AudioManager.instance != null)
                 AudioManager.instance.Play("OpenMap");
             else
+                if (AudioManager.instance != null)
                 AudioManager.instance.Play("CloseMenu");
         }
 
@@ -232,16 +238,16 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-    public void ShowTooltip(Vector3 position, string description)
+    public void ShowTooltip(string description)
     {
-
-        tooltip.SetActive(true);
-        tooltip.transform.position = position;
 
         if (description != null)
         {
             tooltipText.text = description;
         }
+
+        tooltip.SetActive(true);
+
     }
 
     public void HideTooltip()

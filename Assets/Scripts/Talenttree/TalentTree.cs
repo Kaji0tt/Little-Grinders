@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-public enum TalentType { None, Life, Void, Combat }
+public enum TalentType { None, Utility, Void, Combat }
 public class TalentTree : MonoBehaviour
 {
     //private int points = 11;
@@ -17,15 +17,28 @@ public class TalentTree : MonoBehaviour
 
         talents = FindObjectsOfType<Talent>();
 
+        foreach (Talent talent in talents)
+            talent.SetTalentVariables();
+
+        //Untersucht alle Talente auf ihre Typ hin und fügt sie entsprechenden Listen hinzu.
         CalculateAllTalents();
 
+        //Füge alle Abilitie's welche auch Talente sind einer entsprechenden Liste hinzu.
+        CalculatAllAbilityTalents();
+
+        //Sorge dafür, das alle Talente locked sind, welche zu Beginn nicht freigeschaltet sind.
         ResetTalents();
 
+        //Ziehe die 
         DrawTalentTreeLines();
 
         UpdateTalentPointText();
 
+
+
     }
+
+
     #endregion
 
     public Transform talentLineParent;
@@ -34,21 +47,33 @@ public class TalentTree : MonoBehaviour
     public Talent[] talents { get; private set; }
 
     [SerializeField]
-    public Talent[] defaultTalents; 
+    public Talent defaultTalent; 
 
     [HideInInspector]
     public Talent[] allTalents;
+
+    //Alle Aktiven Fähigkeiten des Talentbaums werden hier einer Liste hinzugefügt.
+    public List<Talent> allAbilityTalents = new List<Talent>();
+
+    //Durchsuche die Szene nach sämtliche Elementen, welche sowohl eine Fähigkeit, als auch ein Talent sind.
+    private void CalculatAllAbilityTalents()
+    {
+        AbilityTalent[] allAbilityTalentsArray = FindObjectsOfType<AbilityTalent>();
+
+        foreach (AbilityTalent abilityTalent in allAbilityTalentsArray)
+            allAbilityTalents.Add(abilityTalent);
+    }
 
     [SerializeField]
     private Text talentPointText;
 
     //Für jedes Talent, welches gesetzt wurde, erhöhe die talentTypePoins
     [HideInInspector]
-    public int voidPoints = 0;
+    public int totalVoidPoints = 0;
     [HideInInspector]
-    public int lifePoints = 0;
+    public int totalUtilityPoints = 0;
     [HideInInspector]
-    public int combatPoints = 0;
+    public int totalCombatPoints = 0;
     [HideInInspector]
     public List<Talent> voidTalents = new List<Talent>();
     [HideInInspector]
@@ -56,12 +81,14 @@ public class TalentTree : MonoBehaviour
     [HideInInspector]
     public List<Talent> combatTalents = new List<Talent>();
 
-    public void TryUseTalent(Talent talent)
+    public void TryUseTalent(Talent clickedTalent)
     {
 
-        if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && talent.Click())
+
+
+        if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && clickedTalent.Click())
         {
-            talent.IncreaseTalentTypePoins(talent);
+            clickedTalent.IncreaseTalentTypePoins(clickedTalent);
             #region "Tutorial"
             if (PlayerManager.instance.player.GetComponent<PlayerStats>().level == 2 && GameObject.FindGameObjectWithTag("TutorialScript") != null)
             {
@@ -71,8 +98,8 @@ public class TalentTree : MonoBehaviour
             }
             #endregion
 
-            
-            if (talent is ISmallTalent smallTalent)
+            //SmallTalents sollte es vorerst nicht mehr geben eigentlich..
+            if (clickedTalent is ISmallTalent smallTalent)
             {
                 smallTalent.PassiveEffect();
             }
@@ -81,7 +108,16 @@ public class TalentTree : MonoBehaviour
             UpdateTalentPointText();
         }
 
-
+        //Es sollte sich Gedanken gemacht werden, wie jedes AbilityTalent eine List erhalten kann, in welcher alle Talente gespeichert liegen, welche 
+        //das gleiche AbilityTalent als Referenz wert verwenden. ->
+        //Anschließend könnte man on TryUseTalent alle Talents locken, welche nicht die gleiche TalentType wie entsprechende AbilityType besitzen.
+        
+        foreach(Talent searchingTalent in allAbilityTalents)
+        {
+            if (searchingTalent.abilityTalent.baseAbility.abilitySpec != clickedTalent.abilityTalent.baseAbility.abilitySpec)
+                clickedTalent.LockTalents();
+        }
+        
 
     }
 
@@ -102,10 +138,13 @@ public class TalentTree : MonoBehaviour
     public void ResetTalents()
     {
         foreach (Talent talent in talents)
-            talent.LockTalents();
+        {
+            if (talent == defaultTalent)
+                talent.Unlock();
 
-        foreach (Talent talent in defaultTalents)
-            talent.Unlock();
+            else
+                talent.LockTalents();
+        }
 
         UpdateTalentPointText();
     }
@@ -118,22 +157,9 @@ public class TalentTree : MonoBehaviour
 
     }
     
+    //Trivial - untersucht alle Talente auf ihre Typ hin und fügt sie entsprechenden Listen hinzu.
     void CalculateAllTalents()
     {
-        List<Talent> allTalentsList = new List<Talent>();
-
-        foreach (Talent talent in defaultTalents)
-        {
-
-            allTalentsList.Add(talent);
-
-        }
-        foreach (Talent talent in talents)
-        {
-
-            allTalentsList.Add(talent);
-
-        }
 
         foreach(Talent talent in talents)
         {
@@ -143,11 +169,9 @@ public class TalentTree : MonoBehaviour
             if (talent.talentType == TalentType.Combat)
                 combatTalents.Add(talent);
 
-            if (talent.talentType == TalentType.Life)
+            if (talent.talentType == TalentType.Utility)
                 lifeTalents.Add(talent);
         }
-
-        allTalents = allTalentsList.ToArray();
 
     }
 
@@ -155,7 +179,7 @@ public class TalentTree : MonoBehaviour
     //UILineRenderer currently creates Null-Reference on Start, however the interface is drawn accordingly.
     private void DrawTalentTreeLines()
     {
-        foreach (Talent talent in allTalents)
+        foreach (Talent talent in talents)
         {
             //Erschaffe ein neues GO für die Talent-Tree Line
             GameObject gameObject = new GameObject("_TalentLine", typeof(UILineRenderer));

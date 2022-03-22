@@ -466,6 +466,7 @@ namespace UnityEngine.UI.Extensions
         protected override void OnEnable()
         {
 			base.OnEnable();
+			if(m_points != null)
             if (m_points.Length == 0)
             {
 				m_points = new Vector2[1];

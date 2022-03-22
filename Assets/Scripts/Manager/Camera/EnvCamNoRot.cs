@@ -12,6 +12,7 @@ public class EnvCamNoRot : MonoBehaviour
     public int sO_OffSet;
 
     private SpriteRenderer sprite;
+    private ParticleSystemRenderer particle;
 
     private int no_children;
     private Transform child;
@@ -32,6 +33,8 @@ public class EnvCamNoRot : MonoBehaviour
             if (sprite)
                 //Setze das Tag, damit CameraFollow.cs weiß, welche GO's zwischen Spieler und Kamera liegen für Transparenz.
                 child.gameObject.tag = "Env";
+            else if (child.GetComponent<ParticleSystemRenderer>())
+                child.gameObject.tag = "Env";
 
         }
     }
@@ -47,31 +50,61 @@ public class EnvCamNoRot : MonoBehaviour
 
 
 
-            sprite = child.GetComponent<SpriteRenderer>();
-            if(sprite)
+
+            if (child.GetComponent<SpriteRenderer>())
             {
-                //Enable Shadow Casting for the Sprite
-                sprite.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-
-                //---  LookAt wurde vorerst Disabled, macht Perspektivisch wenig Sinn ---
-                //child.LookAt(Camera.main.transform); 
-                //child.Rotate(0, 25, 0);                           
-
-                if(CameraManager.instance.mainCamGO.activeSelf)
-                {
-                    //Finde Position der Kamera
-                    CameraPosition = CameraManager.instance.mainCamGO.transform.position;
-
-                    //Berechne Abstand zur Kamera
-                    float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
-
-                    //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
-                    sprite.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
-                    sprite.sortingLayerName = "Umgebung_col Layer";
-                }
-
+                SortSriteLayer();
+            }
+            else if (child.GetComponent<ParticleSystem>())
+            {
+                SortParticelLayer();
             }
 
+
+        }
+
+    }
+
+    void SortSriteLayer()
+    {
+        sprite = child.GetComponent<SpriteRenderer>();
+        //Enable Shadow Casting for the Sprite
+        sprite.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+
+        //---  LookAt wurde vorerst Disabled, macht Perspektivisch wenig Sinn ---
+        //child.LookAt(Camera.main.transform); 
+        //child.Rotate(0, 25, 0);                           
+
+        if (CameraManager.instance.mainCamGO.activeSelf)
+        {
+            //Finde Position der Kamera
+            CameraPosition = CameraManager.instance.mainCamGO.transform.position;
+
+            //Berechne Abstand zur Kamera
+            float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
+
+            //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
+            sprite.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
+            sprite.sortingLayerName = "Umgebung_col Layer";
+        }
+
+    }
+
+    void SortParticelLayer()
+    {
+        particle = child.GetComponent<ParticleSystemRenderer>();
+
+        if (CameraManager.instance.mainCamGO.activeSelf)
+        {
+            //Finde Position der Kamera
+            CameraPosition = CameraManager.instance.mainCamGO.transform.position;
+
+            //Berechne Abstand zur Kamera
+            float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
+
+            //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
+            particle.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
+            particle.sortingLayerName = "Umgebung_col Layer";
         }
 
     }

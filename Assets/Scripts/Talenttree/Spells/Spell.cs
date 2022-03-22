@@ -50,7 +50,7 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
     public void OnPointerEnter(PointerEventData eventData)
     {
 
-        UI_Manager.instance.ShowTooltip(new Vector2(Input.mousePosition.x - 10f, Input.mousePosition.y + 10f), GetDescription);
+        UI_Manager.instance.ShowTooltip(GetDescription);
 
 
     }

@@ -564,6 +564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7341183184867835073}
+  - component: {fileID: -2676222393266658223}
   - component: {fileID: 5323671609815286569}
   - component: {fileID: 7938408855908525563}
   - component: {fileID: 4667293957405428250}
@@ -594,6 +595,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2676222393266658223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5463991228911496543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0dc29db564efaa40a563c40c76364c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp:
+    BaseValue: 150
+  Armor:
+    BaseValue: 25
+  AttackPower:
+    BaseValue: 35
+  AbilityPower:
+    BaseValue: 10
+  MovementSpeed:
+    BaseValue: 3
+  AttackSpeed:
+    BaseValue: 0.8
+  level: 5
+  xp: 100
+  castCD: 10
+  attackCD: 1
 --- !u!114 &5323671609815286569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,23 +635,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba17f4bbc98f2b84b89b8d74272773ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isoRenderer: {fileID: 0}
   ikAnimated: 0
   hpBar: {fileID: 7364960992908151137}
   enemyHpSlider: {fileID: 5938159052225535471}
-  Hp:
-    BaseValue: 150
-  Armor:
-    BaseValue: 6
-  AttackPower:
-    BaseValue: 10
-  AbilityPower:
-    BaseValue: 1
-  AttackSpeed:
-    BaseValue: 1
   level: 5
-  experience: 120
-  aggroRange: 5
   attackRange: 2
+  aggroRange: 5
   lootTable: 3
   pulled: 0
 --- !u!212 &7938408855908525563

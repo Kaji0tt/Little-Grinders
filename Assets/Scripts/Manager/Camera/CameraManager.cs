@@ -21,6 +21,9 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
+        if (activeCam == null)
+            activeCam = mainCam;
+
         if (Input.GetKeyDown(KeyCode.Tab))
             activeCam = mapCam;
         else

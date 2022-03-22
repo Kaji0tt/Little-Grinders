@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7164954657055753788}
   - component: {fileID: 7164954657055753791}
   - component: {fileID: 7164954657055753790}
+  - component: {fileID: 860363342507021775}
   - component: {fileID: 7164954657055753785}
   - component: {fileID: 7164954657055753784}
   - component: {fileID: 7164954657055753787}
@@ -129,6 +130,34 @@ NavMeshAgent:
   m_BaseOffset: -0.05
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &860363342507021775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7164954657055753781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0dc29db564efaa40a563c40c76364c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp:
+    BaseValue: 100
+  Armor:
+    BaseValue: 5
+  AttackPower:
+    BaseValue: 5
+  AbilityPower:
+    BaseValue: 5
+  MovementSpeed:
+    BaseValue: 3
+  AttackSpeed:
+    BaseValue: 0.5
+  level: 3
+  xp: 80
+  castCD: 0
+  attackCD: 1
 --- !u!114 &7164954657055753785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,23 +170,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba17f4bbc98f2b84b89b8d74272773ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isoRenderer: {fileID: 0}
   ikAnimated: 0
   hpBar: {fileID: 7164954658741026143}
   enemyHpSlider: {fileID: 7164954657212124049}
-  Hp:
-    BaseValue: 80
-  Armor:
-    BaseValue: 1
-  AttackPower:
-    BaseValue: 6
-  AbilityPower:
-    BaseValue: 5
-  AttackSpeed:
-    BaseValue: 1
-  level: 3
-  experience: 80
-  aggroRange: 5
-  attackRange: 3
+  attackRange: 3.5
+  aggroRange: 4.5
   lootTable: 0
   pulled: 0
 --- !u!114 &7164954657055753784

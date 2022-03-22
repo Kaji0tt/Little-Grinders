@@ -110,6 +110,7 @@ public class PlayerStats : MonoBehaviour
             Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
             tutorialScript.ShowTutorial(6);
             */
+            if(AudioManager.instance != null)
             AudioManager.instance.Play("Level-UP");
 
         }

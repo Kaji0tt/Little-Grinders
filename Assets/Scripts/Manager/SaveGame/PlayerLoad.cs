@@ -136,11 +136,11 @@ public class PlayerLoad : MonoBehaviour
             }
             talentTree.UpdateTalentPointText();
 
-            talentTree.voidPoints = data.savedVP; 
+            talentTree.totalVoidPoints = data.savedVP; 
             
-            talentTree.lifePoints = data.savedLP; 
+            talentTree.totalUtilityPoints = data.savedLP; 
             
-            talentTree.combatPoints = data.savedCP;
+            talentTree.totalCombatPoints = data.savedCP;
 
         }
     }

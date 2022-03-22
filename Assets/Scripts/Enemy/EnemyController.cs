@@ -18,7 +18,7 @@ using TMPro;
 public class EnemyController : MonoBehaviour
 {
     //Create Variabel for the Player (through PlayerManager Singleton)
-    Transform character_transform;
+    //Transform character_transform;
 
     //Create Reference to currents GO Agent
     NavMeshAgent navMeshAgent;
@@ -46,16 +46,16 @@ public class EnemyController : MonoBehaviour
 
     ///-----Stat Stuff-----
     ///Reference to Stats used for Combat
-    [Space]
-    public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
+    //[Space]
+    //public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
+    public MobStats mobStats { get; private set; }
 
-    public int level;
+    //public int level;
 
-    public virtual float attackCD { get; private set; }
+
     private float maxHp;
-    [Space]
-    public int experience;
-    public float aggroRange = 5f, attackRange;
+    public int experience { get; private set; }
+    public float attackRange, aggroRange;
     //private PlayerStats playerStats;
     public LootTable lootTable;
 
@@ -70,24 +70,28 @@ public class EnemyController : MonoBehaviour
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, aggroRange);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, aggroRange);
+
+
     }
 
     void Start()
     {
+        mobStats = GetComponent<MobStats>();
+        experience = mobStats.Get_xp();
         //IK-Animated Objects currently have theire Animators connected in GO's in dependecy of their position in relation to player.position
         //the according GO (e.g. looking down, looking up) is activated. For this, we need to find the according animators of the activated GO's
         enemyAnimator = GetComponentInChildren<EnemyAnimator>();
 
         //UI Display
         TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
-        maxHp = Hp.Value;
+        maxHp = mobStats.Hp.Value;
 
 
 
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
-        character_transform = PlayerManager.instance.player.transform;
 
 
         //Adapt the Isometric-Camera angles
@@ -109,22 +113,22 @@ public class EnemyController : MonoBehaviour
         //Alles noch nicht durchdacht, für pre alpha 0.3 solls reichen.
         if (GlobalMap.instance != null)
         {
-            level = level + GlobalMap.instance.currentMap.mapLevel;
+            mobStats.level = mobStats.level + GlobalMap.instance.currentMap.mapLevel;
 
-            if (level > GlobalMap.instance.currentMap.mapLevel)
+            if (mobStats.level > GlobalMap.instance.currentMap.mapLevel)
             {
-                Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
+                mobStats.Hp.AddModifier(new StatModifier(mobStats.Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
                 //Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 0.01f), StatModType.PercentMult));
-                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel + 1)), StatModType.Flat));
-                AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
+                mobStats.Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel + 1)), StatModType.Flat));
+                mobStats.AttackPower.AddModifier(new StatModifier(mobStats.AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
 
                 //Print do double-check the values of increasing modifiers.
                 //print("modifiers of mobs should have been added, resulting in:" + Hp.Value + " for Hp on " + gameObject.name + ". AttackPower: " + AttackPower.Value);
             }
 
-            maxHp = Hp.Value;
+            maxHp = mobStats.Hp.Value;
 
-            experience += GlobalMap.instance.currentMap.mapLevel * 10;
+            experience += mobStats.Get_xp() + GlobalMap.instance.currentMap.mapLevel * 10;
 
         }
 
@@ -137,8 +141,6 @@ public class EnemyController : MonoBehaviour
 
         CalculateHPCanvas();
 
-        //print(transform.name + player_distance);
-
     }
 
 
@@ -146,12 +148,12 @@ public class EnemyController : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
 
-        player_distance = Vector3.Distance(character_transform.position, transform.position);
+        player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
         //Verarbeitung für ikAnimated Enemys
         //Presumably the ikAnimated Enemys are not going to be supported on the long run.
-        inputVector.x = character_transform.transform.position.x - transform.position.x;
-        inputVector.y = character_transform.transform.position.z - transform.position.z;
+        inputVector.x = PlayerManager.instance.player.transform.position.x - transform.position.x;
+        inputVector.y = PlayerManager.instance.player.transform.position.z - transform.position.z;
         if (ikAnimated == true)
             enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
 
@@ -208,9 +210,19 @@ public class EnemyController : MonoBehaviour
 
     private void CalculateHPCanvas()
     {
-        enemyHpSlider.value = Hp.Value / maxHp;
-        if (Hp.Value < maxHp)
+
+        //Re-Calculate maxHp - this seems necessary, since inheriting Classes do not seem to run EnemyContrller Start Functions to initialize certain values.
+        if (maxHp == 0)
         {
+                mobStats = GetComponent<MobStats>();
+                maxHp = mobStats.Hp.Value;
+        }
+
+        enemyHpSlider.value = mobStats.Hp.Value / maxHp;
+
+        if (mobStats.Hp.Value < maxHp)
+        {
+
             hpBar.SetActive(true);
 
             if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
@@ -218,8 +230,8 @@ public class EnemyController : MonoBehaviour
                 TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
                 {
-                    statText[1].text = Mathf.RoundToInt(Hp.Value) + "/" + Mathf.RoundToInt(maxHp);
-                    statText[0].text = level.ToString();
+                    statText[1].text = Mathf.RoundToInt(mobStats.Hp.Value) + "/" + Mathf.RoundToInt(maxHp);
+                    statText[0].text = mobStats.level.ToString();
                 }
             }
             else
@@ -236,19 +248,19 @@ public class EnemyController : MonoBehaviour
         }
 
 
-        if (Hp.Value <= 0)
+        if (mobStats.Hp.Value <= 0)
             Destroy(gameObject);
     }
 
     public void SetDestination()
     {
-        if (character_transform != null)
+        if (PlayerManager.instance.player.transform != null)
         {
 
-            navMeshAgent.SetDestination(character_transform.transform.position);
+            navMeshAgent.SetDestination(PlayerManager.instance.player.transform.position);
 
             // Hier wird die "Blickrichtung" bestimmt, welche sich an dem Charakter orientiert.
-            Vector3 Direction = character_transform.transform.position - transform.position;
+            Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
 
             Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
 
@@ -267,14 +279,14 @@ public class EnemyController : MonoBehaviour
     {
 
         //Fetch the Playerstats of the player
-        PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+        PlayerStats playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
 
         //Countdown for the Auto-Attack Cooldown
-        attackCD -= Time.deltaTime;
+        mobStats.attackCD -= Time.deltaTime;
 
         if (playerStats != null)
         {
-            if (attackCD <= 0)
+            if (mobStats.attackCD <= 0)
             {
 
                 //Sound-Array mit den dazugehörigen Sound-Namen
@@ -287,10 +299,10 @@ public class EnemyController : MonoBehaviour
                     AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
 
                 //Füge dem Spieler Schaden entsprechend der AttackPower hinzu.
-                playerStats.TakeDamage(AttackPower.Value);
+                playerStats.TakeDamage(mobStats.AttackPower.Value);
 
-                //Der Versuch einen AttackSpeed zu integrieren
-                attackCD = 1f / AttackSpeed.Value;
+                //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
+                mobStats.attackCD = 1f / mobStats.AttackSpeed.Value;
 
             }
         }
@@ -299,7 +311,7 @@ public class EnemyController : MonoBehaviour
 
     
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.
-    private void OnTriggerEnter(Collider collider)
+    public virtual void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.tag == "Bullet") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
@@ -308,6 +320,19 @@ public class EnemyController : MonoBehaviour
 
             TakeDirectDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.         
 
+        }
+
+        if (collider.gameObject.tag == "DirCollider")
+        {
+            collider.gameObject.GetComponent<DirectionCollider>().collidingEnemyControllers.Add(this);
+        }
+    }
+
+    public virtual void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.tag == "DirCollider")
+        {
+            collider.gameObject.GetComponent<DirectionCollider>().collidingEnemyControllers.Remove(this);
         }
     }
 
@@ -321,11 +346,11 @@ public class EnemyController : MonoBehaviour
 
         if (player_distance <= range_radius_ofDMG)
         {
-            incoming_damage = 10 * (incoming_damage * incoming_damage) / (Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
+            incoming_damage = 10 * (incoming_damage * incoming_damage) / (mobStats.Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
 
             incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
 
-            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
+            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             
             //Sound-Array mit den dazugehörigen Sound-Namen
@@ -341,18 +366,18 @@ public class EnemyController : MonoBehaviour
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
 
-        if (Hp.Value <= 0)
+        if (mobStats.Hp.Value <= 0)
             Die();
     }
 
-    public void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
+    public virtual void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
     {
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
         if (player_distance <= range_radius_ofDMG)
         {
 
-            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
+            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             //Sound-Array mit den dazugehörigen Sound-Namen
             string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
@@ -366,19 +391,20 @@ public class EnemyController : MonoBehaviour
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
 
-        if (Hp.Value <= 0)
+        if (mobStats.Hp.Value <= 0)
             Die();
     }
 
 
     public void Die()
     {
-        PlayerStats playerStats = character_transform.GetComponent<PlayerStats>();
+        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
         playerStats.Set_xp(experience);
 
-        if(level >= 1)
-            for(int i = 0; i <= level/2; i++)
+        if(mobStats.level >= 1)
+            //Eine Funktion die in ABhängigkeit vom Moblevel, die ANzahl der Drops erhöhen soll. Hier wäre ein Lerp-Funktion sinnvoll.
+            for(int i = 0; i <= mobStats.level/2; i++)
             {
                 ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
             }

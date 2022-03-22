@@ -52,7 +52,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler //IEndDragHandle
 
             cdText = cdButton.GetComponent<Text>();
 
-            cdText.text = (MyUseable.GetCooldown() - MyUseable.CooldownTimer()).ToString("F1");
+            cdText.text = (MyUseable.CooldownTimer()).ToString("F1");
 
 
         }

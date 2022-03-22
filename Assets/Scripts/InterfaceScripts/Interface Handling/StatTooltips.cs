@@ -10,7 +10,7 @@ public class StatTooltips : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UI_Manager.instance.ShowTooltip(new Vector2(Input.mousePosition.x - 10f, Input.mousePosition.y + 10f), description);
+        UI_Manager.instance.ShowTooltip(description);
     }
 
     public void OnPointerExit(PointerEventData eventData)

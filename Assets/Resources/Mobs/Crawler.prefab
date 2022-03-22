@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 7839687458832828460}
   - component: {fileID: 7839687458832828463}
   - component: {fileID: 7839687458832828462}
+  - component: {fileID: 6924341141967954}
   - component: {fileID: 764865214548323693}
   m_Layer: 0
   m_Name: Crawler
@@ -410,7 +411,7 @@ SpriteRenderer:
   m_Sprite: {fileID: -2640427978379016621, guid: 35952e4d94608254c92bb947da0c58d9,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.32, y: 0.32}
@@ -503,6 +504,34 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &6924341141967954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7839687458832828465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0dc29db564efaa40a563c40c76364c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp:
+    BaseValue: 40
+  Armor:
+    BaseValue: 5
+  AttackPower:
+    BaseValue: 3
+  AbilityPower:
+    BaseValue: 5
+  MovementSpeed:
+    BaseValue: 3
+  AttackSpeed:
+    BaseValue: 1
+  level: 1
+  xp: 40
+  castCD: 1
+  attackCD: 1
 --- !u!114 &764865214548323693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,20 +548,8 @@ MonoBehaviour:
   ikAnimated: 0
   hpBar: {fileID: 7839687460562832954}
   enemyHpSlider: {fileID: 7839687460541522322}
-  Hp:
-    BaseValue: 30
-  Armor:
-    BaseValue: 2
-  AttackPower:
-    BaseValue: 3
-  AbilityPower:
-    BaseValue: 1
-  AttackSpeed:
-    BaseValue: 1
-  level: 1
-  experience: 50
-  aggroRange: 5
   attackRange: 1
+  aggroRange: 5
   lootTable: 0
   pulled: 0
 --- !u!1 &7839687459591370673
