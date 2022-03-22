@@ -544,6 +544,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2096321489943616782}
   - component: {fileID: 2096321489943616785}
+  - component: {fileID: 6382621050988111239}
   - component: {fileID: 2096321489943616784}
   - component: {fileID: 2096321489943616787}
   - component: {fileID: 2096321489943616786}
@@ -625,6 +626,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6382621050988111239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096321489943616788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0dc29db564efaa40a563c40c76364c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp:
+    BaseValue: 30
+  Armor:
+    BaseValue: 2
+  AttackPower:
+    BaseValue: 3
+  AbilityPower:
+    BaseValue: 1
+  MovementSpeed:
+    BaseValue: 2
+  AttackSpeed:
+    BaseValue: 1
+  level: 1
+  xp: 25
+  castCD: 0
+  attackCD: 1
+  aggroRange: 2
+  attackRange: 1
 --- !u!114 &2096321489943616784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,20 +672,9 @@ MonoBehaviour:
   ikAnimated: 0
   hpBar: {fileID: 2096321488921371614}
   enemyHpSlider: {fileID: 2096321489200344703}
-  Hp:
-    BaseValue: 30
-  Armor:
-    BaseValue: 2
-  AttackPower:
-    BaseValue: 3
-  AbilityPower:
-    BaseValue: 0
-  AttackSpeed:
-    BaseValue: 1
   level: 1
-  experience: 50
-  aggroRange: 5
-  attackRange: 1.5
+  attackRange: 0
+  aggroRange: 0
   lootTable: 0
   pulled: 0
 --- !u!54 &2096321489943616787

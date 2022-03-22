@@ -145,6 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8256243436635932968}
   - component: {fileID: 1744054537642316040}
+  - component: {fileID: 8956380645923175466}
   - component: {fileID: 4890702325782306304}
   - component: {fileID: 6332524322234331892}
   - component: {fileID: 6860174602442045388}
@@ -226,6 +227,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8956380645923175466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3181489178533155785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0dc29db564efaa40a563c40c76364c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp:
+    BaseValue: 100
+  Armor:
+    BaseValue: 25
+  AttackPower:
+    BaseValue: 10
+  AbilityPower:
+    BaseValue: 8
+  MovementSpeed:
+    BaseValue: 2
+  AttackSpeed:
+    BaseValue: 1
+  level: 3
+  xp: 75
+  castCD: 6
+  attackCD: 1
 --- !u!114 &4890702325782306304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,23 +267,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba17f4bbc98f2b84b89b8d74272773ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isoRenderer: {fileID: 0}
   ikAnimated: 0
   hpBar: {fileID: 6917757392088859761}
   enemyHpSlider: {fileID: 9136502929712228112}
-  Hp:
-    BaseValue: 70
-  Armor:
-    BaseValue: 12
-  AttackPower:
-    BaseValue: 4
-  AbilityPower:
-    BaseValue: 0
-  AttackSpeed:
-    BaseValue: 1
   level: 3
-  experience: 70
-  aggroRange: 4
   attackRange: 1.5
+  aggroRange: 4
   lootTable: 0
   pulled: 0
 --- !u!54 &6332524322234331892

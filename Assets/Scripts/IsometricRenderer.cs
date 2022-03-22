@@ -29,6 +29,8 @@ public class IsometricRenderer : MonoBehaviour
     //int to clalculate and safe the last direction of view.
     int lastDirection;
 
+    int lastWeaponDirection;
+
     #region isoType für 8 oder 4 Directions. Könnte überflüssig sein, ggf. später säubern.
     //Create an Enum to Set number of Isometric Directions
     private enum IsoType { eightDir, forDir }
@@ -96,8 +98,10 @@ public class IsometricRenderer : MonoBehaviour
             //Wähle entsprechende AnimationsArray aus
             directionArray = weaponSwing;
 
-            //Spiele die Animation über entsprechenden Integer im AnimationController ab.
-            weaponAnim.SetTrigger(directionArray[lastDirection]);
+            //Berechne die letzte Blickrichtung in Abhängigkeit vom DirectionCollider (direction).
+            lastWeaponDirection = DirectionToIndex(direction, 8);
+            //print(lastWeaponDirection); - funktioniert.
+            weaponAnim.SetTrigger(directionArray[lastWeaponDirection]);
 
         }
 

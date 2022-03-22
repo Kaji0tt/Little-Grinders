@@ -15,7 +15,7 @@ public class imp_Voidexplosion : Talent, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
 
-        UI_Manager.instance.ShowTooltip(new Vector2(Input.mousePosition.x, Input.mousePosition.y), GetDescription, gameObject);
+        UI_Manager.instance.ShowTooltip(GetDescription);
 
 
     }

@@ -119,6 +119,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Manager\World\WorldModifiers.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RescalingPanels\RescalePanel.cs" />
+    <Compile Include="Assets\Scripts\Talenttree\Spells\AbilityTalent.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ClickThrough.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\CameraManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_TweenScale.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\PPIViewer.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MetaStats\CharStats.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\UIVerticalScroller.cs" />
+    <Compile Include="Assets\Scripts\Talenttree\Spells\Ability.cs" />
     <Compile Include="Assets\Scripts\Inventory\SortingOrderCanvas.cs" />
     <Compile Include="Assets\Sprites\Charakter\Equipment\WeaponAC.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\MapSave.cs" />
@@ -396,7 +398,7 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_HealFountain.cs" />
-    <Compile Include="Assets\New.cs" />
+    <Compile Include="Assets\Scripts\Talenttree\Spells\Heal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIAdditive.shader" />

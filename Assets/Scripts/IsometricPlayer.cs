@@ -8,10 +8,10 @@ public class IsometricPlayer : MonoBehaviour
     #region Implementation - Basic 
 
     //Klasse, welche Isometrische Darstellungen kalkuliert.
-    IsometricRenderer isoRenderer;
+    public IsometricRenderer isoRenderer;
 
     //Wird im Inspektor eingestellt, um das Game-Objekt der Waffe und dessen Animator zu erkennen.
-    private GameObject weaponGameObject;
+    public GameObject weaponGameObject; 
 
     //Wichtig, um die Sprites entsprechend der Isometrie für die Animationen zu kalkulieren
     private Vector2 inputVector;
@@ -235,7 +235,6 @@ public class IsometricPlayer : MonoBehaviour
 
 
 
-
         PlayerCombatStance();
 
         //UI Orb
@@ -257,7 +256,7 @@ public class IsometricPlayer : MonoBehaviour
         inputVector = new Vector2(horizontalInput, verticalInput);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
         isoRenderer.SetDirection(inputVector);
-        isoRenderer.SetWeaponDirection(inputVector, weaponGameObject.GetComponent<Animator>());
+        isoRenderer.SetWeaponDirection(DirectionCollider.instance.dirVector, weaponGameObject.GetComponent<Animator>());
 
         //print(inputVector);
         //Define Inventory Tab Values   ********schreiben von Interface Texten*********
@@ -435,7 +434,7 @@ public class IsometricPlayer : MonoBehaviour
 
     }
 
-
+    /*
     private void OnTriggerStay(Collider collider)
     {                                                           //Die Abfrage sollte noch verbessert werden.
         
@@ -452,7 +451,6 @@ public class IsometricPlayer : MonoBehaviour
             //Falls noch Platz im Inventar ist
             if(inventory.itemList.Count <= 14)
             {
-                print("we have ben here once");
                 //Füge Item zum Inventar hinzu
                 inventory.AddItem(itemWorld.GetItem());
 
@@ -463,7 +461,7 @@ public class IsometricPlayer : MonoBehaviour
         }
 
     }
-
+    */
     
     private void UseItem(ItemInstance item)
     {

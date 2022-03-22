@@ -147,8 +147,10 @@ public class UI_Manager : MonoBehaviour
         {
             OpenCloseMenu(skillTab);
             if (skillTab.alpha == 0)
+                if(AudioManager.instance != null)
                 AudioManager.instance.Play("OpenSkills");
             else
+                if(AudioManager.instance != null)
                 AudioManager.instance.Play("CloseMenu");
             
         }
@@ -162,8 +164,10 @@ public class UI_Manager : MonoBehaviour
         {
             OpenCloseMenu(mapTab);
             if (mapTab.alpha == 0)
+                if(AudioManager.instance != null)
                 AudioManager.instance.Play("OpenMap");
             else
+                if (AudioManager.instance != null)
                 AudioManager.instance.Play("CloseMenu");
         }
 
@@ -234,29 +238,13 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-    public void ShowTooltip(Vector3 position, string description, GameObject obj)
+    public void ShowTooltip(string description)
     {
-        //RectTransform rect = tooltip.GetComponent<RectTransform>();
-
 
         if (description != null)
         {
             tooltipText.text = description;
         }
-
-        Vector2 newPos = new Vector2(obj.transform.position.x, obj.transform.position.y);
-
-
-        /*
-        if (tooltip.GetComponent<Tooltip>().IsFullyOnScreen())
-        {
-            rect.pivot = new Vector2(0, 1);
-        }
-        else
-            rect.pivot = new Vector2(1, 0);
-        */
-
-        tooltip.transform.position = newPos;
 
         tooltip.SetActive(true);
 

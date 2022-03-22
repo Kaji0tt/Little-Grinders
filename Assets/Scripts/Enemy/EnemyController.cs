@@ -46,16 +46,16 @@ public class EnemyController : MonoBehaviour
 
     ///-----Stat Stuff-----
     ///Reference to Stats used for Combat
-    [Space]
-    public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
+    //[Space]
+    //public CharStats Hp, Armor, AttackPower, AbilityPower, AttackSpeed;
+    public MobStats mobStats { get; private set; }
 
-    public int level;
+    //public int level;
 
-    public virtual float attackCD { get; private set; }
+
     private float maxHp;
-    [Space]
-    public int experience;
-    public float aggroRange = 5f, attackRange;
+    public int experience { get; private set; }
+    public float attackRange, aggroRange;
     //private PlayerStats playerStats;
     public LootTable lootTable;
 
@@ -70,19 +70,24 @@ public class EnemyController : MonoBehaviour
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, aggroRange);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, aggroRange);
+
+
     }
 
     void Start()
     {
+        mobStats = GetComponent<MobStats>();
+        experience = mobStats.Get_xp();
         //IK-Animated Objects currently have theire Animators connected in GO's in dependecy of their position in relation to player.position
         //the according GO (e.g. looking down, looking up) is activated. For this, we need to find the according animators of the activated GO's
         enemyAnimator = GetComponentInChildren<EnemyAnimator>();
 
         //UI Display
         TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
-        maxHp = Hp.Value;
+        maxHp = mobStats.Hp.Value;
 
 
 
@@ -108,22 +113,22 @@ public class EnemyController : MonoBehaviour
         //Alles noch nicht durchdacht, für pre alpha 0.3 solls reichen.
         if (GlobalMap.instance != null)
         {
-            level = level + GlobalMap.instance.currentMap.mapLevel;
+            mobStats.level = mobStats.level + GlobalMap.instance.currentMap.mapLevel;
 
-            if (level > GlobalMap.instance.currentMap.mapLevel)
+            if (mobStats.level > GlobalMap.instance.currentMap.mapLevel)
             {
-                Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
+                mobStats.Hp.AddModifier(new StatModifier(mobStats.Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
                 //Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 0.01f), StatModType.PercentMult));
-                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel + 1)), StatModType.Flat));
-                AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
+                mobStats.Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel + 1)), StatModType.Flat));
+                mobStats.AttackPower.AddModifier(new StatModifier(mobStats.AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
 
                 //Print do double-check the values of increasing modifiers.
                 //print("modifiers of mobs should have been added, resulting in:" + Hp.Value + " for Hp on " + gameObject.name + ". AttackPower: " + AttackPower.Value);
             }
 
-            maxHp = Hp.Value;
+            maxHp = mobStats.Hp.Value;
 
-            experience += GlobalMap.instance.currentMap.mapLevel * 10;
+            experience += mobStats.Get_xp() + GlobalMap.instance.currentMap.mapLevel * 10;
 
         }
 
@@ -205,13 +210,17 @@ public class EnemyController : MonoBehaviour
 
     private void CalculateHPCanvas()
     {
-        //Re-Calculate maxHp - this seems necessary, since inherting Classes do not seem to run EnemyContrller Start Functions to initialize certain values.
+
+        //Re-Calculate maxHp - this seems necessary, since inheriting Classes do not seem to run EnemyContrller Start Functions to initialize certain values.
         if (maxHp == 0)
-            maxHp = Hp.Value;
+        {
+                mobStats = GetComponent<MobStats>();
+                maxHp = mobStats.Hp.Value;
+        }
 
-        enemyHpSlider.value = Hp.Value / maxHp;
+        enemyHpSlider.value = mobStats.Hp.Value / maxHp;
 
-        if (Hp.Value < maxHp)
+        if (mobStats.Hp.Value < maxHp)
         {
 
             hpBar.SetActive(true);
@@ -221,8 +230,8 @@ public class EnemyController : MonoBehaviour
                 TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
                 {
-                    statText[1].text = Mathf.RoundToInt(Hp.Value) + "/" + Mathf.RoundToInt(maxHp);
-                    statText[0].text = level.ToString();
+                    statText[1].text = Mathf.RoundToInt(mobStats.Hp.Value) + "/" + Mathf.RoundToInt(maxHp);
+                    statText[0].text = mobStats.level.ToString();
                 }
             }
             else
@@ -239,7 +248,7 @@ public class EnemyController : MonoBehaviour
         }
 
 
-        if (Hp.Value <= 0)
+        if (mobStats.Hp.Value <= 0)
             Destroy(gameObject);
     }
 
@@ -273,11 +282,11 @@ public class EnemyController : MonoBehaviour
         PlayerStats playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
 
         //Countdown for the Auto-Attack Cooldown
-        attackCD -= Time.deltaTime;
+        mobStats.attackCD -= Time.deltaTime;
 
         if (playerStats != null)
         {
-            if (attackCD <= 0)
+            if (mobStats.attackCD <= 0)
             {
 
                 //Sound-Array mit den dazugehörigen Sound-Namen
@@ -290,10 +299,10 @@ public class EnemyController : MonoBehaviour
                     AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
 
                 //Füge dem Spieler Schaden entsprechend der AttackPower hinzu.
-                playerStats.TakeDamage(AttackPower.Value);
+                playerStats.TakeDamage(mobStats.AttackPower.Value);
 
-                //Der Versuch einen AttackSpeed zu integrieren
-                attackCD = 1f / AttackSpeed.Value;
+                //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
+                mobStats.attackCD = 1f / mobStats.AttackSpeed.Value;
 
             }
         }
@@ -337,11 +346,11 @@ public class EnemyController : MonoBehaviour
 
         if (player_distance <= range_radius_ofDMG)
         {
-            incoming_damage = 10 * (incoming_damage * incoming_damage) / (Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
+            incoming_damage = 10 * (incoming_damage * incoming_damage) / (mobStats.Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
 
             incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
 
-            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
+            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             
             //Sound-Array mit den dazugehörigen Sound-Namen
@@ -357,7 +366,7 @@ public class EnemyController : MonoBehaviour
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
 
-        if (Hp.Value <= 0)
+        if (mobStats.Hp.Value <= 0)
             Die();
     }
 
@@ -368,7 +377,7 @@ public class EnemyController : MonoBehaviour
         if (player_distance <= range_radius_ofDMG)
         {
 
-            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
+            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             //Sound-Array mit den dazugehörigen Sound-Namen
             string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
@@ -382,7 +391,7 @@ public class EnemyController : MonoBehaviour
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
 
-        if (Hp.Value <= 0)
+        if (mobStats.Hp.Value <= 0)
             Die();
     }
 
@@ -393,8 +402,9 @@ public class EnemyController : MonoBehaviour
 
         playerStats.Set_xp(experience);
 
-        if(level >= 1)
-            for(int i = 0; i <= level/2; i++)
+        if(mobStats.level >= 1)
+            //Eine Funktion die in ABhängigkeit vom Moblevel, die ANzahl der Drops erhöhen soll. Hier wäre ein Lerp-Funktion sinnvoll.
+            for(int i = 0; i <= mobStats.level/2; i++)
             {
                 ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
             }

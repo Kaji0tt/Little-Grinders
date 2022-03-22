@@ -31,8 +31,6 @@ public class ItemWorld : MonoBehaviour
 
     public static ItemWorld SpawnItemWorld(Vector3 position, ItemInstance item)
     {
-        print("item got dropped");
-
         Transform transform = Instantiate(ItemAssets.Instance.pfItemWorld, position, Quaternion.identity);
 
         ItemWorld itemWorld = transform.GetComponent<ItemWorld>();
@@ -133,6 +131,38 @@ public class ItemWorld : MonoBehaviour
 
 
     }
+
+    private void OnTriggerStay(Collider collider)
+    {                                                           //Die Abfrage sollte noch verbessert werden.
+
+        if(collider.isTrigger)
+        {
+            IsometricPlayer isoPlayer = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
+
+            //Falls ein entsprechender Collider gefunden wurde und die pickKey Taste (Default Q) gedrück wurde
+
+            //Hier ist noch ein Fehler - beziehen wir uns auf den UI-Manager Key, wird das Item doppel aufgesammelt.
+            if (Input.GetKey(UI_Manager.instance.pickKey))
+            //if (itemWorld != null && Input.GetKey(KeyCode.Q)) 
+            {
+
+                //Falls noch Platz im Inventar ist
+                if (isoPlayer.inventory.itemList.Count <= 14)
+                {
+                    //Füge Item zum Inventar hinzu
+                    isoPlayer.inventory.AddItem(GetItem());
+
+                    //Zerstöre den Collider
+                    DestroySelf();
+                }
+
+            }
+        }
+
+
+
+    }
+
     public ItemInstance GetItem ()
     {
         return item;

@@ -210,7 +210,7 @@ public class PrefabCollection : MonoBehaviour
             if (GlobalMap.instance.currentMap != null)
             {
                 //print("current map is not null");
-                if (mob.GetComponent<EnemyController>().level -1 <= GlobalMap.instance.currentMap.mapLevel)
+                if (mob.GetComponent<EnemyController>().mobStats.level -1 <= GlobalMap.instance.currentMap.mapLevel)
                 {
                     //print("adding mob: " + mob.name);
                     possibleMobs.Add(mob);

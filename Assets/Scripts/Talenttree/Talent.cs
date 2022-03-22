@@ -5,11 +5,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+//Jedes Talent sollte sich auf eine Ability beziehen. 
+//In der Ability, werden in Abhängigkeit von den gewählten Talente Werte geändert, welche die Ability und ihre Spezialisierung beeinflussen.
+//Alle Informationen über mögliche Ausrichtungen von Abilities, liegen somit in jeweils einzelnen Ability-Scriptable Objects.
 
-public class Talent : MonoBehaviour, IMoveable, IPointerClickHandler
+//Die Base-Ability (derzeit Heilung) sollte kein SO sein, sondern von Monobehaviour geerbt werden. (Derzeit stellt Spell diese Erbschaft dar.)
+//Das wäre vergleichbar zum Ability-Holder im Video: https://www.youtube.com/watch?v=ry4I6QyPw4E
+
+//Damit wäre ein Talent der entsprechende Ability Holder - wenn ein Talent geskilled wird, werden in Abhängigkeit von TalentType die AbilityType Integers erhöht.
+public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
     public TalentType talentType;
+
+
+    public AbilityTalent abilityTalent;
 
     //Description of the Spell
     [SerializeField]
@@ -29,17 +39,17 @@ public class Talent : MonoBehaviour, IMoveable, IPointerClickHandler
         this.description = newDes;
     }
     
-    public Image image;
+    private Image image;
     
     public Sprite icon
     {
         get
         {
-            return image.sprite;
+            return abilityTalent.baseAbility.icon;
         }
     }
     
-    [SerializeField]
+
     private Text countText;
 
     [SerializeField]
@@ -70,29 +80,33 @@ public class Talent : MonoBehaviour, IMoveable, IPointerClickHandler
 
 
 
+    //Void to be called in TalentTree.cs for structural purpose.
+    public void SetTalentVariables()
+    {
+        image = GetComponent<Image>();
+        countText = transform.GetComponentInChildren<Text>();
+        countText.text = $"{currentCount}/{maxCount}";
+    }
+
     private void Awake()
     {
+        //DoubleCheck if an AbilityTalent has been choosen, to make sure there are no problems within the editor.
+        if (abilityTalent == null)
+            print("Es wurde vergessen, eine aktive Referenzfähigkeit im Talent: " + gameObject.name + " zu setzen.");
+        
 
-        image = GetComponent<Image>();
-
-        countText.text = $"{currentCount}/{maxCount}";
-
-        if (unlocked)
-            Unlock();
-
-        //UpdateTalentTypePoins();
-        //CheckIfUnlocked();
-
-
+        if (description == null)
+                description = abilityTalent.baseAbility.description;
     }
 
     public bool Click()
     {
+
+
+        countText = transform.GetComponentInChildren<Text>();
         if (currentCount < maxCount && unlocked)
         {
             currentCount++;
-
-
 
             countText.text = $"{currentCount}/{maxCount}";
 
@@ -117,6 +131,8 @@ public class Talent : MonoBehaviour, IMoveable, IPointerClickHandler
         image.color = Color.grey;
 
         countText.color = Color.grey;
+
+        unlocked = false;
     }
 
     public void Unlock()
@@ -135,64 +151,94 @@ public class Talent : MonoBehaviour, IMoveable, IPointerClickHandler
         countText.text = $"{currentCount}/{maxCount}";
 
         if (unlocked)
+        {
             Unlock();
+        }
+
+
+
     }
 
     public void IncreaseTalentTypePoins(Talent talent)
     {
+        //Prüfe welchen Typ das Talent besitzt.
         switch (talent.talentType)
         {
-            case TalentType.Life:
+            //Falls das Talent vom Typ Utility ist
+            case TalentType.Utility:
 
-                TalentTree.instance.lifePoints++;
+                //Erhöhe den Utility-Counter der dazugehörigen BaseAbility um 1
+                abilityTalent.baseAbility.utilityCounter += 1;
+
+                //..und erhöhe den TotalCounter von Utility
+                TalentTree.instance.totalUtilityPoints++;
+
+                /* - Als die Klasse Spells verantwortlich war für die aktiven Fähigkeiten, wurde diese herangehensweise benutzt.
+                 * - Außerdem ist der Approach verkehrt herum gewesen. (Das Talent sollte lieber in TalenTree prüfen,
+                 * - ob dieser ausreichend Punkte in der entsprechenden Kategorie hat, bevor um es dann zu entsperren - nicht vice versa)
                 foreach (Talent lT in TalentTree.instance.lifeTalents)
                 {
-                        lT.collectedTypePoints = TalentTree.instance.lifePoints;
+                        lT.collectedTypePoints = TalentTree.instance.totalUtilityPoints;
 
                     if (lT.collectedTypePoints == lT.requiredTypePoints && lT is Spell)
                         lT.Unlock();
                 }
-
-
+                */
 
                 break;
 
             case TalentType.Combat:
 
-                TalentTree.instance.combatPoints++;
+                abilityTalent.baseAbility.combatCounter += 1;
+
+                TalentTree.instance.totalCombatPoints++;
+                /*
                 foreach (Talent cT in TalentTree.instance.combatTalents)
                 {
-                        cT.collectedTypePoints = TalentTree.instance.combatPoints;
+                        cT.collectedTypePoints = TalentTree.instance.totalCombatPoints;
 
                     if (cT.collectedTypePoints == cT.requiredTypePoints && cT is Spell)
                         cT.Unlock();
                 }
-
+                */
                 break;
 
             case TalentType.Void:
 
-                TalentTree.instance.voidPoints++;
+                abilityTalent.baseAbility.voidCounter += 1;
+
+                TalentTree.instance.totalVoidPoints++;
+                /*
                 foreach(Talent vT in TalentTree.instance.voidTalents)
                 {
-                        vT.collectedTypePoints = TalentTree.instance.voidPoints;
+                        vT.collectedTypePoints = TalentTree.instance.totalVoidPoints;
 
                     if (vT.collectedTypePoints == vT.requiredTypePoints && vT is Spell)
                         vT.Unlock();
                 }
-
-
+                */
                 break;
 
-
         }
+
+        foreach (AbilityTalent abilityTalent in TalentTree.instance.allAbilityTalents)
+            abilityTalent.CheckForUnlock();
     }
 
 
     public void OnPointerClick(PointerEventData eventData)
     {
         TalentTree.instance.TryUseTalent(this);
-        
+        print(abilityTalent.baseAbility.voidCounter);
+    }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        UI_Manager.instance.ShowTooltip(description);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        UI_Manager.instance.HideTooltip();
     }
 }

@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 5797434476105927035}
   - component: {fileID: 5797434476105927032}
   - component: {fileID: 5797434476105927033}
+  - component: {fileID: -3602613563877458092}
   - component: {fileID: 5797434476105927036}
   - component: {fileID: 5797434476105927034}
   - component: {fileID: 5797434476105927037}
@@ -184,6 +185,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-3602613563877458092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5797434476105927046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0dc29db564efaa40a563c40c76364c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp:
+    BaseValue: 50
+  Armor:
+    BaseValue: 5
+  AttackPower:
+    BaseValue: 10
+  AbilityPower:
+    BaseValue: 10
+  MovementSpeed:
+    BaseValue: 3
+  AttackSpeed:
+    BaseValue: 1
+  level: 3
+  xp: 50
+  castCD: 3
+  attackCD: 1
 --- !u!114 &5797434476105927036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,26 +229,13 @@ MonoBehaviour:
   ikAnimated: 0
   hpBar: {fileID: 5797434477719584485}
   enemyHpSlider: {fileID: 5797434476175755931}
-  Hp:
-    BaseValue: 100
-  Armor:
-    BaseValue: 5
-  AttackPower:
-    BaseValue: 10
-  AbilityPower:
-    BaseValue: 10
-  AttackSpeed:
-    BaseValue: 1
-  level: 3
-  experience: 50
-  aggroRange: 3.5
   attackRange: 3.5
+  aggroRange: 3.5
   lootTable: 0
   pulled: 0
   projectile: {fileID: 6514997294628363944, guid: 2fccc55f03e95a9429ab26676e4eaa4f,
     type: 3}
   projectileDamage: 5
-  attackCD: 2
   animationProjectileDelay: 0.5
   projectileOriginY: 0.5
   projectileOffsetXY: 0.5

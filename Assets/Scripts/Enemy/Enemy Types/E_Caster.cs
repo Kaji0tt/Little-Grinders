@@ -16,7 +16,7 @@ public class E_Caster : EnemyController
 
     new private float player_distance;
 
-    new public float attackCD = 2;
+    //new public float attackCD = 2;
 
     private float crnt_attackCD;
 
@@ -71,13 +71,13 @@ public class E_Caster : EnemyController
 
             isoRenderer.AnimateCast(CalculatePlayerDirection());
 
-            crnt_attackCD = attackCD;
+            crnt_attackCD = mobStats.attackCD;
 
             attackStarted = true;
 
         }
 
-        if(crnt_attackCD <= attackCD - animationProjectileDelay && attackStarted)
+        if(crnt_attackCD <= mobStats.attackCD - animationProjectileDelay && attackStarted)
         {
             InstantiateProjectile();
 

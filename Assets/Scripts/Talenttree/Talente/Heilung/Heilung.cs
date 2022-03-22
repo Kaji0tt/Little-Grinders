@@ -51,8 +51,10 @@ public class Heilung : Spell, IUseable
 
         healActivated = false;
 
+        //Genau diesen Rotz wollen wir umgehen.
         lifeHeilungMax = FindObjectOfType<LifeHeilung_Max>();
 
+        //So ein mist auch.
         verbesserte_Heilung = FindObjectOfType<Verbesserte_Heilung>();
 
         SetDescription(descriptionOverride);

@@ -12,7 +12,7 @@ public class CombatHeilung : Talent, IPointerEnterHandler, IPointerExitHandler
     bool armorgained;
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UI_Manager.instance.ShowTooltip(new Vector2(Input.mousePosition.x, Input.mousePosition.y), GetDescription, this.gameObject);
+        UI_Manager.instance.ShowTooltip(GetDescription);
     }
 
     public void OnPointerExit(PointerEventData eventData)

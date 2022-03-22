@@ -16,11 +16,6 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     }
 
-    public void ShowItem()
-    {                                                                                                         
-        UI_Manager.instance.ShowItemTooltip(new Vector2(Input.mousePosition.x - 15f, Input.mousePosition.y + 15f), storedItem);
-    }
-
     public void HideItem()
     {
         UI_Manager.instance.HideTooltip();
@@ -28,15 +23,18 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     
     public void OnPointerEnter(PointerEventData eventData)
     {
+        //Falls der Inventar-Slot ein Item trägt,
         if (storedItem != null)
-        ShowItem();
+
+        UI_Manager.instance.ShowItemTooltip(new Vector2(transform.position.x, transform.position.y), storedItem);
+
 
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        HideItem();
 
+        HideItem();
     }
     
 

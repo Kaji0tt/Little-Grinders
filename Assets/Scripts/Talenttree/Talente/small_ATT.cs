@@ -7,7 +7,7 @@ public class small_ATT : Talent, IPointerEnterHandler, IPointerExitHandler, ISma
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UI_Manager.instance.ShowTooltip(new Vector2(Input.mousePosition.x, Input.mousePosition.y), GetDescription, gameObject);
+        UI_Manager.instance.ShowTooltip(GetDescription);
     }
 
     public void OnPointerExit(PointerEventData eventData)

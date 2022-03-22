@@ -36,98 +36,73 @@ public class MobStats : MonoBehaviour
 
 
     /*
-    [SerializeField]
-    private int level;
-    [SerializeField]
-    private float hp;
-    [SerializeField]
-    private float armor;
-    [SerializeField]
-    private float attackPower;
-    [SerializeField]
-    private float abilityPower;
-    [SerializeField]
-    private float attackSpeed;
+      [SerializeField]
+      private int level;
+      [SerializeField]
+      private float hp;
+      [SerializeField]
+      private float armor;
+      [SerializeField]
+      private float attackPower;
+      [SerializeField]
+      private float abilityPower;
+      [SerializeField]
+      private float attackSpeed;
 
 
-    private float movementSpeed;
+      private float movementSpeed;
+      */
 
+    public int level;
 
-    public float Hp
+    public int xp;
+    public int Get_xp()
     {
-        get { return hp; }
-        private set
-        {
-            if (value < 0) hp = 0;
-            else hp = value;
-        }
+        return xp;
+    }
+    
+    [Space]
+    /// <summary>
+    /// Combat Values
+    /// </summary>
+    public float castCD = 0f;
+
+    [HideInInspector]
+    //Referenzwert für den Attack-Cooldown. Sollte 1 bleiben, alles andere wird über Attacksped kalkuliert.
+    public float attackCD = 1f;
+
+
+
+    /// <summary>
+    /// HP-Stuff
+    /// </summary>
+    private float currentHp;
+    public float Get_currentHp()
+    {
+        return currentHp;
+    }
+    public void Set_currentHp(float mod)
+    {
+        currentHp = currentHp + mod;
     }
 
-    public float Armor
+    public void Load_currentHp(float value)
     {
-        get { return armor; }
-        private set
-        {
-            if (value < 0) hp = 0;
-            else armor = value;
-        }
+        currentHp = value;
     }
 
-    public float AttackPower
+    private float maxHp;
+    public float Get_maxHp()
     {
-        get { return attackPower; }
-        private set
-        {
-            if (value < 0) hp = 0;
-            else attackPower = value;
-        }
+        return maxHp = Hp.Value;
     }
-
-    public float AbilityPower
+    public void Set_maxHp()
     {
-        get { return abilityPower; }
-        private set
-        {
-            if (value < 0) hp = 0;
-            else abilityPower = value;
-        }
-    }
-
-    public float AttackSpeed
-    {
-        get { return attackSpeed; }
-        private set
-        {
-            if (value < 0) hp = 0;
-            else attackSpeed = value;
-        }
-    }
-    public float MovementSpeed
-    {
-        get { return movementSpeed; }
-        private set
-        {
-            if (value < 0) hp = 0;
-            else movementSpeed = value;
-        }
-    }
-
-    public int Level
-    {
-        get { return level; }
-        private set
-        {
-            if (value < 0) hp = 0;
-            else level = value;
-        }
+        maxHp = Hp.Value;
     }
 
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    */
+
+
 }
