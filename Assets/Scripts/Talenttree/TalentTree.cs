@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
+
+//
 public enum TalentType { None, Utility, Void, Combat }
 public class TalentTree : MonoBehaviour
 {
@@ -21,7 +23,7 @@ public class TalentTree : MonoBehaviour
             talent.SetTalentVariables();
 
         //Untersucht alle Talente auf ihre Typ hin und fügt sie entsprechenden Listen hinzu.
-        CalculateAllTalents();
+        //CalculateAllTalents();
 
         //Füge alle Abilitie's welche auch Talente sind einer entsprechenden Liste hinzu.
         CalculatAllAbilityTalents();
@@ -69,11 +71,11 @@ public class TalentTree : MonoBehaviour
 
     //Für jedes Talent, welches gesetzt wurde, erhöhe die talentTypePoins
     [HideInInspector]
-    public int totalVoidPoints = 0;
+    public int totalVoidSpecPoints = 0;
     [HideInInspector]
-    public int totalUtilityPoints = 0;
+    public int totalUtilitySpecPoints = 0;
     [HideInInspector]
-    public int totalCombatPoints = 0;
+    public int totalCombatSpecPoints = 0;
     [HideInInspector]
     public List<Talent> voidTalents = new List<Talent>();
     [HideInInspector]
@@ -88,7 +90,8 @@ public class TalentTree : MonoBehaviour
 
         if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && clickedTalent.Click())
         {
-            clickedTalent.IncreaseTalentTypePoins(clickedTalent);
+            //Erhöhe die Speziliaiserungs-Counter des TalentTree's
+            clickedTalent.IncreaseTalentTreeSpecPoints(clickedTalent);
             #region "Tutorial"
             if (PlayerManager.instance.player.GetComponent<PlayerStats>().level == 2 && GameObject.FindGameObjectWithTag("TutorialScript") != null)
             {
@@ -98,27 +101,34 @@ public class TalentTree : MonoBehaviour
             }
             #endregion
 
-            //SmallTalents sollte es vorerst nicht mehr geben eigentlich..
-            if (clickedTalent is ISmallTalent smallTalent)
-            {
-                smallTalent.PassiveEffect();
-            }
-            
+            //Falls das geskillte Talent keien Fähigkeit ist, setze die Spezialisierung.
+            if(clickedTalent.GetType() != typeof(AbilityTalent))
+            SetAbilitySpecialization(clickedTalent);
+
+
             PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
             UpdateTalentPointText();
         }
-
-        //Es sollte sich Gedanken gemacht werden, wie jedes AbilityTalent eine List erhalten kann, in welcher alle Talente gespeichert liegen, welche 
-        //das gleiche AbilityTalent als Referenz wert verwenden. ->
-        //Anschließend könnte man on TryUseTalent alle Talents locken, welche nicht die gleiche TalentType wie entsprechende AbilityType besitzen.
         
-        foreach(Talent searchingTalent in allAbilityTalents)
+
+    }
+
+    private void SetAbilitySpecialization(Talent clickedTalent)
+    {
+        //Setze die Spezialisierung der Grundfähigkeit auf jene, des geklickten Talents,
+        clickedTalent.abilityTalent.baseAbility.SetSpec(clickedTalent.abilitySpecialization);
+
+        //Gehe durch die Liste aller möglichen Child-Talents der Grundfähigkeit,
+        foreach (Talent childTalent in clickedTalent.abilityTalent.childTalent)
         {
-            if (searchingTalent.abilityTalent.baseAbility.abilitySpec != clickedTalent.abilityTalent.baseAbility.abilitySpec)
-                clickedTalent.LockTalents();
-        }
-        
+            //Überprüfe, ob die Spezialisierung der entsprechend Child-Talente unterschiedlich ist, von der nun gesetzten,
+            if (childTalent.abilitySpecialization != clickedTalent.abilityTalent.baseAbility.abilitySpec)
+            {
+                //Und sperre diese.
+                childTalent.LockTalent();
 
+            }
+        }
     }
 
     void OnEnable()
@@ -143,7 +153,7 @@ public class TalentTree : MonoBehaviour
                 talent.Unlock();
 
             else
-                talent.LockTalents();
+                talent.LockTalent();
         }
 
         UpdateTalentPointText();
@@ -157,23 +167,6 @@ public class TalentTree : MonoBehaviour
 
     }
     
-    //Trivial - untersucht alle Talente auf ihre Typ hin und fügt sie entsprechenden Listen hinzu.
-    void CalculateAllTalents()
-    {
-
-        foreach(Talent talent in talents)
-        {
-            if (talent.talentType == TalentType.Void)
-                voidTalents.Add(talent);
-
-            if (talent.talentType == TalentType.Combat)
-                combatTalents.Add(talent);
-
-            if (talent.talentType == TalentType.Utility)
-                lifeTalents.Add(talent);
-        }
-
-    }
 
     //Funktion um die Verbindungen zwischen den Talenten herzustellen
     //UILineRenderer currently creates Null-Reference on Start, however the interface is drawn accordingly.

@@ -9,22 +9,25 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 {
     #region TalentTree Stuff
 
+
+    //CheckForUnlock soll überprüfen, ob im Talenbaum ausreichend Talentpunkte gesammelt wurden, damit das entsprechende Talent freigeschaltet werden kann.
     public void CheckForUnlock()
     {
+        //In Abhängigkeit vom Typ der Fähigkeit, wird der Talentbaum auf eine entsprchend ausreichende Anzahl von Spezialisierungspunkten überprüft.
         switch(baseAbility.abilityType)
         {
             case Ability.AbilityType.Combat:
-                if (TalentTree.instance.totalCombatPoints >= baseAbility.requiredTypePoints)
+                if (TalentTree.instance.totalCombatSpecPoints >= baseAbility.requiredTypePoints)
                     Unlock();
                 break;
 
             case Ability.AbilityType.Void:
-                if (TalentTree.instance.totalVoidPoints >= baseAbility.requiredTypePoints)
+                if (TalentTree.instance.totalVoidSpecPoints >= baseAbility.requiredTypePoints)
                     Unlock();
                 break;
 
             case Ability.AbilityType.Utility:
-                if (TalentTree.instance.totalUtilityPoints >= baseAbility.requiredTypePoints)
+                if (TalentTree.instance.totalUtilitySpecPoints >= baseAbility.requiredTypePoints)
                     Unlock();
                 break;
 
@@ -35,6 +38,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
 
     #region Abilitiy Stuff
+
     public Ability baseAbility;
     float cooldownTime;
     float activeTime;
@@ -58,14 +62,6 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
         image = GetComponent<Image>();
         cooldownTime = baseAbility.cooldownTime;
         activeTime = baseAbility.activeTime;
-
-        /*
-        foreach(Talent talent in TalentTree.instance.allTalents)
-        {
-            if (talent.abilityTalent == abilityTalent)
-                abilityTalents.Add(talent);
-        }
-        */
 
     }
 
