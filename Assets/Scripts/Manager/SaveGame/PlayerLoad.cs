@@ -130,17 +130,17 @@ public class PlayerLoad : MonoBehaviour
 
                 else
                 {
-                    talent.LockTalents();
+                    talent.LockTalent();
                 }
 
             }
             talentTree.UpdateTalentPointText();
 
-            talentTree.totalVoidPoints = data.savedVP; 
+            talentTree.totalVoidSpecPoints = data.savedVP; 
             
-            talentTree.totalUtilityPoints = data.savedLP; 
+            talentTree.totalUtilitySpecPoints = data.savedLP; 
             
-            talentTree.totalCombatPoints = data.savedCP;
+            talentTree.totalCombatSpecPoints = data.savedCP;
 
         }
     }

@@ -198,11 +198,11 @@ public class PlayerSave
 
         TalentTree talentTree = Object.FindObjectOfType<TalentTree>();
 
-        savedLP = talentTree.totalUtilityPoints;
+        savedLP = talentTree.totalUtilitySpecPoints;
 
-        savedCP = talentTree.totalCombatPoints;
+        savedCP = talentTree.totalCombatSpecPoints;
 
-        savedVP = talentTree.totalVoidPoints;
+        savedVP = talentTree.totalVoidSpecPoints;
     }
 
     private void SaveTheItems()

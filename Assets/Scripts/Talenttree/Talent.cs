@@ -16,7 +16,11 @@ using UnityEngine.EventSystems;
 public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
-    public TalentType talentType;
+    //bool zum überprüfen, welche Spezialisierungspunkte dem TalenTree hinzugefügt werden sollen.
+    private bool voidTalent, combatTalent, utilityTalent;
+
+    //Enum Referenz zum Abgleich, ob die Spezialisierung des Talents jener der Base-Ability entspricht.
+    public Ability.AbilitySpecialization abilitySpecialization;
 
 
     public AbilityTalent abilityTalent;
@@ -126,7 +130,7 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
 
 
-    public void LockTalents()
+    public void LockTalent()
     {
         image.color = Color.grey;
 
@@ -159,77 +163,33 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     }
 
-    public void IncreaseTalentTypePoins(Talent talent)
+
+    //Methode, um die entsprechenden Spezialisierungspunkte im TalenTree zu erhöhen.
+    //Parameter ggf. unnötig.
+    public void IncreaseTalentTreeSpecPoints(Talent talent)
     {
-        //Prüfe welchen Typ das Talent besitzt.
-        switch (talent.talentType)
-        {
-            //Falls das Talent vom Typ Utility ist
-            case TalentType.Utility:
 
-                //Erhöhe den Utility-Counter der dazugehörigen BaseAbility um 1
-                abilityTalent.baseAbility.utilityCounter += 1;
+        if(talent.voidTalent)
+            TalentTree.instance.totalVoidSpecPoints++;
 
-                //..und erhöhe den TotalCounter von Utility
-                TalentTree.instance.totalUtilityPoints++;
+        if (talent.combatTalent)
+            TalentTree.instance.totalCombatSpecPoints++;
 
-                /* - Als die Klasse Spells verantwortlich war für die aktiven Fähigkeiten, wurde diese herangehensweise benutzt.
-                 * - Außerdem ist der Approach verkehrt herum gewesen. (Das Talent sollte lieber in TalenTree prüfen,
-                 * - ob dieser ausreichend Punkte in der entsprechenden Kategorie hat, bevor um es dann zu entsperren - nicht vice versa)
-                foreach (Talent lT in TalentTree.instance.lifeTalents)
-                {
-                        lT.collectedTypePoints = TalentTree.instance.totalUtilityPoints;
+        if (talent.utilityTalent)
+            TalentTree.instance.totalUtilitySpecPoints++;
 
-                    if (lT.collectedTypePoints == lT.requiredTypePoints && lT is Spell)
-                        lT.Unlock();
-                }
-                */
-
-                break;
-
-            case TalentType.Combat:
-
-                abilityTalent.baseAbility.combatCounter += 1;
-
-                TalentTree.instance.totalCombatPoints++;
-                /*
-                foreach (Talent cT in TalentTree.instance.combatTalents)
-                {
-                        cT.collectedTypePoints = TalentTree.instance.totalCombatPoints;
-
-                    if (cT.collectedTypePoints == cT.requiredTypePoints && cT is Spell)
-                        cT.Unlock();
-                }
-                */
-                break;
-
-            case TalentType.Void:
-
-                abilityTalent.baseAbility.voidCounter += 1;
-
-                TalentTree.instance.totalVoidPoints++;
-                /*
-                foreach(Talent vT in TalentTree.instance.voidTalents)
-                {
-                        vT.collectedTypePoints = TalentTree.instance.totalVoidPoints;
-
-                    if (vT.collectedTypePoints == vT.requiredTypePoints && vT is Spell)
-                        vT.Unlock();
-                }
-                */
-                break;
-
-        }
-
+        //Überprüfe, ob entsprechende Talente im TalentTree durch das erreichen von totalSpecPoints freigeschaltet wurde.
         foreach (AbilityTalent abilityTalent in TalentTree.instance.allAbilityTalents)
             abilityTalent.CheckForUnlock();
     }
 
 
+
+
     public void OnPointerClick(PointerEventData eventData)
     {
         TalentTree.instance.TryUseTalent(this);
-        print(abilityTalent.baseAbility.voidCounter);
+        //print(abilityTalent.baseAbility.spec1Counter);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -18,7 +18,10 @@ MonoBehaviour:
   cooldownTime: 20
   activeTime: 0.5
   image: {fileID: 9112533196635184193, guid: 4a1d20c61ab08a14f9b2fe5c33e8bcf0, type: 3}
-  voidCounter: 0
-  combatCounter: 0
-  utilityCounter: 0
+  abilityType: 2
+  requiredTypePoints: 0
+  abilitySpec: 0
+  spec1Counter: 3
+  spec2Counter: 0
+  spec3Counter: 0
   healAmount: 10

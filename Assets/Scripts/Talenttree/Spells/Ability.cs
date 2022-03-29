@@ -29,37 +29,40 @@ public class Ability : ScriptableObject
     public Sprite image;
     public Sprite icon => image;
 
-    //Spezialisierungs Enum
+    /// <summary>
+    /// Daten zum Typ der Fähigkeit.
+    /// </summary>
     public enum AbilityType { Void, Combat, Utility}; // Wird in Abhängigkeit vom Talent entschieden.
 
     public AbilityType abilityType;
 
-    public enum AbilitySpecialization { VoidSpec, CombatSpec, UtilitySpec}
+    public int requiredTypePoints;
+
+    /// <summary>
+    /// Daten zur Spezialisierung der Fähigkeit.
+    /// </summary>
+    public enum AbilitySpecialization { Undefined, Spec1, Spec2, Spec3}
 
     public AbilitySpecialization abilitySpec;
 
 
-    //Integers, welche sich erhöhen, sobald ein entsprechendes Talent erhöht wird.
-    [HideInInspector]
-    public int voidCounter, combatCounter, utilityCounter;
 
-    public int requiredTypePoints;
 
     //Wenn wir das hier
     public virtual void Use(GameObject entitie)
     {
-        //Falls eine Spezialisierung der Fähigkeit vorliegt, sollte die Fähigkeit stets die entsprechenden Spezialisierungen.
+        //Falls eine Spezialisierung der Fähigkeit vorliegt, sollte die Fähigkeit stets die entsprechenden Spezialisierungen ausführen.
         switch(abilitySpec)
         {
-            case AbilitySpecialization.VoidSpec:
+            case AbilitySpecialization.Spec1:
                 VoidSpec();
                 break;
 
-            case AbilitySpecialization.CombatSpec:
+            case AbilitySpecialization.Spec2:
                 CombatSpec();
                 break;
 
-            case AbilitySpecialization.UtilitySpec:
+            case AbilitySpecialization.Spec3:
                 UtilitySpec();
                 break;
         }
@@ -84,19 +87,16 @@ public class Ability : ScriptableObject
     }
 
 
-    //Sobald der Spieler eine Fähigkeit skill, gehen entsprechende Counter hoch.
+    //Sobald der Spieler eine Fähigkeit skillt, gehen entsprechende Counter hoch.
     //Sobald diese Counter >= 0 sind, werden alle anderen Talente welche sich auf diese Fähigkeit beziehen, gelocked.
     //Außerdem sollte zusätzlich dafür gesorgt werden, das die entsprechenden Spec-Uses benutzt werden.
-    public void SetSpec()
+
+
+    public void SetSpec(AbilitySpecialization specialization)
     {
-        if (combatCounter >= 0)
-            abilitySpec = AbilitySpecialization.CombatSpec;
+        abilitySpec = specialization;
 
-        if (utilityCounter >= 0)
-            abilitySpec = AbilitySpecialization.UtilitySpec;
 
-        if (voidCounter >= 0)
-            abilitySpec = AbilitySpecialization.VoidSpec;
 
         Debug.Log(abilitySpec);
     }
