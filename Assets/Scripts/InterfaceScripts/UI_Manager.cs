@@ -78,6 +78,7 @@ public class UI_Manager : MonoBehaviour
 
         mainMenuKey = KeyCode.Escape;
 
+        if (KeyManager.MyInstance != null)
         pickKey = KeyManager.MyInstance.Keybinds["PICK"];
 
         toggleCamKey = KeyCode.Tab;

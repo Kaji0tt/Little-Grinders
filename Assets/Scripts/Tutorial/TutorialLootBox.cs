@@ -75,7 +75,7 @@ public class TutorialLootBox : MonoBehaviour
 
             tutorialUI2.gameObject.SetActive(true);
 
-            tutorialUI2.GetComponent<Animator>().SetInteger("Arrow", 1);
+            //tutorialUI2.GetComponent<Animator>().SetInteger("Arrow", 1);
         }
 
     }
@@ -88,7 +88,7 @@ public class TutorialLootBox : MonoBehaviour
 
             tutorialUI3.gameObject.SetActive(true);
 
-            tutorialUI3.GetComponent<Animator>().SetInteger("Arrow", 2);
+            //tutorialUI3.GetComponent<Animator>().SetInteger("Arrow", 2);
         }
 
     }

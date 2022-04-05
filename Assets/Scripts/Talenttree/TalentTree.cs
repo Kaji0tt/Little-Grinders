@@ -17,10 +17,10 @@ public class TalentTree : MonoBehaviour
     {
         instance = this;
 
-        talents = FindObjectsOfType<Talent>();
+        allTalents = FindObjectsOfType<Talent>();
 
-        foreach (Talent talent in talents)
-            talent.SetTalentVariables();
+        foreach (Talent talent in allTalents)
+            talent.SetTalentUIVariables();
 
         //Untersucht alle Talente auf ihre Typ hin und fügt sie entsprechenden Listen hinzu.
         //CalculateAllTalents();
@@ -46,13 +46,10 @@ public class TalentTree : MonoBehaviour
     public Transform talentLineParent;
 
 
-    public Talent[] talents { get; private set; }
+    public Talent[] allTalents { get; private set; }
 
     [SerializeField]
     public Talent defaultTalent; 
-
-    [HideInInspector]
-    public Talent[] allTalents;
 
     //Alle Aktiven Fähigkeiten des Talentbaums werden hier einer Liste hinzugefügt.
     public List<Talent> allAbilityTalents = new List<Talent>();
@@ -76,12 +73,15 @@ public class TalentTree : MonoBehaviour
     public int totalUtilitySpecPoints = 0;
     [HideInInspector]
     public int totalCombatSpecPoints = 0;
+
+    /*
     [HideInInspector]
     public List<Talent> voidTalents = new List<Talent>();
     [HideInInspector]
     public List<Talent> lifeTalents = new List<Talent>();
     [HideInInspector]
     public List<Talent> combatTalents = new List<Talent>();
+    */
 
     public void TryUseTalent(Talent clickedTalent)
     {
@@ -101,9 +101,11 @@ public class TalentTree : MonoBehaviour
             }
             #endregion
 
-            //Falls das geskillte Talent keien Fähigkeit ist, setze die Spezialisierung.
+            //Falls das geskillte Talent keine Fähigkeit ist, setze die entsprechende Spezialisierung für die Grundfähigkeit.
             if(clickedTalent.GetType() != typeof(AbilityTalent))
-            SetAbilitySpecialization(clickedTalent);
+            SetSpecializationOfAbility(clickedTalent);
+
+            //Increase Spec-Counter
 
 
             PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
@@ -113,7 +115,7 @@ public class TalentTree : MonoBehaviour
 
     }
 
-    private void SetAbilitySpecialization(Talent clickedTalent)
+    private void SetSpecializationOfAbility(Talent clickedTalent)
     {
         //Setze die Spezialisierung der Grundfähigkeit auf jene, des geklickten Talents,
         clickedTalent.abilityTalent.baseAbility.SetSpec(clickedTalent.abilitySpecialization);
@@ -147,7 +149,7 @@ public class TalentTree : MonoBehaviour
     
     public void ResetTalents()
     {
-        foreach (Talent talent in talents)
+        foreach (Talent talent in allTalents)
         {
             if (talent == defaultTalent)
                 talent.Unlock();
@@ -168,11 +170,12 @@ public class TalentTree : MonoBehaviour
     }
     
 
+
     //Funktion um die Verbindungen zwischen den Talenten herzustellen
     //UILineRenderer currently creates Null-Reference on Start, however the interface is drawn accordingly.
     private void DrawTalentTreeLines()
     {
-        foreach (Talent talent in talents)
+        foreach (Talent talent in allTalents)
         {
             //Erschaffe ein neues GO für die Talent-Tree Line
             GameObject gameObject = new GameObject("_TalentLine", typeof(UILineRenderer));

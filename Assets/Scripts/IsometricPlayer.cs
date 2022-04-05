@@ -3,8 +3,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class IsometricPlayer : MonoBehaviour
+///Bezogen auf das Debuff / Bufff System, bzw. die Abilities:
+///Auf dem Spieler liegt eine Liste von Abilities - wenn der Spieler ein AbilityTalent benutzt, wird nach der Ability in der entsprechenden Liste gesucht, welche sich mit der BaseAbility vom AbilityTalent gleicht.
+///Eine InterfaceKlasse DeBuffSystem könnte auf die OnTicks(), OnUse(), und OnCooldowns() von Abilities zugreifen und die... - Ne das stupid.
+public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 {
+    //private List<Ability> abilities = new List<Ability>();
+    //private HashSet<Ability> abilities;
+    private Dictionary<string, Ability> abilities;
+
     #region Implementation - Basic 
 
     //Klasse, welche Isometrische Darstellungen kalkuliert.
@@ -150,6 +157,8 @@ public class IsometricPlayer : MonoBehaviour
     //Fixed Update wird gecalled, vor der physikalischen Berechning innerhalb eines Frames.
     void FixedUpdate()
     {
+        //abilities[0].UseBase(this.gameObject);
+
         MapView();
 
         Move();

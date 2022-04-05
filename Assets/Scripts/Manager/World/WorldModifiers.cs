@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//WTF ist das hier für eine Klasse
 public class WorldModifiers : MonoBehaviour
 {
     public static WorldModifiers instance;

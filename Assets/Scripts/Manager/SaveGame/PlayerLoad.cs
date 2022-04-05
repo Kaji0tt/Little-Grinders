@@ -105,19 +105,19 @@ public class PlayerLoad : MonoBehaviour
         foreach (TalentSave savedTalent in data.talentsToBeSaved)
         {
             Debug.Log("loading Talent: " + savedTalent.talentName + " loading it for " + talentTree.gameObject.name);
-            for (int i = 0; i < talentTree.talents.Length; i++)
+            for (int i = 0; i < talentTree.allTalents.Length; i++)
             {
-                if (talentTree.talents[i].name == savedTalent.talentName)
+                if (talentTree.allTalents[i].name == savedTalent.talentName)
                 {
-                    talentTree.talents[i].Set_currentCount(savedTalent.talentPoints);
+                    talentTree.allTalents[i].Set_currentCount(savedTalent.talentPoints);
 
-                    talentTree.talents[i].unlocked = savedTalent.unlocked;
+                    talentTree.allTalents[i].unlocked = savedTalent.unlocked;
 
-                    talentTree.talents[i].UpdateTalent();
+                    talentTree.allTalents[i].UpdateTalent();
                 }
             }
 
-            foreach(Talent talent in talentTree.talents)
+            foreach(Talent talent in talentTree.allTalents)
             {
                 if (talent.unlocked)
                 {
@@ -202,7 +202,7 @@ public class PlayerLoad : MonoBehaviour
         if (data.savedActionButtons[i] != null)
         {
 
-            foreach (Spell spell in TalentTree.instance.talents.OfType<Spell>())
+            foreach (Spell spell in TalentTree.instance.allTalents.OfType<Spell>())
             {
                 if (spell.GetSpellName == data.savedActionButtons[i])
                 {
