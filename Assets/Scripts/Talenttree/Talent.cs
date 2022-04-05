@@ -30,6 +30,9 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     [TextArea]
     private string description;
 
+    public string talentID;
+    public string talentName;
+
     public string GetDescription
     {
         get
@@ -85,7 +88,7 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
 
     //Void to be called in TalentTree.cs for structural purpose.
-    public void SetTalentVariables()
+    public void SetTalentUIVariables()
     {
         image = GetComponent<Image>();
         countText = transform.GetComponentInChildren<Text>();
@@ -166,6 +169,7 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     //Methode, um die entsprechenden Spezialisierungspunkte im TalenTree zu erhöhen.
     //Parameter ggf. unnötig.
+    
     public void IncreaseTalentTreeSpecPoints(Talent talent)
     {
 
@@ -182,7 +186,7 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         foreach (AbilityTalent abilityTalent in TalentTree.instance.allAbilityTalents)
             abilityTalent.CheckForUnlock();
     }
-
+    
 
 
 

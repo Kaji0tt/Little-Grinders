@@ -654,8 +654,6 @@ MonoBehaviour:
   xp: 25
   castCD: 0
   attackCD: 1
-  aggroRange: 2
-  attackRange: 1
 --- !u!114 &2096321489943616784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,9 +670,8 @@ MonoBehaviour:
   ikAnimated: 0
   hpBar: {fileID: 2096321488921371614}
   enemyHpSlider: {fileID: 2096321489200344703}
-  level: 1
-  attackRange: 0
-  aggroRange: 0
+  attackRange: 2
+  aggroRange: 3
   lootTable: 0
   pulled: 0
 --- !u!54 &2096321489943616787

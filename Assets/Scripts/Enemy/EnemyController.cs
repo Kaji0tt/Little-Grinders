@@ -67,6 +67,9 @@ public class EnemyController : MonoBehaviour
     Vector2 inputVector;
     public bool pulled;
 
+    private bool stun;
+    private float stunTime;
+
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
     void OnDrawGizmosSelected()
     {
@@ -137,12 +140,28 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
 
-        CheckForAggro();
+        if(!stun)
+        {            
+            CheckForAggro();      
+        }
+        else if (stun)
+        {
+            navMeshAgent.SetDestination(transform.position);
+            isoRenderer.inCombatStance = false;
+            stunTime -= Time.deltaTime;
+            if (stunTime <= 0)
+                stun = false;
+        }
 
         CalculateHPCanvas();
-
     }
 
+    public void StunEnemy(float duration)
+    {
+        stun = true;
+        stunTime = duration;
+
+    }
 
     public virtual void CheckForAggro()
     {

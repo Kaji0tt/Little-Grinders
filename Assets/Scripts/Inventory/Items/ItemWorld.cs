@@ -143,7 +143,7 @@ public class ItemWorld : MonoBehaviour
 
             //Hier ist noch ein Fehler - beziehen wir uns auf den UI-Manager Key, wird das Item doppel aufgesammelt.
             if (Input.GetKey(UI_Manager.instance.pickKey))
-            //if (itemWorld != null && Input.GetKey(KeyCode.Q)) 
+            //if (Input.GetKey(KeyCode.Q)) 
             {
 
                 //Falls noch Platz im Inventar ist
