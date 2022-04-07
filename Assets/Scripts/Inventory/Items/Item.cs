@@ -385,6 +385,12 @@ public class ItemInstance :  IMoveable, IUseable
 
         return 0;
     }
+
+    public bool IsActive()
+    {
+        throw new NotImplementedException();
+    }
+
 }
 
 

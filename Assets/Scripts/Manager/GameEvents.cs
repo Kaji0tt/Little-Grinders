@@ -18,6 +18,9 @@ public class GameEvents : MonoBehaviour
     public event Action<ItemInstance> equipWeapon;
     public event Action<ItemInstance> equipSchmuck;
 
+    public event Action<float, GameObject> entitieAttacked;
+
+    public event Action<string> playSound;
     //private IsometricPlayer isometricPlayer;
 
     
@@ -46,6 +49,16 @@ public class GameEvents : MonoBehaviour
             case ItemType.Consumable:
                 //Placeholder. Call for ItemDelte or something. --> Irgendwie, wird das irgendwo anders schon gemacht.
                 break;
+
+        }
+
+    }
+
+    public void OnEntitieAttack(float damage, GameObject entitie)
+    {
+        //Nothing yet.
+        if(entitieAttacked != null)
+        {
 
         }
 

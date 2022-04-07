@@ -10,7 +10,7 @@ public class _projectile : MonoBehaviour
 
     private Quaternion _pRotation;
 
-    public bool _pSpecialEffect;
+    public bool _pSpecialEffect = true;
 
     [HideInInspector]
     public float _pDamage;
@@ -24,6 +24,8 @@ public class _projectile : MonoBehaviour
     public GameObject _hitEnvParticles;
 
     private Rigidbody _pRbody;
+
+    //public Buff specialEffect;
 
     private enum Trajectory { FollowTarget, Direction, Falling, Curve}
 
@@ -81,7 +83,8 @@ public class _projectile : MonoBehaviour
         {
             if(_pSpecialEffect)
             {
-                ApplySpecialEffect();
+                print("special affect should be applied");
+                ApplySpecialEffect(collider);
             }
             else
             {
@@ -98,8 +101,11 @@ public class _projectile : MonoBehaviour
 //muss frei bleiben hier.
     }
 
-    public virtual void ApplySpecialEffect()
+    public virtual void ApplySpecialEffect(Collider collider)
     {
 
+        Poison poison = collider.gameObject.AddComponent<Buff>() as Poison;
+        poison.duration = 5f;
+        poison.damage = collider.GetComponent<PlayerStats>().Get_maxHp() / 50;
     }
 }

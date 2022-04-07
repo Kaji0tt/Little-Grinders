@@ -7794,6 +7794,12 @@ MonoBehaviour:
     volume: 0.25
     loop: 0
     source: {fileID: 0}
+  - name: Heal_Tick_1
+    clip: {fileID: 8300000, guid: 66c1ca433dea92547a238de85fec9266, type: 3}
+    soundType: 0
+    volume: 0.25
+    loop: 0
+    source: {fileID: 0}
   sounds: []
   interfaceSlider: {fileID: 1065741200}
   musicSlider: {fileID: 855593263}
@@ -10786,7 +10792,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 920448029}
   m_Direction: 2
   m_Value: 0.98106784
-  m_Size: 0.5758503
+  m_Size: 0.57585037
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
