@@ -55,6 +55,10 @@ public class UI_Manager : MonoBehaviour
     [SerializeField]
     private CanvasGroup mapTab;
 
+    private List<CanvasGroup> canvasGroup = new List<CanvasGroup>();
+
+    bool allCanvasGroupsClosed;
+
 
     private List<KeyCode> keyCodes = new List<KeyCode>();
 
@@ -67,7 +71,12 @@ public class UI_Manager : MonoBehaviour
     private void OnEnable()
     {
         GameIsPaused = false;
+
+        //Die KeyBindButtons sind die Anzeigen der Zugewiesenen KeyBindings im Menü. Bsp.: Key
         keyBindButtons = GameObject.FindGameObjectsWithTag("KeyBindings");
+
+
+        
     }
 
 
@@ -100,6 +109,8 @@ public class UI_Manager : MonoBehaviour
 
     private void Update()
     {
+
+
             //Interface Abfrage des Cursos sollte implementiert werden.
 
             //Action-Bars
@@ -129,7 +140,7 @@ public class UI_Manager : MonoBehaviour
             ActionButtonOnClick(4);
         }
 
-        if (Input.GetKeyDown(mainMenuKey))
+        if (Input.GetKeyDown(mainMenuKey) && allCanvasGroupsClosed)
         {
 
             if (GameIsPaused)
@@ -171,6 +182,18 @@ public class UI_Manager : MonoBehaviour
                 if (AudioManager.instance != null)
                 AudioManager.instance.Play("CloseMenu");
         }
+
+        //Make it possible to close all Menues by ESCAPE
+        /*
+        if(Input.GetKeyDown(KeyCode.Escape) && !GameIsPaused)
+        {
+            foreach(CanvasGroup canvas in canvasGroup)
+            {
+                if (canvas.alpha == 1)
+                    OpenCloseMenu(canvas);
+            }
+        }
+        */
 
     }
 
@@ -261,7 +284,6 @@ public class UI_Manager : MonoBehaviour
     {
         canvas.alpha = canvas.alpha > 0 ? 0 : 1; 
         canvas.blocksRaycasts = canvas.blocksRaycasts == true ? false : true;
-
     }
 
     //Es sollte noch geschaut werden, inwiefern das UI nach Szenen-Wechsel gespeichert werden kann.

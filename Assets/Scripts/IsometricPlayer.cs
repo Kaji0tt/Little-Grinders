@@ -175,7 +175,8 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         {        
             idle_time = 0;
             transform.rotation = Quaternion.Euler(45,0,0);
-            Camera.main.fieldOfView = userFOV;
+            //05.04.22 Derzeit wird nicht die UserFOV verwendet, da die Kamera im Idlestate ganz nah den spieler zu snappen scheint.
+            Camera.main.fieldOfView = 15;
             idle = false;           
         }
        
@@ -392,7 +393,11 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
             {
                 //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
                 if (enemy != null)
+                {
                     enemy.TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+                    
+                }
+
             }
         }
 

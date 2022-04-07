@@ -92,6 +92,7 @@ public class E_Caster : EnemyController
         if(isoRenderer.DirectionToIndex(CalculatePlayerDirection(), 4) < 2)
         Instantiate(projectile, new Vector3(transform.position.x + projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform).GetComponent<_projectile>()._pDamage = projectileDamage;
 
+
         else
         Instantiate(projectile, new Vector3(transform.position.x - projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform).GetComponent<_projectile>()._pDamage = projectileDamage;
     }

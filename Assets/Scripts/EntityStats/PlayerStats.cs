@@ -146,6 +146,13 @@ public class PlayerStats : MonoBehaviour
 
     }
 
+    public void TakeDirectDamage(float damage)
+    {
+        Set_currentHp(-damage);
+        if (currentHp <= 0)
+            Die();
+    }
+
     //Ggf. TakeDirectDamage hinzufügen? Oder TakeMagicDamage oder ähnliches? Bis dahin wird Schaden lediglich abzgl. Armor abgerechnet.
 
     public void Heal (int healAmount)

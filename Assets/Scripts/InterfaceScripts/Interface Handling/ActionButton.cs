@@ -19,9 +19,12 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler //IEndDragHandle
 
     public Image image { get; private set; }
 
+    //Color lerpColor = Color.white;
+
     public GameObject cdButton;
     private Text cdText;
 
+    Color lerpColor = Color.white;
 
 
     void Start()
@@ -43,6 +46,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler //IEndDragHandle
 
     void Update()
     {
+        //Farbe während die Ability auf Cooldown ist.
         if (MyUseable != null && MyUseable.IsOnCooldown())
         {
 
@@ -56,12 +60,22 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler //IEndDragHandle
 
 
         }
+        //Farbe während die Ability nicht auf Cooldown ist.
         else if (MyUseable != null && !MyUseable.IsOnCooldown())
         {
 
             MyButton.image.color = Color.white;
 
             cdButton.SetActive(false);
+
+        }
+        //Farbe während die Ability aktiv ist.
+        if (MyUseable != null && MyUseable.IsActive())
+        {
+
+            Color lerpColor = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+
+            MyButton.image.color = lerpColor;
 
         }
 
