@@ -4,43 +4,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//Very Basic. Poison should fetch the AP Values of it's origin.
+
+[CreateAssetMenu(menuName = "Buff/Poison")]
 public class Poison : Buff
 {
-    float tickTimer;
-    float tick;
-
     public float damage;
 
-    new float duration;
-    // Start is called before the first frame update
-    void Start()
+    //private Transform targetTransform;
+    //public IEntitie target;
+
+    public override void Activated(IEntitie target, Transform targetTransform)
     {
 
-        tick = tickTimer;
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+    public override void Update()
+    {
+        //Debug.Log("Original Buff Update is being called.");
+        if(active)
+        {
+            //Debug.Log("Posion is currently active.");
+        }
+    }
+    public override void OnTick(IEntitie target)
     {
         
-        tick -= Time.deltaTime;
-
-        if(tick <= 0)
-        {
-            OnTick();
-            tick = tickTimer;
-        }
-
-
-        duration -= Time.deltaTime;
-        if (duration <= 0)
-            Destroy(this);
+       target.TakeDirectDamage(damage, 0);  
+        
     }
 
-    private void OnTick()
+    public override void Expired(IEntitie target, Transform targetTransform)
     {
-        PlayerStats pStats = this.gameObject.GetComponent<PlayerStats>();
-        pStats.TakeDirectDamage(damage);
+        //Debug.Log("Poison Expired.");
     }
+
+
 }

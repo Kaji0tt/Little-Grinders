@@ -4950,6 +4950,7 @@ MonoBehaviour:
     BaseValue: 2
   AttackSpeed:
     BaseValue: 1
+  activeBuffs: []
   xp: 0
   attackCD: 1
   Range: 0
@@ -18328,6 +18329,8 @@ MonoBehaviour:
   healAmount: 10
   healAuraEffect: {fileID: 7052221280941909710, guid: 8847e58df1973f240bfa40e77a247d6b,
     type: 3}
+  healAuraTick: {fileID: 2798696756318865917, guid: 8cc4acbc16c46c047a2266db6c281f25,
+    type: 3}
 --- !u!114 &1028420631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28249,7 +28252,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1232569105}
   m_Direction: 2
   m_Value: 1.0000001
-  m_Size: 0.46374434
+  m_Size: 0.4637443
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

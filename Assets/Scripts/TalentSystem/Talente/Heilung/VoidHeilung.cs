@@ -48,7 +48,7 @@ public class VoidHeilung : Talent, IPointerEnterHandler, IPointerExitHandler
                 if (heilungVoidMax.currentCount == 1)
                     damage = damage * 2;
 
-                hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage((int)(damage), radius + currentCount);
+                hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage((int)(damage), radius + currentCount);
 
 
             }

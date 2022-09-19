@@ -73,7 +73,7 @@ public class Ability : MonoBehaviour
         spec3Talents = new List<Talent>();
     }
 
-    public virtual void UseBase(GameObject entitie)
+    public virtual void UseBase(IEntitie entitie)
     {
         //Falls eine Spezialisierung der Fähigkeit vorliegt, sollte die Fähigkeit stets zusätzlich die entsprechenden Spezialisierungen ausführen.
         switch(abilitySpec)
@@ -93,7 +93,7 @@ public class Ability : MonoBehaviour
     }
 
 
-    public virtual void CallAbilityFunctions(string action, GameObject entitie)
+    public virtual void CallAbilityFunctions(string action, IEntitie entitie)
     {
         switch (abilitySpec)
         {
@@ -134,57 +134,57 @@ public class Ability : MonoBehaviour
     }
 
     //Use Functions.
-    public virtual void OnUseSpec1(GameObject entitie)
+    public virtual void OnUseSpec1(IEntitie entitie)
     {
 
     }
 
-    public virtual void OnUseSpec2(GameObject entitie)
+    public virtual void OnUseSpec2(IEntitie entitie)
     {
 
     }
 
-    public virtual void OnUseSpec3(GameObject entitie)
-    {
-
-    }
-
-
-    //Tick Functions
-    public virtual void OnTickSpec1(GameObject entitie)
-    {
-
-    }
-
-    public virtual void OnTickSpec2(GameObject entitie)
-    {
-
-    }
-
-    public virtual void OnTickSpec3(GameObject entitie)
+    public virtual void OnUseSpec3(IEntitie entitie)
     {
 
     }
 
 
+    //Tick Functions - Should rather be Managed mit dem Buff-System.
+    public virtual void OnTickSpec1(IEntitie entitie)
+    {
 
-    public virtual void OnCooldown(GameObject entitie)
+    }
+
+    public virtual void OnTickSpec2(IEntitie entitie)
+    {
+
+    }
+
+    public virtual void OnTickSpec3(IEntitie entitie)
+    {
+
+    }
+
+
+
+    public virtual void OnCooldown(IEntitie entitie)
     {
 
     }
     //On Cooldown Start Functions
-    public virtual void OnCooldownSpec1(GameObject entitie)
+    public virtual void OnCooldownSpec1(IEntitie entitie)
     {
         // In case you'd want the entitie to be faster for the active time, you may add a StatModifier OnUse and remove it OnCooldown.
         
     }
 
-    public virtual void OnCooldownSpec2(GameObject entitie)
+    public virtual void OnCooldownSpec2(IEntitie entitie)
     {
 
     }
 
-    public virtual void OnCooldownSpec3(GameObject entitie)
+    public virtual void OnCooldownSpec3(IEntitie entitie)
     {
 
     }

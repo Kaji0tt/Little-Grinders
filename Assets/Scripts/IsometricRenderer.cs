@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//Alle Objekte die isometrisch dargestellt werden, werden in 8 Slices eingeteilt um korrekt in der Isometrie angezeigt zu werden.
+//What would actually drasticly improve the Player-Combat Feedback would be, if Attack-Animation was always played, when the NPC is actually attacking.
+
 public class IsometricRenderer : MonoBehaviour
 {
-
-
     //Arrays for Player and NPC's with 8 Directions
     public static readonly string[] staticDirections = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
     public static readonly string[] runDirections = { "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
@@ -42,6 +41,8 @@ public class IsometricRenderer : MonoBehaviour
 
     //Setze Zeit für die Combat-Stance (später sollte diese vom AttackSpeed des Schwertes beeinflusst werden.)
     public bool inCombatStance;
+
+    //public bool isAttacking;
 
     //Die ^ inCombatStance scheint nicht ganz sinnig zu sein. Eher sollte eine Funktion "Play" her, in der beliebige Animationen gespielt werden können.
     //Entsprechende, manuell gschaltete Animationen werden wichtig, sobald NPC's Casts oder Fähigkeiten besitzen.
@@ -144,10 +145,10 @@ public class IsometricRenderer : MonoBehaviour
             //if we are basically standing still, we'll use the Static states
 
             //check what type of iso this GO has
-            if (isoType == IsoType.eightDir)
-                directionArray = staticDirections;
+            //if (isoType == IsoType.eightDir)
+            //    directionArray = staticDirections;
 
-            else if (isoType == IsoType.forDir)
+            //else if (isoType == IsoType.forDir)
                 directionArray = static4Directions;
 
 
@@ -159,39 +160,53 @@ public class IsometricRenderer : MonoBehaviour
             //save the answer to lastDirection
 
             //check if GO is attacking
-            //We are currently not planning on implementing more 8 directional Iso-SpriteSheets, for which we check
-            if (inCombatStance && isoType == IsoType.forDir)
+            /*
+            if (inCombatStance)
             {
-                directionArray = attack4Directions;
+                //directionArray = attack4Directions;
+                directionArray = static4Directions;
 
+                lastDirection = DirectionToIndex(direction, 4);                
+
+            }
+            */
+            if (!inCombatStance)
+            {
+                directionArray = runNPC4Directions;
                 lastDirection = DirectionToIndex(direction, 4);
-
             }
-
-            else if (!inCombatStance || isoType == IsoType.eightDir)
-            {
-                //again, check for isoType of this GO
-                if (isoType == IsoType.eightDir)
-                {
-                    directionArray = runNPCDirections;
-                    lastDirection = DirectionToIndex(direction, 8);
-                }
-
-
-                else if (isoType == IsoType.forDir)
-                {
-                    directionArray = runNPC4Directions;
-                    lastDirection = DirectionToIndex(direction, 4);
-                }
-            }
-
-
-
 
         }
 
         //tell the animator to play the requested state
+        //print(lastDirection);
         animator.Play(directionArray[lastDirection]);
+    }
+
+    public void AttackAnimation()
+    {
+        
+        //isAttacking = true;
+
+        animator.Play(attack4Directions[lastDirection]);
+
+        AnimatorClipInfo[] currentClipInfo = animator.GetCurrentAnimatorClipInfo(0);
+
+        print("Name:" + currentClipInfo[0].clip.name);
+        print("Length:" + currentClipInfo[0].clip.length);
+
+        float attackDuration = currentClipInfo[0].clip.length;
+
+        attackDuration -= Time.deltaTime;
+
+        print(attackDuration);
+        if (attackDuration <= 0)
+        {
+            animator.Play(static4Directions[lastDirection]);
+            //inCombatStance = false;
+        }
+
+
     }
 
     public void AnimateCast(Vector2 direction)

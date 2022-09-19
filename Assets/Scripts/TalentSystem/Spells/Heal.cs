@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[CreateAssetMenu(fileName = "Heal", menuName = "Assets/Spells/Heal")]
+
+//Currently Heal - Aura is broken. Fixing it makes no sense, since the "Buff" System should be done in first place. Heal then might become a Buff.
 public class Heal : Ability
 {
     public float healAmount;
@@ -27,7 +29,7 @@ public class Heal : Ability
     //private var auraEffect;
 
     #region UseRegion
-    public override void UseBase(GameObject entitie)
+    public override void UseBase(IEntitie entitie)
     {
 
         base.UseBase(entitie);
@@ -36,9 +38,12 @@ public class Heal : Ability
 
         ///Entitie sollte woanders zwischen gelagert werden, eigene Methode als Return des Transforms verwenden.
         ///
+        /*
         if (entitie.GetComponent<PlayerStats>() != null)
             entitieAP = entitie.GetComponent<PlayerStats>().AbilityPower.Value;
         else entitieAP = entitie.GetComponent<MobStats>().AbilityPower.Value;
+        */
+        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower);
 
         Debug.Log("entitieAP: " + entitieAP);
 
@@ -46,7 +51,7 @@ public class Heal : Ability
         PlayerManager.instance.player.GetComponent<PlayerStats>().Heal((int)healAmount);
 
         //Erschaffe ein neues GO für den Healaura Effekt
-        Instantiate(healAuraEffect, entitie.transform);
+        Instantiate(healAuraEffect, entitie.GetTransform());
 
         //Setze Parent des GO für vernünftiges UI Layering
         //auraEffect.transform.SetParent(entitie.transform, false);
@@ -55,7 +60,7 @@ public class Heal : Ability
     }
 
     //Möglicherweise reicht eine einzelne Liste von Talenten in Ability, da die Indexes dieser die Referenz für die Values der Spezialisierungen darstellen können.
-    public override void OnUseSpec1(GameObject entitie)
+    public override void OnUseSpec1(IEntitie entitie)
     {
         //Void Spec
 
@@ -65,7 +70,7 @@ public class Heal : Ability
 
         //If spec1 , 2 , 3 Talent[0] current Count >= 0, 
         //
-
+        print("aktive Zeit:" + activeTime);
         ///Erhöht den Radius der Heal-Schadensaura um (Skillpoints of Heilung_Void2)
         ///
         spec1range = 1 + spec1Talents[1].currentCount;
@@ -75,21 +80,21 @@ public class Heal : Ability
         ///
         if(spec1Talents[2].currentCount > 0)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(entitie.transform.position, spec1range);
+            Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, spec1range);
 
             foreach (Collider hitCollider in hitColliders)
             {
                 if (hitCollider.transform.tag == "Enemy")
                 {
                     //print("heal amount:" + healAmount);
-                    hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage(healAmount, spec1range);
+                    hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage(healAmount, spec1range);
                 }
             }
         }
 
     }
 
-    public override void OnUseSpec2(GameObject entitie)
+    public override void OnUseSpec2(IEntitie entitie)
     {
         //Heal Spec
 
@@ -105,6 +110,9 @@ public class Heal : Ability
 
             spec2mod = new StatModifier(spec2speed, StatModType.PercentAdd);
 
+            entitie.AddNewStatModifier(EntitieStats.MovementSpeed, spec2mod);
+
+            /*
             if (entitie.GetComponent<PlayerStats>() != null)
             {
                 PlayerStats pStats = entitie.GetComponent<PlayerStats>();
@@ -116,6 +124,7 @@ public class Heal : Ability
                 mStats.MovementSpeed.AddModifier(spec2mod);
 
             }
+            */
         }
 
         ///Wenn heal genutzt wird, werden alle Gegner im Umkreis von 1 (+ Skillpoints of Heilung_Heal3) für 2 (x Skillpoints of Heilung_Heal3) Sekunden gestunned.
@@ -123,7 +132,7 @@ public class Heal : Ability
         //Stun ist noch nicht implementiert... mist.
         if(spec2Talents[2].currentCount >= 0)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(entitie.transform.position, 1 + spec2Talents[2].currentCount);
+            Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, 1 + spec2Talents[2].currentCount);
 
             foreach (Collider hitCollider in hitColliders)
             {
@@ -135,7 +144,7 @@ public class Heal : Ability
         }
     }
 
-    public override void OnUseSpec3(GameObject entitie)
+    public override void OnUseSpec3(IEntitie entitie)
     {
         //Combat Spec
 
@@ -143,7 +152,11 @@ public class Heal : Ability
         ///
         activeTime = 1 + spec3Talents[0].currentCount;
 
-        if(entitie.GetComponent<PlayerStats>() != null)
+        spec3mod = new StatModifier(entitie.GetStat(EntitieStats.Armor) * 0.2f, StatModType.PercentAdd);
+        entitie.AddNewStatModifier(EntitieStats.Armor, spec3mod);
+
+        /*
+        if (entitie.GetComponent<PlayerStats>() != null)
         {
             if (spec3Talents[0].currentCount > 0)
             {
@@ -153,7 +166,6 @@ public class Heal : Ability
 
                 pStats.Armor.AddModifier(spec3mod);
 
-
             }
 
         }
@@ -161,9 +173,15 @@ public class Heal : Ability
         {
             print("Spec3 für Mob muss noch eingestellt werden");
         }
+        */
 
         ///Während der aktiven Zeitspanne erhöht sich die Waffenstärke um (Skillpoints of Heilung_Combat2) x 10% ATT des Spielers.
         ///
+
+        //  10             *      3                       *  0.1     = 0.3
+        spec3ATmod = new StatModifier(entitie.GetStat(EntitieStats.AttackPower) * spec3Talents[1].currentCount * 0.1f, StatModType.PercentAdd);
+
+        /*
         if (entitie.GetComponent<PlayerStats>() != null)
         {
             if (spec3Talents[1].currentCount > 0)
@@ -182,6 +200,7 @@ public class Heal : Ability
         {
             print("Spec3 für Mob muss noch eingestellt werden");
         }
+        */
 
         ///Während der aktiven Zeitspanne von Heal, erhalten Angreifer 10% der Armor des Spielers (x Skillpoints of Heilung_Combat3) als Schaden.
         ///
@@ -200,7 +219,7 @@ public class Heal : Ability
     #region TickRegion
 
     //Ein TickTimer, welcher alle x Sekunden während der Aktiven Zeit ausgeführt wird. Standard tickTimer ist auf 1 - also alle 1 Sekunden.
-    public override void OnTickSpec1(GameObject entitie)
+    public override void OnTickSpec1(IEntitie entitie)
     {
         //print("Spec1Tick got called");
         //Hier gegebenenfalls nochmal ran, für den fall, das mobs diese fähigkeit verwenden
@@ -208,13 +227,13 @@ public class Heal : Ability
 
         float damage = 4 + (playerStats.AbilityPower.Value / 10);
 
-        Collider[] hitColliders = Physics.OverlapSphere(entitie.transform.position, spec1range);
+        Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, spec1range);
 
         foreach (Collider hitCollider in hitColliders)
         {
             if (hitCollider.transform.tag == "Enemy")
             {
-                hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage(damage, spec1range);
+                hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage(damage, spec1range);
 
             }
         }
@@ -224,15 +243,19 @@ public class Heal : Ability
         if (AudioManager.instance != null)
             AudioManager.instance.Play("Heal_Tick_1");
 
-        Instantiate(healAuraTick, entitie.transform);
+        Instantiate(healAuraTick, entitie.GetTransform());
 
-        Instantiate(healAuraTick, new Vector3(0, 0, -0.3f), Quaternion.identity, entitie.transform);
+        Instantiate(healAuraTick, new Vector3(0, 0, -0.3f), Quaternion.identity, entitie.GetTransform());
 
     }
 
-    public override void OnTickSpec2(GameObject entitie)
+    public override void OnTickSpec2(IEntitie entitie)
     {
+        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower);
 
+        entitie.Heal((int)entitie.Get_maxHp() / 50 + (int)(entitieAP / 10));
+
+        /*
         if (entitie.GetComponent<PlayerStats>() != null)
         {
             PlayerStats pStats = entitie.GetComponent<PlayerStats>();
@@ -246,17 +269,18 @@ public class Heal : Ability
             entitieAP = entitie.GetComponent<MobStats>().AbilityPower.Value;
             print("Der Feind braucht noch eine Zuweisung seiner Entitie im Heal Script");
         }
+        */
 
         if(AudioManager.instance != null)
         AudioManager.instance.Play("Heal_Tick_1");
 
-        Instantiate(healAuraTick, entitie.transform);
+        Instantiate(healAuraTick, entitie.GetTransform());
 
-        Instantiate(healAuraTick, new Vector3(entitie.transform.position.x, entitie.transform.position.y, entitie.transform.position.z - 0.3f), Quaternion.identity, entitie.transform);
+        Instantiate(healAuraTick, new Vector3(entitie.GetTransform().position.x, entitie.GetTransform().position.y, entitie.GetTransform().position.z - 0.3f), Quaternion.identity, entitie.GetTransform());
 
     }
 
-    public override void OnTickSpec3(GameObject entitie)
+    public override void OnTickSpec3(IEntitie entitie)
     {
         //throw new NotImplementedException();
     }
@@ -265,23 +289,23 @@ public class Heal : Ability
 
 
     #region CooldownRegion
-    public override void OnCooldown(GameObject entitie)
+    public override void OnCooldown(IEntitie entitie)
     {
-        Destroy(entitie.transform.Find("HealAura(Clone)").gameObject);
+        Destroy(entitie.GetTransform().Find("Eff_HealAura(Clone)").gameObject);
     }
 
-    public override void OnCooldownSpec1(GameObject entitie)
+    public override void OnCooldownSpec1(IEntitie entitie)
     {
         if (spec1Talents[2].currentCount > 0)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(entitie.transform.position, spec1range);
+            Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, spec1range);
 
             foreach (Collider hitCollider in hitColliders)
             {
                 if (hitCollider.transform.tag == "Enemy")
                 {
                     //print("heal amount:" + healAmount);
-                    hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage(healAmount, spec1range);
+                    hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage(healAmount, spec1range);
                 }
             }
         }
@@ -292,8 +316,11 @@ public class Heal : Ability
         //print("on cooldown got called");
     }
 
-    public override void OnCooldownSpec2(GameObject entitie)
+    public override void OnCooldownSpec2(IEntitie entitie)
     {
+
+        entitie.RemoveStatModifier(EntitieStats.MovementSpeed, spec2mod);
+        /*
         if (entitie.GetComponent<PlayerStats>() != null)
         {
             PlayerStats pStats = entitie.GetComponent<PlayerStats>();
@@ -305,13 +332,14 @@ public class Heal : Ability
             mStats.MovementSpeed.RemoveModifier(spec2mod);
 
         }
-
+        */
         //Destroy(entitie.transform.Find("HealAura(Clone)").gameObject);
     }
 
-    public override void OnCooldownSpec3(GameObject entitie)
+    public override void OnCooldownSpec3(IEntitie entitie)
     {
-        
+        entitie.RemoveStatModifier(EntitieStats.Armor, spec3mod);
+        /*
         if (entitie.GetComponent<PlayerStats>() != null)
         {
 
@@ -334,6 +362,7 @@ public class Heal : Ability
         {
             print("Spec3 für Mob muss noch eingestellt werden");
         }
+        */
     }
     #endregion
 }

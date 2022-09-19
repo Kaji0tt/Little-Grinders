@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+//Um bestimmte Buffs hinzuzufügen, kann im Projektil GetComponent<Buff> gecalled werden, falls dies != null ist, kann der entsprechende Buff bei
+//Kollision applied werden.
 public class _projectile : MonoBehaviour
 {
     private Vector3 _pDirection;
@@ -11,6 +13,12 @@ public class _projectile : MonoBehaviour
     private Quaternion _pRotation;
 
     public bool _pSpecialEffect = true;
+
+    //Schön wäre eine Liste, bzw. ein Dict in welchem die Buffs liegen. Perfekter Weise ein Enum mit ScriptableObjects zum auswählen.
+    public Buff buff;
+
+    //Der Ursprung des Projektils um gegebenenfalls AP Values zur Bearbeitung des Schadens zu verwenden.
+    //public GameObject projectileOrigin;
 
     [HideInInspector]
     public float _pDamage;
@@ -25,7 +33,6 @@ public class _projectile : MonoBehaviour
 
     private Rigidbody _pRbody;
 
-    //public Buff specialEffect;
 
     private enum Trajectory { FollowTarget, Direction, Falling, Curve}
 
@@ -76,19 +83,22 @@ public class _projectile : MonoBehaviour
         
     }
 
+    //Falls der Collider der Spieler ist
     private void OnTriggerEnter(Collider collider)
     {
-
+       
         if (collider.gameObject.tag == "Player")
         {
+            //Und falls das Projektil einen SpecialEffect besitzt
             if(_pSpecialEffect)
             {
-                print("special affect should be applied");
-                ApplySpecialEffect(collider);
+                ApplySpecialEffect(PlayerManager.instance.player.transform.GetComponent<PlayerStats>());
+                Instantiate(_hitParticles, PlayerManager.instance.player.transform.position, Quaternion.identity);
+                Destroy(gameObject);
             }
             else
             {
-                PlayerManager.instance.player.GetComponent<PlayerStats>().TakeDamage(_pDamage);
+                PlayerManager.instance.player.GetComponent<PlayerStats>().TakeDamage(_pDamage, 0);
                 Instantiate(_hitParticles, PlayerManager.instance.player.transform.position, Quaternion.identity);
             }
             Destroy(gameObject);
@@ -101,11 +111,13 @@ public class _projectile : MonoBehaviour
 //muss frei bleiben hier.
     }
 
-    public virtual void ApplySpecialEffect(Collider collider)
+    public virtual void ApplySpecialEffect(IEntitie target)
     {
 
-        Poison poison = collider.gameObject.AddComponent<Buff>() as Poison;
-        poison.duration = 5f;
-        poison.damage = collider.GetComponent<PlayerStats>().Get_maxHp() / 50;
+        BuffInstance buffInstance = BuffDatabase.instance.GetInstance(buff.buffName);
+
+        buffInstance.ApplyBuff(target);
+
     }
+
 }
