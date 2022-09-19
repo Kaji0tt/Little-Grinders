@@ -67,13 +67,17 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
     #endregion
 
-    #region Implementation - Combat Stance
+    #region Implementation - Combat Stance & Buffs
 
     //Ziel-Vector für Raycast der Maus
     private Vector3 targetDirection;
 
     //Combat-Stance Timer, um Attack entsprechend der Attacksped abzurufen
     private float combatStanceTime;
+
+    //Füge eine Liste von Buffs hinzu, welche Auswirkungen auf die PlayerStats besitzen.
+    //GGf. werden diese vom GO behandelt und nicht von der IsometricPlayer Klasse.
+    //public List<Buff> playerBuffs = new List<Buff>(); 
 
     #endregion
 
@@ -157,7 +161,6 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     //Fixed Update wird gecalled, vor der physikalischen Berechning innerhalb eines Frames.
     void FixedUpdate()
     {
-        //abilities[0].UseBase(this.gameObject);
 
         MapView();
 
@@ -394,8 +397,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
                 //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
                 if (enemy != null)
                 {
-                    enemy.TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-                    
+                    enemy.GetComponent<MobStats>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);                    
                 }
 
             }

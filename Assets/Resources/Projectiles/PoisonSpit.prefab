@@ -4926,10 +4926,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a267588b82959244801c8ec4e2b6257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pSpecialEffect: 0
+  _pSpecialEffect: 1
+  buff: {fileID: 11400000, guid: 76551cc37a309d141a51134c757de529, type: 2}
   _pDamage: 0
   _pSpeed: 5
   _hitParticles: {fileID: 3075205263665755041, guid: bfeac9fb419905840b1d1456c56cfa81,
+    type: 3}
+  _hitEnvParticles: {fileID: 1183930090167013337, guid: 3afb1980b63c8a7429d02ffe3d4f9b29,
     type: 3}
   trajectory: 1
 --- !u!54 &6514997294628363950

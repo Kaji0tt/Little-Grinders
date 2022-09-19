@@ -4958,7 +4958,7 @@ GameObject:
   - component: {fileID: 5005454800521421335}
   m_Layer: 0
   m_Name: PoisonSplit1
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9764,6 +9764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pSpecialEffect: 1
+  buff: {fileID: 11400000, guid: 76551cc37a309d141a51134c757de529, type: 2}
   _pDamage: 0
   _pSpeed: 3
   _hitParticles: {fileID: 3075205263665755041, guid: bfeac9fb419905840b1d1456c56cfa81,

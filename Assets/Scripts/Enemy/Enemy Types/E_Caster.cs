@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+//Hier liegt ein Denkfehler vor.
+//Generell wäre es sinnvoll, wenn der EnemyController oder eine geerbte Klasse auf bestimmte "Abilities" Zugriff hat,
+//wäre auch später wichtig für Rare Mobs.
 public class E_Caster : EnemyController
 {
     public GameObject projectile;
@@ -32,11 +35,11 @@ public class E_Caster : EnemyController
 
     public float projectileOffsetXY = 0.5f;
 
-    //private IsometricRenderer isoRenderer;
+    private IsometricRenderer isoRenderer;
 
     private void Start()
     {
-        isoRenderer = GetComponent<IsometricRenderer>();
+        isoRenderer = gameObject.AddComponent<IsometricRenderer>();
     }
 
     public override void CheckForAggro()
@@ -71,7 +74,8 @@ public class E_Caster : EnemyController
 
             isoRenderer.AnimateCast(CalculatePlayerDirection());
 
-            crnt_attackCD = mobStats.attackCD;
+            //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
+            crnt_attackCD = 1f / mobStats.AttackSpeed.Value;
 
             attackStarted = true;
 
@@ -89,7 +93,8 @@ public class E_Caster : EnemyController
     private void InstantiateProjectile()
     {
         //Calculate the Direction of the Player and Offset the Origin of the Projectile by "projectileOffsetXY"
-        if(isoRenderer.DirectionToIndex(CalculatePlayerDirection(), 4) < 2)
+
+        if (isoRenderer.DirectionToIndex(CalculatePlayerDirection(), 4) < 2)
         Instantiate(projectile, new Vector3(transform.position.x + projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform).GetComponent<_projectile>()._pDamage = projectileDamage;
 
 

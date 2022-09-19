@@ -70,6 +70,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollRectEx.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\ExpValueText.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\DropDownList.cs" />
+    <Compile Include="Assets\Scripts\Manager\Camera\ParticleCamScript.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Heal.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\PPVolumeManager.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\EnvCamNoRot.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ReorderableList\ReorderableList.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\NonDrawingGraphic.cs" />
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotHose.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\AbilityDatabase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\SoftMaskScript.cs" />
     <Compile Include="Assets\Scripts\RemoveMissingSCript.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\EnvCamScript.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\HSVUtil.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\UI_Knob.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\StepperSide.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Buffs\BuffDatabase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollRectTweener.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Scroller\Scroller.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionUpdater.cs" />
@@ -402,7 +405,7 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_HealFountain.cs" />
-    <Compile Include="Assets\Scripts\Manager\Camera\ParticleCamScript.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\IEntitie.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIAdditive.shader" />
@@ -419,6 +422,7 @@
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UILinearDodge.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Alpha Blend.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\SoftMaskShader.shader" />
+    <None Include="Assets\Scripts\TalentSystem\Talente\OUTDATED - ReadMe.txt" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Premultiply Blend.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle VertexLit Blended.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />

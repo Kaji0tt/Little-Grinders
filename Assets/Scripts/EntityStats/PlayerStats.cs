@@ -4,11 +4,88 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerStats : MonoBehaviour
+
+//Ggf. wäre es sinvoll eine Interface Klasse zu erstellen, welche die gemeinsamkeiten zwischen MobStats und PlayerStats handled. 
+//Buffs und Abilities könnten sich dann stets auf die InterfaceKlasse beziehen.
+public class PlayerStats : MonoBehaviour, IEntitie
 {
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
 
     public static event Action eventLevelUp;
+
+
+    /// <summary>
+    /// Buff / Debuff System
+    /// </summary>
+
+    public List<BuffInstance> activeBuffs = new List<BuffInstance>();
+
+    public List<BuffInstance> GetBuffs()
+    {
+        return activeBuffs;
+    }
+
+    private List<BuffInstance> newBuffs = new List<BuffInstance>();
+
+    private List<BuffInstance> expiredBuffs = new List<BuffInstance>();
+
+    public void ApplyBuff(BuffInstance buff)
+    {
+        //Falls ein neuer Buff hinzugefügt wird, überprüfe ob dieser Stackbar ist.
+        if (!buff.stackable)
+        {
+            //Falls nicht, erstelle ein Template des Buffs, falls er sich bereits in der aktiven Liste befindet.
+            BuffInstance tmp = activeBuffs.Find(x => x.buffName == buff.buffName);
+
+            if (tmp != null)
+            {
+                //Falls ein aktiver Buff vorhanden war, erneuere ihn mit dem neuen Buff.
+                expiredBuffs.Add(tmp);
+            }
+
+            buff.Activated(this, transform);
+        }
+
+        activeBuffs.Add(buff);
+
+    }
+
+    public void RemoveBuff(BuffInstance buff)
+    {
+        this.expiredBuffs.Add(buff);
+        //buff.Expired();
+    }
+
+    private void HandleBuffs()
+    {
+        //print(activeBuffs.Count);
+        if(activeBuffs.Count > 0)
+        {
+            foreach(BuffInstance buff in activeBuffs)
+            {
+                buff.active = true;
+                buff.Update();
+            }
+        }
+
+        if(newBuffs.Count > 0)
+        {
+            activeBuffs.AddRange(newBuffs);
+            newBuffs.Clear();
+        }
+
+        if(expiredBuffs.Count > 0)
+        {
+            foreach(BuffInstance buff in expiredBuffs)
+            {
+                buff.active = false;
+                activeBuffs.Remove(buff);
+            }
+
+            expiredBuffs.Clear();
+        }
+
+    }
 
     /// <summary>
     /// XP Stuff
@@ -122,6 +199,15 @@ public class PlayerStats : MonoBehaviour
     public void Update()
     {
         LevelUp_need();
+
+        HandleBuffs();
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            BuffInstance buffInstance = BuffDatabase.instance.GetInstance("Reflection");
+            print(buffInstance.buffName);
+            buffInstance.ApplyBuff(this);
+        }
     }
 
 
@@ -130,23 +216,132 @@ public class PlayerStats : MonoBehaviour
         //currentHp = Hp.Value;
         Set_xp(1);
         //Set_level(1);
+
+
+
+
+        //activeBuffs = new List<Buff>();
     }
 
 
-
-
-    public void TakeDamage(float damage)
+    public void AddNewStatModifier(EntitieStats stats, StatModifier modifier)
     {
+        switch (stats)
+        {
+            case EntitieStats.AbilityPower:
+                AbilityPower.AddModifier(modifier);
+                return;
+
+            case EntitieStats.AttackPower:
+                AttackPower.AddModifier(modifier);
+                return;
+
+            case EntitieStats.Armor:
+                Armor.AddModifier(modifier);
+                return;
+
+            case EntitieStats.Hp:
+                Hp.AddModifier(modifier);
+                return;
+
+            case EntitieStats.MovementSpeed:
+                MovementSpeed.AddModifier(modifier);
+                return;
+
+            case EntitieStats.AttackSpeed:
+                AttackSpeed.AddModifier(modifier);
+                return;
+
+
+            default: return;
+        }
+    }
+
+    public void RemoveStatModifier(EntitieStats stats, StatModifier modifier)
+    {
+        switch (stats)
+        {
+            case EntitieStats.AbilityPower:
+                AbilityPower.RemoveModifier(modifier);
+                return;
+
+            case EntitieStats.AttackPower:
+                AttackPower.RemoveModifier(modifier);
+                return;
+
+            case EntitieStats.Armor:
+                Armor.RemoveModifier(modifier);
+                return;
+
+            case EntitieStats.Hp:
+                Hp.RemoveModifier(modifier);
+                return;
+
+            case EntitieStats.MovementSpeed:
+                MovementSpeed.RemoveModifier(modifier);
+                return;
+
+            case EntitieStats.AttackSpeed:
+                AttackSpeed.RemoveModifier(modifier);
+                return;
+
+
+            default: return;
+        }
+    }
+
+    public float GetStat(EntitieStats stat)
+    {
+        switch (stat)
+        {
+            case EntitieStats.AbilityPower:
+                return AbilityPower.Value;
+
+            case EntitieStats.AttackPower:
+                return AttackPower.Value;
+
+            case EntitieStats.Armor:
+                return Armor.Value;
+
+            case EntitieStats.Hp:
+                return Hp.Value;
+
+            case EntitieStats.MovementSpeed:
+                return MovementSpeed.Value;
+
+            case EntitieStats.AttackSpeed:
+                return AttackSpeed.Value;
+
+            default:
+                Debug.Log("No Stat.Value found.");
+                return 0;
+        }
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public void TakeDamage(float damage, int range)
+    {
+        //Die Angriffsreichweite der Mobs (range) spielt derzeit keine rolle. Alle Angriffsverweise auf den Spieler können somit schließlich einen beliebigen Wert besitzen.
         damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
         damage = Mathf.Clamp(damage, 1, int.MaxValue);
-        //currentHp -= damage;
+        
+        //Berichte den Gamevents vom verursachten Schaden am Spieler.
+        //GameEvents.current.PlayerWasAttacked(damage);
+
+        //Ziehe den Schaden vom Spielerleben ab.
         Set_currentHp(-damage);
+
+        //Falls das Leben gegen 0 geht, stirbt der Spieler.
         if (currentHp <= 0)
             Die();
 
     }
 
-    public void TakeDirectDamage(float damage)
+    public void TakeDirectDamage(float damage, float range)
     {
         Set_currentHp(-damage);
         if (currentHp <= 0)

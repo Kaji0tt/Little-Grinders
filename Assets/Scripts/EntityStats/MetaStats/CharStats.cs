@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 [Serializable]
-public class CharStats //: MobStats - Die Stats werden in der entsprechenden Klasse definiert. 
-                       //Ein Mob könnte die Egenschaften CharStats Hp, Armor etc. erhalten, wie auch der Isometric Player.
+public class CharStats
 {
     public float BaseValue;
     
@@ -118,24 +117,6 @@ public class CharStats //: MobStats - Die Stats werden in der entsprechenden Kla
 
         return (float)Math.Round(finalValue, 4);
     }
-
-
-    //Eigenes Tobabo, hier beginnt der Splash von eigenen Funktionen & Methoden, deren Sinn zunächst Fragwürdig sein könnte.
-    
-
-        /*
-        private int xp;
-
-        public int Xp
-        {
-            get { return xp; }
-            private set
-            {
-                if (value < 0) xp = 0;
-                else xp = value;
-            }
-        }
-        */
         
 
 }

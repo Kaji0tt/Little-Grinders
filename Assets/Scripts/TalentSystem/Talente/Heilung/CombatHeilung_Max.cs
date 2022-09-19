@@ -45,7 +45,7 @@ public class CombatHeilung_Max : Talent, IPointerEnterHandler, IPointerExitHandl
                 float damage = playerStats.Armor.Value * 2;
 
 
-                hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage((int)(damage), 1);
+                hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage((int)(damage), 1);
 
                 damageApplied = true;
 

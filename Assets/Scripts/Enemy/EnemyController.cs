@@ -24,13 +24,13 @@ public class EnemyController : MonoBehaviour
     NavMeshAgent navMeshAgent;
 
     //Create Reference to currents GO isoRenderer
-    public IsometricRenderer isoRenderer;
+    IsometricRenderer isoRenderer;
 
     //Create Reference to Animator, for the case its not Animated by the IsometricRenderer, but by IK
-    private EnemyAnimator enemyAnimator;
+    //private EnemyAnimator enemyAnimator;
 
     //For the if Statement of above condition, wether its isometricRendered or rendered by IK
-    public bool ikAnimated;
+    //public bool ikAnimated; Currently no use of IK
 
 
     ///----Combat Variables-----
@@ -53,8 +53,7 @@ public class EnemyController : MonoBehaviour
     //public int level;
 
 
-    private float maxHp;
-    public int experience { get; private set; }
+    private float maxHpForUI;
     public float attackRange, aggroRange;
     //private PlayerStats playerStats;
     public LootTable lootTable;
@@ -69,28 +68,28 @@ public class EnemyController : MonoBehaviour
 
     private bool stun;
     private float stunTime;
+    //private int experience;
 
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
     void OnDrawGizmosSelected()
     {
-
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, aggroRange);
-
-
     }
 
     void Start()
     {
         mobStats = GetComponent<MobStats>();
-        experience = mobStats.Get_xp();
+        //experience = mobStats.Get_xp();
         //IK-Animated Objects currently have theire Animators connected in GO's in dependecy of their position in relation to player.position
         //the according GO (e.g. looking down, looking up) is activated. For this, we need to find the according animators of the activated GO's
-        enemyAnimator = GetComponentInChildren<EnemyAnimator>();
+
+        //NO IK Mobs for now.
+        //enemyAnimator = GetComponentInChildren<EnemyAnimator>();
 
         //UI Display
         TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
-        maxHp = mobStats.Hp.Value;
+        maxHpForUI = mobStats.Hp.Value;
 
 
 
@@ -104,13 +103,14 @@ public class EnemyController : MonoBehaviour
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
         //Ask, if this is an IK-Animated enemy
-        if (ikAnimated == false)
-            isoRenderer = GetComponentInChildren<IsometricRenderer>();
+        //if (ikAnimated == false)
+        isoRenderer = gameObject.AddComponent<IsometricRenderer>();
 
         //Recalculate BaseStats in dependency of Map-Level
-        CalculateMobStats();
+        maxHpForUI = mobStats.Hp.Value;
     }
 
+    /*
     private void CalculateMobStats()
     {
         //Alles noch nicht durchdacht, für pre alpha 0.3 solls reichen.
@@ -129,13 +129,14 @@ public class EnemyController : MonoBehaviour
                 //print("modifiers of mobs should have been added, resulting in:" + Hp.Value + " for Hp on " + gameObject.name + ". AttackPower: " + AttackPower.Value);
             }
 
-            maxHp = mobStats.Hp.Value;
+
 
             experience += mobStats.Get_xp() + GlobalMap.instance.currentMap.mapLevel * 10;
 
         }
 
     }
+    */
 
     void Update()
     {
@@ -167,19 +168,16 @@ public class EnemyController : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
 
+        //Berechne die Distanz zum Spieler.
         player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
-        //Verarbeitung für ikAnimated Enemys
-        //Presumably the ikAnimated Enemys are not going to be supported on the long run.
         inputVector.x = PlayerManager.instance.player.transform.position.x - transform.position.x;
         inputVector.y = PlayerManager.instance.player.transform.position.z - transform.position.z;
-        if (ikAnimated == true)
-            enemyAnimator.AnimateMe(inputVector, player_distance, attackRange, aggroRange);
 
 
-        else
-        {
-            if (player_distance <= aggroRange || pulled)
+
+            //Falls die Distanz zum Spieler kleiner ist als die Aggro-Range, wird der Mob gepulled.
+            if (player_distance <= aggroRange || mobStats.pulled)
             {
                 //Setze die Agent.StoppingDistance gleich mit der AttackRange des Mobs
                 //If the StoppingDistance is smaller then the attackRange, faster mobs may attack while the player is running away
@@ -192,6 +190,7 @@ public class EnemyController : MonoBehaviour
                 if (player_distance < attackRange && navMeshAgent.velocity == Vector3.zero)
                 {
                     //Setze "inCombatStance" des Iso-Renderers dieser Klasse auf true
+                    //Die Combat-Stance war lediglich eine bool um ein AnimationsArray abzuspielen.
                     isoRenderer.inCombatStance = true;
 
                     //Attack the Target
@@ -211,7 +210,7 @@ public class EnemyController : MonoBehaviour
                 isoRenderer.SetNPCDirection(new Vector2(0, 0));
             }
 
-        }
+        
     }
 
 
@@ -231,15 +230,15 @@ public class EnemyController : MonoBehaviour
     {
 
         //Re-Calculate maxHp - this seems necessary, since inheriting Classes do not seem to run EnemyContrller Start Functions to initialize certain values.
-        if (maxHp == 0)
+        if (maxHpForUI == 0)
         {
                 mobStats = GetComponent<MobStats>();
-                maxHp = mobStats.Hp.Value;
+                maxHpForUI = mobStats.Hp.Value;
         }
 
-        enemyHpSlider.value = mobStats.Hp.Value / maxHp;
+        enemyHpSlider.value = mobStats.Hp.Value / maxHpForUI;
 
-        if (mobStats.Hp.Value < maxHp)
+        if (mobStats.Hp.Value < maxHpForUI)
         {
 
             hpBar.SetActive(true);
@@ -249,7 +248,7 @@ public class EnemyController : MonoBehaviour
                 TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
                 {
-                    statText[1].text = Mathf.RoundToInt(mobStats.Hp.Value) + "/" + Mathf.RoundToInt(maxHp);
+                    statText[1].text = Mathf.RoundToInt(mobStats.Hp.Value) + "/" + Mathf.RoundToInt(maxHpForUI);
                     statText[0].text = mobStats.level.ToString();
                 }
             }
@@ -285,8 +284,8 @@ public class EnemyController : MonoBehaviour
 
             inputVector = Vector2.ClampMagnitude(inputVector, 1);
 
-            if (ikAnimated == false)
-                isoRenderer.SetNPCDirection(inputVector);
+            if (isoRenderer.inCombatStance == false)
+            isoRenderer.SetNPCDirection(inputVector);
 
             //irgendwo hier ist noch n kleiner fehler
 
@@ -302,7 +301,6 @@ public class EnemyController : MonoBehaviour
 
         //Countdown for the Auto-Attack Cooldown
         mobStats.attackCD -= Time.deltaTime;
-
         if (playerStats != null)
         {
             if (mobStats.attackCD <= 0)
@@ -317,11 +315,16 @@ public class EnemyController : MonoBehaviour
                     //Play a Sound at random.
                     AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
 
-                //Füge dem Spieler Schaden entsprechend der AttackPower hinzu.
-                playerStats.TakeDamage(mobStats.AttackPower.Value);
+                //Füge dem Spieler Schaden entsprechend der AttackPower hinzu. int Range derzeit irrelevant (0)
+                playerStats.TakeDamage(mobStats.AttackPower.Value, 0);
+
+                //Calle Außerdem das GameEvent, dass der Spieler angegriffen wurde.
+                //GameEvents.current.PlayerWasAttacked(mobStats, mobStats.AttackPower.Value);
+                isoRenderer.AttackAnimation();
 
                 //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
                 mobStats.attackCD = 1f / mobStats.AttackSpeed.Value;
+
 
             }
         }
@@ -332,12 +335,16 @@ public class EnemyController : MonoBehaviour
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.
     public virtual void OnTriggerEnter(Collider collider)
     {
+        //18.09.22 Die Projektile erhalten derzeit ihre eigene Klasse because logical Reasons.
         if (collider.gameObject.tag == "Bullet") // Andere Lösung finden zur Liebe des CPU. // Singleton für DirectionCollider?
         {
+
+            /*
             //Derzeit müssten die entsprechenden Bullet-Scripts hier abgefragt werden, dats stupid.
             Steinwurf_Bullet steinwurf_bullet = collider.GetComponent<Steinwurf_Bullet>();
 
-            TakeDirectDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.         
+            TakeDirectDamage(steinwurf_bullet.steinwurf.damage, steinwurf_bullet.steinwurf.range); // <- Die Bullets werden endlos fliegen können, jedoch erst ab spell.range schaden machen.  
+            */
 
         }
 
@@ -353,84 +360,6 @@ public class EnemyController : MonoBehaviour
         {
             collider.gameObject.GetComponent<DirectionCollider>().collidingEnemyControllers.Remove(this);
         }
-    }
-
-
-
-
-    public void TakeDamage(float incoming_damage, float range_radius_ofDMG)
-    {
-
-        player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
-
-        if (player_distance <= range_radius_ofDMG)
-        {
-            incoming_damage = 10 * (incoming_damage * incoming_damage) / (mobStats.Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
-
-            incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
-
-            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
-
-            
-            //Sound-Array mit den dazugehörigen Sound-Namen
-            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
-
-            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-            if (AudioManager.instance != null)
-
-            //Play a Sound at random.
-            AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
-            
-
-            pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
-        }
-
-        if (mobStats.Hp.Value <= 0)
-            Die();
-    }
-
-    public virtual void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
-    {
-        player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
-
-        if (player_distance <= range_radius_ofDMG)
-        {
-
-            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
-
-            //Sound-Array mit den dazugehörigen Sound-Namen
-            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
-
-            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-            if (AudioManager.instance != null)
-
-            //Play a Sound at random.
-            AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
-
-            pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
-        }
-
-        if (mobStats.Hp.Value <= 0)
-            Die();
-    }
-
-
-    public void Die()
-    {
-        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
-
-        playerStats.Set_xp(experience);
-
-        if(mobStats.level >= 1)
-            //Eine Funktion die in ABhängigkeit vom Moblevel, die ANzahl der Drops erhöhen soll. Hier wäre ein Lerp-Funktion sinnvoll.
-            for(int i = 0; i <= mobStats.level/2; i++)
-            {
-                ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
-            }
-
-        Destroy(this);
-
-        Destroy(gameObject);
     }
 
 }

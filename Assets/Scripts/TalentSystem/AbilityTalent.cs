@@ -132,7 +132,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
                 if (tickerTimer <= 0)
                 {
-                    baseAbility.CallAbilityFunctions("tick", PlayerManager.instance.player);
+                    baseAbility.CallAbilityFunctions("tick", PlayerManager.instance.player.GetComponent<PlayerStats>());
                     tickerTimer = baseAbility.tickTimer;
                 }
             }
@@ -140,8 +140,8 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
             else
             {
-                baseAbility.OnCooldown(PlayerManager.instance.player);
-                baseAbility.CallAbilityFunctions("cooldown", PlayerManager.instance.player);
+                baseAbility.OnCooldown(PlayerManager.instance.player.GetComponent<PlayerStats>());
+                baseAbility.CallAbilityFunctions("cooldown", PlayerManager.instance.player.GetComponent<PlayerStats>());
 
                 state = AbilityState.cooldown;
                 activeTime = baseAbility.activeTime;
@@ -189,7 +189,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
             state = AbilityState.active;
 
-            baseAbility.UseBase(PlayerManager.instance.player);
+            baseAbility.UseBase(PlayerManager.instance.player.GetComponent<PlayerStats>());
             
         }
         

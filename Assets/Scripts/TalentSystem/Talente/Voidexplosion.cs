@@ -35,7 +35,7 @@ public class Voidexplosion : Spell, IUseable
                 if (hitCollider.transform.tag == "Enemy")
                 {
 
-                    hitCollider.transform.GetComponentInParent<EnemyController>().TakeDirectDamage(damage + player.playerStats.AbilityPower.Value * 0.7f, radius + improved.currentCount);
+                    hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage(damage + player.playerStats.AbilityPower.Value * 0.7f, radius + improved.currentCount);
 
 
                 }

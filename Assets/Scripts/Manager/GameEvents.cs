@@ -18,7 +18,7 @@ public class GameEvents : MonoBehaviour
     public event Action<ItemInstance> equipWeapon;
     public event Action<ItemInstance> equipSchmuck;
 
-    public event Action<float, GameObject> entitieAttacked;
+    //public event Action<IEntitie, float> playerWasAttacked;
 
     public event Action<string> playSound;
     //private IsometricPlayer isometricPlayer;
@@ -54,15 +54,11 @@ public class GameEvents : MonoBehaviour
 
     }
 
-    public void OnEntitieAttack(float damage, GameObject entitie)
+    /*
+    public void PlayerWasAttacked(IEntitie origin, float damage)
     {
-        //Nothing yet.
-        if(entitieAttacked != null)
-        {
-
-        }
-
+        playerWasAttacked(origin, damage);
     }
-
+    */
 
 }
