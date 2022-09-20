@@ -35,11 +35,13 @@ public class E_Caster : EnemyController
 
     public float projectileOffsetXY = 0.5f;
 
-    private IsometricRenderer isoRenderer;
 
-    private void Start()
+
+    public override void AddEssentialComponents()
     {
-        isoRenderer = gameObject.AddComponent<IsometricRenderer>();
+        //For some reason Unity spits out an error if we are Instantiating the IsoRenderer and MobCamScript like this.
+        base.AddEssentialComponents();
+
     }
 
     public override void CheckForAggro()
@@ -72,7 +74,7 @@ public class E_Caster : EnemyController
         if(crnt_attackCD <= 0)
         {
 
-            isoRenderer.AnimateCast(CalculatePlayerDirection());
+            gameObject.GetComponent<IsometricRenderer>().AnimateCast(CalculatePlayerDirection());
 
             //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
             crnt_attackCD = 1f / mobStats.AttackSpeed.Value;
@@ -94,7 +96,7 @@ public class E_Caster : EnemyController
     {
         //Calculate the Direction of the Player and Offset the Origin of the Projectile by "projectileOffsetXY"
 
-        if (isoRenderer.DirectionToIndex(CalculatePlayerDirection(), 4) < 2)
+        if (gameObject.GetComponent<IsometricRenderer>().DirectionToIndex(CalculatePlayerDirection(), 4) < 2)
         Instantiate(projectile, new Vector3(transform.position.x + projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform).GetComponent<_projectile>()._pDamage = projectileDamage;
 
 

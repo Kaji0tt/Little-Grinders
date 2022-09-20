@@ -2,28 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Script to Manage the Sorting-Order of the Sprite in reference to the Camera Distance. Essential for 2.5D visualisation for Mobs.
 public class MobsCamScript : MonoBehaviour
 {
-    //Agent Stat Values
-    //UnityEngine.AI.NavMeshAgent agent;
-    //UnityEngine.AI.NavMeshAgent agentDest;
-    //private Vector3 playerPosition;
-
 
     //Sorting Order Values
     private Vector3 CameraPosition;
-    private float DistSelfCamera;
-    [SerializeField]
-    private int sortingOrderBase = 5000;
-    private SpriteRenderer sprite;
 
-    private Animator animator;
+    private float DistSelfCamera;
+
+    [SerializeField] //5000 is Standard value, from which the Distance is being substracted.
+    private int sortingOrderBase = 5000;
+
+    private SpriteRenderer sprite;
 
 
     void Start()
     {
-
-        //agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         if (GetComponent<SpriteRenderer>() != null)
             sprite = GetComponent<SpriteRenderer>();
@@ -31,29 +26,11 @@ public class MobsCamScript : MonoBehaviour
 
     void Update()
     {
-        //transform.LookAt(Camera.main.transform);
-
         CameraPosition = CameraManager.instance.mainCam.transform.position;
         DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;
 
         if(sprite != null)
         sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
-
-
-        //11.09
-        //Die Folgenden Lines of Code sollten wohl verwendet werden, um Attack Animationen / Kampf zu berechnen,
-        //allerdings führen sie aus unbekannten Gründen zu einem Null Error, deshalb erstmal ausgeklammert.
-
-        /*playerPosition = GameObject.Find("Charakter").transform.position;
-        agentDest.SetDestination(playerPosition);
-        agentDest.SetDestination(GameObject.Find("Charakter").transform.position);
-
-        float remainingDist = agent.remainingDistance;
-        if (remainingDist <= 2)
-        {
-
-        }
-        */
     }
 
 

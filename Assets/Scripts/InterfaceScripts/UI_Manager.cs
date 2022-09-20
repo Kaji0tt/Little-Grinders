@@ -140,7 +140,7 @@ public class UI_Manager : MonoBehaviour
             ActionButtonOnClick(4);
         }
 
-        if (Input.GetKeyDown(mainMenuKey) && allCanvasGroupsClosed)
+        if (Input.GetKeyDown(mainMenuKey)) //&&MainMenuClosed
         {
 
             if (GameIsPaused)
