@@ -236,6 +236,12 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     //Wird jeden Frame berechnet.
     private void Update()
     {
+        //GodMode
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            TroubleShootGodMode();
+
+        }
 
         //Input Methods
         if (Input.GetKey(KeyCode.LeftShift))  //Sollte über Menü einstellbar sein #UI_Manager
@@ -282,6 +288,12 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
     }
 
+    void TroubleShootGodMode()
+    {
+        GetComponent<PlayerStats>().Set_SkillPoints(20);
+
+        print("Void:" + TalentTree.instance.totalVoidSpecPoints+ " Utility:" + TalentTree.instance.totalUtilitySpecPoints +" Combat:"+ TalentTree.instance.totalCombatSpecPoints); 
+    }
     //Bewege den Charakter über die HorizontalKeys / VerticalKeys aus den ProjectSettings
     void Move()
     {

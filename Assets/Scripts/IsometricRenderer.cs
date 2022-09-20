@@ -194,14 +194,11 @@ public class IsometricRenderer : MonoBehaviour
 
         AnimatorClipInfo[] currentClipInfo = animator.GetCurrentAnimatorClipInfo(0);
 
-        print("Name:" + currentClipInfo[0].clip.name);
-        print("Length:" + currentClipInfo[0].clip.length);
-
         float attackDuration = currentClipInfo[0].clip.length;
 
         attackDuration -= Time.deltaTime;
 
-        print(attackDuration);
+        //print(attackDuration);
         if (attackDuration <= 0)
         {
             animator.Play(static4Directions[lastDirection]);

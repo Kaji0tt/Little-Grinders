@@ -1,24 +1,24 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[CreateAssetMenu(fileName = "Heal", menuName = "Assets/Spells/Heal")]
-
-//Currently Heal - Aura is broken. Fixing it makes no sense, since the "Buff" System should be done in first place. Heal then might become a Buff.
-public class Heal : Ability
+public class VoidExplosion : Ability
 {
-    public float healAmount;
+    public float baseDamage;
 
     private float spec1range;
 
-    private float spec2speed;
+    private float spec1scaling;
+
+    public float spec1Duration;
+
+    private float spec1Intervall;
 
     float entitieAP;
 
-    public GameObject healAuraEffect;
+    public GameObject voidExpEffect;
 
-    public GameObject healAuraTick;
+    //public GameObject healAuraTick;
 
     private StatModifier spec2mod;
 
@@ -26,7 +26,6 @@ public class Heal : Ability
 
     private StatModifier spec3ATmod;
 
-    //private var auraEffect;
 
     #region UseRegion
     public override void UseBase(IEntitie entitie)
@@ -34,28 +33,74 @@ public class Heal : Ability
 
         base.UseBase(entitie);
 
+        //Calle die Fähigkeit seperat, um sie in den Spezialisierungen unabhängig von der BasAbility (Spec) callen zu können.
+        CallVoidExplosion(entitie);
 
 
-        ///Entitie sollte woanders zwischen gelagert werden, eigene Methode als Return des Transforms verwenden.
-        ///
-        /*
-        if (entitie.GetComponent<PlayerStats>() != null)
-            entitieAP = entitie.GetComponent<PlayerStats>().AbilityPower.Value;
-        else entitieAP = entitie.GetComponent<MobStats>().AbilityPower.Value;
-        */
+
+
+
+
+    }
+
+    ///Erschaffe einen Circle um den Spieler in einem Radius von .5 + spec1.Count / 2 und Füge baseDamage + 30% AP Schaden zu.
+    ///
+    public void CallVoidExplosion(IEntitie entitie)
+    {
+        //Erhalte die AP Values des Ursprungs
         float entitieAP = entitie.GetStat(EntitieStats.AbilityPower);
 
-        //Debug.Log("entitieAP: " + entitieAP);
+        //Erschaffe einen SphereCollider um den Ursprung
+        Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, .5f + spec1range / 2);
 
-        healAmount = healAmount + (entitieAP / 10);
-        PlayerManager.instance.player.GetComponent<PlayerStats>().Heal((int)healAmount);
+        //Für jeden getroffenen Collider
+        foreach (Collider hitCollider in hitColliders)
+        {
+            //Handelt es sich bei dem Collider um einen Feind und beim Ursprung um den Spieler
+            if (entitie.GetTransform().tag == "Player" && hitCollider.transform.tag == "Enemy")
+            {
+                //Falls der erste Spec nicht geskilled wurde, verwende normale Schadensberechnung für alle getroffenen Feinde.
+                if(spec1Talents[0].currentCount == 0)
+                hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * spec1scaling, spec1range);
 
-        //Erschaffe ein neues GO für den Healaura Effekt
-        Instantiate(healAuraEffect, entitie.GetTransform());
+                else
+                {
+                    //Falls der erste Spec1 durch geskilled wurde, verwende zunächst die Standard-Schadensberechnung,
+                    if(spec1Intervall == 0)
+                    {
+                        hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * spec1scaling, spec1range);
 
-        //Setze Parent des GO für vernünftiges UI Layering
-        //auraEffect.transform.SetParent(entitie.transform, false);
 
+                    }
+
+
+                    //ehe der Schaden anschließend durch das Intervall geteilt wird. So erreicht erst der letzte Cast den finalen Schaden.
+                    else
+                    {
+                        hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage((baseDamage + entitieAP * spec1scaling) / spec1Intervall, spec1range);
+
+                    }
+
+                }
+
+
+            }
+
+            if (entitie.GetTransform().tag == "Enemy" && hitCollider.transform.tag == "Player")
+            {
+                //Falls vom Gegener gecalled, füge lediglich dem Spieler Schaden zu.
+                print("succesfully called Enemy-Origin, Player Target");                                                //Die Range ist indem fall fix.
+                hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * 0.3f, 2.5f);
+            }
+
+        }
+
+        //Erschaffe ein entsprechenden Partikel Effect.
+        Instantiate(voidExpEffect, entitie.GetTransform());
+
+        //Sound
+        if (AudioManager.instance != null)
+            AudioManager.instance.Play("VoidExplosion");
 
     }
 
@@ -64,33 +109,36 @@ public class Heal : Ability
     {
         //Void Spec
 
-        ///Heal erhält eine aktive Zeitspanne von 1 + (Skillpoints of Heiling_Void1) Sekunden, pro Sekunde erhalten Feinde in Range = 1, 4 + 10% AP Schaden.
-        ///spec1Talents[0].currentCount; -- Skillspoints of Heilung_Void1
-        activeTime = 1 + spec1Talents[0].currentCount;
-
-        //If spec1 , 2 , 3 Talent[0] current Count >= 0, 
-        //
-        //print("aktive Zeit:" + activeTime);
-        ///Erhöht den Radius der Heal-Schadensaura um (Skillpoints of Heilung_Void2)
-        ///
-        spec1range = 1 + spec1Talents[1].currentCount;
+        ///_________________First-Follow Talent: 
+        ///Void erhält einen erhöhten Radius um 1 pro Punkt in Spec1.
+        spec1range = 1.5f + spec1Talents[0].currentCount;
 
 
-        ///Zu Beginn (und am Ende der aktiven Zeit?) erhalten alle Gegner die verursachte Heilung als Schaden. (x Skillpoints of Heilung_Void3)
-        ///
-        if(spec1Talents[2].currentCount > 0)
+
+        ///_________________Second-Follow Talent: 
+        ///Erhöht die Skalierung von Void-Explosion um 0,1 pro Specpunkt.
+        spec1scaling = 0.3f + (spec1Talents[1].currentCount / 10);
+
+        ///_________________Third-Follow Talent: 
+        ///Im Intervall einer Lerp-Funktion, calle Void Explosion erneut. Die ersten call werden in radius und schaden durch die Gesamtzahl der Calls geteilt.
+
+        //Falls das dritte Follow Talent geskilled wurde, setze die aktive Zeit der Fähigkeit auf die spec1Duration.
+        //Ticks beginnen ab der Hälfte der Duration.
+        if(spec1Talents[2].currentCount == 1)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, spec1range);
+            spec1Intervall = spec1Duration;
 
-            foreach (Collider hitCollider in hitColliders)
-            {
-                if (hitCollider.transform.tag == "Enemy")
-                {
-                    //print("heal amount:" + healAmount);
-                    hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage(healAmount, spec1range);
-                }
-            }
+
+            //Setze die aktive Zeit auf die Länge der lerpDuration von Voidexplosion.
+            activeTime = spec1Duration;
+
+
+            //Scheinbar wird lediglich am Ende der ActiveTime nochmal gecalled.
+            tickTimer = spec1Duration / 2;
+
+
         }
+
 
     }
 
@@ -104,11 +152,11 @@ public class Heal : Ability
 
         ///Während der aktiven Zeitspanne erhält der Spieler (Skillpoits of Heilung_Heal2) x 5% extra Movementspeed.
         ///
-        if(spec2Talents[1].currentCount > 0)
+        if (spec2Talents[1].currentCount > 0)
         {
-            spec2speed = spec2Talents[1].currentCount * 0.05f;
+            //spec2speed = spec2Talents[1].currentCount * 0.05f;
 
-            spec2mod = new StatModifier(spec2speed, StatModType.PercentAdd);
+            //spec2mod = new StatModifier(spec2speed, StatModType.PercentAdd);
 
             entitie.AddNewStatModifier(EntitieStats.MovementSpeed, spec2mod);
 
@@ -130,7 +178,7 @@ public class Heal : Ability
         ///Wenn heal genutzt wird, werden alle Gegner im Umkreis von 1 (+ Skillpoints of Heilung_Heal3) für 2 (x Skillpoints of Heilung_Heal3) Sekunden gestunned.
         ///
         //Stun ist noch nicht implementiert... mist.
-        if(spec2Talents[2].currentCount >= 0)
+        if (spec2Talents[2].currentCount >= 0)
         {
             Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, 1 + spec2Talents[2].currentCount);
 
@@ -221,31 +269,25 @@ public class Heal : Ability
     //Ein TickTimer, welcher alle x Sekunden während der Aktiven Zeit ausgeführt wird. Standard tickTimer ist auf 1 - also alle 1 Sekunden.
     public override void OnTickSpec1(IEntitie entitie)
     {
-        //print("Spec1Tick got called");
-        //Hier gegebenenfalls nochmal ran, für den fall, das mobs diese fähigkeit verwenden
-        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
-        float damage = 4 + (playerStats.AbilityPower.Value / 10);
 
-        Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, spec1range);
-
-        foreach (Collider hitCollider in hitColliders)
+        //Das Intervall "Lerpt" in Abhängigkeit der Länge des Spells herunter und called die Explosion erneut.
+        if(spec1Intervall >= 0)
         {
-            if (hitCollider.transform.tag == "Enemy")
-            {
-                hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage(damage, spec1range);
 
-            }
+            //Reduziere mit jedem Tick die TickZeit um die Hälfte.
+            tickTimer = tickTimer / 2;
+
+            //Mit jedem Intervall, call die Explosion
+            CallVoidExplosion(entitie);
+
+            spec1Intervall -=  1;
         }
-
-        //GFX
-
-        if (AudioManager.instance != null)
-            AudioManager.instance.Play("Heal_Tick_1");
-
-        Instantiate(healAuraTick, entitie.GetTransform());
-
-        Instantiate(healAuraTick, new Vector3(0, 0, -0.3f), Quaternion.identity, entitie.GetTransform());
+        else if (spec1Intervall == 0)
+        {
+            
+            spec1Intervall = spec1Duration;
+        }
 
     }
 
@@ -271,12 +313,12 @@ public class Heal : Ability
         }
         */
 
-        if(AudioManager.instance != null)
-        AudioManager.instance.Play("Heal_Tick_1");
+        if (AudioManager.instance != null)
+            AudioManager.instance.Play("Heal_Tick_1");
 
-        Instantiate(healAuraTick, entitie.GetTransform());
+        Instantiate(voidExpEffect, entitie.GetTransform());
 
-        Instantiate(healAuraTick, new Vector3(entitie.GetTransform().position.x, entitie.GetTransform().position.y, entitie.GetTransform().position.z - 0.3f), Quaternion.identity, entitie.GetTransform());
+        Instantiate(voidExpEffect, new Vector3(entitie.GetTransform().position.x, entitie.GetTransform().position.y, entitie.GetTransform().position.z - 0.3f), Quaternion.identity, entitie.GetTransform());
 
     }
 
@@ -291,11 +333,12 @@ public class Heal : Ability
     #region CooldownRegion
     public override void OnCooldown(IEntitie entitie)
     {
-        Destroy(entitie.GetTransform().Find("Eff_HealAura(Clone)").gameObject);
+        //Destroy(entitie.GetTransform().Find("Eff_HealAura(Clone)").gameObject);
     }
 
     public override void OnCooldownSpec1(IEntitie entitie)
     {
+        /*
         if (spec1Talents[2].currentCount > 0)
         {
             Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, spec1range);
@@ -305,10 +348,11 @@ public class Heal : Ability
                 if (hitCollider.transform.tag == "Enemy")
                 {
                     //print("heal amount:" + healAmount);
-                    hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage(healAmount, spec1range);
+                    hitCollider.transform.GetComponentInParent<MobStats>().TakeDirectDamage(baseDamage, spec1range);
                 }
             }
         }
+        */
 
         //entitie.transform.Find("HealAura(Clone)");
 

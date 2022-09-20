@@ -54,7 +54,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
     private enum AbilityState { ready, active, cooldown };
     AbilityState state = AbilityState.ready;
 
-//Ich glaub Unity meckert hier, dass das Image multiple times serialzed wurde.
+    //Ich glaub Unity meckert hier, dass das Image multiple times serialzed wurde.
     public new Sprite icon => baseAbility.icon;
 
     private Image image;
@@ -97,6 +97,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
     private void AddSpecializationTalents(Talent childTalent)
     {
+        if(!childTalent.passive)
         switch (childTalent.abilitySpecialization)
         {
             case Ability.AbilitySpecialization.Spec1:

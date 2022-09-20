@@ -121,9 +121,9 @@ public class PlayerLoad : MonoBehaviour
             {
                 if (talent.unlocked)
                 {
-                    if(talent is ISmallTalent smallTalent)
+                    if(talent.passive)
                     {
-                        smallTalent.PassiveEffect();
+                        talent.ApplyPassiveTalentPoints(talent);
                     }
                     talent.Unlock();
                 }

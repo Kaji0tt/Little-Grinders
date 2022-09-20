@@ -104,13 +104,11 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\SoftMaskScript.cs" />
     <Compile Include="Assets\Scripts\RemoveMissingSCript.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\EnvCamScript.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\Heilung\Verbesserte_Heilung.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardStack2D.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\GlobalMap.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\TooltipTrigger.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\SelectionBox\SelectionBox.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\BoundTooltip\BoundTooltipTrigger.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\Heilung\Heilung.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\ComboBox.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UICircle.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\MenuSystem\Menu.cs" />
@@ -182,7 +180,6 @@
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotSchmuck.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorPickerTester.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\Heilung\CombatHeilung.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\TalentLines.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ReorderableList\ReorderableListDebug.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buff.cs" />
@@ -226,6 +223,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\ScrollRect\FancyScrollRect.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UIPrimitiveBase.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\IEntitie.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\TableLayoutGroup.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ScrollSnap.cs" />
     <Compile Include="Assets\UI_Map.cs" />
@@ -263,7 +261,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\Gradient2.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyCellGroup.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_TextComplex.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\Heilung\CombatHeilung_Max.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\Accordion.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemMods.cs" />
     <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
@@ -286,7 +283,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ContentScrollSnapHorizontal.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ScrollSnapBase.cs" />
     <Compile Include="Assets\Unity\Info\Scripts\Readme.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\small_AP.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UtilsClass.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Scroller\MovementType.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\ShaderEffects\UISoftAdditiveEffect.cs" />
@@ -301,8 +297,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\IFancyCellGroupContext.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\OptionsMenu.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\small_ATT.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\Heilung\LifeHeilung_Max.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorPickerPresets.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\MenuSystem\SimpleMenu.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buffs\Reflection.cs" />
@@ -319,7 +313,6 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\StatTooltips.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MobStats.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\OutsideVegLoader.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\Heilung\VoidHeilungMax.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Spell.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionMethods.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\TestCompression.cs" />
@@ -346,7 +339,6 @@
     <Compile Include="Assets\Scripts\TroubleShootPlayerPrefs.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\Item.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ScrollSnapScrollbarHelper.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\small_HP.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\Circle.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\ItemSpells\ItemActionScript.cs" />
@@ -354,7 +346,6 @@
     <Compile Include="Assets\Scripts\Manager\SaveGame\DebugPlayerPref.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Core\FancyCell.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\ShineEffect.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talente\Heilung\VoidHeilung.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Weapon.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UISquircle.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Talent.cs" />
@@ -405,7 +396,7 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_HealFountain.cs" />
-    <Compile Include="Assets\Scripts\InterfaceScripts\IEntitie.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\VoidExplosion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIAdditive.shader" />
