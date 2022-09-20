@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -50,6 +51,7 @@ public class CameraFollow : MonoBehaviour
     {
 
         if (Input.mouseScrollDelta.y != 0 && Time.timeScale == 1f)
+            if(!IsMouseOverUIWithIgnores())
             Zoom();
 
         //Vector3 CameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
@@ -124,6 +126,30 @@ public class CameraFollow : MonoBehaviour
         
     }
 
+    private bool IsMouseOverUIWithIgnores() //C @CodeMonkey
+    {
+        //Erstelle eine lokale Variabel von der Position der Maus
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = Input.mousePosition;
+
+        //Erstelle eine Liste aus Raycast-Daten
+        List<RaycastResult> raycastResultList = new List<RaycastResult>();
+
+        //Erstelle Raycasts von der Position der Maus und speichere ihre Ergebnisse in der Liste
+        EventSystem.current.RaycastAll(pointerEventData, raycastResultList);
+
+        //Filter die Liste auf vom Raycast getroffene Objekte und entferne jene, welche das ClickThrough Skript besitzen.
+        for (int i = 0; i < raycastResultList.Count; i++)
+        {
+            if (raycastResultList[i].gameObject.GetComponent<ClickThrough>() != null)
+            {
+                raycastResultList.RemoveAt(i);
+                i--;
+            }
+        }
+
+        return raycastResultList.Count > 0;
+    }
 
     void Zoom()
     {

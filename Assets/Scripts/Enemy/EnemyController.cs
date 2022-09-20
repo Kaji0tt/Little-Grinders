@@ -102,12 +102,19 @@ public class EnemyController : MonoBehaviour
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
-        //Ask, if this is an IK-Animated enemy
-        //if (ikAnimated == false)
-        isoRenderer = gameObject.AddComponent<IsometricRenderer>();
+        AddEssentialComponents();
 
         //Recalculate BaseStats in dependency of Map-Level
         maxHpForUI = mobStats.Hp.Value;
+    }
+
+    public virtual void AddEssentialComponents()
+    {
+        //Add a Renderer Component.
+        isoRenderer = gameObject.AddComponent<IsometricRenderer>();
+
+        //Add the MobCamScript.
+        gameObject.AddComponent<MobsCamScript>();
     }
 
     /*

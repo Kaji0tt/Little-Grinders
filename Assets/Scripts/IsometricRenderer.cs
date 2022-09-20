@@ -31,12 +31,14 @@ public class IsometricRenderer : MonoBehaviour
     int lastWeaponDirection;
 
     #region isoType für 8 oder 4 Directions. Könnte überflüssig sein, ggf. später säubern.
+    /*
     //Create an Enum to Set number of Isometric Directions
     private enum IsoType { eightDir, forDir }
 
     //Set the Value of above Enum for Isometric Directions
     [SerializeField]
     IsoType isoType;
+    */
     #endregion
 
     //Setze Zeit für die Combat-Stance (später sollte diese vom AttackSpeed des Schwertes beeinflusst werden.)
