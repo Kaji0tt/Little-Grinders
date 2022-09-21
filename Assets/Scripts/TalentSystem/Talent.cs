@@ -17,7 +17,10 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 {
 
     //bool zum überprüfen, welche Spezialisierungspunkte dem TalenTree hinzugefügt werden sollen.
-    private bool voidTalent, combatTalent, utilityTalent;
+    //public bool voidTalent, combatTalent, utilityTalent;
+
+    //Versuch den Typ in einem Enum zu verpacken wegen übersichtlich.
+    public Ability.AbilityType abilityType;
 
     //Enum Referenz zum Abgleich, ob die Spezialisierung des Talents jener der Base-Ability entspricht.
     public Ability.AbilitySpecialization abilitySpecialization;
@@ -32,6 +35,8 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     public string talentID;
     public string talentName;
+
+    public bool passive;
 
     public string GetDescription
     {
@@ -172,21 +177,57 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     
     public void IncreaseTalentTreeSpecPoints(Talent talent)
     {
+        switch (talent.abilityType)
+        {
+            case Ability.AbilityType.Combat:
+                TalentTree.instance.totalCombatSpecPoints++;
+                break;
 
-        if(talent.voidTalent)
-            TalentTree.instance.totalVoidSpecPoints++;
+            case Ability.AbilityType.Void:
+                TalentTree.instance.totalVoidSpecPoints++;
+                break;
 
-        if (talent.combatTalent)
-            TalentTree.instance.totalCombatSpecPoints++;
+            case Ability.AbilityType.Utility:
+                TalentTree.instance.totalUtilitySpecPoints++;
+                break;
 
-        if (talent.utilityTalent)
-            TalentTree.instance.totalUtilitySpecPoints++;
+        }
 
         //Überprüfe, ob entsprechende Talente im TalentTree durch das erreichen von totalSpecPoints freigeschaltet wurde.
         foreach (AbilityTalent abilityTalent in TalentTree.instance.allAbilityTalents)
             abilityTalent.CheckForUnlock();
     }
-    
+
+    //Setze die passiven Werte des Talentbaums ein.
+    public void ApplyPassivePointsAndEffects(Talent talent)
+    {
+        if(talent.passive)
+        switch (talent.abilityType)
+        {
+            case Ability.AbilityType.Combat:
+                PlayerManager.instance.player.GetComponent<PlayerStats>().AddNewStatModifier(EntitieStats.AttackPower, new StatModifier(0.5f, StatModType.Flat));
+                break;
+
+            case Ability.AbilityType.Void:
+                PlayerManager.instance.player.GetComponent<PlayerStats>().AddNewStatModifier(EntitieStats.AbilityPower, new StatModifier(0.5f, StatModType.Flat));
+                break;
+
+            case Ability.AbilityType.Utility:
+                PlayerManager.instance.player.GetComponent<PlayerStats>().AddNewStatModifier(EntitieStats.Hp, new StatModifier(1, StatModType.Flat));
+                break;
+
+            default:
+                print("Entweder wurde einem passiven Talent kein Typ zugewiesen, oder es handelt sich um einen Sockel");
+                    break;
+
+        }
+
+        else
+        {
+            talent.abilityTalent.ApplySpecialization(talent);
+        }
+
+    }
 
 
 

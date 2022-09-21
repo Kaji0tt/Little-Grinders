@@ -193,10 +193,13 @@ public class PlayerSave
 
         foreach (Talent talent in allTalents)
         {
-            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked));
+            Debug.Log(talent.talentName + "Spezialisierung: " + (int)talent.abilitySpecialization);
+            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked, (int)talent.abilityTalent.baseAbility.abilitySpec));
         }
 
-        TalentTree talentTree = Object.FindObjectOfType<TalentTree>();
+        Debug.Log(allTalents.Length);
+
+        TalentTree talentTree = TalentTree.instance;
 
         savedLP = talentTree.totalUtilitySpecPoints;
 

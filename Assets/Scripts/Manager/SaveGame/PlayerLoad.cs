@@ -98,7 +98,7 @@ public class PlayerLoad : MonoBehaviour
 
     private void LoadSkillPoints(PlayerSave data)
     {
-        TalentTree talentTree = FindObjectOfType<TalentTree>();
+        TalentTree talentTree = TalentTree.instance;
 
         talentTree.ResetTalents();
 
@@ -115,25 +115,10 @@ public class PlayerLoad : MonoBehaviour
 
                     talentTree.allTalents[i].UpdateTalent();
                 }
-            }
-
-            foreach(Talent talent in talentTree.allTalents)
-            {
-                if (talent.unlocked)
-                {
-                    if(talent is ISmallTalent smallTalent)
-                    {
-                        smallTalent.PassiveEffect();
-                    }
-                    talent.Unlock();
-                }
-
-                else
-                {
-                    talent.LockTalent();
-                }
 
             }
+
+
             talentTree.UpdateTalentPointText();
 
             talentTree.totalVoidSpecPoints = data.savedVP; 
@@ -141,6 +126,42 @@ public class PlayerLoad : MonoBehaviour
             talentTree.totalUtilitySpecPoints = data.savedLP; 
             
             talentTree.totalCombatSpecPoints = data.savedCP;
+
+
+
+        }
+
+
+        foreach (Talent talent in talentTree.allTalents)
+        {
+            if (talent.unlocked)
+            {
+                //Falls es sich nicht um ein AbilityTalent handelt, füge die Effekte hinzu.
+                if (talent.GetType() != typeof(AbilityTalent))
+                {
+                    
+                    for (int i = 1; i <= talent.currentCount; i++)
+                    talent.ApplyPassivePointsAndEffects(talent);
+                }
+                else
+                {
+                    foreach(TalentSave savedTalent in data.talentsToBeSaved)
+                    if(talent.talentName == savedTalent.talentName)
+                    {
+                            print("JUHU; FOUND: " + savedTalent.talentName + ", got the Spec: " + (Ability.AbilitySpecialization)savedTalent.spec);
+                            print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
+                            talent.abilityTalent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
+                        }
+
+                }
+
+                talent.Unlock();
+            }
+
+            else
+            {
+                talent.LockTalent();
+            }
 
         }
     }

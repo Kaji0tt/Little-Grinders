@@ -90,6 +90,7 @@ public class TalentTree : MonoBehaviour
 
         if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && clickedTalent.Click())
         {
+            //if(clickedTalent.abilitySpecialization == Ability.AbilitySpecialization.Spec1)
             //Erhöhe die Speziliaiserungs-Counter des TalentTree's
             clickedTalent.IncreaseTalentTreeSpecPoints(clickedTalent);
             #region "Tutorial"
@@ -103,10 +104,20 @@ public class TalentTree : MonoBehaviour
 
             //Falls das geskillte Talent keine Fähigkeit ist, setze die entsprechende Spezialisierung für die Grundfähigkeit.
             if(clickedTalent.GetType() != typeof(AbilityTalent))
-            SetSpecializationOfAbility(clickedTalent);
+            {
+                //Setze die Spezialisierung.
+                SetSpecializationOfAbility(clickedTalent);
 
-            //Increase Spec-Counter
+                //Und füge die Boni auf das Base Talent hinzu.
+                if(!clickedTalent.passive)
+                ApplySpecializationEffects(clickedTalent);
 
+            }
+
+
+            //Falls es sich um ein passives Talent handelt, erhöhe die passiven Werte.
+            if (clickedTalent.passive)
+                clickedTalent.ApplyPassivePointsAndEffects(clickedTalent);
 
             PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
             UpdateTalentPointText();
@@ -131,6 +142,11 @@ public class TalentTree : MonoBehaviour
 
             }
         }
+    }
+
+    private void ApplySpecializationEffects(Talent clickedTalent)
+    {
+        clickedTalent.abilityTalent.ApplySpecialization(clickedTalent);
     }
 
     void OnEnable()
