@@ -9,6 +9,15 @@ using UnityEngine.SceneManagement;
 //Buffs und Abilities könnten sich dann stets auf die InterfaceKlasse beziehen.
 public class PlayerStats : MonoBehaviour, IEntitie
 {
+    #region Singleton
+    public static PlayerStats instance;
+    private void Awake()
+    {
+        instance = this;
+
+    }
+    #endregion
+
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
 
     public static event Action eventLevelUp;

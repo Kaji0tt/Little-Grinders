@@ -34,6 +34,27 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
         }
     }
 
+    internal void ApplySpecialization(Talent talent)
+    {
+    
+        switch (talent.abilitySpecialization)
+        {
+            case Ability.AbilitySpecialization.Spec1:
+                baseAbility.ApplySpec1Bonus(talent);
+                break;
+
+            case Ability.AbilitySpecialization.Spec2:
+                baseAbility.ApplySpec2Bonus(talent);
+                break;
+
+            case Ability.AbilitySpecialization.Spec3:
+                baseAbility.ApplySpec3Bonus(talent);
+                break;
+
+        }
+        
+    }
+
     #endregion
 
 
@@ -72,6 +93,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
         baseAbility.spec2Talents.Clear();
         baseAbility.spec3Talents.Clear();
 
+        //Durchlaufe jedes Childtalent
         foreach (Talent talent in childTalent)
         {
 
@@ -83,6 +105,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
     private void RunThroughChildTalents(Talent talent)
     {
+        //Und füge dieses der entsprechenden Spezialisierungsliste hinzu. (Spec1 / Spec2 / Spec3)
         AddSpecializationTalents(talent);
         if(talent.childTalent.Length > 0)
         {
@@ -101,15 +124,15 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
         switch (childTalent.abilitySpecialization)
         {
             case Ability.AbilitySpecialization.Spec1:
-                baseAbility.SetSpec1Talent(childTalent);
+                baseAbility.AddSpec1TalentsToList(childTalent);
                     break;
 
             case Ability.AbilitySpecialization.Spec2:
-                baseAbility.SetSpec2Talent(childTalent);
+                baseAbility.AddSpec2TalentsToList(childTalent);
                 break;
 
             case Ability.AbilitySpecialization.Spec3:
-                baseAbility.SetSpec3Talent(childTalent);
+                baseAbility.AddSpec3TalentsToList(childTalent);
                 break;
 
         }
@@ -177,6 +200,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
     }
 
 
+
     public void Use()
     {
         //Setzen der Spezialisierungspunkte in der Ability.
@@ -186,12 +210,14 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
             tickerTimer = baseAbility.tickTimer;
 
+
             activeTime = baseAbility.activeTime;
+
 
             state = AbilityState.active;
 
-            baseAbility.UseBase(PlayerManager.instance.player.GetComponent<PlayerStats>());
-            
+
+            baseAbility.UseBase(PlayerManager.instance.player.GetComponent<PlayerStats>());           
         }
         
     }

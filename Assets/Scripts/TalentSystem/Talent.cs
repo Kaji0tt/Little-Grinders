@@ -197,10 +197,11 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         foreach (AbilityTalent abilityTalent in TalentTree.instance.allAbilityTalents)
             abilityTalent.CheckForUnlock();
     }
-    
-    //Muss bei TryUseTalent oder beim Laden gecalled werden, falls es sich um ein passives Talent handelt.
-    public void ApplyPassiveTalentPoints(Talent talent)
+
+    //Setze die passiven Werte des Talentbaums ein.
+    public void ApplyPassivePointsAndEffects(Talent talent)
     {
+        if(talent.passive)
         switch (talent.abilityType)
         {
             case Ability.AbilityType.Combat:
@@ -221,8 +222,14 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
         }
 
+        else
+        {
+            talent.abilityTalent.ApplySpecialization(talent);
+        }
 
     }
+
+
 
     public void OnPointerClick(PointerEventData eventData)
     {

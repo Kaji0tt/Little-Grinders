@@ -105,6 +105,15 @@ public class VoidExplosion : Ability
     }
 
     //Möglicherweise reicht eine einzelne Liste von Talenten in Ability, da die Indexes dieser die Referenz für die Values der Spezialisierungen darstellen können.
+
+    public override void ApplySpec1Bonus(Talent t)
+    {
+
+        spec1range = 1.5f + spec1Talents[0].currentCount;
+
+        spec1scaling = 0.3f + (spec1Talents[1].currentCount / 10);
+
+    }
     public override void OnUseSpec1(IEntitie entitie)
     {
         //Void Spec
@@ -142,6 +151,10 @@ public class VoidExplosion : Ability
 
     }
 
+    public override void ApplySpec2Bonus(Talent t)
+    {
+        activeTime = 1 + spec2Talents[0].currentCount;
+    }
     public override void OnUseSpec2(IEntitie entitie)
     {
         //Heal Spec
@@ -192,6 +205,10 @@ public class VoidExplosion : Ability
         }
     }
 
+    public override void ApplySpec3Bonus(Talent t)
+    {
+        activeTime = 1 + spec3Talents[0].currentCount;
+    }
     public override void OnUseSpec3(IEntitie entitie)
     {
         //Combat Spec

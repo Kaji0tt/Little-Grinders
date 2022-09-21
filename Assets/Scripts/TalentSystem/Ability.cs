@@ -26,7 +26,7 @@ using UnityEngine.UI;
 //                                                                                                 In den Funktionen der Ability sollte demnach stets ein GO mitgegegeben werden, welches als Referenz für den Nutzer dient.
 //
 //GGf. könnte man die Ability Componente den Mobs / Spieler direkt geben, beim Call wird auf die Instanz der Klasse auf dem Spielobjekt zugegriffen.
-public class Ability : MonoBehaviour
+public abstract class Ability : MonoBehaviour
 {
     //Standard Daten zu einer Fähigkeit
     //public string abilityID;
@@ -134,37 +134,22 @@ public class Ability : MonoBehaviour
     }
 
     //Use Functions.
-    public virtual void OnUseSpec1(IEntitie entitie)
-    {
+    public abstract void OnUseSpec1(IEntitie entitie);
 
-    }
 
-    public virtual void OnUseSpec2(IEntitie entitie)
-    {
+    public abstract void OnUseSpec2(IEntitie entitie);
 
-    }
 
-    public virtual void OnUseSpec3(IEntitie entitie)
-    {
-
-    }
+    public abstract void OnUseSpec3(IEntitie entitie);
+ 
 
 
     //Tick Functions - Should rather be Managed mit dem Buff-System.
-    public virtual void OnTickSpec1(IEntitie entitie)
-    {
+    public abstract void OnTickSpec1(IEntitie entitie);
 
-    }
+    public abstract void OnTickSpec2(IEntitie entitie);
 
-    public virtual void OnTickSpec2(IEntitie entitie)
-    {
-
-    }
-
-    public virtual void OnTickSpec3(IEntitie entitie)
-    {
-
-    }
+    public abstract void OnTickSpec3(IEntitie entitie);
 
 
 
@@ -172,22 +157,17 @@ public class Ability : MonoBehaviour
     {
 
     }
+
     //On Cooldown Start Functions
-    public virtual void OnCooldownSpec1(IEntitie entitie)
-    {
-        // In case you'd want the entitie to be faster for the active time, you may add a StatModifier OnUse and remove it OnCooldown.
-        
-    }
+    public abstract void OnCooldownSpec1(IEntitie entitie);
 
-    public virtual void OnCooldownSpec2(IEntitie entitie)
-    {
+    // In case you'd want the entitie to be faster for the active time, you may add a StatModifier OnUse and remove it OnCooldown.
+    // (This might be done with Buffs aswell though)
 
-    }
+    public abstract void OnCooldownSpec2(IEntitie entitie);
 
-    public virtual void OnCooldownSpec3(IEntitie entitie)
-    {
+    public abstract void OnCooldownSpec3(IEntitie entitie);
 
-    }
 
 
     //Sobald der Spieler eine Fähigkeit skillt, gehen entsprechende Counter hoch.
@@ -201,23 +181,30 @@ public class Ability : MonoBehaviour
         if(abilitySpec == AbilitySpecialization.Undefined)
         abilitySpec = specialization;
 
+
         //Debug.Log(spec1Counter + spec2Counter + spec3Counter);
     }
 
+    //Dieso Funktionen werden gecalled, sobald ein Talent, welches nicht passiv ist, angeklickt und erfolgreich geskilled wurde.
+    //Somit lassen sich die Boni (e.g. Range + 1) vor der Anwendung der Fähigkeit bereits setzen.
+    public abstract void ApplySpec1Bonus(Talent t);
+    public abstract void ApplySpec2Bonus(Talent t);
+    public abstract void ApplySpec3Bonus(Talent t);
 
-
-    public void SetSpec1Talent(Talent talent)
+    public void AddSpec1TalentsToList(Talent talent)
     {
         spec1Talents.Add(talent);
     }
 
-    public void SetSpec2Talent(Talent talent)
+    public void AddSpec2TalentsToList(Talent talent)
     {
         spec2Talents.Add(talent);
     }
 
-    public void SetSpec3Talent(Talent talent)
+    public void AddSpec3TalentsToList(Talent talent)
     {
         spec3Talents.Add(talent);
     }
+
+
 }

@@ -38,11 +38,6 @@ public class Heal : Ability
 
         ///Entitie sollte woanders zwischen gelagert werden, eigene Methode als Return des Transforms verwenden.
         ///
-        /*
-        if (entitie.GetComponent<PlayerStats>() != null)
-            entitieAP = entitie.GetComponent<PlayerStats>().AbilityPower.Value;
-        else entitieAP = entitie.GetComponent<MobStats>().AbilityPower.Value;
-        */
         float entitieAP = entitie.GetStat(EntitieStats.AbilityPower);
 
         //Debug.Log("entitieAP: " + entitieAP);
@@ -59,6 +54,13 @@ public class Heal : Ability
 
     }
 
+    public override void ApplySpec1Bonus(Talent t)
+    {
+        activeTime = 1 + spec1Talents[0].currentCount;
+
+        spec1range = 1 + spec1Talents[1].currentCount;
+    }
+
     //Möglicherweise reicht eine einzelne Liste von Talenten in Ability, da die Indexes dieser die Referenz für die Values der Spezialisierungen darstellen können.
     public override void OnUseSpec1(IEntitie entitie)
     {
@@ -68,9 +70,7 @@ public class Heal : Ability
         ///spec1Talents[0].currentCount; -- Skillspoints of Heilung_Void1
         activeTime = 1 + spec1Talents[0].currentCount;
 
-        //If spec1 , 2 , 3 Talent[0] current Count >= 0, 
-        //
-        //print("aktive Zeit:" + activeTime);
+
         ///Erhöht den Radius der Heal-Schadensaura um (Skillpoints of Heilung_Void2)
         ///
         spec1range = 1 + spec1Talents[1].currentCount;
@@ -94,6 +94,11 @@ public class Heal : Ability
 
     }
 
+    public override void ApplySpec2Bonus(Talent t)
+    {
+        activeTime = 1 + spec2Talents[0].currentCount;
+
+    }
     public override void OnUseSpec2(IEntitie entitie)
     {
         //Heal Spec
@@ -144,6 +149,11 @@ public class Heal : Ability
         }
     }
 
+
+    public override void ApplySpec3Bonus(Talent t)
+    {
+        activeTime = 1 + spec3Talents[0].currentCount;
+    }
     public override void OnUseSpec3(IEntitie entitie)
     {
         //Combat Spec

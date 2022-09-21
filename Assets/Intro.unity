@@ -6265,7 +6265,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: Socket
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_UtilitySocket
   passive: 1
   maxCount: 1
   unlocked: 0
@@ -11292,7 +11292,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: +1 HP
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_PassiveHP1
   passive: 1
   maxCount: 5
   unlocked: 0
@@ -27110,7 +27110,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: Socket
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_CombatSocket
   passive: 1
   maxCount: 1
   unlocked: 0
@@ -38401,7 +38401,7 @@ MonoBehaviour:
   description: "W\xE4hrend der aktiven Zeitspanne erh\xF6ht sich die Waffenst\xE4rke
     um\n(Skillpoints of Heilung_Combat2) x 10% ATT des Spielers."
   talentID: 
-  talentName: "St\xE4rkende Heilung"
+  talentName: Heal_Combat2
   passive: 0
   maxCount: 3
   unlocked: 0
@@ -43492,7 +43492,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: +0,5 AP
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_PassiveAP2
   passive: 1
   maxCount: 5
   unlocked: 0
@@ -46123,7 +46123,7 @@ MonoBehaviour:
   description: "Heal erh\xE4lt eine aktive Zeitspanne von +1 Sekunde.\nHeilt zus\xE4tzlich
     um 1% + 10%AP des fehlenden Lebens."
   talentID: AT1-21
-  talentName: 
+  talentName: Heal_Utility1
   passive: 0
   maxCount: 5
   unlocked: 0
@@ -46963,7 +46963,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: Wenn Heal genutzt wird, werden alle Gegner im Umkreis stunned.
   talentID: AT1-23
-  talentName: 
+  talentName: Heal_Utility3
   passive: 0
   maxCount: 1
   unlocked: 0
@@ -48831,7 +48831,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: +1 HP
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_PassiveHP2
   passive: 1
   maxCount: 5
   unlocked: 0
@@ -53588,7 +53588,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: Macht auch noch nichts, man sehe und staune.
   talentID: AT1-12
-  talentName: 
+  talentName: Heilung_Void2
   passive: 0
   maxCount: 3
   unlocked: 0
@@ -63314,7 +63314,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: Empty Socket
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_VoidSocket
   passive: 1
   maxCount: 1
   unlocked: 0
@@ -64523,7 +64523,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: +0,5 HP
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_PassiveAtt1
   passive: 1
   maxCount: 5
   unlocked: 0
@@ -69122,7 +69122,7 @@ MonoBehaviour:
     10% der Armor des Spielers \n(x Skillpoints of Heilung_Combat3) als Schaden.\nNicht
     implementiert."
   talentID: 
-  talentName: Dornige Heilung
+  talentName: HealCombat3
   passive: 0
   maxCount: 1
   unlocked: 0
@@ -75350,7 +75350,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: +0,5 AP
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_PassiveAP1
   passive: 1
   maxCount: 5
   unlocked: 0
@@ -76006,7 +76006,7 @@ MonoBehaviour:
   description: "Heal erh\xE4lt eine aktive Zeitspanne von (3 + n) Sekunden. /n Pro
     Sekunde erhalten Feinde in Range = 1, 10% AP Schaden."
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_Void1
   passive: 0
   maxCount: 5
   unlocked: 0
@@ -81659,7 +81659,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: +0,5 HP
   talentID: AT1-11
-  talentName: Raub
+  talentName: Heal_PassiveAtt2
   passive: 1
   maxCount: 5
   unlocked: 0
@@ -83256,7 +83256,7 @@ MonoBehaviour:
   description: "Heal erh\xE4lt eine aktive Zeitspanne von (Skillpoints of \nHeilung_Combat1),
     w\xE4hrend dieser Zeitspannte erh\xE4lt der Spieler\n20% Armor als extra Armor."
   talentID: 
-  talentName: "Sch\xFCtzende Heilung"
+  talentName: Heal_Combat1
   passive: 0
   maxCount: 5
   unlocked: 0
@@ -83555,7 +83555,7 @@ MonoBehaviour:
   description: "W\xE4hrend der aktiven Zeitspanne von Heal erh\xE4lt der Spieler
     n x 5% Movement Speed."
   talentID: AT1-22
-  talentName: 
+  talentName: Heal_Utility2
   passive: 0
   maxCount: 3
   unlocked: 0
@@ -84282,7 +84282,7 @@ MonoBehaviour:
   abilityTalent: {fileID: 326339659}
   description: 
   talentID: AT1-13
-  talentName: 
+  talentName: Heal_Void3
   passive: 0
   maxCount: 1
   unlocked: 0
