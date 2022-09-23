@@ -24,5 +24,7 @@ driven by the players curiosity.
 
 
 ┌───── ### Open-Script Project's ### 
-- Map Scaling, Maps in General
-- Skills & Abilitys
+- Ability-System
+- Rare-Mobs & Mob-Rolls
+- Daten Upload zum Server-Profil
+- Sockel-Items mit erweiterten Talent-Baum
