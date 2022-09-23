@@ -25,6 +25,6 @@ driven by the players curiosity.
 
 ┌───── ### Open-Script Project's ### 
 - Ability-System
-- Rare-Mobs & Mob-Rolls
+- Mobs: Rare Mobs, Mobs using Abilities, more diverse Mobs
 - Daten Upload zum Server-Profil
 - Sockel-Items mit erweiterten Talent-Baum
