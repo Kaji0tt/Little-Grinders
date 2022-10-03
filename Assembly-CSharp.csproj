@@ -92,6 +92,7 @@
     <Compile Include="Assets\Scripts\TalentSystem\Talente\Steinwurf.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\Gradient.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Schuhe.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Buffs\LifePoison.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MetaStats\StatModifier.cs" />
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotBrust.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_Totem.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_Sprite.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\TextPic.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Buffs\WeakArmor.cs" />
     <Compile Include="Assets\CodeMonkey\Assets.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\ItemSave.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
@@ -283,6 +285,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ContentScrollSnapHorizontal.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ScrollSnapBase.cs" />
     <Compile Include="Assets\Unity\Info\Scripts\Readme.cs" />
+    <Compile Include="Assets\Scripts\Manager\ParticleManager.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UtilsClass.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Scroller\MovementType.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\ShaderEffects\UISoftAdditiveEffect.cs" />
@@ -341,6 +344,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ScrollSnapScrollbarHelper.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\Circle.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\VoidExplosion.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\ItemSpells\ItemActionScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\Triangulator.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\DebugPlayerPref.cs" />
@@ -396,7 +400,8 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_HealFountain.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Spells\VoidExplosion.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\UI_Buff.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\UI_BuffHolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIAdditive.shader" />

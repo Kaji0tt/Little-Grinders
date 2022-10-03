@@ -80,7 +80,7 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
                     inventory.RemoveItem(item);
                 }
 
-                GameEvents.current.EquipChanged(item);
+                GameEvents.instance.EquipChanged(item);
                 //eqSlots.equip(item);
                 Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
 

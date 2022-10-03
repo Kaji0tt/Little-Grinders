@@ -205,15 +205,15 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         switch (talent.abilityType)
         {
             case Ability.AbilityType.Combat:
-                PlayerManager.instance.player.GetComponent<PlayerStats>().AddNewStatModifier(EntitieStats.AttackPower, new StatModifier(0.5f, StatModType.Flat));
+                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.AttackPower).AddModifier( new StatModifier(0.5f, StatModType.Flat));
                 break;
 
             case Ability.AbilityType.Void:
-                PlayerManager.instance.player.GetComponent<PlayerStats>().AddNewStatModifier(EntitieStats.AbilityPower, new StatModifier(0.5f, StatModType.Flat));
+                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.AbilityPower).AddModifier(new StatModifier(0.5f, StatModType.Flat));
                 break;
 
             case Ability.AbilityType.Utility:
-                PlayerManager.instance.player.GetComponent<PlayerStats>().AddNewStatModifier(EntitieStats.Hp, new StatModifier(1, StatModType.Flat));
+                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.Hp).AddModifier( new StatModifier(1, StatModType.Flat));
                 break;
 
             default:

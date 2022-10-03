@@ -6,9 +6,9 @@ public enum EntitieStats { Hp, AbilityPower, AttackPower, MovementSpeed, AttackS
 //Es sollte eine Funktion geben, die in IEntitie zwischen Player und Mob unterscheiden kann.
 public interface IEntitie
 {
-    public void AddNewStatModifier(EntitieStats stat, StatModifier mod);
+    //public void AddNewStatModifier(EntitieStats stat, StatModifier mod);
 
-    public void RemoveStatModifier(EntitieStats stat, StatModifier mod);
+    //public void RemoveStatModifier(EntitieStats stat, StatModifier mod);
 
     public void Die();
 
@@ -16,7 +16,7 @@ public interface IEntitie
 
     public float Get_maxHp();
 
-    public float GetStat(EntitieStats stat);
+    public CharStats GetStat(EntitieStats stat);
 
     public Transform GetTransform();
 

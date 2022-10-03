@@ -22,97 +22,31 @@ public class MobStats : MonoBehaviour, IEntitie
         HandleBuffs();
     }
 
-    public void AddNewStatModifier(EntitieStats stats, StatModifier modifier)
-    {
-        switch (stats)
-        {
-            case EntitieStats.AbilityPower:
-                AbilityPower.AddModifier(modifier);
-                return;
-
-            case EntitieStats.AttackPower:
-                AttackPower.AddModifier(modifier);
-                return;
-
-            case EntitieStats.Armor:
-                Armor.AddModifier(modifier);
-                return;
-
-            case EntitieStats.Hp:
-                Hp.AddModifier(modifier);
-                return;
-
-            case EntitieStats.MovementSpeed:
-                MovementSpeed.AddModifier(modifier);
-                return;
-
-            case EntitieStats.AttackSpeed:
-                AttackSpeed.AddModifier(modifier);
-                return;
-
-
-            default: return;
-        }
-    }
-
-    public void RemoveStatModifier(EntitieStats stats, StatModifier modifier)
-    {
-        switch (stats)
-        {
-            case EntitieStats.AbilityPower:
-                AbilityPower.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.AttackPower:
-                AttackPower.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.Armor:
-                Armor.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.Hp:
-                Hp.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.MovementSpeed:
-                MovementSpeed.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.AttackSpeed:
-                AttackSpeed.RemoveModifier(modifier);
-                return;
-
-
-            default: return;
-        }
-    }
-
-    public float GetStat(EntitieStats stat)
+    public CharStats GetStat(EntitieStats stat)
     {
         switch (stat)
         {
             case EntitieStats.AbilityPower:
-                return AbilityPower.Value;
+                return AbilityPower;
 
             case EntitieStats.AttackPower:
-                return AttackPower.Value;
+                return AttackPower;
 
             case EntitieStats.Armor:
-                return Armor.Value;
+                return Armor;
 
             case EntitieStats.Hp:
-                return Hp.Value;
+                return Hp;
 
             case EntitieStats.MovementSpeed:
-                return MovementSpeed.Value;
+                return MovementSpeed;
 
             case EntitieStats.AttackSpeed:
-                return AttackSpeed.Value;
+                return AttackSpeed;
 
             default:
                 Debug.Log("No Stat.Value found.");
-                return 0;
+                return null;
         }
     }
 
@@ -133,11 +67,17 @@ public class MobStats : MonoBehaviour, IEntitie
             if (level > GlobalMap.instance.currentMap.mapLevel)
             {
                 //Erhöhe die HP um den Wert des Kartenlevels * 10 / 2. 
-                Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 10 / 2), StatModType.Flat));
+                Hp.BaseValue = Hp.BaseValue * (GlobalMap.instance.currentMap.mapLevel * 5);
+                //OLD: Hp.AddModifier(new StatModifier(Hp.Value + (GlobalMap.instance.currentMap.mapLevel * 5), StatModType.Flat));
+
                 //Erhöhe Rüstung um den Wert des Kartenlevels.
-                Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel + 1)), StatModType.Flat));
+                Armor.BaseValue = Armor.BaseValue * (GlobalMap.instance.currentMap.mapLevel + 1);
+                //OLD: Armor.AddModifier(new StatModifier((PlayerManager.instance.player.GetComponent<PlayerStats>().Get_level() / (GlobalMap.instance.currentMap.mapLevel + 1)), StatModType.Flat));
+
                 //Erhöhe Angriff um den Wert des Kartenlevels.
-                AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
+                AttackPower.BaseValue = AttackPower.BaseValue + (GlobalMap.instance.currentMap.mapLevel * 2);
+                //AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
+
 
             }
 
@@ -179,7 +119,8 @@ public class MobStats : MonoBehaviour, IEntitie
             if (tmp != null) 
             {
                 //Falls ein aktiver Buff vorhanden war, erneuere ihn mit dem neuen Buff.
-                expiredBuffs.Add(tmp);
+                RemoveBuff(tmp);
+                //expiredBuffs.Add(tmp);
             }
         }
 
@@ -190,7 +131,7 @@ public class MobStats : MonoBehaviour, IEntitie
     public void RemoveBuff(BuffInstance buff)
     {
         this.expiredBuffs.Add(buff);
-        //buff.Expired();
+        buff.Expired(buff.MyTargetEntitie, buff.MyOriginEntitie);
     }
 
     private void HandleBuffs()

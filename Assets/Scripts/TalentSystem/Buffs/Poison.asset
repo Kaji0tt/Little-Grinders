@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buffName: Poison
   MyDuration: 10
+  MyBaseDamage: 4
   ProcChance: 0
   tickIntervall: 1
   stackable: 0
-  particleEffect: {fileID: 0}
-  icon: {fileID: 0}
-  damage: 1
+  active: 0
+  particleEffect: {fileID: 2607011833056147231, guid: bfeac9fb419905840b1d1456c56cfa81,
+    type: 3}
+  icon: {fileID: 7565603557658285252, guid: 6dc7009a86b070e41bdb2f3976a3369f, type: 3}
+  MyDescription: "F\xFCgt pro Tick 2 Schaden zu."
+  MyTickDamage: 2

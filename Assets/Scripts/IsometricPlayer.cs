@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 ///Bezogen auf das Debuff / Bufff System, bzw. die Abilities:
 ///Auf dem Spieler liegt eine Liste von Abilities - wenn der Spieler ein AbilityTalent benutzt, wird nach der Ability in der entsprechenden Liste gesucht, welche sich mit der BaseAbility vom AbilityTalent gleicht.
 ///Eine InterfaceKlasse DeBuffSystem könnte auf die OnTicks(), OnUse(), und OnCooldowns() von Abilities zugreifen und die... - Ne das stupid.
@@ -107,6 +108,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
     // Item which spawns upon load:
     //public Item test_item, test_item2, test_item3;
+
 
     private void Awake()
     {
@@ -390,6 +392,8 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
             //*** ANIMATION *** - > Animation-Speed = AttackSpeed vom Schwert.
             weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
 
+            //Call the GameEvent of Attacking Player
+            GameEvents.instance.PlayerHasAttacked(playerStats.AttackPower.Value);
 
             //*** SOUND ***    
             string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };
@@ -409,7 +413,8 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
                 //Falls der Feind gestorben ist, wollen wir ihn nicht länger angreifen. Ohne != null kommt es sonst zur Null-Reference, nachdem entsprechende Feinde getötet wurden.
                 if (enemy != null)
                 {
-                    enemy.GetComponent<MobStats>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);                    
+                    enemy.GetComponent<MobStats>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+
                 }
 
             }

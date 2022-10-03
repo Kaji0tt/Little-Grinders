@@ -8,14 +8,14 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Buff/Poison")]
 public class Poison : Buff
 {
-    public float damage;
+    public float MyTickDamage;
 
     //private Transform targetTransform;
     //public IEntitie target;
 
-    public override void Activated(IEntitie target, Transform targetTransform)
+    public override void Activated(IEntitie instanceTarget, Transform targetTransform)
     {
-
+        instanceTarget.TakeDirectDamage(MyBaseDamage, 0);
     }
 
 
@@ -25,17 +25,18 @@ public class Poison : Buff
         //Debug.Log("Original Buff Update is being called.");
         if(active)
         {
-            //Debug.Log("Posion is currently active.");
+            Debug.Log("Posion is currently active.");
         }
     }
-    public override void OnTick(IEntitie target)
+    public override void OnTick(IEntitie instanceTarget, IEntitie instanceOrigin)
     {
         
-       target.TakeDirectDamage(damage, 0);  
+       instanceTarget.TakeDirectDamage(MyTickDamage, 0);
+        Instantiate(particleEffect, PlayerManager.instance.player.transform);
         
     }
 
-    public override void Expired(IEntitie target, Transform targetTransform)
+    public override void Expired(IEntitie instanceTarget, IEntitie instanceOrigin)
     {
         //Debug.Log("Poison Expired.");
     }

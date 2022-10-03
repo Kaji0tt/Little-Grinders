@@ -11,7 +11,7 @@ public class EQSlotSchmuck : MonoBehaviour
 
     private void Start()
     {
-        GameEvents.current.equipSchmuck += equip;
+        GameEvents.instance.equipSchmuck += equip;
         int_slotBtn = GetComponent<Int_SlotBtn>();
     }
 

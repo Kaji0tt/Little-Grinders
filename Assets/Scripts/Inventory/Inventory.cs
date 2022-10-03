@@ -9,7 +9,7 @@ public class Inventory : MonoBehaviour
     public event EventHandler OnItemListChanged; //Würde man für Equip nicht brauchen, da einzelne GO
     public List<ItemInstance> itemList;
     private Action<ItemInstance> useItemAction; //Würde man brauchen, falls man aktive Fähigkeiten auf den Items haben möchte.
-    private GameEvents current;
+    //private GameEvents current;
 
 
 

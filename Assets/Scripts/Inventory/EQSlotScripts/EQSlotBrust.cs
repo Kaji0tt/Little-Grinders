@@ -11,7 +11,7 @@ public class EQSlotBrust : MonoBehaviour
 
     private void Start()
     {
-        GameEvents.current.equipBrust += equip;
+        GameEvents.instance.equipBrust += equip;
         int_slotBtn = GetComponent<Int_SlotBtn>();
         //Debug.Log("On Start, i got loaded the following Item: " + brust_Item.ItemName + " with ID: " + brust_Item.ItemID);
     }
