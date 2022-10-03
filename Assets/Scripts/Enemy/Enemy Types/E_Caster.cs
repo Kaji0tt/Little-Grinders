@@ -12,6 +12,8 @@ public class E_Caster : EnemyController
 {
     public GameObject projectile;
 
+    private GameObject projClone;
+
     [SerializeField]
     private float projectileDamage;
 
@@ -101,7 +103,17 @@ public class E_Caster : EnemyController
 
 
         else
-        Instantiate(projectile, new Vector3(transform.position.x - projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform).GetComponent<_projectile>()._pDamage = projectileDamage;
+        {
+            //Initialisiere ein Projektil
+            projClone = Instantiate(projectile, new Vector3(transform.position.x - projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform);
+            //Setze den Schaden des Projektils
+            projClone.GetComponent<_projectile>()._pDamage = projectileDamage;
+            //Bestimme die Ursprungs-Entitie für das Projektil.
+            projClone.GetComponent<_projectile>().SetOrigin(this.gameObject.GetComponent<MobStats>());
+
+            //print("E_Caster else called.");
+        }
+
     }
 
 

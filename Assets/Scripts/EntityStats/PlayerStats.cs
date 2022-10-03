@@ -40,6 +40,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
 
     public void ApplyBuff(BuffInstance buff)
     {
+
         //Falls ein neuer Buff hinzugefügt wird, überprüfe ob dieser Stackbar ist.
         if (!buff.stackable)
         {
@@ -56,6 +57,8 @@ public class PlayerStats : MonoBehaviour, IEntitie
         }
 
         activeBuffs.Add(buff);
+
+        UI_Buff.instance.ApplyUIBuff(buff);
 
     }
 
@@ -211,12 +214,14 @@ public class PlayerStats : MonoBehaviour, IEntitie
 
         HandleBuffs();
 
+        /*
         if (Input.GetKeyDown(KeyCode.J))
         {
             BuffInstance buffInstance = BuffDatabase.instance.GetInstance("Reflection");
             print(buffInstance.buffName);
             buffInstance.ApplyBuff(this);
         }
+        */
     }
 
 
@@ -232,98 +237,31 @@ public class PlayerStats : MonoBehaviour, IEntitie
         //activeBuffs = new List<Buff>();
     }
 
-
-    public void AddNewStatModifier(EntitieStats stats, StatModifier modifier)
-    {
-        switch (stats)
-        {
-            case EntitieStats.AbilityPower:
-                AbilityPower.AddModifier(modifier);
-                return;
-
-            case EntitieStats.AttackPower:
-                AttackPower.AddModifier(modifier);
-                return;
-
-            case EntitieStats.Armor:
-                Armor.AddModifier(modifier);
-                return;
-
-            case EntitieStats.Hp:
-                Hp.AddModifier(modifier);
-                return;
-
-            case EntitieStats.MovementSpeed:
-                MovementSpeed.AddModifier(modifier);
-                return;
-
-            case EntitieStats.AttackSpeed:
-                AttackSpeed.AddModifier(modifier);
-                return;
-
-
-            default: return;
-        }
-    }
-
-    public void RemoveStatModifier(EntitieStats stats, StatModifier modifier)
-    {
-        switch (stats)
-        {
-            case EntitieStats.AbilityPower:
-                AbilityPower.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.AttackPower:
-                AttackPower.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.Armor:
-                Armor.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.Hp:
-                Hp.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.MovementSpeed:
-                MovementSpeed.RemoveModifier(modifier);
-                return;
-
-            case EntitieStats.AttackSpeed:
-                AttackSpeed.RemoveModifier(modifier);
-                return;
-
-
-            default: return;
-        }
-    }
-
-    public float GetStat(EntitieStats stat)
+    public CharStats GetStat(EntitieStats stat)
     {
         switch (stat)
         {
             case EntitieStats.AbilityPower:
-                return AbilityPower.Value;
+                return AbilityPower;
 
             case EntitieStats.AttackPower:
-                return AttackPower.Value;
+                return AttackPower;
 
             case EntitieStats.Armor:
-                return Armor.Value;
+                return Armor;
 
             case EntitieStats.Hp:
-                return Hp.Value;
+                return Hp;
 
             case EntitieStats.MovementSpeed:
-                return MovementSpeed.Value;
+                return MovementSpeed;
 
             case EntitieStats.AttackSpeed:
-                return AttackSpeed.Value;
+                return AttackSpeed;
 
             default:
                 Debug.Log("No Stat.Value found.");
-                return 0;
+                return null;
         }
     }
 
@@ -338,8 +276,8 @@ public class PlayerStats : MonoBehaviour, IEntitie
         damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
         damage = Mathf.Clamp(damage, 1, int.MaxValue);
         
-        //Berichte den Gamevents vom verursachten Schaden am Spieler.
-        //GameEvents.current.PlayerWasAttacked(damage);
+        //Berichte den GameEvents vom verursachten Schaden am Spieler.
+        GameEvents.instance.PlayerWasAttacked(damage);
 
         //Ziehe den Schaden vom Spielerleben ab.
         Set_currentHp(-damage);

@@ -65,6 +65,12 @@ public class TalentTree : MonoBehaviour
 
     [SerializeField]
     private Text talentPointText;
+    [SerializeField]
+    private Text totalVoidPointsText;
+    [SerializeField]
+    private Text totalUtilityPointsText;
+    [SerializeField]
+    private Text totalCombatPointsText;
 
     //Für jedes Talent, welches gesetzt wurde, erhöhe die talentTypePoins
     [HideInInspector]
@@ -102,8 +108,12 @@ public class TalentTree : MonoBehaviour
             }
             #endregion
 
+            totalVoidPointsText.text = totalVoidSpecPoints.ToString();
+            totalUtilityPointsText.text = totalUtilitySpecPoints.ToString();
+            totalCombatPointsText.text = totalCombatSpecPoints.ToString();
+
             //Falls das geskillte Talent keine Fähigkeit ist, setze die entsprechende Spezialisierung für die Grundfähigkeit.
-            if(clickedTalent.GetType() != typeof(AbilityTalent))
+            if (clickedTalent.GetType() != typeof(AbilityTalent))
             {
                 //Setze die Spezialisierung.
                 SetSpecializationOfAbility(clickedTalent);
@@ -181,7 +191,14 @@ public class TalentTree : MonoBehaviour
     {
         
         if(PlayerManager.instance.player != null)
-        talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
+        {
+            talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
+            totalVoidPointsText.text = totalVoidSpecPoints.ToString();
+            totalUtilityPointsText.text = totalUtilitySpecPoints.ToString();
+            totalCombatPointsText.text = totalCombatSpecPoints.ToString();
+        }
+
+
 
     }
     

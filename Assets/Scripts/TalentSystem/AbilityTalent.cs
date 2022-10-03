@@ -249,9 +249,35 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UI_Manager.instance.ShowTooltip(baseAbility.description);
+        UI_Manager.instance.ShowTooltip(baseAbility.description + '\n' + GetRequirementsOfTalent(this));
     }
 
+    public string GetRequirementsOfTalent(AbilityTalent ability)
+    {
+        string info = null;
+        switch (ability.baseAbility.abilityType)
+        {
+            case Ability.AbilityType.Combat:
+                if (TalentTree.instance.totalCombatSpecPoints <= baseAbility.requiredTypePoints)
+                    info = "<color=#b27d90>Benötigte Combat-Punkte:<b> " + ability.baseAbility.requiredTypePoints + "</b></color>";
+                    return info;
+
+            case Ability.AbilityType.Void:
+                if (TalentTree.instance.totalVoidSpecPoints <= baseAbility.requiredTypePoints)
+                    info = "<color=#b27d90>Benötigte Void-Punkte:<b> " + ability.baseAbility.requiredTypePoints + "</b></color>";
+                return info;
+                
+
+            case Ability.AbilityType.Utility:
+                if (TalentTree.instance.totalUtilitySpecPoints <= baseAbility.requiredTypePoints)
+                    info = "<color=#b27d90>Benötigte Utility-Punkte:<b> " + ability.baseAbility.requiredTypePoints + "</b></color>";
+                return info;
+                
+
+            default: return info;
+
+        }
+    }
     public void OnDrag(PointerEventData eventData)
     {
         HandScript.instance.TakeMoveable(this);

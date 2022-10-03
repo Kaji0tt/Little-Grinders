@@ -4,13 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameEvents : MonoBehaviour
-{ 
-    public static GameEvents current;
-
-    private void Awake()
+{
+    #region Singleton
+    public static GameEvents instance;
+    void Awake()
     {
-        current = this;
+        //Singleton Anweisung, zur globalen Reference AudioManager.instance
+        if (instance == null)
+            instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
+    #endregion
+
     public event Action<ItemInstance> equipSchuhe;
     public event Action<ItemInstance> equipHose;
     public event Action<ItemInstance> equipBrust;
@@ -18,9 +27,14 @@ public class GameEvents : MonoBehaviour
     public event Action<ItemInstance> equipWeapon;
     public event Action<ItemInstance> equipSchmuck;
 
+    public event Action<float> OnPlayerHasAttackedEvent;
+    //public event Action<float> OnPlayerWasAttackedEvent;
+
+    public event Action<float> OnEnemyHasAttackedEvent;
+    public event Action<float> OnEnemyWasAttackedEvent;
     //public event Action<IEntitie, float> playerWasAttacked;
 
-    public event Action<string> playSound;
+    public static event Action<string> playSound;
     //private IsometricPlayer isometricPlayer;
 
     
@@ -54,11 +68,25 @@ public class GameEvents : MonoBehaviour
 
     }
 
-    /*
-    public void PlayerWasAttacked(IEntitie origin, float damage)
+    
+    public void PlayerHasAttacked(float damage)
     {
-        playerWasAttacked(origin, damage);
+        OnPlayerHasAttackedEvent(damage);
     }
-    */
+    public void PlayerWasAttacked(float damage)
+    {
+        //OnPlayerWasAttackedEvent(damage);
+    }
+
+    public void EnemyHasAttacked(float damage)
+    {
+        OnEnemyHasAttackedEvent(damage);
+    }
+
+    public void EnemyWasAttacked(float damage)
+    {
+        OnEnemyHasAttackedEvent(damage);
+    }
+
 
 }

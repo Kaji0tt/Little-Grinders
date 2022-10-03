@@ -31,23 +31,35 @@ using UnityEngine.EventSystems;
 
 
 
-public class BuffInstance : Buff
+public class BuffInstance : Buff, IDescribable
 {
     public string buffName;
 
     public float MyDuration;
 
-    public IEntitie target;
+    public float MyBaseDamage;
 
-    private Transform targetTransform;
+    public IEntitie MyTargetEntitie;
 
-    private float tickTimer;
+    //Lediglich die BuffInstance kann von der Origin Wissen, ansonsten werden die Scriptable Objects persistent überwiesen.
+    //
+    public IEntitie MyOriginEntitie { get; set; }
+
+    private Transform MyTargetTransform;
+
+    private float MyTickTimer;
 
     public float tick;
 
     //public float damage;
 
     public bool stackable;
+
+    private int MyStacks;
+
+    public string MyDescription { get; set; }
+
+
 
     //Der StatModifier sollte in der geerbten Klasse definiert werden.
     //Er könnte sich auf das MovementSpeed ebenso auswirken, wie auf die HP!
@@ -60,10 +72,11 @@ public class BuffInstance : Buff
 
     public Sprite icon;
 
-    private Buff originalBuff;
+    public Buff originalBuff;
 
     public BuffInstance(Buff buff)
     {
+        
         
         buffName = buff.buffName;
         MyDuration = buff.MyDuration;
@@ -74,29 +87,37 @@ public class BuffInstance : Buff
 
         icon = buff.icon;
 
+        tick = buff.tickIntervall;
+
+        MyBaseDamage = buff.MyBaseDamage;
+        //If you'd like to acces certain values, which not the original Buff but the 
+        //Scriptable Version of it (e.g. LifePoison), refert to the original Buff and use its values.
+        //Don't change the values so! Changes to SO's are permanent!
         originalBuff = buff;
 
-        tick = buff.tickIntervall;
-        
+        MyDescription = buff.MyDescription;
+
 
     }
 
     //BuffInstance wird mittels ApplyBuff und einer entsprechenden Entitie zugewiesen.
     //Über die Entitie lassen sich alle Stats und Values verändern.
     //Innerhalb der Entittie (MobStat / PlayerStat) wird der Buff einer Liste hinzugefügt.
-    public void ApplyBuff(IEntitie entitie)
+    public void ApplyBuff(IEntitie myTargetEntitie, IEntitie myOriginEntititie)
     {
         //Die Entitie wird in der BuffInstance gespeichert.
-        target = entitie;
+        MyTargetEntitie = myTargetEntitie;
 
         //Das TickIntervall wird übernommen, so dass der Buff in dem im SO gespeicherten Intervall tickt.
-        tickTimer = tick;
+        MyTickTimer = tick;
+
+        MyOriginEntitie = myOriginEntititie;
 
         //Prüfe ob der Buff Stackable ist und füge die BuffInstanz der Entitie hinzu.
-        entitie.ApplyBuff(this);
+        myTargetEntitie.ApplyBuff(this);
 
         //Speicher die Transform der Entitie. Relevant für Positionierung von Particel-Effekten.
-        targetTransform = entitie.GetTransform();
+        MyTargetTransform = myTargetEntitie.GetTransform();
     }
 
     public override void Activated(IEntitie target, Transform targetTransform)
@@ -111,12 +132,12 @@ public class BuffInstance : Buff
 
     public virtual void Remove()
     {
-        target.RemoveBuff(this);
+        MyTargetEntitie.RemoveBuff(this);
     }
 
-    public override void Expired(IEntitie target, Transform targetTransform)
+    public override void Expired(IEntitie instanceTarget, IEntitie instanceOrigin)
     {
-        originalBuff.Expired(target, targetTransform);
+        originalBuff.Expired(instanceTarget, instanceOrigin);
     }
     public override void Update()
     {           
@@ -130,33 +151,47 @@ public class BuffInstance : Buff
         else
             Remove();
 
-        Debug.Log("Current Duration: " + MyDuration);
+        //Debug.Log("Current Duration: " + MyDuration);
 
         originalBuff.Update();
     }
 
 
-    public override void OnTick(IEntitie target)
+    public override void OnTick(IEntitie instanceTarget, IEntitie instanceOrigin)
     {
-        originalBuff.OnTick(target);
+        originalBuff.OnTick(MyTargetEntitie, MyOriginEntitie);
     }
 
     public void CalculateTickers()
     {
-        Debug.Log("Tick:" + tick);
+        //Debug.Log("Tick:" + tick);
         tick -= Time.deltaTime;
 
         if (tick <= 0)
         {
-            tick = tickTimer;
+            tick = MyTickTimer;
 
-            Debug.Log(MyDuration + "duration");
-            OnTick(target);
+            //Debug.Log("Cast Tick on " + MyTargetEntitie.GetTransform().name + " which originated from " + MyOriginEntitie.GetTransform().name );
+            OnTick(MyTargetEntitie, MyOriginEntitie);
         }
 
 
     }
 
+    public string GetDescription()
+    {
+        return MyDescription;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        UI_Manager.instance.ShowTooltip(GetDescription());
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        UI_Manager.instance.HideTooltip();
+    }
 }
 
 
@@ -165,6 +200,8 @@ public abstract class Buff : ScriptableObject
     public string buffName;
 
     public float MyDuration;
+
+    public float MyBaseDamage;
 
     public float ProcChance;
 
@@ -181,13 +218,16 @@ public abstract class Buff : ScriptableObject
 
     public Sprite icon;
 
+    [TextArea]
+    public string MyDescription;
+
     public abstract void Activated(IEntitie target, Transform targetTransform);
 
     public abstract void Update();
 
-    public abstract void Expired(IEntitie target, Transform targetTransform);
+    public abstract void Expired(IEntitie instanceTarget, IEntitie instanceOrigin);
 
-    public abstract void OnTick(IEntitie target);
+    public abstract void OnTick(IEntitie instanceTarget, IEntitie instanceOrigin);
 
 
 }

@@ -30,7 +30,7 @@ public class EQSlotSchuhe : MonoBehaviour
 
     private void Start()
     {
-        GameEvents.current.equipSchuhe += equip;
+        GameEvents.instance.equipSchuhe += equip;
         int_slotBtn = GetComponent<Int_SlotBtn>();
     }
 

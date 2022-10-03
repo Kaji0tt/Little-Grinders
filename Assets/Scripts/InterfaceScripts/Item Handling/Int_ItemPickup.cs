@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Scheint nicht verwendet zu werden.
 public class Int_ItemPickup : MonoBehaviour
 {
     private string StoredData;
@@ -10,6 +11,7 @@ public class Int_ItemPickup : MonoBehaviour
     private SpriteRenderer sprite;
     void Start()
     {
+        print(gameObject.name);
         StoredData = "Nothing";
         sprite = GetComponent<SpriteRenderer>();
 

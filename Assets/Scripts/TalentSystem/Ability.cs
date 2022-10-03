@@ -46,7 +46,7 @@ public abstract class Ability : MonoBehaviour
     /// <summary>
     /// Daten zum Typ der Fähigkeit.
     /// </summary>
-    public enum AbilityType { Void, Combat, Utility }; // Wird in Abhängigkeit vom Talent entschieden.
+    public enum AbilityType { Void, Utility, Combat }; // Wird in Abhängigkeit vom Talent entschieden.
 
     public AbilityType abilityType;
 

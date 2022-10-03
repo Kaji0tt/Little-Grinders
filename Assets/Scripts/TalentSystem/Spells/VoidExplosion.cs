@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,11 @@ public class VoidExplosion : Ability
 {
     public float baseDamage;
 
+    public GameObject voidExpEffect;
+
+    /// <summary>
+    /// Spec 1 Variables
+    /// </summary>
     private float spec1range;
 
     private float spec1scaling;
@@ -14,18 +20,44 @@ public class VoidExplosion : Ability
 
     private float spec1Intervall;
 
-    float entitieAP;
+    /// <summary>
+    /// Spec 2 Variables
+    /// </summary>
 
-    public GameObject voidExpEffect;
+    public Buff lifeDot;
+
+    public float spec2extraDamage;
+
+    private float spec2finalDamage;
+
+    public GameObject spec2VoidEplo;
 
     //public GameObject healAuraTick;
 
-    private StatModifier spec2mod;
+    /// <summary>
+    /// Spec 3 Variables
+    /// </summary>
 
-    private StatModifier spec3mod;
+    public Buff weakArmor;
 
-    private StatModifier spec3ATmod;
+    private void Start()
+    {
+        GameEvents.instance.OnPlayerHasAttackedEvent += PlayerAttacked; 
 
+    }
+
+    private void OnDisable()
+    {
+        //GameEvents.instance.OnPlayerHasAttackedEvent -= PlayerAttacked;
+    }
+
+    private void PlayerAttacked(float playerDamage)
+    {
+        if(spec3Talents[2].currentCount > 0 && this.GetComponent<AbilityTalent>().IsActive())
+        {
+            CallVoidExplosion(PlayerManager.instance.player.GetComponent<PlayerStats>(), PlayerManager.instance.player.transform.position);
+        }
+    }
 
     #region UseRegion
     public override void UseBase(IEntitie entitie)
@@ -34,24 +66,19 @@ public class VoidExplosion : Ability
         base.UseBase(entitie);
 
         //Calle die Fähigkeit seperat, um sie in den Spezialisierungen unabhängig von der BasAbility (Spec) callen zu können.
-        CallVoidExplosion(entitie);
-
-
-
-
-
+        CallVoidExplosion(entitie, entitie.GetTransform().position);
 
     }
 
     ///Erschaffe einen Circle um den Spieler in einem Radius von .5 + spec1.Count / 2 und Füge baseDamage + 30% AP Schaden zu.
     ///
-    public void CallVoidExplosion(IEntitie entitie)
+    public void CallVoidExplosion(IEntitie entitie, Vector3 position)
     {
         //Erhalte die AP Values des Ursprungs
-        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower);
+        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower).Value;
 
         //Erschaffe einen SphereCollider um den Ursprung
-        Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, .5f + spec1range / 2);
+        Collider[] hitColliders = Physics.OverlapSphere(position, 1f + spec1range);
 
         //Für jeden getroffenen Collider
         foreach (Collider hitCollider in hitColliders)
@@ -61,15 +88,14 @@ public class VoidExplosion : Ability
             {
                 //Falls der erste Spec nicht geskilled wurde, verwende normale Schadensberechnung für alle getroffenen Feinde.
                 if(spec1Talents[0].currentCount == 0)
-                hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * spec1scaling, spec1range);
+                hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * (0.3f + spec1scaling) + spec2extraDamage, 1f + spec1range);
 
                 else
                 {
                     //Falls der erste Spec1 durch geskilled wurde, verwende zunächst die Standard-Schadensberechnung,
                     if(spec1Intervall == 0)
                     {
-                        hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * spec1scaling, spec1range);
-
+                        hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * (0.3f + spec1scaling), 1f + spec1range);
 
                     }
 
@@ -77,7 +103,7 @@ public class VoidExplosion : Ability
                     //ehe der Schaden anschließend durch das Intervall geteilt wird. So erreicht erst der letzte Cast den finalen Schaden.
                     else
                     {
-                        hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage((baseDamage + entitieAP * spec1scaling) / spec1Intervall, spec1range);
+                        hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage((baseDamage + (entitieAP * 0.3f) * spec1scaling) / spec1Intervall, 1f + spec1range);
 
                     }
 
@@ -90,7 +116,7 @@ public class VoidExplosion : Ability
             {
                 //Falls vom Gegener gecalled, füge lediglich dem Spieler Schaden zu.
                 print("succesfully called Enemy-Origin, Player Target");                                                //Die Range ist indem fall fix.
-                hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * 0.3f, 2.5f);
+                hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * 0.3f, 1.5f);
             }
 
         }
@@ -106,12 +132,16 @@ public class VoidExplosion : Ability
 
     //Möglicherweise reicht eine einzelne Liste von Talenten in Ability, da die Indexes dieser die Referenz für die Values der Spezialisierungen darstellen können.
 
+    //De we actually need to give Information of the clicked Talent? Not sure.
     public override void ApplySpec1Bonus(Talent t)
     {
 
-        spec1range = 1.5f + spec1Talents[0].currentCount;
+        //Standard reichweite beträgt 1. 
+        //Ist die erste Fähigkeit von Voidexplosion durch geskilled, beträgt die reichweite 1 +  (5 / 5 = 1) = 2
+        spec1range = spec1Talents[0].currentCount / 5;
 
-        spec1scaling = 0.3f + (spec1Talents[1].currentCount / 10);
+        //Erhöht den Verursachten schaden pro skillpunkt um zusätzlich 10% AP
+        spec1scaling = (spec1Talents[1].currentCount / 10);
 
     }
     public override void OnUseSpec1(IEntitie entitie)
@@ -120,13 +150,13 @@ public class VoidExplosion : Ability
 
         ///_________________First-Follow Talent: 
         ///Void erhält einen erhöhten Radius um 1 pro Punkt in Spec1.
-        spec1range = 1.5f + spec1Talents[0].currentCount;
+        spec1range = spec1Talents[0].currentCount / 5;
 
 
 
         ///_________________Second-Follow Talent: 
         ///Erhöht die Skalierung von Void-Explosion um 0,1 pro Specpunkt.
-        spec1scaling = 0.3f + (spec1Talents[1].currentCount / 10);
+        spec1scaling = spec1Talents[1].currentCount / 10;
 
         ///_________________Third-Follow Talent: 
         ///Im Intervall einer Lerp-Funktion, calle Void Explosion erneut. Die ersten call werden in radius und schaden durch die Gesamtzahl der Calls geteilt.
@@ -153,128 +183,117 @@ public class VoidExplosion : Ability
 
     public override void ApplySpec2Bonus(Talent t)
     {
-        activeTime = 1 + spec2Talents[0].currentCount;
+        spec2extraDamage = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_maxHp() / 100 * (5 * spec2Talents[1].currentCount);
+
+        if (spec2Talents[2].currentCount > 0)
+        {
+            activeTime = 5;
+        }
+
+        if (spec2Talents[2].currentCount > 0)
+        {
+            spec2finalDamage = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_maxHp() / 100 * 20;
+        }
     }
     public override void OnUseSpec2(IEntitie entitie)
     {
-        //Heal Spec
+        //Utility Spec
 
-        ///Heal erhält eine aktive Zeitspanne von 1+ (Skillpoints of Heilung_Heal1), pro Sekunde heilt der Spieler zusätzlich um 2% max HP + 10% AP
-        ///
-        activeTime = 1 + spec2Talents[0].currentCount;
 
-        ///Während der aktiven Zeitspanne erhält der Spieler (Skillpoits of Heilung_Heal2) x 5% extra Movementspeed.
-        ///
+        ///Void-Explosion fügt je Skillpunkt einen Dot hinzu, welcher über 5 Sekunden je Skillpunkt 1 + 2% AP + 2% PlayerMaxLife Schaden verursacht.  
+        //activeTime = 1 + spec2Talents[0].currentCount;
+
+        //for(int i = 0; i < spec2Talents[0].currentCount; i++)
+        //{
+        Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, 1f);
+
+        ApplySpec2Dots(entitie, hitColliders);
+        //}
+
+
+
+
+        ///Der Schaden von Void-Explosion wird je Skillpunkt um 5% des Spieler Lebens erhöht.
         if (spec2Talents[1].currentCount > 0)
         {
-            //spec2speed = spec2Talents[1].currentCount * 0.05f;
-
-            //spec2mod = new StatModifier(spec2speed, StatModType.PercentAdd);
-
-            entitie.AddNewStatModifier(EntitieStats.MovementSpeed, spec2mod);
-
-            /*
-            if (entitie.GetComponent<PlayerStats>() != null)
-            {
-                PlayerStats pStats = entitie.GetComponent<PlayerStats>();
-                pStats.MovementSpeed.AddModifier(spec2mod);
-            }
-            else
-            {
-                MobStats mStats = entitie.GetComponent<MobStats>();
-                mStats.MovementSpeed.AddModifier(spec2mod);
-
-            }
-            */
+            spec2extraDamage = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_maxHp() / 100 * (5 * spec2Talents[1].currentCount);
+            Debug.Log(spec2extraDamage);
         }
 
-        ///Wenn heal genutzt wird, werden alle Gegner im Umkreis von 1 (+ Skillpoints of Heilung_Heal3) für 2 (x Skillpoints of Heilung_Heal3) Sekunden gestunned.
+        ///Void Explosion wird nach 5 Sekunden an der Stelle des Cursors ein zusätzliches Mal gecasted und verursacht dabei 20% des Spieler Lebens als zusätzlichen Schaden.
         ///
         //Stun ist noch nicht implementiert... mist.
-        if (spec2Talents[2].currentCount >= 0)
+        if (spec2Talents[2].currentCount > 0)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, 1 + spec2Talents[2].currentCount);
+            spec2finalDamage = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_maxHp() / 100 * 20;
 
-            foreach (Collider hitCollider in hitColliders)
+
+        }
+    }
+
+    void ApplySpec2Dots(IEntitie entitie, Collider[] hitColliders)
+    {
+
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.transform.tag == "Enemy")
             {
-                if (hitCollider.transform.tag == "Enemy")
-                {
-                    hitCollider.transform.GetComponentInParent<EnemyController>().StunEnemy(2 * spec2Talents[2].currentCount);
-                }
+                /*Certain Problem about Buffs - the BuffInstance does not know about certain values of the Buff. While Damage Buffs might have a Damage value
+                 * thats subject to Change from other Classes (e.g. Abilities), other Buffs like Reflection or Thorns might not deal with base damage Values.
+                 * LF for a way, that Specific Buffs might be edited after they've been constructed.
+                 */
+                BuffInstance buffInstance = new BuffInstance(lifeDot);
+
+                //You could change the MyBaseDamage Value here, however we are applying the Debuff currently for the number of SpecPoints invested which makes more fun and sense.
+                //buffInstance.MyBaseDamage = buffInstance.MyBaseDamage * 
+
+                //print(hitCollider.gameObject.transform.parent.GetComponent<MobStats>());
+                buffInstance.ApplyBuff(hitCollider.gameObject.transform.parent.GetComponent<MobStats>(), PlayerManager.instance.player.GetComponent<PlayerStats>());
+
             }
         }
     }
 
     public override void ApplySpec3Bonus(Talent t)
     {
-        activeTime = 1 + spec3Talents[0].currentCount;
+        if(spec3Talents[2].currentCount > 0)
+        activeTime = 5;
     }
     public override void OnUseSpec3(IEntitie entitie)
     {
         //Combat Spec
 
-        ///Heal erhält eine aktive Zeitspanne von (Skillpoints of Heilung_Combat1), während dieser Zeitspannte erhält der Spieler 20% Armor als extra Armor. 
-        ///
-        activeTime = 1 + spec3Talents[0].currentCount;
+        ///Void Explosion reduziert über einen Debuff die Rüstung der Gegner um jeweils 5% für 5 Sekunden. -> Buff, Rüstungszerreißen
+        Collider[] hitColliders = Physics.OverlapSphere(entitie.GetTransform().position, 1f + spec1range);
 
-        spec3mod = new StatModifier(entitie.GetStat(EntitieStats.Armor) * 0.2f, StatModType.PercentAdd);
-        entitie.AddNewStatModifier(EntitieStats.Armor, spec3mod);
-
-        /*
-        if (entitie.GetComponent<PlayerStats>() != null)
+        foreach(Collider collider in hitColliders)
         {
-            if (spec3Talents[0].currentCount > 0)
+            if(collider.gameObject.tag == "Enemy")
             {
-                PlayerStats pStats = entitie.GetComponent<PlayerStats>();
+                BuffInstance buffInstance = new BuffInstance(weakArmor);
 
-                spec3mod = new StatModifier(pStats.Armor.Value * 0.2f, StatModType.PercentAdd);
+                //You could change the MyBaseDamage Value here, however we are applying the Debuff currently for the number of SpecPoints invested which makes more fun and sense.
+                //buffInstance.MyBaseDamage = buffInstance.MyBaseDamage * 
 
-                pStats.Armor.AddModifier(spec3mod);
-
+                //print(hitCollider.gameObject.transform.parent.GetComponent<MobStats>());
+                buffInstance.ApplyBuff(collider.gameObject.transform.parent.GetComponent<MobStats>(), PlayerManager.instance.player.GetComponent<PlayerStats>());
             }
-
         }
-        else
-        {
-            print("Spec3 für Mob muss noch eingestellt werden");
-        }
-        */
-
-        ///Während der aktiven Zeitspanne erhöht sich die Waffenstärke um (Skillpoints of Heilung_Combat2) x 10% ATT des Spielers.
-        ///
-
-        //  10             *      3                       *  0.1     = 0.3
-        spec3ATmod = new StatModifier(entitie.GetStat(EntitieStats.AttackPower) * spec3Talents[1].currentCount * 0.1f, StatModType.PercentAdd);
-
-        /*
-        if (entitie.GetComponent<PlayerStats>() != null)
-        {
-            if (spec3Talents[1].currentCount > 0)
-            {
-                PlayerStats pStats = entitie.GetComponent<PlayerStats>();
-                                                    //  10             *      3                       *  0.1     = 0.3
-                spec3ATmod = new StatModifier(pStats.AttackPower.Value * spec3Talents[1].currentCount * 0.1f, StatModType.PercentAdd);
-
-                pStats.AttackPower.AddModifier(spec3ATmod);
 
 
-            }
 
-        }
-        else
-        {
-            print("Spec3 für Mob muss noch eingestellt werden");
-        }
-        */
 
-        ///Während der aktiven Zeitspanne von Heal, erhalten Angreifer 10% der Armor des Spielers (x Skillpoints of Heilung_Combat3) als Schaden.
-        ///
 
-        //Schon wieder so ein Moment, wo man merkt, wir brauchen DeBuffSystem..
-        //In Allen Controllern sollte eine Funktion Apply(Buff, Duration) sein.
+        ///Void-Explosion gibt dir einen Attack-Power von jeweils 5% für 5 Sekunden.
 
-        //In diesem Fall, Player.Apply(Dornen, spec3Talents[0].currentCount)
-        //Woher weiß die Ability, was Dornen sind?..
+
+
+
+
+        ///Void-Explosion bleibt 5 Sekunden aktiv - während der aktiven Zeit, castest du Void-Explosion während deiner Angriffe.
+        //Should work.
+
 
     }
 
@@ -296,7 +315,7 @@ public class VoidExplosion : Ability
             tickTimer = tickTimer / 2;
 
             //Mit jedem Intervall, call die Explosion
-            CallVoidExplosion(entitie);
+            CallVoidExplosion(entitie, entitie.GetTransform().position);
 
             spec1Intervall -=  1;
         }
@@ -310,33 +329,8 @@ public class VoidExplosion : Ability
 
     public override void OnTickSpec2(IEntitie entitie)
     {
-        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower);
 
-        entitie.Heal((int)entitie.Get_maxHp() / 50 + (int)(entitieAP / 10));
-
-        /*
-        if (entitie.GetComponent<PlayerStats>() != null)
-        {
-            PlayerStats pStats = entitie.GetComponent<PlayerStats>();
-            entitieAP = entitie.GetComponent<PlayerStats>().AbilityPower.Value;
-            PlayerManager.instance.player.GetComponent<PlayerStats>().Heal((int)pStats.Get_maxHp() / 50  + (int)(entitieAP / 10));
-
-        }
-
-        else
-        {
-            entitieAP = entitie.GetComponent<MobStats>().AbilityPower.Value;
-            print("Der Feind braucht noch eine Zuweisung seiner Entitie im Heal Script");
-        }
-        */
-
-        if (AudioManager.instance != null)
-            AudioManager.instance.Play("Heal_Tick_1");
-
-        Instantiate(voidExpEffect, entitie.GetTransform());
-
-        Instantiate(voidExpEffect, new Vector3(entitie.GetTransform().position.x, entitie.GetTransform().position.y, entitie.GetTransform().position.z - 0.3f), Quaternion.identity, entitie.GetTransform());
-
+        //Spec 2 aint got no Tick dependent on Spell but uses Buff System.
     }
 
     public override void OnTickSpec3(IEntitie entitie)
@@ -379,27 +373,42 @@ public class VoidExplosion : Ability
 
     public override void OnCooldownSpec2(IEntitie entitie)
     {
+        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower).Value;
 
-        entitie.RemoveStatModifier(EntitieStats.MovementSpeed, spec2mod);
-        /*
-        if (entitie.GetComponent<PlayerStats>() != null)
+        //Get MousePos.
+        Ray ray = CameraManager.instance.mainCam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, LayerMask.NameToLayer("Floor")))
         {
-            PlayerStats pStats = entitie.GetComponent<PlayerStats>();
-            pStats.MovementSpeed.RemoveModifier(spec2mod);
-        }
-        else
-        {
-            MobStats mStats = entitie.GetComponent<MobStats>();
-            mStats.MovementSpeed.RemoveModifier(spec2mod);
+            Collider[] hitColliders = Physics.OverlapSphere(raycastHit.point, 1f + spec1range);
 
+            ApplySpec2Dots(entitie, hitColliders);
+
+            //Für jeden getroffenen Collider
+            foreach (Collider hitCollider in hitColliders)
+            {
+                //Handelt es sich bei dem Collider um einen Feind und beim Ursprung um den Spieler
+                if (entitie.GetTransform().tag == "Player" && hitCollider.transform.tag == "Enemy")
+                {
+                    //Falls der erste Spec nicht geskilled wurde, verwende normale Schadensberechnung für alle getroffenen Feinde.
+
+                    hitCollider.transform.GetComponentInParent<IEntitie>().TakeDirectDamage(baseDamage + entitieAP * (0.3f + spec1scaling) + spec2extraDamage + spec2finalDamage, float.MaxValue);
+                }
+
+            }
+
+            Instantiate(spec2VoidEplo, raycastHit.point, Quaternion.identity);
         }
-        */
-        //Destroy(entitie.transform.Find("HealAura(Clone)").gameObject);
+
+        //Erschaffe einen SphereCollider um den Ursprung
+
+
+
+
     }
+
 
     public override void OnCooldownSpec3(IEntitie entitie)
     {
-        entitie.RemoveStatModifier(EntitieStats.Armor, spec3mod);
         /*
         if (entitie.GetComponent<PlayerStats>() != null)
         {

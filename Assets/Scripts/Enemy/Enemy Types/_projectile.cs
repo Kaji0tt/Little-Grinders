@@ -33,6 +33,8 @@ public class _projectile : MonoBehaviour
 
     private Rigidbody _pRbody;
 
+    public IEntitie _origin { get; private set; }
+
 
     private enum Trajectory { FollowTarget, Direction, Falling, Curve}
 
@@ -111,13 +113,20 @@ public class _projectile : MonoBehaviour
 //muss frei bleiben hier.
     }
 
-    public virtual void ApplySpecialEffect(IEntitie target)
+    public virtual void ApplySpecialEffect(IEntitie targetEntitie)
     {
-
+        //Erschaffe eine Kopie des angegebenen Buffs
         BuffInstance buffInstance = BuffDatabase.instance.GetInstance(buff.buffName);
 
-        buffInstance.ApplyBuff(target);
+        //Und füge diese der Ziel-Entitie des Projektils hinzu und vermittel ?Der Ziel-Entitie? die Informationen des Ursprungs.
+        //->Die Ziel-Entitie muss nicht wissen, wo der Urpsrung des Buffs liegt, lediglich der Buff muss dies wissen.
+        buffInstance.ApplyBuff(targetEntitie, _origin);
 
+    }
+
+    public void SetOrigin(IEntitie origin)
+    {
+        _origin = origin;
     }
 
 }

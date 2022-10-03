@@ -13,16 +13,11 @@ public class EQSlotWeapon : MonoBehaviour
 
     private Int_SlotBtn int_slotBtn;
 
-
-    private void Awake()
-    {
-
-    }
     
     
     private void Start()
     {
-        GameEvents.current.equipWeapon += equip;
+        GameEvents.instance.equipWeapon += equip;
 
         int_slotBtn = GetComponent<Int_SlotBtn>();
 

@@ -6,25 +6,25 @@ public class ItemRolls : MonoBehaviour
 {
     //private string[] waffenRollsLegendary = new string[] { "- Ikarus Omen", " - Kitava's Qual", " - Blutrabes Erbe", " - Tyraels Gabe", " - Illidans Rache" };
 
-    public ItemMods[] wLegendaryRolls;
+    public ItemMods[] wLegendaryRolls { get; set; }
 
     //private string[] waffenRollsEpic = new string[] { "Essenzpeiniger", "Weltenzerstörer", "aus Mithril geschaffen", "von Titanen gerfertigt", "im Seelenfeuer geschmiedet" };
 
-    public ItemMods[] wEpicRolls;
+    public ItemMods[] wEpicRolls { get; set; }
 
     //private string[] waffenRollsRare = new string[] { "aus Eryx", "von Pandorra", "aus Himmelsrand", "aus Uldaman", "Runenverziert", "mit Edelsteinen besetzt"};
 
-    public ItemMods[] wRareRolls;
+    public ItemMods[] wRareRolls { get; set; }
 
     //private string[] waffenRollsUncommon = new string[] { "gefährlich", "magisch", "zwergisch", "geschärft", "gesegnet", "leicht", "pulsierend", "berüchtigt" };
 
-    public ItemMods[] wUncommonRolls;
+    public ItemMods[] wUncommonRolls { get; set; }
 
     //private string[] waffenRollsNegative = new string[] { "rostend", "stumpf", "abgenutzt", "zerbrechlich", "veraltet", "verflucht", "kräfte zehrend", "schwerfällig" };
 
-    public ItemMods[] wUnbrauchbarRolls;
+    public ItemMods[] wUnbrauchbarRolls { get; set; }
 
-    private ItemModsData[] allMods;
+    public ItemModsData[] modsOnItem;
     //----Gedanke, bzw. logische Struktur - umgangsprachlich:
 
     private string[] rarity = new string[] { "Unbrauchbar", "Gewöhnlich", "Ungewöhnlich", "Selten", "Episch", "Legendär" };
@@ -33,7 +33,7 @@ public class ItemRolls : MonoBehaviour
 
     private float[] _rarityChances;
 
-    #region New Concept for Item-Rools
+    #region New Concept for Item-Rolls
     ///--- Rarity of Item ---
     ///
     /// RollRarity()
@@ -69,6 +69,20 @@ public class ItemRolls : MonoBehaviour
     [HideInInspector]
     public float levelModifier, worldModifier, bossModifier;
 
+    private void Start()
+    {
+        ItemMods[] wUnbrauchbarRolls = Resources.LoadAll<ItemMods>("Mods/Unbrauchbar");
+
+        ItemMods[] wUncommonRolls = Resources.LoadAll<ItemMods>("Mods/Ungewöhnlich");
+
+        ItemMods[] wRareRolls = Resources.LoadAll<ItemMods>("Mods/Selten");
+
+        ItemMods[] wEpicRolls = Resources.LoadAll<ItemMods>("Mods/Episch");
+
+        ItemMods[] wLegendaryRolls = Resources.LoadAll<ItemMods>("Mods/Legendary");
+
+    }
+
     public ItemInstance RollItem(ItemInstance item)
     {
         //If the Item is not a Consumable
@@ -100,7 +114,7 @@ public class ItemRolls : MonoBehaviour
             //Create a Mod for each ItemModsData in Array allMods
             for (int i = 0; i <= allMods.Length -1; i++ )
             {
-
+                print("We are in the int:i loop for all Mods, which has a length of " + allMods.Length);
                 //Roll the Rarity of each Mod, capped at below the rarity of the Item
                 allMods[i] = PickASingleRoll(RollRarity(currentItemRarity, "mod"));
             }
@@ -128,14 +142,16 @@ public class ItemRolls : MonoBehaviour
     private int RollRarity(int fixedRarity, string type)
     {
         //Bestimme den Level-Modifier anhand des Spieler-Levels
-        levelModifier = 1 + 1 * (PlayerManager.instance.player.GetComponent<PlayerStats>().level / 100);
+        //levelModifier = 1 + 1 * (PlayerManager.instance.player.GetComponent<PlayerStats>().level / 1000);
 
-        //Bestimme den Map-Modifier anhand des Welt-Levels (Maps not implemented yet.)
-        // worldModifier = 1 + 1 * (MapLevel / 10)
+        //Bestimme den Roll-Modifier anhand des Welt-Levels (Replaced with Level-Modifier 23.09.22)
+        if (GlobalMap.instance != null)
+            worldModifier = 1 + 1 * (GlobalMap.instance.currentMap.mapLevel / 10);
+        else worldModifier = 1;
 
 
         //Da wir ein neues Item mit einer fixedRarity von 5 in den Roll geben, kann als itemRarity nicht ein "Unbrauchbaren" Standardwert gesetzt werden. Somit bleibt diese Option nur für Mods.
-        if ((Random.Range(1, 1000) >= (badroll - 10 * levelModifier)) && (fixedRarity > 0)) 
+        if ((Random.Range(1, 1000) >= (badroll - 10 * worldModifier)) && (fixedRarity > 0)) 
         {
             if (type != "mod")
                 print("Passed the Bad Rarity, rolling for an Uncommon! /n Rarity is currently Common.");
@@ -143,22 +159,22 @@ public class ItemRolls : MonoBehaviour
                 print("Items only of type Uncommon can't roll additional mods but badrolls, resultung in Null;");
 
             //Wenn das Item gewöhnlich ist, darf kein Roll diese Raritätsstufe überschreiten. Falls es sich um ein Mod handelt, der gewürfelt wird, wird die Abfrage geskipped.
-            if ((Random.Range(1, 1000) <= uncommon * levelModifier || type == "mod") && (fixedRarity > 1))
+            if ((Random.Range(1, 1000) <= uncommon * worldModifier || type == "mod") && (fixedRarity > 1))
             {
                 print("Passed the Uncommon Rarity, rolling for a Rare! /n Rarity is currently Uncommon.");
 
                 //Wenn das Item rare ist, darf kein Roll diese Raritätsstufe überschreiten.
-                if ((Random.Range(1, 1000) <= (rare * levelModifier)) && (fixedRarity > 2))
+                if ((Random.Range(1, 1000) <= (rare * worldModifier)) && (fixedRarity > 2))
                 {
                     print("Passed the Rare Rarity, rolling for an Epic! /n Rarity is currently Rare.");
                     //Wenn das Item episch ist, darf kein Roll diese Raritätsstufe überschreiten.
 
-                    if ((Random.Range(1, 1000) <= (epic * levelModifier)) && (fixedRarity > 3))
+                    if ((Random.Range(1, 1000) <= (epic * worldModifier)) && (fixedRarity > 3))
                     {
                         print("Passed the Epic Rarity, rolling for a Legendary! /n Rarity is currently Epic.");
                         //Ein Item, das Legendär ist, darf keine weitere Legendären Rolls erhalten, und darf diese Raritätsstufe nicht erneut überschreiten. 
 
-                        if ((Random.Range(1, 1000) <= (legendary * levelModifier) || type != "mod") && (fixedRarity > 4))
+                        if ((Random.Range(1, 1000) <= (legendary * worldModifier) || type != "mod") && (fixedRarity > 4))
                         {
                             print("Congrats! Rolled a Legendary!");
                             //rarity[5]=Legendary
@@ -192,19 +208,19 @@ public class ItemRolls : MonoBehaviour
         if (rarityModifier > 2)
 
             //Würfel die Menge der zusätzlichen Modifier.
-            if (Random.Range(0, 1001) <= uncommon * levelModifier * rarityModifier / 2)
+            if (Random.Range(0, 1001) <= uncommon * worldModifier * rarityModifier / 2)
             {
 
                 //Beispiel: Chance Minimum 2 zusätzliche Rolls zu erhalten, bei Spielerstufe 100 bei einem Item der Rarität Episch.
                 //          150 * 2 * 3 / 2 = 450
                 //          Mit 45% Wahrscheinlichkeit, würde ein episches Item auf Level 100 mit 2 oder mehr zusätzlichen Rolls generiert werden.
-                if (Random.Range(1, 1000) <= rare * levelModifier * rarityModifier / 2)
+                if (Random.Range(1, 1000) <= rare * worldModifier * rarityModifier / 2)
                 {
 
-                    if (Random.Range(1, 1000) <= rare * levelModifier * rarityModifier / 2)
+                    if (Random.Range(1, 1000) <= rare * worldModifier * rarityModifier / 2)
                     {
 
-                        if (Random.Range(1, 1000) <= epic * levelModifier * rarityModifier / 2)
+                        if (Random.Range(1, 1000) <= epic * worldModifier * rarityModifier / 2)
                         {
 
                             if (Random.Range(1, 10000) <= legendary * levelModifier * rarityModifier / 2)
@@ -252,6 +268,7 @@ public class ItemRolls : MonoBehaviour
 
             if (rarityOfRoll == 3)
             {
+
                 int randomRoll = Random.Range(0, wRareRolls.Length);
 
                 return new ItemModsData(wRareRolls[randomRoll]);
@@ -260,6 +277,7 @@ public class ItemRolls : MonoBehaviour
 
             if (rarityOfRoll == 2)
             {
+
                 int randomRoll = Random.Range(0, wUncommonRolls.Length);
 
                 return new ItemModsData(wUncommonRolls[randomRoll]);
@@ -274,7 +292,8 @@ public class ItemRolls : MonoBehaviour
 
             if (rarityOfRoll == 0)
             {
-                int randomRoll = Random.Range(0, wUncommonRolls.Length);
+
+                int randomRoll = Random.Range(0, wUnbrauchbarRolls.Length);
 
                 return new ItemModsData(wUnbrauchbarRolls[randomRoll]);
 

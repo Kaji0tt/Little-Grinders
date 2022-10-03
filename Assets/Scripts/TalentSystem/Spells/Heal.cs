@@ -38,7 +38,7 @@ public class Heal : Ability
 
         ///Entitie sollte woanders zwischen gelagert werden, eigene Methode als Return des Transforms verwenden.
         ///
-        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower);
+        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower).Value;
 
         //Debug.Log("entitieAP: " + entitieAP);
 
@@ -59,6 +59,21 @@ public class Heal : Ability
         activeTime = 1 + spec1Talents[0].currentCount;
 
         spec1range = 1 + spec1Talents[1].currentCount;
+
+
+        //Setze die Färbung der Partikel beim Tick
+        ParticleSystem.MainModule settingsTick = healAuraTick.GetComponent<ParticleSystem>().main;
+        settingsTick.startColor = new Color(1, 0, 1, 1);
+
+        //Setze Färbung der Aura selbst
+        ParticleSystem ps = healAuraEffect.GetComponent<ParticleSystem>();
+        var col = ps.colorOverLifetime;
+        Gradient grad = new Gradient();
+        grad.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(Color.black, 0.0f), new GradientColorKey(Color.magenta, 0.7f), new GradientColorKey(Color.black, 1.0f) }, 
+            new GradientAlphaKey[] { new GradientAlphaKey(0.0f, 0.0f), new GradientAlphaKey(1.0f, 0.7f), new GradientAlphaKey(0f, 1.0f) });
+        col.color = grad;
+
     }
 
     //Möglicherweise reicht eine einzelne Liste von Talenten in Ability, da die Indexes dieser die Referenz für die Values der Spezialisierungen darstellen können.
@@ -98,6 +113,23 @@ public class Heal : Ability
     {
         activeTime = 1 + spec2Talents[0].currentCount;
 
+
+        //Setze die Färbung der Partikel beim Tick
+        ParticleSystem.MainModule settingsTick = healAuraTick.GetComponent<ParticleSystem>().main;
+        settingsTick.startColor = new Color(0, 1, 0, 1); //Green
+
+
+        //Setze Färbung der Aura selbst
+        ParticleSystem ps = healAuraEffect.GetComponent<ParticleSystem>();  
+        var col = ps.colorOverLifetime;
+
+        Gradient grad = new Gradient();
+        grad.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(Color.black, 0.0f), new GradientColorKey(Color.green, 0.7f), new GradientColorKey(Color.black, 1.0f) }, 
+            new GradientAlphaKey[] { new GradientAlphaKey(0.0f, 0.0f), new GradientAlphaKey(1.0f, 0.7f), new GradientAlphaKey(0f, 1.0f)});
+
+        col.color = grad;
+
     }
     public override void OnUseSpec2(IEntitie entitie)
     {
@@ -115,21 +147,8 @@ public class Heal : Ability
 
             spec2mod = new StatModifier(spec2speed, StatModType.PercentAdd);
 
-            entitie.AddNewStatModifier(EntitieStats.MovementSpeed, spec2mod);
+            entitie.GetStat(EntitieStats.MovementSpeed).AddModifier(spec2mod);
 
-            /*
-            if (entitie.GetComponent<PlayerStats>() != null)
-            {
-                PlayerStats pStats = entitie.GetComponent<PlayerStats>();
-                pStats.MovementSpeed.AddModifier(spec2mod);
-            }
-            else
-            {
-                MobStats mStats = entitie.GetComponent<MobStats>();
-                mStats.MovementSpeed.AddModifier(spec2mod);
-
-            }
-            */
         }
 
         ///Wenn heal genutzt wird, werden alle Gegner im Umkreis von 1 (+ Skillpoints of Heilung_Heal3) für 2 (x Skillpoints of Heilung_Heal3) Sekunden gestunned.
@@ -153,6 +172,23 @@ public class Heal : Ability
     public override void ApplySpec3Bonus(Talent t)
     {
         activeTime = 1 + spec3Talents[0].currentCount;
+
+
+        //Setze die Färbung der Partikel beim Tick
+        ParticleSystem.MainModule settingsTick = healAuraTick.GetComponent<ParticleSystem>().main;
+        settingsTick.startColor = new Color(1, 0.92f, 0.016f, 1);
+
+
+        //Setze Färbung der Aura selbst
+        ParticleSystem ps = healAuraEffect.GetComponent<ParticleSystem>();
+        var col = ps.colorOverLifetime;
+
+        Gradient grad = new Gradient();
+        grad.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(Color.black, 0.0f), new GradientColorKey(Color.yellow, 0.7f), new GradientColorKey(Color.black, 1.0f) }, 
+            new GradientAlphaKey[] { new GradientAlphaKey(0.0f, 0.0f), new GradientAlphaKey(1.0f, 0.7f), new GradientAlphaKey(0f, 1.0f) });
+
+        col.color = grad;
     }
     public override void OnUseSpec3(IEntitie entitie)
     {
@@ -162,8 +198,8 @@ public class Heal : Ability
         ///
         activeTime = 1 + spec3Talents[0].currentCount;
 
-        spec3mod = new StatModifier(entitie.GetStat(EntitieStats.Armor) * 0.2f, StatModType.PercentAdd);
-        entitie.AddNewStatModifier(EntitieStats.Armor, spec3mod);
+        spec3mod = new StatModifier(entitie.GetStat(EntitieStats.Armor).Value * 0.2f, StatModType.PercentAdd);
+        entitie.GetStat(EntitieStats.Armor).AddModifier(spec3mod);
 
         /*
         if (entitie.GetComponent<PlayerStats>() != null)
@@ -189,7 +225,7 @@ public class Heal : Ability
         ///
 
         //  10             *      3                       *  0.1     = 0.3
-        spec3ATmod = new StatModifier(entitie.GetStat(EntitieStats.AttackPower) * spec3Talents[1].currentCount * 0.1f, StatModType.PercentAdd);
+        spec3ATmod = new StatModifier(entitie.GetStat(EntitieStats.AttackPower).Value * spec3Talents[1].currentCount * 0.1f, StatModType.PercentAdd);
 
         /*
         if (entitie.GetComponent<PlayerStats>() != null)
@@ -253,15 +289,16 @@ public class Heal : Ability
         if (AudioManager.instance != null)
             AudioManager.instance.Play("Heal_Tick_1");
 
-        Instantiate(healAuraTick, entitie.GetTransform());
 
-        Instantiate(healAuraTick, new Vector3(0, 0, -0.3f), Quaternion.identity, entitie.GetTransform());
+        GameObject healTick = healAuraTick;
+
+        Instantiate(healTick, new Vector3(entitie.GetTransform().position.x, entitie.GetTransform().position.y, entitie.GetTransform().position.z - 0.3f), Quaternion.identity, entitie.GetTransform());
 
     }
 
     public override void OnTickSpec2(IEntitie entitie)
     {
-        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower);
+        float entitieAP = entitie.GetStat(EntitieStats.AbilityPower).Value;
 
         entitie.Heal((int)entitie.Get_maxHp() / 50 + (int)(entitieAP / 10));
 
@@ -284,9 +321,11 @@ public class Heal : Ability
         if(AudioManager.instance != null)
         AudioManager.instance.Play("Heal_Tick_1");
 
-        Instantiate(healAuraTick, entitie.GetTransform());
 
-        Instantiate(healAuraTick, new Vector3(entitie.GetTransform().position.x, entitie.GetTransform().position.y, entitie.GetTransform().position.z - 0.3f), Quaternion.identity, entitie.GetTransform());
+        //Setting Color
+        GameObject healTick = healAuraTick;
+
+        Instantiate(healTick, new Vector3(entitie.GetTransform().position.x, entitie.GetTransform().position.y, entitie.GetTransform().position.z - 0.3f), Quaternion.identity, entitie.GetTransform());
 
     }
 
@@ -329,7 +368,7 @@ public class Heal : Ability
     public override void OnCooldownSpec2(IEntitie entitie)
     {
 
-        entitie.RemoveStatModifier(EntitieStats.MovementSpeed, spec2mod);
+        entitie.GetStat(EntitieStats.MovementSpeed).RemoveModifier(spec2mod);
         /*
         if (entitie.GetComponent<PlayerStats>() != null)
         {
@@ -348,7 +387,7 @@ public class Heal : Ability
 
     public override void OnCooldownSpec3(IEntitie entitie)
     {
-        entitie.RemoveStatModifier(EntitieStats.Armor, spec3mod);
+        entitie.GetStat(EntitieStats.Armor).RemoveModifier(spec3mod);
         /*
         if (entitie.GetComponent<PlayerStats>() != null)
         {
