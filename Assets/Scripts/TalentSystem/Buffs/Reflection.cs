@@ -8,15 +8,19 @@ public class Reflection : Buff
 {
     public float damage;
 
+    private IEntitie instanceTarget;
+
     private void OnEnable()
     {
-        //GameEvents.OnPlayerWasAttacked += 
+        //GameEvents.instance.OnPlayerHasAttackedEvent += PlayerAttacked;
+        //GameEvents.instance.OnEnemyHasAttackedEvent += EnemyAttacked;
     }
 
     public override void Activated(IEntitie target, Transform targetTransform)
     {
         //Wenn Reflection aktiviert wird, füge den Listener hinzu, dass ReflectDamage gecalled wird, sobald der Spieler schaden erleidet.
         //GameEvents.current.playerWasAttacked += reflectDamage;
+        instanceTarget = target;
 
         Debug.Log("reflection applied");
 
