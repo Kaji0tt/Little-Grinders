@@ -6,23 +6,23 @@ public class ItemRolls : MonoBehaviour
 {
     //private string[] waffenRollsLegendary = new string[] { "- Ikarus Omen", " - Kitava's Qual", " - Blutrabes Erbe", " - Tyraels Gabe", " - Illidans Rache" };
 
-    public ItemMods[] wLegendaryRolls { get; set; }
+    public ItemMods[] wLegendaryRolls; //{ get; set; }
 
     //private string[] waffenRollsEpic = new string[] { "Essenzpeiniger", "Weltenzerstörer", "aus Mithril geschaffen", "von Titanen gerfertigt", "im Seelenfeuer geschmiedet" };
 
-    public ItemMods[] wEpicRolls { get; set; }
+    public ItemMods[] wEpicRolls; //{ get; set; }
 
     //private string[] waffenRollsRare = new string[] { "aus Eryx", "von Pandorra", "aus Himmelsrand", "aus Uldaman", "Runenverziert", "mit Edelsteinen besetzt"};
 
-    public ItemMods[] wRareRolls { get; set; }
+    public ItemMods[] wRareRolls; //{ get; set; }
 
     //private string[] waffenRollsUncommon = new string[] { "gefährlich", "magisch", "zwergisch", "geschärft", "gesegnet", "leicht", "pulsierend", "berüchtigt" };
 
-    public ItemMods[] wUncommonRolls { get; set; }
+    public ItemMods[] wUncommonRolls; //{ get; set; }
 
     //private string[] waffenRollsNegative = new string[] { "rostend", "stumpf", "abgenutzt", "zerbrechlich", "veraltet", "verflucht", "kräfte zehrend", "schwerfällig" };
 
-    public ItemMods[] wUnbrauchbarRolls { get; set; }
+    public ItemMods[] wUnbrauchbarRolls; //{ get; set; }
 
     public ItemModsData[] modsOnItem;
     //----Gedanke, bzw. logische Struktur - umgangsprachlich:
@@ -71,6 +71,7 @@ public class ItemRolls : MonoBehaviour
 
     private void Start()
     {
+        /*
         ItemMods[] wUnbrauchbarRolls = Resources.LoadAll<ItemMods>("Mods/Unbrauchbar");
 
         ItemMods[] wUncommonRolls = Resources.LoadAll<ItemMods>("Mods/Ungewöhnlich");
@@ -80,11 +81,12 @@ public class ItemRolls : MonoBehaviour
         ItemMods[] wEpicRolls = Resources.LoadAll<ItemMods>("Mods/Episch");
 
         ItemMods[] wLegendaryRolls = Resources.LoadAll<ItemMods>("Mods/Legendary");
-
+        */
     }
 
     public ItemInstance RollItem(ItemInstance item)
     {
+        //print(wEpicRolls.Length);
         //If the Item is not a Consumable
         if (item.itemType != ItemType.Consumable)
         {

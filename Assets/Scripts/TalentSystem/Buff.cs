@@ -75,10 +75,10 @@ public class BuffInstance : Buff, IDescribable
     public Buff originalBuff;
 
     public BuffInstance(Buff buff)
-    {
-        
+    {       
         
         buffName = buff.buffName;
+
         MyDuration = buff.MyDuration;
 
         stackable = buff.stackable;

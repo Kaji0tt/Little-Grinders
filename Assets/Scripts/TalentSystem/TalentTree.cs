@@ -220,7 +220,7 @@ public class TalentTree : MonoBehaviour
             UILineRenderer lineRend = gameObject.GetComponent<UILineRenderer>();
 
             //Setze Farbe der Talent-Linie
-            lineRend.color = new Color(.3f, .3f, .3f, .5f);
+            lineRend.color = new Color(.7f, .7f, .7f, 1f);
 
             //Setze den Ankerpunkt der Talent-Linie nach Rechts-Unten
             RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
