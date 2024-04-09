@@ -197,7 +197,7 @@ public class PlayerSave
             talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked, (int)talent.abilityTalent.baseAbility.abilitySpec));
         }
 
-        Debug.Log(allTalents.Length);
+        //Debug.Log(allTalents.Length);
 
         TalentTree talentTree = TalentTree.instance;
 

@@ -10,9 +10,14 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        player = GameObject.FindGameObjectWithTag("Player");
 
     }
+
+
     #endregion
-    public GameObject player;
+
+
+    public GameObject player { get; private set; }
 
 }

@@ -4,33 +4,46 @@ using UnityEngine.UI;
 using UnityEngine;
 using System;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UI_Manager : MonoBehaviour
 {
     #region Singleton
-    public static UI_Manager instance;
-    private void Awake()
-    {
-        UI_Manager[] sceneInstances = FindObjectsOfType<UI_Manager>();
-        if(sceneInstances.Length >= 2)
-        {
-            Destroy(sceneInstances[0]);
-        }
-        instance = this;
+    //public static UI_Manager instance { get; private set; }
+    public static UI_Manager myInstance;
 
+    public static UI_Manager instance
+    {
+        get
+        {
+            UI_Manager[] instances = FindObjectsOfType<UI_Manager>();
+
+            if (myInstance == null)
+            {
+
+                 myInstance = instances[0];
+            }
+            if (instances.Length > 1)
+            {
+                Destroy(instances[1]);
+            }
+
+            return myInstance;
+        }
     }
 
     #endregion
-    [SerializeField]
-    private GameObject tooltip;
 
-    private Text tooltipText;
+    public GameObject tooltip;
 
-    [SerializeField]
-    private Button[] actionButtons;
+    //private Text tooltipText;
+
+    //[SerializeField]
+    //private Button[] actionButtons;
+    private Button aBtn1, aBtn2, aBtn3, aBtn4, aBtn5;
 
 
-    private IsometricPlayer isometricPlayer;
+    //private IsometricPlayer isometricPlayer;
 
     private KeyCode mainMenuKey;
 
@@ -39,21 +52,27 @@ public class UI_Manager : MonoBehaviour
 
     private GameObject[] keyBindButtons;
 
-
-    [SerializeField]
+    //Die Zuweisung über den Inspector ist scheiße, da bei SzeneWechsel die Einstellungen / Zuweisung verloren geht.
+    //Hilfreich wäre ein "OnSceneChange" Event oder so.
+    //[SerializeField]
     private CanvasGroup inventoryTab;
 
-    [SerializeField]
+    //[SerializeField]
     private CanvasGroup skillTab;
 
-    [SerializeField]
+    //[SerializeField]
     private CanvasGroup mainMenu;  //hier sollte später das komplette Hauptmenü drin liegen.
 
-    [SerializeField]
+    //[SerializeField]
     private CanvasGroup actionBar;
 
-    [SerializeField]
+    //[SerializeField]
     private CanvasGroup mapTab;
+
+
+    //BadManner WorkAround für MainMenü
+    [SerializeField]
+    private GameObject canvasIG;
 
     private List<CanvasGroup> canvasGroup = new List<CanvasGroup>();
 
@@ -67,53 +86,189 @@ public class UI_Manager : MonoBehaviour
     public static bool GameIsPaused = false;
 
 
+    private void OnChangedScene(Scene current, Scene next)
+    {
+        string currentName = current.name;
+
+        if (currentName == null)
+        {
+            // Scene1 has been removed
+            currentName = "Replaced";
+        }
+
+        Debug.Log("Scenes: " + currentName + ", " + next.name);
+        //Zuweisungen der Komponenten ohne Inspektor (Insbesondere Wichtig für Szenewechsel oder die Szeneübergreifende Anwendung von KeyBinds.
+
+        if (next.name != "MainMenu")
+        {
+            AllStartMethods();
+        }
+
+
+
+
+
+    }
+
+    private void OnDisable()
+    {
+
+        SceneManager.activeSceneChanged -= OnChangedScene;
+
+    }
 
     private void OnEnable()
     {
         GameIsPaused = false;
 
-        //Die KeyBindButtons sind die Anzeigen der Zugewiesenen KeyBindings im Menü. Bsp.: Key
         keyBindButtons = GameObject.FindGameObjectsWithTag("KeyBindings");
 
+        foreach(GameObject keyBindBtn in keyBindButtons)
+        {
+            keyBindBtn.AddComponent<UI_Btn_Listener>();
+        }
 
-        
+        SceneManager.activeSceneChanged += OnChangedScene;
+
     }
+
+
+    /*
+     * Richtig Chaos hier.
+     * Alle Elemente sollten während des HauptMenüs bereits da sein.
+     * CanvasGroup Ingame sollte deaktiviert werden, sobald alle Überschreibungen für KeyManager da sind. 
+     * Also: CurrentScene = HauptMenü -> CanvasIngame.active(false)
+     *       CurrentScene != HauptmMenü -> CanvasIngame.active(true)
+     *       
+     * So kann ein Schreiben später relevanter Daten bereits im Startbildschirm geschehen.
+     * On
+     * 
+     * 
+     * 
+     * 
+     */
 
 
     private void Start()
     {
-        if(tooltip != null)
-        tooltipText = tooltip.GetComponentInChildren<Text>();
+        
+
+        CheckForUI_Elements();
+
+
+        //BindKeysInManager();
+
+        RefreshKeyBindText();
+
 
         mainMenuKey = KeyCode.Escape;
 
         if (KeyManager.MyInstance != null)
-        pickKey = KeyManager.MyInstance.Keybinds["PICK"];
+            pickKey = KeyManager.MyInstance.Keybinds["PICK"];
+
+        toggleCamKey = KeyCode.Tab;
+
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            canvasIG.SetActive(false);
+        }
+
+        //isometricPlayer = GetComponent<IsometricPlayer>();
+
+
+
+
+    }
+
+    private void AllStartMethods()
+    {
+        //Die KeyBindButtons sind die Anzeigen der Zugewiesenen KeyBindings im Menü. Bsp.: Key
+        keyBindButtons = GameObject.FindGameObjectsWithTag("KeyBindings");
+
+        Debug.Log("Hey i got called! We rached starter Method!");
+
+        CheckForUI_Elements();
+
+        //RefreshKeyBindText();
+
+        Debug.Log("We got beanth the main check methods!");
+        mainMenuKey = KeyCode.Escape;
+
+        if (KeyManager.MyInstance != null)
+            pickKey = KeyManager.MyInstance.Keybinds["PICK"];
 
         toggleCamKey = KeyCode.Tab;
 
 
-        isometricPlayer = GetComponent<IsometricPlayer>();
+    }
 
-        RefreshKeyBindText();
+    public void BindKeysInManager()
+    {
 
+        KeyManager.MyInstance.BindKey("UP", KeyCode.W);
+        KeyManager.MyInstance.BindKey("LEFT", KeyCode.A);
+        KeyManager.MyInstance.BindKey("DOWN", KeyCode.S);
+        KeyManager.MyInstance.BindKey("RIGHT", KeyCode.D);
+
+        KeyManager.MyInstance.BindKey("STATS", KeyCode.E);
+        KeyManager.MyInstance.BindKey("SKILLS", KeyCode.P);
+        KeyManager.MyInstance.BindKey("PICK", KeyCode.Q);
+        KeyManager.MyInstance.BindKey("MAP", KeyCode.M);
+
+        KeyManager.MyInstance.BindKey("SLOT1", KeyCode.Alpha1);
+        KeyManager.MyInstance.BindKey("SLOT2", KeyCode.Alpha2);
+        KeyManager.MyInstance.BindKey("SLOT3", KeyCode.Alpha3);
+        KeyManager.MyInstance.BindKey("SLOT4", KeyCode.Alpha4);
+        KeyManager.MyInstance.BindKey("SLOT5", KeyCode.Alpha5);
     }
 
     private void RefreshKeyBindText()
     {
-        foreach(KeyValuePair<string, KeyCode> kvp in KeyManager.MyInstance.Keybinds)
+        Debug.Log("Inside: RefreshKeyBindText()  Method!");
+        foreach (KeyValuePair<string, KeyCode> kvp in KeyManager.MyInstance.Keybinds)
         {
+            Debug.Log("Inside: KeyManager.MyInstance.KeyBinds collection!! Key:" + kvp.Key.ToString());
             UpdateKeyText(kvp.Key, kvp.Value);
         }
     }
 
+    //Es sollte noch geschaut werden, inwiefern das UI nach Szenen-Wechsel gespeichert werden kann.
+    public void UpdateKeyText(string key, KeyCode code)
+    {
+        Debug.Log("Inside: UpdateKeyText for Key:" + key + " with Code: " + code.ToString());
+        TextMeshProUGUI tmp = Array.Find(keyBindButtons, x => x.name == key).GetComponentInChildren<TextMeshProUGUI>();
+
+
+        //Debug.Log("you got updatekeytext running.");
+        if (code.ToString().Contains("Alpha"))
+        {
+            tmp.text = code.ToString().Substring(5);
+        }
+        else
+            tmp.text = code.ToString();
+
+    }
+
     private void Update()
     {
+        //CheckForUI_Elements();
+
+        //Interface Abfrage des Cursos sollte implementiert werden.
+        /*if(tooltip == null && SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            tooltip = FindObjectOfType<Tooltip>().gameObject;
+            HideTooltip();
 
 
-            //Interface Abfrage des Cursos sollte implementiert werden.
 
-            //Action-Bars
+
+
+        }
+        */
+        //Debug.Log("Key of Slot1: " + KeyManager.MyInstance.ActionBinds["SLOT1"]);
+        //Action-Bars
+        //Debug.Log("Also, ActionBinds in Key Manager sollte nicht Null sein: " + KeyManager.MyInstance.ActionBinds["SLOT1"]);
+
 
         if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT1"]) && !GameIsPaused)
         {
@@ -225,7 +380,45 @@ public class UI_Manager : MonoBehaviour
 
     private void ActionButtonOnClick(int btnIndex)
     {
-        actionButtons[btnIndex].onClick.Invoke();
+        switch (btnIndex)
+        {
+            case 0:
+
+                aBtn1.onClick.Invoke();
+
+                break;
+
+            case 1:
+
+                aBtn2.onClick.Invoke();
+
+                break;
+
+            case 2:
+
+                aBtn3.onClick.Invoke();
+
+                break;
+
+            case 3:
+
+                aBtn4.onClick.Invoke();
+
+                break;
+
+            case 4:
+
+                aBtn5.onClick.Invoke();
+
+                break;
+
+            default:
+                break;
+
+        }
+
+        //Debug.Log(actionButtons[btnIndex].gameObject.name);
+        //actionButtons[btnIndex].onClick.Invoke();
     }
 
     public void ShowItemTooltip(Vector3 position, ItemInstance item)
@@ -257,21 +450,25 @@ public class UI_Manager : MonoBehaviour
             if (item.itemRarity == "Unbrauchbar")
                 color = "#8c6d6d";
 
+            string itemDescription = string.Format("<b><color={0}> {1} </color></b>\n{2}\n{3}", color, item.ItemName, item.ItemDescription, item.ItemValueInfo);
             
-            tooltipText.text = string.Format("<b><color={0}> {1} </color></b>\n{2}\n{3}", color, item.ItemName, item.ItemDescription, item.ItemValueInfo);
+            Tooltip.instance.SetText(itemDescription);
+            //tooltip.SetText() = string.Format("<b><color={0}> {1} </color></b>\n{2}\n{3}", color, item.ItemName, item.ItemDescription, item.ItemValueInfo);
         }
     }
 
     public void ShowTooltip(string description)
     {
-
+        /*
         if (description != null)
         {
             tooltipText.text = description;
         }
-
+        */
         tooltip.SetActive(true);
 
+
+        Tooltip.instance.SetText(description);
     }
 
     public void HideTooltip()
@@ -282,23 +479,106 @@ public class UI_Manager : MonoBehaviour
 
     public void OpenCloseMenu(CanvasGroup canvas)
     {
+        if (canvas == null)
+            CheckForUI_Elements();
         canvas.alpha = canvas.alpha > 0 ? 0 : 1; 
         canvas.blocksRaycasts = canvas.blocksRaycasts == true ? false : true;
     }
 
-    //Es sollte noch geschaut werden, inwiefern das UI nach Szenen-Wechsel gespeichert werden kann.
-    public void UpdateKeyText(string key, KeyCode code)
-    {
-        TextMeshProUGUI tmp = Array.Find(keyBindButtons, x => x.name == key).GetComponentInChildren<TextMeshProUGUI>();
 
-        if (code.ToString().Contains("Alpha"))
+
+
+    //Überprüfe, ob die UI Elemente wirklich nicht Null sind.
+    void CheckForUI_Elements()
+    {
+        InterfaceElement[] interfaceElements = FindObjectsOfType<InterfaceElement>();
+
+        foreach(InterfaceElement interfaceElement in interfaceElements)
         {
-            tmp.text = code.ToString().Substring(5);
+            interfaceElement.InitialisizeUIElement(interfaceElement);
+
+            switch (interfaceElement.interfaceElementEnum)
+            {
+                case InterfaceElementDeclaration.Inventar:
+
+                    //Debug.Log("also eigentlich sollte das Inventar fesstgelegt worden sein. Hier meine CanvasGroup: ");
+                    inventoryTab = interfaceElement.GetComponent<CanvasGroup>();
+
+                    break;
+
+                case InterfaceElementDeclaration.Tooltip:
+
+                    //Debug.Log(interfaceElement.gameObject.name);
+                    //Debug.Log("also eigentlich sollte das Inventar fesstgelegt worden sein. Hier meine CanvasGroup: ");
+                    tooltip = interfaceElement.gameObject;
+
+                    HideTooltip();
+
+                    break;
+
+                case InterfaceElementDeclaration.Map:
+
+                    mapTab = interfaceElement.GetComponent<CanvasGroup>();
+
+                    break;
+
+                case InterfaceElementDeclaration.MainMenu:
+
+                    mainMenu = interfaceElement.GetComponent<CanvasGroup>();
+
+                    break;
+
+                case InterfaceElementDeclaration.Skilltab:
+
+                    skillTab = interfaceElement.GetComponent<CanvasGroup>();
+
+                    break;
+
+                    /*
+                case InterfaceElementDeclaration.Tooltip:
+
+                    interfaceElement.InitialisizeUIElement(interfaceElement);
+                    tooltip = interfaceElement.interfaceGameObject;
+
+                    break;
+                    */
+                case InterfaceElementDeclaration.AB1:
+
+                    aBtn1 = interfaceElement.GetComponent<Button>();
+
+                    break;
+
+                case InterfaceElementDeclaration.AB2:
+
+                    aBtn2 = interfaceElement.GetComponent<Button>();
+
+                    break;
+
+                case InterfaceElementDeclaration.AB3:
+
+                    aBtn3 = interfaceElement.GetComponent<Button>();
+
+                    break;
+
+                case InterfaceElementDeclaration.AB4:
+
+                    aBtn4 = interfaceElement.GetComponent<Button>();
+
+                    break;
+
+                case InterfaceElementDeclaration.AB5:
+
+                    aBtn5 = interfaceElement.GetComponent<Button>();
+
+                    break;
+
+                default:
+                    break;
+
+            }
         }
-        else
-            tmp.text = code.ToString();
+
 
     }
-
 
 }

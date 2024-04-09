@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buffName: Reflection
   MyDuration: 60
+  MyBaseDamage: 0
   ProcChance: 0
   tickIntervall: 1
   stackable: 0
   active: 0
   particleEffect: {fileID: 3458640627601143648, guid: 41ea76bd5647d6a48a5f76ac20d14401,
     type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: -6929366907357469176, guid: 6dc7009a86b070e41bdb2f3976a3369f, type: 3}
+  MyDescription: 
   damage: 5

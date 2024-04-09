@@ -39,7 +39,7 @@ public class Reflection : Buff
     }
     public override void OnTick(IEntitie instanceTarget, IEntitie instanceOrigin)
     {
-
+        
 
 
     }
