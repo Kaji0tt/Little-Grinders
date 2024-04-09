@@ -104,7 +104,7 @@ public class PlayerLoad : MonoBehaviour
 
         foreach (TalentSave savedTalent in data.talentsToBeSaved)
         {
-            Debug.Log("loading Talent: " + savedTalent.talentName + " loading it for " + talentTree.gameObject.name);
+            //Debug.Log("loading Talent: " + savedTalent.talentName + " loading it for " + talentTree.gameObject.name);
             for (int i = 0; i < talentTree.allTalents.Length; i++)
             {
                 if (talentTree.allTalents[i].name == savedTalent.talentName)
@@ -148,8 +148,8 @@ public class PlayerLoad : MonoBehaviour
                     foreach(TalentSave savedTalent in data.talentsToBeSaved)
                     if(talent.talentName == savedTalent.talentName)
                     {
-                            print("JUHU; FOUND: " + savedTalent.talentName + ", got the Spec: " + (Ability.AbilitySpecialization)savedTalent.spec);
-                            print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
+                            //print("JUHU; FOUND: " + savedTalent.talentName + ", got the Spec: " + (Ability.AbilitySpecialization)savedTalent.spec);
+                            //print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
                             talent.abilityTalent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
                         }
 

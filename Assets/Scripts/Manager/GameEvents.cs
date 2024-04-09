@@ -6,16 +6,26 @@ using UnityEngine;
 public class GameEvents : MonoBehaviour
 {
     #region Singleton
-    public static GameEvents instance;
-    void Awake()
+    //public static UI_Manager instance { get; private set; }
+    public static GameEvents myInstance;
+
+    public static GameEvents instance
     {
-        //Singleton Anweisung, zur globalen Reference AudioManager.instance
-        if (instance == null)
-            instance = this;
-        else
+        get
         {
-            Destroy(gameObject);
-            return;
+            GameEvents[] instances = FindObjectsOfType<GameEvents>();
+
+            if (myInstance == null)
+            {
+
+                myInstance = instances[0];
+            }
+            if (instances.Length > 1)
+            {
+                Destroy(instances[1]);
+            }
+
+            return myInstance;
         }
     }
     #endregion

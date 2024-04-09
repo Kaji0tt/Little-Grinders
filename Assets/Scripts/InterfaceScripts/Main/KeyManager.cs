@@ -57,6 +57,7 @@ public class KeyManager : MonoBehaviour
         //Possibly use Playerprefs on BindKey - e.g. PlayerPrefs.SetInt(key, KeyCode-to-number);
         //Then on load or start, if(PlayerPrefs.GetKey(key)), BindKey(PlayerPrefs.GetKey)
         //else do this assignment called below.
+        
         BindKey("UP", KeyCode.W);
         BindKey("LEFT", KeyCode.A);
         BindKey("DOWN", KeyCode.S);
@@ -72,6 +73,7 @@ public class KeyManager : MonoBehaviour
         BindKey("SLOT3", KeyCode.Alpha3);
         BindKey("SLOT4", KeyCode.Alpha4);
         BindKey("SLOT5", KeyCode.Alpha5);
+        
 
     }
 

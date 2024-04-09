@@ -28,6 +28,7 @@ public class DebugPlayerPref : MonoBehaviour
 
         PlayerPrefs.DeleteKey("MapX"); PlayerPrefs.DeleteKey("MapY");
 
+        //UI_Manager.instance.BindKeysInManager();
 
         //Reset the Static Values of GlobalMap
         /*
@@ -37,6 +38,11 @@ public class DebugPlayerPref : MonoBehaviour
         */
 
 
+    }
+
+    private void Start()
+    {
+        //
     }
 
     private void OnDisable()

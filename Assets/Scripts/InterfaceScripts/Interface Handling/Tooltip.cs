@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tooltip : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Tooltip : MonoBehaviour
     public static Tooltip instance;
     private void Awake()
     {
+
+
         Tooltip[] sceneInstances = FindObjectsOfType<Tooltip>();
         if (sceneInstances.Length >= 2)
         {
@@ -22,9 +25,16 @@ public class Tooltip : MonoBehaviour
 
     private RectTransform rect;
 
+    private Text tooltipText;
+
+
     private void Start()
     {
         rect = GetComponent<RectTransform>();
+
+        tooltipText = GetComponentInChildren<Text>();
+
+        //gameObject.SetActive(false);
     }
     public void Update()
     {
@@ -41,8 +51,6 @@ public class Tooltip : MonoBehaviour
         }
 
 
-
-
     }
 
     public bool IsFullyOnScreen()
@@ -57,5 +65,12 @@ public class Tooltip : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void SetText(string newText)
+    {
+        tooltipText = GetComponentInChildren<Text>();
+
+        tooltipText.text = newText;
     }
 }
