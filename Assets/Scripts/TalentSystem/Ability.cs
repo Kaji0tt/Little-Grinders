@@ -61,16 +61,13 @@ public abstract class Ability : MonoBehaviour
 
 
     //Versuch, die Instanzen der Talente in einer Liste zu speichern -> Woher weiß das Ability, welches Talent wozu gehört? -> Theoretisch durch die Reihenfolge.
-    public List<Talent> spec1Talents { get; private set; }
-    public List<Talent> spec2Talents { get; private set; }
-    public List<Talent> spec3Talents { get; private set; }
+    public List<Talent> spec1Talents = new List<Talent>();
+    public List<Talent> spec2Talents = new List<Talent>();
+    public List<Talent> spec3Talents = new List<Talent>();
 
 
-    private void Awake()
+    private void OnEnable()
     {
-        spec1Talents = new List<Talent>();
-        spec2Talents = new List<Talent>();
-        spec3Talents = new List<Talent>();
     }
 
     public virtual void UseBase(IEntitie entitie)

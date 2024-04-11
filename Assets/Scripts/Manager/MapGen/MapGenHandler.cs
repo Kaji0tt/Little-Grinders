@@ -60,7 +60,7 @@ public class MapGenHandler : MonoBehaviour
 
             PlayerSave data = SaveSystem.LoadPlayer();
 
-            playerLoad.LoadPlayer(data);
+
 
             if (data.currentMap == null)
             {
@@ -78,9 +78,12 @@ public class MapGenHandler : MonoBehaviour
 
             PlayerPrefs.DeleteKey("Load");
 
+            playerLoad.LoadPlayer(data);
+
             UI_GlobalMap.instance.CalculateExploredMaps();
 
             LogScript.instance.ShowLog("Loaded with Key: Load (Should be called, when loaded from menu )");
+
 
         }
 

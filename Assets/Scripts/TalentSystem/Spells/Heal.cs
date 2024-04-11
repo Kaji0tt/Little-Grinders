@@ -54,11 +54,27 @@ public class Heal : Ability
 
     }
 
+    /*Das Problem könnte darin liegen, dass beim Load ein Talent verwendet wird, das nicht im Editor existiert.
+     *Es stammt aus dem playerLoad.
+     *Eigentlich wird mit dem (Talent t) auf das entsprechende Talent im Editor referiert.
+     *Da dieses nicht existiert, bzw. aus dem PlayerLoad nicht auszulesen ist, könnte an dieser Stelle ein Null Error auftreten.
+     *Alle Elemente innerhalb des "ApplySpec1Bonus" sind auffindbar, lediglich das Talent t nicht.
+     */
     public override void ApplySpec1Bonus(Talent t)
     {
+        //spec1Talents.Add(t);
+
+        Debug.Log("Spec1Talents (Void). Name of Talent:" + spec1Talents[0].talentName + ". CurrCount of it: " + spec1Talents[0].currentCount + ". spec1Talents Lenght: " + spec1Talents.Count + ". (Total Length of Spec1 subsequent Talents.");
+        foreach(Talent taal in spec1Talents)
+        {
+            //Irgendwo wird eine Liste mit sämtlichen Instanzen des Spec1 initialisiert. Beim Szenenwechsel ist diese nicht mehr da.
+            //Further: Es wäre sinnvoller, wenn die gespeicherten Talente mit "TryUseTalent" angewendet werden.
+            Debug.Log(taal.talentName);
+        }
         activeTime = 1 + spec1Talents[0].currentCount;
 
         spec1range = 1 + spec1Talents[1].currentCount;
+
 
 
         //Setze die Färbung der Partikel beim Tick
@@ -111,9 +127,13 @@ public class Heal : Ability
 
     public override void ApplySpec2Bonus(Talent t)
     {
+
+
+        //spec2Talents.Add(t);
+
         activeTime = 1 + spec2Talents[0].currentCount;
 
-
+        Debug.Log("Spec2Talents (Utility) currCount: " + spec2Talents[0].currentCount + ". spec2Talents Lenght: " + spec2Talents.Count);
         //Setze die Färbung der Partikel beim Tick
         ParticleSystem.MainModule settingsTick = healAuraTick.GetComponent<ParticleSystem>().main;
         settingsTick.startColor = new Color(0, 1, 0, 1); //Green
@@ -171,8 +191,12 @@ public class Heal : Ability
 
     public override void ApplySpec3Bonus(Talent t)
     {
+        //spec3Talents.Add(t);
+
         activeTime = 1 + spec3Talents[0].currentCount;
 
+
+        Debug.Log("Spec2Talents (Combat) currCount: " + spec3Talents[0].currentCount + ". spec2Talents Lenght: " + spec3Talents.Count);
 
         //Setze die Färbung der Partikel beim Tick
         ParticleSystem.MainModule settingsTick = healAuraTick.GetComponent<ParticleSystem>().main;

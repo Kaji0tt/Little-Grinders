@@ -13,7 +13,7 @@ public class InterfaceElement : MonoBehaviour
 
     public CanvasGroup myCanvasGroup { get; private set; }
 
-    //public GameObject interfaceGameObject { get; private set; }
+    public GameObject myGameObject { get; private set; }
 
     public Button myButton { get; private set; }
 
@@ -21,7 +21,7 @@ public class InterfaceElement : MonoBehaviour
     {
 
 
-
+        interfaceElement.myGameObject = gameObject;
         //interfaceElement.interfaceGameObject = interfaceElement.GetComponent<GameObject>();
         /*if (interfaceElement.interfaceGameObject.name == "Tooltip")
             Debug.Log("Yo Bruder, bin da ");

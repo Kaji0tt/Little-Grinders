@@ -139,9 +139,10 @@ public class PlayerLoad : MonoBehaviour
                 //Falls es sich nicht um ein AbilityTalent handelt, füge die Effekte hinzu.
                 if (talent.GetType() != typeof(AbilityTalent))
                 {
-                    
+
                     for (int i = 1; i <= talent.currentCount; i++)
-                    talent.ApplyPassivePointsAndEffects(talent);
+                        //talent.ApplyPassivePointsAndEffects(talent); Ehemaliger Ansatz, aber ApplyPassivePointsAndEffects sieht hinfällig im vgl. TryUseTalent aus
+                        TalentTree.instance.TryUseTalent(talent);
                 }
                 else
                 {

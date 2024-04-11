@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
+//Ability Talent ist das Script, welches sich im Editor innerhalb des Canvas auf dem GameObject befinden sollte, damit der Spieler das Talent "bewegen" kann.
 public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
 {
     #region TalentTree Stuff
@@ -40,6 +42,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
         switch (talent.abilitySpecialization)
         {
             case Ability.AbilitySpecialization.Spec1:
+                //Debug.Log(talent.talentName + " soll auf spec1 geskilled werden.");
                 baseAbility.ApplySpec1Bonus(talent);
                 break;
 
@@ -88,7 +91,13 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
         //print(childTalent.Length);
 
-        //Troubleshoot Spec-Lists, Cleare der Ability Lists, da es sich bei der Ability um ein SO handelt, welches Veränderungen dauerhaft speichert.
+
+        /*
+        -> Troubleshoot Spec-Lists, Cleare der Ability Lists, da es sich bei der Ability um ein SO handelt, welches Veränderungen dauerhaft speichert.
+        Für den Moment suche ich nach einer Lösung für einen Ansatz der SO geschichte - aber ob der SO Ansatz überhaupt richtig ist?
+        Ich finde es fragwürdig, dass ich eine Klasse erstelle und anschließend daraus ein SO abwandel, wenn ich die Ability als MonoBehaviour selbst
+        im Editor verwende..
+         */
         baseAbility.spec1Talents.Clear();
         baseAbility.spec2Talents.Clear();
         baseAbility.spec3Talents.Clear();

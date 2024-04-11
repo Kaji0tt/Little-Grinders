@@ -7,13 +7,19 @@ public class EQSlotKopf : MonoBehaviour
 
     private Int_SlotBtn int_slotBtn;
 
-    private void Start()
+
+    private void OnEnable()
     {
         GameEvents.instance.equipKopf += equip;
+
         int_slotBtn = GetComponent<Int_SlotBtn>();
+
     }
 
-
+    private void OnDisable()
+    {
+        GameEvents.instance.equipKopf -= equip;
+    }
     public void equip(ItemInstance item)
     {
         if (kopf_Item == null)
