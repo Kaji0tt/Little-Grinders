@@ -9,10 +9,17 @@ public class EQSlotHose : MonoBehaviour
 
     private Int_SlotBtn int_slotBtn;
 
-    private void Start()
+    private void OnEnable()
     {
         GameEvents.instance.equipHose += equip;
+
         int_slotBtn = GetComponent<Int_SlotBtn>();
+
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.instance.equipHose -= equip;
     }
 
 

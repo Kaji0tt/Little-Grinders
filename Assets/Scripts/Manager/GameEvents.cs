@@ -78,7 +78,7 @@ public class GameEvents : MonoBehaviour
 
     }
 
-    
+    //Sollte zusätzlich die Entitie mitgeben.
     public void PlayerHasAttacked(float damage)
     {
         OnPlayerHasAttackedEvent(damage);
@@ -88,6 +88,7 @@ public class GameEvents : MonoBehaviour
         //OnPlayerWasAttackedEvent(damage);
     }
 
+    //Sollte zusätzlich die Entitie mitgeben.
     public void EnemyHasAttacked(float damage)
     {
         OnEnemyHasAttackedEvent(damage);

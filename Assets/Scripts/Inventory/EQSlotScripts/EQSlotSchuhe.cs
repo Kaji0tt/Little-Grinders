@@ -28,10 +28,17 @@ public class EQSlotSchuhe : MonoBehaviour
     //Deshalb darf int_slotBtn nicht gecalled werden, wenn es sich um das Laden von PlayerData handelt.
     private Int_SlotBtn int_slotBtn;
 
-    private void Start()
+    private void OnEnable()
     {
         GameEvents.instance.equipSchuhe += equip;
+
         int_slotBtn = GetComponent<Int_SlotBtn>();
+
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.instance.equipSchuhe -= equip;
     }
 
 

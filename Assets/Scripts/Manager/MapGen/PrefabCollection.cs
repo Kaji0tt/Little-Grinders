@@ -236,7 +236,7 @@ public class PrefabCollection : MonoBehaviour
 
     public GameObject GetRandomPreBuildTile()
     {
-        print("The length of the current Pre-Build Tiles is: " + preBuildTiles.Length);
+        //print("The length of the current Pre-Build Tiles is: " + preBuildTiles.Length);
 
         return preBuildTiles[Random.Range(0, preBuildTiles.Length)];
 

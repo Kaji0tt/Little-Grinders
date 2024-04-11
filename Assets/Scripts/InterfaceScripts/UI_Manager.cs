@@ -71,8 +71,8 @@ public class UI_Manager : MonoBehaviour
 
 
     //BadManner WorkAround für MainMenü
-    [SerializeField]
-    private GameObject canvasIG;
+    //[SerializeField]
+    //private GameObject canvasIG;
 
     private List<CanvasGroup> canvasGroup = new List<CanvasGroup>();
 
@@ -101,6 +101,11 @@ public class UI_Manager : MonoBehaviour
 
         if (next.name != "MainMenu")
         {
+            AllStartMethods();
+        }
+        else
+        {
+            //DeactivateIngameInterface();
             AllStartMethods();
         }
 
@@ -149,6 +154,14 @@ public class UI_Manager : MonoBehaviour
      */
 
 
+    /*
+    private void DeactivateIngameInterface()
+    {
+
+        canvasIG.SetActive(false);
+    }
+    */
+
     private void Start()
     {
         
@@ -168,11 +181,13 @@ public class UI_Manager : MonoBehaviour
 
         toggleCamKey = KeyCode.Tab;
 
+
+        /*
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             canvasIG.SetActive(false);
         }
-
+        */
         //isometricPlayer = GetComponent<IsometricPlayer>();
 
 
@@ -185,18 +200,19 @@ public class UI_Manager : MonoBehaviour
         //Die KeyBindButtons sind die Anzeigen der Zugewiesenen KeyBindings im Menü. Bsp.: Key
         keyBindButtons = GameObject.FindGameObjectsWithTag("KeyBindings");
 
-        Debug.Log("Hey i got called! We rached starter Method!");
+        //Debug.Log("Hey i got called! We rached starter Method!");
 
         CheckForUI_Elements();
 
         //RefreshKeyBindText();
 
-        Debug.Log("We got beanth the main check methods!");
+        //Debug.Log("We got beanth the main check methods!");
         mainMenuKey = KeyCode.Escape;
 
+        /*
         if (KeyManager.MyInstance != null)
             pickKey = KeyManager.MyInstance.Keybinds["PICK"];
-
+        */
         toggleCamKey = KeyCode.Tab;
 
 
@@ -224,10 +240,10 @@ public class UI_Manager : MonoBehaviour
 
     private void RefreshKeyBindText()
     {
-        Debug.Log("Inside: RefreshKeyBindText()  Method!");
+        //Debug.Log("Inside: RefreshKeyBindText()  Method!");
         foreach (KeyValuePair<string, KeyCode> kvp in KeyManager.MyInstance.Keybinds)
         {
-            Debug.Log("Inside: KeyManager.MyInstance.KeyBinds collection!! Key:" + kvp.Key.ToString());
+            //Debug.Log("Inside: KeyManager.MyInstance.KeyBinds collection!! Key:" + kvp.Key.ToString());
             UpdateKeyText(kvp.Key, kvp.Value);
         }
     }
@@ -235,7 +251,7 @@ public class UI_Manager : MonoBehaviour
     //Es sollte noch geschaut werden, inwiefern das UI nach Szenen-Wechsel gespeichert werden kann.
     public void UpdateKeyText(string key, KeyCode code)
     {
-        Debug.Log("Inside: UpdateKeyText for Key:" + key + " with Code: " + code.ToString());
+        //Debug.Log("Inside: UpdateKeyText for Key:" + key + " with Code: " + code.ToString());
         TextMeshProUGUI tmp = Array.Find(keyBindButtons, x => x.name == key).GetComponentInChildren<TextMeshProUGUI>();
 
 
@@ -495,6 +511,8 @@ public class UI_Manager : MonoBehaviour
 
         foreach(InterfaceElement interfaceElement in interfaceElements)
         {
+            //Debug.Log(SceneManager.GetActiveScene().name + interfaceElement.gameObject.name);
+
             interfaceElement.InitialisizeUIElement(interfaceElement);
 
             switch (interfaceElement.interfaceElementEnum)
@@ -508,8 +526,8 @@ public class UI_Manager : MonoBehaviour
 
                 case InterfaceElementDeclaration.Tooltip:
 
-                    //Debug.Log(interfaceElement.gameObject.name);
-                    //Debug.Log("also eigentlich sollte das Inventar fesstgelegt worden sein. Hier meine CanvasGroup: ");
+                    //Debug.Log(interfaceElement.gameObject.name); <- In Procedural Map war Tooltip aus, deshalb zunächst nicht gefunden.
+
                     tooltip = interfaceElement.gameObject;
 
                     HideTooltip();

@@ -5689,7 +5689,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &259668528
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6347,7 +6347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10.000122}
+  m_AnchoredPosition: {x: 0, y: -10.000153}
   m_SizeDelta: {x: 100, y: -744}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &283737639
@@ -28293,6 +28293,9 @@ MonoBehaviour:
   abilityType: 0
   requiredTypePoints: 10
   abilitySpec: 0
+  spec1Talents: []
+  spec2Talents: []
+  spec3Talents: []
   baseDamage: 5
   voidExpEffect: {fileID: 3255141819397502439, guid: 60e52df6bac92d94d94e1b7148a0463a,
     type: 3}
@@ -29732,6 +29735,7 @@ GameObject:
   - component: {fileID: 1163371625}
   - component: {fileID: 1163371624}
   - component: {fileID: 1163371628}
+  - component: {fileID: 1163371629}
   m_Layer: 5
   m_Name: Canvas (Ingame)
   m_TagString: Untagged
@@ -29833,10 +29837,22 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1163371623}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &1163371629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163371623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761f5d288f89e8045b3084a9873db1e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1164352476
 GameObject:
   m_ObjectHideFlags: 0
@@ -32019,6 +32035,9 @@ MonoBehaviour:
   abilityType: 1
   requiredTypePoints: 0
   abilitySpec: 0
+  spec1Talents: []
+  spec2Talents: []
+  spec3Talents: []
   healAmount: 10
   healAuraEffect: {fileID: 7052221280941909710, guid: 8847e58df1973f240bfa40e77a247d6b,
     type: 3}
@@ -32222,7 +32241,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 920448030}
   m_HandleRect: {fileID: 920448029}
   m_Direction: 2
-  m_Value: 0.9810677
+  m_Value: 0.98106784
   m_Size: 0.5758503
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -33194,7 +33213,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1277139698
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33930,7 +33949,6 @@ MonoBehaviour:
   tooltip: {fileID: 0}
   toggleCamKey: 0
   pickKey: 0
-  canvasIG: {fileID: 1163371623}
 --- !u!114 &1300116313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46215,7 +46233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1734441391
 RectTransform:
   m_ObjectHideFlags: 0
@@ -50333,7 +50351,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1880817038
 RectTransform:
   m_ObjectHideFlags: 0
@@ -54617,7 +54635,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2010285965
 RectTransform:
   m_ObjectHideFlags: 0
@@ -55473,7 +55491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2037024800
 RectTransform:
   m_ObjectHideFlags: 0
@@ -57799,8 +57817,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1172845273}
   m_HandleRect: {fileID: 1172845272}
   m_Direction: 2
-  m_Value: 0.999996
-  m_Size: 0.46374425
+  m_Value: 0.9999961
+  m_Size: 0.4637443
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

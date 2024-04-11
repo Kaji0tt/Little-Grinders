@@ -13,15 +13,25 @@ public class EQSlotWeapon : MonoBehaviour
 
     private Int_SlotBtn int_slotBtn;
 
-    
-    
-    private void Start()
+
+
+    private void OnEnable()
     {
         GameEvents.instance.equipWeapon += equip;
 
         int_slotBtn = GetComponent<Int_SlotBtn>();
 
         weaponAnim = GameObject.Find("WeaponAnimParent");
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.instance.equipWeapon -= equip;
+    }
+
+    private void Start()
+    {
+
 
     }
 

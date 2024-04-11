@@ -32,7 +32,7 @@ public static class SaveSystem
             PlayerSave data = formatter.Deserialize(stream) as PlayerSave;
             stream.Close();
 
-            Debug.Log("SAVE TROUBLESHOOT -- player.xxs loaded");
+            Debug.Log("Player Data loaded.");
 
             return data;
         }
