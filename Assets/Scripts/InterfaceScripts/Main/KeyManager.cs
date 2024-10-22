@@ -14,21 +14,27 @@ public class KeyManager : MonoBehaviour
     {
         get
         {
-            KeyManager[] instances = FindObjectsOfType<KeyManager>();
-
             if (instance == null)
             {
-
-                instance = instances[0];
+                Debug.LogError("KeyManager instance is null. Make sure it's initialized properly.");
             }
-            if (instances.Length > 1)
-            {
-                Destroy(instances[1]);
-            }
-
             return instance;
         }
     }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // Hält den KeyManager über Szenenwechsel hinweg
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject); // Falls eine weitere Instanz erstellt wird, zerstöre sie
+        }
+    }
+
 
     public Dictionary<string, KeyCode> Keybinds { get; private set; }
 
@@ -38,12 +44,6 @@ public class KeyManager : MonoBehaviour
 
     public string[] keyNames = { "UP", "LEFT", "DOWN", "RIGHT", "STATS", "SKILLS", "PICK", "MAP", "SLOT1", "SLOT2", "SLOT3", "SLOT4", "SLOT5" };
 
-    void Awake()
-    {
-
-        //Der KeyManager muss Szeneübergreifen bestehen bleiben.
-        DontDestroyOnLoad(gameObject);
-    }
 
 
     void Start()

@@ -42,16 +42,23 @@ public class DirectionCollider : MonoBehaviour
 
     void Update()
     {
-
+        int floorLayerMask = LayerMask.GetMask("Floor"); // Erstelle eine Layer-Maske nur für die Ebene mit dem Tag "Floor"
+        
         //Direction of Directioncollider = Input.Mouse World Position - Charakter Position 
         Ray ray = CameraManager.instance.mainCam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, Mathf.Infinity, floorLayerMask))
         {
+            //
             Vector3 rayhitDir = raycastHit.point - PlayerManager.instance.player.transform.position;
             dirVector = rayhitDir.normalized;
         }
 
-        transform.position = PlayerManager.instance.player.transform.position + dirVector;
+        Vector3 newPosition = PlayerManager.instance.player.transform.position + dirVector;
+        newPosition.y = transform.position.y; // Setze die Y-Position auf die aktuelle Y-Position des DirectionColliders
+        transform.position = newPosition;
+    
+
+        //transform.position = PlayerManager.instance.player.transform.position + dirVector;
         //Waffenposition anpassen
 
         //player.isoRenderer.SetWeaponDirection(dirVector, player.weaponGameObject.GetComponent<Animator>());

@@ -1,91 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class EQSlotHose : MonoBehaviour
+﻿
+public class EQSlotHose : EQSlotBase
 {
-    public static ItemInstance hose_Item;
-
-    private Int_SlotBtn int_slotBtn;
-
-    private void OnEnable()
+    private void Awake()
     {
-        GameEvents.instance.equipHose += equip;
-
-        int_slotBtn = GetComponent<Int_SlotBtn>();
-
+        slotType = EquipmentSlotType.Hose; // Setzt den Slot-Typ auf Schuhe
     }
 
-    private void OnDisable()
+    protected override void BindToGameEvent()
     {
-        GameEvents.instance.equipHose -= equip;
+        GameEvents.Instance.OnEquipHose += Equip;
     }
 
-
-    public void equip(ItemInstance item)
+    protected override void UnbindFromGameEvent()
     {
-        if (hose_Item == null)
-        {
-            hose_Item = item;
-
-            //ItemSave.equippedItems.Add(item);
-
-            int_slotBtn.StoreItem(item);
-
-            GetComponent<Image>().sprite = item.icon;
-
-        }
-        else
-        {
-            Dequip();
-
-            hose_Item = item;
-
-            int_slotBtn.storedItem = item;
-
-            GetComponent<Image>().sprite = item.icon;
-
-        }
+        GameEvents.Instance.OnEquipHose -= Equip;
     }
-
-    public void Dequip()
-    {
-
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(hose_Item);
-
-        GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(hose_Item);
-
-        //ItemSave.equippedItems.Remove(hose_Item);
-
-        hose_Item = null;
-
-        int_slotBtn.storedItem = null;
-
-    }
-
-
-    public void TaskOnClick()
-    {
-        if (hose_Item != null)
-            Dequip();
-    }
-
-    public void LoadItem(ItemInstance item)
-    {
-        hose_Item = item;
-
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
-
-        item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
-
-        GetComponent<Image>().sprite = item.icon;
-
-        Int_SlotBtn int_slotBtn = gameObject.GetComponentInChildren<Int_SlotBtn>();
-        int_slotBtn.storedItem = item;
-
-    }
-
 }

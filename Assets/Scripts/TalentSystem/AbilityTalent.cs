@@ -151,7 +151,7 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
     void Update()
     {
 
-        //During Active State, reduce the Active Time
+
         if (state == AbilityState.active)
         {
 

@@ -48,7 +48,6 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
     {
         RefreshInventoryItems();
     }
-
     private void RefreshInventoryItems()
     {
         foreach (Transform child in Int_Inventory)
@@ -56,80 +55,87 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
             if (child == Int_Slot) continue;
             Destroy(child.gameObject);
         }
+
         int x = 0;
         int y = 0;
         float SlotCellSize = 50f;
+
+        // Zuerst das Dictionary der Consumables durchlaufen
+        foreach (var kvp in inventory.GetConsumableDict())
+        {
+            string itemID = kvp.Key;
+            int itemAmount = kvp.Value;
+
+            ItemInstance item = new ItemInstance(ItemDatabase.GetItemID(itemID)); // Hole das Item basierend auf der ID
+            CreateInventorySlot(item, itemAmount, ref x, ref y, SlotCellSize);
+        }
+
+        // Dann die Liste der Nicht-Consumables durchlaufen
         foreach (ItemInstance item in inventory.GetItemList())
         {
+            CreateInventorySlot(item, 1, ref x, ref y, SlotCellSize);  // Bei Nicht-Consumables ist die Menge immer 1
+        }
+    }
 
-            RectTransform SlotRectTransform = Instantiate(Int_Slot, Int_Inventory).GetComponent<RectTransform>();
-            SlotRectTransform.gameObject.SetActive(true);
-            SlotRectTransform.GetComponent<Int_SlotBtn>().StoreItem(item); //funktioniert
+    private void CreateInventorySlot(ItemInstance item, int amount, ref int x, ref int y, float SlotCellSize)
+    {
+        RectTransform SlotRectTransform = Instantiate(Int_Slot, Int_Inventory).GetComponent<RectTransform>();
+        SlotRectTransform.gameObject.SetActive(true);
+        SlotRectTransform.GetComponent<Int_SlotBtn>().StoreItem(item);
 
-            SlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
+        SlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
+        {
+            if (item.itemType == ItemType.Consumable)
             {
-                if(item.itemType == ItemType.Consumable)
-                {
-                    ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemID(item.ItemID));
-                    inventory.UseItem(duplicateItem);
-                    inventory.RemoveItem(duplicateItem);
-                }
-                else
-                {
-                    inventory.UseItem(item);
-                    inventory.RemoveItem(item);
-                }
-
-                GameEvents.instance.EquipChanged(item);
-                //eqSlots.equip(item);
-                Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
-
-            };
-            SlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
-            {
-                if(item.itemType == ItemType.Consumable)
-                {
-                    ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemID(item.ItemID));
-                    inventory.RemoveItem(duplicateItem);
-                    ItemWorld.DropItem(PlayerManager.instance.player.transform.position, duplicateItem);
-                }
-                else
-                {
-                    inventory.RemoveItem(item);
-                    ItemWorld.DropItem(PlayerManager.instance.player.transform.position, item);
-                }
-
-                Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
-                //print("successfull");
-            };
-            SlotRectTransform.GetComponent<Button_UI>().MouseDownOnceFunc = () =>
-            {
-                if (item.itemType == ItemType.Consumable)
-                {
-                    HandScript.instance.TakeMoveable(item);
-                }
-            };
-
-            SlotRectTransform.anchoredPosition = new Vector2(x * SlotCellSize, y * SlotCellSize);
-
-            Image image = SlotRectTransform.Find("image").GetComponent<Image>();
-            image.sprite = item.icon;
-
-            //Finde das TMPro Element und dessen Text um den Amount anzuzeigen.
-            TextMeshProUGUI uiText = SlotRectTransform.Find("amount").GetComponent<TextMeshProUGUI>();
-
-            if (item.amount > 1)
-                uiText.SetText(item.amount.ToString());
+                ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemID(item.ItemID));
+                inventory.UseItem(duplicateItem);
+                inventory.RemoveItem(duplicateItem);
+            }
             else
-                uiText.SetText("");
-
-            x++;
-            if (x > 5)
             {
-                x = 0;
-                y++;
+                inventory.UseItem(item);
+                inventory.RemoveItem(item);
             }
 
+            GameEvents.Instance.EquipChanged(item);
+            Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
+        };
+
+        SlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
+        {
+            if (item.itemType == ItemType.Consumable)
+            {
+                ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemID(item.ItemID));
+                inventory.RemoveItem(duplicateItem);
+                ItemWorld.DropItem(PlayerManager.instance.player.transform.position, duplicateItem);
+            }
+            else
+            {
+                inventory.RemoveItem(item);
+                ItemWorld.DropItem(PlayerManager.instance.player.transform.position, item);
+            }
+
+            Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
+        };
+
+        SlotRectTransform.anchoredPosition = new Vector2(x * SlotCellSize, y * SlotCellSize);
+
+        Image image = SlotRectTransform.Find("image").GetComponent<Image>();
+        image.sprite = item.icon;
+
+        // Finde das TMPro-Element und setze den Text für die Menge
+        TextMeshProUGUI uiText = SlotRectTransform.Find("amount").GetComponent<TextMeshProUGUI>();
+
+        if (amount > 1)
+            uiText.SetText(amount.ToString());
+        else
+            uiText.SetText("");
+
+        x++;
+        if (x > 5)
+        {
+            x = 0;
+            y++;
         }
     }
 

@@ -323,6 +323,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionMethods.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\TestCompression.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ISpell.cs" />
+    <Compile Include="Assets\IG_Canvas_MM.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CurlyUI\CUIBezierCurve.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorPickerControl.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Talente\Voidexplosion.cs" />
@@ -404,7 +405,8 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_HealFountain.cs" />
-    <Compile Include="Assets\IG_Canvas_MM.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\IEquipableSlot.cs" />
+    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIAdditive.shader" />

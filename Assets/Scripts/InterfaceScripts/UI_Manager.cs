@@ -9,28 +9,34 @@ using UnityEngine.SceneManagement;
 public class UI_Manager : MonoBehaviour
 {
     #region Singleton
-    //public static UI_Manager instance { get; private set; }
-    public static UI_Manager myInstance;
+    private static UI_Manager myInstance;
 
     public static UI_Manager instance
     {
         get
         {
-            UI_Manager[] instances = FindObjectsOfType<UI_Manager>();
-
             if (myInstance == null)
             {
-
-                 myInstance = instances[0];
+                Debug.LogError("UI_Manager instance is null. Make sure it's initialized correctly.");
             }
-            if (instances.Length > 1)
-            {
-                Destroy(instances[1]);
-            }
-
             return myInstance;
         }
     }
+
+    private void Awake()
+    {
+        if (myInstance == null)
+        {
+            myInstance = this;
+            DontDestroyOnLoad(gameObject); // Hält UI_Manager über Szenenwechsel hinweg
+        }
+        else if (myInstance != this)
+        {
+            Destroy(gameObject); // Zerstört doppelte Instanzen
+        }
+    }
+
+
 
     #endregion
 
@@ -265,26 +271,32 @@ public class UI_Manager : MonoBehaviour
 
     }
 
+
+    private bool IsInMainMenu()
+    {
+        // Beispiel: Hauptmenü hat den Build-Index 0
+        return SceneManager.GetActiveScene().buildIndex == 0;
+    }
     private void Update()
     {
-        //CheckForUI_Elements();
 
-        //Interface Abfrage des Cursos sollte implementiert werden.
-        /*if(tooltip == null && SceneManager.GetActiveScene().name != "MainMenu")
+        if(!IsInMainMenu())
         {
-            tooltip = FindObjectOfType<Tooltip>().gameObject;
-            HideTooltip();
+            CheckForUserAction();
+        }
+    }
 
+    [SerializeField]
+    private Item[] itemsOnStart;
 
-
-
+    private void CheckForUserAction()
+    {
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            foreach (Item item in itemsOnStart)
+            PlayerManager.instance.player.Inventory.AddItem(new ItemInstance(item));
 
         }
-        */
-        //Debug.Log("Key of Slot1: " + KeyManager.MyInstance.ActionBinds["SLOT1"]);
-        //Action-Bars
-        //Debug.Log("Also, ActionBinds in Key Manager sollte nicht Null sein: " + KeyManager.MyInstance.ActionBinds["SLOT1"]);
-
 
         if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT1"]) && !GameIsPaused)
         {
@@ -330,12 +342,12 @@ public class UI_Manager : MonoBehaviour
         {
             OpenCloseMenu(skillTab);
             if (skillTab.alpha == 0)
-                if(AudioManager.instance != null)
-                AudioManager.instance.Play("OpenSkills");
-            else
-                if(AudioManager.instance != null)
-                AudioManager.instance.Play("CloseMenu");
-            
+                if (AudioManager.instance != null)
+                    AudioManager.instance.Play("OpenSkills");
+                else
+                if (AudioManager.instance != null)
+                    AudioManager.instance.Play("CloseMenu");
+
         }
 
         if (Input.GetKeyDown(KeyManager.MyInstance.Keybinds["STATS"]) && !GameIsPaused)
@@ -347,11 +359,11 @@ public class UI_Manager : MonoBehaviour
         {
             OpenCloseMenu(mapTab);
             if (mapTab.alpha == 0)
-                if(AudioManager.instance != null)
-                AudioManager.instance.Play("OpenMap");
-            else
                 if (AudioManager.instance != null)
-                AudioManager.instance.Play("CloseMenu");
+                    AudioManager.instance.Play("OpenMap");
+                else
+                if (AudioManager.instance != null)
+                    AudioManager.instance.Play("CloseMenu");
         }
 
         //Make it possible to close all Menues by ESCAPE

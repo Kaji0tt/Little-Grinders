@@ -42,7 +42,8 @@ public class VoidExplosion : Ability
 
     private void Start()
     {
-        GameEvents.instance.OnPlayerHasAttackedEvent += PlayerAttacked; 
+        Debug.Log("Void Explosion verändert aktuell nicht PlayerAttacked - hier ggf. nochmal trouble shopoten.");
+        //GameEvents.Instance.PlayerHasAttacked(PlayerAttacked) += PlayerAttacked; 
 
     }
 

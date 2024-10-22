@@ -47,7 +47,7 @@ public class DebugPlayerPref : MonoBehaviour
 
     private void OnDisable()
     {
-        Destroy(FindObjectOfType<KeyManager>());
+        //Destroy(FindObjectOfType<KeyManager>());
         Destroy(this.gameObject);
     }
 }

@@ -4906,8 +4906,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0038be263d74d9b95eb7a5862c9f4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isoRenderer: {fileID: 0}
-  weaponGameObject: {fileID: 0}
+  isoRenderer: {fileID: 251029957}
+  weaponGameObject: {fileID: 750255068}
   rangedWeapon: 0
   equippedItems: []
   idleRotSpeed: 10
@@ -22593,6 +22593,9 @@ MonoBehaviour:
   abilityType: 1
   requiredTypePoints: 0
   abilitySpec: 0
+  spec1Talents: []
+  spec2Talents: []
+  spec3Talents: []
   healAmount: 10
   healAuraEffect: {fileID: 7052221280941909710, guid: 8847e58df1973f240bfa40e77a247d6b,
     type: 3}
@@ -25708,6 +25711,9 @@ MonoBehaviour:
   abilityType: 0
   requiredTypePoints: 10
   abilitySpec: 0
+  spec1Talents: []
+  spec2Talents: []
+  spec3Talents: []
   baseDamage: 5
   voidExpEffect: {fileID: 3255141819397502439, guid: 60e52df6bac92d94d94e1b7148a0463a,
     type: 3}
@@ -32319,7 +32325,6 @@ MonoBehaviour:
   tooltip: {fileID: 1980186880}
   toggleCamKey: 113
   pickKey: 9
-  canvasIG: {fileID: 0}
 --- !u!114 &1545008514
 MonoBehaviour:
   m_ObjectHideFlags: 0

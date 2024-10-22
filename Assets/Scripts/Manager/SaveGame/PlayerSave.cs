@@ -163,25 +163,51 @@ public class PlayerSave
 
         }
     }
-
     private void SaveTheInventory()
     {
-        inventoryItemMods = new List<ItemModsData>[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
+        // Hole das Item-Dictionary vom Inventar (Consumables) und die Liste der Non-Consumables
+        var conDict = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetConsumableDict();
+        var itemList = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList();
 
-        inventoryItemRarity = new string[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
+        // Initialisiere die Arrays basierend auf der Gesamtanzahl der Items (Consumables + Non-Consumables)
+        int totalItemCount = conDict.Count + itemList.Count;
+        inventoryItemMods = new List<ItemModsData>[totalItemCount];
+        inventoryItemRarity = new string[totalItemCount];
 
         int currentItem = 0;
 
-        foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList())
+        // Iteriere über das Dictionary der Consumables (Key: ItemID, Value: Anzahl)
+        foreach (KeyValuePair<string, int> entry in conDict)
         {
+            // Hole das ItemInstance basierend auf der ItemID
+            ItemInstance item = new ItemInstance(ItemDatabase.GetItemID(entry.Key));
+            int amount = entry.Value;
+
+            // Speichere die ItemID so oft, wie das Item vorhanden ist (Anzahl)
+            for (int i = 0; i < amount; i++)
+            {
+                // Füge die ItemID zur Speicherliste hinzu
+                inventorySave.Add(item.ItemID);
+
+                // Speichere die Mods und die Rarity für das aktuelle Item
+                inventoryItemMods[currentItem] = item.addedItemMods;
+                inventoryItemRarity[currentItem] = item.itemRarity;
+
+                currentItem++;
+            }
+        }
+
+        // Iteriere über die Liste der Non-Consumables
+        foreach (ItemInstance item in itemList)
+        {
+            // Speichere die ItemID des Non-Consumable-Items
             inventorySave.Add(item.ItemID);
 
+            // Speichere die Mods und die Rarity für das aktuelle Item
             inventoryItemMods[currentItem] = item.addedItemMods;
-
             inventoryItemRarity[currentItem] = item.itemRarity;
 
-            currentItem += 1;
-
+            currentItem++;
         }
     }
 

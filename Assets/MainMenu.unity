@@ -325,6 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e57fc21261e0034d82f980a632f1cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 0
 --- !u!114 &17032350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,7 +366,6 @@ MonoBehaviour:
     itemAction: {fileID: 0}
     c_percent: 0
     addedItemMods: []
-    amount: 0
 --- !u!114 &17032351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4821,7 +4821,6 @@ MonoBehaviour:
     itemAction: {fileID: 0}
     c_percent: 0
     addedItemMods: []
-    amount: 0
 --- !u!114 &209124108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4834,6 +4833,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3b9cd47653bd04ba55662f5f8f6922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 0
 --- !u!114 &209124109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6072,6 +6072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0ba23188049f749bee8c59866f9d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 0
 --- !u!114 &266154893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6112,7 +6113,6 @@ MonoBehaviour:
     itemAction: {fileID: 0}
     c_percent: 0
     addedItemMods: []
-    amount: 0
 --- !u!114 &266154894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6347,7 +6347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10.000153}
+  m_AnchoredPosition: {x: 0, y: -10.000122}
   m_SizeDelta: {x: 100, y: -744}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &283737639
@@ -6441,7 +6441,6 @@ MonoBehaviour:
     itemAction: {fileID: 0}
     c_percent: 0
     addedItemMods: []
-    amount: 0
 --- !u!114 &288624428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6454,6 +6453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee0a073ba2e9444f8c2c5357fb4ab97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 0
 --- !u!114 &288624429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11617,7 +11617,6 @@ MonoBehaviour:
     itemAction: {fileID: 0}
     c_percent: 0
     addedItemMods: []
-    amount: 0
 --- !u!114 &481383181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11899,7 +11898,6 @@ MonoBehaviour:
     itemAction: {fileID: 0}
     c_percent: 0
     addedItemMods: []
-    amount: 0
 --- !u!114 &485610376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11912,6 +11910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd1eac5456747e40a11d39bc76b1c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 0
 --- !u!114 &485610377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32500,7 +32499,6 @@ MonoBehaviour:
     itemAction: {fileID: 0}
     c_percent: 0
     addedItemMods: []
-    amount: 0
 --- !u!114 &1263213761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32513,6 +32511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0641d718accf8214fae99dbbe4cc1633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 0
 --- !u!114 &1263213762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33949,6 +33948,12 @@ MonoBehaviour:
   tooltip: {fileID: 0}
   toggleCamKey: 0
   pickKey: 0
+  itemsOnStart:
+  - {fileID: 11400000, guid: a25f24bf889bc344983faa636d0e5aee, type: 2}
+  - {fileID: 11400000, guid: a25f24bf889bc344983faa636d0e5aee, type: 2}
+  - {fileID: 11400000, guid: a25f24bf889bc344983faa636d0e5aee, type: 2}
+  - {fileID: 11400000, guid: 836de1198cfca6f42a0aacc0bdb708fb, type: 2}
+  - {fileID: 11400000, guid: 46177b1529ef2ed46b49494f8927936a, type: 2}
 --- !u!114 &1300116313
 MonoBehaviour:
   m_ObjectHideFlags: 0

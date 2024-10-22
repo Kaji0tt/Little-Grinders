@@ -1,134 +1,77 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-//Relike der Anfänge. Die EQSlots sind mit das erste komplexere, was je programmiert wurde in diesem Spiel, und sind deshalb der absolute Inbegriff des Spaghetti-Monsters.
-public class EQSlotWeapon : MonoBehaviour
+public class EQSlotWeapon : EQSlotBase
 {
-
-    public static ItemInstance weapon_Item;
-
     private GameObject weaponAnim;
 
-    private Int_SlotBtn int_slotBtn;
-
-
-
-    private void OnEnable()
+    private void Awake()
     {
-        GameEvents.instance.equipWeapon += equip;
-
-        int_slotBtn = GetComponent<Int_SlotBtn>();
-
+        slotType = EquipmentSlotType.Weapon; // Setzt den Slot-Typ auf Weapon
         weaponAnim = GameObject.Find("WeaponAnimParent");
     }
 
-    private void OnDisable()
+    protected override void BindToGameEvent()
     {
-        GameEvents.instance.equipWeapon -= equip;
+        GameEvents.Instance.OnEquipWeapon += Equip;
     }
 
-    private void Start()
+    protected override void UnbindFromGameEvent()
     {
-
-
+        GameEvents.Instance.OnEquipWeapon -= Equip;
     }
 
-
-    public void equip(ItemInstance item)
+    public override void Equip(ItemInstance item)
     {
-        if (weapon_Item == null)
+        base.Equip(item); // Nutzt die allgemeine Logik für das Ausrüsten von Items
+
+        // Spezifische Logik für die Waffe: Setzt das Sprite der Waffe im WeaponAnim GameObject
+        if (weaponAnim != null)
         {
-            EquipItem(item);
-
-
-            //Line für Tutorial-Text
-            if (item.ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript") != null)
-            {
-                Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-
-                tutorialScript.ShowTutorial(5);
-
-            }
-
-
-        }
-        else
-        {
-            Dequip();
-            EquipItem(item);
-
+            weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
         }
 
-    }
-
-
-    public void Dequip()
-    {
-
-
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(weapon_Item);
-
-        GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(weapon_Item);
-
-        weaponAnim.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Blank_Icon");
-
-        if (weapon_Item.RangedWeapon)
-            PlayerManager.instance.player.GetComponent<IsometricPlayer>().rangedWeapon = false;
-
-        weapon_Item = null;
-
-
-        int_slotBtn.storedItem = null;
-    }
-
-    public void EquipItem(ItemInstance item)
-    {
-        weapon_Item = item;
-
-        //ItemSave.equippedItems.Add(item);
-
-        int_slotBtn.StoreItem(item);
-
-        GetComponent<Image>().sprite = item.icon;
-
-        weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
-
-        //playerStats = player.GetComponent<PlayerStats>();
-
-        PlayerManager.instance.player.GetComponent<PlayerStats>().Range = item.Range;
-
-
+        // Logik für Fernkampfwaffen
         if (item.RangedWeapon)
-            PlayerManager.instance.player.GetComponent<IsometricPlayer>().rangedWeapon = true;
+        {
+            PlayerManager.instance.player.rangedWeapon = true;
+        }
+
+        // Spezielle Tutorial-Logik
+        if (item.ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript") != null)
+        {
+            Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
+            tutorialScript.ShowTutorial(5);
+        }
     }
 
-    public void TaskOnClick()
+    public override void Dequip()
     {
-        if (weapon_Item != null)
-            Dequip();
+        base.Dequip(); // Nutzt die allgemeine Logik für das Ablegen von Items
+
+        // Entfernt das Waffensprite vom WeaponAnim GameObject
+        if (weaponAnim != null)
+        {
+            weaponAnim.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Blank_Icon");
+        }
+
+        /* Derzeit nicht vorhanden.
+        // Logik für Fernkampfwaffen
+        if (weapon_Item != null && weapon_Item.RangedWeapon)
+        {
+            PlayerManager.Instance.Player.GetComponent<IsometricPlayer>().rangedWeapon = false;
+        }
+        */
     }
 
-
-    public void LoadItem(ItemInstance item)
+    public override void LoadItem(ItemInstance item)
     {
-        weapon_Item = item;
+        base.LoadItem(item); // Nutzt die allgemeine Logik zum Laden eines Items
 
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
-
-        item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
-
-        GetComponent<Image>().sprite = item.icon;
-
-        Int_SlotBtn int_slotBtn = gameObject.GetComponentInChildren<Int_SlotBtn>();
-        int_slotBtn.storedItem = item;
-
-        weaponAnim = GameObject.Find("WeaponAnimParent");
-
-        weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
-
+        // Setzt das Waffensprite im WeaponAnim GameObject
+        if (weaponAnim != null)
+        {
+            weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
+        }
     }
 }

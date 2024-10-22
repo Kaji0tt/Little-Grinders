@@ -277,7 +277,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
         damage = Mathf.Clamp(damage, 1, int.MaxValue);
         
         //Berichte den GameEvents vom verursachten Schaden am Spieler.
-        GameEvents.instance.PlayerWasAttacked(damage);
+        GameEvents.Instance.PlayerWasAttacked(damage);
 
         //Ziehe den Schaden vom Spielerleben ab.
         Set_currentHp(-damage);

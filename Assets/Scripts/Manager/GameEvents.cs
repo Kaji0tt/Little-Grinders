@@ -1,103 +1,91 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameEvents : MonoBehaviour
 {
     #region Singleton
-    //public static UI_Manager instance { get; private set; }
-    public static GameEvents myInstance;
+    // Die statische Instanz des Singletons
+    public static GameEvents Instance { get; private set; }
 
-    public static GameEvents instance
+    private void Awake()
     {
-        get
+        // Überprüfen, ob eine Instanz bereits existiert
+        if (Instance == null)
         {
-            GameEvents[] instances = FindObjectsOfType<GameEvents>();
-
-            if (myInstance == null)
-            {
-
-                myInstance = instances[0];
-            }
-            if (instances.Length > 1)
-            {
-                Destroy(instances[1]);
-            }
-
-            return myInstance;
+            Instance = this; // Setze die aktuelle Instanz
+            DontDestroyOnLoad(gameObject); // Optional: Behalte dieses Objekt bei Szenenwechseln
+        }
+        else if (Instance != this)
+        {
+            // Falls eine andere Instanz bereits existiert, zerstöre diese neue Instanz
+            Destroy(gameObject);
         }
     }
     #endregion
 
-    public event Action<ItemInstance> equipSchuhe;
-    public event Action<ItemInstance> equipHose;
-    public event Action<ItemInstance> equipBrust;
-    public event Action<ItemInstance> equipKopf;
-    public event Action<ItemInstance> equipWeapon;
-    public event Action<ItemInstance> equipSchmuck;
 
-    public event Action<float> OnPlayerHasAttackedEvent;
-    //public event Action<float> OnPlayerWasAttackedEvent;
+    // Events für Ausrüstungsgegenstände
+    public event Action<ItemInstance> OnEquipKopf;
+    public event Action<ItemInstance> OnEquipSchuhe;
+    public event Action<ItemInstance> OnEquipHose;
+    public event Action<ItemInstance> OnEquipBrust;
+    public event Action<ItemInstance> OnEquipWeapon;
+    public event Action<ItemInstance> OnEquipSchmuck;
 
-    public event Action<float> OnEnemyHasAttackedEvent;
-    public event Action<float> OnEnemyWasAttackedEvent;
-    //public event Action<IEntitie, float> playerWasAttacked;
+    // Kampf-Events
+    public event Action<float> OnPlayerHasAttacked;
+    public event Action<float> OnEnemyHasAttacked;
 
-    public static event Action<string> playSound;
-    //private IsometricPlayer isometricPlayer;
+    // Sound-Event
+    public static event Action<string> PlaySound;
 
-    
     public void EquipChanged(ItemInstance item)
     {
         switch (item.itemType)
         {
             case ItemType.Kopf:
-                equipKopf(item);
+                OnEquipKopf?.Invoke(item);
                 break;
             case ItemType.Brust:
-                equipBrust(item);
+                OnEquipBrust?.Invoke(item);
                 break;
             case ItemType.Beine:
-                equipHose(item);
+                OnEquipHose?.Invoke(item);
                 break;
             case ItemType.Schuhe:
-                equipSchuhe(item);
+                OnEquipSchuhe?.Invoke(item);
                 break;
             case ItemType.Schmuck:
-                equipSchmuck(item);
+                OnEquipSchmuck?.Invoke(item);
                 break;
             case ItemType.Weapon:
-                equipWeapon(item);
+                OnEquipWeapon?.Invoke(item);
                 break;
-            case ItemType.Consumable:
-                //Placeholder. Call for ItemDelte or something. --> Irgendwie, wird das irgendwo anders schon gemacht.
+            default:
+                Debug.LogWarning("Unknown item type: " + item.itemType);
                 break;
-
         }
-
     }
 
-    //Sollte zusätzlich die Entitie mitgeben.
+    // Kampfaktionen
     public void PlayerHasAttacked(float damage)
     {
-        OnPlayerHasAttackedEvent(damage);
-    }
-    public void PlayerWasAttacked(float damage)
-    {
-        //OnPlayerWasAttackedEvent(damage);
+        OnPlayerHasAttacked?.Invoke(damage);
     }
 
-    //Sollte zusätzlich die Entitie mitgeben.
+    public void PlayerWasAttacked(float damage)
+    {
+        //OnPlayerWasAttacked?.Invoke(damage);
+    }
+
     public void EnemyHasAttacked(float damage)
     {
-        OnEnemyHasAttackedEvent(damage);
+        OnEnemyHasAttacked?.Invoke(damage);
     }
 
     public void EnemyWasAttacked(float damage)
     {
-        OnEnemyHasAttackedEvent(damage);
+        //OnEnemyWasAttacked?.Invoke(damage);
+
     }
-
-
 }

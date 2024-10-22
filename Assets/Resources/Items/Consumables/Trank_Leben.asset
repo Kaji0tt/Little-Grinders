@@ -22,6 +22,7 @@ MonoBehaviour:
   icon: {fileID: -804648594177512020, guid: 95a129829be181b4f81de5c1363c0f03, type: 3}
   percent: 25
   baseLevel: 2
+  activeItem: 1
   hp: 0
   armor: 0
   attackPower: 0
@@ -35,4 +36,4 @@ MonoBehaviour:
   c_hp: 20
   usable: 1
   c_percent: 0
-  itemAction: {fileID: 0}
+  itemSpell: {fileID: 0}

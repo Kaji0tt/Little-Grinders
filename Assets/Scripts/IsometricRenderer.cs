@@ -67,11 +67,11 @@ public class IsometricRenderer : MonoBehaviour
 
         string[] directionArray; //= null;
 
-        if (direction.magnitude < .01f)
+        if (direction.magnitude < .2f)
         { 
             directionArray = staticDirections;
 
-
+            lastDirection = DirectionToIndex(direction, 8);
         }        
 
         else

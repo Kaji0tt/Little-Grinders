@@ -272,11 +272,39 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
 
         //Input & WalkAnimation
+
+        /*
         float horizontalInput = Input.GetAxis("HorizontalKey");
         float verticalInput = Input.GetAxis("VerticalKey");
         inputVector = new Vector2(horizontalInput, verticalInput);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
         isoRenderer.SetDirection(inputVector);
+
+        */
+
+        float horizontalInput = Input.GetAxis("HorizontalKey");
+        float verticalInput = Input.GetAxis("VerticalKey");
+
+        // Prüfe, ob keine Tastatureingabe vorliegt
+        if (Mathf.Approximately(horizontalInput, 0) && Mathf.Approximately(verticalInput, 0))
+        {
+            // Berechne die Blickrichtung basierend auf der Mausposition
+            Vector3 directionToMouse = DirectionCollider.instance.dirVector; // Verwende den Richtungsvektor, den du im vorherigen Code für den DirectionCollider berechnet hast
+
+            // Konvertiere die Richtung in eine 2D-Richtung, um sie mit dem IsoRenderer zu verwenden
+            Vector2 mouseDirection2D = new Vector2(directionToMouse.x, directionToMouse.z).normalized;
+
+            // Minimiere den Input von mouseDirection2D, damit die IsoRenderer Idle-Array auswählt.
+            mouseDirection2D = Vector2.ClampMagnitude(mouseDirection2D, 0.1f);
+            isoRenderer.SetDirection(mouseDirection2D); // Setze die Blickrichtung des IsoRenderers basierend auf der Mausposition
+        }
+        else
+        {
+            // Wenn Tastatureingabe vorliegt, verwende diese für die Blickrichtung
+            Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
+            inputVector = Vector2.ClampMagnitude(inputVector, 1);
+            isoRenderer.SetDirection(inputVector); // Setze die Blickrichtung des IsoRenderers basierend auf der Tastatureingabe
+        }
         isoRenderer.SetWeaponDirection(DirectionCollider.instance.dirVector, weaponGameObject.GetComponent<Animator>());
 
         //print(inputVector);
@@ -393,7 +421,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
             weaponGameObject.gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
 
             //Call the GameEvent of Attacking Player
-            GameEvents.instance.PlayerHasAttacked(playerStats.AttackPower.Value);
+            GameEvents.Instance.PlayerHasAttacked(playerStats.AttackPower.Value);
 
             //*** SOUND ***    
             string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public enum ItemType {Kopf, Brust, Beine, Schuhe, Schmuck, Weapon, Consumable}
 //public enum ItemRarity {Unbrauchbar, Gewöhnlich, Ungewöhnlich, Selten, Episch, Legendär}
 
+
+
 [CreateAssetMenu(fileName = "Item0000", menuName = "Assets/Item")]
 public class Item : ScriptableObject
 {
@@ -24,6 +26,7 @@ public class Item : ScriptableObject
     public Sprite icon;        //scale item.sprite always to correct size, for ItemWorld to Spawn it in according size aswell. either here or in itemworld
     public int percent;
     public int baseLevel;
+    public bool activeItem;
 
     [Space]
     [Header("Flat-Werte")]
@@ -52,9 +55,7 @@ public class Item : ScriptableObject
     public float c_percent;
 
 
-    public Spell itemAction;
-
-
+    public Spell itemSpell;
 
 }
 
@@ -117,8 +118,9 @@ public class ItemInstance :  IMoveable, IUseable
     [HideInInspector]
     public List<ItemModsData> addedItemMods = new List<ItemModsData>(); //??
 
-    [HideInInspector]
-    public int amount = 1;
+    //BadManner
+    //[HideInInspector]
+    //public int amount = 1;
 
     private IMoveable MyMoveable;
 
@@ -221,7 +223,7 @@ public class ItemInstance :  IMoveable, IUseable
         if(useable)
         {
             useable = true;
-            itemAction = item.itemAction;
+            itemAction = item.itemSpell;
         }
         #endregion
 
@@ -341,14 +343,15 @@ public class ItemInstance :  IMoveable, IUseable
 
     public void Use()
     {
-        Inventory inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-        
-        if (this.itemType == ItemType.Consumable)
+        Inventory inventory = PlayerManager.instance.player.Inventory;
+        Debug.Log("Moin na! Ich werde benutzt:" + ItemName);
+
+        if (itemType == ItemType.Consumable)
         {
             if (inventory.itemList.Contains(this))
             {
-                PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.RemoveItem(this);
-                PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.UseItem(this);
+                PlayerManager.instance.player.Inventory.RemoveItem(this);
+                PlayerManager.instance.player.Inventory.UseItem(this);
             };
 
         };
@@ -388,7 +391,11 @@ public class ItemInstance :  IMoveable, IUseable
 
     public bool IsActive()
     {
-        throw new NotImplementedException();
+        //Do Sepcial Stuff which is called like Update.
+        if ( GetCooldown()== 0)
+            return false;
+        else
+        return true;
     }
 
 }
