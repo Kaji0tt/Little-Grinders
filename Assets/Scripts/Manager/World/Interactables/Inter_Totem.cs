@@ -85,7 +85,7 @@ public class Inter_Totem : Interactable
                 }
 
 
-                PlayerManager.instance.player.GetComponent<PlayerStats>().Set_xp(20);
+                PlayerManager.instance.player.GetComponent<PlayerStats>().Gain_xp(20);
 
                 timeStamp += Time.deltaTime;
 

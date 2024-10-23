@@ -6,171 +6,245 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ActionButton : MonoBehaviour, IPointerEnterHandler //IEndDragHandler
-{
-    //IUseable sollte ich später auch noch hinzufügen für die Potions... außerdem müssen Potions Stackbar sein.
-    public IUseable MyUseable { get; private set; }
 
+public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
+{
+    public IUseable MyUseable { get; private set; }
     private IMoveable MyMoveable;
 
     public Button MyButton { get; private set; }
-
     public Sprite icon { get; private set; }
-
     public Image image { get; private set; }
 
-    //Color lerpColor = Color.white;
+    private string itemName;
 
     public GameObject cdButton;
     private Text cdText;
-
-    Color lerpColor = Color.white;
-
+    private Inventory playerInventory;
 
     void Start()
     {
         MyButton = GetComponent<Button>();
         MyButton.image = GetComponent<Image>();
         MyButton.onClick.AddListener(OnClick);
+        cdText = GetComponentInChildren<Text>();
+        
+
     }
 
     public void OnClick()
     {
 
-        if (MyUseable != null)
+        // Überprüfe, ob es sich um ein Item handelt
+        if (MyUseable != null && MyUseable is ItemInstance)
         {
-            MyUseable.Use();
+            // Hole den Namen des IUseable und überprüfe die Verfügbarkeit im Inventar
+            string itemName = MyUseable.GetName();
+
+            // Finde das Item im Inventar basierend auf dem Namen
+            ItemInstance itemInInventory = FindItemInInventory(itemName);
+
+            if (itemInInventory != null)
+            {
+                int itemAmount = PlayerManager.instance.player.inventory.GetItemAmount(itemInInventory);
+
+                if (itemAmount > 0)
+                {
+                    MyUseable.Use(); // Nur verwenden, wenn noch Aufladungen vorhanden sind
+                }
+                else
+                {
+                    // Optional: Deaktiviere den Button, wenn das Item leer ist
+                    Debug.Log("Item " + itemName + " is out of stock. 2");
+                    MyButton.image.color = Color.gray; // Visuelles Feedback
+                }
+            }
+            else
+            {
+                MyButton.image.color = Color.black; // Visuelles Feedback
+                Debug.Log("Item " + itemName + " is out of stock. 1");
+            }
+
+
+        }
+        else if (MyUseable != null)
+        {
+
+            MyUseable.Use(); // Nur verwenden, wenn es sich nicht um ein aktives Item handelt.
         }
 
+        else
+        {
+            Debug.Log("No Spell on current Action Button! ");
+        }
+
+    }
+
+    private ItemInstance FindItemInInventory(string itemName)
+    {
+        // Durchlaufe alle Items im Inventar und suche nach dem Item anhand des Namens
+        foreach (ItemInstance item in PlayerManager.instance.player.inventory.GetItemList())
+        {
+            if (item.ItemName == itemName)
+            {
+                return item;
+            }
+        }
+
+        // Auch Consumables durchsuchen (falls sie im Dictionary sind)
+        foreach (var kvp in PlayerManager.instance.player.inventory.GetConsumableDict())
+        {
+            string consumableItemID = kvp.Key;
+            ItemInstance consumableItem = new ItemInstance(ItemDatabase.GetItemByID(consumableItemID));
+
+            if (consumableItem.ItemName == itemName)
+            {
+                return consumableItem;
+            }
+        }
+
+        // Wenn das Item nicht gefunden wurde, gib null zurück
+        return null;
     }
 
     void Update()
     {
-        //Farbe während die Ability auf Cooldown ist.
-        if (MyUseable != null && MyUseable.IsOnCooldown())
+        // Überprüfe, ob es sich um ein Item handelt
+        if (MyUseable != null && MyUseable is ItemInstance)
         {
+            // Hole den Namen des Items und prüfe die Menge im Inventar
+            string itemName = MyUseable.GetName();
+            ItemInstance itemInInventory = FindItemInInventory(itemName);
 
-            MyButton.image.color = Color.grey;
-
-            cdButton.SetActive(true);
-
-            cdText = cdButton.GetComponent<Text>();
-
-            cdText.text = (MyUseable.CooldownTimer()).ToString("F1");
-
-
-        }
-        //Farbe während die Ability nicht auf Cooldown ist.
-        else if (MyUseable != null && !MyUseable.IsOnCooldown())
-        {
-
-            MyButton.image.color = Color.white;
-
-            cdButton.SetActive(false);
-
-        }
-        //Farbe während die Ability aktiv ist.
-        if (MyUseable != null && MyUseable.IsActive())
-        {
-
-            Color lerpColor = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
-
-            MyButton.image.color = lerpColor;
-
-        }
-
-
-    }
-
-    public void UpdateVisual()
-    {
-
-        MyButton.image.sprite = HandScript.instance.Put().icon;
-
-        MyButton.image.color = Color.white;
-    }
-
-    //Wurde eingefügt um ggf. ActionBars zu speichern.
-    /*
-    public void SetUseable(IMoveable moveable)
-    {
-        this.MyMoveable = moveable;
-
-        UpdateVisual();
-    }
-    */
-    public void SetUseable(IUseable useable)
-    {
-        //this.MyMoveable = moveable;
-
-        this.MyUseable = useable;
-
-        UpdateVisual();
-    }
-
-    public void LoadSpellUseable(Spell spell)
-    {
-        //this.MyUseable = useable;
-
-        MyUseable = spell;
-
-        MyMoveable = spell;
-
-        MyButton = GetComponent<Button>();
-
-        MyButton.image.sprite = spell.icon;
-
-        MyButton.image.color = Color.white;
-
-    }
-
-    internal void LoadItemUseable(Item item)
-    {
-        Inventory inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-
-        ItemInstance interfaceItem = inventory.itemList.FirstOrDefault(x => x.ItemID == item.ItemID);
-
-        MyUseable = interfaceItem;
-
-        MyMoveable = interfaceItem;
-
-        MyButton = GetComponent<Button>();
-
-        MyButton.image.sprite = interfaceItem.icon;
-
-        MyButton.image.color = Color.white;
-    }
-
-    //On POinter ClickHandler ist wohl lediglich für das Spellbook wichtig, welches wir über den TalentTree umgangen haben.
-    /*public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            if (HandScript.instance.MyMoveable != null && HandScript.instance.MyMoveable is IUseable)
+            if(itemInInventory != null)
             {
-                UI_Manager.instance.SetUseable(HandScript.instance.MyMoveable as IUseable);
+                int itemAmount = PlayerManager.instance.player.inventory.GetItemAmount(itemInInventory);
+                if (itemAmount > 0)
+                {
+
+                    // Wenn keine Aufladungen mehr vorhanden sind, Button ausgrauen
+                    MyButton.image.color = Color.white;
+                    cdText.CrossFadeAlpha(1, 1, true);
+                    cdText.text = itemAmount.ToString();
+                    cdText.color = Color.white;
+
+                }
+                else
+                {
+                    cdText.CrossFadeAlpha(0, 1, true);
+                    MyButton.image.color = Color.gray;
+                                               //MyUseable = null; // Entferne die Verwendung
+                }
+            }
+
+            else
+            {
+                cdText.CrossFadeAlpha(0, 1, true);
+                MyButton.image.color = Color.gray; // Item ist aufgebraucht
+                                                   //MyUseable = null; // Entferne die Verwendung
+            }
+
+        }
+        else if (MyUseable != null) // Cooldown- und Aktivierungslogik für Fähigkeiten
+        {
+            // Prüfe, ob die Fähigkeit auf Cooldown ist
+            if (MyUseable.IsOnCooldown())
+            {
+                cdText.CrossFadeAlpha(1, 1, true);
+                cdText.color = Color.white;
+                MyButton.image.color = Color.grey;
+                cdButton.SetActive(true);
+                cdText.text = MyUseable.CooldownTimer().ToString("F1");
+            }
+            else
+            {
+                cdText.CrossFadeAlpha(0, 1, true);
+                MyButton.image.color = Color.white;
+                cdButton.SetActive(false);
+            }
+
+            // Zeige, ob die Fähigkeit aktiv ist
+            if (MyUseable.IsActive())
+            {
+                MyButton.image.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
             }
         }
-    }*/
+        else
+        {
+            // Wenn MyUseable null ist (kein Item oder keine Fähigkeit)
+            cdText.CrossFadeAlpha(0, 1, true);
+        }
+    }
+    public void UpdateVisual()
+    {
+        if (HandScript.instance.MyMoveable != null)
+        {
+            MyButton.image.sprite = HandScript.instance.MyMoveable.icon;
+            MyButton.image.color = Color.white;
+        }
+    }
+
+    public void SetUseable(IUseable useable)
+    {
+        this.MyUseable = useable;
+        cdButton.SetActive(true);
+        cdButton.GetComponent<Text>().text = useable.GetName();
+        playerInventory = PlayerManager.instance.player.inventory;
+        UpdateVisual();
+
+
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (HandScript.instance.MyMoveable != null && HandScript.instance.MyMoveable is IUseable)
+        {
+            SetUseable(HandScript.instance.MyMoveable as IUseable);
+            MyMoveable = HandScript.instance.Put();
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData) { }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (MyMoveable != null)
+        {
+            HandScript.instance.TakeMoveable(MyMoveable);
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
     {
         if (HandScript.instance.MyMoveable != null)
         {
             SetUseable(HandScript.instance.MyMoveable as IUseable);
-            MyMoveable = HandScript.instance.Put();
-            //HandScript.instance.MyMoveable = null;
+            HandScript.instance.Put();
         }
-
-        /*
-        if(Input.GetKey(KeyCode.Mouse1))
-        {
-            MyMoveable = null;
-            MyUseable = null;
-            image = null;
-        }
-        */
-
     }
 
+
+    /// Laden von Spielerdaten:
+
+    public void LoadAbilityUseable(AbilityTalent ability)
+    {
+        MyUseable = ability;
+        MyMoveable = ability;
+        MyButton = GetComponent<Button>();
+        playerInventory = PlayerManager.instance.player.inventory;
+
+        MyButton.image.sprite = ability.icon; // Setze das Icon des Spells
+        MyButton.image.color = Color.white;
+    }
+
+    public void LoadItemUseable(ItemInstance item)
+    {
+        MyUseable = item; // Stelle sicher, dass ItemInstance IUseable implementiert
+        MyMoveable = item; // Stelle sicher, dass ItemInstance IMoveable implementiert
+        MyButton = GetComponent<Button>();
+        playerInventory = PlayerManager.instance.player.inventory;
+
+        MyButton.image.sprite = item.icon; // Setze das Icon des Items
+        MyButton.image.color = Color.white;
+    }
 }

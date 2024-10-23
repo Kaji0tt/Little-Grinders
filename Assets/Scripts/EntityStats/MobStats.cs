@@ -286,7 +286,7 @@ public class MobStats : MonoBehaviour, IEntitie
     {
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
-        playerStats.Set_xp(xp);
+        playerStats.Gain_xp(xp);
 
         if (this.level >= 1)
             //Eine Funktion die in ABhängigkeit vom Moblevel, die ANzahl der Drops erhöhen soll. Hier wäre ein Lerp-Funktion sinnvoll.

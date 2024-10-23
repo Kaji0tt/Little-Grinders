@@ -59,23 +59,32 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
         int x = 0;
         int y = 0;
         float SlotCellSize = 50f;
+        int maxSlots = 15;
+        int currentSlot = 0;
 
         // Zuerst das Dictionary der Consumables durchlaufen
         foreach (var kvp in inventory.GetConsumableDict())
         {
+            if (currentSlot >= maxSlots) break;
+
             string itemID = kvp.Key;
             int itemAmount = kvp.Value;
 
-            ItemInstance item = new ItemInstance(ItemDatabase.GetItemID(itemID)); // Hole das Item basierend auf der ID
+            ItemInstance item = new ItemInstance(ItemDatabase.GetItemByID(itemID)); // Hole das Item basierend auf der ID
             CreateInventorySlot(item, itemAmount, ref x, ref y, SlotCellSize);
+            currentSlot++;
         }
 
         // Dann die Liste der Nicht-Consumables durchlaufen
         foreach (ItemInstance item in inventory.GetItemList())
         {
-            CreateInventorySlot(item, 1, ref x, ref y, SlotCellSize);  // Bei Nicht-Consumables ist die Menge immer 1
+            if (currentSlot >= maxSlots) break;
+
+            CreateInventorySlot(item, 1, ref x, ref y, SlotCellSize);
+            currentSlot++;
         }
     }
+
 
     private void CreateInventorySlot(ItemInstance item, int amount, ref int x, ref int y, float SlotCellSize)
     {
@@ -87,7 +96,7 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
         {
             if (item.itemType == ItemType.Consumable)
             {
-                ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemID(item.ItemID));
+                ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemByID(item.ItemID)); //Trigger 1
                 inventory.UseItem(duplicateItem);
                 inventory.RemoveItem(duplicateItem);
             }
@@ -105,7 +114,7 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
         {
             if (item.itemType == ItemType.Consumable)
             {
-                ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemID(item.ItemID));
+                ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemByID(item.ItemID));
                 inventory.RemoveItem(duplicateItem);
                 ItemWorld.DropItem(PlayerManager.instance.player.transform.position, duplicateItem);
             }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-//Um bestimmte Buffs hinzuzufügen, kann im Projektil GetComponent<Buff> gecalled werden, falls dies != null ist, kann der entsprechende Buff bei
+//Um bestimmte Buffs hinzuzufï¿½gen, kann im Projektil GetComponent<Buff> gecalled werden, falls dies != null ist, kann der entsprechende Buff bei
 //Kollision applied werden.
 public class _projectile : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class _projectile : MonoBehaviour
 
     public bool _pSpecialEffect = true;
 
-    //Schön wäre eine Liste, bzw. ein Dict in welchem die Buffs liegen. Perfekter Weise ein Enum mit ScriptableObjects zum auswählen.
+    //Schï¿½n wï¿½re eine Liste, bzw. ein Dict in welchem die Buffs liegen. Perfekter Weise ein Enum mit ScriptableObjects zum auswï¿½hlen.
     public Buff buff;
 
     //Der Ursprung des Projektils um gegebenenfalls AP Values zur Bearbeitung des Schadens zu verwenden.
@@ -77,7 +77,7 @@ public class _projectile : MonoBehaviour
     private void ProjectileFlightByDirection()
     {
         //print(_pDirection.normalized);
-        _pRbody.velocity = (_pDirection.normalized * _pSpeed);
+        _pRbody.linearVelocity = (_pDirection.normalized * _pSpeed);
 
         _pRotation = Quaternion.LookRotation(_pDirection);
         transform.localRotation = Quaternion.Lerp(transform.rotation, _pRotation, 1);
@@ -118,7 +118,7 @@ public class _projectile : MonoBehaviour
         //Erschaffe eine Kopie des angegebenen Buffs
         BuffInstance buffInstance = BuffDatabase.instance.GetInstance(buff.buffName);
 
-        //Und füge diese der Ziel-Entitie des Projektils hinzu und vermittel ?Der Ziel-Entitie? die Informationen des Ursprungs.
+        //Und fï¿½ge diese der Ziel-Entitie des Projektils hinzu und vermittel ?Der Ziel-Entitie? die Informationen des Ursprungs.
         //->Die Ziel-Entitie muss nicht wissen, wo der Urpsrung des Buffs liegt, lediglich der Buff muss dies wissen.
         buffInstance.ApplyBuff(targetEntitie, _origin);
 

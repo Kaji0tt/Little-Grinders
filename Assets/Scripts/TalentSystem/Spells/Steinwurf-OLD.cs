@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
 public class Steinwurf_Bullet : MonoBehaviour
 {
 
@@ -55,7 +56,7 @@ public class Steinwurf_Bullet : MonoBehaviour
 
 
             Vector3 direction = destination - transform.position;
-            bullet_rigidbody.velocity = (direction.normalized * speed);
+            bullet_rigidbody.linearVelocity = (direction.normalized * speed);
 
 
     }
@@ -81,3 +82,4 @@ public class Steinwurf_Bullet : MonoBehaviour
             Destroy(gameObject);
     }
 }
+*/

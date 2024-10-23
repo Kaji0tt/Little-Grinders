@@ -11,6 +11,7 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
     [SerializeField]
     private string spellName;
 
+
     public string GetSpellName
     {
         get
@@ -94,7 +95,10 @@ public class Spell : Talent, IPointerEnterHandler, IPointerExitHandler, IDragHan
 
     }
 
-
+    public string GetName()
+    {
+        return GetSpellName;
+    }
     public virtual void Use()
     {
         throw new NotImplementedException();

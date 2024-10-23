@@ -109,7 +109,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
         return xp;
     }
 
-    public int Set_xp(int mod)
+    public int Gain_xp(int mod)
     {
         xp = xp + mod;
         if (xp >= LevelUp_need())
@@ -228,7 +228,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
     public void Start()
     {
         //currentHp = Hp.Value;
-        Set_xp(1);
+        Gain_xp(1);
         //Set_level(1);
 
 

@@ -293,6 +293,7 @@ public class UI_Manager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.H))
         {
+            PlayerManager.instance.player.GetComponent<PlayerStats>().Gain_xp(100);
             foreach (Item item in itemsOnStart)
             PlayerManager.instance.player.Inventory.AddItem(new ItemInstance(item));
 

@@ -33,11 +33,13 @@ using UnityEngine.EventSystems;
 
 public class BuffInstance : Buff, IDescribable
 {
-    public string buffName;
 
-    public float MyDuration;
 
-    public float MyBaseDamage;
+    public new string buffName;
+
+    public new float MyDuration;
+
+    public new float MyBaseDamage;
 
     public IEntitie MyTargetEntitie;
 
@@ -53,11 +55,11 @@ public class BuffInstance : Buff, IDescribable
 
     //public float damage;
 
-    public bool stackable;
+    public new bool stackable;
 
     private int MyStacks;
 
-    public string MyDescription { get; set; }
+    public new string MyDescription { get; set; }
 
 
 

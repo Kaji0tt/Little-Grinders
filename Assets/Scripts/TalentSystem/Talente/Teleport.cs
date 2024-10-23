@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
 public class Teleport : Spell, IUseable
 {
     public float travelDistance;
@@ -60,4 +61,4 @@ public class Teleport : Spell, IUseable
     }
 
 }
-
+*/

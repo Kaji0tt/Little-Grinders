@@ -201,9 +201,60 @@ public class TalentTree : MonoBehaviour
 
 
     }
-    
 
+    // Funktion um die Verbindungen zwischen den Talenten herzustellen
+    private void DrawTalentTreeLines()
+    {
+        foreach (Talent talent in allTalents)
+        {
+            // Erschaffe ein neues GameObject für die Talent-Tree Line
+            GameObject lineGO = new GameObject("_TalentLine", typeof(UILineRenderer));
 
+            // Setze Parent des GO für vernünftiges UI Layering
+            lineGO.transform.SetParent(talentLineParent, false);
+
+            // Füge UILineRenderer der Unity.UI.Extensions hinzu
+            UILineRenderer lineRend = lineGO.GetComponent<UILineRenderer>();
+
+            // Setze Farbe der Talent-Linie
+            lineRend.color = new Color(.7f, .7f, .7f, 1f);
+
+            // Setze den Ankerpunkt der Talent-Linie nach Rechts-Unten
+            RectTransform rectTrans = lineGO.GetComponent<RectTransform>();
+            rectTrans.anchorMin = new Vector2(0, 0);
+            rectTrans.anchorMax = new Vector2(0, 0);
+
+            // Erstelle eine Liste der Positionen der Talente
+            List<Vector2> talentLinePositions = new List<Vector2>();
+
+            // Füge die Position des Ursprungstalents (Parent-Talent) hinzu
+            RectTransform parentRect = talent.GetComponent<RectTransform>();
+            Vector2 parentPosition = parentRect.anchoredPosition + parentRect.sizeDelta * 0.5f;
+            talentLinePositions.Add(parentPosition);
+
+            // Überprüfe alle Child-Talente
+            foreach (Talent childTalent in talent.childTalent)
+            {
+                if (childTalent != null)
+                {
+                    // Füge die Position des Child-Talents hinzu
+                    RectTransform childRect = childTalent.GetComponent<RectTransform>();
+                    Vector2 childPosition = childRect.anchoredPosition + childRect.sizeDelta * 0.5f;
+
+                    // Füge die Linie von Parent zu Child hinzu
+                    talentLinePositions.Add(childPosition);
+                }
+                else
+                {
+                    Debug.LogWarning("Child talent is null for parent: " + talent.name);
+                }
+            }
+
+            // Übergebe die Positionen an den UILineRenderer
+            lineRend.Points = talentLinePositions.ToArray();
+        }
+    }
+    /*
     //Funktion um die Verbindungen zwischen den Talenten herzustellen
     //UILineRenderer currently creates Null-Reference on Start, however the interface is drawn accordingly.
     private void DrawTalentTreeLines()
@@ -249,5 +300,6 @@ public class TalentTree : MonoBehaviour
 
         }
     }
+    */
 
 }

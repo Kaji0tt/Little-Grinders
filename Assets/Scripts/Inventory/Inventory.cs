@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -25,27 +26,40 @@ public class Inventory : MonoBehaviour
         itemList = new List<ItemInstance>();
     }
 
+    // 22.10.2024 AI-Tag
+    // This was created with assistance from Muse, a Unity Artificial Intelligence product
+
+    // 22.10.2024 AI-Tag
+    // This was created with assistance from Muse, a Unity Artificial Intelligence product
+
     public void AddItem(ItemInstance item, int amount = 1)
     {
-        if (item.itemType == ItemType.Consumable)  // Prüfe, ob das Item ein Consumable ist
+        // Zähle nur die Anzahl der Slots für nicht-consumable Items und die eindeutigen Consumables
+        int totalSlots = consumableInventory.Count + itemList.Count;
+
+        // Überprüfe das Limit nur für neue nicht-consumable Items
+        if (item.itemType != ItemType.Consumable && totalSlots >= 15)
         {
-            // Stapelbare Items (Consumables) werden im Dictionary gestapelt
+            Debug.LogWarning("Inventar ist voll!");
+            return;
+        }
+
+        if (item.itemType == ItemType.Consumable)
+        {
             if (consumableInventory.ContainsKey(item.ItemID))
             {
-                consumableInventory[item.ItemID] += amount;  // Erhöhe die Anzahl, wenn bereits vorhanden
+                consumableInventory[item.ItemID] += amount;
             }
             else
             {
-                consumableInventory[item.ItemID] = amount;  // Füge das Item hinzu, wenn es neu ist
+                consumableInventory[item.ItemID] = amount;
             }
         }
         else
         {
-            // Nicht-Consumables werden einzeln in die Liste aufgenommen
             itemList.Add(item);
         }
 
-        // Benachrichtige Listener, dass sich das Inventar geändert hat
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -86,6 +100,11 @@ public class Inventory : MonoBehaviour
 
     public void UseItem(ItemInstance item)
     {
+        //Diese Stelle könnte praktisch werden, um visuals anzupassen. Also, dass Standard Sprite sich anpasst und die
+        //Gegenstände wirklicn anzieh!
+        if (item.useable && item != null)
+        item.Use();
+
         useItemAction(item);
     }
 

@@ -1,6 +1,8 @@
 ﻿
 public interface IUseable
 {
+    string GetName();
+
     void Use();
 
     bool IsOnCooldown();

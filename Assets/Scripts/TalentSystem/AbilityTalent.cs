@@ -73,6 +73,10 @@ public class AbilityTalent : Talent, IMoveable, IUseable, IPointerEnterHandler, 
 
     float tickerTimer;
 
+    public string GetName()
+    {
+        return baseAbility.abilityName;
+    }
 
     //Jedes Ability Talent besitzt 3 Stances
     private enum AbilityState { ready, active, cooldown };

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/*
 public class Voidexplosion : Spell, IUseable
 {
     public float radius = 2.5f;
@@ -62,4 +62,4 @@ public class Voidexplosion : Spell, IUseable
     }
 
 }
-
+*/

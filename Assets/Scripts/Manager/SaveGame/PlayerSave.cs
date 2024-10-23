@@ -136,31 +136,18 @@ public class PlayerSave
     {
         ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
 
-        savedActionButtons = new string[5]; // Ggf. hier anknüpfen, sobald man Items auch safen kann. Man könnte das MyUseable as ItemInstance saven
-
-        savedActionButtonIndex = new int[5];
-
-        //Debug.Log("actionButtons" + actionButtons.Length);
-
-        //Debug.Log("saved ACtionButtons " + savedActionButtons.Length);
+        // Setze die Größe der Arrays entsprechend der Anzahl der ActionButtons dynamisch
+        savedActionButtons = new string[actionButtons.Length];
+        savedActionButtonIndex = new int[actionButtons.Length];
 
         foreach (ActionButton slot in actionButtons)
         {
-            if (slot.gameObject.name == "ActionButton1")
-                SaveActionbarSlot(1, slot);
-
-            if (slot.gameObject.name == "ActionButton2")
-                SaveActionbarSlot(2, slot);
-
-            if (slot.gameObject.name == "ActionButton3")
-                SaveActionbarSlot(3, slot);
-
-            if (slot.gameObject.name == "ActionButton4")
-                SaveActionbarSlot(4, slot);
-
-            if (slot.gameObject.name == "ActionButton5")
-                SaveActionbarSlot(5, slot);
-
+            // Extrahiere die Nummer aus dem ActionButton-Namen, z.B. "ActionButton1" => 1
+            if (slot.gameObject.name.StartsWith("ActionButton"))
+            {
+                int slotIndex = int.Parse(slot.gameObject.name.Replace("ActionButton", "")) - 1;
+                SaveActionbarSlot(slotIndex, slot); // Speichere den Slot dynamisch basierend auf der Slot-Nummer
+            }
         }
     }
     private void SaveTheInventory()
@@ -180,7 +167,7 @@ public class PlayerSave
         foreach (KeyValuePair<string, int> entry in conDict)
         {
             // Hole das ItemInstance basierend auf der ItemID
-            ItemInstance item = new ItemInstance(ItemDatabase.GetItemID(entry.Key));
+            ItemInstance item = new ItemInstance(ItemDatabase.GetItemByID(entry.Key));
             int amount = entry.Value;
 
             // Speichere die ItemID so oft, wie das Item vorhanden ist (Anzahl)
@@ -347,9 +334,9 @@ public class PlayerSave
             savedActionButtonIndex[i-1] = i;
 
             //Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtonIndex[i]);
-            if((slot.MyUseable is Spell))
+            if(slot.MyUseable is Ability)
             {
-                savedActionButtons[i - 1] = (slot.MyUseable as Spell).GetSpellName;
+                savedActionButtons[i - 1] = (slot.MyUseable as Ability).abilityName;
             }
             else if (slot.MyUseable is ItemInstance)
             {

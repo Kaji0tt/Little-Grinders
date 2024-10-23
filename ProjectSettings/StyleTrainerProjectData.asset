@@ -1,0 +1,1967 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e07c9b2c97f84356bb2bfac29363e611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StyleTrainerData:
+    rid: 1455634060787319071
+  m_DefaultStyleData:
+    rid: 1455634060787319072
+  m_DefaultStyleVersion: 2023111600
+  m_DefaultStyles:
+  - rid: 1455634060787319497
+  m_AssetPath: 
+  m_PreviousProjectIDs: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1455634060787319071
+      type: {class: StyleTrainerData, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: d182923f-9cbe-421b-af1a-fc05bd527e8a
+        m_State: 1
+        m_Disposing: 0
+        m_Styles:
+        - rid: 1455634060787319073
+        - rid: 1455634060787319498
+        - rid: 1455634063481110587
+        m_Version: 202231001
+    - rid: 1455634060787319072
+      type: {class: StyleTrainerData, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 11000000-0000-0000-0000-000000000011
+        m_State: 1
+        m_Disposing: 0
+        m_Styles:
+        - rid: 1455634063481110588
+        m_Version: 202231001
+    - rid: 1455634060787319073
+      type: {class: StyleData, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 3a0d1e0c-c8cd-4fab-a11d-f52ce2710827
+        m_State: 1
+        m_Disposing: 0
+        m_IsFallback: 0
+        m_Thumbnail:
+          rid: 1455634060787319074
+        m_Visible: 1
+        selectedCheckPointGUID: 4c887ff8-196a-4e0f-b064-d21a34ad1f73
+        m_FavoriteCheckPointGUID: 00000000-0000-0000-0000-000000000000
+        parentID: 00000000-0000-0000-0000-000000000000
+        m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+        m_TrainingSteps: 2000
+        m_CheckPoints:
+        - m_Guid: 131b3d54-8ab2-4449-b0ff-a83a84e9b74c
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: ae1d7801-86a3-4819-b47d-3e58b0e1f364
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: ae1d7801-86a3-4819-b47d-3e58b0e1f364
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: 751545af-6536-4a4f-b622-f3a69356135f
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 751545af-6536-4a4f-b622-f3a69356135f
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: 4aa30084-27db-4acd-aec4-44d9750999bd
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 4aa30084-27db-4acd-aec4-44d9750999bd
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 200
+        - m_Guid: 43c6d1d3-baa8-49c0-ae01-0fc8b200ab78
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 19a65b78-76b0-4833-aa43-b9ca510d9746
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 19a65b78-76b0-4833-aa43-b9ca510d9746
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: 4073998b-7ebb-4bea-b588-013ff94f7d36
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 4073998b-7ebb-4bea-b588-013ff94f7d36
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: be4074a7-f08e-40cd-84ea-12affce92b5c
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: be4074a7-f08e-40cd-84ea-12affce92b5c
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 400
+        - m_Guid: d70f2a18-18b0-42db-8560-d928cccdf047
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 08404a45-9713-4573-ad54-83dc2a9617fd
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 08404a45-9713-4573-ad54-83dc2a9617fd
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: 483377b1-1be2-45ea-adfd-f7230bc17844
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 483377b1-1be2-45ea-adfd-f7230bc17844
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: 6689b7a8-19b5-464f-a23d-b3d51fd4ab24
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 6689b7a8-19b5-464f-a23d-b3d51fd4ab24
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 600
+        - m_Guid: 9dceba53-cc5c-43e2-abf4-9a1acefd04d3
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: d9d0ffe7-d962-4698-a8e1-88b22ca21596
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: d9d0ffe7-d962-4698-a8e1-88b22ca21596
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: 0a891474-a179-4a42-864a-93ecf53259d0
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 0a891474-a179-4a42-864a-93ecf53259d0
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: c9e61f79-4867-4bd5-b0b5-362e1ecd7d59
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: c9e61f79-4867-4bd5-b0b5-362e1ecd7d59
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 800
+        - m_Guid: 8e728d26-65cf-4c7e-a7b3-606a1386392d
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: bfd002d0-d77f-408b-b3b3-508fc892f098
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: bfd002d0-d77f-408b-b3b3-508fc892f098
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: 675dcc7c-1223-426d-991b-ec4fdb0a6317
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 675dcc7c-1223-426d-991b-ec4fdb0a6317
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: 5eaea900-b56f-4954-8845-b97b879d3be8
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 5eaea900-b56f-4954-8845-b97b879d3be8
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1000
+        - m_Guid: a2ccf275-e268-456a-b194-b0fb4dffd618
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: a46de8b1-3c0f-4eb2-bc92-f45914f1d5c5
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: a46de8b1-3c0f-4eb2-bc92-f45914f1d5c5
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: d9b62355-f8d8-4413-92a9-73b21d6a97d0
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: d9b62355-f8d8-4413-92a9-73b21d6a97d0
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: f4c153cf-8d7f-471c-88a3-569e8bd395c1
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: f4c153cf-8d7f-471c-88a3-569e8bd395c1
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1200
+        - m_Guid: 885fb243-7e6c-4b14-aa74-5e663f930298
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 2655f283-88be-4f4a-a51f-9a928bb205a1
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 2655f283-88be-4f4a-a51f-9a928bb205a1
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: 0edbc5fa-c941-4481-8aec-416602c8f93e
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 0edbc5fa-c941-4481-8aec-416602c8f93e
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: 5b630115-c437-4c1e-ba2c-0d01955d6527
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 5b630115-c437-4c1e-ba2c-0d01955d6527
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1400
+        - m_Guid: fa8b2893-b364-4cff-b21e-ae6fbe5986e8
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 9d9fe37b-bb8b-4482-b716-87ee19b29903
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 9d9fe37b-bb8b-4482-b716-87ee19b29903
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: e7e45056-d625-48e7-b648-dcc97df5c660
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: e7e45056-d625-48e7-b648-dcc97df5c660
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: 0ff2a7b4-ee51-47d4-b8ca-e83fd9cc1ee7
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 0ff2a7b4-ee51-47d4-b8ca-e83fd9cc1ee7
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1600
+        - m_Guid: 430ada77-8062-46f8-a1d2-07394304f0e3
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: a4066e97-ab88-4dd8-a598-d425e534ed38
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: a4066e97-ab88-4dd8-a598-d425e534ed38
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: 59ab5e0e-0eaf-40ba-a552-85263c84b86c
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 59ab5e0e-0eaf-40ba-a552-85263c84b86c
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: 82fb675a-d115-4848-89de-68351e2f9411
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 82fb675a-d115-4848-89de-68351e2f9411
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1800
+        - m_Guid: 4c887ff8-196a-4e0f-b064-d21a34ad1f73
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinder Sprites
+          m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+            Erster Versuch.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 7a3f854a-fa6d-4546-8e7e-e97f35fa57dc
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 7a3f854a-fa6d-4546-8e7e-e97f35fa57dc
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: zauberschwert mit flammen
+          - m_Guid: 8097b899-606a-4bec-ac4e-3fe56cd70dc9
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 8097b899-606a-4bec-ac4e-3fe56cd70dc9
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "palmen auf d\xFCnen"
+          - m_Guid: 218c851e-4e78-4db4-9121-d204b95b7b9a
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 218c851e-4e78-4db4-9121-d204b95b7b9a
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: "icon f\xFCr einen heilzauber"
+          m_FavoriteSampleOutputDataGuid: 218c851e-4e78-4db4-9121-d204b95b7b9a
+          m_TrainingSteps: 2000
+        m_SampleOutputPrompts:
+        - Zauberschwert mit Flammen
+        - "Palmen auf D\xFCnen"
+        - "Icon f\xFCr einen Heilzauber"
+        m_TrainingSetData:
+        - m_Guid: 2a95ed7b-4583-4e98-8f68-00829f833966
+          m_State: 1
+          m_Disposing: 0
+          m_TrainingSet:
+          - m_Guid: f3c8118d-3540-4da1-a283-5f47a49d2d75
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319075
+          - m_Guid: 6caea8cf-7208-4e8b-a72d-80b1f885e197
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319076
+          - m_Guid: 005f3768-faee-44f7-a501-8116577003d6
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319077
+          - m_Guid: 761c072d-bfc0-4474-8d3d-e4950fead2f1
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319078
+          - m_Guid: 1d7b24f0-7c19-4015-9c20-78806fdbca20
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319079
+          - m_Guid: f1121503-6f8a-41f3-ba2d-97e438fb2314
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319080
+          - m_Guid: 81a08123-7b6e-40a2-9f63-cbe371f36581
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319081
+          - m_Guid: ad832cc8-4c10-489d-807b-789d6718f928
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319082
+          - m_Guid: bae51c61-ffb3-4d17-9212-2f01e2154f67
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319083
+          - m_Guid: 85a23634-680f-481c-83a5-a79ee0b4de95
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319084
+          - m_Guid: 73c39f7c-6f34-4d25-bf39-457deca4dd77
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319085
+          - m_Guid: d598881c-67b8-4b34-b978-d508cea6a5c5
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319086
+          - m_Guid: c8b3c0f5-4aa5-4138-9e26-2a55befee3c1
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319087
+          - m_Guid: 9128d094-8f93-4bb6-bf9c-7d5facc7a73e
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319088
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+        m_Name: LittleGrinder Sprites
+        m_Description: Das Grundlagen Set im die KI an den Artstyle zu trainieren.
+          Erster Versuch.
+    - rid: 1455634060787319074
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 00000000-0000-0000-0000-000000000000
+        m_State: 3
+        m_Disposing: 1
+    - rid: 1455634060787319075
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: f3c8118d-3540-4da1-a283-5f47a49d2d75
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319076
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 6caea8cf-7208-4e8b-a72d-80b1f885e197
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319077
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 005f3768-faee-44f7-a501-8116577003d6
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319078
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 761c072d-bfc0-4474-8d3d-e4950fead2f1
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319079
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 1d7b24f0-7c19-4015-9c20-78806fdbca20
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319080
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: f1121503-6f8a-41f3-ba2d-97e438fb2314
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319081
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 81a08123-7b6e-40a2-9f63-cbe371f36581
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319082
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: ad832cc8-4c10-489d-807b-789d6718f928
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319083
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: bae51c61-ffb3-4d17-9212-2f01e2154f67
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319084
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 85a23634-680f-481c-83a5-a79ee0b4de95
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319085
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 73c39f7c-6f34-4d25-bf39-457deca4dd77
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319086
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: d598881c-67b8-4b34-b978-d508cea6a5c5
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319087
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: c8b3c0f5-4aa5-4138-9e26-2a55befee3c1
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319088
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 9128d094-8f93-4bb6-bf9c-7d5facc7a73e
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319497
+      type: {class: StyleData, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 00000000-0000-0000-0000-000000000000
+        m_State: 1
+        m_Disposing: 0
+        m_IsFallback: 1
+        m_Thumbnail:
+          rid: -2
+        m_Visible: 0
+        selectedCheckPointGUID: 00000000-0000-0000-0000-000000000000
+        m_FavoriteCheckPointGUID: active
+        parentID: 00000000-0000-0000-0000-000000000000
+        m_ProjectID: 00000000-0000-0000-0000-000000000000
+        m_TrainingSteps: 2000
+        m_CheckPoints:
+        - m_Guid: 00000000-0000-0000-0000-000000000000
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: 00000000-0000-0000-0000-000000000000
+          m_Name: Default
+          m_Description: Default style.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 
+            m_State: 0
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: 
+          m_ValidationImagesData: []
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 2000
+        m_SampleOutputPrompts: []
+        m_TrainingSetData: []
+        m_Name: Default
+        m_Description: Default style.
+    - rid: 1455634060787319498
+      type: {class: StyleData, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 3fa00074-38d5-4e28-984c-5b61bc6e2ed1
+        m_State: 1
+        m_Disposing: 0
+        m_IsFallback: 0
+        m_Thumbnail:
+          rid: 1455634060787319500
+        m_Visible: 1
+        selectedCheckPointGUID: f920c11f-71d4-47ef-9dd5-3410fc0702c5
+        m_FavoriteCheckPointGUID: 982c9e3e-b3cf-4a49-b526-ca654e5a1c30
+        parentID: 00000000-0000-0000-0000-000000000000
+        m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+        m_TrainingSteps: 2000
+        m_CheckPoints:
+        - m_Guid: fe0fb2e7-7c66-4f28-9bb7-c2064abbb897
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: ebfe3e84-0eb5-4e09-b06d-886b6d8d2999
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: ebfe3e84-0eb5-4e09-b06d-886b6d8d2999
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: 175f5bf4-59d6-40d3-9bca-cce3e320143c
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 175f5bf4-59d6-40d3-9bca-cce3e320143c
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: 667b81a6-5689-4fc0-80b0-12c5b85a05cd
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 667b81a6-5689-4fc0-80b0-12c5b85a05cd
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 200
+        - m_Guid: ac21fc51-c83d-47c9-ab73-06175dbe01ec
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 9c7f32f4-8f2c-47b3-a707-6bbce68896e0
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 9c7f32f4-8f2c-47b3-a707-6bbce68896e0
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: 42648d71-a1fa-48b1-8f29-defb52491cda
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 42648d71-a1fa-48b1-8f29-defb52491cda
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: 1323b2af-bd07-46b0-bbef-a78af2c403f6
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 1323b2af-bd07-46b0-bbef-a78af2c403f6
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 400
+        - m_Guid: b9cc9d7e-9e20-4bc7-b079-9d2b76590a38
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: d19a503a-d24d-45d9-96a4-1cfff4549eef
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: d19a503a-d24d-45d9-96a4-1cfff4549eef
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: bae698b7-48bb-434d-80af-c803db30c667
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: bae698b7-48bb-434d-80af-c803db30c667
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: 76385f4a-10fc-4ade-9d18-096bd2120978
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 76385f4a-10fc-4ade-9d18-096bd2120978
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 600
+        - m_Guid: 982c9e3e-b3cf-4a49-b526-ca654e5a1c30
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 9fc7288e-3801-4ef1-9330-463d43f2b457
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 9fc7288e-3801-4ef1-9330-463d43f2b457
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: c8f18217-681f-479a-bb06-0ee4ffc739f6
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: c8f18217-681f-479a-bb06-0ee4ffc739f6
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: 80e4ab75-25d2-40eb-9f16-0d15c2419e57
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 80e4ab75-25d2-40eb-9f16-0d15c2419e57
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 80e4ab75-25d2-40eb-9f16-0d15c2419e57
+          m_TrainingSteps: 800
+        - m_Guid: be2c18ad-f672-42e1-ab73-ebcdf9f91050
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: bf4b3f2e-f562-48eb-8926-35f83938c85f
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: bf4b3f2e-f562-48eb-8926-35f83938c85f
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: a49ff329-c807-47f3-ae36-93a9ac896d33
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: a49ff329-c807-47f3-ae36-93a9ac896d33
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: e38373fe-9c6f-4b66-a9e6-6a7061027ad6
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: e38373fe-9c6f-4b66-a9e6-6a7061027ad6
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1000
+        - m_Guid: 79369bcf-a78d-48b2-bd49-e01f1aea000b
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: e44118cc-9909-4bf8-bcc9-b52eab4b9aed
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: e44118cc-9909-4bf8-bcc9-b52eab4b9aed
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: 84d2067d-3606-4b70-b6c5-2b84554a88fe
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 84d2067d-3606-4b70-b6c5-2b84554a88fe
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: 82232f96-6d81-4d13-beb6-cad3866edfb3
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 82232f96-6d81-4d13-beb6-cad3866edfb3
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1200
+        - m_Guid: 0770c8fb-8126-4c21-b365-716d5d70d35f
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: c19e581e-0ffa-4868-b8ba-fa643d0f06ad
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: c19e581e-0ffa-4868-b8ba-fa643d0f06ad
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: b7c60904-5593-4ad1-9427-4b768d77b35c
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: b7c60904-5593-4ad1-9427-4b768d77b35c
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: 14bf4b4a-6551-479a-85a0-9b4df3666246
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 14bf4b4a-6551-479a-85a0-9b4df3666246
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: c19e581e-0ffa-4868-b8ba-fa643d0f06ad
+          m_TrainingSteps: 1400
+        - m_Guid: cf119cef-4660-4e76-8583-a1af90a24fc9
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: c0ac646d-164f-4026-a0bf-20412d474956
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: c0ac646d-164f-4026-a0bf-20412d474956
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: 9df24c1b-30c3-4913-ace3-611993c36421
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 9df24c1b-30c3-4913-ace3-611993c36421
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: 18903898-8f1e-488c-a27e-358521283983
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 18903898-8f1e-488c-a27e-358521283983
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1600
+        - m_Guid: 8cfedf57-b264-42f0-bfcb-386e39e794f5
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: e815b1ed-0f15-49c5-b396-238560855232
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: e815b1ed-0f15-49c5-b396-238560855232
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: 28db0580-7b50-4b04-9016-50b1dba9c19d
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 28db0580-7b50-4b04-9016-50b1dba9c19d
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: 165c100a-a731-4584-a0cd-5f3492314a9e
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 165c100a-a731-4584-a0cd-5f3492314a9e
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1800
+        - m_Guid: f920c11f-71d4-47ef-9dd5-3410fc0702c5
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: LittleGrinders 2
+          m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+            to Train the AI
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+            m_State: 5
+            m_Disposing: 1
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 7cee7caa-cc2d-43a2-9165-352465fd12a3
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: 7cee7caa-cc2d-43a2-9165-352465fd12a3
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: palms
+          - m_Guid: b734ec15-1360-4511-9e5b-83da96f40e4d
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: b734ec15-1360-4511-9e5b-83da96f40e4d
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: skeleton warrior
+          - m_Guid: bc66fc51-9748-465a-b9f9-2b7a5bed5774
+            m_State: 5
+            m_Disposing: 1
+            m_ImageArtifact:
+              m_Guid: bc66fc51-9748-465a-b9f9-2b7a5bed5774
+              m_State: 1
+              m_Disposing: 1
+            m_Prompt: heal icon
+          m_FavoriteSampleOutputDataGuid: 7cee7caa-cc2d-43a2-9165-352465fd12a3
+          m_TrainingSteps: 2000
+        m_SampleOutputPrompts:
+        - Palms
+        - Skeleton Warrior
+        - Heal Icon
+        m_TrainingSetData:
+        - m_Guid: aa30b50e-9c4f-4268-9fbe-7638ae7bd69c
+          m_State: 1
+          m_Disposing: 0
+          m_TrainingSet:
+          - m_Guid: dee9faef-7102-4e75-8a12-528c95b9a4a1
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319501
+          - m_Guid: 7187263f-7e9b-40cc-9876-2cb5df76bda5
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319502
+          - m_Guid: b28810ac-0573-40c9-bd7a-77993919ea3b
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319503
+          - m_Guid: e608bc50-b810-4346-bad2-c24f51331595
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319504
+          - m_Guid: f88b105b-3429-4259-83fa-46ae58833b01
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319505
+          - m_Guid: fbbea944-3a3f-4d01-943c-a1bc40c283df
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319506
+          - m_Guid: 08e919d2-43d4-4701-a991-ad0440773207
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319507
+          - m_Guid: eefe4965-73a1-493d-9cd0-16d0dc75ea43
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319508
+          - m_Guid: 166da2cc-bcde-420d-8e70-0afccb5e7d3e
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319509
+          - m_Guid: 76cf3dcd-bb7d-4f1f-ac4e-a4f07cfe8261
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319510
+          - m_Guid: 7bbbb6b8-f33d-447a-9121-f45373056b79
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319511
+          - m_Guid: d8fb1406-6b1c-4def-ad96-ff3d6b0ff550
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319512
+          - m_Guid: 66c59951-1f93-47bf-a479-1fffbdf9f00f
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319513
+          - m_Guid: 1cd34d0b-84d9-41ce-812b-9200396a7dc1
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319514
+          - m_Guid: 14a33411-9b8e-4817-9568-266195424354
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634060787319515
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+        m_Name: LittleGrinders 2
+        m_Description: Second Attempt to Copy the Origins of Hanna's and my Art-Style
+          to Train the AI
+    - rid: 1455634060787319500
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 00000000-0000-0000-0000-000000000000
+        m_State: 3
+        m_Disposing: 1
+    - rid: 1455634060787319501
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: dee9faef-7102-4e75-8a12-528c95b9a4a1
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319502
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 7187263f-7e9b-40cc-9876-2cb5df76bda5
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319503
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: b28810ac-0573-40c9-bd7a-77993919ea3b
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319504
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: e608bc50-b810-4346-bad2-c24f51331595
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319505
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: f88b105b-3429-4259-83fa-46ae58833b01
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319506
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: fbbea944-3a3f-4d01-943c-a1bc40c283df
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319507
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 08e919d2-43d4-4701-a991-ad0440773207
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319508
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: eefe4965-73a1-493d-9cd0-16d0dc75ea43
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319509
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 166da2cc-bcde-420d-8e70-0afccb5e7d3e
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319510
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 76cf3dcd-bb7d-4f1f-ac4e-a4f07cfe8261
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319511
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 7bbbb6b8-f33d-447a-9121-f45373056b79
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319512
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: d8fb1406-6b1c-4def-ad96-ff3d6b0ff550
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319513
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 66c59951-1f93-47bf-a479-1fffbdf9f00f
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319514
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 1cd34d0b-84d9-41ce-812b-9200396a7dc1
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634060787319515
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 14a33411-9b8e-4817-9568-266195424354
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110587
+      type: {class: StyleData, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 3ebe7075-d06d-4107-aa2e-f43ce3c46795
+        m_State: 1
+        m_Disposing: 0
+        m_IsFallback: 0
+        m_Thumbnail:
+          rid: 1455634063481110589
+        m_Visible: 1
+        selectedCheckPointGUID: e1e9461a-cd27-425e-9c81-24ce88cf8baf
+        m_FavoriteCheckPointGUID: 00000000-0000-0000-0000-000000000000
+        parentID: 00000000-0000-0000-0000-000000000000
+        m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+        m_TrainingSteps: 2000
+        m_CheckPoints:
+        - m_Guid: bd67aa6e-d708-471e-b081-90a65515de00
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: d5c43743-20e1-404f-9997-04e3248d74f8
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: d5c43743-20e1-404f-9997-04e3248d74f8
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: 9e07a40e-b9d0-414f-8271-358b53d49c19
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 9e07a40e-b9d0-414f-8271-358b53d49c19
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: 41a4fab9-7210-4f2b-99a6-3b02a2091cf3
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 41a4fab9-7210-4f2b-99a6-3b02a2091cf3
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 200
+        - m_Guid: a8895ef5-2eaa-4b53-8076-e62afce5608a
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: ab5d8494-3c8b-455d-bb16-c3757cc000ec
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: ab5d8494-3c8b-455d-bb16-c3757cc000ec
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: 4c129b75-e6ba-4e6b-a0d4-ebb117e136dd
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 4c129b75-e6ba-4e6b-a0d4-ebb117e136dd
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: 869799c2-8add-46cf-b55e-f79cabb7832e
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 869799c2-8add-46cf-b55e-f79cabb7832e
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 400
+        - m_Guid: 7997c233-0f75-4fe7-8cd4-3f4749cb1cba
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: eb940b03-b742-4621-a242-19e5f09b4a86
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: eb940b03-b742-4621-a242-19e5f09b4a86
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: bed81e3b-a74a-42a1-9747-b949b3073f94
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: bed81e3b-a74a-42a1-9747-b949b3073f94
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: 14d8c1c5-cd3d-40f0-9c8a-c4fc61b7dbc7
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 14d8c1c5-cd3d-40f0-9c8a-c4fc61b7dbc7
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 600
+        - m_Guid: ee80bca8-2f8e-4e14-84d1-5f88e9287df7
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 0ca4dc27-0bfb-4a54-ae87-35b4413bb813
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 0ca4dc27-0bfb-4a54-ae87-35b4413bb813
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: aecb300c-1a7f-4d77-90ca-38c1b958f367
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: aecb300c-1a7f-4d77-90ca-38c1b958f367
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: 0e958e4a-3c0c-4014-8ce0-20158e923d26
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 0e958e4a-3c0c-4014-8ce0-20158e923d26
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 800
+        - m_Guid: ce5c64da-4ffc-491d-8c5d-d1c4040ae1a3
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 28879e98-eb09-419c-b723-7149ee015289
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 28879e98-eb09-419c-b723-7149ee015289
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: 097fe1ef-287d-4403-aa4e-022ca78b017c
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 097fe1ef-287d-4403-aa4e-022ca78b017c
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: 49e73089-98c9-451e-9612-c64c85e17a24
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 49e73089-98c9-451e-9612-c64c85e17a24
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1000
+        - m_Guid: 0f1a9024-96a9-402b-bf7f-b3a7f7de8154
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: cf6c26c1-a5ad-428f-a0f6-c8c388a238cf
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: cf6c26c1-a5ad-428f-a0f6-c8c388a238cf
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: 806bdfa7-298a-407a-ae71-a231bc83629a
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 806bdfa7-298a-407a-ae71-a231bc83629a
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: db7407ce-62ec-4b4d-877c-f8d248af1437
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: db7407ce-62ec-4b4d-877c-f8d248af1437
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1200
+        - m_Guid: 156e89b8-6f7d-4cfb-98cd-45d5e6411034
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: f3886984-a73f-49e4-bc86-376df7c68e5d
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: f3886984-a73f-49e4-bc86-376df7c68e5d
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: f77e849b-ea0e-477b-ac50-fa3e92ef100c
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: f77e849b-ea0e-477b-ac50-fa3e92ef100c
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: bff49238-6cef-46fd-a445-af608d9f9b82
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: bff49238-6cef-46fd-a445-af608d9f9b82
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1400
+        - m_Guid: 41d60f03-4620-443c-b75d-87c8c36a5672
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 7f973649-4834-49e5-8d9e-51ec176bf59a
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 7f973649-4834-49e5-8d9e-51ec176bf59a
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: 6d944361-7856-4227-8133-9a1b7191976a
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 6d944361-7856-4227-8133-9a1b7191976a
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: 5b21aa13-fc04-49d3-a757-2dd93100537a
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 5b21aa13-fc04-49d3-a757-2dd93100537a
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1600
+        - m_Guid: 28272fa8-e972-465b-8090-a9c2302b69a2
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 8d4ac6c5-a0ba-49fd-8b5e-7ed6927db5ec
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 8d4ac6c5-a0ba-49fd-8b5e-7ed6927db5ec
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: d44fe887-d61c-42fd-a0be-51065b11b848
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: d44fe887-d61c-42fd-a0be-51065b11b848
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: dea769aa-963b-4855-9c9a-52fa81a1ef0d
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: dea769aa-963b-4855-9c9a-52fa81a1ef0d
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1800
+        - m_Guid: e1e9461a-cd27-425e-9c81-24ce88cf8baf
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_Name: Sketchy Icons
+          m_Description: A Trained Style to generate sketchy Icons.
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+          m_ValidationImagesData:
+          - m_Guid: 1e32f33f-5338-4075-811c-9e75133f2958
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 1e32f33f-5338-4075-811c-9e75133f2958
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: heal icon
+          - m_Guid: caca1774-6e2c-4d11-8d68-e31dd7d51c0d
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: caca1774-6e2c-4d11-8d68-e31dd7d51c0d
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: indian bow
+          - m_Guid: 4d9a8008-8caa-4e61-bcf1-0006ffb52d25
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 4d9a8008-8caa-4e61-bcf1-0006ffb52d25
+              m_State: 1
+              m_Disposing: 0
+            m_Prompt: leather chestpiece
+          m_FavoriteSampleOutputDataGuid: 1e32f33f-5338-4075-811c-9e75133f2958
+          m_TrainingSteps: 2000
+        m_SampleOutputPrompts:
+        - Heal Icon
+        - Indian Bow
+        - Leather Chestpiece
+        m_TrainingSetData:
+        - m_Guid: d1166368-c043-4aa8-8bde-956ab738f626
+          m_State: 1
+          m_Disposing: 0
+          m_TrainingSet:
+          - m_Guid: c68f7b40-07a4-4d67-8b59-82f9cf629a71
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110590
+          - m_Guid: 911d0782-2f3e-479a-94d0-552ebdaa2339
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110591
+          - m_Guid: 284ed25e-ff20-4e2b-bc40-2fe603b4bd51
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110592
+          - m_Guid: 88c4c6dc-f16a-4e99-b8cf-d3e881503813
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110593
+          - m_Guid: 67897881-028a-4801-b358-52ae44163b33
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110594
+          - m_Guid: f4164170-a51c-4f4a-b1c0-d1777c7c91e7
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110595
+          - m_Guid: 340991eb-6df7-4b80-bdfc-270e40635582
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110596
+          - m_Guid: f54d1b19-5a97-4dfa-bcb6-e09dd23ad183
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110597
+          - m_Guid: dce3b9ac-04df-4f25-848c-53a9475f226a
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110598
+          - m_Guid: 52b379cd-a55b-4748-bbb4-bcab5580842c
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110599
+          - m_Guid: 74bcb8fb-e72c-4add-9517-8df524d5ceec
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110600
+          - m_Guid: ba2722d5-4918-4dcc-853d-26e36eec8b93
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110601
+          - m_Guid: 9e9ddcde-1187-4210-b613-c461c04fbc9d
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110602
+          - m_Guid: e90040ed-b9f0-4d2a-8410-f7f1f5062b36
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              rid: 1455634063481110603
+          m_ProjectID: d182923f-9cbe-421b-af1a-fc05bd527e8a
+        m_Name: Sketchy Icons
+        m_Description: A Trained Style to generate sketchy Icons.
+    - rid: 1455634063481110588
+      type: {class: StyleData, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 5cc104e0-423a-473e-8034-b9d346cb2357
+        m_State: 1
+        m_Disposing: 0
+        m_IsFallback: 0
+        m_Thumbnail:
+          rid: -2
+        m_Visible: 1
+        selectedCheckPointGUID: 00000000-0000-0000-0000-000000000000
+        m_FavoriteCheckPointGUID: active
+        parentID: 00000000-0000-0000-0000-000000000000
+        m_ProjectID: 11000000-0000-0000-0000-000000000011
+        m_TrainingSteps: 2000
+        m_CheckPoints:
+        - m_Guid: 03fa404b-39fc-4979-9272-deb5d8c4b24c
+          m_State: 1
+          m_Disposing: 0
+          m_ProjectID: 11000000-0000-0000-0000-000000000011
+          m_Name: 'Happy Harvest [Orion V4 2000]'
+          m_Description: 8 Nov 2023
+          parent_id: 00000000-0000-0000-0000-000000000000
+          m_TrainingSetData:
+            m_Guid: 3e758588-960f-44f5-865a-d5eaa1b1dec4
+            m_State: 5
+            m_Disposing: 0
+            m_TrainingSet: []
+            m_ProjectID: 11000000-0000-0000-0000-000000000011
+          m_ValidationImagesData:
+          - m_Guid: 96b39a19-2d3e-4bc5-aa3c-38667ed6eba5
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 96b39a19-2d3e-4bc5-aa3c-38667ed6eba5
+              m_State: 5
+              m_Disposing: 0
+            m_Prompt: A chicken
+          - m_Guid: 05de072c-ebbc-43d7-886b-7ac4f9cbd079
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 05de072c-ebbc-43d7-886b-7ac4f9cbd079
+              m_State: 5
+              m_Disposing: 0
+            m_Prompt: A cow
+          - m_Guid: 2dbfc212-f87b-45f9-a05a-06368e190ca1
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 2dbfc212-f87b-45f9-a05a-06368e190ca1
+              m_State: 5
+              m_Disposing: 0
+            m_Prompt: A dog
+          - m_Guid: e0139464-a868-402a-95b8-b4c26685a97b
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: e0139464-a868-402a-95b8-b4c26685a97b
+              m_State: 5
+              m_Disposing: 0
+            m_Prompt: A farmer
+          - m_Guid: 4421bead-a3ff-4c09-9514-61e127eb470e
+            m_State: 5
+            m_Disposing: 0
+            m_ImageArtifact:
+              m_Guid: 4421bead-a3ff-4c09-9514-61e127eb470e
+              m_State: 5
+              m_Disposing: 0
+            m_Prompt: A pine tree
+          m_FavoriteSampleOutputDataGuid: 
+          m_TrainingSteps: 1200
+        m_SampleOutputPrompts:
+        - A chicken
+        - A cow
+        - A dog
+        - A farmer
+        - A pine tree
+        m_TrainingSetData:
+        - m_Guid: 3e758588-960f-44f5-865a-d5eaa1b1dec4
+          m_State: 5
+          m_Disposing: 0
+          m_TrainingSet: []
+          m_ProjectID: 11000000-0000-0000-0000-000000000011
+        m_Name: Default
+        m_Description: Default Style
+    - rid: 1455634063481110589
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 00000000-0000-0000-0000-000000000000
+        m_State: 3
+        m_Disposing: 0
+    - rid: 1455634063481110590
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: c68f7b40-07a4-4d67-8b59-82f9cf629a71
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110591
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 911d0782-2f3e-479a-94d0-552ebdaa2339
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110592
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 284ed25e-ff20-4e2b-bc40-2fe603b4bd51
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110593
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 88c4c6dc-f16a-4e99-b8cf-d3e881503813
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110594
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 67897881-028a-4801-b358-52ae44163b33
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110595
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: f4164170-a51c-4f4a-b1c0-d1777c7c91e7
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110596
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 340991eb-6df7-4b80-bdfc-270e40635582
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110597
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: f54d1b19-5a97-4dfa-bcb6-e09dd23ad183
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110598
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: dce3b9ac-04df-4f25-848c-53a9475f226a
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110599
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 52b379cd-a55b-4748-bbb4-bcab5580842c
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110600
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 74bcb8fb-e72c-4add-9517-8df524d5ceec
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110601
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: ba2722d5-4918-4dcc-853d-26e36eec8b93
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110602
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: 9e9ddcde-1187-4210-b613-c461c04fbc9d
+        m_State: 1
+        m_Disposing: 1
+    - rid: 1455634063481110603
+      type: {class: ImageArtifact, ns: Unity.Muse.StyleTrainer, asm: Unity.Muse.StyleTrainer}
+      data:
+        m_Guid: e90040ed-b9f0-4d2a-8410-f7f1f5062b36
+        m_State: 1
+        m_Disposing: 1
