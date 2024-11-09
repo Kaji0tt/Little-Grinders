@@ -26,7 +26,7 @@ using UnityEngine.UI;
 //                                                                                                 In den Funktionen der Ability sollte demnach stets ein GO mitgegegeben werden, welches als Referenz für den Nutzer dient.
 //
 //GGf. könnte man die Ability Componente den Mobs / Spieler direkt geben, beim Call wird auf die Instanz der Klasse auf dem Spielobjekt zugegriffen.
-public abstract class Ability : MonoBehaviour
+public abstract class Ability : MonoBehaviour, IMoveable, IUseable, IDragHandler, IEndDragHandler
 {
     //Standard Daten zu einer Fähigkeit
     //public string abilityID;
@@ -35,7 +35,13 @@ public abstract class Ability : MonoBehaviour
     public string description;
     [Space]
     public float cooldownTime;
+    private float runtimeCooldownTime;
+
     public float activeTime;
+    private float runtimeActive;
+
+
+    float tickerTimer;
 
     [HideInInspector]
     public float tickTimer = 1;
@@ -52,6 +58,8 @@ public abstract class Ability : MonoBehaviour
 
     public int requiredTypePoints;
 
+
+
     /// <summary>
     /// Daten zur Spezialisierung der Fähigkeit.
     /// </summary>
@@ -64,6 +72,107 @@ public abstract class Ability : MonoBehaviour
     public List<Talent> spec1Talents = new List<Talent>();
     public List<Talent> spec2Talents = new List<Talent>();
     public List<Talent> spec3Talents = new List<Talent>();
+
+
+
+
+    #region Abilitiy Stuff
+
+
+    //Ggf. sollten States in einer anderen Klasse / einem Manager reguliert werden?
+    private enum AbilityState { ready, active, cooldown };
+    AbilityState state = AbilityState.ready;
+
+    void Start()
+    {
+        runtimeActive = activeTime;
+        runtimeCooldownTime = cooldownTime;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+
+
+        if (state == AbilityState.active)
+        {
+
+            if (runtimeActive > 0)
+            {
+                runtimeActive -= Time.deltaTime;
+
+
+                tickerTimer -= Time.deltaTime;
+
+                if (tickerTimer <= 0)
+                {
+                    CallAbilityFunctions("tick", PlayerManager.instance.player.GetComponent<PlayerStats>());
+                    tickerTimer = tickTimer;
+                }
+            }
+
+
+            else
+            {
+                OnCooldown(PlayerManager.instance.player.GetComponent<PlayerStats>());
+                CallAbilityFunctions("cooldown", PlayerManager.instance.player.GetComponent<PlayerStats>());
+
+                state = AbilityState.cooldown;
+                runtimeActive = activeTime;
+            }
+
+        }
+
+        //During Cooldown State, reduce the Cooldown Time
+        if (state == AbilityState.cooldown)
+        {
+            //print("ability is on cooldown" + cooldownTime);
+            if (cooldownTime > 0)
+            {
+                cooldownTime -= Time.deltaTime;
+
+                //image.color = Color.grey;
+            }
+
+            else
+            {
+                state = AbilityState.ready;
+
+                cooldownTime = cooldownTime;
+
+                //image.color = Color.white;
+            }
+
+        }
+
+
+
+    }
+
+
+
+    public void Use()
+    {
+        //Setzen der Spezialisierungspunkte in der Ability.
+
+        if (state == AbilityState.ready)
+        {
+
+            //tickerTimer = tickTimer;
+
+
+            //activeTime = activeTime;
+
+
+            state = AbilityState.active;
+
+
+            UseBase(PlayerManager.instance.player.GetComponent<PlayerStats>());
+        }
+
+    }
+    #endregion
 
 
     private void OnEnable()
@@ -203,5 +312,186 @@ public abstract class Ability : MonoBehaviour
         spec3Talents.Add(talent);
     }
 
+    public string GetName()
+    {
+        return abilityName;
+    }
+
+    public bool IsOnCooldown()
+    {
+        if (state == AbilityState.cooldown)
+            return true;
+        else
+            return false;
+    }
+
+    public float GetCooldown()
+    {
+        return cooldownTime;
+    }
+
+    public float CooldownTimer()
+    {
+        return cooldownTime;
+    }
+
+    public bool IsActive()
+    {
+        if (state == AbilityState.active)
+            return true;
+        else
+            return false;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+            HandScript.instance.TakeMoveable(this);
+    }
+
+
+    // Diese Methode wird ausgeführt, wenn das Ziehen des Objekts endet
+    public void OnEndDrag(PointerEventData eventData)
+    {
+
+        // Liste für die Raycast-Ergebnisse
+        List<RaycastResult> results = new List<RaycastResult>();
+
+        // Raycast durchführen und Ergebnisse sammeln
+        EventSystem.current.RaycastAll(eventData, results);
+
+        // Ergebnisse überprüfen
+        foreach (RaycastResult result in results)
+        {
+            ActionButton actionButton = result.gameObject.GetComponent<ActionButton>();
+            if (actionButton != null)
+            {
+                // SetUseable aufrufen, wenn ActionButton gefunden wird
+                actionButton.SetUseable(this);
+                Debug.Log("Item dropped onto ActionButton, SetUseable called.");
+                return;
+            }
+        }
+
+
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public class AbilityTemplate : Ability
+{
+    /// <summary> --> AI SUMMARY <---
+    /// This Summary serves as Information for AI:
+    /// Player Data:
+    /// PlayerManager.instance.player as Reference for the Player GameObject for e.g. Transform.
+    /// PlayerManager.instance.player.GetComponent<PlayerStats>(); is reference for the different Stats of the player.
+    /// These include floats as of: 
+    /// AbilityPower, Armor, AttackPower, AttackSpeed, Hp (Health), MovementSpeed
+    /// theire Reference is fetched via: float aSpeed = pStats.AttackSpeed.Value;
+    /// </summary>
+    /// <param name="entitie"></param>
+
+    #region UseRegion
+    public override void UseBase(IEntitie entitie)
+    {
+
+        base.UseBase(entitie);
+
+
+    }
+
+
+    public override void ApplySpec1Bonus(Talent t)
+    {
+
+
+    }
+
+
+    public override void OnUseSpec1(IEntitie entitie)
+    {
+
+
+    }
+
+    public override void ApplySpec2Bonus(Talent t)
+    {
+
+    }
+    public override void OnUseSpec2(IEntitie entitie)
+    {
+
+    }
+
+
+    public override void ApplySpec3Bonus(Talent t)
+    {
+
+    }
+    public override void OnUseSpec3(IEntitie entitie)
+    {
+
+    }
+
+    #endregion
+
+
+    #region TickRegion
+
+    //Ein TickTimer, welcher alle x Sekunden während der Aktiven Zeit ausgeführt wird. Standard tickTimer ist auf 1 - also alle 1 Sekunden.
+    public override void OnTickSpec1(IEntitie entitie)
+    {
+ 
+
+    }
+
+    public override void OnTickSpec2(IEntitie entitie)
+    {
+ 
+
+    }
+
+    public override void OnTickSpec3(IEntitie entitie)
+    {
+        //throw new NotImplementedException();
+    }
+
+    #endregion
+
+
+    #region CooldownRegion
+    public override void OnCooldown(IEntitie entitie)
+    {
+
+    }
+
+    public override void OnCooldownSpec1(IEntitie entitie)
+    {
+
+    }
+
+    public override void OnCooldownSpec2(IEntitie entitie)
+    {
+
+    }
+
+    public override void OnCooldownSpec3(IEntitie entitie)
+    {
+
+    }
+    #endregion
+}
+
+

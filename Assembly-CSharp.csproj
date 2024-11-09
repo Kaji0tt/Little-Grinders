@@ -131,6 +131,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionsInputManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\PaginationManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\SuperellipsePoints.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Pace.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Schuhe.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buff.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UIPrimitiveBase.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Assets\Scripts\WeaponController.cs" />
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotHose.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\SortingOrder.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Pace_UI.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewContext.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorLabel.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy Types\_projectile.cs" />
@@ -210,7 +212,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridView.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CylinderText.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Spells\Steinwurf-OLD.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy Types\E_Caster.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\TalentLines.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Assets\Scripts\Manager\SaveGame\CloneItem.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\BezierPath.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\BoundTooltip\BoundTooltipTrigger.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\CooldownManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\StepperSide.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UICircle.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\Circle.cs" />
@@ -301,10 +303,9 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RescalingPanels\RescalePanel.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CurlyUI\CUIImage.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionUpdater.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Spells\Spell-OLD.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MobStats.cs" />
-    <Compile Include="Assets\Scripts\EntityStats\MetaStats\StatModifier.cs" />
     <Compile Include="Assets\Sprites\Charakter\Equipment\WeaponAC.cs" />
+    <Compile Include="Assets\Scripts\EntityStats\MetaStats\StatModifier.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_MagneticInfiniteScroll.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewCell.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionMethods.cs" />
@@ -386,6 +387,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\UIWindowBase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\TextPic.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\ExpValueText.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\AbilityTemplate.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Talent.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CurlyUI\CUIBezierCurve.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\PrefabTheme.cs" />
@@ -1460,12 +1462,12 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.23f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.AI.Navigation">
-      <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.AppUI.Navigation.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.AppUI.Navigation.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.AI.Navigation">
+      <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.2D.Common.Path.Editor">
@@ -1584,12 +1586,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.AppUI.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="SerializableGUID">
       <HintPath>Library\ScriptAssemblies\SerializableGUID.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Services.Core.Analytics">
@@ -1708,16 +1710,16 @@
       <HintPath>Library\ScriptAssemblies\UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.InternalAPIEditorBridge.001">
-      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+    <Reference Include="Unity.Behavior.Serialization">
+      <HintPath>Library\ScriptAssemblies\Unity.Behavior.Serialization.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.2D.Animation.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Behavior.Serialization">
-      <HintPath>Library\ScriptAssemblies\Unity.Behavior.Serialization.dll</HintPath>
+    <Reference Include="Unity.InternalAPIEditorBridge.001">
+      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Muse.Chat.Bridge">
@@ -1796,12 +1798,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing.Stores">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Burst.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Purchasing.Stores">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Services.Core">

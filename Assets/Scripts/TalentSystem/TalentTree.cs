@@ -17,16 +17,19 @@ public class TalentTree : MonoBehaviour
     {
         instance = this;
 
-        allTalents = FindObjectsOfType<Talent>();
-
+        allTalents = FindObjectsByType<Talent>(FindObjectsSortMode.None); // true, um auch inaktive Objekte einzuschließen
+        
         foreach (Talent talent in allTalents)
+        {
             talent.SetTalentUIVariables();
+        }
 
         //Untersucht alle Talente auf ihre Typ hin und fügt sie entsprechenden Listen hinzu.
         //CalculateAllTalents();
 
         //Füge alle Abilitie's welche auch Talente sind einer entsprechenden Liste hinzu.
         CalculatAllAbilityTalents();
+
 
         //Sorge dafür, das alle Talente locked sind, welche zu Beginn nicht freigeschaltet sind.
         ResetTalents();
@@ -43,6 +46,7 @@ public class TalentTree : MonoBehaviour
 
     #endregion
 
+    //talentLineParent sollte jedes AbilityTalent sein.
     public Transform talentLineParent;
 
 
@@ -57,7 +61,7 @@ public class TalentTree : MonoBehaviour
     //Durchsuche die Szene nach sämtliche Elementen, welche sowohl eine Fähigkeit, als auch ein Talent sind.
     private void CalculatAllAbilityTalents()
     {
-        AbilityTalent[] allAbilityTalentsArray = FindObjectsOfType<AbilityTalent>();
+        AbilityTalent[] allAbilityTalentsArray = FindObjectsByType<AbilityTalent>(FindObjectsSortMode.InstanceID);
 
         foreach (AbilityTalent abilityTalent in allAbilityTalentsArray)
             allAbilityTalents.Add(abilityTalent);
@@ -113,7 +117,7 @@ public class TalentTree : MonoBehaviour
             totalCombatPointsText.text = totalCombatSpecPoints.ToString();
 
             //Falls das geskillte Talent keine Fähigkeit ist, setze die entsprechende Spezialisierung für die Grundfähigkeit.
-            if (clickedTalent.GetType() != typeof(AbilityTalent))
+            if (clickedTalent.baseAbility != null)
             {
                 //Setze die Spezialisierung.
                 SetSpecializationOfAbility(clickedTalent);
@@ -138,17 +142,20 @@ public class TalentTree : MonoBehaviour
 
     private void SetSpecializationOfAbility(Talent clickedTalent)
     {
-        //Setze die Spezialisierung der Grundfähigkeit auf jene, des geklickten Talents,
-        clickedTalent.abilityTalent.baseAbility.SetSpec(clickedTalent.abilitySpecialization);
+        //Falls sich das geklickte Talent auf eine Fähigkeit richtet, setze die Spezialisierung der Grundfähigkeit auf jene, des geklickten Talents
+        if(clickedTalent.baseAbility != null)
+        clickedTalent.baseAbility.SetSpec(clickedTalent.abilitySpecialization);
 
-        //Gehe durch die Liste aller möglichen Child-Talents der Grundfähigkeit,
-        foreach (Talent childTalent in clickedTalent.abilityTalent.childTalent)
+        //Überprüfe allTalents ob die baseAbility identisch ist mit der von clickedTalent,
+        //falls ja, überprüfe ob das entsprechende Talent eine andere Spezialisierung hat, als die der baseAbility.
+        //wenn dies so ist, dann LockTalent(); das entsprechende Talent.
+        foreach (Talent aTalent in allTalents)
         {
-            //Überprüfe, ob die Spezialisierung der entsprechend Child-Talente unterschiedlich ist, von der nun gesetzten,
-            if (childTalent.abilitySpecialization != clickedTalent.abilityTalent.baseAbility.abilitySpec)
+
+            if (aTalent.abilitySpecialization != clickedTalent.baseAbility.abilitySpec)
             {
-                //Und sperre diese.
-                childTalent.LockTalent();
+
+                aTalent.LockTalent();
 
             }
         }
@@ -156,7 +163,7 @@ public class TalentTree : MonoBehaviour
 
     private void ApplySpecializationEffects(Talent clickedTalent)
     {
-        clickedTalent.abilityTalent.ApplySpecialization(clickedTalent);
+        clickedTalent.ApplySpecialization(clickedTalent);
     }
 
     void OnEnable()
@@ -203,6 +210,7 @@ public class TalentTree : MonoBehaviour
     }
 
     // Funktion um die Verbindungen zwischen den Talenten herzustellen
+    /*
     private void DrawTalentTreeLines()
     {
         foreach (Talent talent in allTalents)
@@ -254,52 +262,112 @@ public class TalentTree : MonoBehaviour
             lineRend.Points = talentLinePositions.ToArray();
         }
     }
+    */
     /*
-    //Funktion um die Verbindungen zwischen den Talenten herzustellen
-    //UILineRenderer currently creates Null-Reference on Start, however the interface is drawn accordingly.
-    private void DrawTalentTreeLines()
-    {
-        foreach (Talent talent in allTalents)
+        //Funktion um die Verbindungen zwischen den Talenten herzustellen
+        //UILineRenderer currently creates Null-Reference on Start, however the interface is drawn accordingly.
+        private void DrawTalentTreeLines()
         {
-            //Erschaffe ein neues GO für die Talent-Tree Line
-            GameObject gameObject = new GameObject("_TalentLine", typeof(UILineRenderer));
+            foreach(AbilityTalent aTalent in allAbilityTalents)
+            {                
 
-            //Setze Parent des GO für vernünftiges UI Layering
-            gameObject.transform.SetParent(talentLineParent, false);
 
-            //Füge UILineRendere der Unity.UI.Extensions hinzu
-            UILineRenderer lineRend = gameObject.GetComponent<UILineRenderer>();
+                foreach (Talent talent in allTalents)
+                {
+                    //Erschaffe ein neues GO für die Talent-Tree Line
+                    GameObject gameObject = new GameObject("_TalentLine", typeof(UILineRenderer));
 
-            //Setze Farbe der Talent-Linie
-            lineRend.color = new Color(.7f, .7f, .7f, 1f);
+                    //Setze Parent des GO für vernünftiges UI Layering
+                    gameObject.transform.SetParent(aTalent.gameObject.transform, false);
 
-            //Setze den Ankerpunkt der Talent-Linie nach Rechts-Unten
-            RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
+                    //Füge UILineRendere der Unity.UI.Extensions hinzu
+                    UILineRenderer lineRend = gameObject.GetComponent<UILineRenderer>();
 
-            rectTrans.anchorMin = new Vector2(0, 0);
-            rectTrans.anchorMax = new Vector2(0, 0);
+                    //Setze Farbe der Talent-Linie
+                    lineRend.color = new Color(.7f, .7f, .7f, 1f);
 
-            //Erstelle eine Liste der Positionen der Talente
-            List<Vector2> childTalPos = new List<Vector2>();
+                    //Setze den Ankerpunkt der Talent-Linie nach Rechts-Unten
+                    RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
 
-            //Füge den Ursprung hinzu (Das Talent, welches Verbindungen zu den Kinder-Talenten aufbauen soll) - .5 um mittig positioniert zu werden.
-            childTalPos.Add(talent.GetComponent<RectTransform>().anchoredPosition + talent.GetComponent<RectTransform>().sizeDelta * .5f);
+                    rectTrans.anchorMin = new Vector2(0, 0);
+                    rectTrans.anchorMax = new Vector2(0, 0);
 
-            //Für jedes Kinder-Talent soll der Liste neue Positionen hinzugefügt werden, aus welchen später die Talent-Linien erstellt werden.
-            foreach (Talent childTalent in talent.childTalent)
-            {
+                    //Erstelle eine Liste der Positionen der Talente
+                    List<Vector2> childTalPos = new List<Vector2>();
 
-                //Es müssten stets zwei Punkte hinzugefügt werden, die Mitte das Kinder-Talents und die des Ursprung-Talents (childTalent + talent)
-                childTalPos.Add(childTalent.GetComponent<RectTransform>().anchoredPosition + childTalent.GetComponent<RectTransform>().sizeDelta * .5f);
-                childTalPos.Add(talent.GetComponent<RectTransform>().anchoredPosition + childTalent.GetComponent<RectTransform>().sizeDelta * .5f);
+                    //Füge den Ursprung hinzu (Das Talent, welches Verbindungen zu den Kinder-Talenten aufbauen soll) - .5 um mittig positioniert zu werden.
+                    childTalPos.Add(talent.GetComponent<RectTransform>().anchoredPosition + talent.GetComponent<RectTransform>().sizeDelta * .5f);
 
+                    //Für jedes Kinder-Talent soll der Liste neue Positionen hinzugefügt werden, aus welchen später die Talent-Linien erstellt werden.
+                    foreach (Talent childTalent in talent.childTalent)
+                    {
+
+                        //Es müssten stets zwei Punkte hinzugefügt werden, die Mitte das Kinder-Talents und die des Ursprung-Talents (childTalent + talent)
+                        childTalPos.Add(childTalent.GetComponent<RectTransform>().anchoredPosition + childTalent.GetComponent<RectTransform>().sizeDelta * .5f);
+                        childTalPos.Add(talent.GetComponent<RectTransform>().anchoredPosition + childTalent.GetComponent<RectTransform>().sizeDelta * .5f);
+
+                    }
+
+                    //Füge die Liste dem erschaffenen GO mit UILineRenderer Komponente hinzu
+                    lineRend.Points = childTalPos.ToArray();
+
+                }
             }
 
-            //Füge die Liste dem erschaffenen GO mit UILineRenderer Komponente hinzu
-            lineRend.Points = childTalPos.ToArray();
+        }
+    */
 
+
+    private void DrawTalentTreeLines()
+    {
+        Transform contentTransform = GetComponentInParent<ScrollRect>().content;
+
+        foreach(Talent talent in allTalents)
+        {
+            DrawLinesRecursively(talent, talent.childTalent, contentTransform);
         }
     }
-    */
+
+    // Rekursive Methode, um Linien zwischen Parent- und Child-Talenten zu zeichnen
+    private void DrawLinesRecursively(Talent parentTalent, Talent[] childTalents, Transform contentTransform)
+    {
+        RectTransform parentRect = parentTalent.GetComponent<RectTransform>();
+        Vector2 parentCenter = GetRectTransformCenterInLocalSpace(parentRect, contentTransform);
+
+        foreach (Talent childTalent in childTalents)
+        {
+            if (childTalent == null) continue;
+
+            GameObject lineGO = new GameObject("_TalentLine", typeof(UILineRenderer));
+            lineGO.transform.SetParent(talentLineParent, false);
+
+            UILineRenderer lineRend = lineGO.GetComponent<UILineRenderer>();
+            lineRend.color = new Color(75f / 255f, 75f / 255f, 75f / 255f, 1f);
+
+            lineRend.LineThickness = 4f;
+
+            RectTransform childRect = childTalent.GetComponent<RectTransform>();
+            Vector2 childCenter = GetRectTransformCenterInLocalSpace(childRect, contentTransform);
+
+            List<Vector2> linePoints = new List<Vector2> { parentCenter, childCenter };
+            lineRend.Points = linePoints.ToArray();
+
+            DrawLinesRecursively(childTalent, childTalent.childTalent, contentTransform);
+        }
+    }
+
+    // Hilfsfunktion zur Berechnung der Position der Mitte eines RectTransforms im lokalen Raum des übergeordneten Canvas
+    private Vector2 GetRectTransformCenterInLocalSpace(RectTransform rect, Transform referenceTransform)
+    {
+        Vector2 worldCenter = rect.TransformPoint(rect.rect.center);
+        Vector2 localCenter;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            referenceTransform as RectTransform,
+            worldCenter,
+            null,
+            out localCenter
+        );
+        return localCenter;
+    }
 
 }

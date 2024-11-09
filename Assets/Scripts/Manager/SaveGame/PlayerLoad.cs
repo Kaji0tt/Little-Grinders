@@ -135,7 +135,7 @@ public class PlayerLoad : MonoBehaviour
                     {
                             //print("JUHU; FOUND: " + savedTalent.talentName + ", got the Spec: " + (Ability.AbilitySpecialization)savedTalent.spec);
                             //print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
-                            talent.abilityTalent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
+                            talent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
                         }
 
                 }
@@ -213,9 +213,9 @@ public class PlayerLoad : MonoBehaviour
             // Überprüfen, ob der gespeicherte Name einem Zauber entspricht
             foreach (Talent talent in TalentTree.instance.allTalents)
             {
-                if (talent.abilityTalent.baseAbility.abilityName == data.savedActionButtons[i])
+                if (talent.baseAbility.abilityName == data.savedActionButtons[i])
                 {
-                    slot.LoadAbilityUseable(talent.abilityTalent); // Zauber in den Slot laden
+                    slot.LoadAbilityUseable(talent.baseAbility); // Zauber in den Slot laden
                     itemLoaded = true; // Markiere, dass ein Item geladen wurde
                     break; // Beende die Schleife, wenn der Zauber gefunden wurde
                 }

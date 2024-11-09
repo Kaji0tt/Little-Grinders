@@ -207,7 +207,7 @@ public class PlayerSave
         foreach (Talent talent in allTalents)
         {
             //Debug.Log(talent.talentName + "Spezialisierung: " + (int)talent.abilitySpecialization);
-            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked, (int)talent.abilityTalent.baseAbility.abilitySpec));
+            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked, (int)talent.baseAbility.abilitySpec));
         }
 
         //Debug.Log(allTalents.Length);

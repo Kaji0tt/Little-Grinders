@@ -16,7 +16,10 @@ public class InterfaceDragging : MonoBehaviour,IBeginDragHandler, IDragHandler, 
     private float zoomSpeed = 0.1f;
 
     [SerializeField]
-    private float maxZoom = 10f;
+    private float maxZoomOut;
+
+    [SerializeField]
+    private float maxZoomIn;
 
     private Vector3 initialScale;
 
@@ -72,8 +75,9 @@ public class InterfaceDragging : MonoBehaviour,IBeginDragHandler, IDragHandler, 
 
     private Vector3 ClampDesiredScale(Vector3 desiredScale)
     {
-        desiredScale = Vector3.Max(new Vector3(0.4f, 0.4f, 0.4f), desiredScale);
-        desiredScale = Vector3.Min(initialScale, desiredScale);
+        desiredScale = Vector3.Max(new Vector3(maxZoomOut, maxZoomOut, maxZoomOut), desiredScale);
+        //desiredScale = Vector3.Min(initialScale, desiredScale);
+        desiredScale = Vector3.Min(new Vector3(maxZoomIn, maxZoomIn, maxZoomIn), desiredScale);
         return desiredScale;
     }
 }

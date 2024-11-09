@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class HandScript : MonoBehaviour
+
+
+public class HandScript : MonoBehaviour, IEndDragHandler
 {
     #region Singleton
     public static HandScript instance;
@@ -13,6 +16,8 @@ public class HandScript : MonoBehaviour
     #endregion
 
     public IMoveable MyMoveable { get; set; }
+
+    public IUseable MyUseable { get; set; }
 
     private Image image;
 
@@ -32,6 +37,11 @@ public class HandScript : MonoBehaviour
         this.MyMoveable = moveable;
         image.sprite = moveable.icon;
         image.color = Color.white; // Mache das Item sichtbar, wenn es gezogen wird.
+    }
+
+    public void TakeUseable(IUseable useable)
+    {
+        MyUseable = useable;
     }
 
     private void Update()
@@ -54,4 +64,10 @@ public class HandScript : MonoBehaviour
         image.color = new Color(0, 0, 0, 0); // Mache das Bild unsichtbar
         return tmp;
     }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Debug.Log("Handscript OnEndDrag triggered.");
+    }
 }
+

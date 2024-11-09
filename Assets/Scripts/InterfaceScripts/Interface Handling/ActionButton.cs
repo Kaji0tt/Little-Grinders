@@ -6,11 +6,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/*
+ * Moini! Ich bin aktuell dabei meine AbilityTalent Klasse aufzuräumen, bzw. redundant zu machen. Dabei ist mir etwas aufgefallen:
+Mein Handyscript, bzw. die EventSystems von Unity machen quatsch bzgl. meiner PointerEvent daten. Ich habe gefühlt in jede Klasse alles reingehauen, was sich auf PointerDragEvent kram bezieht. Aber: Am schlausten scheint es mir, wenn das HandScript einzig und allein das IEndDragHandler Event verarbeitet und alle Sachen, die gezogen werden sollen sich ausschließlich mit IDragHandler zum aufnehmen des Drags beschäftigen.
 
+Kannst du das bitte so formulieren, dass das Handscript schaut, ob die Maus aktuell über einem SpielObjekt im Interface hovert, dass ein IUseable bestitzt, und wenn ja, dann soll bitte 
+*/
 public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
 {
     public IUseable MyUseable { get; private set; }
-    private IMoveable MyMoveable;
+    public IMoveable MyMoveable { get; private set; }
 
     public Button MyButton { get; private set; }
     public Sprite icon { get; private set; }
@@ -195,14 +200,18 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     }
 
+    
     public void OnPointerEnter(PointerEventData eventData)
     {
+        /*
         if (HandScript.instance.MyMoveable != null && HandScript.instance.MyMoveable is IUseable)
         {
             SetUseable(HandScript.instance.MyMoveable as IUseable);
             MyMoveable = HandScript.instance.Put();
         }
+        */
     }
+    
 
     public void OnPointerExit(PointerEventData eventData) { }
 
@@ -214,19 +223,37 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
     }
 
+
+
+    /*
     public void OnEndDrag(PointerEventData eventData)
     {
+        
         if (HandScript.instance.MyMoveable != null)
         {
             SetUseable(HandScript.instance.MyMoveable as IUseable);
             HandScript.instance.Put();
         }
+        
     }
+    */
 
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Debug.Log("ActionButton OnEndDrag triggered.");
+        if (HandScript.instance.MyMoveable != null)
+        {
+            SetUseable(HandScript.instance.MyUseable);
+
+            HandScript.instance.Put();
+
+            icon = MyMoveable.icon;
+        }
+    }
 
     /// Laden von Spielerdaten:
 
-    public void LoadAbilityUseable(AbilityTalent ability)
+    public void LoadAbilityUseable(Ability ability)
     {
         MyUseable = ability;
         MyMoveable = ability;
@@ -247,4 +274,6 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         MyButton.image.sprite = item.icon; // Setze das Icon des Items
         MyButton.image.color = Color.white;
     }
+
+
 }
