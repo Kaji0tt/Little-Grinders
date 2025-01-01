@@ -29,3 +29,7 @@ driven by the players curiosity.
 - Daten Upload zum Server-Profil
 - Sockel-Items mit erweiterten Talent-Baum
 - Buffs
+
+Update 01.01.25:
+Last Stable Build findet sich in der Cloud unter folgendem Link
+https://mega.nz/file/ew0UjJ4J#IDDXX0i6uB6tORl1F6mHU5EqLQTO3fmYJCyH3lcj8Gc
