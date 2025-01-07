@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 
 //Int_SlotBtn sollte mit IMoveable und IUseable ebenfalls arbeiten.
-public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
 {
     public ItemInstance storedItem;
 
@@ -41,7 +41,16 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         HideItem();
     }
-    
 
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        HandScript.instance.Put();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        HandScript.instance.TakeMoveable(storedItem);
+    }
 
 }

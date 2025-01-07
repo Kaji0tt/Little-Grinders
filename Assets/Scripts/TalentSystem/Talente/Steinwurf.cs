@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Steinwurf : Spell, IUseable
+/*
+public class Steinwurf : MonoBehaviour, IUseable
 {
 
 
@@ -111,3 +111,4 @@ public class Steinwurf : Spell, IUseable
         return coolDownTimer;
     }
 }
+*/

@@ -109,7 +109,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
         return xp;
     }
 
-    public int Set_xp(int mod)
+    public int Gain_xp(int mod)
     {
         xp = xp + mod;
         if (xp >= LevelUp_need())
@@ -228,7 +228,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
     public void Start()
     {
         //currentHp = Hp.Value;
-        Set_xp(1);
+        Gain_xp(1);
         //Set_level(1);
 
 
@@ -277,7 +277,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
         damage = Mathf.Clamp(damage, 1, int.MaxValue);
         
         //Berichte den GameEvents vom verursachten Schaden am Spieler.
-        GameEvents.instance.PlayerWasAttacked(damage);
+        GameEvents.Instance.PlayerWasAttacked(damage);
 
         //Ziehe den Schaden vom Spielerleben ab.
         Set_currentHp(-damage);

@@ -342,7 +342,7 @@ public class ItemRolls : MonoBehaviour
     public static ItemInstance GetItemStats(string ID, List<ItemModsData> mods, string rarity)
     {
         //Erstelle eine ItemInstance, welche aus der Datenbank anhand der ID ausgelesen wird.
-        ItemInstance item = new ItemInstance(ItemDatabase.GetItemID(ID));
+        ItemInstance item = new ItemInstance(ItemDatabase.GetItemByID(ID));
 
         //Setze die Rarität des Items entsprechend des gespeicherten Strings.
         SetRarity(item, rarity);

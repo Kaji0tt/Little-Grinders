@@ -7,10 +7,13 @@ public class PlayerManager : MonoBehaviour
 
     #region Singleton
     public static PlayerManager instance;
+
+ 
     private void Awake()
     {
         instance = this;
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<IsometricPlayer>();
+
 
     }
 
@@ -18,6 +21,6 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
 
-    public GameObject player { get; private set; }
+    public IsometricPlayer player { get; private set; }
 
 }

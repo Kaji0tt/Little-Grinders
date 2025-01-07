@@ -55,31 +55,15 @@ public class PlayerLoad : MonoBehaviour
 
         foreach (ActionButton slot in actionButtons)
         {
-            if (slot.gameObject.name == "ActionButton1")
-                LoadActionbarSlot(0, slot, data);
-
-            if (slot.gameObject.name == "ActionButton2")
-                LoadActionbarSlot(1, slot, data);
-
-            if (slot.gameObject.name == "ActionButton3")
-                LoadActionbarSlot(2, slot, data);
-
-            if (slot.gameObject.name == "ActionButton4")
-                LoadActionbarSlot(3, slot, data);
-
-            if (slot.gameObject.name == "ActionButton5")
-                LoadActionbarSlot(4, slot, data);
-        }
-        // Is it possible to refer to a class, inherting form another from its parent class?
-        /*
-        foreach(Spell spell in spells)
-        {
-            if (data.savedActionButtons[i] == spell.name)
+            if (slot.gameObject.name.StartsWith("ActionButton"))
             {
-                actionButtons[i].SetUseable(spell);
+                // Extrahiere die Slot-Nummer dynamisch aus dem Namen (z.B. "ActionButton1" => 0)
+                int slotIndex = int.Parse(slot.gameObject.name.Replace("ActionButton", "")) - 1;
+
+                // Lade den Slot mit der entsprechenden gespeicherten Aktion
+                LoadActionbarSlot(slotIndex, slot, data);
             }
         }
-        */
     }
 
     private void LoadInventory(PlayerSave data)
@@ -151,7 +135,7 @@ public class PlayerLoad : MonoBehaviour
                     {
                             //print("JUHU; FOUND: " + savedTalent.talentName + ", got the Spec: " + (Ability.AbilitySpecialization)savedTalent.spec);
                             //print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
-                            talent.abilityTalent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
+                            talent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
                         }
 
                 }
@@ -221,25 +205,47 @@ public class PlayerLoad : MonoBehaviour
 
     void LoadActionbarSlot(int i, ActionButton slot, PlayerSave data)
     {
+        // Überprüfen, ob Daten für diesen Slot vorhanden sind
         if (data.savedActionButtons[i] != null)
         {
+            bool itemLoaded = false;
 
-            foreach (Spell spell in TalentTree.instance.allTalents.OfType<Spell>())
+            // Überprüfen, ob der gespeicherte Name einem Zauber entspricht
+            foreach (Talent talent in TalentTree.instance.allTalents)
             {
-                if (spell.GetSpellName == data.savedActionButtons[i])
+                if (talent.baseAbility.abilityName == data.savedActionButtons[i])
                 {
-                    slot.LoadSpellUseable(spell);
+                    slot.LoadAbilityUseable(talent.baseAbility); // Zauber in den Slot laden
+                    itemLoaded = true; // Markiere, dass ein Item geladen wurde
+                    break; // Beende die Schleife, wenn der Zauber gefunden wurde
                 }
-
-
             }
 
-            if(ItemDatabase.GetItemID(data.savedActionButtons[i]) != null)
+            // Überprüfen, ob der gespeicherte Name einem Item entspricht (wenn noch nichts geladen wurde)
+            if (!itemLoaded)
             {
-                slot.LoadItemUseable(ItemDatabase.GetItemID(data.savedActionButtons[i]));
+                // Hole das Item basierend auf der ID
+                Item item = ItemDatabase.GetItemByID(data.savedActionButtons[i]);
+
+                // Erstelle eine neue ItemInstance aus dem Item, wenn es gefunden wurde
+                if (item != null)
+                {
+                    ItemInstance itemInstance = new ItemInstance(item); // Erstelle eine neue ItemInstance
+                    slot.LoadItemUseable(itemInstance); // ItemInstance in den Slot laden
+                    itemLoaded = true;
+                }
+            }
+
+            // Füge eine Fehlerüberprüfung hinzu
+            if (!itemLoaded)
+            {
+                Debug.LogWarning($"Kein Zauber oder Item gefunden für Actionbar-Slot {i}: {data.savedActionButtons[i]}");
             }
         }
-
+        else
+        {
+            Debug.LogWarning($"Keine gespeicherten Daten für Actionbar-Slot {i}");
+        }
     }
 
 

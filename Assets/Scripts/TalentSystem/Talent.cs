@@ -26,14 +26,16 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     public Ability.AbilitySpecialization abilitySpecialization;
 
 
-    public AbilityTalent abilityTalent;
+    public Ability baseAbility;
+
+    //public AbilityTalent abilityTalent;
 
     //Description of the Spell
     [SerializeField]
     [TextArea]
     private string description;
 
-    public string talentID;
+    //Der talentName wird zum abgleich der Talente beim Laden des spiels verwendet und dient der Anzeige im interface.
     public string talentName;
 
     public bool passive;
@@ -57,12 +59,12 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     {
         get
         {
-            return abilityTalent.baseAbility.icon;
+            return baseAbility.icon;
         }
     }
     
 
-    private Text countText;
+    private Text textComponent;
 
     [SerializeField]
     private int maxCount;
@@ -91,36 +93,151 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     //https://youtu.be/ILaDr3CE7QY?t=615
 
 
+    public string GetName()
+    {
+            return talentName;
+    }
+
+    //CheckForUnlock soll überprüfen, ob im Talenbaum ausreichend Talentpunkte gesammelt wurden, damit das entsprechende Talent freigeschaltet werden kann.
+    public void CheckForUnlock()
+    {
+        //In Abhängigkeit vom Typ der Fähigkeit, wird der Talentbaum auf eine entsprchend ausreichende Anzahl von Spezialisierungspunkten überprüft.
+        switch (baseAbility.abilityType)
+        {
+            case Ability.AbilityType.Combat:
+                if (TalentTree.instance.totalCombatSpecPoints >= baseAbility.requiredTypePoints)
+                    Unlock();
+                break;
+
+            case Ability.AbilityType.Void:
+                if (TalentTree.instance.totalVoidSpecPoints >= baseAbility.requiredTypePoints)
+                    Unlock();
+                break;
+
+            case Ability.AbilityType.Utility:
+                if (TalentTree.instance.totalUtilitySpecPoints >= baseAbility.requiredTypePoints)
+                    Unlock();
+                break;
+
+        }
+    }
+    //AbilityTalent Merge- hinzugefügt 28.10
+    private void RunThroughChildTalents(Talent talent)
+    {
+        //Und füge dieses der entsprechenden Spezialisierungsliste hinzu. (Spec1 / Spec2 / Spec3)
+        AddSpecializationTalents(talent);
+        if (talent.childTalent.Length > 0)
+        {
+            foreach (Talent childTalent in talent.childTalent)
+            {
+                RunThroughChildTalents(childTalent);
+            }
+
+
+        }
+    }
+
+    //AbilityTalent Merge- hinzugefügt 28.10
+    private void AddSpecializationTalents(Talent childTalent)
+    {
+        if (!childTalent.passive)
+            switch (childTalent.abilitySpecialization)
+            {
+                case Ability.AbilitySpecialization.Spec1:
+                    baseAbility.AddSpec1TalentsToList(childTalent);
+                    break;
+
+                case Ability.AbilitySpecialization.Spec2:
+                    baseAbility.AddSpec2TalentsToList(childTalent);
+                    break;
+
+                case Ability.AbilitySpecialization.Spec3:
+                    baseAbility.AddSpec3TalentsToList(childTalent);
+                    break;
+
+            }
+    }
+
+    internal void ApplySpecialization(Talent talent)
+    {
+        if (talent.baseAbility != null)
+        {
+            switch (talent.abilitySpecialization)
+            {
+                case Ability.AbilitySpecialization.Spec1:
+                    //Debug.Log(talent.talentName + " soll auf spec1 geskilled werden.");
+                    baseAbility.ApplySpec1Bonus(talent);
+                    break;
+
+                case Ability.AbilitySpecialization.Spec2:
+                    baseAbility.ApplySpec2Bonus(talent);
+                    break;
+
+                case Ability.AbilitySpecialization.Spec3:
+                    baseAbility.ApplySpec3Bonus(talent);
+                    break;
+
+            }
+        }
+        else
+            Debug.Log("Das geklickte Talent hat keine Basisfähigkeit hinterlegt, oder diese ist null");
+
+
+
+    }
 
     //Void to be called in TalentTree.cs for structural purpose.
     public void SetTalentUIVariables()
     {
         image = GetComponent<Image>();
-        countText = transform.GetComponentInChildren<Text>();
-        countText.text = $"{currentCount}/{maxCount}";
+
+        // Hole alle direkten Kind-GameObjects
+        foreach (Transform child in transform)
+        {
+            // Versuche, die Text-Komponente im Kind-GameObject zu finden
+            textComponent = child.GetComponent<Text>();
+
+            if (textComponent != null)
+            {
+                // Hier kannst du mit der gefundenen Text-Komponente arbeiten
+                textComponent.text = $"{currentCount}/{maxCount}";
+            }
+        }
     }
 
     private void Awake()
     {
         //DoubleCheck if an AbilityTalent has been choosen, to make sure there are no problems within the editor.
-        if (abilityTalent == null)
-            print("Es wurde vergessen, eine aktive Referenzfähigkeit im Talent: " + gameObject.name + " zu setzen.");
-        
+        if (!baseAbility)
+            print("Das Talent " + gameObject.name + " hat keine direkte Fähigkeit auf die es sich bezieht.");
+
 
         if (description == null)
-                description = abilityTalent.baseAbility.description;
+            SetDescription("Keine Beschreibung angegeben, Basisfähigkeitsbeschreibng: \n" + baseAbility.description);
+
+        if (talentName == null)
+        {
+            if (baseAbility)
+                talentName = new string("Specialization of " + baseAbility.GetName());
+            else
+                talentName = new string("Talentname not set.");
+        }
+
+
+
+
     }
 
     public bool Click()
     {
 
 
-        countText = transform.GetComponentInChildren<Text>();
+        textComponent = transform.GetComponentInChildren<Text>();
         if (currentCount < maxCount && unlocked)
         {
             currentCount++;
 
-            countText.text = $"{currentCount}/{maxCount}";
+            textComponent.text = $"{currentCount}/{maxCount}";
 
             if (currentCount == maxCount)
             {
@@ -142,7 +259,18 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     {
         image.color = Color.grey;
 
-        countText.color = Color.grey;
+        foreach (Transform child in transform)
+        {
+            // Versuche, die Text-Komponente im Kind-GameObject zu finden
+            textComponent = child.GetComponent<Text>();
+
+            if (textComponent != null)
+            {
+                // Hier kannst du mit der gefundenen Text-Komponente arbeiten
+                textComponent.color = Color.grey;
+            }
+        }
+
 
         unlocked = false;
     }
@@ -151,7 +279,18 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     {
         image.color = Color.white;
 
-        countText.color = Color.white;
+        foreach (Transform child in transform)
+        {
+            // Versuche, die Text-Komponente im Kind-GameObject zu finden
+            textComponent = child.GetComponent<Text>();
+
+            if (textComponent != null)
+            {
+                // Hier kannst du mit der gefundenen Text-Komponente arbeiten
+                textComponent.color = Color.white;
+            }
+        }
+
 
         unlocked = true;
     }
@@ -160,7 +299,7 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     {
         image = GetComponent<Image>();
 
-        countText.text = $"{currentCount}/{maxCount}";
+        textComponent.text = $"{currentCount}/{maxCount}";
 
         if (unlocked)
         {
@@ -201,19 +340,20 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     //Setze die passiven Werte des Talentbaums ein.
     public void ApplyPassivePointsAndEffects(Talent talent)
     {
+        Debug.Log("Ist es nicht fragwürdig, das über diese Methode Talente nichts können, außer langweilige FlatStats hinzuzufügen?");
         if(talent.passive)
         switch (talent.abilityType)
         {
             case Ability.AbilityType.Combat:
-                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.AttackPower).AddModifier( new StatModifier(0.5f, StatModType.Flat));
+                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.AttackPower).AddModifier( new StatModifier(1f, StatModType.Flat));
                 break;
 
             case Ability.AbilityType.Void:
-                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.AbilityPower).AddModifier(new StatModifier(0.5f, StatModType.Flat));
+                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.AbilityPower).AddModifier(new StatModifier(1f, StatModType.Flat));
                 break;
 
             case Ability.AbilityType.Utility:
-                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.Hp).AddModifier( new StatModifier(1, StatModType.Flat));
+                PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.Hp).AddModifier( new StatModifier(2, StatModType.Flat));
                 break;
 
             default:
@@ -222,10 +362,6 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
         }
 
-        else
-        {
-            talent.abilityTalent.ApplySpecialization(talent);
-        }
 
     }
 
@@ -237,13 +373,42 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         //print(abilityTalent.baseAbility.spec1Counter);
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        UI_Manager.instance.ShowTooltip(description);
-    }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         UI_Manager.instance.HideTooltip();
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        UI_Manager.instance.ShowTooltip(description + '\n' + GetRequirementsOfTalent(this));
+    }
+
+    public string GetRequirementsOfTalent(Talent talent)
+    {
+        string info = null;
+        switch (talent.baseAbility.abilityType)
+        {
+            case Ability.AbilityType.Combat:
+                if (TalentTree.instance.totalCombatSpecPoints <= talent.baseAbility.requiredTypePoints)
+                    info = "<color=#b27d90>Benötigte Combat-Punkte:<b> " + talent.baseAbility.requiredTypePoints + "</b></color>";
+                return info;
+
+            case Ability.AbilityType.Void:
+                if (TalentTree.instance.totalVoidSpecPoints <= talent.requiredTypePoints)
+                    info = "<color=#b27d90>Benötigte Void-Punkte:<b> " + talent.baseAbility.requiredTypePoints + "</b></color>";
+                return info;
+
+
+            case Ability.AbilityType.Utility:
+                if (TalentTree.instance.totalUtilitySpecPoints <= talent.requiredTypePoints)
+                    info = "<color=#b27d90>Benötigte Utility-Punkte:<b> " + talent.baseAbility.requiredTypePoints + "</b></color>";
+                return info;
+
+
+            default: return info;
+
+        }
+    }
+
 }

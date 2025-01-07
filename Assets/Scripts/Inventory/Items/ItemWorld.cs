@@ -132,35 +132,33 @@ public class ItemWorld : MonoBehaviour
 
     }
 
-    private void OnTriggerStay(Collider collider)
-    {                                                           //Die Abfrage sollte noch verbessert werden.
+    // 23.10.2024 AI-Tag
+    // This was created with assistance from Muse, a Unity Artificial Intelligence product
 
-        if(collider.isTrigger)
+    private void OnTriggerStay(Collider collider)
+    {
+        if (collider.isTrigger)
         {
             IsometricPlayer isoPlayer = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
 
-            //Falls ein entsprechender Collider gefunden wurde und die pickKey Taste (Default Q) gedrück wurde
-
-            //Hier ist noch ein Fehler - beziehen wir uns auf den UI-Manager Key, wird das Item doppel aufgesammelt.
             if (Input.GetKey(UI_Manager.instance.pickKey))
-            //if (Input.GetKey(KeyCode.Q)) 
             {
-
-                //Falls noch Platz im Inventar ist
-                if (isoPlayer.inventory.itemList.Count <= 14)
+                // Überprüfen, ob Platz im Inventar ist
+                if (isoPlayer.inventory.itemList.Count + isoPlayer.inventory.GetConsumableDict().Count < 15)
                 {
-                    //Füge Item zum Inventar hinzu
+                    // Füge Item zum Inventar hinzu
                     isoPlayer.inventory.AddItem(GetItem());
 
-                    //Zerstöre den Collider
+                    // Zerstöre den Collider
                     DestroySelf();
                 }
-
+                else
+                {
+                    // Inventar ist voll, keine Aktion ausführen
+                    Debug.LogWarning("Inventar ist voll! Gegenstand kann nicht aufgenommen werden.");
+                }
             }
         }
-
-
-
     }
 
     public ItemInstance GetItem ()

@@ -1,89 +1,18 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-
-public class EQSlotKopf : MonoBehaviour
+﻿
+public class EQSlotKopf : EQSlotBase
 {
-    public static ItemInstance kopf_Item;
-
-    private Int_SlotBtn int_slotBtn;
-
-
-    private void OnEnable()
+    private void Awake()
     {
-        GameEvents.instance.equipKopf += equip;
-
-        int_slotBtn = GetComponent<Int_SlotBtn>();
-
+        slotType = EquipmentSlotType.Kopf; // Setzt den Slot-Typ auf Kopf
     }
 
-    private void OnDisable()
+    protected override void BindToGameEvent()
     {
-        GameEvents.instance.equipKopf -= equip;
-    }
-    public void equip(ItemInstance item)
-    {
-        if (kopf_Item == null)
-        {
-            kopf_Item = item;
-
-            //ItemSave.equippedItems.Add(item);
-
-            int_slotBtn.StoreItem(item);
-
-            GetComponent<Image>().sprite = item.icon;
-
-        }
-        else
-        {
-            Dequip();
-
-            kopf_Item = item;
-
-            int_slotBtn.storedItem = item;
-
-            GetComponent<Image>().sprite = item.icon;
-
-        }
+        GameEvents.Instance.OnEquipKopf += Equip;
     }
 
-    public void Dequip()
+    protected override void UnbindFromGameEvent()
     {
-
-
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(kopf_Item);
-
-        GetComponent<Image>().sprite = Resources.Load<Sprite>("Blank_Icon");
-
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().Dequip(kopf_Item);
-
-        //ItemSave.equippedItems.Remove(kopf_Item);
-
-        kopf_Item = null;
-
-        int_slotBtn.storedItem = null;
-
+        GameEvents.Instance.OnEquipKopf -= Equip;
     }
-
-
-    public void TaskOnClick()
-    {
-        if (kopf_Item != null)
-            Dequip();
-    }
-
-    public void LoadItem(ItemInstance item)
-    {
-        kopf_Item = item;
-
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems.Add(item);
-
-        item.Equip(PlayerManager.instance.player.GetComponent<PlayerStats>());
-
-        GetComponent<Image>().sprite = item.icon;
-
-        Int_SlotBtn int_slotBtn = gameObject.GetComponentInChildren<Int_SlotBtn>();
-        int_slotBtn.storedItem = item;
-
-    }
-
 }

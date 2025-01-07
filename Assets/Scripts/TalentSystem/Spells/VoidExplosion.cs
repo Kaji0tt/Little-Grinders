@@ -42,7 +42,8 @@ public class VoidExplosion : Ability
 
     private void Start()
     {
-        GameEvents.instance.OnPlayerHasAttackedEvent += PlayerAttacked; 
+        Debug.Log("Void Explosion verändert aktuell nicht PlayerAttacked - hier ggf. nochmal trouble shopoten.");
+        //GameEvents.Instance.PlayerHasAttacked(PlayerAttacked) += PlayerAttacked; 
 
     }
 
@@ -53,10 +54,12 @@ public class VoidExplosion : Ability
 
     private void PlayerAttacked(float playerDamage)
     {
+        /*
         if(spec3Talents[2].currentCount > 0 && this.GetComponent<AbilityTalent>().IsActive())
         {
             CallVoidExplosion(PlayerManager.instance.player.GetComponent<PlayerStats>(), PlayerManager.instance.player.transform.position);
         }
+        */
     }
 
     #region UseRegion

@@ -136,52 +136,65 @@ public class PlayerSave
     {
         ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
 
-        savedActionButtons = new string[5]; // Ggf. hier anknüpfen, sobald man Items auch safen kann. Man könnte das MyUseable as ItemInstance saven
-
-        savedActionButtonIndex = new int[5];
-
-        //Debug.Log("actionButtons" + actionButtons.Length);
-
-        //Debug.Log("saved ACtionButtons " + savedActionButtons.Length);
+        // Setze die Größe der Arrays entsprechend der Anzahl der ActionButtons dynamisch
+        savedActionButtons = new string[actionButtons.Length];
+        savedActionButtonIndex = new int[actionButtons.Length];
 
         foreach (ActionButton slot in actionButtons)
         {
-            if (slot.gameObject.name == "ActionButton1")
-                SaveActionbarSlot(1, slot);
-
-            if (slot.gameObject.name == "ActionButton2")
-                SaveActionbarSlot(2, slot);
-
-            if (slot.gameObject.name == "ActionButton3")
-                SaveActionbarSlot(3, slot);
-
-            if (slot.gameObject.name == "ActionButton4")
-                SaveActionbarSlot(4, slot);
-
-            if (slot.gameObject.name == "ActionButton5")
-                SaveActionbarSlot(5, slot);
-
+            // Extrahiere die Nummer aus dem ActionButton-Namen, z.B. "ActionButton1" => 1
+            if (slot.gameObject.name.StartsWith("ActionButton"))
+            {
+                int slotIndex = int.Parse(slot.gameObject.name.Replace("ActionButton", "")) - 1;
+                SaveActionbarSlot(slotIndex, slot); // Speichere den Slot dynamisch basierend auf der Slot-Nummer
+            }
         }
     }
-
     private void SaveTheInventory()
     {
-        inventoryItemMods = new List<ItemModsData>[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
+        // Hole das Item-Dictionary vom Inventar (Consumables) und die Liste der Non-Consumables
+        var conDict = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetConsumableDict();
+        var itemList = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList();
 
-        inventoryItemRarity = new string[PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList().Count];
+        // Initialisiere die Arrays basierend auf der Gesamtanzahl der Items (Consumables + Non-Consumables)
+        int totalItemCount = conDict.Count + itemList.Count;
+        inventoryItemMods = new List<ItemModsData>[totalItemCount];
+        inventoryItemRarity = new string[totalItemCount];
 
         int currentItem = 0;
 
-        foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList())
+        // Iteriere über das Dictionary der Consumables (Key: ItemID, Value: Anzahl)
+        foreach (KeyValuePair<string, int> entry in conDict)
         {
+            // Hole das ItemInstance basierend auf der ItemID
+            ItemInstance item = new ItemInstance(ItemDatabase.GetItemByID(entry.Key));
+            int amount = entry.Value;
+
+            // Speichere die ItemID so oft, wie das Item vorhanden ist (Anzahl)
+            for (int i = 0; i < amount; i++)
+            {
+                // Füge die ItemID zur Speicherliste hinzu
+                inventorySave.Add(item.ItemID);
+
+                // Speichere die Mods und die Rarity für das aktuelle Item
+                inventoryItemMods[currentItem] = item.addedItemMods;
+                inventoryItemRarity[currentItem] = item.itemRarity;
+
+                currentItem++;
+            }
+        }
+
+        // Iteriere über die Liste der Non-Consumables
+        foreach (ItemInstance item in itemList)
+        {
+            // Speichere die ItemID des Non-Consumable-Items
             inventorySave.Add(item.ItemID);
 
+            // Speichere die Mods und die Rarity für das aktuelle Item
             inventoryItemMods[currentItem] = item.addedItemMods;
-
             inventoryItemRarity[currentItem] = item.itemRarity;
 
-            currentItem += 1;
-
+            currentItem++;
         }
     }
 
@@ -194,7 +207,7 @@ public class PlayerSave
         foreach (Talent talent in allTalents)
         {
             //Debug.Log(talent.talentName + "Spezialisierung: " + (int)talent.abilitySpecialization);
-            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked, (int)talent.abilityTalent.baseAbility.abilitySpec));
+            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked, (int)talent.baseAbility.abilitySpec));
         }
 
         //Debug.Log(allTalents.Length);
@@ -321,9 +334,9 @@ public class PlayerSave
             savedActionButtonIndex[i-1] = i;
 
             //Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtonIndex[i]);
-            if((slot.MyUseable is Spell))
+            if(slot.MyUseable is Ability)
             {
-                savedActionButtons[i - 1] = (slot.MyUseable as Spell).GetSpellName;
+                savedActionButtons[i - 1] = (slot.MyUseable as Ability).abilityName;
             }
             else if (slot.MyUseable is ItemInstance)
             {

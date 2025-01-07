@@ -127,7 +127,7 @@ public class ItemDatabase : MonoBehaviour
         return result;
     }
 
-    public static Item GetItemID(string ID)
+    public static Item GetItemByID(string ID)
     {
         //Debug.Log("Searching for item with ID: " + ID);
 
@@ -152,6 +152,35 @@ public class ItemDatabase : MonoBehaviour
         }
 
         Debug.Log("No item with ID: " + ID + " found.");
+
+        return null;
+    }
+
+    public static Item GetItemByName(string name)
+    {
+        //Debug.Log("Searching for item with ID: " + ID);
+
+        for (int i = 0; i < totalLoottable.Count; i++)
+        {
+
+            foreach (Item item in totalLoottable[i])
+            {
+
+                if (item.ItemName == name)
+                {
+                    Item foundItem = item;
+
+                    //Es sollten nun Instanzen von Items geladen werden. Mit dieser Loop werden die Items der SO gefunden, nicht jedoch die Instanzen.
+                    //print("Found item: " + foundItem.ItemName);
+
+                    return foundItem;
+                }
+
+            }
+
+        }
+
+        Debug.Log("No item with ID: " + name + " found.");
 
         return null;
     }

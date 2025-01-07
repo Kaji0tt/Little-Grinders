@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public enum ItemType {Kopf, Brust, Beine, Schuhe, Schmuck, Weapon, Consumable}
 //public enum ItemRarity {Unbrauchbar, Gewöhnlich, Ungewöhnlich, Selten, Episch, Legendär}
 
+
+
 [CreateAssetMenu(fileName = "Item0000", menuName = "Assets/Item")]
 public class Item : ScriptableObject
 {
@@ -24,6 +26,7 @@ public class Item : ScriptableObject
     public Sprite icon;        //scale item.sprite always to correct size, for ItemWorld to Spawn it in according size aswell. either here or in itemworld
     public int percent;
     public int baseLevel;
+    public bool activeItem;
 
     [Space]
     [Header("Flat-Werte")]
@@ -44,15 +47,14 @@ public class Item : ScriptableObject
     public float p_movementSpeed;
 
     [Space]
-    [Header("Consumables")]
-    public int c_hp;
+    [Header("Actives")]
     public bool usable;
+    public Potion itemPotion;
+    public Ability itemAbility;
 
     [HideInInspector]
     public float c_percent;
 
-
-    public Spell itemAction;
 
 
 
@@ -97,12 +99,9 @@ public class ItemInstance :  IMoveable, IUseable
     public float[] percentValues = new float[6];
 
 
-
-    public int c_hp;
-
+    //Actives
     public bool useable;
-
-    public Spell itemAction;
+    public Potion itemPotion;
 
     [HideInInspector]
     public float c_percent;
@@ -117,14 +116,15 @@ public class ItemInstance :  IMoveable, IUseable
     [HideInInspector]
     public List<ItemModsData> addedItemMods = new List<ItemModsData>(); //??
 
-    [HideInInspector]
-    public int amount = 1;
+    //BadManner
+    //[HideInInspector]
+    //public int amount = 1;
 
     private IMoveable MyMoveable;
 
-    private IUseable MyUseAble;
+    //private IUseable MyUseAble;
 
-      
+
     //Wird eigentlich nicht verwendet, sollte aber im Konstruktor gecalled werden.
     //public ItemModsData[] myItemMods; 
 
@@ -142,6 +142,9 @@ public class ItemInstance :  IMoveable, IUseable
         {
             MyMoveable = this;
         }
+
+        if (item.itemPotion != null)
+            itemPotion = item.itemPotion;
         
         //ItemRarity wird ausgelassen, da es erst im Roll berechnet wird.
 
@@ -213,29 +216,30 @@ public class ItemInstance :  IMoveable, IUseable
             p_movementSpeed = item.p_movementSpeed;
         }
 
-        if (item.c_hp != 0)
-        {
-            c_hp = item.c_hp;
-        }
-
         if(useable)
         {
             useable = true;
-            itemAction = item.itemAction;
+
         }
         #endregion
 
+
+
+
         SetValueDescription(this);
-
-
         //Die Rolls müssen in der ItemInstance gecalled werden.
 
-
+ 
 
 
     }
 
 
+
+    public string GetName()
+    {
+        return ItemName;
+    }
 
     /* Incoming - Use soll es ermöglichen, aktive Fähigkeiten auf den Items zu besitzen, welche über die ActionBar gecastet werden sollen.
     public void Use()
@@ -259,11 +263,6 @@ public class ItemInstance :  IMoveable, IUseable
         {
             percentStatMods[i] = new StatModifier(percentValues[i], StatModType.PercentAdd, this);
         }
-
-        if (c_hp != 0)
-            playerStats.Heal(c_hp);
-
-        //if(useable)
 
 
 
@@ -322,7 +321,11 @@ public class ItemInstance :  IMoveable, IUseable
         if (item.percentValues[4] != 0) item.modStrings[8] = "\nErhöht Attack Speed um " +          item.percentValues[4] * 100 + "%"; else item.modStrings[8] = "";
         if (item.percentValues[5] != 0) item.modStrings[9] = "\nErhöht deinen Movementspeed um " +  item.percentValues[5] * 100 + "%"; else item.modStrings[9] = "";
 
-        if (item.c_hp != 0) item.modStrings[10] = "\nHeilt den Spieler um " +                       item.c_hp  + " Lebenspunkte"; else item.modStrings[10] = "";
+        //Setze die Beschreibung auf die Beschreibung des Scriptable Objects des Trankes.
+        if (item.useable)
+            if (item.itemPotion != null)
+                item.modStrings[10] = item.itemPotion.descr;
+
         string finalString;
         finalString = modStrings[0] + modStrings[1] + modStrings[2] + modStrings[3] + modStrings[4] + modStrings[5] + modStrings[6] + modStrings[7] + modStrings[8] + modStrings[9] + modStrings[10];
 
@@ -341,19 +344,28 @@ public class ItemInstance :  IMoveable, IUseable
 
     public void Use()
     {
-        Inventory inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
-        
-        if (this.itemType == ItemType.Consumable)
+        //Inventory inventory = PlayerManager.instance.player.Inventory;
+
+        itemPotion.Use();
+        PlayerManager.instance.player.Inventory.RemoveItem(this);
+        //An dieser Stelle sollte die Referenz zu einem bestimmten Spell geschehen. So bleibt sicher gestellt, dass jedes individuelle Item
+        //unterschiedliche Spells abrufen kann.
+        /*
+        Debug.Log("Item is beeing used.");
+
+        if (itemType == ItemType.Consumable)
         {
+            Debug.Log("Item is a consumable");
             if (inventory.itemList.Contains(this))
             {
-                PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.RemoveItem(this);
-                PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.UseItem(this);
+                Debug.Log("Inventory contains this consumable");
+                PlayerManager.instance.player.Inventory.RemoveItem(this);
+                Use();
             };
 
         };
 
-
+        */
     }
 
     public bool IsOnCooldown()
@@ -388,8 +400,13 @@ public class ItemInstance :  IMoveable, IUseable
 
     public bool IsActive()
     {
-        throw new NotImplementedException();
+        //Do Sepcial Stuff which is called like Update.
+        if ( GetCooldown()== 0)
+            return false;
+        else
+        return true;
     }
+
 
 }
 
