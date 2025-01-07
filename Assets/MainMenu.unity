@@ -875,7 +875,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragSpeed: 150
   zoomSpeed: 0.1
-  maxZoom: 10
+  maxZoomOut: 0
+  maxZoomIn: 0
 --- !u!114 &28952164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6207,9 +6208,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: 
   talentName: Stronger Voidexplosion
   passive: 0
   maxCount: 3
@@ -7715,9 +7715,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: +1 HP
-  talentID: AT1-11
   talentName: Heal_PassiveHP1
   passive: 1
   maxCount: 5
@@ -10201,9 +10200,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: Socket
-  talentID: AT1-11
   talentName: Heal_CombatSocket
   passive: 1
   maxCount: 1
@@ -10677,9 +10675,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: +0,5 AP
-  talentID: AT1-11
   talentName: Heal_PassiveAP1
   passive: 1
   maxCount: 5
@@ -13176,9 +13173,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: 
   talentName: Draining Voidexplosion
   passive: 0
   maxCount: 5
@@ -13567,11 +13563,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: "W\xE4hrend der aktiven Zeitspanne von Heal, \nerhalten Angreifer
     10% der Armor des Spielers \n(x Skillpoints of Heilung_Combat3) als Schaden.\nNicht
     implementiert."
-  talentID: 
   talentName: HealCombat3
   passive: 0
   maxCount: 1
@@ -15543,9 +15538,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: 
   talentName: Draining Life Explosion
   passive: 0
   maxCount: 3
@@ -15779,9 +15773,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: +0,5 AP
-  talentID: AT1-11
   talentName: Heal_PassiveAP2
   passive: 1
   maxCount: 5
@@ -17849,9 +17842,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: 
   talentName: Greater Voidexplosion
   passive: 0
   maxCount: 5
@@ -19677,9 +19669,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: Socket
-  talentID: AT1-11
   talentName: Heal_UtilitySocket
   passive: 1
   maxCount: 1
@@ -20878,9 +20869,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: 
   talentName: Weakening Voidexplosion
   passive: 0
   maxCount: 5
@@ -25261,9 +25251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: Lerpt durch der Kram.
-  talentID: 
   talentName: Void Impulsion
   passive: 0
   maxCount: 1
@@ -27353,9 +27342,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: 
   talentName: Weaponed Voidexplosion
   passive: 0
   maxCount: 1
@@ -27725,10 +27713,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: "Heal erh\xE4lt eine aktive Zeitspanne von +1 Sekunde.\nHeilt zus\xE4tzlich
     um 1% + 10%AP des fehlenden Lebens."
-  talentID: AT1-21
   talentName: Heal_Utility1
   passive: 0
   maxCount: 5
@@ -28377,10 +28364,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 0
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 1129854909}
   description: "Verursacht in einem Umfeld von 0.5 einen direkt Schaden in H\xF6he
     von 5 + 30% AP."
-  talentID: AT1-002
   talentName: Voidexplosion
   passive: 0
   maxCount: 1
@@ -28390,7 +28376,6 @@ MonoBehaviour:
   - {fileID: 550338120}
   - {fileID: 841418216}
   requiredTypePoints: 0
-  baseAbility: {fileID: 1129854909}
 --- !u!114 &1129854909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28575,10 +28560,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: "W\xE4hrend der aktiven Zeitspanne von Heal erh\xE4lt der Spieler
     n x 5% Movement Speed."
-  talentID: AT1-22
   talentName: Heal_Utility2
   passive: 0
   maxCount: 3
@@ -32131,9 +32115,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 0
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 1243800722}
   description: Heilt den Spieler um 10 HP.
-  talentID: AT1-00
   talentName: Heilung
   passive: 0
   maxCount: 1
@@ -32143,7 +32126,6 @@ MonoBehaviour:
   - {fileID: 1108470594}
   - {fileID: 1499897451}
   requiredTypePoints: 0
-  baseAbility: {fileID: 1243800722}
 --- !u!114 &1243800722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32371,8 +32353,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 920448030}
   m_HandleRect: {fileID: 920448029}
   m_Direction: 2
-  m_Value: 0.9810682
-  m_Size: 0.5758504
+  m_Value: 0.9810677
+  m_Size: 0.5758503
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -33404,7 +33386,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragSpeed: 400
   zoomSpeed: 0.1
-  maxZoom: -9
+  maxZoomOut: 0
+  maxZoomIn: 0
 --- !u!222 &1277139701
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -35699,9 +35682,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: Empty Socket
-  talentID: AT1-11
   talentName: Heal_VoidSocket
   passive: 1
   maxCount: 1
@@ -36565,9 +36547,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: 
   talentName: Draining Life Implosion
   passive: 0
   maxCount: 1
@@ -37160,10 +37141,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: "W\xE4hrend der aktiven Zeitspanne erh\xF6ht sich die Waffenst\xE4rke
     um\n(Skillpoints of Heilung_Combat2) x 10% ATT des Spielers."
-  talentID: 
   talentName: Heal_Combat2
   passive: 0
   maxCount: 3
@@ -39845,10 +39825,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: "Heal erh\xE4lt eine aktive Zeitspanne von (Skillpoints of \nHeilung_Combat1),
     w\xE4hrend dieser Zeitspannte erh\xE4lt der Spieler\n20% Armor als extra Armor."
-  talentID: 
   talentName: Heal_Combat1
   passive: 0
   maxCount: 5
@@ -42769,9 +42748,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: Macht auch noch nichts, man sehe und staune.
-  talentID: AT1-12
   talentName: Heilung_Void2
   passive: 0
   maxCount: 3
@@ -44283,9 +44261,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1129854908}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: 
   talentName: Fastening Voidexplosion
   passive: 0
   maxCount: 3
@@ -48182,9 +48159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: +1 HP
-  talentID: AT1-11
   talentName: Heal_PassiveHP2
   passive: 1
   maxCount: 5
@@ -49004,9 +48980,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: +0,5 HP
-  talentID: AT1-11
   talentName: Heal_PassiveAtt2
   passive: 1
   maxCount: 5
@@ -50951,9 +50926,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: 
-  talentID: AT1-13
   talentName: Heal_Void3
   passive: 0
   maxCount: 1
@@ -52704,9 +52678,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 2
   abilitySpecialization: 3
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: +0,5 HP
-  talentID: AT1-11
   talentName: Heal_PassiveAtt1
   passive: 1
   maxCount: 5
@@ -53153,10 +53126,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 0
   abilitySpecialization: 1
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: "Heal erh\xE4lt eine aktive Zeitspanne von (3 + n) Sekunden. /n Pro
     Sekunde erhalten Feinde in Range = 1, 10% AP Schaden."
-  talentID: AT1-11
   talentName: Heal_Void1
   passive: 0
   maxCount: 5
@@ -57380,9 +57352,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityType: 1
   abilitySpecialization: 2
-  abilityTalent: {fileID: 1243800721}
+  baseAbility: {fileID: 0}
   description: Wenn Heal genutzt wird, werden alle Gegner im Umkreis stunned.
-  talentID: AT1-23
   talentName: Heal_Utility3
   passive: 0
   maxCount: 1
@@ -58077,8 +58048,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1172845273}
   m_HandleRect: {fileID: 1172845272}
   m_Direction: 2
-  m_Value: 0.9999961
-  m_Size: 0.4637443
+  m_Value: 0.999996
+  m_Size: 0.46374425
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -14,10 +14,11 @@ public class Scene_LoadNextScene : MonoBehaviour
         //Um auf den Spieler zuzugreifen, muss auf diesen mit PlayerManager.instance.play referiert werden.
         if (collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
         {
-
+            Debug.Log("You got here!");
             //Wenn wir im Tutorial sind (buildIndex 1), erschaffe eine Map und füge sie der GlobalMap Instanz hinzu.
             if (SceneManager.GetActiveScene().buildIndex != 2)
             {
+                Debug.Log("Amd tje game should save.!");
                 //MapSave newMap = new MapSave();
 
                 //GlobalMap.instance.AddNewMap(newMap);

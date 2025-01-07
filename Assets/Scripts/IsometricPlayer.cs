@@ -320,9 +320,13 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
     void TroubleShootGodMode()
     {
-        GetComponent<PlayerStats>().Set_SkillPoints(20);
 
-        print("Void:" + TalentTree.instance.totalVoidSpecPoints+ " Utility:" + TalentTree.instance.totalUtilitySpecPoints +" Combat:"+ TalentTree.instance.totalCombatSpecPoints); 
+        foreach (Talent talent in TalentTree.instance.allTalents)
+        {
+
+            Debug.Log(talent.name + talent.abilitySpecialization + talent.currentCount);
+
+        }
     }
     //Bewege den Charakter über die HorizontalKeys / VerticalKeys aus den ProjectSettings
     void Move()

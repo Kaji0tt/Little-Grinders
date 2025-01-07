@@ -10,13 +10,23 @@ public class Pace_UI : MonoBehaviour
 
     private Image imageComponent;
 
-    private void Awake()
+
+
+    private void Start()
     {
+        Debug.Log("I woke up");
         imageComponent = GetComponent<Image>();
+
+        Debug.Log("Going to Check UI Colors ");
+        SetPaceUIColors();
+
+        Debug.Log("UI Colors good");
     }
 
     public void UpdateChargeUI(int chargeCount)
     {
+        SetPaceUIColors();
+
         // Aktualisiert das angezeigte Sprite basierend auf der Anzahl der Ladungen
         switch (chargeCount)
         {
@@ -37,5 +47,35 @@ public class Pace_UI : MonoBehaviour
                 break;
         }
     }
+
+    private void Update()
+    {
+        IsPaceSkilled();
+    }
+
+    public bool IsPaceSkilled()
+    {
+        if (TalentTree.instance.defaultTalent.currentCount >= 1)
+        {
+            return true;
+        }
+        else return false;
+
+    }
+
+    public void SetPaceUIColors()
+    {
+        if (IsPaceSkilled())
+        {
+            // Setze normale Farben
+            imageComponent.color = Color.white; // Standardfarbe
+        }
+        else
+        {
+            // Setze auf Schwarz-Weiß (Graustufen)
+            imageComponent.color = Color.black; // Grautöne
+        }
+    }
+
 }
 

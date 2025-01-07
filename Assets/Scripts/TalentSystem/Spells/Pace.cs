@@ -17,7 +17,9 @@ public class Pace : Ability
 
     private void Start()
     {
+        speedModifier = new StatModifier(defaultSpeedModifier, StatModType.PercentAdd, this);
         paceUI.UpdateChargeUI(chargeCount);  // Initialisiere die UI-Anzeige basierend auf den aktuellen Ladungen
+
     }
 
     #region UseRegion
@@ -38,7 +40,6 @@ public class Pace : Ability
         paceUI.UpdateChargeUI(chargeCount);
 
         // Füge den StatModifier hinzu, der die Bewegungsgeschwindigkeit erhöht
-        speedModifier = new StatModifier(defaultSpeedModifier, StatModType.PercentAdd, this);
         playerStats.MovementSpeed.AddModifier(speedModifier);
 
         // Setze die aktive Zeit für die aktuelle Aufladung auf die Standarddauer, ohne die maximale Dauer zu überschreiten
@@ -131,7 +132,8 @@ public class Pace : Ability
     {
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
-        Debug.Log("TICK PACE!");
+        
+        Debug.Log("TICK PACE! Current Active:" + chargeCount);
         // Reduziere die aktive Zeit und entferne ggf. den SpeedModifier
         if (activeTime <= 0)
         {
