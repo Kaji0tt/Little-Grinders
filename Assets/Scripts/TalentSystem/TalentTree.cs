@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 
-//
-public enum TalentType { None, Utility, Void, Combat }
+
 public class TalentTree : MonoBehaviour
 {
     //private int points = 11;
@@ -18,18 +18,11 @@ public class TalentTree : MonoBehaviour
         instance = this;
 
         allTalents = FindObjectsByType<Talent>(FindObjectsSortMode.None); // true, um auch inaktive Objekte einzuschließen
-        
+
         foreach (Talent talent in allTalents)
         {
             talent.SetTalentUIVariables();
         }
-
-        //Untersucht alle Talente auf ihre Typ hin und fügt sie entsprechenden Listen hinzu.
-        //CalculateAllTalents();
-
-        //Füge alle Abilitie's welche auch Talente sind einer entsprechenden Liste hinzu.
-        CalculatAllAbilityTalents();
-
 
         //Sorge dafür, das alle Talente locked sind, welche zu Beginn nicht freigeschaltet sind.
         ResetTalents();
@@ -53,45 +46,16 @@ public class TalentTree : MonoBehaviour
     public Talent[] allTalents { get; private set; }
 
     [SerializeField]
-    public Talent defaultTalent; 
+    public Talent[] defaultTalents; 
 
     //Alle Aktiven Fähigkeiten des Talentbaums werden hier einer Liste hinzugefügt.
-    public List<Talent> allAbilityTalents = new List<Talent>();
+    public List<Talent> allTalentSpells = new List<Talent>();
 
-    //Durchsuche die Szene nach sämtliche Elementen, welche sowohl eine Fähigkeit, als auch ein Talent sind.
-    private void CalculatAllAbilityTalents()
-    {
-        AbilityTalent[] allAbilityTalentsArray = FindObjectsByType<AbilityTalent>(FindObjectsSortMode.InstanceID);
 
-        foreach (AbilityTalent abilityTalent in allAbilityTalentsArray)
-            allAbilityTalents.Add(abilityTalent);
-    }
 
     [SerializeField]
     private Text talentPointText;
-    [SerializeField]
-    private Text totalVoidPointsText;
-    [SerializeField]
-    private Text totalUtilityPointsText;
-    [SerializeField]
-    private Text totalCombatPointsText;
 
-    //Für jedes Talent, welches gesetzt wurde, erhöhe die talentTypePoins
-    [HideInInspector]
-    public int totalVoidSpecPoints = 0;
-    [HideInInspector]
-    public int totalUtilitySpecPoints = 0;
-    [HideInInspector]
-    public int totalCombatSpecPoints = 0;
-
-    /*
-    [HideInInspector]
-    public List<Talent> voidTalents = new List<Talent>();
-    [HideInInspector]
-    public List<Talent> lifeTalents = new List<Talent>();
-    [HideInInspector]
-    public List<Talent> combatTalents = new List<Talent>();
-    */
 
     public void TryUseTalent(Talent clickedTalent)
     {
@@ -102,7 +66,7 @@ public class TalentTree : MonoBehaviour
         {
             //if(clickedTalent.abilitySpecialization == Ability.AbilitySpecialization.Spec1)
             //Erhöhe die Speziliaiserungs-Counter des TalentTree's
-            clickedTalent.IncreaseTalentTreeSpecPoints(clickedTalent);
+            //clickedTalent.IncreaseTalentTreeSpecPoints(clickedTalent);
             #region "Tutorial"
             if (PlayerManager.instance.player.GetComponent<PlayerStats>().level == 2 && GameObject.FindGameObjectWithTag("TutorialScript") != null)
             {
@@ -112,22 +76,20 @@ public class TalentTree : MonoBehaviour
             }
             #endregion
 
-            totalVoidPointsText.text = totalVoidSpecPoints.ToString();
-            totalUtilityPointsText.text = totalUtilitySpecPoints.ToString();
-            totalCombatPointsText.text = totalCombatSpecPoints.ToString();
 
             //Falls das geskillte Talent keine Fähigkeit ist, setze die entsprechende Spezialisierung für die Grundfähigkeit.
+            /*
             if (clickedTalent.baseAbility != null)
             {
                 //Setze die Spezialisierung.
-                SetSpecializationOfAbility(clickedTalent);
+                //SetSpecializationOfAbility(clickedTalent);
 
                 //Und füge die Boni auf das Base Talent hinzu.
-                if(!clickedTalent.passive)
-                ApplySpecializationEffects(clickedTalent);
+                //if(!clickedTalent.passive)
+                //ApplySpecializationEffects(clickedTalent);
 
             }
-
+            */
 
             //Falls es sich um ein passives Talent handelt, erhöhe die passiven Werte.
             if (clickedTalent.passive)
@@ -140,31 +102,39 @@ public class TalentTree : MonoBehaviour
 
     }
 
+    /* 07.03: Spells als Affixes, Rebuilding.
     private void SetSpecializationOfAbility(Talent clickedTalent)
     {
         //Falls sich das geklickte Talent auf eine Fähigkeit richtet, setze die Spezialisierung der Grundfähigkeit auf jene, des geklickten Talents
         if(clickedTalent.baseAbility != null)
-        clickedTalent.baseAbility.SetSpec(clickedTalent.abilitySpecialization);
+            /// 07.03: Spells als Affixes, Rebuilding.
+            /// clickedTalent.baseAbility.SetSpec(clickedTalent.abilitySpecialization);
 
-        //Überprüfe allTalents ob die baseAbility identisch ist mit der von clickedTalent,
-        //falls ja, überprüfe ob das entsprechende Talent eine andere Spezialisierung hat, als die der baseAbility.
-        //wenn dies so ist, dann LockTalent(); das entsprechende Talent.
-        foreach (Talent aTalent in allTalents)
-        {
+            //Überprüfe allTalents ob die baseAbility identisch ist mit der von clickedTalent,
+            //falls ja, überprüfe ob das entsprechende Talent eine andere Spezialisierung hat, als die der baseAbility.
+            //wenn dies so ist, dann LockTalent(); das entsprechende Talent.
 
-            if (aTalent.abilitySpecialization != clickedTalent.baseAbility.abilitySpec)
+            /* 07.03: Spells als Affixes, Rebuilding.
+            foreach (Talent aTalent in allTalents)
             {
 
-                aTalent.LockTalent();
 
+                if (aTalent.abilitySpecialization != clickedTalent.baseAbility.abilitySpec)
+                {
+
+                    aTalent.LockTalent();
+
+                }
             }
-        }
-    }
+            */
 
+
+    /* 07.03: Spells als Affixes, Rebuilding.
     private void ApplySpecializationEffects(Talent clickedTalent)
     {
         clickedTalent.ApplySpecialization(clickedTalent);
     }
+    */
 
     void OnEnable()
     {
@@ -179,14 +149,13 @@ public class TalentTree : MonoBehaviour
     }
 
 
-    
+
     public void ResetTalents()
     {
         foreach (Talent talent in allTalents)
         {
-            if (talent == defaultTalent)
+            if (defaultTalents.Contains(talent))
                 talent.Unlock();
-
             else
                 talent.LockTalent();
         }
@@ -197,12 +166,10 @@ public class TalentTree : MonoBehaviour
     public void UpdateTalentPointText()
     {
         
+
         if(PlayerManager.instance.player != null)
         {
             talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
-            totalVoidPointsText.text = totalVoidSpecPoints.ToString();
-            totalUtilityPointsText.text = totalUtilitySpecPoints.ToString();
-            totalCombatPointsText.text = totalCombatSpecPoints.ToString();
         }
 
 

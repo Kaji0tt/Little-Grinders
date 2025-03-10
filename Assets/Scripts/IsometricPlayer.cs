@@ -324,7 +324,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         foreach (Talent talent in TalentTree.instance.allTalents)
         {
 
-            Debug.Log(talent.name + talent.abilitySpecialization + talent.currentCount);
+            Debug.Log(talent.name + talent.currentCount);
 
         }
     }

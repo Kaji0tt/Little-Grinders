@@ -13,61 +13,29 @@ using UnityEngine.EventSystems;
 //Das wäre vergleichbar zum Ability-Holder im Video: https://www.youtube.com/watch?v=ry4I6QyPw4E
 
 //Damit wäre ein Talent der entsprechende Ability Holder - wenn ein Talent geskilled wird, werden in Abhängigkeit von TalentType die AbilityType Integers erhöht.
+
+//values for passive talents
+public enum TalentType { Health, Regenration, Armor, AttackDamage, AbilityPower, Movement };
+
 public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-
-    //bool zum überprüfen, welche Spezialisierungspunkte dem TalenTree hinzugefügt werden sollen.
-    //public bool voidTalent, combatTalent, utilityTalent;
-
-    //Versuch den Typ in einem Enum zu verpacken wegen übersichtlich.
-    public Ability.AbilityType abilityType;
-
-    //Enum Referenz zum Abgleich, ob die Spezialisierung des Talents jener der Base-Ability entspricht.
-    public Ability.AbilitySpecialization abilitySpecialization;
-
-
-    public Ability baseAbility;
-
-    //public AbilityTalent abilityTalent;
-
-    //Description of the Spell
-    [SerializeField]
-    [TextArea]
-    private string description;
-
-    //Der talentName wird zum abgleich der Talente beim Laden des spiels verwendet und dient der Anzeige im interface.
-    public string talentName;
-
+    //Is this talent a passive talent? If not, set the ability.
     public bool passive;
 
-    public string GetDescription
-    {
-        get
-        {
-            return description;
-        }
-    }
-    
-    public virtual void SetDescription(string newDes)
-    {
-        this.description = newDes;
-    }
-    
-    private Image image;
-    
-    public Sprite icon
-    {
-        get
-        {
-            return baseAbility.icon;
-        }
-    }
-    
+    //if its not a passive, set the talent via inspector
+    //HINT: the "EditorTalentPassivToggle.cs" manages the display in unity editor
+    public Ability myAbility;
 
-    private Text textComponent;
+    //name of the talent, needed for loading / saving
+    public string talentName;
 
-    [SerializeField]
-    private int maxCount;
+    //set the value of this passive
+    public TalentType myType;
+
+    //set the value of % increase, gained by 1 point in talent count
+    public float value;
+
+    //the commulated value of the value.
     public int currentCount { get; private set; }
 
     public void Set_currentCount(int newCount)
@@ -75,15 +43,56 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         currentCount = newCount;
     }
 
+    //the maximum count of this passive talent
+    [SerializeField]
+    private int maxCount;
+
+    //the descirption of the talent will be generated automaticly
+    private string description;
+
+    private void Start()
+    {
+        if (passive)
+        {
+            SetDescription(); // Setzt die korrekte Beschreibung für passive Talente
+        }
+        else if (myAbility != null)
+        {
+            description = myAbility.description; // Setzt die Beschreibung für aktive Talente
+            maxCount = 1;
+        }
+        else
+        {
+            description = "Talent has not been declared in Unity editor yet.";
+        }
+
+
+    }
+
+    public void SetDescription()
+    {
+        description = "Increases the players <b>" + myType.ToString() + "</b> by <b>" + value.ToString() + "</b> per skillpoint invested. ";
+
+    }
+
+
+
+    private Image image;
+
+    public Sprite icon;
+    
+
+    private Text textComponent;
+
+
+
+    [HideInInspector]
     public bool unlocked;
 
     //[SerializeField]
     public Talent[] childTalent;
 
-    //Wie viele Punkte in TalentType sind nötig, für dieses Talent?
-    public int requiredTypePoints;
 
-    private int collectedTypePoints;
 
     //Die Weiterleitung zu anderen Talenten macht er in Abhängig von "Pfeilen", also wenn ein PfeilSprite auf eine andere Fähigkeit zeigt, bzw. sie einen Pfeil besitzt, dann wird das Folgetalent freigeschaltet.
     //Kp ob ich das so machen wollen würde, entsprechendes Video hier:
@@ -98,34 +107,12 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             return talentName;
     }
 
-    //CheckForUnlock soll überprüfen, ob im Talenbaum ausreichend Talentpunkte gesammelt wurden, damit das entsprechende Talent freigeschaltet werden kann.
-    public void CheckForUnlock()
-    {
-        //In Abhängigkeit vom Typ der Fähigkeit, wird der Talentbaum auf eine entsprchend ausreichende Anzahl von Spezialisierungspunkten überprüft.
-        switch (baseAbility.abilityType)
-        {
-            case Ability.AbilityType.Combat:
-                if (TalentTree.instance.totalCombatSpecPoints >= baseAbility.requiredTypePoints)
-                    Unlock();
-                break;
 
-            case Ability.AbilityType.Void:
-                if (TalentTree.instance.totalVoidSpecPoints >= baseAbility.requiredTypePoints)
-                    Unlock();
-                break;
-
-            case Ability.AbilityType.Utility:
-                if (TalentTree.instance.totalUtilitySpecPoints >= baseAbility.requiredTypePoints)
-                    Unlock();
-                break;
-
-        }
-    }
-    //AbilityTalent Merge- hinzugefügt 28.10
+ 
     private void RunThroughChildTalents(Talent talent)
     {
         //Und füge dieses der entsprechenden Spezialisierungsliste hinzu. (Spec1 / Spec2 / Spec3)
-        AddSpecializationTalents(talent);
+        //AddSpecializationTalents(talent);
         if (talent.childTalent.Length > 0)
         {
             foreach (Talent childTalent in talent.childTalent)
@@ -137,56 +124,9 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         }
     }
 
-    //AbilityTalent Merge- hinzugefügt 28.10
-    private void AddSpecializationTalents(Talent childTalent)
-    {
-        if (!childTalent.passive)
-            switch (childTalent.abilitySpecialization)
-            {
-                case Ability.AbilitySpecialization.Spec1:
-                    baseAbility.AddSpec1TalentsToList(childTalent);
-                    break;
-
-                case Ability.AbilitySpecialization.Spec2:
-                    baseAbility.AddSpec2TalentsToList(childTalent);
-                    break;
-
-                case Ability.AbilitySpecialization.Spec3:
-                    baseAbility.AddSpec3TalentsToList(childTalent);
-                    break;
-
-            }
-    }
-
-    internal void ApplySpecialization(Talent talent)
-    {
-        if (talent.baseAbility != null)
-        {
-            switch (talent.abilitySpecialization)
-            {
-                case Ability.AbilitySpecialization.Spec1:
-                    //Debug.Log(talent.talentName + " soll auf spec1 geskilled werden.");
-                    baseAbility.ApplySpec1Bonus(talent);
-                    break;
-
-                case Ability.AbilitySpecialization.Spec2:
-                    baseAbility.ApplySpec2Bonus(talent);
-                    break;
-
-                case Ability.AbilitySpecialization.Spec3:
-                    baseAbility.ApplySpec3Bonus(talent);
-                    break;
-
-            }
-        }
-        else
-            Debug.Log("Das geklickte Talent hat keine Basisfähigkeit hinterlegt, oder diese ist null");
-
-
-
-    }
 
     //Void to be called in TalentTree.cs for structural purpose.
+    //Setzt Image und Count Text für jedes einzelne Talent.
     public void SetTalentUIVariables()
     {
         image = GetComponent<Image>();
@@ -205,28 +145,6 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         }
     }
 
-    private void Awake()
-    {
-        //DoubleCheck if an AbilityTalent has been choosen, to make sure there are no problems within the editor.
-        if (!baseAbility)
-            print("Das Talent " + gameObject.name + " hat keine direkte Fähigkeit auf die es sich bezieht.");
-
-
-        if (description == null)
-            SetDescription("Keine Beschreibung angegeben, Basisfähigkeitsbeschreibng: \n" + baseAbility.description);
-
-        if (talentName == null)
-        {
-            if (baseAbility)
-                talentName = new string("Specialization of " + baseAbility.GetName());
-            else
-                talentName = new string("Talentname not set.");
-        }
-
-
-
-
-    }
 
     public bool Click()
     {
@@ -310,49 +228,23 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     }
 
-
-    //Methode, um die entsprechenden Spezialisierungspunkte im TalenTree zu erhöhen.
-    //Parameter ggf. unnötig.
     
-    public void IncreaseTalentTreeSpecPoints(Talent talent)
-    {
-        switch (talent.abilityType)
-        {
-            case Ability.AbilityType.Combat:
-                TalentTree.instance.totalCombatSpecPoints++;
-                break;
-
-            case Ability.AbilityType.Void:
-                TalentTree.instance.totalVoidSpecPoints++;
-                break;
-
-            case Ability.AbilityType.Utility:
-                TalentTree.instance.totalUtilitySpecPoints++;
-                break;
-
-        }
-
-        //Überprüfe, ob entsprechende Talente im TalentTree durch das erreichen von totalSpecPoints freigeschaltet wurde.
-        foreach (AbilityTalent abilityTalent in TalentTree.instance.allAbilityTalents)
-            abilityTalent.CheckForUnlock();
-    }
-
     //Setze die passiven Werte des Talentbaums ein.
     public void ApplyPassivePointsAndEffects(Talent talent)
     {
         Debug.Log("Ist es nicht fragwürdig, das über diese Methode Talente nichts können, außer langweilige FlatStats hinzuzufügen?");
         if(talent.passive)
-        switch (talent.abilityType)
+        switch (myType)
         {
-            case Ability.AbilityType.Combat:
+            case TalentType.Health:
                 PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.AttackPower).AddModifier( new StatModifier(1f, StatModType.Flat));
                 break;
 
-            case Ability.AbilityType.Void:
+            case TalentType.Regenration:
                 PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.AbilityPower).AddModifier(new StatModifier(1f, StatModType.Flat));
                 break;
 
-            case Ability.AbilityType.Utility:
+            case TalentType.Armor:
                 PlayerManager.instance.player.GetComponent<PlayerStats>().GetStat(EntitieStats.Hp).AddModifier( new StatModifier(2, StatModType.Flat));
                 break;
 
@@ -381,34 +273,8 @@ public class Talent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UI_Manager.instance.ShowTooltip(description + '\n' + GetRequirementsOfTalent(this));
+        UI_Manager.instance.ShowTooltip(description);
     }
 
-    public string GetRequirementsOfTalent(Talent talent)
-    {
-        string info = null;
-        switch (talent.baseAbility.abilityType)
-        {
-            case Ability.AbilityType.Combat:
-                if (TalentTree.instance.totalCombatSpecPoints <= talent.baseAbility.requiredTypePoints)
-                    info = "<color=#b27d90>Benötigte Combat-Punkte:<b> " + talent.baseAbility.requiredTypePoints + "</b></color>";
-                return info;
-
-            case Ability.AbilityType.Void:
-                if (TalentTree.instance.totalVoidSpecPoints <= talent.requiredTypePoints)
-                    info = "<color=#b27d90>Benötigte Void-Punkte:<b> " + talent.baseAbility.requiredTypePoints + "</b></color>";
-                return info;
-
-
-            case Ability.AbilityType.Utility:
-                if (TalentTree.instance.totalUtilitySpecPoints <= talent.requiredTypePoints)
-                    info = "<color=#b27d90>Benötigte Utility-Punkte:<b> " + talent.baseAbility.requiredTypePoints + "</b></color>";
-                return info;
-
-
-            default: return info;
-
-        }
-    }
 
 }

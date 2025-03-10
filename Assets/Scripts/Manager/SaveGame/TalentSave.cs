@@ -12,15 +12,13 @@ public class TalentSave
 
     public int spec { get; set; }
     
-    public TalentSave(string name, int points, bool unlocked, int spec)
+    public TalentSave(string name, int points, bool unlocked)
     {
         this.talentName = name;
 
         this.talentPoints = points;
 
         this.unlocked = unlocked;
-
-        this.spec = spec;
 
     }
 
