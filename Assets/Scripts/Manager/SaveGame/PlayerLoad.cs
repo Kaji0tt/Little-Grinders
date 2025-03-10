@@ -105,12 +105,6 @@ public class PlayerLoad : MonoBehaviour
 
             talentTree.UpdateTalentPointText();
 
-            talentTree.totalVoidSpecPoints = data.savedVP; 
-            
-            talentTree.totalUtilitySpecPoints = data.savedLP; 
-            
-            talentTree.totalCombatSpecPoints = data.savedCP;
-
 
 
         }
@@ -135,7 +129,8 @@ public class PlayerLoad : MonoBehaviour
                     {
                             //print("JUHU; FOUND: " + savedTalent.talentName + ", got the Spec: " + (Ability.AbilitySpecialization)savedTalent.spec);
                             //print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
-                            talent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
+                            /// 07.03: Spells als Affixes, Rebuilding.
+                            /// talent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
                         }
 
                 }
@@ -154,22 +149,22 @@ public class PlayerLoad : MonoBehaviour
     private void LoadEquippedItems(PlayerSave data)
     {
         if (data.brust != null)
-            FindObjectOfType<EQSlotBrust>().LoadItem(ItemRolls.GetItemStats(data.brust, data.modsBrust, data.brust_r));
+            FindFirstObjectByType<EQSlotBrust>().LoadItem(ItemRolls.GetItemStats(data.brust, data.modsBrust, data.brust_r));
 
         if (data.hose != null)
-            FindObjectOfType<EQSlotHose>().LoadItem(ItemRolls.GetItemStats(data.hose, data.modsHose, data.hose_r));
+            FindFirstObjectByType<EQSlotHose>().LoadItem(ItemRolls.GetItemStats(data.hose, data.modsHose, data.hose_r));
 
         if (data.kopf != null)
-            FindObjectOfType<EQSlotKopf>().LoadItem(ItemRolls.GetItemStats(data.kopf, data.modsKopf, data.kopf_r));
+            FindFirstObjectByType<EQSlotKopf>().LoadItem(ItemRolls.GetItemStats(data.kopf, data.modsKopf, data.kopf_r));
 
         if (data.schuhe != null)
-            FindObjectOfType<EQSlotSchuhe>().LoadItem(ItemRolls.GetItemStats(data.schuhe, data.modsSchuhe, data.schuhe_r));
+            FindFirstObjectByType<EQSlotSchuhe>().LoadItem(ItemRolls.GetItemStats(data.schuhe, data.modsSchuhe, data.schuhe_r));
 
         if (data.schmuck != null)
-            FindObjectOfType<EQSlotSchmuck>().LoadItem(ItemRolls.GetItemStats(data.schmuck, data.modsSchmuck, data.schmuck_r));
+            FindFirstObjectByType<EQSlotSchmuck>().LoadItem(ItemRolls.GetItemStats(data.schmuck, data.modsSchmuck, data.schmuck_r));
 
         if (data.weapon != null)
-            FindObjectOfType<EQSlotWeapon>().LoadItem(ItemRolls.GetItemStats(data.weapon, data.modsWeapon, data.weapon_r));
+            FindFirstObjectByType<EQSlotWeapon>().LoadItem(ItemRolls.GetItemStats(data.weapon, data.modsWeapon, data.weapon_r));
     }
 
     private void LoadPlayerStats(PlayerSave data)
@@ -213,9 +208,10 @@ public class PlayerLoad : MonoBehaviour
             // Überprüfen, ob der gespeicherte Name einem Zauber entspricht
             foreach (Talent talent in TalentTree.instance.allTalents)
             {
-                if (talent.baseAbility.abilityName == data.savedActionButtons[i])
+            
+                if (talent.talentName == data.savedActionButtons[i] && talent.passive == false)
                 {
-                    slot.LoadAbilityUseable(talent.baseAbility); // Zauber in den Slot laden
+                    slot.LoadAbilityUseable(talent.myAbility); // Zauber in den Slot laden
                     itemLoaded = true; // Markiere, dass ein Item geladen wurde
                     break; // Beende die Schleife, wenn der Zauber gefunden wurde
                 }

@@ -29,7 +29,8 @@ using UnityEngine.UI;
 /// 
 /// </summary>
 
-public class AbilityTalent : Talent, IMoveable,  IPointerEnterHandler, IPointerExitHandler //IUseable,
+//Obsolete.
+public class AbilityTalent : Talent,  IPointerEnterHandler, IPointerExitHandler //IUseable,
 {
 
 
