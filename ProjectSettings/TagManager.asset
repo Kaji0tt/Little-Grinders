@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
   - EQ-Slot
   - Inv-Slot
@@ -24,6 +24,7 @@ TagManager:
   - Tooltip
   - MainMenu
   - ActionButton
+  - TalentNodeBackground
   layers:
   - Default
   - TransparentFX
@@ -67,3 +68,5 @@ TagManager:
   - name: Umgebung_col Layer
     uniqueID: 1784732549
     locked: 0
+  m_RenderingLayers:
+  - Default

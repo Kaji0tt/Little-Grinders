@@ -104,6 +104,7 @@
     <Compile Include="Assets\Scripts\Tutorial\TutorialLootBox.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ClickThrough.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\NonDrawingGraphic.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\TalentTree\SectorVisualizer.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemWorld.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\SaveLoadMenu.cs" />
     <Compile Include="Assets\Scripts\Inventory\Equipment.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\MenuSystem\MenuManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\ScrollRect\FancyScrollRect.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemRolls.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\TalentTreeManager.cs" />
     <Compile Include="Assets\Scripts\Manager\GameEvents.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RadialSlider.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorSliderImage.cs" />
@@ -265,6 +267,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UIGridRenderer.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ExtensionsToggleGroup.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Talent_UI.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\AccordionElement.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\ToolTip.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
@@ -275,6 +278,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\MeshCreator.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\IFancyGridViewContext.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\DragCorrector.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\TalentTree\TalentNode.cs" />
     <Compile Include="Assets\Scripts\IsometricRenderer.cs" />
     <Compile Include="Assets\Scripts\Manager\DirectionCollider.cs" />
     <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
@@ -296,6 +300,7 @@
     <Compile Include="Assets\Scripts\Manager\SaveGame\MapSave.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Core\FancyCell.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorPickerPresets.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\TalentTree\TalentTreeGenerator.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RescalingPanels\RescalePanel.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CurlyUI\CUIImage.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionUpdater.cs" />
@@ -332,7 +337,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UISelectableExtension.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\UI_Buff.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ReadOnlyAttribute.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\TalentTree.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_Sprite.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CurvedText.cs" />
     <Compile Include="Assets\Scripts\Tutorial\TutorialLootBoxCollider.cs" />
@@ -384,7 +388,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\TextPic.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\ExpValueText.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\AbilityTemplate.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Talent.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CurlyUI\CUIBezierCurve.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\PrefabTheme.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ReorderableList\ReorderableListDebug.cs" />

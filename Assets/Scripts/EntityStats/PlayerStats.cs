@@ -18,7 +18,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
     }
     #endregion
 
-    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
+    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed, Regeneration;
 
     public static event Action eventLevelUp;
 
@@ -212,29 +212,44 @@ public class PlayerStats : MonoBehaviour, IEntitie
     {
         LevelUp_need();
 
+
         HandleBuffs();
 
-        /*
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            BuffInstance buffInstance = BuffDatabase.instance.GetInstance("Reflection");
-            print(buffInstance.buffName);
-            buffInstance.ApplyBuff(this);
-        }
-        */
     }
+
+
+
 
 
     public void Start()
     {
-        //currentHp = Hp.Value;
         Gain_xp(1);
-        //Set_level(1);
 
+        StartCoroutine(Regenerate());
+    }
 
+    private bool isRegenerating = true;
 
+    IEnumerator Regenerate()
+    {
+       while(isRegenerating)
+        {
+            yield return new WaitForSeconds(1);
+            if(currentHp < maxHp)
+            {
+                currentHp = Mathf.Min(currentHp + Regeneration.Value, maxHp);
+            }
+        }
+    }
 
-        //activeBuffs = new List<Buff>();
+    public void StartRegeneration()
+    {
+        isRegenerating = true;
+    }
+
+    public void StopRegeneration()
+    {
+        isRegenerating = false;
     }
 
     public CharStats GetStat(EntitieStats stat)
@@ -258,6 +273,9 @@ public class PlayerStats : MonoBehaviour, IEntitie
 
             case EntitieStats.AttackSpeed:
                 return AttackSpeed;
+
+            case EntitieStats.Regeneration:
+                return Regeneration;
 
             default:
                 Debug.Log("No Stat.Value found.");

@@ -20,7 +20,6 @@ public abstract class Ability : MonoBehaviour, IMoveable, IUseable, IDragHandler
 
     public bool isPersistent; // Falls true, bleibt die Fähigkeit aktiv
 
-
     float tickerTimer;
 
     [HideInInspector]

@@ -30,7 +30,7 @@ using UnityEngine.UI;
 /// </summary>
 
 //Obsolete.
-public class AbilityTalent : Talent,  IPointerEnterHandler, IPointerExitHandler //IUseable,
+public class AbilityTalent : Talent_UI,  IPointerEnterHandler, IPointerExitHandler //IUseable,
 {
 
 

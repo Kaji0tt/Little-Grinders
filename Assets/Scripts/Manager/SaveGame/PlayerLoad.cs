@@ -82,14 +82,14 @@ public class PlayerLoad : MonoBehaviour
 
     private void LoadSkillPoints(PlayerSave data)
     {
-        TalentTree talentTree = TalentTree.instance;
+        TalentTreeManager talentTree = TalentTreeManager.instance;
 
         talentTree.ResetTalents();
 
         foreach (TalentSave savedTalent in data.talentsToBeSaved)
         {
             //Debug.Log("loading Talent: " + savedTalent.talentName + " loading it for " + talentTree.gameObject.name);
-            for (int i = 0; i < talentTree.allTalents.Length; i++)
+            for (int i = 0; i < talentTree.allTalents.Count; i++)
             {
                 if (talentTree.allTalents[i].name == savedTalent.talentName)
                 {
@@ -110,7 +110,7 @@ public class PlayerLoad : MonoBehaviour
         }
 
 
-        foreach (Talent talent in talentTree.allTalents)
+        foreach (Talent_UI talent in talentTree.allTalents)
         {
             if (talent.unlocked)
             {
@@ -120,7 +120,7 @@ public class PlayerLoad : MonoBehaviour
 
                     for (int i = 1; i <= talent.currentCount; i++)
                         //talent.ApplyPassivePointsAndEffects(talent); Ehemaliger Ansatz, aber ApplyPassivePointsAndEffects sieht hinfällig im vgl. TryUseTalent aus
-                        TalentTree.instance.TryUseTalent(talent);
+                        TalentTreeManager.instance.TryUseTalent(talent);
                 }
                 else
                 {
@@ -140,7 +140,7 @@ public class PlayerLoad : MonoBehaviour
 
             else
             {
-                talent.LockTalent();
+                talent.Lock();
             }
 
         }
@@ -206,7 +206,7 @@ public class PlayerLoad : MonoBehaviour
             bool itemLoaded = false;
 
             // Überprüfen, ob der gespeicherte Name einem Zauber entspricht
-            foreach (Talent talent in TalentTree.instance.allTalents)
+            foreach (Talent_UI talent in TalentTreeManager.instance.allTalents)
             {
             
                 if (talent.talentName == data.savedActionButtons[i] && talent.passive == false)

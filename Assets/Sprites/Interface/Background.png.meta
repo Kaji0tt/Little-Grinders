@@ -103,38 +103,16 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Background_0
-      rect:
-        serializedVersion: 2
-        x: 158
-        y: 632
-        width: 38
-        height: 38
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 024fa93b6e9dcd4e0800000000000000
-      internalID: -1955448553306655712
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Background_1
       rect:
         serializedVersion: 2
         x: 266
         y: 170
         width: 1454
-        height: 741
+        height: 740
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 45, y: 50, z: 51, w: 47}
       customData: 
       outline: []
       physicsShape: []
@@ -162,6 +140,7 @@ TextureImporter:
     nameFileIdTable:
       Background_0: -1955448553306655712
       Background_1: 7014286043975846214
+      Background_2: 1119926573
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
