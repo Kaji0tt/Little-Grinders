@@ -321,7 +321,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     void TroubleShootGodMode()
     {
 
-        foreach (Talent talent in TalentTree.instance.allTalents)
+        foreach (Talent_UI talent in TalentTreeManager.instance.allTalents)
         {
 
             Debug.Log(talent.name + talent.currentCount);

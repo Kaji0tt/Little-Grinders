@@ -1,12 +1,12 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Talent))]
+[CustomEditor(typeof(Talent_UI))]
 public class EditorTalentInspector : Editor
 {
     public override void OnInspectorGUI()
     {
-        Talent myTalent = (Talent)target;
+        Talent_UI myTalent = (Talent_UI)target;
         SerializedObject so = new SerializedObject(myTalent);
 
         // "passive"-Toggle anzeigen

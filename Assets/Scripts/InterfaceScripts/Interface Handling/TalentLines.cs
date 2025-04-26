@@ -22,7 +22,7 @@ public class TalentLines : MonoBehaviour
     [SerializeField]
     private Transform parent;
     */
-    public void CreateConnection(Talent talent, Talent childTalent)
+    public void CreateConnection(Talent_UI talent, Talent_UI childTalent)
     {
 
         GameObject gameObject = new GameObject("TalentLine", typeof(Image));

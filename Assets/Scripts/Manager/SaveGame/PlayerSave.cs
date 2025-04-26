@@ -202,9 +202,9 @@ public class PlayerSave
     {
         //TalentTree talentTree = GameObject.Find("TalentTree").GetComponent<TalentTree>();
 
-        Talent[] allTalents = Object.FindObjectsOfType<Talent>();
+        Talent_UI[] allTalents = Object.FindObjectsOfType<Talent_UI>();
 
-        foreach (Talent talent in allTalents)
+        foreach (Talent_UI talent in allTalents)
         {
             //Debug.Log(talent.talentName + "Spezialisierung: " + (int)talent.abilitySpecialization);
             talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked));
@@ -212,7 +212,7 @@ public class PlayerSave
 
         //Debug.Log(allTalents.Length);
 
-        TalentTree talentTree = TalentTree.instance;
+        TalentTreeManager talentTree = TalentTreeManager.instance;
 
     }
 

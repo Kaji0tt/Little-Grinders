@@ -5,58 +5,42 @@ using UnityEngine;
 
 public class Heal : Ability
 {
-    public float healAmount = 1f;  // Menge an HP pro Tick
-    public GameObject healAuraEffect; // Effekt für die Heilung
-    public GameObject healAuraTick; // Effekt für Tick-Heilung
+    public float regValue = 1f;  // Menge an HP pro Tick
 
 
-    private GameObject activeHealEffect;
-    private bool isHealing = false; // Zustand der Heilung
+
+    private bool isApplied = false; // Zustand der Heilung
 
     public override void UseBase(IEntitie entitie)
     {
-        if (!isHealing)
+        if(!isApplied)
         {
-            isHealing = true;
-            Debug.Log("Healing activated!");
+            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
-            if (healAuraEffect != null && activeHealEffect == null)
+            playerStats.Regeneration.AddModifier(new StatModifier(regValue, StatModType.Flat));
+
+
+
+            foreach (TalentNode rootNode in TalentTreeGenerator.instance.allNodes)
             {
-                activeHealEffect = Instantiate(healAuraEffect, entitie.GetTransform().position, Quaternion.identity);
-                activeHealEffect.transform.SetParent(entitie.GetTransform());
+                if (rootNode.Depth == 0)
+                    rootNode.uiElement.GetComponent<Talent_UI>().Unlock();
             }
-        }
-        else
-        {
-            isHealing = false;
-            Debug.Log("Healing deactivated, going into cooldown.");
 
-            OnCooldown(entitie);
-            CallAbilityFunctions("cooldown", entitie);
-            //SetState(AbilityState.cooldown); // Hier die neue Methode verwenden
+            isApplied = true;
+
+            Debug.Log("Reg Value is applied");
         }
+        Debug.Log("Regvalue should have been applied.");
     }
 
     public override void OnTick(IEntitie entitie)
     {
-        if (isHealing)
-        {
-            Debug.Log("Healing " + healAmount + " HP per second!");
-            entitie.Heal(Mathf.RoundToInt(healAmount)); // Spieler heilen
 
-            if (healAuraTick != null)
-            {
-                Instantiate(healAuraTick, entitie.GetTransform().position, Quaternion.identity);
-            }
-        }
     }
 
     public override void OnCooldown(IEntitie entitie)
     {
-        if (activeHealEffect != null)
-        {
-            Destroy(activeHealEffect); // Heal-Aura entfernen
-            activeHealEffect = null;
-        }
+
     }
 }
