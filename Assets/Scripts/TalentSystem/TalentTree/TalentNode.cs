@@ -16,7 +16,7 @@ public class TalentNode
 
     //public List<TalentNode> myParents; // Vorgänger-Knoten
 
-    public List<TalentNode> myConnectedNodes; //= new List<TalentNode>();
+    public List<TalentNode> myConnectedNodes = new List<TalentNode>();
 
     public int Depth; // Entfernung von der Wurzel
 
@@ -112,6 +112,24 @@ public class TalentNode
         else return 1;
 
     }
+
+    public bool IsExpanded()
+    {
+        if (myConnectedNodes == null || myConnectedNodes.Count == 0)
+            return false;
+
+        foreach (TalentNode connectedNode in myConnectedNodes)
+        {
+            if (connectedNode.Depth > Depth)
+            {
+                Debug.Log(connectedNode.ID + " is in Depth: " + connectedNode.Depth + ". Thats deeper than " + Depth + " of current Talent: " + ID);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
 
 
