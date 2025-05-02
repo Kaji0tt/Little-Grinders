@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
@@ -21,8 +22,7 @@ public class TalentTreeGenerator : MonoBehaviour
     public float angleVariation = 50f;  // Zufällige Streuung des Winkels
                                          // -> Sollte eigentlich 360° sein, damit auch "rückwärts" richtung Ursprung erkundet werden kann.
 
-    public float sectionWeightMultiplier = 15;
-    //public float hybridBorderProbability = 5;
+    public float sectionWeightMultiplier = 15; // sectionWeightMultiplier sorgt dafür, wie stark die Nähe zum TalentType-Strang bei der Auswahl eines TalentTyps ins Gewicht fällt
     public int depthGeneration = 2; // Ab wann die nächsten Nodes gespawned werden sollen. "Sichtweite im TalentTree"
 
     // Definiere das Mindestgewicht für weit entfernte TalentTypes
@@ -46,20 +46,6 @@ public class TalentTreeGenerator : MonoBehaviour
         //1.
         GenerateTree();
 
-        List<TalentNode> hybridTalents = new List<TalentNode>();
-
-        //Debug.Log um zu überprüfen, ob hybride Talente generiert worden sind.
-        foreach (TalentNode talent in allNodes)
-        {
-
-
-            if(talent.myTypes.Count > 1)
-            {
-                hybridTalents.Add(talent);
-            }
-        }
-
-        //Debug.Log(hybridTalents.Count);
     }
 
     //2.
@@ -79,19 +65,11 @@ public class TalentTreeGenerator : MonoBehaviour
         // 2.2. Erst jetzt UI-Elemente für alle Root-Nodes zeichnen
         SetAndDrawRootNodes();
 
-        // 2.3. Erzeuge eine Kopie der ursprünglichen Root-Nodes und expandiere von diesen ausgehend.
-        List<TalentNode> rootNodes = new List<TalentNode>(allNodes.FindAll(n => n.Depth == 0));
-
-        foreach (TalentNode root in rootNodes)
-        {
-           
-            ExpandNode(root);
-            TalentTreeManager.instance.UpdateTalentTree(root);
-
-        }
+        // 2.3. Erzeuge eine Kopie der ursprünglichen Root-Nodes und expandiere von diesen ausgehend. //02.05 -> Warum?!
 
         // 2.4. Generiere den Tree bis zum Ende von depthGeneration
-        for(int i = 1; i <= depthGeneration; i++)
+        //Fragwürdig. Weg mit dem Bums.
+        for(int i = 0; i <= depthGeneration; i++)
         {
  
             foreach(TalentNode node in GetNodesAtDepth(i))
@@ -100,14 +78,33 @@ public class TalentTreeGenerator : MonoBehaviour
             }
 
         }
+
     }
 
+    //3.1 Führe BFS (Bredth First Search) aus, indem alle Nodes ausgehend von einem bestimmten (dem geklickten Talent) durchgegnagen werden.
+    //Wenn in einer Entfernungn von 2 (depthGeneration) zum geklickten Talent, Talente gefunden werden, gebe diese in einer Liste wieder.
+    public void ExpandBranch(TalentNode clickedTalent)
+    {
+
+        List<TalentNode> nodes2faraway;
+        nodes2faraway = ClaculateAllNodesOfBranchToDepthGen(clickedTalent);
+        foreach (TalentNode foundNode in nodes2faraway)
+        {
+            if(foundNode.Depth > clickedTalent.Depth && !foundNode.IsExpanded())
+            {
+                ExpandNode(foundNode);
+            }
+        }
+    }
+
+    //Erhalte alle Nodes in einer bestimmten Tiefe.
     List<TalentNode> GetNodesAtDepth(int i)
     {
         List<TalentNode> depthNodes = new List<TalentNode>(allNodes.FindAll(n => n.Depth == i));
 
         return depthNodes;
     }
+
 
     /// <summary>
     /// Configuring the Rootnodes of the TalentTree and adding them to the Index.
@@ -122,42 +119,29 @@ public class TalentTreeGenerator : MonoBehaviour
         {
             Vector3 position;
 
-            //Für alle Ursprungstalente
-            if (rootNode.Depth == 0)
-            {
-                // Index für korrekten Winkel
-                int index = allNodes.IndexOf(rootNode);
+            // Index für korrekten Winkel
+            int index = allNodes.IndexOf(rootNode);
 
-                // Gleichmäßige Verteilung um den Ursprung
-                float angle = (index / 6f) * 360f;
+            // Gleichmäßige Verteilung um den Ursprung
+            float angle = (index / 6f) * 360f;
 
-                // Grad in Radiant umwandeln
-                float radians = angle * Mathf.Deg2Rad; 
+            // Grad in Radiant umwandeln
+            float radians = angle * Mathf.Deg2Rad; 
 
-                position = new Vector3(
-                    Mathf.Cos(radians) * radius, // X-Position
-                    Mathf.Sin(radians) * radius, // Y-Position
-                    0
-                );
-            }
-
-            //Scheint keine großen Sinn zu verfolgen aktuell
-            else
-            {
-                // Normal weiter nach unten verzweigen
-                float xOffset = 200f;
-                float yOffset = -100f;
-                position = new Vector3(rootNode.Depth * xOffset, rootNode.ID * yOffset, 0);
-            }
-
-
+            position = new Vector3(
+                Mathf.Cos(radians) * radius, // X-Position
+                Mathf.Sin(radians) * radius, // Y-Position
+                0
+            );
 
             //Setze die entsprechenden Variabeln
             rootNode.myPosition = position;
 
             //Generiere das Interface UI Objekt
-            Talent_UI newNode_UI = Instantiate(myTalentUI, canvasTransform);
-            newNode_UI.SetNode(rootNode);
+            Talent_UI uiNode = Instantiate(myTalentUI, canvasTransform);
+
+            //Setze die Node infos.
+            uiNode.SetNode(rootNode);
 
         }
     }
@@ -165,34 +149,17 @@ public class TalentTreeGenerator : MonoBehaviour
     //Methode um den Talentbaum ausgehend von TalentNode parent zu vergrößern
     public void ExpandNode(TalentNode parent)
     {
-        Debug.Log("Called by TalentID: " + parent.ID + " with Value " + string.Join("/", parent.myTypes));
+        int numChildren;
+        //Debug.Log("Called by TalentID: " + parent.ID + " with Value " + string.Join("/", parent.myTypes));
         //Würfel eine zufällige Zahl für die neuen Kinder
-        int numChildren = UnityEngine.Random.Range(2, 5); // 2 bis 5 Kinder
-
-        Debug.Log("Should Generate atleast " + numChildren + " Children");
-
-        /*
-        //Bei Ursprungstalenten erstelle aufjedenfall 3 Nodes
-        if (parent.Depth == 0)
+        if(parent.Depth == 0)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                TalentNode newNode = CreateChildNode(parent);
-
-                Vector2 validPosition;
-                TalentNode overlappingNode;
-
-                // Wiederhole solange, bis ein Overlap gefunden wurde:
-                while (!CheckForOverlap(parent, out validPosition, out overlappingNode))
-                {
-                    // Hier könntest du ggf. Debug.Log schreiben oder Position neu berechnen
-                }
-
-                // Jetzt kannst du z. B. den gefundenen Overlap verwenden
-                Debug.Log("Overlapping Node gefunden: " + overlappingNode.ID);
-            }
+            numChildren = 3;
         }
-        */
+        else
+        numChildren = UnityEngine.Random.Range(2, 5); // 2 bis 5 Kinder
+
+        //Debug.Log("Should Generate atleast " + numChildren + " Children");
 
         //Für jedes Kind
         for (int i = 0; i < numChildren; i++)
@@ -202,9 +169,9 @@ public class TalentTreeGenerator : MonoBehaviour
 
             Vector2 validPosition;
 
-            if (!CheckForOverlap(parent, out validPosition, out TalentNode overlappingNode))
+            if (!IsTheNewNodeOverlaping(parent, out validPosition, out TalentNode overlappingNode))
             {
-                Debug.Log("Child " + i + " hat keine Überlappung gefunden. Erstelle neue Node.");
+                //Debug.Log("Child " + i + " hat keine Überlappung gefunden. Erstelle neue Node.");
 
                 //Füge anhand der Position des Talents ein Type hinzu.
                 newNode.myPosition = validPosition;
@@ -243,22 +210,26 @@ public class TalentTreeGenerator : MonoBehaviour
             }
             else if(!parent.myConnectedNodes.Contains(overlappingNode))
             {
-                Debug.Log("Child " + i + " hat eine Überlappung gefunden. Ergänze Verbindung, da nicht vorhanden.");
+                //Debug.Log("Child " + i + " hat eine Überlappung gefunden. Ergänze Verbindung, da nicht vorhanden.");
                 // **Verbindung zum neuen Knoten zeichnen
                 DrawConnection(parent.uiElement.GetComponent<RectTransform>(), overlappingNode.uiElement.GetComponent<RectTransform>());
                 overlappingNode.myConnectedNodes.Add(parent);
-                overlappingNode.uiElement.GetComponent<Talent_UI>().Unlockable();
+                //overlappingNode.myTalentUI.SetNode(overlappingNode);
+                overlappingNode.myTalentUI.Unlockable();
 
                 parent.myConnectedNodes.Add(overlappingNode);
-                parent.uiElement.GetComponent<Talent_UI>().Unlockable();
+                //parent.myTalentUI.SetNode(parent);
+                parent.myTalentUI.Unlockable();
             }
             else
             {
-                Debug.Log("Child " + i + " hat eine Überlappung gefunden. Verbindung bereits vorhanden.");
+                //Debug.Log("Child " + i + " hat eine Überlappung gefunden. Verbindung bereits vorhanden.");
             }
 
             //uiNode.GetComponentInChildren<Text>().text = string.Join("/", childNode.myTypes) + ": " + childNode.myCurrentCount + "/" + childNode.myMaxCount;
         }
+
+        parent.hasExpanded = true;
     }
 
     private TalentNode CreateChildNode(TalentNode parent)
@@ -273,7 +244,7 @@ public class TalentTreeGenerator : MonoBehaviour
     }
 
 
-    private bool CheckForOverlap(TalentNode parent, out Vector2 validPosition, out TalentNode overlappingNode)
+    private bool IsTheNewNodeOverlaping(TalentNode parent, out Vector2 validPosition, out TalentNode overlappingNode)
     {
         validPosition = Vector2.zero;
         //overlappingNode = null;
@@ -295,7 +266,7 @@ public class TalentTreeGenerator : MonoBehaviour
         //Berechnung des letztlich gültigen Winkels im Versatz...
         float childAngle = (parentAngle + angleOffset) * Mathf.Deg2Rad;
 
-        Debug.Log("Winkel des Kindes: " + childAngle);
+        //Debug.Log("Winkel des Kindes: " + childAngle);
         //und übernahme in 2 floats zur Konstruktion eines Vektors.
         float childX = parent.myPosition.x + Mathf.Cos(childAngle) * childRadius;
         float childY = parent.myPosition.y + Mathf.Sin(childAngle) * childRadius;
@@ -339,46 +310,63 @@ public class TalentTreeGenerator : MonoBehaviour
         return UnityEngine.Random.Range(-allowedAngleRange, allowedAngleRange);
     }
 
-    public List<TalentNode> ClaculateBranch(TalentNode startNode, int targetDepth)
+
+    // Ermittelt mit Hilfe von Breadth-First Search (BFS) alle TalentNodes, 
+    // die innerhalb einer bestimmten Tiefe vom angeklickten Talent aus erreichbar sind.
+    public List<TalentNode> ClaculateAllNodesOfBranchToDepthGen(TalentNode clickedTalent)
     {
-        // Ergebnisliste für alle Nodes in der gewünschten Tiefe
-        List<TalentNode> result = new List<TalentNode>();
+        // Ergebnisliste für alle gefundenen Nodes innerhalb der Zieltiefe
+        List<TalentNode> result = new();
 
-        // Set zur Vermeidung von Zyklen – speichert alle bereits besuchten Nodes
-        HashSet<TalentNode> visited = new HashSet<TalentNode>();
+        // HashSet um sicherzustellen, dass jeder Node nur einmal besucht wird (Zyklen vermeiden)
+        HashSet<TalentNode> visited = new();
 
-        // Warteschlange für die BFS. Jeder Eintrag besteht aus einem Tuple<Node, aktuelle Tiefe>
-        Queue<(TalentNode node, int depth)> queue = new Queue<(TalentNode, int)>();
+        // BFS-Queue: speichert Tupel (Node, Tiefe des Nodes vom Startknoten aus)
+        Queue<(TalentNode node, int depth)> queue = new();
 
-        // Initialisiere die Suche mit dem Startknoten auf Tiefe 0
-        queue.Enqueue((startNode, 0));
-        visited.Add(startNode);
+        // Start: lege den angeklickten Knoten mit Tiefe 0 in die Queue
+        queue.Enqueue((clickedTalent, 0));
+        visited.Add(clickedTalent);
 
-        while (queue.Count > targetDepth)
+        int targetDepth = depthGeneration; // Zieltiefe, wie weit der Branch gehen darf
+
+        // Jetzt beginnt die eigentliche BFS: solange noch Elemente in der Queue sind
+        while (queue.Count > 0)
         {
+
+            //Debug.Log(queue.Count);
+            // Nimm das vorderste Element aus der Queue
             var (currentNode, currentDepth) = queue.Dequeue();
 
-            // Wenn wir die gewünschte Tiefe erreicht haben, füge den Node zur Ergebnisliste hinzu
+            // **Hier die wichtigste Logik:**
+
+            // Wenn die aktuelle Tiefe <= Zieltiefe ist, füge den Node in die Ergebnisliste ein
             if (currentDepth <= targetDepth)
             {
-                //Debug.Log("Füge Node-ID:" + currentNode.ID + " mit dem Value:" + currentNode.myValue + " hinzu.");
                 result.Add(currentNode);
-                continue;
-            }
 
-            // Wenn die Tiefe kleiner ist, durchlaufe die Nachbarn
-
-            foreach (var neighbor in currentNode.myConnectedNodes)
-            {
-                if (!visited.Contains(neighbor))
+                // Prüfe Nachbarn **nur dann**, wenn noch Platz nach unten ist
+                if (currentDepth < targetDepth)
                 {
-                    visited.Add(neighbor);
-                    queue.Enqueue((neighbor, currentDepth + 1));
+                    foreach (TalentNode neighbor in currentNode.myConnectedNodes)
+                    {
+                        // Nur unbesuchte Nachbarn einfügen UND solche, die tiefer liegen
+                        if (!visited.Contains(neighbor) && neighbor.Depth > currentNode.Depth)
+                        {
+                            visited.Add(neighbor);
+                            queue.Enqueue((neighbor, currentDepth + 1)); // Tiefe +1
+                        }
+                    }
                 }
             }
-
         }
 
+        Debug.Log("You Found " + result.Count + " Nodes via " + clickedTalent.ID + ", und zwar: " + string.Join(", ", result.Select(node => node.ID)));
+        foreach (TalentNode node in result)
+        {
+ 
+            //Debug.Log("ID: " + node.ID + " at Depth: " + node.Depth);
+        }
         return result;
     }
 
@@ -388,7 +376,7 @@ public class TalentTreeGenerator : MonoBehaviour
     {
         if (parent.Depth <= 1) return; // Keine Hybrid-Talente für Root-Nodes
 
-        float sectorSize = 360f / 6; // 6 Talent-Sektoren
+       float sectorSize = 360f / 6; // 6 Talent-Sektoren
         Vector2 childPos = childNode.uiElement.GetComponent<RectTransform>().anchoredPosition;
         float childAngle = Mathf.Atan2(childPos.y, childPos.x) * Mathf.Rad2Deg;
         if (childAngle < 0) childAngle += 360f; // Winkel positiv machen
@@ -404,7 +392,7 @@ public class TalentTreeGenerator : MonoBehaviour
         float hybridBorderThreshold = sectorSize / 4; // Beispielwert: 1/4 des Sektorbereichs
 
         bool isFarFromCenter = distanceFromCenter > hybridBorderThreshold;
-
+        
         if (isFarFromCenter)
         {
             TalentType hybridType;
@@ -419,9 +407,11 @@ public class TalentTreeGenerator : MonoBehaviour
             if (!childNode.myTypes.Contains(hybridType))
             {
                 childNode.myTypes.Add(hybridType);
+                childNode.myTalentUI.SetNode(childNode);
 
             }
         }
+
     }
 
 
@@ -491,50 +481,6 @@ public class TalentTreeGenerator : MonoBehaviour
 
         return types[0]; // Fallback (sollte nie eintreten)
     }
-
-    private TalentNode FindClosestNeighbor(TalentNode node)
-    {
-        float maxHybridDistance = 250f; // Maximale Entfernung für gültige Hybrid-Verbindung
-        TalentNode closestNeighbor = null;
-        float minDistance = maxHybridDistance; // Nur Knoten innerhalb dieser Distanz zulassen
-
-        foreach (TalentNode other in allNodes)
-        {
-            if (other == node) continue;
-
-            float distance = Vector2.Distance(
-                node.uiElement.GetComponent<RectTransform>().anchoredPosition,
-                other.uiElement.GetComponent<RectTransform>().anchoredPosition);
-
-            if (distance < minDistance && SameSector(node, other))
-            {
-                minDistance = distance;
-                closestNeighbor = other;
-            }
-        }
-        return closestNeighbor;
-    }
-
-    // Prüft, ob zwei Knoten im selben Talent-Sektor liegen
-    private bool SameSector(TalentNode a, TalentNode b)
-    {
-        float sectorSize = 360f / 6; // Sechs Talent-Sektoren
-        float angleA = GetAngle(a);
-        float angleB = GetAngle(b);
-
-        int sectorA = Mathf.FloorToInt(angleA / sectorSize);
-        int sectorB = Mathf.FloorToInt(angleB / sectorSize);
-
-        return Mathf.Abs(sectorA - sectorB) <= 1; // Direkt benachbarte Sektoren sind erlaubt
-    }
-
-    // Berechnet den Winkel eines Knotens
-    private float GetAngle(TalentNode node)
-    {
-        Vector2 pos = node.uiElement.GetComponent<RectTransform>().anchoredPosition;
-        return Mathf.Atan2(pos.y, pos.x) * Mathf.Rad2Deg;
-    }
-
 
     public void DrawConnection(RectTransform parentRect, RectTransform childRect)
     {

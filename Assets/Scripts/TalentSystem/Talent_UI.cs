@@ -65,18 +65,17 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             description = myAbility.description; // Setzt die Beschreibung für aktive Talente
             maxCount = 1;
         }
-        else
+
+        //Debug.Log("I got enabled!");
+        if (myNode == null)
         {
-            description = "Talent has not been declared in Unity editor yet.";
+            myNode = GetComponent<TalentNode>();
+            myNode.IsExpanded();
         }
 
-        Debug.Log("I got enabled!");
-        if (myNode == null)
-            myNode = GetComponent<TalentNode>();
 
 
         image = GetComponent<Image>();
-
 
         StartCoroutine(RotateCircle());
         circle.gameObject.SetActive(false);
@@ -89,6 +88,9 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     public void SetNode(TalentNode node)
     {
+
+
+
         node.uiElement = GetComponent<Transform>();
         myRectTransform = GetComponent<RectTransform>();
         myNode = node;
@@ -104,14 +106,13 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             UpdateTalent();
             node.SetGameObject(this);
         }
-
         OwnStart();
     }
 
     private void SetNodeInfo()
     {
 
-        Debug.Log(myNode.myTypes.Count);
+        //Debug.Log(myNode.myTypes.Count);
         //Setze Werte
 
         myTypes = myNode.myTypes;
@@ -232,8 +233,16 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
             if (textComponent != null)
             {
+                if(myNode != null)
                 // Hier kannst du mit der gefundenen Text-Komponente arbeiten
-                textComponent.text = $"{currentCount}/{maxCount}";
+                textComponent.text = $"ID: {myNode.ID}:{currentCount}/{maxCount}";
+
+                else
+                {
+                    Debug.Log("In: SetTalentUIVariables() konnte kein Node gefunden werden.");
+                    textComponent.text = $"{currentCount}/{maxCount}";
+                }
+
             }
         }
     }
@@ -245,7 +254,15 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         {
             currentCount++;
 
-            textComponent.text = $"{currentCount}/{maxCount}";
+            if(myNode != null)
+            textComponent.text = $"ID: {myNode.ID}:{currentCount}/{maxCount}";
+
+            else
+            {
+                Debug.Log("In: Click() konnte kein Node gefunden werden.");
+                textComponent.text = $"{currentCount}/{maxCount}";
+            }
+               // textComponent.text = $"{currentCount}/{maxCount}";
 
             // Nur wenn es sich nicht um den Urpsrung des TalentTrees handelt!
             if (myAbility == null)
@@ -253,7 +270,7 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             if (currentCount == 1)   
             {
                 // Nur einmalig expandieren!
-                TalentTreeGenerator.instance.ExpandNode(myNode);
+                //TalentTreeGenerator.instance.ExpandNode(myNode);
             }
 
             if (currentCount == maxCount)
@@ -270,31 +287,11 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         return false;
     }
 
-    /*
-    public bool Click()
+    public void ChangeImageToExpanded()
     {
-
-        textComponent = transform.GetComponentInChildren<Text>();
-        if (currentCount < maxCount && unlocked)
-        {
-            currentCount++;
-            //Debug.Log("Current Count von " + gameObject.name + " wurde erhöht.");
-            textComponent.text = $"{currentCount}/{maxCount}";
-
-            if (currentCount == maxCount)
-            {
-                for (int i = 0; i < childTalent.Count; i++)
-                {
-                    if (childTalent[i] != null)
-                        childTalent[i].Unlock();
-
-                }
-            }
-            return true;
-        }
-        return false;
+        image = GetComponent<Image>();
+        image.color = Color.yellow;
     }
-    */
 
 
     public bool Unlockable()
@@ -304,12 +301,9 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             if (unlocked) return true;
 
 
-            foreach(TalentNode neighborNode in myNode.myConnectedNodes)
-            {
-                    if (neighborNode != null)
-                    if (neighborNode.myCurrentCount >= neighborNode.myMaxCount)
+            foreach (TalentNode neighbor in myNode.myConnectedNodes)
+                if (neighbor != null && neighbor.myCurrentCount >= neighbor.myMaxCount)
                     Unlock();
-            }
 
             return false;
         }
