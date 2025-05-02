@@ -16,7 +16,7 @@ public class TalentNode
 
     //public List<TalentNode> myParents; // Vorgänger-Knoten
 
-    public List<TalentNode> myConnectedNodes = new List<TalentNode>();
+    public List<TalentNode> myConnectedNodes = new();
 
     public int Depth; // Entfernung von der Wurzel
 
@@ -47,42 +47,27 @@ public class TalentNode
     //Generierung der Urpsrungstalente 
     public TalentNode(int id, TalentNode parent, int depth, TalentType type)
     {
-        ///Initialisieren
-        //myParents = new List<TalentNode>();
-        //myChildren = new List<TalentNode>();
         myConnectedNodes = new List<TalentNode>();
-        myConnectedNodes.Add(parent);
+        if (parent != null)
+            myConnectedNodes.Add(parent);
 
-        //if (parent != null) myConnectedNodes.Add(parent);
         myTypes.Add(type);
 
-
         ID = id;
-
         Depth = depth;
 
-
-        // Startwerte setzen
         myCurrentCount = 0;
-
-        // Hauptäste (Tiefe 0) haben immer myMaxCount = 3, andere variiert zwischen 1 und 5
         myMaxCount = (depth == 0) ? 3 : UnityEngine.Random.Range(1, 6);
-
-        // myValue abhängig von der Tiefe berechnen
         myValue = CalculateValue(depth);
-
-
     }
 
-    //Konstruktor ohny TalenType, für spätere Zuweisung im Generator.
     public TalentNode(int id, TalentNode parent, int depth)
     {
-        //myParents = new List<TalentNode>();
-        //myChildren = new List<TalentNode>();
         myConnectedNodes = new List<TalentNode>();
-        myConnectedNodes.Add(parent);
-        myTypes = new List<TalentType>(); // Noch leer
-        //myPosition = position;
+        if (parent != null)
+            myConnectedNodes.Add(parent);
+
+        myTypes = new List<TalentType>();
 
         ID = id;
         Depth = depth;
@@ -90,8 +75,6 @@ public class TalentNode
         myCurrentCount = 0;
         myMaxCount = (depth == 0) ? 3 : UnityEngine.Random.Range(1, 6);
         myValue = CalculateValue(depth);
-
-
     }
 
     public void SetGameObject(Talent_UI talentUI)

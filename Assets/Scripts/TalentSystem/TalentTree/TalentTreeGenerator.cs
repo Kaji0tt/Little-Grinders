@@ -65,18 +65,11 @@ public class TalentTreeGenerator : MonoBehaviour
         // 2.2. Erst jetzt UI-Elemente für alle Root-Nodes zeichnen
         SetAndDrawRootNodes();
 
-        // 2.3. Erzeuge eine Kopie der ursprünglichen Root-Nodes und expandiere von diesen ausgehend. //02.05 -> Warum?!
-
-        // 2.4. Generiere den Tree bis zum Ende von depthGeneration
-        //Fragwürdig. Weg mit dem Bums.
-        for(int i = 0; i <= depthGeneration; i++)
+        // 2.3 Erweitere den Ast der Baumes ausgehend von den Rootnodes
+        for (int i = 0; i <= depthGeneration; i++)
         {
- 
-            foreach(TalentNode node in GetNodesAtDepth(i))
-            {
-                ExpandNode(node);
-            }
-
+            foreach (TalentNode node in GetNodesAtDepth(i))
+            ExpandNode(node);         
         }
 
     }
@@ -87,13 +80,10 @@ public class TalentTreeGenerator : MonoBehaviour
     {
 
         List<TalentNode> nodes2faraway;
-        nodes2faraway = ClaculateAllNodesOfBranchToDepthGen(clickedTalent);
+        nodes2faraway = ClaculateAllNodesInDistanceTo(clickedTalent, depthGeneration, true);
         foreach (TalentNode foundNode in nodes2faraway)
         {
-            if(foundNode.Depth > clickedTalent.Depth && !foundNode.IsExpanded())
-            {
-                ExpandNode(foundNode);
-            }
+            ExpandNode(foundNode);
         }
     }
 
@@ -146,89 +136,101 @@ public class TalentTreeGenerator : MonoBehaviour
         }
     }
 
-    //Methode um den Talentbaum ausgehend von TalentNode parent zu vergrößern
+    /// <summary>
+    /// Erweitert den Talentbaum ausgehend vom gegebenen Parent-Node.
+    /// Fügt genau numChildren neue, tieferliegende Nodes hinzu oder verbindet sie.
+    /// </summary>
+    /// <param name="parent">Der Ausgangs-Knoten, von dem neue Talente verzweigen sollen</param>
     public void ExpandNode(TalentNode parent)
     {
         int numChildren;
-        //Debug.Log("Called by TalentID: " + parent.ID + " with Value " + string.Join("/", parent.myTypes));
-        //Würfel eine zufällige Zahl für die neuen Kinder
-        if(parent.Depth == 0)
+
+        // Bestimme, wie viele Kinder erstellt werden sollen
+        if (parent.Depth == 0)
         {
-            numChildren = 3;
+            numChildren = 3; // Wurzel-Nodes starten mit 3 Kindern
         }
         else
-        numChildren = UnityEngine.Random.Range(2, 5); // 2 bis 5 Kinder
-
-        //Debug.Log("Should Generate atleast " + numChildren + " Children");
-
-        //Für jedes Kind
-        for (int i = 0; i < numChildren; i++)
         {
-            //Erstelle eine ChildNode mit den Infos: Tiefe, ID und Parent als connectedTalent.
-            TalentNode newNode = CreateChildNode(parent);
+            numChildren = UnityEngine.Random.Range(2, 5); // 2 bis 4 Kinder bei tieferen Knoten
+        }
 
-            Vector2 validPosition;
+        Debug.Log("Starte Expansion für Node " + parent.ID + " → Ziel: " + numChildren + " neue Verbindungen.");
 
-            if (!IsTheNewNodeOverlaping(parent, out validPosition, out TalentNode overlappingNode))
+        int createdChildren = 0;                // Zähler für erfolgreich hinzugefügte Nodes oder Verbindungen
+        int attempts = 0;                       // Wie oft versucht wurde, eine Position zu generieren
+        int maxAttempts = numChildren * 10;     // Sicherheitsgrenze (z. B. 30 Versuche bei 3 Kindern)
+
+        // Wiederhole solange, bis genug Kinder erstellt wurden oder zu viele Versuche unternommen wurden
+        while (createdChildren < numChildren && attempts < maxAttempts)
+        {
+            attempts++;                         // Jeder Schleifendurchlauf zählt als Versuch
+
+            // Versuche, eine neue Position zu finden, ohne mit bestehenden Nodes zu überlappen
+            if (!IsTheNewNodeOverlaping(parent, out Vector2 validPosition, out TalentNode overlappingNode))
             {
-                //Debug.Log("Child " + i + " hat keine Überlappung gefunden. Erstelle neue Node.");
+                Debug.Log($"[Versuch {attempts}] Keine Überlappung gefunden – neue Node wird erstellt.");
 
-                //Füge anhand der Position des Talents ein Type hinzu.
+                // Erstelle neue Node, weise Position und Typ zu
+                TalentNode newNode = CreateChildNode(parent);
                 newNode.myPosition = validPosition;
                 newNode.myTypes.Add(GetTalentType(newNode.myPosition));
 
-                // Erstellt das UI-Element NACH erfolgreicher Positionierung
+                // UI-Element instanziieren und dem Node zuweisen
                 Talent_UI uiNode = Instantiate(myTalentUI, canvasTransform);
-
-                //newNode.uiElement = uiNode.GetComponent<Transform>();
-
                 uiNode.SetNode(newNode);
 
-                // Füge die grafische Oberfläche des neuen Nodes hinzu und überarbeite ziehe eine Verbindung
+                // Node in Datenstruktur aufnehmen
                 allNodes.Add(newNode);
-
                 parent.myConnectedNodes.Add(newNode);
                 newNode.myConnectedNodes.Add(parent);
 
-                // **Verbindung sofort zeichnen**: Parent zu Child
-                if (newNode.Depth != 0) 
+                // Verbindung zeichnen und ggf. Typ-Anpassung bei Hybrid-Talenten
+                if (newNode.Depth != 0)
                 {
-
                     DrawConnection(parent.uiElement.GetComponent<RectTransform>(), uiNode.myRectTransform);
-
-
-                    // Überprüft, ob das Talent ein Hybrid-Talent sein sollte
                     CheckAndAssignHybridType(newNode, parent);
 
+                    // Hybrid-Talente sind schwächer: Wert halbieren
                     if (newNode.myTypes.Count > 1)
                         newNode.myValue /= 2;
                 }
 
-
-
-
+                createdChildren++; // Erfolgreich hinzugefügt
             }
-            else if(!parent.myConnectedNodes.Contains(overlappingNode))
+            else if (!parent.myConnectedNodes.Contains(overlappingNode) && overlappingNode.Depth > parent.Depth)
             {
-                //Debug.Log("Child " + i + " hat eine Überlappung gefunden. Ergänze Verbindung, da nicht vorhanden.");
-                // **Verbindung zum neuen Knoten zeichnen
-                DrawConnection(parent.uiElement.GetComponent<RectTransform>(), overlappingNode.uiElement.GetComponent<RectTransform>());
+                // Die Position ist belegt, aber eine gültige Verbindung ist noch nicht vorhanden
+                Debug.Log($"[Versuch {attempts}] Überlappung mit Node {overlappingNode.ID}, noch keine Verbindung – Verbindung wird hergestellt.");
+
+                // Zeichne Verbindung in UI
+                DrawConnection(
+                    parent.uiElement.GetComponent<RectTransform>(),
+                    overlappingNode.uiElement.GetComponent<RectTransform>());
+
+                // Füge Verbindung hinzu
                 overlappingNode.myConnectedNodes.Add(parent);
-                //overlappingNode.myTalentUI.SetNode(overlappingNode);
                 overlappingNode.myTalentUI.Unlockable();
 
                 parent.myConnectedNodes.Add(overlappingNode);
-                //parent.myTalentUI.SetNode(parent);
                 parent.myTalentUI.Unlockable();
+
+                createdChildren++; // Verbindung zählt als Kind
             }
             else
             {
-                //Debug.Log("Child " + i + " hat eine Überlappung gefunden. Verbindung bereits vorhanden.");
+                // Entweder bereits verbunden oder Tiefe passt nicht – ignoriere diesen Versuch
+                Debug.Log($"[Versuch {attempts}] Überlappung mit ungültigem oder bereits verbundenem Node – wird übersprungen.");
             }
-
-            //uiNode.GetComponentInChildren<Text>().text = string.Join("/", childNode.myTypes) + ": " + childNode.myCurrentCount + "/" + childNode.myMaxCount;
         }
 
+        // Wenn maximale Anzahl an Versuchen erreicht wurde, gib eine Warnung aus
+        if (attempts >= maxAttempts)
+        {
+            Debug.LogWarning($"Maximale Versuchsanzahl erreicht für Node {parent.ID}. Nur {createdChildren} von {numChildren} Kindern konnten erstellt werden.");
+        }
+
+        // Markiere Node als "erweitert"
         parent.hasExpanded = true;
     }
 
@@ -238,62 +240,64 @@ public class TalentTreeGenerator : MonoBehaviour
         int childID = nextID++;
         int newDepth = parent.Depth + 1;
 
-      
 
-            return new TalentNode(childID, parent, newDepth);
+
+        return new TalentNode(childID, parent, newDepth);
     }
 
-
+    /// <summary>
+    /// Überprüft, ob an der potenziellen Position eines neuen Child-Nodes bereits ein anderer Node existiert.
+    /// Gibt entweder eine gültige neue Position oder einen existierenden überlappenden Node zurück.
+    /// </summary>
+    /// <param name="parent">Der übergeordnete Knoten, von dem der neue Child-Node ausgeht</param>
+    /// <param name="validPosition">Ausgabeparameter: gültige neue Position für den Child-Node</param>
+    /// <param name="overlappingNode">Ausgabeparameter: bereits existierender Node an der Zielposition (falls vorhanden)</param>
+    /// <returns>
+    /// true  → ein überlappender Node wurde gefunden (validPosition ist ungültig)
+    /// false → keine Überlappung, validPosition ist nutzbar
+    /// </returns>
     private bool IsTheNewNodeOverlaping(TalentNode parent, out Vector2 validPosition, out TalentNode overlappingNode)
     {
+        // Initialisierung der Rückgabeparameter
         validPosition = Vector2.zero;
-        //overlappingNode = null;
+        overlappingNode = null;
 
-        //Abstand zum Ursprungstalent:
-        //Erschließt sich aus den im Inspektor definierbaren Wert "baseChildRadius" und dem "depthScalingFactor
+        // --- Positionierung des neuen Child-Nodes ---
+
+        // Bestimme zufällige Distanz (Radius) vom Parent zum Kind
         float childRadius = UnityEngine.Random.Range(baseChildRadius, baseChildRadius * (1 + depthScalingFactor));
 
-        //Winkel zum Ursprungstalent:
-        //Erschließt sich ebenfalls aus dem im Inspektor definierten Wert.
-        float angleOffset = GetAngleOfChild(parent.Depth);
+        // Berechne den Winkel, in dem das neue Kind relativ zum Parent platziert werden soll
+        float angleOffset = GetAngleOfChild(parent.Depth); // abhängig von der Tiefe
 
-        //Unsicher, Magie von Chatti:
-        //Vermutlich der Winkel des Ursprungstalents im Verhältnis zum "Ursprung" des UIs(0.0)
-        float parentAngle = Mathf.Atan2(
-            parent.myPosition.y,
-            parent.myPosition.x) * Mathf.Rad2Deg;
+        // Aktueller Winkel des Parent-Nodes (vom Ursprung aus gesehen)
+        float parentAngle = Mathf.Atan2(parent.myPosition.y, parent.myPosition.x) * Mathf.Rad2Deg;
 
-        //Berechnung des letztlich gültigen Winkels im Versatz...
+        // Gesamtwinkel für das Kind = Parent-Winkel + Versatz
         float childAngle = (parentAngle + angleOffset) * Mathf.Deg2Rad;
 
-        //Debug.Log("Winkel des Kindes: " + childAngle);
-        //und übernahme in 2 floats zur Konstruktion eines Vektors.
+        // Berechne Position des Kindes auf Basis von Radius und Winkel
         float childX = parent.myPosition.x + Mathf.Cos(childAngle) * childRadius;
         float childY = parent.myPosition.y + Mathf.Sin(childAngle) * childRadius;
         Vector2 newPosition = new Vector2(childX, childY);
 
-        //Überprüfe ob es an der neuen Position bereits einen Node gibt, ...
+        // --- Überprüfung auf Überlappung mit bestehenden Nodes ---
+
+        // Finde, falls vorhanden, einen existierenden Node an der berechneten Position
         TalentNode foundNode = IsOverlappingWithNode(newPosition);
 
-        //... fals kein Node an der "newPosition gefunden wurde:
         if (foundNode == null)
         {
-            //Gebe die neue Position aus, setze Bool auf True
-            //Debug.Log("Es wurde kein Node zum Überlappen gefunden! Stattdessen wird eine Position zurück gegeben:" + newPosition);
+            // Keine Überlappung: gültige Position gefunden
             validPosition = newPosition;
-            overlappingNode = null;
             return false;
         }
         else
         {
-            //Ansonsten gebe die gefundene Node aus, setze Bool auf False
+            // Überlappung vorhanden: gebe den überlappenden Node zurück
             overlappingNode = foundNode;
-            //Debug.Log("Node wurde gefunden! Wert:" + string.Join(", ", foundNode.myTypes));
             return true;
         }
-
-
-
     }
 
     private float GetAngleOfChild(int depth)
@@ -311,62 +315,54 @@ public class TalentTreeGenerator : MonoBehaviour
     }
 
 
-    // Ermittelt mit Hilfe von Breadth-First Search (BFS) alle TalentNodes, 
-    // die innerhalb einer bestimmten Tiefe vom angeklickten Talent aus erreichbar sind.
-    public List<TalentNode> ClaculateAllNodesOfBranchToDepthGen(TalentNode clickedTalent)
+    /// <summary>
+    /// Ermittelt mit Hilfe von Breadth-First Search (BFS) alle TalentNodes,
+    /// die innerhalb einer bestimmten Tiefe vom Start-Talent aus erreichbar sind.
+    /// Optional kann angegeben werden, ob nur tieferliegende Nodes berücksichtigt werden sollen.
+    /// </summary>
+    /// <param name="clickedTalent">Start-Talentknoten für die Suche</param>
+    /// <param name="onlyDeeperNodes">
+    /// Wenn true, werden nur Nodes mit höherer Tiefe als der Startknoten zurückgegeben.
+    /// Wenn false, werden alle Nodes innerhalb der erlaubten Tiefe zurückgegeben.
+    /// </param>
+    /// <returns>Liste erreichbarer TalentNodes je nach Tiefe und Auswahl</returns>
+    public List<TalentNode> ClaculateAllNodesInDistanceTo(TalentNode clickedTalent, int distance, bool onlyDeeperNodes)
     {
-        // Ergebnisliste für alle gefundenen Nodes innerhalb der Zieltiefe
-        List<TalentNode> result = new();
+        List<TalentNode> result = new();                        // Ergebnisliste
+        HashSet<TalentNode> visited = new();                    // Um doppelte Besuche zu vermeiden
+        Queue<(TalentNode node, int depth)> queue = new();      // BFS-Warteschlange (Node + aktuelle Tiefe)
 
-        // HashSet um sicherzustellen, dass jeder Node nur einmal besucht wird (Zyklen vermeiden)
-        HashSet<TalentNode> visited = new();
+        queue.Enqueue((clickedTalent, 0));                      // Startknoten einfügen
+        visited.Add(clickedTalent);                             // Als besucht markieren
 
-        // BFS-Queue: speichert Tupel (Node, Tiefe des Nodes vom Startknoten aus)
-        Queue<(TalentNode node, int depth)> queue = new();
+        int targetDepth = distance;                             // Maximale Tiefe aus Konfiguration
 
-        // Start: lege den angeklickten Knoten mit Tiefe 0 in die Queue
-        queue.Enqueue((clickedTalent, 0));
-        visited.Add(clickedTalent);
-
-        int targetDepth = depthGeneration; // Zieltiefe, wie weit der Branch gehen darf
-
-        // Jetzt beginnt die eigentliche BFS: solange noch Elemente in der Queue sind
         while (queue.Count > 0)
         {
+            var (currentNode, currentDepth) = queue.Dequeue();  // Nächstes Element verarbeiten
 
-            //Debug.Log(queue.Count);
-            // Nimm das vorderste Element aus der Queue
-            var (currentNode, currentDepth) = queue.Dequeue();
-
-            // **Hier die wichtigste Logik:**
-
-            // Wenn die aktuelle Tiefe <= Zieltiefe ist, füge den Node in die Ergebnisliste ein
-            if (currentDepth <= targetDepth)
+            // Kriterium: Nur dann zur Ergebnisliste hinzufügen, wenn Bedingung erfüllt ist
+            if (!onlyDeeperNodes || currentNode.Depth > clickedTalent.Depth)
             {
                 result.Add(currentNode);
+            }
 
-                // Prüfe Nachbarn **nur dann**, wenn noch Platz nach unten ist
-                if (currentDepth < targetDepth)
+            // Wenn Tiefe noch nicht erreicht → Nachbarn durchsuchen
+            if (currentDepth < targetDepth)
+            {
+                foreach (TalentNode neighbor in currentNode.myConnectedNodes)
                 {
-                    foreach (TalentNode neighbor in currentNode.myConnectedNodes)
+                    if (!visited.Contains(neighbor))
                     {
-                        // Nur unbesuchte Nachbarn einfügen UND solche, die tiefer liegen
-                        if (!visited.Contains(neighbor) && neighbor.Depth > currentNode.Depth)
-                        {
-                            visited.Add(neighbor);
-                            queue.Enqueue((neighbor, currentDepth + 1)); // Tiefe +1
-                        }
+                        visited.Add(neighbor);                             // Besucht markieren
+                        queue.Enqueue((neighbor, currentDepth + 1));       // In Queue mit nächster Tiefe einfügen
                     }
                 }
             }
         }
 
-        Debug.Log("You Found " + result.Count + " Nodes via " + clickedTalent.ID + ", und zwar: " + string.Join(", ", result.Select(node => node.ID)));
-        foreach (TalentNode node in result)
-        {
- 
-            //Debug.Log("ID: " + node.ID + " at Depth: " + node.Depth);
-        }
+        // Debug-Ausgabe zur Analyse
+        Debug.Log("You Found " + result.Count + " Nodes via " + clickedTalent.ID);
         return result;
     }
 
