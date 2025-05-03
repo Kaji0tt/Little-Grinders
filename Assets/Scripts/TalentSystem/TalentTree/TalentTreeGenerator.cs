@@ -143,6 +143,14 @@ public class TalentTreeGenerator : MonoBehaviour
     /// <param name="parent">Der Ausgangs-Knoten, von dem neue Talente verzweigen sollen</param>
     public void ExpandNode(TalentNode parent)
     {
+
+        // Wenn der Knoten bereits das Maximum an Verbindungen hat, verlasse die Methode
+        if (parent.myConnectedNodes.Count >= 3)
+        {
+            Debug.Log($"Node {parent.ID} hat bereits die maximale Anzahl an Verbindungen (3). Abbruch.");
+            return;
+        }
+
         int numChildren;
 
         // Bestimme, wie viele Kinder erstellt werden sollen
@@ -198,30 +206,41 @@ public class TalentTreeGenerator : MonoBehaviour
 
                 createdChildren++; // Erfolgreich hinzugefügt
             }
-            else if (!parent.myConnectedNodes.Contains(overlappingNode) && overlappingNode.Depth > parent.Depth)
-            {
-                // Die Position ist belegt, aber eine gültige Verbindung ist noch nicht vorhanden
-                Debug.Log($"[Versuch {attempts}] Überlappung mit Node {overlappingNode.ID}, noch keine Verbindung – Verbindung wird hergestellt.");
-
-                // Zeichne Verbindung in UI
-                DrawConnection(
-                    parent.uiElement.GetComponent<RectTransform>(),
-                    overlappingNode.uiElement.GetComponent<RectTransform>());
-
-                // Füge Verbindung hinzu
-                overlappingNode.myConnectedNodes.Add(parent);
-                overlappingNode.myTalentUI.Unlockable();
-
-                parent.myConnectedNodes.Add(overlappingNode);
-                parent.myTalentUI.Unlockable();
-
-                createdChildren++; // Verbindung zählt als Kind
-            }
             else
             {
-                // Entweder bereits verbunden oder Tiefe passt nicht – ignoriere diesen Versuch
-                Debug.Log($"[Versuch {attempts}] Überlappung mit ungültigem oder bereits verbundenem Node – wird übersprungen.");
+                // Überlappender Knoten darf nicht bereits verbunden sein UND beide Knoten dürfen nicht voll sein
+                bool canConnect = !parent.myConnectedNodes.Contains(overlappingNode) &&
+                                  parent.myConnectedNodes.Count < 3 &&
+                                  overlappingNode.myConnectedNodes.Count < 3 &&
+                                  overlappingNode.Depth > parent.Depth;
+
+
+                if (canConnect)
+                {
+                    // Die Position ist belegt, aber eine gültige Verbindung ist noch nicht vorhanden
+                    Debug.Log($"[Versuch {attempts}] Überlappung mit Node {overlappingNode.ID}, noch keine Verbindung – Verbindung wird hergestellt.");
+
+                    // Zeichne Verbindung in UI
+                    DrawConnection(
+                        parent.uiElement.GetComponent<RectTransform>(),
+                        overlappingNode.uiElement.GetComponent<RectTransform>());
+
+                    // Füge Verbindung hinzu
+                    overlappingNode.myConnectedNodes.Add(parent);
+                    overlappingNode.myTalentUI.Unlockable();
+
+                    parent.myConnectedNodes.Add(overlappingNode);
+                    parent.myTalentUI.Unlockable();
+
+                    createdChildren++; // Verbindung zählt als Kind
+                }
+                else
+                {
+                    // Entweder bereits verbunden oder Tiefe passt nicht – ignoriere diesen Versuch
+                    Debug.Log($"[Versuch {attempts}] Überlappung mit ungültigem oder bereits verbundenem Node – wird übersprungen.");
+                }
             }
+ 
         }
 
         // Wenn maximale Anzahl an Versuchen erreicht wurde, gib eine Warnung aus
