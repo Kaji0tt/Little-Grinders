@@ -89,7 +89,6 @@ public class EnemyController : MonoBehaviour
 
         //UI Display
         TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
-        maxHpForUI = mobStats.Hp.Value;
 
 
 
@@ -219,7 +218,6 @@ public class EnemyController : MonoBehaviour
 
         
     }
-
 
 
     public Vector2 CalculatePlayerDirection()

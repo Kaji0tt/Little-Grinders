@@ -13,7 +13,7 @@ public class PlayerManager : MonoBehaviour
     {
         instance = this;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<IsometricPlayer>();
-
+        playerStats = player.GetComponent<PlayerStats>();
 
     }
 
@@ -22,5 +22,7 @@ public class PlayerManager : MonoBehaviour
 
 
     public IsometricPlayer player { get; private set; }
+
+    public PlayerStats playerStats { get; private set; }
 
 }

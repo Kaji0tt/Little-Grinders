@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-//Ggf. wäre es sinvoll eine Interface Klasse zu erstellen, welche die gemeinsamkeiten zwischen MobStats und PlayerStats handled. 
+//Ggf. wäre es sinvoll eine Interface Klasse zu erstellen, welche die Gemeinsamkeiten zwischen MobStats und PlayerStats handled. 
 //Buffs und Abilities könnten sich dann stets auf die InterfaceKlasse beziehen.
 public class PlayerStats : MonoBehaviour, IEntitie
 {
@@ -212,8 +212,8 @@ public class PlayerStats : MonoBehaviour, IEntitie
     {
         LevelUp_need();
 
-
         HandleBuffs();
+
 
     }
 
@@ -224,7 +224,6 @@ public class PlayerStats : MonoBehaviour, IEntitie
     public void Start()
     {
         Gain_xp(1);
-
         StartCoroutine(Regenerate());
     }
 
@@ -235,21 +234,11 @@ public class PlayerStats : MonoBehaviour, IEntitie
        while(isRegenerating)
         {
             yield return new WaitForSeconds(1);
-            if(currentHp < maxHp)
+            if(currentHp < Hp.Value)
             {
-                currentHp = Mathf.Min(currentHp + Regeneration.Value, maxHp);
+                currentHp = Mathf.Min(currentHp + Regeneration.Value, Hp.Value);
             }
         }
-    }
-
-    public void StartRegeneration()
-    {
-        isRegenerating = true;
-    }
-
-    public void StopRegeneration()
-    {
-        isRegenerating = false;
     }
 
     public CharStats GetStat(EntitieStats stat)

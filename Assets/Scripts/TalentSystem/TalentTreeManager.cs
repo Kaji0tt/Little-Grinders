@@ -74,15 +74,19 @@ public class TalentTreeManager : MonoBehaviour
         //Nur wenn der Spieler auch über Skillpunkte verfügt
         if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && clickedTalent.Click())
         {
-            //Füge die EIgenschaften des Talents dem Spieler hinzu
-            clickedTalent.ApplyPassivePointsAndEffects(clickedTalent);
 
-            PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
-            UpdateTalentPointText();
             if(clickedTalent.myNode != null)
             {
+                PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
+
+                UpdateTalentPointText();
+
                 clickedTalent.myNode.myCurrentCount++;
+
                 UpdateTalentTree(clickedTalent.myNode);
+
+                //Füge die EIgenschaften des Talents dem Spieler hinzu
+                ApplyPassivePointsAndEffects(clickedTalent);
             }
 
 
@@ -103,8 +107,6 @@ public class TalentTreeManager : MonoBehaviour
         }        
     }
 
-
-
     void OnEnable()
     {
         PlayerStats.eventLevelUp += UpdateTalentPointText;
@@ -117,7 +119,35 @@ public class TalentTreeManager : MonoBehaviour
         PlayerStats.eventLevelUp -= UpdateTalentPointText;
     }
 
+    public void ApplyPassivePointsAndEffects(Talent_UI clickedTalent)
+    {
+        var playerStats = PlayerStats.instance;
 
+        foreach (TalentType type in clickedTalent.myTypes)
+        {
+            EntitieStats stat = type switch
+            {
+                TalentType.HP => EntitieStats.Hp,
+                TalentType.AP => EntitieStats.AbilityPower,
+                TalentType.AD => EntitieStats.AttackPower,
+                TalentType.AR => EntitieStats.Armor,
+                TalentType.AS => EntitieStats.AttackSpeed,
+                TalentType.RE => EntitieStats.Regeneration,
+                _ => EntitieStats.None // Falls du eine ungültige Auswahl abfangen willst
+            };
+
+            if (stat != EntitieStats.None)
+            {
+                //Debug.Log("Cool, adding" + stat + "  with " +  skilledTalent.value + " as PercentMult to the Player.");
+                playerStats.GetStat(stat).AddModifier(new StatModifier(clickedTalent.value * 0.01f, StatModType.PercentAdd));
+            }
+            else
+            {
+                Console.WriteLine("Entweder wurde einem passiven Talent kein Typ zugewiesen, oder es handelt sich um einen Sockel");
+            }
+        }
+
+    }
 
     public void ResetTalents()
     {
@@ -134,13 +164,12 @@ public class TalentTreeManager : MonoBehaviour
 
     public void UpdateTalentPointText()
     {
-       
         if(PlayerManager.instance.player != null)
         {
             talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
         }
-
     }
+
     public void UpdateTalentTree(TalentNode node)
     {
         // Aktualisiere den Text auf dem UI-Element (z.B. 1/3)

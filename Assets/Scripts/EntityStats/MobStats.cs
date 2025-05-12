@@ -234,6 +234,10 @@ public class MobStats : MonoBehaviour, IEntitie
                 //Play a Sound at random.
                 AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
 
+            //Füge eine Hit Animation für den Animator hinzu
+            IsometricRenderer isoRend = GetComponent<IsometricRenderer>();
+            isoRend.AnimateHit();
+
 
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
