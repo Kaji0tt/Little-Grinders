@@ -6206,17 +6206,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Stronger Voidexplosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Stronger Voidexplosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 3
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1003919623}
-  requiredTypePoints: 0
 --- !u!114 &268647400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7713,17 +7713,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: +1 HP
-  talentName: Heal_PassiveHP1
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_PassiveHP1
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1130313203}
-  requiredTypePoints: 0
 --- !u!114 &328825250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10198,17 +10198,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: Socket
-  talentName: Heal_CombatSocket
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_CombatSocket
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 562670273}
-  requiredTypePoints: 0
 --- !u!114 &444091531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10673,17 +10673,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: +0,5 AP
-  talentName: Heal_PassiveAP1
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_PassiveAP1
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1601131375}
-  requiredTypePoints: 0
 --- !u!114 &457855193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13171,17 +13171,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Draining Voidexplosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Draining Voidexplosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 638114921}
-  requiredTypePoints: 0
 --- !u!114 &550338121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13561,18 +13561,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: "W\xE4hrend der aktiven Zeitspanne von Heal, \nerhalten Angreifer
-    10% der Armor des Spielers \n(x Skillpoints of Heilung_Combat3) als Schaden.\nNicht
-    implementiert."
-  talentName: HealCombat3
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: HealCombat3
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent: []
-  requiredTypePoints: 0
 --- !u!114 &562670274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15536,17 +15534,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Draining Life Explosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Draining Life Explosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 3
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1382046196}
-  requiredTypePoints: 0
 --- !u!114 &638114922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15771,17 +15769,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: +0,5 AP
-  talentName: Heal_PassiveAP2
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_PassiveAP2
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1357695855}
-  requiredTypePoints: 0
 --- !u!114 &656378739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17840,17 +17838,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Greater Voidexplosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Greater Voidexplosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 268647399}
-  requiredTypePoints: 0
 --- !u!114 &727172711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19667,17 +19665,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: Socket
-  talentName: Heal_UtilitySocket
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_UtilitySocket
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 2089695000}
-  requiredTypePoints: 0
 --- !u!114 &811797639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20867,17 +20865,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Weakening Voidexplosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Weakening Voidexplosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1653067415}
-  requiredTypePoints: 0
 --- !u!114 &841418217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25249,16 +25247,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: Lerpt durch der Kram.
-  talentName: Void Impulsion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Void Impulsion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent: []
-  requiredTypePoints: 0
 --- !u!114 &1003919624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27340,16 +27338,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Weaponed Voidexplosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Weaponed Voidexplosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent: []
-  requiredTypePoints: 0
 --- !u!114 &1089954266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27711,18 +27709,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: "Heal erh\xE4lt eine aktive Zeitspanne von +1 Sekunde.\nHeilt zus\xE4tzlich
-    um 1% + 10%AP des fehlenden Lebens."
-  talentName: Heal_Utility1
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heal_Utility1
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 328825249}
-  requiredTypePoints: 0
 --- !u!114 &1108470595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28362,20 +28359,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba209d0e519e3ee459b03476f17a7f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 0
-  baseAbility: {fileID: 1129854909}
-  description: "Verursacht in einem Umfeld von 0.5 einen direkt Schaden in H\xF6he
-    von 5 + 30% AP."
-  talentName: Voidexplosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Voidexplosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 1
   childTalent:
   - {fileID: 727172710}
   - {fileID: 550338120}
   - {fileID: 841418216}
-  requiredTypePoints: 0
 --- !u!114 &1129854909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28388,28 +28384,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adc7bbf318b010d42bed89e79f1384c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityName: Void Explosion
-  description: "Verursacht in einem Umfeld von 0.5 einen direkt Schaden in H\xF6he
-    von 5 + 30% AP."
-  cooldownTime: 6
-  activeTime: 0
-  tickTimer: 1
-  image: {fileID: -2422863903076380541, guid: 6dc7009a86b070e41bdb2f3976a3369f, type: 3}
-  abilityType: 0
-  requiredTypePoints: 10
-  abilitySpec: 0
-  spec1Talents: []
-  spec2Talents: []
-  spec3Talents: []
-  baseDamage: 5
-  voidExpEffect: {fileID: 3255141819397502439, guid: 60e52df6bac92d94d94e1b7148a0463a,
-    type: 3}
-  spec1Duration: 6
-  lifeDot: {fileID: 11400000, guid: af40dcbfca061294ea3a57717be9717d, type: 2}
-  spec2extraDamage: 0
-  spec2VoidEplo: {fileID: 544977364057432029, guid: f0c490477a1de6b4c8c2f557ddd43842,
-    type: 3}
-  weakArmor: {fileID: 11400000, guid: 7dabf96d2b344a14bb58f9ca4b84fea7, type: 2}
 --- !u!114 &1129854910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28558,18 +28532,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: "W\xE4hrend der aktiven Zeitspanne von Heal erh\xE4lt der Spieler
-    n x 5% Movement Speed."
-  talentName: Heal_Utility2
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heal_Utility2
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 3
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1812477283}
-  requiredTypePoints: 0
 --- !u!114 &1130313204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32113,19 +32086,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba209d0e519e3ee459b03476f17a7f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 0
-  baseAbility: {fileID: 1243800722}
-  description: Heilt den Spieler um 10 HP.
-  talentName: Heilung
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heilung
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 1
   childTalent:
   - {fileID: 1933207072}
   - {fileID: 1108470594}
   - {fileID: 1499897451}
-  requiredTypePoints: 0
 --- !u!114 &1243800722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32142,19 +32115,10 @@ MonoBehaviour:
   description: Heilt den sofort Spieler um 10 + 10%AP.
   cooldownTime: 15
   activeTime: 0.5
+  isPersistent: 0
   tickTimer: 1
   image: {fileID: 9112533196635184193, guid: 4a1d20c61ab08a14f9b2fe5c33e8bcf0, type: 3}
-  abilityType: 1
-  requiredTypePoints: 0
-  abilitySpec: 0
-  spec1Talents: []
-  spec2Talents: []
-  spec3Talents: []
-  healAmount: 10
-  healAuraEffect: {fileID: 7052221280941909710, guid: 8847e58df1973f240bfa40e77a247d6b,
-    type: 3}
-  healAuraTick: {fileID: 2798696756318865917, guid: 8cc4acbc16c46c047a2266db6c281f25,
-    type: 3}
+  regValue: 1
 --- !u!114 &1243800723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33362,16 +33326,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b69fc70d86f954fb4fa312d7f8aad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  talentUI: {fileID: 0}
+  parentGameObject: {fileID: 0}
+  startAbility: {fileID: 0}
+  allTalents: []
   talentLineParent: {fileID: 1150486649}
   defaultTalent: {fileID: 1243800721}
-  allAbilityTalents: []
   talentPointText: {fileID: 546030528}
-  totalVoidPointsText: {fileID: 117013379}
-  totalUtilityPointsText: {fileID: 1722775587}
-  totalCombatPointsText: {fileID: 109963348}
-  totalVoidSpecPoints: 0
-  totalUtilitySpecPoints: 0
-  totalCombatSpecPoints: 0
+  hpIcon: {fileID: 0}
+  arIcon: {fileID: 0}
+  asIcon: {fileID: 0}
+  adIcon: {fileID: 0}
+  apIcon: {fileID: 0}
+  reIcon: {fileID: 0}
+  defaultIcon: {fileID: 0}
 --- !u!114 &1277139700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35680,17 +35648,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: Empty Socket
-  talentName: Heal_VoidSocket
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_VoidSocket
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1892337622}
-  requiredTypePoints: 0
 --- !u!114 &1357695856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36545,16 +36513,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Draining Life Implosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Draining Life Implosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent: []
-  requiredTypePoints: 0
 --- !u!114 &1382046197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37139,18 +37107,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: "W\xE4hrend der aktiven Zeitspanne erh\xF6ht sich die Waffenst\xE4rke
-    um\n(Skillpoints of Heilung_Combat2) x 10% ATT des Spielers."
-  talentName: Heal_Combat2
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heal_Combat2
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 3
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1834177499}
-  requiredTypePoints: 0
 --- !u!114 &1399004945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39823,18 +39790,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: "Heal erh\xE4lt eine aktive Zeitspanne von (Skillpoints of \nHeilung_Combat1),
-    w\xE4hrend dieser Zeitspannte erh\xE4lt der Spieler\n20% Armor als extra Armor."
-  talentName: Heal_Combat1
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heal_Combat1
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1926274685}
-  requiredTypePoints: 0
 --- !u!114 &1499897452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42746,17 +42712,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: Macht auch noch nichts, man sehe und staune.
-  talentName: Heilung_Void2
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heilung_Void2
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 3
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 656378738}
-  requiredTypePoints: 0
 --- !u!114 &1601131376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44259,17 +44225,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Fastening Voidexplosion
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Fastening Voidexplosion
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 3
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1089954265}
-  requiredTypePoints: 0
 --- !u!114 &1653067416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48157,17 +48123,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: +1 HP
-  talentName: Heal_PassiveHP2
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_PassiveHP2
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 811797638}
-  requiredTypePoints: 0
 --- !u!114 &1812477284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48978,17 +48944,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: +0,5 HP
-  talentName: Heal_PassiveAtt2
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_PassiveAtt2
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 444091530}
-  requiredTypePoints: 0
 --- !u!114 &1834177500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50924,16 +50890,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: 
-  talentName: Heal_Void3
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heal_Void3
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent: []
-  requiredTypePoints: 0
 --- !u!114 &1892337623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52676,17 +52642,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 2
-  abilitySpecialization: 3
-  baseAbility: {fileID: 0}
-  description: +0,5 HP
-  talentName: Heal_PassiveAtt1
   passive: 1
+  myAbility: {fileID: 0}
+  talentName: Heal_PassiveAtt1
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 1399004944}
-  requiredTypePoints: 0
 --- !u!114 &1926274686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53124,18 +53090,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 0
-  abilitySpecialization: 1
-  baseAbility: {fileID: 0}
-  description: "Heal erh\xE4lt eine aktive Zeitspanne von (3 + n) Sekunden. /n Pro
-    Sekunde erhalten Feinde in Range = 1, 10% AP Schaden."
-  talentName: Heal_Void1
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heal_Void1
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 5
+  icon: {fileID: 0}
   unlocked: 0
   childTalent:
   - {fileID: 457855192}
-  requiredTypePoints: 0
 --- !u!114 &1933207073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57350,16 +57315,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9214c813fdf47f64caa8b63ef37e535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityType: 1
-  abilitySpecialization: 2
-  baseAbility: {fileID: 0}
-  description: Wenn Heal genutzt wird, werden alle Gegner im Umkreis stunned.
-  talentName: Heal_Utility3
   passive: 0
+  myAbility: {fileID: 0}
+  talentName: Heal_Utility3
+  myTypes: 
+  value: 0
+  circle: {fileID: 0}
   maxCount: 1
+  icon: {fileID: 0}
   unlocked: 0
   childTalent: []
-  requiredTypePoints: 0
 --- !u!114 &2089695001
 MonoBehaviour:
   m_ObjectHideFlags: 0

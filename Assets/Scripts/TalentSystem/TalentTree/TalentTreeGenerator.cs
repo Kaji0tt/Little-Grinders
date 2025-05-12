@@ -163,7 +163,7 @@ public class TalentTreeGenerator : MonoBehaviour
             numChildren = UnityEngine.Random.Range(2, 5); // 2 bis 4 Kinder bei tieferen Knoten
         }
 
-        Debug.Log("Starte Expansion für Node " + parent.ID + " → Ziel: " + numChildren + " neue Verbindungen.");
+        //Debug.Log("Starte Expansion für Node " + parent.ID + " → Ziel: " + numChildren + " neue Verbindungen.");
 
         int createdChildren = 0;                // Zähler für erfolgreich hinzugefügte Nodes oder Verbindungen
         int attempts = 0;                       // Wie oft versucht wurde, eine Position zu generieren
@@ -177,7 +177,7 @@ public class TalentTreeGenerator : MonoBehaviour
             // Versuche, eine neue Position zu finden, ohne mit bestehenden Nodes zu überlappen
             if (!IsTheNewNodeOverlaping(parent, out Vector2 validPosition, out TalentNode overlappingNode))
             {
-                Debug.Log($"[Versuch {attempts}] Keine Überlappung gefunden – neue Node wird erstellt.");
+                //Debug.Log($"[Versuch {attempts}] Keine Überlappung gefunden – neue Node wird erstellt.");
 
                 // Erstelle neue Node, weise Position und Typ zu
                 TalentNode newNode = CreateChildNode(parent);
@@ -218,7 +218,7 @@ public class TalentTreeGenerator : MonoBehaviour
                 if (canConnect)
                 {
                     // Die Position ist belegt, aber eine gültige Verbindung ist noch nicht vorhanden
-                    Debug.Log($"[Versuch {attempts}] Überlappung mit Node {overlappingNode.ID}, noch keine Verbindung – Verbindung wird hergestellt.");
+                    //Debug.Log($"[Versuch {attempts}] Überlappung mit Node {overlappingNode.ID}, noch keine Verbindung – Verbindung wird hergestellt.");
 
                     // Zeichne Verbindung in UI
                     DrawConnection(
@@ -237,7 +237,7 @@ public class TalentTreeGenerator : MonoBehaviour
                 else
                 {
                     // Entweder bereits verbunden oder Tiefe passt nicht – ignoriere diesen Versuch
-                    Debug.Log($"[Versuch {attempts}] Überlappung mit ungültigem oder bereits verbundenem Node – wird übersprungen.");
+                    //Debug.Log($"[Versuch {attempts}] Überlappung mit ungültigem oder bereits verbundenem Node – wird übersprungen.");
                 }
             }
  
@@ -246,7 +246,7 @@ public class TalentTreeGenerator : MonoBehaviour
         // Wenn maximale Anzahl an Versuchen erreicht wurde, gib eine Warnung aus
         if (attempts >= maxAttempts)
         {
-            Debug.LogWarning($"Maximale Versuchsanzahl erreicht für Node {parent.ID}. Nur {createdChildren} von {numChildren} Kindern konnten erstellt werden.");
+            //Debug.LogWarning($"Maximale Versuchsanzahl erreicht für Node {parent.ID}. Nur {createdChildren} von {numChildren} Kindern konnten erstellt werden.");
         }
 
         // Markiere Node als "erweitert"
@@ -381,7 +381,7 @@ public class TalentTreeGenerator : MonoBehaviour
         }
 
         // Debug-Ausgabe zur Analyse
-        Debug.Log("You Found " + result.Count + " Nodes via " + clickedTalent.ID);
+        //Debug.Log("You Found " + result.Count + " Nodes via " + clickedTalent.ID);
         return result;
     }
 

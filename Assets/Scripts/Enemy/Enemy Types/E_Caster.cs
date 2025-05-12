@@ -76,7 +76,7 @@ public class E_Caster : EnemyController
         if(crnt_attackCD <= 0)
         {
 
-            gameObject.GetComponent<IsometricRenderer>().AnimateCast(CalculatePlayerDirection());
+            gameObject.GetComponent<IsometricRenderer>().AnimateCast();
 
             //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
             crnt_attackCD = 1f / mobStats.AttackSpeed.Value;

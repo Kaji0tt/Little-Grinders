@@ -370,39 +370,6 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     }
 
-    public void ApplyPassivePointsAndEffects(Talent_UI skilledTalent)
-    {
-        var playerStats = PlayerStats.instance;
-
-        foreach (TalentType type in skilledTalent.myTypes)
-        {
-            EntitieStats stat = type switch
-            {
-                TalentType.HP => EntitieStats.Hp,
-                TalentType.AP => EntitieStats.AbilityPower,
-                TalentType.AD => EntitieStats.AttackPower,
-                TalentType.AR => EntitieStats.Armor,
-                TalentType.AS => EntitieStats.AttackSpeed,
-                TalentType.RE => EntitieStats.Regeneration,
-                _ => EntitieStats.None // Falls du eine ungültige Auswahl abfangen willst
-            };
-
-            if (stat != EntitieStats.None)
-            {
-                //Debug.Log("Cool, adding" + stat + "  with " +  skilledTalent.value + " as PercentMult to the Player.");
-                playerStats.GetStat(stat).AddModifier(new StatModifier(skilledTalent.value * 0.01f, StatModType.PercentAdd));
-            }
-            else
-            {
-                Console.WriteLine("Entweder wurde einem passiven Talent kein Typ zugewiesen, oder es handelt sich um einen Sockel");
-            }
-        }
-
-    }
-
-
-
-
     public void OnPointerClick(PointerEventData eventData)
     {
         TalentTreeManager.instance.TryUseTalent(this);

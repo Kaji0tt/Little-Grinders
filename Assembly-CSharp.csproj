@@ -107,6 +107,7 @@
     <Compile Include="Assets\Scripts\TalentSystem\TalentTree\SectorVisualizer.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemWorld.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\SaveLoadMenu.cs" />
+    <Compile Include="Assets\Scripts\Player\IsometricPlayer.cs" />
     <Compile Include="Assets\Scripts\Inventory\Equipment.cs" />
     <Compile Include="Assets\Scripts\Manager\SceneManagement\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\TroubleShootPlayerPrefs.cs" />
@@ -131,11 +132,11 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionsInputManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\PaginationManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\SuperellipsePoints.cs" />
+    <Compile Include="Assets\Scripts\Player\IsometricRenderer.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Schuhe.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buff.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UIPrimitiveBase.cs" />
     <Compile Include="Assets\Scripts\Manager\PlayerManager.cs" />
-    <Compile Include="Assets\Scripts\IsometricPlayer.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardExpanding2D.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\Gradient.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\ScrollRect\FancyScrollRectCell.cs" />
@@ -167,7 +168,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
-    <Compile Include="Assets\Scripts\WeaponController.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyAnimationUtility.cs" />
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotHose.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\SortingOrder.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewContext.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\Events\HSVChangedEvent.cs" />
     <Compile Include="Assets\Scripts\EntityStats\PlayerStats.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\HorizontalScrollSnap.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyData.cs" />
     <Compile Include="Assets\IG_Canvas_MM.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Inventory\SortingOrderCanvas.cs" />
@@ -279,7 +281,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\IFancyGridViewContext.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\DragCorrector.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\TalentTree\TalentNode.cs" />
-    <Compile Include="Assets\Scripts\IsometricRenderer.cs" />
     <Compile Include="Assets\Scripts\Manager\DirectionCollider.cs" />
     <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\BoxSlider.cs" />

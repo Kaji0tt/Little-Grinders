@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e663a59e9f027e64db241af9863da555, type: 3}
+  m_Name: Moka
+  m_EditorClassIdentifier: 
+  myName: 
+  myAttackDamage: 0
+  myAbilityPower: 0
+  myMovementSpeed: 0
+  myAttackSpeed: 0
+  myArmor: 0
+  myHealth: 0
+  myRegeneration: 0
+  mySpriteSheet: {fileID: 1375931221, guid: b24815244a7623d48948779bbef8cbd8, type: 3}
+  myAnimatorController: {fileID: 0}
+  myRenderer: {fileID: 0}
