@@ -77370,6 +77370,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7839687458473625230, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839687458473625233, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.046
+      objectReference: {fileID: 0}
     - target: {fileID: 7839687458832828457, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -77378,7 +77388,7 @@ PrefabInstance:
     - target: {fileID: 7839687458832828457, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.464
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7839687458832828457, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
         type: 3}
@@ -77424,12 +77434,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 9fc98c34957b3264d9d520b9c40494d9, type: 2}
+      objectReference: {fileID: 9100000, guid: de3cee5f5c96ab347a5b5856597a54f2, type: 2}
     - target: {fileID: 7839687458832828463, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
         type: 3}
       propertyPath: spriteSheet
       value: 
-      objectReference: {fileID: 1375931221, guid: b24815244a7623d48948779bbef8cbd8,
+      objectReference: {fileID: -389391650, guid: dbcfd50ce3cbb944db4e80262d4b6417,
         type: 3}
     - target: {fileID: 7839687458832828465, guid: 0cb07fea32cbf7c45bbb4804aafa9fd3,
         type: 3}

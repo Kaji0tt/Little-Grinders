@@ -17,6 +17,7 @@ public static class EnemyAnimationUtility
         if (importer != null)
         {
             importer.spritePixelsPerUnit = 800;
+            importer.spritePivot = new Vector2(0.5f, 0.0f);
             importer.SaveAndReimport(); // Anwenden der Änderungen
         }
 
