@@ -303,7 +303,7 @@ public class EnemyController : MonoBehaviour
 
                 //Calle Außerdem das GameEvent, dass der Spieler angegriffen wurde.
                 //GameEvents.current.PlayerWasAttacked(mobStats, mobStats.AttackPower.Value);
-                isoRenderer.AttackAnimation();
+                isoRenderer.PlayAttack();
 
                 //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
                 mobStats.attackCD = 1f / mobStats.AttackSpeed.Value;
