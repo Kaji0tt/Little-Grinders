@@ -2,6 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AnimationState
+{
+    Idle,
+    Walk,
+    Attack,
+    Cast,
+    Hit,
+    Die
+}
 
 //Update: 11.05 -> Diese Klasse sollte ein einheitliches System für alle Animationen bekommen.
 
@@ -72,6 +81,11 @@ public class IsometricRenderer : MonoBehaviour
             PlayWalk();
         else
             PlayIdle();
+    }
+
+    public void Play(AnimationState state)
+    {
+        animator.Play(state.ToString());
     }
 
     public void PlayIdle() => animator.Play("Idle");
@@ -154,8 +168,8 @@ public class IsometricRenderer : MonoBehaviour
 
     }
 
-
-    public void AttackAnimation()
+    /*
+    public void PlayAttack()
     {
 
 
@@ -168,12 +182,12 @@ public class IsometricRenderer : MonoBehaviour
         //print(attackDuration);
         if (attackDuration <= 0)
         {
-
+            animator.Play("Attack");
         }
 
 
     }
-
+    */
 
 
     //helper functions
