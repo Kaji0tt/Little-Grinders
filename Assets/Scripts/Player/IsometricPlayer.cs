@@ -267,14 +267,14 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
             // Minimiere den Input von mouseDirection2D, damit die IsoRenderer Idle-Array auswählt.
             mouseDirection2D = Vector2.ClampMagnitude(mouseDirection2D, 0.1f);
-            isoRenderer.SetDirection(mouseDirection2D); // Setze die Blickrichtung des IsoRenderers basierend auf der Mausposition
+            isoRenderer.SetPlayerDirection(mouseDirection2D); // Setze die Blickrichtung des IsoRenderers basierend auf der Mausposition
         }
         else
         {
             // Wenn Tastatureingabe vorliegt, verwende diese für die Blickrichtung
             Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
             inputVector = Vector2.ClampMagnitude(inputVector, 1);
-            isoRenderer.SetDirection(inputVector); // Setze die Blickrichtung des IsoRenderers basierend auf der Tastatureingabe
+            isoRenderer.SetPlayerDirection(inputVector); // Setze die Blickrichtung des IsoRenderers basierend auf der Tastatureingabe
         }
         isoRenderer.SetWeaponDirection(DirectionCollider.instance.dirVector, weaponGameObject.GetComponent<Animator>());
 

@@ -21,7 +21,8 @@ public class EnemyController : MonoBehaviour
     //Transform character_transform;
 
     //Create Reference to currents GO Agent
-    NavMeshAgent navMeshAgent;
+
+    public NavMeshAgent navMeshAgent { get; private set; }
 
     //Create Reference to currents GO isoRenderer
     IsometricRenderer isoRenderer;
@@ -190,7 +191,7 @@ public class EnemyController : MonoBehaviour
                 navMeshAgent.stoppingDistance = attackRange / 2;
 
                 //Setze das Target des Mobs und starte "chasing"
-                SetDestination();
+                navMeshAgent.SetDestination(PlayerManager.instance.player.transform.position);
 
                 //Falls die Spieler-Distanz kleiner ist, als die Attack Range
                 if (player_distance < attackRange && navMeshAgent.velocity == Vector3.zero)
@@ -213,7 +214,7 @@ public class EnemyController : MonoBehaviour
             else
             {
                 navMeshAgent.SetDestination(transform.position);
-                isoRenderer.SetNPCDirection(new Vector2(0, 0));
+                //isoRenderer.SetNPCDirection(new Vector2(0, 0));
             }
 
         
@@ -273,29 +274,6 @@ public class EnemyController : MonoBehaviour
 
         if (mobStats.Hp.Value <= 0)
             Destroy(gameObject);
-    }
-
-    public void SetDestination()
-    {
-        if (PlayerManager.instance.player.transform != null)
-        {
-
-            navMeshAgent.SetDestination(PlayerManager.instance.player.transform.position);
-
-            // Hier wird die "Blickrichtung" bestimmt, welche sich an dem Charakter orientiert.
-            Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
-
-            Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
-
-            inputVector = Vector2.ClampMagnitude(inputVector, 1);
-
-            if (isoRenderer.inCombatStance == false)
-            isoRenderer.SetNPCDirection(inputVector);
-
-            //irgendwo hier ist noch n kleiner fehler
-
-
-        }
     }
 
     public virtual void Attack()

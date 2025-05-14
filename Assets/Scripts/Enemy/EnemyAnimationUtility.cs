@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEditor.Animations;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -14,16 +15,20 @@ public static class EnemyAnimationUtility
         // Pfad und ImportSettings holen
         string path = AssetDatabase.GetAssetPath(spriteSheet);
         TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+
         if (importer != null)
         {
             importer.spritePixelsPerUnit = 800;
-            importer.spritePivot = new Vector2(0.5f, 0.0f);
-            importer.SaveAndReimport(); // Anwenden der Änderungen
+            importer.SaveAndReimport(); // Änderungen anwenden
         }
 
         // Alle Sprites aus dem SpriteSheet laden
         Object[] allAssets = AssetDatabase.LoadAllAssetsAtPath(path);
-        Sprite[] sprites = allAssets.OfType<Sprite>().ToArray();
+
+        Sprite[] sprites = allAssets
+        .OfType<Sprite>()
+        .OrderBy(s => ExtractNumber(s.name))
+        .ToArray();
 
         if (sprites.Length == 0)
         {
@@ -42,7 +47,7 @@ public static class EnemyAnimationUtility
 
         // AnimatorController erzeugen
         string controllerPath = $"{animDir}/{baseName}_Controller.controller";
-        var controller = UnityEditor.Animations.AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
+        var controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
 
         // Gruppiere Sprites in feste 8er-Blöcke
         var groups = new Dictionary<string, List<Sprite>>();
@@ -87,7 +92,7 @@ public static class EnemyAnimationUtility
             {
                 keyFrames[i] = new ObjectReferenceKeyframe
                 {
-                    time = i / 6f,
+                    time = i / clip.frameRate,
                     value = frames[i]
                 };
             }
@@ -96,9 +101,37 @@ public static class EnemyAnimationUtility
 
             string clipPath = $"{animDir}/{baseName}_{clipName}.anim";
             AssetDatabase.CreateAsset(clip, clipPath);
-            controller.AddMotion(clip);
+            var state = controller.AddMotion(clip);
+            state.name = clipName; // ⬅️ Nur "Idle", "Walk", etc. im State-Machine-Namen
+        }
+
+        // 🔁 AnimatorController dem aktiven GameObject zuweisen
+        GameObject selectedGO = Selection.activeGameObject;
+        if (selectedGO != null)
+        {
+            Animator animator = selectedGO.GetComponent<Animator>();
+            if (animator == null)
+                animator = selectedGO.AddComponent<Animator>();
+
+            animator.runtimeAnimatorController = controller;
+
+            Debug.Log($"✅ {baseName} AnimatorController wurde dem GameObject '{selectedGO.name}' zugewiesen.");
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Kein GameObject ausgewählt. AnimatorController konnte nicht zugewiesen werden.");
         }
 
         Debug.Log($"✅ Generated {groups.Count} animations and AnimatorController for '{baseName}' at '{animDir}'");
+    }
+
+    private static object ExtractNumber(string name)
+    {
+        string number = new string(name.Reverse()
+            .TakeWhile(char.IsDigit)
+            .Reverse()
+            .ToArray());
+
+        return int.TryParse(number, out int result) ? result : 0;
     }
 }
