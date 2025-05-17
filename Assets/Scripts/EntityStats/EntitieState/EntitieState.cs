@@ -1,5 +1,10 @@
 using UnityEngine;
 
+/// <summary>
+/// Der Vorteil einer individuellen Klassenstruktur gegenüber Enum-States ist die Flexible Anpassungsfähigkeit.
+/// Bei individuellen Abläufen, Animationen, States oder Bewegungen, können diese stets als eigene Klasse geerbt von Entitie State hinzugefügt werden.
+/// </summary>
+
 public abstract class EntitieState
 { 
     protected EnemyController controller;
@@ -14,8 +19,11 @@ public abstract class EntitieState
     public virtual void Update() { }
 }
 
+/// <summary>
+/// Die einzelnen Animationen, welche zu bestimmten Entities gehören. 
+/// In der Enemy State Logic befinden sich alle Animations States die eine feindliche Entitie üblicherweise braucht.
+/// </summary>
 
-//Enemy State Logic
 #region Enemy State Logic
 public class IdleState : EntitieState
 {
@@ -56,6 +64,8 @@ public class ChaseState : EntitieState
 
     public override void Update()
     {
+        //controller.myTarget = controller.Player;
+
         if (controller.myTarget == null)
         {
             controller.TransitionTo(new IdleState(controller));
@@ -74,16 +84,19 @@ public class ChaseState : EntitieState
 
 public class AttackState : EntitieState
 {
-    private float attackCooldown = 1.2f;
+    public AttackState(EnemyController controller) : base(controller) { }
+
+    //private float attackCooldown;
     private float timer;
 
-    public AttackState(EnemyController controller) : base(controller) { }
+
 
     public override void Enter()
     {
+        //attackCooldown = 
         controller.StopMoving();
         controller.PerformAttack();
-        timer = attackCooldown;
+        timer = controller.mobStats.attackCD;
     }
 
     public override void Update()
@@ -100,9 +113,14 @@ public class AttackState : EntitieState
         {
             // Wieder angreifen oder zurück zu Chase
             if (controller.IsInAttackRange())
+            {
                 controller.TransitionTo(new AttackState(controller));
+            }
             else
+            {
+                Debug.Log("Ouh! Player out of range, lets Chase!");
                 controller.TransitionTo(new ChaseState(controller));
+            }
         }
     }
 }

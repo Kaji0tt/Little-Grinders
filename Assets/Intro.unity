@@ -9303,7 +9303,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0631f36ac84554335b5b1f70f25312fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inCombatStance: 0
   spriteSheet: {fileID: 0}
   generatedAnimator: {fileID: 0}
 --- !u!95 &306612086
@@ -50611,8 +50610,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1155331146}
   m_HandleRect: {fileID: 1155331145}
   m_Direction: 2
-  m_Value: 0.9999963
-  m_Size: 0.46374434
+  m_Value: 0.999996
+  m_Size: 0.4637443
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -73519,7 +73518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0631f36ac84554335b5b1f70f25312fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inCombatStance: 0
   spriteSheet: {fileID: 0}
   generatedAnimator: {fileID: 0}
 --- !u!54 &1716960237

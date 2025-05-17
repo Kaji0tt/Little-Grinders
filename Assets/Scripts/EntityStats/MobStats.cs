@@ -237,6 +237,7 @@ public class MobStats : MonoBehaviour, IEntitie
             //Füge eine Hit Animation für den Animator hinzu
             IsometricRenderer isoRend = GetComponent<IsometricRenderer>();
             isoRend.PlayHit();
+            //isoRend.
 
 
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
