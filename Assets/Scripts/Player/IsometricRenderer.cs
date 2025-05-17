@@ -60,20 +60,6 @@ public class IsometricRenderer : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
-    {
-        UpdateMovement();
-    }
-
-    public void UpdateMovement()
-    {
-        if(myController != null && myController.myNavMeshAgent != null)
-        if (myController.myNavMeshAgent.velocity.sqrMagnitude > 0.01f)
-            PlayWalk();
-        else
-            PlayIdle();
-    }
-
     public void Play(AnimationState state)
     {
         if (state == currentState) return;
@@ -97,6 +83,7 @@ public class IsometricRenderer : MonoBehaviour
         {
             isPerformingAction = true;
             StartCoroutine(ResetActionAfterAnimation());
+            Debug.Log("Attack should be performing!");
         }
     }
 
