@@ -89,7 +89,7 @@ public class CharacterCombat : MonoBehaviour
                 isSlowing = true;
 
                 weaponAnimator.SetBool("isAttacking", true);
-                isoRenderer.inCombatStance = true;
+                isoRenderer.ToggleActionState(true);
                 currentState = CombatState.ComboWindow;
                 break;
 
@@ -123,7 +123,7 @@ public class CharacterCombat : MonoBehaviour
                 playerStats.MovementSpeed.RemoveModifier(attackSlow);
                 weaponAnimator.SetBool("isAttacking", false);
                 weaponAnimator.speed = 1.0f; // Reset der Animator-Geschwindigkeit
-                isoRenderer.inCombatStance = false;
+                isoRenderer.ToggleActionState(false);
                 currentState = CombatState.Idle;
                 break;
 
