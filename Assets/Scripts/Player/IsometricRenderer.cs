@@ -30,15 +30,6 @@ public class IsometricRenderer : MonoBehaviour
     int lastWeaponDirection;
 
     private EnemyController myController;
-    /*
-    //Arrays for NPC's which only have 4 Directions -> dieser bereich kann sehr gerne überarbeitet werden. die logik soll komplett dem neuen system angepasst werden.
-    public static readonly string[] runNPC4Directions = { "Run NE", "Run SE", "Run SW", "Run NW" };
-    public static readonly string[] static4Directions = { "Static NE", "Static SE", "Static SW", "Static NW" };
-    public static readonly string[] attack4Directions = { "Attack NE", "Attack SE", "Attack SW", "Attack NW" };
-    public static readonly string[] hit4Directions = { "Hit NE", "Hit SE", "Hit SW", "Hit NW" };
-    */
-
-
 
     //The animator the IsoRenderer refers to. Typically attached to the animated GameObject, e.g. the Enemy.
     Animator animator;
