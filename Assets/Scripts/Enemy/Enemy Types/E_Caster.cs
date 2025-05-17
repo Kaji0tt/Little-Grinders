@@ -46,29 +46,9 @@ public class E_Caster : EnemyController
 
     }
 
-    public override void CheckForAggro()
-    {
-        casterNavMeshAgent = GetComponent<NavMeshAgent>();
-
-        player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
-
-        if (player_distance <= aggroRange || pulled)
-        {
-            //Setze die Agent.StoppingDistance gleich mit der AttackRange des Mobs
-            //If the StoppingDistance is smaller then the attackRange, faster mobs may attack while the player is running away
-            //navMeshAgent.stoppingDistance = attackRange / 2;
-            casterNavMeshAgent.stoppingDistance = attackRange;
 
 
-            //Falls die Spieler-Distanz kleiner ist, als die Attack Range
-            if (player_distance < attackRange && casterNavMeshAgent.velocity == Vector3.zero)
-            {
-                Attack();
-            }
-        }      
-    }
-
-
+    /*
     public override void Attack()
     {
         crnt_attackCD -= Time.deltaTime;
@@ -93,7 +73,7 @@ public class E_Caster : EnemyController
         }
 
     }
-
+    */
     private void InstantiateProjectile()
     {
         //Calculate the Direction of the Player and Offset the Origin of the Projectile by "projectileOffsetXY"

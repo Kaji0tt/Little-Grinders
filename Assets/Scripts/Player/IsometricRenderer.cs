@@ -34,11 +34,11 @@ public class IsometricRenderer : MonoBehaviour
     //The animator the IsoRenderer refers to. Typically attached to the animated GameObject, e.g. the Enemy.
     Animator animator;
 
+    private AnimationState currentState = AnimationState.Idle;
+
+    private bool isPerformingAction = false;
 
 
-
-    //Setze Zeit für die Combat-Stance (später sollte diese vom AttackSpeed des Schwertes beeinflusst werden.)
-    public bool inCombatStance;
 
     //Set the Spritesheet to auto Animate this enemy.
     public Sprite spriteSheet; 
@@ -54,7 +54,7 @@ public class IsometricRenderer : MonoBehaviour
     {
         //cache the animator component
         animator = GetComponent<Animator>();
-        inCombatStance = false;
+        isPerformingAction = false;
 
         myController = GetComponent<EnemyController>();
 
@@ -67,8 +67,8 @@ public class IsometricRenderer : MonoBehaviour
 
     public void UpdateMovement()
     {
-        if(myController != null && myController.navMeshAgent != null)
-        if (myController.navMeshAgent.velocity.sqrMagnitude > 0.01f)
+        if(myController != null && myController.myNavMeshAgent != null)
+        if (myController.myNavMeshAgent.velocity.sqrMagnitude > 0.01f)
             PlayWalk();
         else
             PlayIdle();
@@ -76,7 +76,43 @@ public class IsometricRenderer : MonoBehaviour
 
     public void Play(AnimationState state)
     {
+        if (state == currentState) return;
+
+        // Sofort Idle/Walk zulassen
+        if (state == AnimationState.Idle || state == AnimationState.Walk)
+        {
+            animator.Play(state.ToString());
+            currentState = state;
+            return;
+        }
+
+        // Falls eine Action läuft, überspringe neue Befehle
+        if (isPerformingAction) return;
+
         animator.Play(state.ToString());
+        currentState = state;
+
+        // Falls Animation blocking ist, starte Timer
+        if (state == AnimationState.Attack || state == AnimationState.Cast || state == AnimationState.Hit || state == AnimationState.Die)
+        {
+            isPerformingAction = true;
+            StartCoroutine(ResetActionAfterAnimation());
+        }
+    }
+
+    private IEnumerator ResetActionAfterAnimation()
+    {
+        yield return null; // Ein Frame warten, um den neuen State korrekt zu erfassen
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float animLength = stateInfo.length;
+
+        yield return new WaitForSeconds(animLength);
+
+        isPerformingAction = false;
+
+        // Optional: automatisch zurück zu Idle
+        if (currentState != AnimationState.Die)
+            Play(AnimationState.Idle);
     }
 
     public void PlayIdle() => animator.Play("Idle");
@@ -86,7 +122,10 @@ public class IsometricRenderer : MonoBehaviour
     public void PlayCast() => animator.Play("Cast");
     public void PlayDie() => animator.Play("Die");
 
-
+    public void ToggleActionState(bool active)
+    {
+        isPerformingAction = active;
+    }
 
     public void SetPlayerDirection(Vector2 direction){
 
@@ -118,7 +157,7 @@ public class IsometricRenderer : MonoBehaviour
         string[] directionArray; //= null;
 
         //Falls die Combat-Stance des Charakters im Animation-Controller ist #IsometricPlayer.Attack(), führe folgende Animationen aus.
-        if (weaponAnim.GetBool("isAttacking") == true && inCombatStance == false)
+        if (weaponAnim.GetBool("isAttacking") == true && isPerformingAction == false)
         {
 
             //Aktiviere den Animation-Controller, falls dieser deaktivert war.
