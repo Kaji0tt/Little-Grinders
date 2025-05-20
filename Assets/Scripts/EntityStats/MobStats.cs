@@ -11,6 +11,8 @@ public class MobStats : MonoBehaviour, IEntitie
     public bool pulled;
     //public int experience { get; private set; }
 
+    public bool isDead { get; private set; } = false;
+
     private void Start()
     {
         CalculateMobStats();
@@ -235,16 +237,17 @@ public class MobStats : MonoBehaviour, IEntitie
                 AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
 
             //Füge eine Hit Animation für den Animator hinzu
-            IsometricRenderer isoRend = GetComponent<IsometricRenderer>();
-            isoRend.PlayHit();
+            //IsometricRenderer isoRend = GetComponent<IsometricRenderer>();
+            //isoRend.PlayHit();
+
             //isoRend.
 
 
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
 
-        if (Hp.Value <= 0)
-            Die();
+        //if (Hp.Value <= 0)
+        //    Die();
     }
 
 
@@ -270,8 +273,8 @@ public class MobStats : MonoBehaviour, IEntitie
             pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
 
-        if (Hp.Value <= 0)
-            Die();
+        //if (Hp.Value <= 0)
+        //    Die();
     }
 
     public void Heal(int healAmount)
@@ -289,20 +292,33 @@ public class MobStats : MonoBehaviour, IEntitie
 
     public void Die()
     {
+
+        if(!isDead)
+        StartCoroutine(DelayedDeath());
+    }
+
+    private IEnumerator DelayedDeath()
+    {
+        this.isDead = true;
+
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
         playerStats.Gain_xp(xp);
 
         if (this.level >= 1)
-            //Eine Funktion die in ABhängigkeit vom Moblevel, die ANzahl der Drops erhöhen soll. Hier wäre ein Lerp-Funktion sinnvoll.
-            for (int i = 0; i <= level / 2; i++)
-            {
-                ItemDatabase.instance.GetWeightDrop(gameObject.transform.position);
-            }
+        {
+            ItemDatabase.instance.GetWeightDrop(transform.position);
+        }
 
-        Destroy(this);
 
+        // Warte 10 Sekunden (Todesanimation + Liegenbleiben)
+        yield return new WaitForSeconds(10f);
+
+        Debug.Log("Mob will vanish in 10");
+
+        // Erst jetzt zerstören
         Destroy(gameObject);
+
     }
 
 

@@ -83,7 +83,7 @@ public class IsometricRenderer : MonoBehaviour
         {
             isPerformingAction = true;
             StartCoroutine(ResetActionAfterAnimation());
-            Debug.Log("Attack should be performing!");
+            //Debug.Log("Attack should be performing!");
         }
     }
 
@@ -97,15 +97,12 @@ public class IsometricRenderer : MonoBehaviour
 
         isPerformingAction = false;
 
-        // Optional: automatisch zurück zu Idle
-        if (currentState != AnimationState.Die)
-            Play(AnimationState.Idle);
     }
 
-    public void PlayIdle() => animator.Play("Idle");
-    public void PlayWalk() => animator.Play("Walk");
-    public void PlayAttack() => animator.Play("Attack");
-    public void PlayHit() => animator.Play("Hit");
+    //public void PlayIdle() => animator.Play("Idle");
+    //public void PlayWalk() => animator.Play("Walk");
+    //public void PlayAttack() => animator.Play("Attack");
+    //public void PlayHit() => animator.Play("Hit");
     public void PlayCast() => animator.Play("Cast");
     public void PlayDie() => animator.Play("Die");
 

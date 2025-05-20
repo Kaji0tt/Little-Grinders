@@ -1,8 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
-/// Der Vorteil einer individuellen Klassenstruktur gegenüber Enum-States ist die Flexible Anpassungsfähigkeit.
-/// Bei individuellen Abläufen, Animationen, States oder Bewegungen, können diese stets als eigene Klasse geerbt von Entitie State hinzugefügt werden.
+/// Der Vorteil einer individuellen Klassenstruktur gegenÃ¼ber Enum-States ist die Flexible AnpassungsfÃ¤higkeit.
+/// Bei individuellen AblÃ¤ufen, Animationen, States oder Bewegungen, kÃ¶nnen diese stets als eigene Klasse geerbt von Entitie State hinzugefÃ¼gt werden.
 /// </summary>
 
 public abstract class EntitieState
@@ -20,36 +21,97 @@ public abstract class EntitieState
 }
 
 /// <summary>
-/// Die einzelnen Animationen, welche zu bestimmten Entities gehören. 
-/// In der Enemy State Logic befinden sich alle Animations States die eine feindliche Entitie üblicherweise braucht.
+/// Die einzelnen Animationen, welche zu bestimmten Entities gehÃ¶ren. 
+/// In der Enemy State Logic befinden sich alle Animations States die eine feindliche Entitie Ã¼blicherweise braucht.
 /// </summary>
 
 #region Enemy State Logic
 public class IdleState : EntitieState
 {
-    public IdleState(EnemyController controller) : base(controller) { }
+    public IdleState(EnemyController controller) : base(controller) 
+    {
+        mySpawnPoint = controller.transform.position;
 
-    public override void Update()
+    }
+
+    // ðŸ‘‡ Lokale Parameter nur fÃ¼r das Wandern
+    private Vector3 mySpawnPoint;
+    private float myIdleTimer = 0f;
+    private float myNextWanderTime = 3f;
+    private readonly float myWanderRadius = 2f;
+    private readonly float myWaitBetweenWandersMin = 1f;
+    private readonly float myWaitBetweenWandersMax = 4f;
+
+
+    public override void Enter()
     {
         float distance = Vector3.Distance(controller.Player.position, controller.transform.position);
 
-        if (distance < controller.aggroRange || controller.mobStats.pulled)
+        controller.StopMoving();
+
+        if (controller.myNavMeshAgent == null)
+            controller.AddEssentialComponents();
+
+        if (controller.myIsoRenderer != null)
+            controller.myIsoRenderer.Play(AnimationState.Idle);
+
+        myIdleTimer = 0f;
+        myNextWanderTime = Random.Range(myWaitBetweenWandersMin, myWaitBetweenWandersMax);
+    }
+
+    public override void Update()
+    {
+
+        // Falls Spieler zu nahe ist -> Zustandswechsel
+        if (Vector3.Distance(controller.transform.position, controller.Player.position) <= controller.aggroRange)
         {
-            controller.myTarget = controller.Player;
-            controller.TransitionTo(new ChaseState(controller));
+            controller.TransitionTo(new ChaseState(controller)); // musst du ggf. anpassen
+            return;
         }
 
-        if(controller != null)
-        {
-            //Debug.Log("Controller of #" + controller.name + " is not null!");
+        HandleWander();
 
-            if(controller.myIsoRenderer != null)
-            {
-                //Debug.Log("IsoRenderer of #" + controller.name + " is not null!");
+    }
+
+    public void HandleWander()
+    {
+        myIdleTimer += Time.deltaTime;
+
+        if (myIdleTimer >= myNextWanderTime)
+        {
+            TryWander();
+
+            myIdleTimer = 0f;
+            myNextWanderTime = Random.Range(myWaitBetweenWandersMin, myWaitBetweenWandersMax);
+        }
+
+        // Wenn am Ziel angekommen â†’ zurÃ¼ck zu Idle
+        if (!controller.myNavMeshAgent.pathPending &&
+            controller.myNavMeshAgent.remainingDistance <= controller.myNavMeshAgent.stoppingDistance)
+        {
+            controller.StopMoving();
+            if (controller.myIsoRenderer != null)
                 controller.myIsoRenderer.Play(AnimationState.Idle);
-            }
         }
+    }
 
+    private void TryWander()
+    {
+
+        Vector3 randomDirection = Random.insideUnitSphere * myWanderRadius;
+        randomDirection += mySpawnPoint;
+        randomDirection.y = controller.transform.position.y;
+
+        Debug.Log("You got here and the next direction should be:" + randomDirection);
+
+        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, myWanderRadius, NavMesh.AllAreas))
+        {
+            controller.myNavMeshAgent.SetDestination(hit.position);
+
+            if (controller.myIsoRenderer != null)
+                controller.myIsoRenderer.Play(AnimationState.Walk);
+
+        }
     }
 }
 
@@ -64,19 +126,24 @@ public class ChaseState : EntitieState
 
     public override void Update()
     {
-        //controller.myTarget = controller.Player;
 
-        if (controller.myTarget == null)
-        {
-            controller.TransitionTo(new IdleState(controller));
-            return;
-        }
+        float distance = Vector3.Distance(controller.Player.position, controller.transform.position);
 
         controller.MoveToTarget();
 
         if (controller.IsInAttackRange())
         {
             controller.TransitionTo(new AttackState(controller));
+        }
+
+        if (distance > controller.aggroRange)
+        {
+
+            controller.myIsoRenderer.Play(AnimationState.Idle);
+
+            controller.StopMoving();
+
+            return;
         }
 
     }
@@ -111,17 +178,34 @@ public class AttackState : EntitieState
 
         if (timer <= 0f)
         {
-            // Wieder angreifen oder zurück zu Chase
+            // Wieder angreifen oder zurÃ¼ck zu Chase
             if (controller.IsInAttackRange())
             {
                 controller.TransitionTo(new AttackState(controller));
             }
             else
             {
-                Debug.Log("Ouh! Player out of range, lets Chase!");
+                //Debug.Log("Ouh! Player out of range, lets Chase!");
                 controller.TransitionTo(new ChaseState(controller));
             }
         }
+    }
+}
+
+public class HitState : EntitieState
+{
+    public HitState(EnemyController controller) : base(controller) { }
+
+    public override void Enter()
+    {
+        controller.myIsoRenderer.Play(AnimationState.Hit);
+    }
+
+    public override void Update()
+    {
+
+
+
     }
 }
 
@@ -132,8 +216,8 @@ public class DeadState : EntitieState
     public override void Enter()
     {
         controller.myIsoRenderer.Play(AnimationState.Die);
-        controller.myNavMeshAgent.isStopped = true;
-        controller.enabled = false; // Stoppe weitere Logik
+        controller.StopMoving();
+        //controller.enabled = false; // Stoppe weitere Logik
     }
 }
 #endregion
