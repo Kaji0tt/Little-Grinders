@@ -8,9 +8,18 @@ public static class EnemyAnimationUtility
 {
     public static void CreateGroupedAnimationsFromSpriteSheet(string baseName, Sprite spriteSheet)
     {
-        // Namen für die Animationen in Reihenfolge (je 8 Sprites pro Animation)
-        string[] clipNames = { "Idle", "Walk", "Attack", "Casting", "Hitting", "Dying", "Open1", "Open2" };
-        int framesPerClip = 8;
+        // Animationen mit beliebigen Frame-Gruppen definieren: (Startindex, Frameanzahl)
+        var clipDefinitions = new Dictionary<string, List<(int startIndex, int frameCount)>>()
+        {
+            { "Idle",   new List<(int, int)> { (0, 8) } },
+            { "Walk",   new List<(int, int)> { (8, 8) } },
+            { "Attack", new List<(int, int)> { (16, 4), (20, 4) } }, // Zwei 4er-Blöcke für Attack
+            { "Casting",new List<(int, int)> { (24, 8) } },
+            { "Hit",    new List<(int, int)> { (28, 4), (32, 4) } }, // Zwei 4er-Blöcke für Hit
+            { "Die",    new List<(int, int)> { (36, 4), (40, 4) } }, // Zwei 4er-Blöcke für Die
+            { "Open1",  new List<(int, int)> { (48, 8) } },
+            { "Open2",  new List<(int, int)> { (56, 8) } },
+        };
 
         // Pfad und ImportSettings holen
         string path = AssetDatabase.GetAssetPath(spriteSheet);
@@ -22,13 +31,12 @@ public static class EnemyAnimationUtility
             importer.SaveAndReimport(); // Änderungen anwenden
         }
 
-        // Alle Sprites aus dem SpriteSheet laden
+        // Alle Sprites aus dem SpriteSheet laden und sortieren
         Object[] allAssets = AssetDatabase.LoadAllAssetsAtPath(path);
-
         Sprite[] sprites = allAssets
-        .OfType<Sprite>()
-        .OrderBy(s => ExtractNumber(s.name))
-        .ToArray();
+            .OfType<Sprite>()
+            .OrderBy(s => ExtractNumber(s.name))
+            .ToArray();
 
         if (sprites.Length == 0)
         {
@@ -49,29 +57,29 @@ public static class EnemyAnimationUtility
         string controllerPath = $"{animDir}/{baseName}_Controller.controller";
         var controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
 
-        // Gruppiere Sprites in feste 8er-Blöcke
-        var groups = new Dictionary<string, List<Sprite>>();
-        for (int i = 0; i < clipNames.Length; i++)
+        // Animationen aus Sprite-Blöcken bauen
+        foreach (var kvp in clipDefinitions)
         {
-            string clipName = clipNames[i];
-            int startIndex = i * framesPerClip;
+            string clipName = kvp.Key;
+            List<(int, int)> ranges = kvp.Value;
 
-            if (startIndex + framesPerClip > sprites.Length)
+            List<Sprite> clipSprites = new();
+
+            foreach (var (startIndex, frameCount) in ranges)
             {
-                Debug.LogWarning($"⚠️ Not enough sprites for clip '{clipName}'. Skipping.");
-                continue;
+                if (startIndex + frameCount > sprites.Length)
+                {
+                    Debug.LogWarning($"⚠️ Not enough sprites for clip '{clipName}'. Skipping.");
+                    continue;
+                }
+
+                clipSprites.AddRange(sprites.Skip(startIndex).Take(frameCount));
             }
 
-            List<Sprite> clipSprites = sprites.Skip(startIndex).Take(framesPerClip).ToList();
-            groups.Add(clipName, clipSprites);
-        }
+            if (clipSprites.Count == 0)
+                continue;
 
-        // Für jede Gruppe eine Animation erstellen und zum Controller hinzufügen
-        foreach (var group in groups)
-        {
-            string clipName = group.Key;
-            List<Sprite> frames = group.Value;
-
+            // AnimationClip erstellen
             AnimationClip clip = new AnimationClip();
             clip.frameRate = 6;
 
@@ -80,6 +88,7 @@ public static class EnemyAnimationUtility
             clipSettings.loopTime = true;
             AnimationUtility.SetAnimationClipSettings(clip, clipSettings);
 
+            // Sprite Keyframes setzen
             EditorCurveBinding binding = new EditorCurveBinding
             {
                 type = typeof(SpriteRenderer),
@@ -87,25 +96,26 @@ public static class EnemyAnimationUtility
                 propertyName = "m_Sprite"
             };
 
-            ObjectReferenceKeyframe[] keyFrames = new ObjectReferenceKeyframe[frames.Count];
-            for (int i = 0; i < frames.Count; i++)
+            ObjectReferenceKeyframe[] keyFrames = new ObjectReferenceKeyframe[clipSprites.Count];
+            for (int i = 0; i < clipSprites.Count; i++)
             {
                 keyFrames[i] = new ObjectReferenceKeyframe
                 {
                     time = i / clip.frameRate,
-                    value = frames[i]
+                    value = clipSprites[i]
                 };
             }
 
             AnimationUtility.SetObjectReferenceCurve(clip, binding, keyFrames);
 
+            // Clip speichern
             string clipPath = $"{animDir}/{baseName}_{clipName}.anim";
             AssetDatabase.CreateAsset(clip, clipPath);
             var state = controller.AddMotion(clip);
-            state.name = clipName; // ⬅️ Nur "Idle", "Walk", etc. im State-Machine-Namen
+            state.name = clipName;
         }
 
-        // 🔁 AnimatorController dem aktiven GameObject zuweisen
+        // AnimatorController dem aktiven GameObject zuweisen
         GameObject selectedGO = Selection.activeGameObject;
         if (selectedGO != null)
         {
@@ -122,7 +132,7 @@ public static class EnemyAnimationUtility
             Debug.LogWarning("⚠️ Kein GameObject ausgewählt. AnimatorController konnte nicht zugewiesen werden.");
         }
 
-        Debug.Log($"✅ Generated {groups.Count} animations and AnimatorController for '{baseName}' at '{animDir}'");
+        Debug.Log($"✅ Generated {clipDefinitions.Count} animations and AnimatorController for '{baseName}' at '{animDir}'");
     }
 
     private static object ExtractNumber(string name)

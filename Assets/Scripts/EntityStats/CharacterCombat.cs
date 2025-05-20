@@ -169,6 +169,7 @@ public class CharacterCombat : MonoBehaviour
             if (enemy != null)
             {
                 enemy.GetComponent<MobStats>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+                //enemy.GetComponent<IEntitie>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
                 // OPTIONAL: Zeige Hit-Animation, Partikeleffekt etc.
                 // Instantiate(hitEffectPrefab, enemy.transform.position, Quaternion.identity);
             }

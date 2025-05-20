@@ -83,10 +83,8 @@ public class EnemyController : MonoBehaviour
     }
     void Update()
     {
-
         CalculateHPCanvas();
         myEntitieState?.Update();
-
     }
 
     public void SetLocalDirectionVariables()
@@ -105,9 +103,10 @@ public class EnemyController : MonoBehaviour
         myIsoRenderer = gameObject.GetComponent<IsometricRenderer>();
 
         //Add the MobCamScript.
+        if(gameObject.GetComponent<MobsCamScript>() == null)
         gameObject.AddComponent<MobsCamScript>();
 
-        if (myNavMeshAgent = null)
+        if (myNavMeshAgent == null)
             myNavMeshAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -133,7 +132,6 @@ public class EnemyController : MonoBehaviour
         if (playerStats != null)
         {
 
-
             //Sound-Array mit den dazugehörigen Sound-Namen
             string[] hitSounds = new string[] { "Mob_ZombieAttack1", "Mob_ZombieAttack2", "Mob_ZombieAttack3" };
 
@@ -152,7 +150,6 @@ public class EnemyController : MonoBehaviour
 
             //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
             //mobStats.attackCD = 1f / mobStats.AttackSpeed.Value;
-
         }
 
     }
@@ -231,7 +228,16 @@ public class EnemyController : MonoBehaviour
 
 
         if (mobStats.Hp.Value <= 0)
-            Destroy(gameObject);
+        {
+            if(!mobStats.isDead)
+            {
+                mobStats.Die();
+                TransitionTo(new DeadState(this));
+            }
+
+            //StopMoving();
+        }
+
     }
     /*
     public virtual void Attack()
