@@ -241,7 +241,7 @@ public class EnemyController : MonoBehaviour
 
         if (mobStats.Hp.Value < maxHpForUI)
         {
-
+            if(!mobStats.isDead)
             hpBar.SetActive(true);
 
             if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
@@ -253,7 +253,7 @@ public class EnemyController : MonoBehaviour
                     statText[0].text = mobStats.level.ToString();
                 }
             }
-            else
+            else if(!mobStats.isDead)
             {
                 TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
@@ -279,44 +279,6 @@ public class EnemyController : MonoBehaviour
         }
 
     }
-    /*
-    public virtual void Attack()
-    {
-
-        //Fetch the Playerstats of the player
-        PlayerStats playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
-
-        //Countdown for the Auto-Attack Cooldown
-        mobStats.attackCD -= Time.deltaTime;
-        if (playerStats != null)
-        {
-            if (mobStats.attackCD <= 0)
-            {
-
-                //Sound-Array mit den dazugehörigen Sound-Namen
-                string[] hitSounds = new string[] { "Mob_ZombieAttack1", "Mob_ZombieAttack2", "Mob_ZombieAttack3" };
-
-                //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-                if (AudioManager.instance != null)
-
-                    //Play a Sound at random.
-                    AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
-
-                //Füge dem Spieler Schaden entsprechend der AttackPower hinzu. int Range derzeit irrelevant (0)
-                playerStats.TakeDamage(mobStats.AttackPower.Value, 0);
-
-                //Calle Außerdem das GameEvent, dass der Spieler angegriffen wurde.
-                //GameEvents.current.PlayerWasAttacked(mobStats, mobStats.AttackPower.Value);
-                myIsoRenderer.PlayAttack();
-
-                //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
-                mobStats.attackCD = 1f / mobStats.AttackSpeed.Value;
-
-
-            }
-        }
-    }
-    */
 
     
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.

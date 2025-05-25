@@ -305,17 +305,9 @@ public class MobStats : MonoBehaviour, IEntitie
         /// Entferne Rigidbody / Collider oder NavMesh
         /// Du fauler Hund, mach doch einfach den richtig weg und streich den Rest vom Code.
         ///</summary>
-        var collider = GetComponent<Collider>();
+        var collider = GetComponentInChildren<Collider>();
         if (collider != null)
             Destroy(collider);
-
-        var rigidbody = GetComponent<Rigidbody>();
-        if (rigidbody != null)
-            Destroy(rigidbody);
-
-        var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        if (agent != null)
-            agent.enabled = false;
 
         // XP geben
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();

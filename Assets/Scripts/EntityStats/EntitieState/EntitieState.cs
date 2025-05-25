@@ -179,7 +179,7 @@ public class AttackState : EntitieState
             // Wieder angreifen oder zurück zu Chase
             if (controller.IsPlayerInAttackRange())
             {
-                Debug.Log("Ich bin hier, im Update von AttackState.");
+                //Debug.Log("Ich bin hier, im Update von AttackState.");
                 controller.TransitionTo(new AttackState(controller));
             }
             else
@@ -214,6 +214,8 @@ public class DeadState : EntitieState
 
     public override void Enter()
     {
+        controller.hpBar.SetActive(false);
+        controller.myIsoRenderer.ToggleActionState(false);
         controller.myIsoRenderer.Play(AnimationState.Die);
         controller.mobStats.Die();
     }
