@@ -301,8 +301,24 @@ public class MobStats : MonoBehaviour, IEntitie
     {
         this.isDead = true;
 
-        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+        ///<summary>
+        /// Entferne Rigidbody / Collider oder NavMesh
+        /// Du fauler Hund, mach doch einfach den richtig weg und streich den Rest vom Code.
+        ///</summary>
+        var collider = GetComponent<Collider>();
+        if (collider != null)
+            Destroy(collider);
 
+        var rigidbody = GetComponent<Rigidbody>();
+        if (rigidbody != null)
+            Destroy(rigidbody);
+
+        var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        if (agent != null)
+            agent.enabled = false;
+
+        // XP geben
+        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
         playerStats.Gain_xp(xp);
 
         if (this.level >= 1)
@@ -310,15 +326,10 @@ public class MobStats : MonoBehaviour, IEntitie
             ItemDatabase.instance.GetWeightDrop(transform.position);
         }
 
-
         // Warte 10 Sekunden (Todesanimation + Liegenbleiben)
         yield return new WaitForSeconds(10f);
 
-        Debug.Log("Mob will vanish in 10");
-
-        // Erst jetzt zerstören
         Destroy(gameObject);
-
     }
 
 

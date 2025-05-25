@@ -39,8 +39,8 @@ public class IdleState : EntitieState
     private float myIdleTimer = 0f;
     private float myNextWanderTime = 3f;
     private readonly float myWanderRadius = 2f;
-    private readonly float myWaitBetweenWandersMin = 1f;
-    private readonly float myWaitBetweenWandersMax = 4f;
+    private readonly float myWaitBetweenWandersMin = 2f;
+    private readonly float myWaitBetweenWandersMax = 5f;
 
 
     public override void Enter()
@@ -102,7 +102,7 @@ public class IdleState : EntitieState
         randomDirection += mySpawnPoint;
         randomDirection.y = controller.transform.position.y;
 
-        Debug.Log("You got here and the next direction should be:" + randomDirection);
+        //Debug.Log("You got here and the next direction should be:" + randomDirection);
 
         if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, myWanderRadius, NavMesh.AllAreas))
         {
@@ -126,26 +126,24 @@ public class ChaseState : EntitieState
 
     public override void Update()
     {
+        //float distance = Vector3.Distance(controller.Player.position, controller.transform.position);
 
-        float distance = Vector3.Distance(controller.Player.position, controller.transform.position);
-
-        controller.MoveToTarget();
-
-        if (controller.IsInAttackRange())
+        if (controller.IsPlayerInAttackRange())
         {
             controller.TransitionTo(new AttackState(controller));
-        }
-
-        if (distance > controller.aggroRange)
-        {
-
-            controller.myIsoRenderer.Play(AnimationState.Idle);
-
-            controller.StopMoving();
-
             return;
         }
 
+        // Nur verfolgen, wenn nicht in Angriffsreichweite
+        controller.MoveToPlayer();
+
+        // Wenn Ziel wieder außerhalb der Aggro-Reichweite ist
+        if (controller.PlayerDistance() > controller.aggroRange)
+        {
+            controller.myIsoRenderer.Play(AnimationState.Idle);
+            controller.StopMoving();
+            controller.TransitionTo(new IdleState(controller));
+        }
     }
 }
 
@@ -179,8 +177,9 @@ public class AttackState : EntitieState
         if (timer <= 0f)
         {
             // Wieder angreifen oder zurück zu Chase
-            if (controller.IsInAttackRange())
+            if (controller.IsPlayerInAttackRange())
             {
+                Debug.Log("Ich bin hier, im Update von AttackState.");
                 controller.TransitionTo(new AttackState(controller));
             }
             else
@@ -216,8 +215,7 @@ public class DeadState : EntitieState
     public override void Enter()
     {
         controller.myIsoRenderer.Play(AnimationState.Die);
-        controller.StopMoving();
-        //controller.enabled = false; // Stoppe weitere Logik
+        controller.mobStats.Die();
     }
 }
 #endregion

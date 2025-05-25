@@ -24,7 +24,7 @@ public class EnemyController : MonoBehaviour
 
     public Transform Player => PlayerManager.instance.player.transform;
 
-    public Transform myTarget;
+    //public Transform myTarget;
 
 
     [Header("Interface Referenzen")]
@@ -54,6 +54,13 @@ public class EnemyController : MonoBehaviour
     ///----Position/Ziel/Direction----
     ///Controller Variables
     Vector3 myForward, myRight;
+
+    /// <summary>
+    /// Intervalle für den Zufälligkeitswert von zu wählenenden Richtungen
+    /// </summary>
+    private float directionTimer = 0f;
+    private readonly float directionInterval = 0.5f;
+    private Vector3 currentDirection = Vector3.zero;
 
 
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
@@ -85,6 +92,8 @@ public class EnemyController : MonoBehaviour
     {
         CalculateHPCanvas();
         myEntitieState?.Update();
+
+
     }
 
     public void SetLocalDirectionVariables()
@@ -154,28 +163,57 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    public bool IsInAttackRange()
+    public bool IsPlayerInAttackRange()
     {
-        if (myTarget == null) return false;
-        return Vector3.Distance(transform.position, myTarget.position) <= attackRange;
+        if (Player == null) return false;
+        //myTarget
+        return Vector3.Distance(transform.position, Player.position) <= attackRange;
     }
 
     public void StopMoving()
     {
+        if (myNavMeshAgent == enabled)
         myNavMeshAgent.SetDestination(transform.position);
     }
 
-    public void MoveToTarget()
+    //public void MoveToTarget()
+    public void MoveToPlayer()
     {
-        if(myNavMeshAgent == null)
-        {
+        if (myNavMeshAgent == null)
             myNavMeshAgent = GetComponent<NavMeshAgent>();
+
+        directionTimer -= Time.deltaTime;
+
+        if (directionTimer <= 0f)
+        {
+            //Die Laufrichtung, welche in die Wahrschienlichkeitsrechnung als Hauptziel vergeben wird
+            Vector3 preferredDirection = (Player.position - transform.position).normalized;
+
+            // Gewichtet anhand von Wahrscheinlichkeiten Richtung Spieler laufen
+            currentDirection = MovementHelper.GetWeightedDirection(preferredDirection);
+
+            // Setze das Intervall für die Richtungsdefinition zurück
+            directionTimer = directionInterval;
         }
-        myNavMeshAgent.SetDestination(PlayerManager.instance.player.transform.position);
+
+        // Laufziel berechnen – z. B. 2 Meter in diese Richtung
+        Vector3 destination = transform.position + currentDirection * 2f;
+
+        myNavMeshAgent.SetDestination(destination);
+        //Vector3 toPlayer = PlayerManager.instance.player.transform.position - transform.position;
+
+
+
 
     }
     #endregion
 
+    public float PlayerDistance()
+	{
+		float distance = Vector3.Distance(Player.position, transform.position);
+        return distance;
+	}
+	
     public Vector2 CalculatePlayerDirection()
     {
         Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
@@ -186,6 +224,8 @@ public class EnemyController : MonoBehaviour
 
         return inputVector;
     }
+	
+
 
     private void CalculateHPCanvas()
     {
@@ -231,7 +271,7 @@ public class EnemyController : MonoBehaviour
         {
             if(!mobStats.isDead)
             {
-                mobStats.Die();
+                StopMoving();
                 TransitionTo(new DeadState(this));
             }
 

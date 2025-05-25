@@ -80,14 +80,6 @@ public class UI_Manager : MonoBehaviour
     //[SerializeField]
     //private GameObject canvasIG;
 
-    private List<CanvasGroup> canvasGroup = new List<CanvasGroup>();
-
-    bool allCanvasGroupsClosed;
-
-
-    private List<KeyCode> keyCodes = new List<KeyCode>();
-
-    private string bindName;
 
     public static bool GameIsPaused = false;
 
