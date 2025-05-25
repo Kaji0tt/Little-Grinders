@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.EventSystems;
 
 
@@ -61,9 +62,11 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
     #region Implementation - Interface Objekte und Texte
 
-    GameObject uiInventoryTab, uiHpOrb;
-    private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText, ui_Level, ui_Xp, ui_HpOrbTxt;
-    private Slider HpSlider, XpSlider;
+    GameObject uiInventoryTab;
+    private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText, ui_Level;
+    private TextMeshProUGUI xp_Text;
+    private GameObject hp_Text;
+    private Image HpImage, XpImage;
     private float maxHP;
 
     #endregion
@@ -121,10 +124,6 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         //GameEvents.current.LevelUpdate += UpdateLevel;
         uiInventoryTab = GameObject.Find("Inventory Tab");              
         ui_Level = GameObject.Find("LevelText").GetComponent<Text>();
-        ui_Xp = GameObject.Find("XpText").GetComponent<Text>();
-        uiHpOrb = GameObject.Find("HpOrbTxt");
-        HpSlider = GameObject.Find("HpOrb").GetComponent<Slider>();
-        XpSlider = GameObject.Find("XpBar").GetComponent<Slider>();
         GameObject uiXp = GameObject.Find("XpText");
         //////////////////////Das ist ja fucking eklig, finde eine Alternative um die Texte zu initialisieren!!!!!
         playerStats.Set_currentHp(playerStats.Get_maxHp());
@@ -136,7 +135,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         ui_invAbilityPowerText = GameObject.Find("ui_invAbiP").GetComponent<Text>();
         ui_invAttackSpeedText = GameObject.Find("ui_invAttS").GetComponent<Text>();
         ui_invMovementSpeedText = GameObject.Find("ui_invMS").GetComponent<Text>();
-        ui_HpOrbTxt = GameObject.Find("HpOrbTxt").GetComponent<Text>();
+        //ui_HpOrbTxt = GameObject.Find("HpOrbTxt").GetComponent<Text>();
 
 
         /*
@@ -144,6 +143,14 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         ItemWorld.SpawnItemWorld(new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), new ItemInstance(test_item));
         ItemWorld.SpawnItemWorld(new Vector3(transform.position.x, transform.position.y, transform.position.z + .5f), new ItemInstance(test_item));
         */
+    }
+
+    private void Start()
+    {
+        xp_Text = PlayerManager.instance.xp_Text;
+        hp_Text = PlayerManager.instance.hp_Text;
+        HpImage = PlayerManager.instance.hpFill;
+        XpImage = PlayerManager.instance.xpFill;
     }
 
     //Fixed Update wird gecalled, vor der physikalischen Berechning innerhalb eines Frames.
@@ -236,20 +243,18 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
             ShowStatText();
         else
         {
-            uiHpOrb.SetActive(false);
-            ui_Xp.text = "";
+            hp_Text.SetActive(false);
+            xp_Text.text = "";
         }
 
 
 
 
-        //UI Orb
-        HpSlider.value = playerStats.Get_currentHp() / playerStats.Hp.Value;
-        XpSlider.maxValue = playerStats.LevelUp_need(); //irgendwie unschön, vll kann man Max.Value einmalig einstellen, nachdem man levelUp gekommen ist.
-        XpSlider.value = playerStats.xp;
+        // UI Orb
+        HpImage.fillAmount = playerStats.Get_currentHp() / playerStats.Hp.Value;
+        XpImage.fillAmount = XpImage.fillAmount = (playerStats.LevelUp_need() > 0f) ? (float)playerStats.xp / playerStats.LevelUp_need() : 0f;
         ui_Level.text = playerStats.level.ToString();
-        PPVolumeManager.instance.LowHealthPP(HpSlider.value);
-
+        PPVolumeManager.instance.LowHealthPP(HpImage.fillAmount);
         //Postprocessing for LowHealth
 
 
@@ -318,9 +323,9 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     void ShowStatText()
     {
         //Aktiviere entsprechende UI Elemente und schreibe diese.
-        uiHpOrb.SetActive(true);
-        ui_HpOrbTxt.text = Mathf.RoundToInt(playerStats.Get_currentHp()) + "\n" + Mathf.RoundToInt(playerStats.Hp.Value);
-        ui_Xp.text = playerStats.xp + "/" + playerStats.LevelUp_need();
+        hp_Text.SetActive(true);
+        hp_Text.GetComponent<TextMeshProUGUI>().text = Mathf.RoundToInt(playerStats.Get_currentHp()) + "\n" + Mathf.RoundToInt(playerStats.Hp.Value);
+        xp_Text.text = playerStats.xp + "/" + playerStats.LevelUp_need();
     }
     
     private void UseItem(ItemInstance item)

@@ -38,7 +38,16 @@ public class IsometricRenderer : MonoBehaviour
 
     private bool isPerformingAction = false;
 
-
+    // Mapping von AnimationState zu möglichen Clipnamen
+    private static readonly Dictionary<AnimationState, string[]> animationVariants = new Dictionary<AnimationState, string[]>()
+    {
+    { AnimationState.Idle,   new[] { "Idle" } },
+    { AnimationState.Walk,   new[] { "Walk" } },
+    { AnimationState.Attack, new[] { "Attack1", "Attack2" } },
+    { AnimationState.Cast,   new[] { "Casting" } },
+    { AnimationState.Hit,    new[] { "Hit1", "Hit2" } },
+    { AnimationState.Die,    new[] { "Die1", "Die2" } },
+    };
 
     //Set the Spritesheet to auto Animate this enemy.
     public Sprite spriteSheet; 
@@ -62,28 +71,35 @@ public class IsometricRenderer : MonoBehaviour
 
     public void Play(AnimationState state)
     {
-        if (state == currentState) return;
+        // Welche States dürfen mehrfach getriggert werden
+        bool canRepeat = (state == AnimationState.Attack); 
 
-        // Sofort Idle/Walk zulassen
-        if (state == AnimationState.Idle || state == AnimationState.Walk)
+        if (!canRepeat && state == currentState)
+            return;
+
+        // Falls Action läuft, unterbrich nur wenn der State nicht wiederholbar ist
+        if (isPerformingAction && !canRepeat)
+            return;
+
+        currentState = state;
+
+        // 🎲 Hol die verfügbaren Varianten
+        if (!animationVariants.TryGetValue(state, out string[] variants))
         {
-            animator.Play(state.ToString());
-            currentState = state;
+            //Debug.LogWarning($"No animation defined for state: {state}");
             return;
         }
 
-        // Falls eine Action läuft, überspringe neue Befehle
-        if (isPerformingAction) return;
+        string chosenAnim = variants[Random.Range(0, variants.Length)];
+        //Debug.Log($"[IsoRenderer] {state} → Playing: {chosenAnim}");
 
-        animator.Play(state.ToString());
-        currentState = state;
+        animator.Play(chosenAnim);
 
         // Falls Animation blocking ist, starte Timer
         if (state == AnimationState.Attack || state == AnimationState.Cast || state == AnimationState.Hit || state == AnimationState.Die)
         {
             isPerformingAction = true;
             StartCoroutine(ResetActionAfterAnimation());
-            //Debug.Log("Attack should be performing!");
         }
     }
 
@@ -98,13 +114,6 @@ public class IsometricRenderer : MonoBehaviour
         isPerformingAction = false;
 
     }
-
-    //public void PlayIdle() => animator.Play("Idle");
-    //public void PlayWalk() => animator.Play("Walk");
-    //public void PlayAttack() => animator.Play("Attack");
-    //public void PlayHit() => animator.Play("Hit");
-    public void PlayCast() => animator.Play("Cast");
-    public void PlayDie() => animator.Play("Die");
 
     public void ToggleActionState(bool active)
     {

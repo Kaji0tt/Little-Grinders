@@ -11,14 +11,17 @@ public static class EnemyAnimationUtility
         // Animationen mit beliebigen Frame-Gruppen definieren: (Startindex, Frameanzahl)
         var clipDefinitions = new Dictionary<string, List<(int startIndex, int frameCount)>>()
         {
-            { "Idle",   new List<(int, int)> { (0, 8) } },
-            { "Walk",   new List<(int, int)> { (8, 8) } },
-            { "Attack", new List<(int, int)> { (16, 4), (20, 4) } }, // Zwei 4er-Blöcke für Attack
-            { "Casting",new List<(int, int)> { (24, 8) } },
-            { "Hit",    new List<(int, int)> { (28, 4), (32, 4) } }, // Zwei 4er-Blöcke für Hit
-            { "Die",    new List<(int, int)> { (36, 4), (40, 4) } }, // Zwei 4er-Blöcke für Die
-            { "Open1",  new List<(int, int)> { (48, 8) } },
-            { "Open2",  new List<(int, int)> { (56, 8) } },
+            { "Idle",       new List<(int, int)> { (0, 8) } },
+            { "Walk",       new List<(int, int)> { (8, 8) } },
+            { "Attack1",    new List<(int, int)> { (16, 4) } }, // 👈 erster Die-Block
+            { "Attack2",    new List<(int, int)> { (20, 4) } }, // 👈 zweiter Die-Block
+            { "Casting",    new List<(int, int)> { (24, 8) } },
+            { "Die1",       new List<(int, int)> { (32, 4) } }, // 👈 Die Animation á 4 Sprites
+            { "Die2",       new List<(int, int)> { (36, 4) } },
+            { "Hit1",       new List<(int, int)> { (40, 4) } }, // 👈 Hit Animation á 4 Sprites
+            { "Hit2",       new List<(int, int)> { (44, 4) } },
+            { "Open1",      new List<(int, int)> { (48, 8) } },
+            { "Open2",      new List<(int, int)> { (56, 8) } },
         };
 
         // Pfad und ImportSettings holen
@@ -83,9 +86,19 @@ public static class EnemyAnimationUtility
             AnimationClip clip = new AnimationClip();
             clip.frameRate = 6;
 
-            // Loop aktivieren
+            // Loop nur für bestimmte Animationen aktivieren
             var clipSettings = AnimationUtility.GetAnimationClipSettings(clip);
-            clipSettings.loopTime = true;
+
+            if (clipName.StartsWith("Die"))
+            {
+                clipSettings.loopTime = false;
+                clip.wrapMode = WrapMode.ClampForever;
+            }
+            else
+            {
+                clipSettings.loopTime = true;
+            }
+
             AnimationUtility.SetAnimationClipSettings(clip, clipSettings);
 
             // Sprite Keyframes setzen
