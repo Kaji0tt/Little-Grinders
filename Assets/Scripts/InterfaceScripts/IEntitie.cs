@@ -22,9 +22,9 @@ public interface IEntitie
 
     public List<BuffInstance> GetBuffs();
 
-    public void TakeDamage(float damage, int range);
+    //public void TakeDamage(float damage, int range);
 
-    public void TakeDirectDamage(float damage, float range);
+    //public void TakeDirectDamage(float damage, float range);
 
     public void Heal(int healAmount);
 

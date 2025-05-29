@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CodeMonkey.Utils;
 using UnityEditor;
+using TMPro;
 
 public class ItemWorld : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class ItemWorld : MonoBehaviour
     private Light lightSource;
 
     private Renderer itemWorldRend;
+
+    [SerializeField]
+    private TextMeshProUGUI itemWorldText;
 
     [SerializeField]
     private float m_Hue, m_Saturation, m_Value;
@@ -33,6 +37,7 @@ public class ItemWorld : MonoBehaviour
     {
         Transform transform = Instantiate(ItemAssets.Instance.pfItemWorld, position, Quaternion.identity);
 
+
         ItemWorld itemWorld = transform.GetComponent<ItemWorld>();
 
         itemWorld.SetItem(item);
@@ -45,91 +50,87 @@ public class ItemWorld : MonoBehaviour
         ItemWorld itemWorld = SpawnItemWorld(dropPosition, item);
             return itemWorld;
     }
-
     public void SetItem(ItemInstance item)
     {
         this.item = item;
 
         spriteRenderer.sprite = item.icon;
+        itemWorldText = transform.GetComponentInChildren<TextMeshProUGUI>();
 
+        // Template aus Settings, z. B.: "F to pick up {item.ItemName}"
+        string template = "F to pick up {item.ItemName}";//Settings.PickupPromptText;
 
-        #region GFX & Audio Settings for Rarities
-        if (item.itemRarity == "Unbrauchbar")
+        // Farbcodes nach Rarity
+        Color rarityColor = Color.white;
+
+        switch (item.itemRarity)
         {
-            itemWorldRend.material.SetColor("_Color", Color.red);
-            
-            lightSource.color = new Color(1, 0, 0, 0.5f);
-            lightSource.range = 0.2f;
-            lightSource.intensity = 0.005f;
-            
-        }
+            case "Unbrauchbar":
+                rarityColor = Color.red;
+                itemWorldRend.material.SetColor("_Color", Color.red);
+                lightSource.color = new Color(1, 0, 0, 0.5f);
+                lightSource.range = 0.2f;
+                lightSource.intensity = 0.005f;
+                break;
 
-        if (item.itemRarity == "Gewöhnlich")
-        {
+            case "Gewöhnlich":
+                rarityColor = Color.white;
+                itemWorldRend.material.SetColor("_Color", Color.white);
+                lightSource.color = new Color(0, 1, 0, 0.2f);
+                lightSource.range = 0f;
+                lightSource.intensity = 0f;
+                break;
 
-            itemWorldRend.material.SetColor("_Color", Color.white);
-
-            lightSource.color = new Color(0, 1, 0, 0.2f);
-            lightSource.range = 0f;
-            lightSource.intensity = 0f;
-        }
-
-        if (item.itemRarity == "Ungewöhnlich")
-        {
-
-            //DynamicGI.SetEmissive(itemWorldRend, new Color(1f, 0.1f, 0.5f, 1.0f) * 1);
-            itemWorldRend.material.SetColor("_Color", Color.green);
-            itemWorldRend.material.SetFloat("_OffSet", 0.0010f);
-
-            lightSource.color = new Color(0,1,0,0.5f);
-            lightSource.range = 1f;
-            lightSource.intensity = 0.01f;
-
+            case "Ungewöhnlich":
+                rarityColor = Color.green;
+                itemWorldRend.material.SetColor("_Color", Color.green);
+                itemWorldRend.material.SetFloat("_OffSet", 0.0010f);
+                lightSource.color = new Color(0, 1, 0, 0.5f);
+                lightSource.range = 1f;
+                lightSource.intensity = 0.01f;
                 AudioManager.instance.Play("Drop_Uncommon");
-        }
+                break;
 
-
-        if (item.itemRarity == "Selten")
-        {
-            itemWorldRend.material.SetColor("_Color", Color.blue);
-            itemWorldRend.material.SetFloat("_OffSet", 0.0015f);
-
-            lightSource.color = Color.blue;
-            lightSource.range = 1f;
-            lightSource.intensity = 0.1f;
-
+            case "Selten":
+                rarityColor = Color.blue;
+                itemWorldRend.material.SetColor("_Color", Color.blue);
+                itemWorldRend.material.SetFloat("_OffSet", 0.0015f);
+                lightSource.color = Color.blue;
+                lightSource.range = 1f;
+                lightSource.intensity = 0.1f;
                 AudioManager.instance.Play("Drop_Rare");
-        }
+                break;
 
-
-        if (item.itemRarity == "Episch")
-        {
-            itemWorldRend.material.SetColor("_Color", Color.magenta);
-            itemWorldRend.material.SetFloat("_OffSet", 0.8f);
-
-            lightSource.color = Color.magenta;
-            lightSource.range = 1f;
-            lightSource.intensity = 0.5f;
-
+            case "Episch":
+                rarityColor = Color.magenta;
+                itemWorldRend.material.SetColor("_Color", Color.magenta);
+                itemWorldRend.material.SetFloat("_OffSet", 0.8f);
+                lightSource.color = Color.magenta;
+                lightSource.range = 1f;
+                lightSource.intensity = 0.5f;
                 AudioManager.instance.Play("Drop_Epic");
-        }
+                break;
 
-
-        if (item.itemRarity == "Legendär")
-        {
-            itemWorldRend.material.SetColor("_Color", new Color(0.54f, 0.32f, 0.13f, 1));
-            itemWorldRend.material.SetFloat("_OffSet", 1f);
-
-            lightSource.color = new Color(0.54f, 0.32f, 0.13f, 1);
-            lightSource.range = 1f;
-            lightSource.intensity = 1f;
-
+            case "Legendär":
+                rarityColor = new Color(0.54f, 0.32f, 0.13f, 1);
+                itemWorldRend.material.SetColor("_Color", rarityColor);
+                itemWorldRend.material.SetFloat("_OffSet", 1f);
+                lightSource.color = rarityColor;
+                lightSource.range = 1f;
+                lightSource.intensity = 1f;
                 AudioManager.instance.Play("Drop_Legendary");
+                break;
         }
-        #endregion
 
+        // 👉 Nur der Item-Name wird farbig
+        string hexColor = ColorUtility.ToHtmlStringRGB(rarityColor);
+        string coloredName = $"<color=#{hexColor}>{item.ItemName}</color>";
 
+        // Platzhalter ersetzen
+        string resolvedText = template.Replace("{item.ItemName}", coloredName);
 
+        // Finaler Text im World-UI
+        itemWorldText.text = resolvedText;
     }
 
     // 23.10.2024 AI-Tag

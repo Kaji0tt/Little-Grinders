@@ -45,7 +45,6 @@ public class IdleState : EntitieState
 
     public override void Enter()
     {
-        float distance = Vector3.Distance(controller.Player.position, controller.transform.position);
 
         controller.StopMoving();
 
@@ -161,6 +160,10 @@ public class AttackState : EntitieState
         //attackCooldown = 
         controller.StopMoving();
         controller.PerformAttack();
+        if (controller.myIsoRenderer != null)
+        {
+            controller.myIsoRenderer.Play(AnimationState.Attack);
+        }
         timer = controller.mobStats.attackCD;
     }
 
@@ -193,18 +196,40 @@ public class AttackState : EntitieState
 
 public class HitState : EntitieState
 {
+    private float hitTimer;
+
     public HitState(EnemyController controller) : base(controller) { }
 
     public override void Enter()
     {
+        controller.myIsoRenderer.ToggleActionState(true);
         controller.myIsoRenderer.Play(AnimationState.Hit);
+
+        // Dynamisch: echte Animationslänge holen
+        hitTimer = controller.myIsoRenderer.GetCurrentAnimationLength();
     }
 
     public override void Update()
     {
+        hitTimer -= Time.deltaTime;
 
+        if (hitTimer <= 0f)
+        {
+            controller.myIsoRenderer.ToggleActionState(false);
 
-
+            if (controller.isDead)
+            {
+                controller.TransitionTo(new DeadState(controller));
+            }
+            else if (controller.IsPlayerInAttackRange())
+            {
+                controller.TransitionTo(new AttackState(controller));
+            }
+            else
+            {
+                controller.TransitionTo(new ChaseState(controller));
+            }
+        }
     }
 }
 

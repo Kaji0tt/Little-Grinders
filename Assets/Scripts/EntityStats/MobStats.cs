@@ -8,14 +8,12 @@ public class MobStats : MonoBehaviour, IEntitie
 {
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
 
-    public bool pulled;
-    //public int experience { get; private set; }
-
     public bool isDead { get; private set; } = false;
 
     private void Start()
     {
         CalculateMobStats();
+        //Debug.Log(gameObject.name + ": My Health Base is " + Hp.BaseValue + ", after Calculation it is:" + Hp.Value);
 
     }
 
@@ -187,6 +185,8 @@ public class MobStats : MonoBehaviour, IEntitie
 
     /// <summary>
     /// HP-Stuff
+    /// Carefull, currently currentHP is of no usage. It will be of important role, once Monster Modifications are implemented.
+    /// Take BaseValue instead.
     /// </summary>
     private float currentHp;
     public float Get_currentHp()
@@ -213,69 +213,6 @@ public class MobStats : MonoBehaviour, IEntitie
         maxHp = Hp.Value;
     }
 
-    public void TakeDamage(float incoming_damage, int range_radius_ofDMG)
-    {
-
-        float player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
-
-        if (player_distance <= range_radius_ofDMG)
-        {
-            incoming_damage = 10 * (incoming_damage * incoming_damage) / (Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
-
-            incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
-
-            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
-
-
-            //Sound-Array mit den dazugehörigen Sound-Namen
-            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
-
-            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-            if (AudioManager.instance != null)
-
-                //Play a Sound at random.
-                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
-
-            //Füge eine Hit Animation für den Animator hinzu
-            //IsometricRenderer isoRend = GetComponent<IsometricRenderer>();
-            //isoRend.PlayHit();
-
-            //isoRend.
-
-
-            pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
-        }
-
-        //if (Hp.Value <= 0)
-        //    Die();
-    }
-
-
-    //Take Direct Damage ignoriert die Rüstungswerte der Entitie - besonders relevant für AP Schaden.
-    public virtual void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
-    {
-        float player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
-
-        if (player_distance <= range_radius_ofDMG)
-        {
-
-            Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
-
-            //Sound-Array mit den dazugehörigen Sound-Namen
-            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
-
-            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-            if (AudioManager.instance != null)
-
-                //Play a Sound at random.
-                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
-
-            pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
-        }
-
-        //if (Hp.Value <= 0)
-        //    Die();
-    }
 
     public void Heal(int healAmount)
     {
