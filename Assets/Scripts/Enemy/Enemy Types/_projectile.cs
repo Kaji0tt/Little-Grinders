@@ -100,7 +100,7 @@ public class _projectile : MonoBehaviour
             }
             else
             {
-                PlayerManager.instance.player.GetComponent<PlayerStats>().TakeDamage(_pDamage, 0);
+                //PlayerManager.instance.player.GetComponent<PlayerStats>().TakeDamage(_pDamage, 0);
                 Instantiate(_hitParticles, PlayerManager.instance.player.transform.position, Quaternion.identity);
             }
             Destroy(gameObject);

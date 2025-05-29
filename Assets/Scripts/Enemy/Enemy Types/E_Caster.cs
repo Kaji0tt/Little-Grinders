@@ -89,7 +89,7 @@ public class E_Caster : EnemyController
             //Setze den Schaden des Projektils
             projClone.GetComponent<_projectile>()._pDamage = projectileDamage;
             //Bestimme die Ursprungs-Entitie für das Projektil.
-            projClone.GetComponent<_projectile>().SetOrigin(this.gameObject.GetComponent<MobStats>());
+            //projClone.GetComponent<_projectile>().SetOrigin(this.gameObject.GetComponent<MobStats>());
 
             //print("E_Caster else called.");
         }

@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 300
+  spritePixelsToUnits: 400
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -95,12 +95,2300 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: InterfaceC2_0
+      rect:
+        serializedVersion: 2
+        x: 1963
+        y: 2074
+        width: 61
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdf98d048a80d0b46abf859f3e9656f1
+      internalID: -1491937686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_1
+      rect:
+        serializedVersion: 2
+        x: 2275
+        y: 2094
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5c927e056dbe0e43a7b8691ae52284c
+      internalID: -515928066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_2
+      rect:
+        serializedVersion: 2
+        x: 2287
+        y: 2096
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93c63192afd7f664f9a1d5f4e7fcc8aa
+      internalID: -1772904222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_3
+      rect:
+        serializedVersion: 2
+        x: 2300
+        y: 2097
+        width: 7
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78d7687319c66e54799b257dfc9b8446
+      internalID: -819754594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_4
+      rect:
+        serializedVersion: 2
+        x: 2026
+        y: 2089
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af0bc39ce8719924d9d9dfd0d18f1dc9
+      internalID: 95167680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_5
+      rect:
+        serializedVersion: 2
+        x: 2062
+        y: 2088
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3f1fbc13202d1b4b82a8f6e9e7c0f1c
+      internalID: 181839734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_6
+      rect:
+        serializedVersion: 2
+        x: 2199
+        y: 2085
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df4afd99c1630df4da09e281132b2ba3
+      internalID: 473198989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_7
+      rect:
+        serializedVersion: 2
+        x: 2277
+        y: 2088
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3ed58c667b6cb44ba11a95941130dbc
+      internalID: 54683346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_8
+      rect:
+        serializedVersion: 2
+        x: 2034
+        y: 2078
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6fcf912f8b066b4394d2a6b99513da2
+      internalID: 380358855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_9
+      rect:
+        serializedVersion: 2
+        x: 2361
+        y: 2070
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3b830d20b0f1a14991f0e9dd17e05a0
+      internalID: -1487663153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_10
+      rect:
+        serializedVersion: 2
+        x: 2372
+        y: 2034
+        width: 70
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8028dc0eda1f2a543be7e1e679b54d43
+      internalID: 2146573341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_11
+      rect:
+        serializedVersion: 2
+        x: 1995
+        y: 2062
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7eecee21037a5be45a558e07e8f48cb4
+      internalID: 1934624556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_12
+      rect:
+        serializedVersion: 2
+        x: 2443
+        y: 2060
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d312697939589b943a30c7edd705416d
+      internalID: 1802768720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_13
+      rect:
+        serializedVersion: 2
+        x: 2078
+        y: 2015
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65d0f58eea0519448bd16b9202aa2fa6
+      internalID: 1297303496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_14
+      rect:
+        serializedVersion: 2
+        x: 1840
+        y: 2002
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8adc1a3fc844c66468280b5e991cf037
+      internalID: 235182227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_15
+      rect:
+        serializedVersion: 2
+        x: 1513
+        y: 1821
+        width: 153
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbd1ccf2333826646ab07bec7d1c13d8
+      internalID: 1497896646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_16
+      rect:
+        serializedVersion: 2
+        x: 2769
+        y: 1923
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98ba3a4a9d9ad8144a42d6d377204c8c
+      internalID: -2086924465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_17
+      rect:
+        serializedVersion: 2
+        x: 2822
+        y: 1397
+        width: 493
+        height: 576
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fafb7cadea73a204bbe53ac6243ac44a
+      internalID: -371520408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_18
+      rect:
+        serializedVersion: 2
+        x: 3370
+        y: 1822
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb961e73521410943b407a96754c550b
+      internalID: 889949907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_19
+      rect:
+        serializedVersion: 2
+        x: 3302
+        y: 1630
+        width: 164
+        height: 189
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7845c86c8b5f8ec4393172671dabf5bf
+      internalID: -900225451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_20
+      rect:
+        serializedVersion: 2
+        x: 3390
+        y: 1816
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b3e66801ea067144aebde831d1c0e2f
+      internalID: -492426173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_21
+      rect:
+        serializedVersion: 2
+        x: 3509
+        y: 1604
+        width: 227
+        height: 213
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc253e283ee608e4ab63cb54c3287301
+      internalID: 1651621961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_22
+      rect:
+        serializedVersion: 2
+        x: 3464
+        y: 1786
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fdb82e2ab270b5438c7aa2c023959bf
+      internalID: 1039331568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_23
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 1282
+        width: 673
+        height: 502
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e95c469f3e5a7a4aa5581f39b53dc12
+      internalID: -22143867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_24
+      rect:
+        serializedVersion: 2
+        x: 2810
+        y: 1649
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5caec3817b28f6c4ea84d49a5c2d0b98
+      internalID: 918020629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_25
+      rect:
+        serializedVersion: 2
+        x: 3394
+        y: 1572
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fb5935120d7ed24d9ff77a18c20a89c
+      internalID: -960949632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_26
+      rect:
+        serializedVersion: 2
+        x: 3552
+        y: 1440
+        width: 223
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01aec6c944f834b40b69236a07cd1136
+      internalID: 286969044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_27
+      rect:
+        serializedVersion: 2
+        x: 2500
+        y: 1537
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbdacae541b9b144e868fe5ab424eee2
+      internalID: -1217856090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_28
+      rect:
+        serializedVersion: 2
+        x: 3317
+        y: 1419
+        width: 155
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c211d34f9bd31594a9149ee51e480a89
+      internalID: 661067390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_29
+      rect:
+        serializedVersion: 2
+        x: 2621
+        y: 1523
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faf92c51bb14b2f4692aca75364f3316
+      internalID: -612285963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_30
+      rect:
+        serializedVersion: 2
+        x: 2640
+        y: 1527
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a47b6d630f31dbc40bd7aaa5e6512c33
+      internalID: -1774024036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_31
+      rect:
+        serializedVersion: 2
+        x: 2626
+        y: 1493
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acb3289436685d44da74608d2f12ce3b
+      internalID: 439381362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_32
+      rect:
+        serializedVersion: 2
+        x: 2511
+        y: 1444
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5adb84f52a0457640b707a51f5666c74
+      internalID: 1999182004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_33
+      rect:
+        serializedVersion: 2
+        x: 2565
+        y: 852
+        width: 636
+        height: 637
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c6c6e33e93f64d46b779edbfb91eecf
+      internalID: -1767171995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_34
+      rect:
+        serializedVersion: 2
+        x: 2423
+        y: 1394
+        width: 7
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f3e857872990bb47998ba9b712d0c37
+      internalID: 828418883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_35
+      rect:
+        serializedVersion: 2
+        x: 2465
+        y: 1380
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2016834927d5bea459f8a83e01c47a46
+      internalID: -651543639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_36
+      rect:
+        serializedVersion: 2
+        x: 2561
+        y: 1381
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 775eff4bb6efb9848be53cfcebb612b0
+      internalID: 1448369478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_37
+      rect:
+        serializedVersion: 2
+        x: 2553
+        y: 1259
+        width: 29
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 604b03e62ef22874a978e87f3d3e7641
+      internalID: 455860797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_38
+      rect:
+        serializedVersion: 2
+        x: 3853
+        y: 1288
+        width: 34
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 795b8d2d0e490284d9d5ddbe97cd99c3
+      internalID: 1942209363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_39
+      rect:
+        serializedVersion: 2
+        x: 3888
+        y: 1238
+        width: 103
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7c3c24a056f2604da1b560e931efae7
+      internalID: 2121795188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_40
+      rect:
+        serializedVersion: 2
+        x: 3903
+        y: 1298
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15994e805ccc39143804703b8b828e32
+      internalID: 1618461575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_41
+      rect:
+        serializedVersion: 2
+        x: 3958
+        y: 1302
+        width: 17
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2f820c84e6d72e4ea24403edab9ed23
+      internalID: 1043206285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_42
+      rect:
+        serializedVersion: 2
+        x: 3973
+        y: 1298
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ab2ea87fe93e8749924a04c22d53502
+      internalID: 249885424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_43
+      rect:
+        serializedVersion: 2
+        x: 3831
+        y: 1279
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf736762222447f4099f71a7e432003f
+      internalID: -1900157285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_44
+      rect:
+        serializedVersion: 2
+        x: 3841
+        y: 1284
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b32fedd8b792c3047984bb2d22c2659c
+      internalID: 159937253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_45
+      rect:
+        serializedVersion: 2
+        x: 3848
+        y: 1278
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3134fa1b0d41d97418b1a34fd119c31e
+      internalID: 2040390447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_46
+      rect:
+        serializedVersion: 2
+        x: 3862
+        y: 1271
+        width: 20
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1829aa330b169b540a09911f662d4e43
+      internalID: 1595811971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_47
+      rect:
+        serializedVersion: 2
+        x: 3341
+        y: 1269
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f68f4bbfa5cd87a4ca6aab858cad63c1
+      internalID: -2056551363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_48
+      rect:
+        serializedVersion: 2
+        x: 3845
+        y: 1271
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e57f1ba8b7c1a674ca850863258aa3ca
+      internalID: 1771100643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_49
+      rect:
+        serializedVersion: 2
+        x: 2427
+        y: 1255
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc60fd64c2c26c548a0bf85020d8a5cc
+      internalID: -650860905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_50
+      rect:
+        serializedVersion: 2
+        x: 3337
+        y: 1253
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b872ca08ae0c0e74e9016ee3ffb8e1b1
+      internalID: -737741748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_51
+      rect:
+        serializedVersion: 2
+        x: 3647
+        y: 1246
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 711d6b6df8252b24b8c6156ac6464f6b
+      internalID: 1287952447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_52
+      rect:
+        serializedVersion: 2
+        x: 3666
+        y: 1252
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 461d43974ba125c458ec0782e2017d69
+      internalID: -1176839217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_53
+      rect:
+        serializedVersion: 2
+        x: 3339
+        y: 1245
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 103e1fc66c524a24bb3ab8f8d2226ca3
+      internalID: 1255187017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_54
+      rect:
+        serializedVersion: 2
+        x: 2517
+        y: 1230
+        width: 11
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cab1d2823004eb14d96668fad05d035c
+      internalID: -1203963429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_55
+      rect:
+        serializedVersion: 2
+        x: 3625
+        y: 1219
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74ba7841b388d4f4d85f06901acae766
+      internalID: -1780990872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_56
+      rect:
+        serializedVersion: 2
+        x: 3635
+        y: 1226
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3031dde13a821b47b59ee6b33c05562
+      internalID: 1800324959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_57
+      rect:
+        serializedVersion: 2
+        x: 3269
+        y: 1224
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66f96e42bc7d2824e9a463b64205298c
+      internalID: -1335159017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_58
+      rect:
+        serializedVersion: 2
+        x: 3443
+        y: 1062
+        width: 173
+        height: 163
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2c96fbc017f877418ef62fcde01c2fe
+      internalID: -1886764300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_59
+      rect:
+        serializedVersion: 2
+        x: 2453
+        y: 1203
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a408c756588a9845be96ddbb5b9f530
+      internalID: -612250228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_60
+      rect:
+        serializedVersion: 2
+        x: 2298
+        y: 1128
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09730ab1c0a58d24d86d9aa6aa9e6c4c
+      internalID: 2096501383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_61
+      rect:
+        serializedVersion: 2
+        x: 2310
+        y: 1133
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd75a31e49f5f2549855e5b9da1fdaec
+      internalID: -1629219664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_62
+      rect:
+        serializedVersion: 2
+        x: 2320
+        y: 1159
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ef29d607916f2f43b4d6a3c58e84b7a
+      internalID: -13849658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_63
+      rect:
+        serializedVersion: 2
+        x: 2335
+        y: 1117
+        width: 29
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89e6f44ed90299749a3c54dcab5f2900
+      internalID: -1110089070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_64
+      rect:
+        serializedVersion: 2
+        x: 2273
+        y: 1106
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a956c3dd247bd0e44a547cb7d34f16fc
+      internalID: 513093721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_65
+      rect:
+        serializedVersion: 2
+        x: 3380
+        y: 1101
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 991c6fffe3781794e9484c3b4c6d49a6
+      internalID: 2031369449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_66
+      rect:
+        serializedVersion: 2
+        x: 2156
+        y: 1097
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b684684ba99eb948bab706c17971ba8
+      internalID: 424047972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_67
+      rect:
+        serializedVersion: 2
+        x: 2169
+        y: 1087
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5168faaf8e0a09543bbd6846eccdc38b
+      internalID: 1693014224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_68
+      rect:
+        serializedVersion: 2
+        x: 2228
+        y: 1077
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89e48c512aca0114ca42ff711f00e16c
+      internalID: -617137641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_69
+      rect:
+        serializedVersion: 2
+        x: 1446
+        y: 491
+        width: 551
+        height: 566
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be5fc6e85f14feb43b7560b6f6c44525
+      internalID: -1079708926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_70
+      rect:
+        serializedVersion: 2
+        x: 3867
+        y: 1035
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b016b93dcc577ea4f8adde392275dfb7
+      internalID: -1657145878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_71
+      rect:
+        serializedVersion: 2
+        x: 3837
+        y: 1009
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18a22ddc98c9f5b4797ca26eb4e43007
+      internalID: 1272058124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_72
+      rect:
+        serializedVersion: 2
+        x: 3344
+        y: 970
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fccb60db64273b4684fa8e07fb72e51
+      internalID: 8501084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_73
+      rect:
+        serializedVersion: 2
+        x: 3364
+        y: 968
+        width: 21
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c846b8654db45b14090ae87cdbeb3b82
+      internalID: 39186405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_74
+      rect:
+        serializedVersion: 2
+        x: 3227
+        y: 896
+        width: 15
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 164893f6f887c1e4ab795f1f6fc5f6ce
+      internalID: -234078154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_75
+      rect:
+        serializedVersion: 2
+        x: 3317
+        y: 315
+        width: 465
+        height: 637
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa888116780c62d4d966005ab384f656
+      internalID: -725094153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_76
+      rect:
+        serializedVersion: 2
+        x: 3300
+        y: 878
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22d3605ffd180404080cdda4bdb33f84
+      internalID: -93081354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_77
+      rect:
+        serializedVersion: 2
+        x: 2115
+        y: 749
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaacd46e4346cc94f90e942119940265
+      internalID: 1474733488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_78
+      rect:
+        serializedVersion: 2
+        x: 2681
+        y: 718
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cacca5d790b789046b2939ead810d3eb
+      internalID: -621793194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_79
+      rect:
+        serializedVersion: 2
+        x: 2138
+        y: 684
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f982eaa791a44494085cc10cb8edcb05
+      internalID: 895328785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_80
+      rect:
+        serializedVersion: 2
+        x: 3005
+        y: 621
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 279afbd63a1b5ce4e8cea4cbb8cc6660
+      internalID: 1518347156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_81
+      rect:
+        serializedVersion: 2
+        x: 3142
+        y: 626
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f53a9cbc71b25db44be1452f6ba46d60
+      internalID: -1852650634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_82
+      rect:
+        serializedVersion: 2
+        x: 3790
+        y: 618
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95f78f7ed8ee19e498da60fe1da61e97
+      internalID: -859258692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_83
+      rect:
+        serializedVersion: 2
+        x: 2993
+        y: 595
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 556847a277f194a4195ae97cc6282acd
+      internalID: -771868897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_84
+      rect:
+        serializedVersion: 2
+        x: 2836
+        y: 494
+        width: 143
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bd96aab018b353458c8189f52f72a6b
+      internalID: 254617389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_85
+      rect:
+        serializedVersion: 2
+        x: 2989
+        y: 566
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14b7832a85eca124c871c3e0cc2cfa8f
+      internalID: -877761355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_86
+      rect:
+        serializedVersion: 2
+        x: 2992
+        y: 554
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 731ba180c48bce74dace3caa2946483b
+      internalID: -372354452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_87
+      rect:
+        serializedVersion: 2
+        x: 2664
+        y: 549
+        width: 10
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51664d3aaed2a6d41858937ed0b83d1f
+      internalID: -126178517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_88
+      rect:
+        serializedVersion: 2
+        x: 2478
+        y: 419
+        width: 273
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67531e496333f1f4ca0fae259e0f6e64
+      internalID: -799949219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_89
+      rect:
+        serializedVersion: 2
+        x: 3973
+        y: 491
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 165df5887d27bb044a51f54b22bcd577
+      internalID: -588000004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_90
+      rect:
+        serializedVersion: 2
+        x: 2033
+        y: 468
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a42d7bf94b890eb43aacd7596ba15152
+      internalID: 85371535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_91
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 468
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8dcaa5c9f58f4b44a1af53aa8f35f7c
+      internalID: 1863601620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_92
+      rect:
+        serializedVersion: 2
+        x: 2526
+        y: 304
+        width: 649
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4efde04bad548945b731a318f45166b
+      internalID: -1442459167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_93
+      rect:
+        serializedVersion: 2
+        x: 3967
+        y: 261
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0da97f604e497f449b18bff542efd108
+      internalID: -674143203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_94
+      rect:
+        serializedVersion: 2
+        x: 2745
+        y: 210
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67b583c07354ef140bfde8bbd8789e76
+      internalID: 887945292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_95
+      rect:
+        serializedVersion: 2
+        x: 1416
+        y: 140
+        width: 97
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7407f2ee643122b4e86905b0112e2772
+      internalID: 1224350938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_96
+      rect:
+        serializedVersion: 2
+        x: 2203
+        y: 166
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c50781ef4fd0b9e46bee9ce3079fdb4a
+      internalID: 304121094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_97
+      rect:
+        serializedVersion: 2
+        x: 2233
+        y: 163
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e07ad7d9fba0984a926733fb03becbe
+      internalID: 1026080269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_98
+      rect:
+        serializedVersion: 2
+        x: 3681
+        y: 160
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e75c55f1a61ce644aac41530fa04613
+      internalID: -1927633616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_99
+      rect:
+        serializedVersion: 2
+        x: 2200
+        y: 140
+        width: 53
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c15a44cb850f83b4da280bba96b6dea9
+      internalID: 1572960412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_100
+      rect:
+        serializedVersion: 2
+        x: 3264
+        y: 144
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b14dff469022c8943b053d1b0a2c35b4
+      internalID: -1465455191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_101
+      rect:
+        serializedVersion: 2
+        x: 3282
+        y: 140
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f91571d6d1e7ba408fe9e6ba8c37015
+      internalID: -90129528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_102
+      rect:
+        serializedVersion: 2
+        x: 3297
+        y: 145
+        width: 21
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96b344bb4df1a8c4d9f22e796739a525
+      internalID: 310776742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InterfaceC2_103
+      rect:
+        serializedVersion: 2
+        x: 3959
+        y: 140
+        width: 30
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 967f75fb51b538341b539dc6ccb8b877
+      internalID: -772893967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7c85651db532c8944a481f12a0d62cfa
     internalID: 0
     vertices: []
     indices: 
@@ -109,7 +2397,111 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      InterfaceC2_0: -1491937686
+      InterfaceC2_1: -515928066
+      InterfaceC2_10: 2146573341
+      InterfaceC2_100: -1465455191
+      InterfaceC2_101: -90129528
+      InterfaceC2_102: 310776742
+      InterfaceC2_103: -772893967
+      InterfaceC2_11: 1934624556
+      InterfaceC2_12: 1802768720
+      InterfaceC2_13: 1297303496
+      InterfaceC2_14: 235182227
+      InterfaceC2_15: 1497896646
+      InterfaceC2_16: -2086924465
+      InterfaceC2_17: -371520408
+      InterfaceC2_18: 889949907
+      InterfaceC2_19: -900225451
+      InterfaceC2_2: -1772904222
+      InterfaceC2_20: -492426173
+      InterfaceC2_21: 1651621961
+      InterfaceC2_22: 1039331568
+      InterfaceC2_23: -22143867
+      InterfaceC2_24: 918020629
+      InterfaceC2_25: -960949632
+      InterfaceC2_26: 286969044
+      InterfaceC2_27: -1217856090
+      InterfaceC2_28: 661067390
+      InterfaceC2_29: -612285963
+      InterfaceC2_3: -819754594
+      InterfaceC2_30: -1774024036
+      InterfaceC2_31: 439381362
+      InterfaceC2_32: 1999182004
+      InterfaceC2_33: -1767171995
+      InterfaceC2_34: 828418883
+      InterfaceC2_35: -651543639
+      InterfaceC2_36: 1448369478
+      InterfaceC2_37: 455860797
+      InterfaceC2_38: 1942209363
+      InterfaceC2_39: 2121795188
+      InterfaceC2_4: 95167680
+      InterfaceC2_40: 1618461575
+      InterfaceC2_41: 1043206285
+      InterfaceC2_42: 249885424
+      InterfaceC2_43: -1900157285
+      InterfaceC2_44: 159937253
+      InterfaceC2_45: 2040390447
+      InterfaceC2_46: 1595811971
+      InterfaceC2_47: -2056551363
+      InterfaceC2_48: 1771100643
+      InterfaceC2_49: -650860905
+      InterfaceC2_5: 181839734
+      InterfaceC2_50: -737741748
+      InterfaceC2_51: 1287952447
+      InterfaceC2_52: -1176839217
+      InterfaceC2_53: 1255187017
+      InterfaceC2_54: -1203963429
+      InterfaceC2_55: -1780990872
+      InterfaceC2_56: 1800324959
+      InterfaceC2_57: -1335159017
+      InterfaceC2_58: -1886764300
+      InterfaceC2_59: -612250228
+      InterfaceC2_6: 473198989
+      InterfaceC2_60: 2096501383
+      InterfaceC2_61: -1629219664
+      InterfaceC2_62: -13849658
+      InterfaceC2_63: -1110089070
+      InterfaceC2_64: 513093721
+      InterfaceC2_65: 2031369449
+      InterfaceC2_66: 424047972
+      InterfaceC2_67: 1693014224
+      InterfaceC2_68: -617137641
+      InterfaceC2_69: -1079708926
+      InterfaceC2_7: 54683346
+      InterfaceC2_70: -1657145878
+      InterfaceC2_71: 1272058124
+      InterfaceC2_72: 8501084
+      InterfaceC2_73: 39186405
+      InterfaceC2_74: -234078154
+      InterfaceC2_75: -725094153
+      InterfaceC2_76: -93081354
+      InterfaceC2_77: 1474733488
+      InterfaceC2_78: -621793194
+      InterfaceC2_79: 895328785
+      InterfaceC2_8: 380358855
+      InterfaceC2_80: 1518347156
+      InterfaceC2_81: -1852650634
+      InterfaceC2_82: -859258692
+      InterfaceC2_83: -771868897
+      InterfaceC2_84: 254617389
+      InterfaceC2_85: -877761355
+      InterfaceC2_86: -372354452
+      InterfaceC2_87: -126178517
+      InterfaceC2_88: -799949219
+      InterfaceC2_89: -588000004
+      InterfaceC2_9: -1487663153
+      InterfaceC2_90: 85371535
+      InterfaceC2_91: 1863601620
+      InterfaceC2_92: -1442459167
+      InterfaceC2_93: -674143203
+      InterfaceC2_94: 887945292
+      InterfaceC2_95: 1224350938
+      InterfaceC2_96: 304121094
+      InterfaceC2_97: 1026080269
+      InterfaceC2_98: -1927633616
+      InterfaceC2_99: 1572960412
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

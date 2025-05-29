@@ -29,26 +29,36 @@ public class IsometricRenderer : MonoBehaviour
 
     int lastWeaponDirection;
 
-    private EnemyController myController;
+    //private EnemyController myController;
 
     //The animator the IsoRenderer refers to. Typically attached to the animated GameObject, e.g. the Enemy.
     Animator animator;
 
     private AnimationState currentState = AnimationState.Idle;
 
-    private bool isPerformingAction = false;
+    public bool isPerformingAction = false;
 
     // Mapping von AnimationState zu möglichen Clipnamen
     private static readonly Dictionary<AnimationState, string[]> animationVariants = new Dictionary<AnimationState, string[]>()
     {
     { AnimationState.Idle,   new[] { "Idle" } },
     { AnimationState.Walk,   new[] { "Walk" } },
-    { AnimationState.Attack, new[] { "Attack1", "Attack2" } },
+    { AnimationState.Attack, new[] { "Attack1", "Attack2" } }, //can overwrite
     { AnimationState.Cast,   new[] { "Casting" } },
-    { AnimationState.Hit,    new[] { "Hit1", "Hit2" } },
-    { AnimationState.Die,    new[] { "Die1", "Die2" } },
+    { AnimationState.Hit,    new[] { "Hit1", "Hit2" } }, //can overwrite
+    { AnimationState.Die,    new[] { "Die1", "Die2" } }, //can overwrite, can not get overwritten
     };
 
+
+    private static readonly Dictionary<AnimationState, int> animationPriority = new Dictionary<AnimationState, int>()
+    {
+        { AnimationState.Idle, 0 },
+        { AnimationState.Walk, 0 },
+        { AnimationState.Cast, 1 },
+        { AnimationState.Hit, 2 },
+        { AnimationState.Attack, 2 },
+        { AnimationState.Die, 10 } // Höchste Priorität → ununterbrechbar
+    };
     //Set the Spritesheet to auto Animate this enemy.
     public Sprite spriteSheet; 
     [HideInInspector] public RuntimeAnimatorController generatedAnimator;
@@ -65,55 +75,59 @@ public class IsometricRenderer : MonoBehaviour
         animator = GetComponent<Animator>();
         isPerformingAction = false;
 
-        myController = GetComponent<EnemyController>();
+        //myController = GetComponent<EnemyController>();
 
     }
-
     public void Play(AnimationState state)
     {
-        // Welche States dürfen mehrfach getriggert werden
-        bool canRepeat = (state == AnimationState.Attack); 
-
-        if (!canRepeat && state == currentState)
-            return;
-
-        // Falls Action läuft, unterbrich nur wenn der State nicht wiederholbar ist
-        if (isPerformingAction && !canRepeat)
+        if (!CanOverride(state))
             return;
 
         currentState = state;
 
-        // 🎲 Hol die verfügbaren Varianten
         if (!animationVariants.TryGetValue(state, out string[] variants))
-        {
-            //Debug.LogWarning($"No animation defined for state: {state}");
             return;
-        }
 
         string chosenAnim = variants[Random.Range(0, variants.Length)];
-        //Debug.Log($"[IsoRenderer] {state} → Playing: {chosenAnim}");
-
         animator.Play(chosenAnim);
 
-        // Falls Animation blocking ist, starte Timer
-        if (state == AnimationState.Attack || state == AnimationState.Cast || state == AnimationState.Hit || state == AnimationState.Die)
+        if (state == AnimationState.Attack || state == AnimationState.Cast || state == AnimationState.Die)
         {
             isPerformingAction = true;
             StartCoroutine(ResetActionAfterAnimation());
         }
     }
 
+    public float GetCurrentAnimationLength()
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        return stateInfo.length;
+    }
+
     private IEnumerator ResetActionAfterAnimation()
     {
         yield return null; // Ein Frame warten, um den neuen State korrekt zu erfassen
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        float animLength = stateInfo.length;
+        
+        float animLength = GetCurrentAnimationLength();
 
         yield return new WaitForSeconds(animLength);
 
         isPerformingAction = false;
 
     }
+
+    private bool CanOverride(AnimationState newState)
+    {
+        if (currentState == AnimationState.Die)
+            return false;
+
+        if (newState == currentState && !(newState == AnimationState.Attack || newState == AnimationState.Hit))
+            return false;
+
+        return animationPriority[newState] >= animationPriority[currentState];
+    }
+
+
 
     public void ToggleActionState(bool active)
     {

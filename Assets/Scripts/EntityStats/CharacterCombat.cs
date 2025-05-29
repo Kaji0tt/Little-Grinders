@@ -168,7 +168,7 @@ public class CharacterCombat : MonoBehaviour
             // Vermeide NullReference, falls Gegner bereits besiegt wurden
             if (enemy != null)
             {
-                enemy.GetComponent<MobStats>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
+                enemy.TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
                 //enemy.GetComponent<IEntitie>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
                 // OPTIONAL: Zeige Hit-Animation, Partikeleffekt etc.
                 // Instantiate(hitEffectPrefab, enemy.transform.position, Quaternion.identity);

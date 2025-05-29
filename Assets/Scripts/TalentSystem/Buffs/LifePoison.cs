@@ -58,7 +58,7 @@ public class LifePoison : Buff
 
         float totalDamage = MyBaseDamage + lifeDamage + apDamage;
         Debug.Log("Ticking for " + MyBaseDamage + " and " + lifeDamage + " lifeDamage and " + apDamage + " apDamage. So in total:" + totalDamage);
-        instanceTarget.TakeDirectDamage(MyBaseDamage + lifeDamage + apDamage, 900);
+        //instanceTarget.TakeDirectDamage(MyBaseDamage + lifeDamage + apDamage, 900);
 
     }
 

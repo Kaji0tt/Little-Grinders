@@ -93,6 +93,12 @@ public class EnemyController : MonoBehaviour
         CalculateHPCanvas();
         myEntitieState?.Update();
 
+        if(gameObject.name == "Dustling Start 1")
+        {
+            Debug.Log(myEntitieState.ToString());
+            Debug.Log(myIsoRenderer.isPerformingAction);
+            Debug.Log("Troubleshooten warum Attack abgespielt wird, wenn State == Chase & isPerformingAction == false");
+        }
 
     }
 
@@ -129,10 +135,7 @@ public class EnemyController : MonoBehaviour
 
     public void PerformAttack()
     {
-        if (myIsoRenderer != null)
-        {
-            myIsoRenderer.Play(AnimationState.Attack);
-        }
+
 
         // TODO: Schadenslogik, Cooldowns etc.
         PlayerStats playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
@@ -241,10 +244,10 @@ public class EnemyController : MonoBehaviour
 
         if (mobStats.Hp.Value < maxHpForUI)
         {
-
+            if(!mobStats.isDead)
             hpBar.SetActive(true);
 
-            if (Input.GetKey(KeyCode.LeftShift))  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
+            if (Input.GetKey(KeyCode.LeftShift) && !mobStats.isDead)  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
             {
                 TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
@@ -253,7 +256,7 @@ public class EnemyController : MonoBehaviour
                     statText[0].text = mobStats.level.ToString();
                 }
             }
-            else
+            else if(!mobStats.isDead)
             {
                 TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
@@ -279,46 +282,72 @@ public class EnemyController : MonoBehaviour
         }
 
     }
-    /*
-    public virtual void Attack()
+
+
+    public void TakeDamage(float incoming_damage, int range_radius_ofDMG)
     {
+        //Debug.Log("Ich, " + gameObject.name + " bekomme " + incoming_damage + " Schaden.");
 
-        //Fetch the Playerstats of the player
-        PlayerStats playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
+        //float player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
-        //Countdown for the Auto-Attack Cooldown
-        mobStats.attackCD -= Time.deltaTime;
-        if (playerStats != null)
+        if (PlayerDistance() <= range_radius_ofDMG)
         {
-            if (mobStats.attackCD <= 0)
+            incoming_damage = 10 * (incoming_damage * incoming_damage) / (mobStats.Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
+
+            incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
+
+            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
+
+            //Debug.Log("Abzgl. Rüstung müsste das mein Leben von: " + mobStats.Hp.Value + ", um " + incoming_damage + " reduzieren");
+            //Sound-Array mit den dazugehörigen Sound-Namen
+            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
+
+            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
+            if (AudioManager.instance != null)
+
+                //Play a Sound at random.
+                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+
+            //Setze den Entitie State auf "Hit"
+            // Nur Hit-Animation, wenn NICHT im Angriff
+            if (!(myEntitieState is AttackState))
             {
-
-                //Sound-Array mit den dazugehörigen Sound-Namen
-                string[] hitSounds = new string[] { "Mob_ZombieAttack1", "Mob_ZombieAttack2", "Mob_ZombieAttack3" };
-
-                //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-                if (AudioManager.instance != null)
-
-                    //Play a Sound at random.
-                    AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
-
-                //Füge dem Spieler Schaden entsprechend der AttackPower hinzu. int Range derzeit irrelevant (0)
-                playerStats.TakeDamage(mobStats.AttackPower.Value, 0);
-
-                //Calle Außerdem das GameEvent, dass der Spieler angegriffen wurde.
-                //GameEvents.current.PlayerWasAttacked(mobStats, mobStats.AttackPower.Value);
-                myIsoRenderer.PlayAttack();
-
-                //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
-                mobStats.attackCD = 1f / mobStats.AttackSpeed.Value;
-
-
+                TransitionTo(new HitState(this));
             }
+
+            //pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
         }
     }
-    */
 
-    
+
+    //Take Direct Damage ignoriert die Rüstungswerte der Entitie - besonders relevant für AP Schaden.
+    public virtual void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
+    {
+        float player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
+
+        if (player_distance <= range_radius_ofDMG)
+        {
+
+            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
+
+            //Sound-Array mit den dazugehörigen Sound-Namen
+            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
+
+            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
+            if (AudioManager.instance != null)
+
+                //Play a Sound at random.
+                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+
+
+            //Setze den Entitie State auf "Hit"
+            //TransitionTo(new HitState(this));
+            myIsoRenderer.Play(AnimationState.Hit);
+
+            //pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
+
+        }
+    }
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.
     public virtual void OnTriggerEnter(Collider collider)
     {

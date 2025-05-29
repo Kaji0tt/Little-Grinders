@@ -15,7 +15,7 @@ public class Poison : Buff
 
     public override void Activated(IEntitie instanceTarget, Transform targetTransform)
     {
-        instanceTarget.TakeDirectDamage(MyBaseDamage, 0);
+        //instanceTarget.TakeDirectDamage(MyBaseDamage, 0);
     }
 
 
@@ -31,7 +31,7 @@ public class Poison : Buff
     public override void OnTick(IEntitie instanceTarget, IEntitie instanceOrigin)
     {
         
-       instanceTarget.TakeDirectDamage(MyTickDamage, 0);
+       //instanceTarget.TakeDirectDamage(MyTickDamage, 0);
         Instantiate(particleEffect, PlayerManager.instance.player.transform);
         
     }
