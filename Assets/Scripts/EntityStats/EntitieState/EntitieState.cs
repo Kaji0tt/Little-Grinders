@@ -151,25 +151,25 @@ public class AttackState : EntitieState
     public AttackState(EnemyController controller) : base(controller) { }
 
     //private float attackCooldown;
-    private float timer;
+    private float attackTime;
 
 
 
     public override void Enter()
     {
         //attackCooldown = 
-        controller.StopMoving();
+        //controller.StopMoving();
         controller.PerformAttack();
         if (controller.myIsoRenderer != null)
         {
             controller.myIsoRenderer.Play(AnimationState.Attack);
         }
-        timer = controller.mobStats.attackCD;
+        attackTime = controller.myIsoRenderer.GetCurrentAnimationLength();
     }
 
     public override void Update()
     {
-        timer -= Time.deltaTime;
+        attackTime -= Time.deltaTime;
 
         if (controller.isDead)
         {
@@ -177,7 +177,7 @@ public class AttackState : EntitieState
             return;
         }
 
-        if (timer <= 0f)
+        if (attackTime <= 0f)
         {
             // Wieder angreifen oder zurück zu Chase
             if (controller.IsPlayerInAttackRange())
@@ -188,7 +188,7 @@ public class AttackState : EntitieState
             else
             {
                 //Debug.Log("Ouh! Player out of range, lets Chase!");
-                controller.TransitionTo(new ChaseState(controller));
+                controller.TransitionTo(new IdleState(controller));
             }
         }
     }
@@ -239,6 +239,7 @@ public class DeadState : EntitieState
 
     public override void Enter()
     {
+        controller.StopMoving();
         controller.hpBar.SetActive(false);
         controller.myIsoRenderer.ToggleActionState(false);
         controller.myIsoRenderer.Play(AnimationState.Die);

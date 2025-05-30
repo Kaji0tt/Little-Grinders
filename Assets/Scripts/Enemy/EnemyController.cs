@@ -95,9 +95,9 @@ public class EnemyController : MonoBehaviour
 
         if(gameObject.name == "Dustling Start 1")
         {
-            Debug.Log(myEntitieState.ToString());
-            Debug.Log(myIsoRenderer.isPerformingAction);
-            Debug.Log("Troubleshooten warum Attack abgespielt wird, wenn State == Chase & isPerformingAction == false");
+            //Debug.Log(myEntitieState.ToString());
+            //Debug.Log(myIsoRenderer.isPerformingAction);
+            //Debug.Log("Troubleshooten warum Attack abgespielt wird, wenn State == Chase & isPerformingAction == false");
         }
 
     }

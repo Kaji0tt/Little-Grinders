@@ -9298,6 +9298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0631f36ac84554335b5b1f70f25312fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPerformingAction: 0
   spriteSheet: {fileID: 0}
   generatedAnimator: {fileID: 0}
 --- !u!95 &306612086
@@ -65153,6 +65154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0631f36ac84554335b5b1f70f25312fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPerformingAction: 0
   spriteSheet: {fileID: 0}
   generatedAnimator: {fileID: 0}
 --- !u!54 &1716960237
