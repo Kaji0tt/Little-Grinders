@@ -60,7 +60,11 @@ public class IsometricRenderer : MonoBehaviour
         { AnimationState.Die, 10 } // Höchste Priorität → ununterbrechbar
     };
     //Set the Spritesheet to auto Animate this enemy.
-    public Sprite spriteSheet; 
+    public Sprite spriteSheet;
+
+    public bool mirrorSpritesheet = false;
+
+
     [HideInInspector] public RuntimeAnimatorController generatedAnimator;
 
     private void Reset()
@@ -80,9 +84,6 @@ public class IsometricRenderer : MonoBehaviour
     }
     public void Play(AnimationState state)
     {
-        if (!CanOverride(state))
-            return;
-
         currentState = state;
 
         if (!animationVariants.TryGetValue(state, out string[] variants))
@@ -115,18 +116,6 @@ public class IsometricRenderer : MonoBehaviour
         isPerformingAction = false;
 
     }
-
-    private bool CanOverride(AnimationState newState)
-    {
-        if (currentState == AnimationState.Die)
-            return false;
-
-        if (newState == currentState && !(newState == AnimationState.Attack || newState == AnimationState.Hit))
-            return false;
-
-        return animationPriority[newState] >= animationPriority[currentState];
-    }
-
 
 
     public void ToggleActionState(bool active)

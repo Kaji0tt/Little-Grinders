@@ -18,7 +18,19 @@ public class IsometricRendererEditor : Editor
 
         if (GUILayout.Button("🎞 Generate Animations from SpriteSheet"))
         {
-            EnemyAnimationUtility.CreateGroupedAnimationsFromSpriteSheet(iso.spriteSheet.name, iso.spriteSheet);
+            var controller = EnemyAnimationUtility.CreateGroupedAnimationsFromSpriteSheet(iso.spriteSheet.name, iso.spriteSheet);
+            if (controller != null)
+            {
+                Animator animator = iso.gameObject.GetComponent<Animator>();
+                if (animator == null)
+                    animator = iso.gameObject.AddComponent<Animator>();
+
+                animator.runtimeAnimatorController = controller;
+
+                // Optional: GameObject im Editor hervorheben
+                Selection.activeGameObject = iso.gameObject;
+                EditorGUIUtility.PingObject(iso.gameObject);
+            }
         }
     }
 }

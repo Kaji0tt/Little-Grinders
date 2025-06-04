@@ -2,40 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class LogScript : MonoBehaviour
 {
-    #region Singleton
     public static LogScript instance;
+
+    private Text text;
+    private Coroutine fadeCoroutine;
+
     private void Awake()
     {
         instance = this;
-
     }
-    #endregion
-
-    private Text text;
-    private bool input = false;
 
     private void Start()
     {
-        text = transform.GetComponent<Text>();
+        text = GetComponent<Text>();
         text.text = "";
+        text.canvasRenderer.SetAlpha(0f);
     }
 
-    void Update()
+    public void ShowLog(string logtxt, float duration = -1f)
     {
-        if(input)
-        {
-            text.CrossFadeAlpha(0, 4, false);
-            input = false;
-        }
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+
+        if (duration <= 0f)
+            duration = Mathf.Clamp(logtxt.Length * 0.1f, 3f, 8f); // Dynamische Dauer
+
+        fadeCoroutine = StartCoroutine(ShowLogRoutine(logtxt, duration));
     }
 
-    public void ShowLog(string logtxt)
+    private IEnumerator ShowLogRoutine(string logtxt, float duration)
     {
-        text.CrossFadeAlpha(1, 1, false);
         text.text = logtxt;
-        input = true;
+
+        text.canvasRenderer.SetAlpha(0f);              // Unsichtbar starten
+        text.CrossFadeAlpha(1f, 0.5f, false);          // Sanftes Einfaden
+
+        yield return new WaitForSeconds(duration);
+
+        text.CrossFadeAlpha(0f, 2f, false);            // Langsam ausfaden
     }
 }
