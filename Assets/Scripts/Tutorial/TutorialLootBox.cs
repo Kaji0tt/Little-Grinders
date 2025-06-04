@@ -33,9 +33,27 @@ public class TutorialLootBox : MonoBehaviour
         PlayerStats.eventLevelUp += ShowNextUI;
 
 
+
     }
 
+    private void Start()
+    {
+        StartCoroutine(ShowIntroLogs());
+    }
 
+    private IEnumerator ShowIntroLogs()
+    {
+        yield return new WaitUntil(() => LogScript.instance != null); // Warten bis LogScript bereit ist
+
+        LogScript.instance.ShowLog("Hey Adventurer!");
+        yield return new WaitForSeconds(2f);
+
+        LogScript.instance.ShowLog("Welcome to the world of Little Grinders!");
+        yield return new WaitForSeconds(3f);
+
+        LogScript.instance.ShowLog("Use WASD to move around and open the Chest to prepare for Battle!");
+        yield return new WaitForSeconds(5f);
+    }
 
     void OnDisable()
     {
@@ -45,11 +63,11 @@ public class TutorialLootBox : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        if (Input.GetKeyDown(KeyCode.Q) && collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && lootBoxOpened == false)
+        if (Input.GetKeyDown(KeyCode.F) && collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && lootBoxOpened == false)
         {
             lootBoxOpened = true;
 
-            Vector3 spawnPos = new Vector3(gameObject.transform.position.x + 0.5f, gameObject.transform.position.y, gameObject.transform.position.z);
+            Vector3 spawnPos = new Vector3(PlayerManager.instance.player.transform.position.x + .5f, gameObject.transform.position.y, PlayerManager.instance.player.transform.position.z + .9f);
 
             ItemWorld.SpawnItemWorld(spawnPos, new ItemInstance(firstItem));
 
@@ -63,20 +81,24 @@ public class TutorialLootBox : MonoBehaviour
     {
         if (lootBoxOpened)
         {
-            sprite = this.gameObject.GetComponentInParent<SpriteRenderer>();
+            sprite = GetComponentInParent<SpriteRenderer>();
             sprite.sprite = newSprite;
-            /*
-            if(tutorialShowed == false)
-            tutorialBox.ShowTutorial(3);
-            tutorialShowed = true;
-            */
 
             tutorialUI1.gameObject.SetActive(false);
 
-            tutorialUI2.gameObject.SetActive(true);
+            StartCoroutine(PostLootLog()); // NEU
 
-            //tutorialUI2.GetComponent<Animator>().SetInteger("Arrow", 1);
+            // ...
         }
+    }
+
+    private IEnumerator PostLootLog()
+    {
+        LogScript.instance.ShowLog("Great! Get the sword!");
+
+        yield return new WaitForSeconds(3.5f); // oder automatisch
+        
+        LogScript.instance.ShowLog("Open the inventory on \"C\" and do \"Mouse1\" on the sword.");
 
     }
 

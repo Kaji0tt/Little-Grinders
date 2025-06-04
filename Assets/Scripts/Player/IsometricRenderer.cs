@@ -60,7 +60,11 @@ public class IsometricRenderer : MonoBehaviour
         { AnimationState.Die, 10 } // Höchste Priorität → ununterbrechbar
     };
     //Set the Spritesheet to auto Animate this enemy.
-    public Sprite spriteSheet; 
+    public Sprite spriteSheet;
+
+    public bool mirrorSpritesheet = false;
+
+
     [HideInInspector] public RuntimeAnimatorController generatedAnimator;
 
     private void Reset()

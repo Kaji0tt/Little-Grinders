@@ -27,9 +27,9 @@ public class EnemyController : MonoBehaviour
     //public Transform myTarget;
 
 
-    [Header("Interface Referenzen")]
-    public GameObject hpBar;
-    public Slider enemyHpSlider;
+    //[Header("Interface Referenzen")]
+    public GameObject hpBar { get; private set; }
+    private Slider enemyHpSlider;
 
     /// <summary>
     /// Bullet Types - finde eine bessere Methode die entsprechenden Scripte abzurufen.
@@ -114,23 +114,32 @@ public class EnemyController : MonoBehaviour
     public virtual void AddEssentialComponents()
     {
         //Get Renderer Component.
-        if(myIsoRenderer == null)
-        myIsoRenderer = gameObject.GetComponent<IsometricRenderer>();
+        if (myIsoRenderer == null)
+            myIsoRenderer = gameObject.GetComponent<IsometricRenderer>();
 
         //Add the MobCamScript.
-        if(gameObject.GetComponent<MobsCamScript>() == null)
-        gameObject.AddComponent<MobsCamScript>();
+        if (gameObject.GetComponent<MobsCamScript>() == null)
+            gameObject.AddComponent<MobsCamScript>();
 
         if (myNavMeshAgent == null)
             myNavMeshAgent = GetComponent<NavMeshAgent>();
+
+        // Automatische Referenzierung der UI-Elemente
+        if (hpBar == null)
+            hpBar = transform.GetChild(1).gameObject;
+
+        if (enemyHpSlider == null && hpBar != null)
+            enemyHpSlider = hpBar.GetComponentInChildren<Slider>();
     }
 
     #region Action StateMachine
     public void TransitionTo(EntitieState newState)
-    {
-        myEntitieState?.Exit();
-        myEntitieState = newState;
-        myEntitieState.Enter();
+    {   if(!mobStats.isDead)
+        {
+            myEntitieState?.Exit();
+            myEntitieState = newState;
+            myEntitieState.Enter();
+        }
     }
 
     public void PerformAttack()
