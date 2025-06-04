@@ -66,6 +66,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Scroller\MovementDirection.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\ItemSpells\ItemSpellTemp.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buffs\LifePoison.cs" />
+    <Compile Include="Assets\Scripts\Combat\CharacterCombat.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\SelectionBox\IBoxSelectable.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Bar.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\Events\ColorChangedEvent.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\MobsCamScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\Events\HSVChangedEvent.cs" />
+    <Compile Include="Assets\Scripts\Combat\AttackStep.cs" />
     <Compile Include="Assets\Scripts\EntityStats\PlayerStats.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\HorizontalScrollSnap.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyData.cs" />
@@ -297,6 +299,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\HSVUtil.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_InfiniteScroll.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_UI.cs" />
+    <Compile Include="Assets\Scripts\Combat\WeaponCombo.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\MapSave.cs" />
@@ -347,7 +350,6 @@
     <Compile Include="Assets\Scripts\Manager\SaveGame\GlobalMap.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Heal.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
-    <Compile Include="Assets\Scripts\EntityStats\CharacterCombat.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\BoundTooltip\BoundTooltipItem.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Ability.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\Lootbox.cs" />

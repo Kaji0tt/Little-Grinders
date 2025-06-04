@@ -19,6 +19,7 @@ public class Item : ScriptableObject
     public string ItemDescription;
     [SerializeField]
     public ItemType itemType;
+    public WeaponCombo weaponCombo;
     [HideInInspector]
     public string itemRarity;   // [Currently gettin Implemented]: https://www.youtube.com/watch?v=dvSYloBxzrU
     public int Range;
@@ -70,6 +71,7 @@ public class ItemInstance :  IMoveable, IUseable
     public string ItemDescription;
     public string ItemValueInfo;
     public ItemType itemType;
+    public WeaponCombo weaponCombo;
     public string itemRarity = "Gewöhnlich";
 
     public int Range;
@@ -135,8 +137,8 @@ public class ItemInstance :  IMoveable, IUseable
         ItemName = item.ItemName;
         ItemDescription = item.ItemDescription;
         itemType = item.itemType;
-        
 
+        weaponCombo = item.weaponCombo;
         //Noch nicht implementiert. Das Interface MyUseAble wird wichtig, wenn wir aktive Fähigkeiten oder Tränke über die ActionBar abrufen können wollen.
         if(itemType == ItemType.Consumable)
         {

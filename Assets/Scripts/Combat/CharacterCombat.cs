@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 //Finite-State-Machine
 public enum CombatState
@@ -30,6 +31,16 @@ public class CharacterCombat : MonoBehaviour
     //public List<Buff> playerBuffs = new List<Buff>(); 
 
     private CombatState currentState = CombatState.Idle;
+
+    private int currentComboIndex = 0;
+    private float lastAttackTime = 1.5f;
+    private float comboResetTime = 1.2f;
+
+    private WeaponCombo currentCombo => equippedWeapon?.weaponCombo;
+
+    private ItemInstance equippedWeapon =>
+        PlayerManager.instance.player.equippedItems
+            .FirstOrDefault(i => i.itemType == ItemType.Weapon);
 
     #endregion
 
@@ -138,57 +149,64 @@ public class CharacterCombat : MonoBehaviour
 
     void Attack()
     {
-
-        // Prüfe, ob eine Waffe ausgerüstet ist (Range != 0 als Platzhalter)
-        if (playerStats.Range != 0)
+        //Wenn derzeit keine Combo durchgeführt wird oder keine Schritte enthalten sind, führe keine Combo durch.
+        if (currentCombo == null || currentCombo.comboSteps.Count == 0)
         {
-            // Trigger die Angriffsanimation
-            weaponAnimator.speed = playerStats.AttackSpeed.Value;
-            weaponAnimator.SetBool("isAttacking", true);
-
-            // Berechne Verzögerung basierend auf AttackSpeed (1 / Speed) * 0.5 für „Trefferzeitpunkt“ in der Mitte
-            float delay = (1f / playerStats.AttackSpeed.Value) * 0.5f;
-
-            // Starte Coroutine, um Schaden + Sound verzögert auszuführen
-            StartCoroutine(DelayedHit(delay));
+            Debug.LogWarning("Keine Combo definiert oder keine Schritte enthalten.");
+            return;
         }
 
+        // Reset Combo, wenn zu lange her
+        if (Time.time - lastAttackTime > comboResetTime)
+        {
+            currentComboIndex = 0;
+        }
+
+        // Stelle sicher, dass Index innerhalb der Liste liegt
+        if (currentComboIndex >= currentCombo.comboSteps.Count)
+        {
+            currentComboIndex = 0;
+        }
+
+        AttackStep currentStep = currentCombo.comboSteps[currentComboIndex];
+
+        // Animation abspielen
+        weaponAnimator.speed = playerStats.AttackSpeed.Value;
+        Debug.Log(currentStep.attackStepName);
+
+        // Berechne Delay für den Trefferpunkt
+        float delay = (1f / playerStats.AttackSpeed.Value) * currentStep.timeToNextAttack;
+
+        // Berechne Schaden
+        float baseDamage = playerStats.AttackPower.Value;
+        float finalDamage = baseDamage * currentStep.damageMultiplier;
+
+        StartCoroutine(DelayedHit(delay, finalDamage));
+
+        lastAttackTime = Time.time;
+        currentComboIndex++;
     }
 
     // Coroutine, die Schaden und Sound nach einer gewissen Verzögerung ausführt
-    IEnumerator DelayedHit(float delay)
+    IEnumerator DelayedHit(float delay, float damage)
     {
-        // Warte die definierte Verzögerung (halbe Angriffszeit)
         yield return new WaitForSeconds(delay);
 
-        // *** COLLISION + SCHADEN ***
-        // Prüfe alle Gegner im Angriffsbereich und wende Schaden an
         foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
         {
-            // Vermeide NullReference, falls Gegner bereits besiegt wurden
             if (enemy != null)
             {
-                enemy.TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-                //enemy.GetComponent<IEntitie>().TakeDamage(playerStats.AttackPower.Value, playerStats.Range);
-                // OPTIONAL: Zeige Hit-Animation, Partikeleffekt etc.
-                // Instantiate(hitEffectPrefab, enemy.transform.position, Quaternion.identity);
+                enemy.TakeDamage(damage, playerStats.Range);
             }
         }
 
-        // *** SOUND ***
-        // Spiele zufälligen Angriffssound ab, sofern AudioManager vorhanden ist
         if (AudioManager.instance != null)
         {
             string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };
-
             AudioManager.instance.Play(attackSounds[Random.Range(0, attackSounds.Length)]);
         }
 
-        // *** GAME-EVENT ***
-        // Informiere das System, dass der Spieler angegriffen hat (z. B. für UI, XP, etc.)
-        GameEvents.Instance.PlayerHasAttacked(playerStats.AttackPower.Value);
-
-        // Visuelles Feedback vorbereiten (z. B. Partikeleffekt bei Slow, Treffereffekt etc.)
+        GameEvents.Instance.PlayerHasAttacked(damage);
         SpawnAttackVFX();
     }
 
@@ -274,32 +292,5 @@ public class CharacterCombat : MonoBehaviour
 
     }
 
-    /*
-    private void OnTriggerStay(Collider collider)
-    {
-        
-        //Versuche einen Collider mit der Item-World Klasse zu finden
-        ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
 
-        //Falls ein entsprechender Collider gefunden wurde und die pickKey Taste (Default Q) gedrück wurde
-
-        //Hier ist noch ein Fehler - beziehen wir uns auf den UI-Manager Key, wird das Item doppel aufgesammelt.
-        if (itemWorld != null && Input.GetKey(UI_Manager.instance.pickKey))
-        //if (itemWorld != null && Input.GetKey(KeyCode.Q)) 
-        {
-
-            //Falls noch Platz im Inventar ist
-            if(inventory.itemList.Count <= 14)
-            {
-                //Füge Item zum Inventar hinzu
-                inventory.AddItem(itemWorld.GetItem());
-
-                //Zerstöre den Collider
-                itemWorld.DestroySelf();
-            }
-
-        }
-
-    }
-    */
 }
