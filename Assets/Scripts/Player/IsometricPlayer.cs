@@ -332,7 +332,6 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     {
         item.Equip(playerStats);
         equippedItems.Add(item);
-
     }
     public void Dequip (ItemInstance item)
     {
