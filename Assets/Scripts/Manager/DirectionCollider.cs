@@ -39,8 +39,7 @@ public class DirectionCollider : MonoBehaviour
 
         Vector3 newPosition = PlayerManager.instance.player.transform.position + dirVector;
         newPosition.y = transform.position.y; // Setze die Y-Position auf die aktuelle Y-Position des DirectionColliders
-        transform.position = newPosition;
-    
+        transform.position = newPosition;    
 
         //Das is noch nicht perfekt, aber OnTriggerExit() funktioniert nicht richtig, 
         //um die entsprechenden Listeneinträge zu entfernen. Deshalb dafür noch WorkAround finden.
@@ -53,11 +52,6 @@ public class DirectionCollider : MonoBehaviour
             }
 
         }
-
-        //print(collidingEnemyControllers.Count());
-
-
-
 
     }
 

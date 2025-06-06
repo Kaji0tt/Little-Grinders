@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b365318f5579c2c4f8607142f7c8e183, type: 3}
+  m_Name: SwordCombo
+  m_EditorClassIdentifier: 
+  comboSteps:
+  - animationClip: {fileID: 7400000, guid: 36afddbb7db3fe54cac13647dfc03014, type: 2}
+    attackStepName: Sword_1
+    damageMultiplier: 1
+    timeToNextAttack: 0.5
+  - animationClip: {fileID: 7400000, guid: 5375b16e1eb97954389b68e49c471047, type: 2}
+    attackStepName: Sword_2
+    damageMultiplier: 1.2
+    timeToNextAttack: 0.5
+  - animationClip: {fileID: 7400000, guid: 7ed87b34757d29c488d9cbe9bf5b743d, type: 2}
+    attackStepName: Sword_Smash
+    damageMultiplier: 1.5
+    timeToNextAttack: 1

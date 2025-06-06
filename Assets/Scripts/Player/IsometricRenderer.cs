@@ -19,7 +19,6 @@ public class IsometricRenderer : MonoBehaviour
     //Arrays for Player
     public static readonly string[] staticDirections = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
     public static readonly string[] runDirections = { "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
-    public static readonly string[] runNPCDirections = {"Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
 
     //Array created for Weapon Animation, once upon a time i didnt know about programming & logical structure.
     public static readonly string[] weaponSwing = { "Attack_N", "Attack_NW", "Attack_W", "Attack_SW", "Attack_S", "Attack_SE", "Attack_E", "Attack_NE" };
@@ -147,17 +146,18 @@ public class IsometricRenderer : MonoBehaviour
         animator.Play(directionArray[lastDirection]);
     }
 
-    //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll animiert werden.
-    public void SetWeaponDirection(Vector2 direction, Animator weaponAnim)
+    
+    //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll die Idle Animation darstellen.
+    public void AnimateIdleWeapon(Vector2 direction, CharacterCombat charCombat)
     {
         string[] directionArray; //= null;
 
+        //Animator parentAnimator = GetComponentInParent<Animator>();
+        //Debug.Log(parentAnimator);
         //Falls die Combat-Stance des Charakters im Animation-Controller ist #IsometricPlayer.Attack(), führe folgende Animationen aus.
-        if (weaponAnim.GetBool("isAttacking") == true && isPerformingAction == false)
+        /*
+        if (charCombat.weaponAttackAnimator.GetBool("isAttacking") == true && isPerformingAction == false)
         {
-
-            //Aktiviere den Animation-Controller, falls dieser deaktivert war.
-            weaponAnim.enabled = true;
 
             //Wähle entsprechende AnimationsArray aus
             directionArray = weaponSwing;
@@ -165,55 +165,89 @@ public class IsometricRenderer : MonoBehaviour
             //Berechne die letzte Blickrichtung in Abhängigkeit vom DirectionCollider (direction).
             lastWeaponDirection = DirectionToIndex(direction, 8);
             //print(lastWeaponDirection); - funktioniert.
-            weaponAnim.SetTrigger(directionArray[lastWeaponDirection]);
+            charCombat.weaponRootAnimator.SetTrigger(directionArray[lastWeaponDirection]);
 
         }
-
+        */
 
         //Falls der Character nicht am Angreifen ist #IsometricPlayer.Attack(), führe die Standrad-Waffenanimation aus.
-        else if (weaponAnim.GetBool("isAttacking") == false)
+        if (charCombat.weaponAttackAnimator.GetBool("isAttacking") == false)
         {
+            charCombat.weaponRootAnimator.enabled = true;
 
-            //Falls sich der Charakter nicht bewegt, soll die Animation des Schwertes ebenfalls stillstehen.
-            if(direction.magnitude < 0.1f)
-            {
-                weaponAnim.enabled = false;
-            }
+            //Wähle entsprechende AnimationsArray aus
+            directionArray = runDirections;
 
-            else
-            {
-                weaponAnim.enabled = true;
+            //Spiele die Animation ab.
+            charCombat.weaponRootAnimator.Play(directionArray[lastDirection]);
 
-                //Wähle entsprechende AnimationsArray aus
-                directionArray = runDirections;
-
-                //Spiele die Animation ab.
-                weaponAnim.Play(directionArray[lastDirection]);
-            }
         }
-
+        else
+            charCombat.weaponRootAnimator.enabled = true;
     }
 
-    /*
-    public void PlayAttack()
+
+
+    /// <summary>
+    /// Weapon Animation
+    /// </summary>
+
+    private AnimatorOverrideController weaponOverrideController;
+    public void PlayWeaponAttack(AnimationClip clip, Animator weaponAttackAnimator)
     {
-
-
-        AnimatorClipInfo[] currentClipInfo = animator.GetCurrentAnimatorClipInfo(0);
-
-        float attackDuration = currentClipInfo[0].clip.length;
-
-        attackDuration -= Time.deltaTime;
-
-        //print(attackDuration);
-        if (attackDuration <= 0)
+        if (clip == null)
         {
-            animator.Play("Attack");
+            Debug.LogWarning("Kein Clip übergeben!");
+            return;
         }
 
+        Debug.Log("PlayWeaponAttack was called.");
 
+        // 1. Rotation setzen
+        Vector3 dir = DirectionCollider.instance.dirVector - PlayerManager.instance.player.transform.position;
+        RotateWeaponTowardDirection(dir);
+
+        // 2. Ensure override controller exists
+        if (weaponOverrideController == null || weaponAttackAnimator.runtimeAnimatorController != weaponOverrideController)
+        {
+            weaponOverrideController = new AnimatorOverrideController(weaponAttackAnimator.runtimeAnimatorController);
+            weaponAttackAnimator.runtimeAnimatorController = weaponOverrideController;
+        }
+
+        // 3. Override the correct clip BEFORE triggering the animation
+        Debug.Log("Set Clip to: " + clip.name + " and setting it to " + weaponAttackAnimator.gameObject.name + ". \n " + weaponOverrideController);
+        weaponOverrideController["Placeholder"] = clip;
+
+        // 4. Jetzt Trigger und Bool setzen
+        weaponAttackAnimator.ResetTrigger("AttackTrigger");
+        weaponAttackAnimator.SetTrigger("AttackTrigger");
+        //weaponAttackAnimator.SetBool("isAttacking", true);
     }
-    */
+
+    private void RotateWeaponTowardDirection(Vector3 direction)
+    {
+        if (direction == Vector3.zero)
+            return;
+        Debug.Log(direction);
+        // Richtung normalisieren (rein zur Sicherheit)
+        direction.y = 0; // Nur horizontale Rotation
+        Vector3 lookDir = direction.normalized;
+
+        // Rotation berechnen
+        Quaternion lookRotation = Quaternion.LookRotation(lookDir);
+
+        // Objekt (z. B. Waffe) drehen
+        transform.rotation = lookRotation;
+    }
+
+    public void OnAttackAnimationEnd()
+    {
+        Animator parentAnimator = GetComponentInParent<Animator>();
+        if (parentAnimator != null)
+        {
+            parentAnimator.SetBool("isAttacking", false);
+        }
+    }
 
 
     //helper functions

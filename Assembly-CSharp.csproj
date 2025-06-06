@@ -311,7 +311,6 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionUpdater.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MobStats.cs" />
     <Compile Include="Assets\Scripts\EntityStats\MetaStats\StatModifier.cs" />
-    <Compile Include="Assets\Sprites\Charakter\Equipment\WeaponAC.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_MagneticInfiniteScroll.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewCell.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionMethods.cs" />
@@ -412,6 +411,7 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Kopf.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\Accordion.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Brust.cs" />
+    <Compile Include="Assets\Scripts\Combat\WeaponAnimation\AttackStateBehaviour.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollRectEx.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\UIVerticalScroller.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buffs\Reflection.cs" />

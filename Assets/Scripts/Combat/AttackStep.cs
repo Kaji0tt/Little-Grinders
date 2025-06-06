@@ -5,7 +5,7 @@ public class AttackStep
 {
     // Für den Troubleshoot wird animationClip ausgetauscht mit einem Namen.
     // Später sollten Animationen manuell erstellt werden über Transform-Pos Änderung.
-    //public AnimationClip animationClip;
+    public AnimationClip animationClip;
     public string attackStepName;
     public float damageMultiplier = 1f;
     public float timeToNextAttack = 1f; // Optional: Zeitfenster für die nächste Eingabe

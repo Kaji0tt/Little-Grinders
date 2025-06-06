@@ -3,12 +3,14 @@ using UnityEngine.UI;
 
 public class EQSlotWeapon : EQSlotBase
 {
-    private GameObject weaponAnim;
+    private Image weaponImage;
 
     private void Awake()
     {
         slotType = EquipmentSlotType.Weapon; // Setzt den Slot-Typ auf Weapon
-        weaponAnim = GameObject.Find("WeaponAnimParent");
+        weaponImage = GetComponent<Image>();
+        //Bad Mannor.
+        //weaponAnim = GameObject.Find("WeaponAnimParent");
     }
 
     protected override void BindToGameEvent()
@@ -25,11 +27,27 @@ public class EQSlotWeapon : EQSlotBase
     {
         base.Equip(item); // Nutzt die allgemeine Logik für das Ausrüsten von Items
 
+        //Greife auf den IsometricRenderer des Spielers zu, um das Waffen-Sprite zu setzen
+        CharacterCombat charRend = PlayerManager.instance.player.GetComponent<CharacterCombat>();
+
+        //Greife auf das Sprite-Renderer der RootAnimation zu:
+        SpriteRenderer weaponSprite = charRend.weaponRootAnimator.GetComponent<SpriteRenderer>();
+
+        weaponSprite.sprite = item.icon; //Null?
+
         // Spezifische Logik für die Waffe: Setzt das Sprite der Waffe im WeaponAnim GameObject
-        if (weaponAnim != null)
+        /*
+        if (weaponImage.sprite == null)
         {
-            weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
+            weaponImage.sprite = GetComponent<SpriteRenderer>().sprite;
+            weaponImage.sprite = item.icon; //Null?
         }
+        else
+        {
+            weaponImage.sprite = item.icon; //Null?
+        }
+
+        */
 
         // Logik für Fernkampfwaffen
         if (item.RangedWeapon)
@@ -37,12 +55,8 @@ public class EQSlotWeapon : EQSlotBase
             PlayerManager.instance.player.rangedWeapon = true;
         }
 
-        // Spezielle Tutorial-Logik
-        if (item.ItemID == "WP0001" && GameObject.FindGameObjectWithTag("TutorialScript") != null)
-        {
-            Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-            tutorialScript.ShowTutorial(5);
-        }
+
+
     }
 
     public override void Dequip()
@@ -50,18 +64,8 @@ public class EQSlotWeapon : EQSlotBase
         base.Dequip(); // Nutzt die allgemeine Logik für das Ablegen von Items
 
         // Entfernt das Waffensprite vom WeaponAnim GameObject
-        if (weaponAnim != null)
-        {
-            weaponAnim.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Blank_Icon");
-        }
+        weaponImage.sprite = Resources.Load<Sprite>("Blank_Icon");
 
-        /* Derzeit nicht vorhanden.
-        // Logik für Fernkampfwaffen
-        if (weapon_Item != null && weapon_Item.RangedWeapon)
-        {
-            PlayerManager.Instance.Player.GetComponent<IsometricPlayer>().rangedWeapon = false;
-        }
-        */
     }
 
     public override void LoadItem(ItemInstance item)
@@ -69,9 +73,9 @@ public class EQSlotWeapon : EQSlotBase
         base.LoadItem(item); // Nutzt die allgemeine Logik zum Laden eines Items
 
         // Setzt das Waffensprite im WeaponAnim GameObject
-        if (weaponAnim != null)
+        if (weaponImage != null)
         {
-            weaponAnim.GetComponent<SpriteRenderer>().sprite = item.icon;
+            weaponImage.GetComponent<SpriteRenderer>().sprite = item.icon;
         }
     }
 }

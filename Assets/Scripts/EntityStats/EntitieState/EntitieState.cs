@@ -202,7 +202,7 @@ public class HitState : EntitieState
 
     public override void Enter()
     {
-        controller.myIsoRenderer.ToggleActionState(true);
+        //controller.myIsoRenderer.ToggleActionState(true);
         controller.myIsoRenderer.Play(AnimationState.Hit);
 
         // Dynamisch: echte Animationslänge holen
@@ -215,7 +215,7 @@ public class HitState : EntitieState
 
         if (hitTimer <= 0f)
         {
-            controller.myIsoRenderer.ToggleActionState(false);
+            //controller.myIsoRenderer.ToggleActionState(false);
 
             if (controller.isDead)
             {
@@ -241,7 +241,7 @@ public class DeadState : EntitieState
     {
         controller.StopMoving();
         controller.hpBar.SetActive(false);
-        controller.myIsoRenderer.ToggleActionState(false);
+        //controller.myIsoRenderer.ToggleActionState(false);
         controller.myIsoRenderer.Play(AnimationState.Die);
         controller.mobStats.Die();
     }
