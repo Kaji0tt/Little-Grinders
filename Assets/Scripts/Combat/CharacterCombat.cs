@@ -25,12 +25,6 @@ public class CharacterCombat : MonoBehaviour
     private float combatStanceTime;
 
 
-    //Root Animator (Idle Animations)
-    public Animator weaponRootAnimator;
-
-    //Parent Animator (liegt im Character als Parent gepsiechert, animiert die Waffenbewegung bei Attacks.)
-    public Animator weaponAttackAnimator;
-
 
     //Füge eine Liste von Buffs hinzu, welche Auswirkungen auf die PlayerStats besitzen.
     //GGf. werden diese vom GO behandelt und nicht von der IsometricPlayer Klasse.
@@ -108,7 +102,7 @@ public class CharacterCombat : MonoBehaviour
                     Attack();
 
                     // Setze Animationsgeschwindigkeit auf AttackSpeed
-                    weaponRootAnimator.speed = playerStats.AttackSpeed.Value;
+                    isoRenderer.weaponRootAnimator.speed = playerStats.AttackSpeed.Value;
 
                     currentState = CombatState.Attacking;
                 }
@@ -154,7 +148,7 @@ public class CharacterCombat : MonoBehaviour
                 // Alles zurücksetzen
                 playerStats.MovementSpeed.RemoveModifier(attackSlow);
                 //weaponAnimator.SetBool("isAttacking", false);
-                weaponRootAnimator.speed = 1.0f; // Reset der Animator-Geschwindigkeit
+                isoRenderer.weaponRootAnimator.speed = 1.0f; // Reset der Animator-Geschwindigkeit
                 //isoRenderer.ToggleActionState(false);
                 currentState = CombatState.Idle;
                 break;
@@ -193,13 +187,13 @@ public class CharacterCombat : MonoBehaviour
         AttackStep currentStep = currentCombo.comboSteps[currentComboIndex];
 
         // Neue Zeile: Starte die Animation mit dem Clip aus dem aktuellen AttackStep
-        isoRenderer.PlayWeaponAttack(currentStep.animationClip, weaponAttackAnimator);
+        isoRenderer.PlayWeaponAttack(currentStep.animationClip, isoRenderer.weaponAttackAnimator);
         //Speed anpassen.
         //weaponAttackAnimator.speed = playerStats.AttackSpeed.Value;
 
 
         // Animation abspielen
-        weaponRootAnimator.speed = playerStats.AttackSpeed.Value;
+        isoRenderer.weaponRootAnimator.speed = playerStats.AttackSpeed.Value;
         //Debug.Log(currentStep.attackStepName);
 
         // Berechne Delay für den Trefferpunkt

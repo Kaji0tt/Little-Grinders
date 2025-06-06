@@ -23,6 +23,12 @@ public class IsometricRenderer : MonoBehaviour
     //Array created for Weapon Animation, once upon a time i didnt know about programming & logical structure.
     public static readonly string[] weaponSwing = { "Attack_N", "Attack_NW", "Attack_W", "Attack_SW", "Attack_S", "Attack_SE", "Attack_E", "Attack_NE" };
 
+    //Root Animator (Idle Animations)
+    public Animator weaponRootAnimator;
+
+    //Parent Animator (liegt im Character als Parent gepsiechert, animiert die Waffenbewegung bei Attacks.)
+    public Animator weaponAttackAnimator;
+
     //int to clalculate and safe the last direction of view.
     int lastDirection;
 
@@ -34,6 +40,7 @@ public class IsometricRenderer : MonoBehaviour
     Animator animator;
 
     private AnimationState currentState = AnimationState.Idle;
+
 
     public bool isPerformingAction = false;
 
@@ -148,7 +155,7 @@ public class IsometricRenderer : MonoBehaviour
 
     
     //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll die Idle Animation darstellen.
-    public void AnimateIdleWeapon(Vector2 direction, CharacterCombat charCombat)
+    public void AnimateIdleWeapon(Vector2 direction)
     {
         string[] directionArray; //= null;
 
@@ -171,19 +178,19 @@ public class IsometricRenderer : MonoBehaviour
         */
 
         //Falls der Character nicht am Angreifen ist #IsometricPlayer.Attack(), führe die Standrad-Waffenanimation aus.
-        if (charCombat.weaponAttackAnimator.GetBool("isAttacking") == false)
+        if (weaponAttackAnimator.GetBool("isAttacking") == false)
         {
-            charCombat.weaponRootAnimator.enabled = true;
+            weaponRootAnimator.enabled = true;
 
             //Wähle entsprechende AnimationsArray aus
             directionArray = runDirections;
 
             //Spiele die Animation ab.
-            charCombat.weaponRootAnimator.Play(directionArray[lastDirection]);
+            weaponRootAnimator.Play(directionArray[lastDirection]);
 
         }
         else
-            charCombat.weaponRootAnimator.enabled = true;
+            weaponRootAnimator.enabled = true;
     }
 
 
@@ -237,7 +244,7 @@ public class IsometricRenderer : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(lookDir);
 
         // Objekt (z. B. Waffe) drehen
-        transform.rotation = lookRotation;
+        weaponAttackAnimator.transform.rotation = lookRotation;
     }
 
     public void OnAttackAnimationEnd()
