@@ -340,6 +340,7 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    weaponCombo: {fileID: 0}
     itemRarity: 
     Range: 0
     RangedWeapon: 0
@@ -4814,6 +4815,7 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    weaponCombo: {fileID: 0}
     itemRarity: 
     Range: 0
     RangedWeapon: 0
@@ -6111,6 +6113,7 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    weaponCombo: {fileID: 0}
     itemRarity: 
     Range: 0
     RangedWeapon: 0
@@ -6437,6 +6440,7 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    weaponCombo: {fileID: 0}
     itemRarity: 
     Range: 0
     RangedWeapon: 0
@@ -11627,6 +11631,7 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    weaponCombo: {fileID: 0}
     itemRarity: 
     Range: 0
     RangedWeapon: 0
@@ -11907,6 +11912,7 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    weaponCombo: {fileID: 0}
     itemRarity: 
     Range: 0
     RangedWeapon: 0
@@ -32313,8 +32319,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 920448030}
   m_HandleRect: {fileID: 920448029}
   m_Direction: 2
-  m_Value: 0.98106784
-  m_Size: 0.5758504
+  m_Value: 0.981068
+  m_Size: 0.57585037
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -32552,6 +32558,7 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    weaponCombo: {fileID: 0}
     itemRarity: 
     Range: 0
     RangedWeapon: 0
@@ -57938,7 +57945,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1172845272}
   m_Direction: 2
   m_Value: 0.999996
-  m_Size: 0.46374434
+  m_Size: 0.46374425
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

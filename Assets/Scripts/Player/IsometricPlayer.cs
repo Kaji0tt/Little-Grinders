@@ -20,7 +20,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     public IsometricRenderer isoRenderer;
 
     //Wird im Inspektor eingestellt, um das Game-Objekt der Waffe und dessen Animator zu erkennen.
-    public GameObject weaponGameObject; 
+    //public GameObject weaponGameObject; 
 
     //Wichtig, um die Sprites entsprechend der Isometrie für die Animationen zu kalkulieren
     private Vector2 inputVector;
@@ -111,7 +111,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         forward.y = 0;
         forward = Vector3.Normalize(forward);
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
-        weaponGameObject = GameObject.Find("WeaponAnim");
+        //weaponGameObject = GameObject.Find("WeaponAnim");
 
 
         //Item Management
@@ -281,7 +281,8 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
             inputVector = Vector2.ClampMagnitude(inputVector, 1);
             isoRenderer.SetPlayerDirection(inputVector); // Setze die Blickrichtung des IsoRenderers basierend auf der Tastatureingabe
         }
-        isoRenderer.SetWeaponDirection(DirectionCollider.instance.dirVector, weaponGameObject.GetComponent<Animator>());
+        isoRenderer.AnimateIdleWeapon(DirectionCollider.instance.dirVector, GetComponent<CharacterCombat>());
+        //isoRenderer.PlayWeaponAttack()
 
         //print(inputVector);
         //Define Inventory Tab Values   ********schreiben von Interface Texten*********

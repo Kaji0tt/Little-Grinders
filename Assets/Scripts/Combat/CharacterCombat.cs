@@ -24,16 +24,37 @@ public class CharacterCombat : MonoBehaviour
     //Combat-Stance Timer, um Attack entsprechend der Attacksped abzurufen
     private float combatStanceTime;
 
-    [SerializeField]
-    private Animator weaponAnimator;
+
+    //Root Animator (Idle Animations)
+    public Animator weaponRootAnimator;
+
+    //Parent Animator (liegt im Character als Parent gepsiechert, animiert die Waffenbewegung bei Attacks.)
+    public Animator weaponAttackAnimator;
+
+
     //Füge eine Liste von Buffs hinzu, welche Auswirkungen auf die PlayerStats besitzen.
     //GGf. werden diese vom GO behandelt und nicht von der IsometricPlayer Klasse.
     //public List<Buff> playerBuffs = new List<Buff>(); 
 
     private CombatState currentState = CombatState.Idle;
 
+
+    /// <summary>
+    /// Combo System: 
+    /// current index = an welcher Stelle (AttackStep) sich der spieler innerhalb der WeaponCombo befindet.
+    /// </summary>
     private int currentComboIndex = 0;
-    private float lastAttackTime = 1.5f;
+
+    /// <summary>
+    /// Combo System: 
+    /// lastAttackTime = Variabel, die beim Angriff den Zeitpunkt des ComboStarts speichert
+    /// </summary>
+    private float lastAttackTime;
+
+    /// <summary>
+    /// Combo System:
+    /// Zeit die vergehen darf, bevor die Combo abgebrochen wird.
+    /// </summary>
     private float comboResetTime = 1.2f;
 
     private WeaponCombo currentCombo => equippedWeapon?.weaponCombo;
@@ -68,7 +89,7 @@ public class CharacterCombat : MonoBehaviour
         playerStats = GetComponent<PlayerStats>();
         isoRenderer = GetComponent<IsometricRenderer>();
 
-        isoRenderer.SetWeaponDirection(DirectionCollider.instance.dirVector, weaponAnimator);
+        //isoRenderer.SetWeaponDirection(DirectionCollider.instance.dirVector, weaponRootAnimator);
     }
 
     private void FixedUpdate()
@@ -87,7 +108,7 @@ public class CharacterCombat : MonoBehaviour
                     Attack();
 
                     // Setze Animationsgeschwindigkeit auf AttackSpeed
-                    weaponAnimator.speed = playerStats.AttackSpeed.Value;
+                    weaponRootAnimator.speed = playerStats.AttackSpeed.Value;
 
                     currentState = CombatState.Attacking;
                 }
@@ -99,8 +120,8 @@ public class CharacterCombat : MonoBehaviour
                 currentSlowValue = -0.5f;
                 isSlowing = true;
 
-                weaponAnimator.SetBool("isAttacking", true);
-                isoRenderer.ToggleActionState(true);
+                //weaponAnimator.SetBool("isAttacking", true);
+                //isoRenderer.ToggleActionState(true);
                 currentState = CombatState.ComboWindow;
                 break;
 
@@ -132,9 +153,9 @@ public class CharacterCombat : MonoBehaviour
             case CombatState.Cooldown:
                 // Alles zurücksetzen
                 playerStats.MovementSpeed.RemoveModifier(attackSlow);
-                weaponAnimator.SetBool("isAttacking", false);
-                weaponAnimator.speed = 1.0f; // Reset der Animator-Geschwindigkeit
-                isoRenderer.ToggleActionState(false);
+                //weaponAnimator.SetBool("isAttacking", false);
+                weaponRootAnimator.speed = 1.0f; // Reset der Animator-Geschwindigkeit
+                //isoRenderer.ToggleActionState(false);
                 currentState = CombatState.Idle;
                 break;
 
@@ -149,6 +170,7 @@ public class CharacterCombat : MonoBehaviour
 
     void Attack()
     {
+        Debug.Log("Attack was called!");
         //Wenn derzeit keine Combo durchgeführt wird oder keine Schritte enthalten sind, führe keine Combo durch.
         if (currentCombo == null || currentCombo.comboSteps.Count == 0)
         {
@@ -170,9 +192,15 @@ public class CharacterCombat : MonoBehaviour
 
         AttackStep currentStep = currentCombo.comboSteps[currentComboIndex];
 
+        // Neue Zeile: Starte die Animation mit dem Clip aus dem aktuellen AttackStep
+        isoRenderer.PlayWeaponAttack(currentStep.animationClip, weaponAttackAnimator);
+        //Speed anpassen.
+        //weaponAttackAnimator.speed = playerStats.AttackSpeed.Value;
+
+
         // Animation abspielen
-        weaponAnimator.speed = playerStats.AttackSpeed.Value;
-        Debug.Log(currentStep.attackStepName);
+        weaponRootAnimator.speed = playerStats.AttackSpeed.Value;
+        //Debug.Log(currentStep.attackStepName);
 
         // Berechne Delay für den Trefferpunkt
         float delay = (1f / playerStats.AttackSpeed.Value) * currentStep.timeToNextAttack;
