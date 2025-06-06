@@ -31,7 +31,7 @@ public class EQSlotWeapon : EQSlotBase
         IsometricRenderer isoRenderer = PlayerManager.instance.player.GetComponent<IsometricRenderer>();
 
         //Greife auf das Sprite-Renderer der RootAnimation zu:
-        SpriteRenderer weaponSprite = isoRenderer.weaponRootAnimator.GetComponent<SpriteRenderer>();
+        SpriteRenderer weaponSprite = isoRenderer.weaponAnimator.GetComponent<SpriteRenderer>();
 
         weaponSprite.sprite = item.icon; //Null?
 

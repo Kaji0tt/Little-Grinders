@@ -16,33 +16,38 @@ public enum AnimationState
 
 public class IsometricRenderer : MonoBehaviour
 {
-    //Arrays for Player
+
+    /// <summary>
+    /// Player Section:
+    /// These variables are only used for the animation of the player character.
+    /// </summary>
+    
+    //8 directional, single created sprite sheet.
     public static readonly string[] staticDirections = { "Static N", "Static NW", "Static W", "Static SW", "Static S", "Static SE", "Static E", "Static NE" };
     public static readonly string[] runDirections = { "Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE" };
-
-    //Array created for Weapon Animation, once upon a time i didnt know about programming & logical structure.
-    public static readonly string[] weaponSwing = { "Attack_N", "Attack_NW", "Attack_W", "Attack_SW", "Attack_S", "Attack_SE", "Attack_E", "Attack_NE" };
-
-    //Root Animator (Idle Animations)
-    public Animator weaponRootAnimator;
-
-    //Parent Animator (liegt im Character als Parent gepsiechert, animiert die Waffenbewegung bei Attacks.)
-    public Animator weaponAttackAnimator;
 
     //int to clalculate and safe the last direction of view.
     int lastDirection;
 
-    int lastWeaponDirection;
+    //Der Animator, welcher für die Animation der waffe verantwortlich ist.
+    public Animator weaponAnimator;
 
-    //private EnemyController myController;
+    //Das Transform des "Vaters" von WeaponAnimator - damit die Animation/Clips, welche Transform von weaponAnimator angreifen, unangetastet bleiben.
+    public Transform weaponPivot;
+
+    //used for casts, attacks etc.
+    public bool isPerformingAction = false;
 
     //The animator the IsoRenderer refers to. Typically attached to the animated GameObject, e.g. the Enemy.
     Animator animator;
 
+
+    /// <summary>
+    /// Enemy Section:
+    /// These variables are only used for the animation of the of Enemy characters.
+    /// </summary>
+
     private AnimationState currentState = AnimationState.Idle;
-
-
-    public bool isPerformingAction = false;
 
     // Mapping von AnimationState zu möglichen Clipnamen
     private static readonly Dictionary<AnimationState, string[]> animationVariants = new Dictionary<AnimationState, string[]>()
@@ -55,16 +60,6 @@ public class IsometricRenderer : MonoBehaviour
     { AnimationState.Die,    new[] { "Die1", "Die2" } }, //can overwrite, can not get overwritten
     };
 
-
-    private static readonly Dictionary<AnimationState, int> animationPriority = new Dictionary<AnimationState, int>()
-    {
-        { AnimationState.Idle, 0 },
-        { AnimationState.Walk, 0 },
-        { AnimationState.Cast, 1 },
-        { AnimationState.Hit, 2 },
-        { AnimationState.Attack, 2 },
-        { AnimationState.Die, 10 } // Höchste Priorität → ununterbrechbar
-    };
     //Set the Spritesheet to auto Animate this enemy.
     public Sprite spriteSheet;
 
@@ -153,44 +148,23 @@ public class IsometricRenderer : MonoBehaviour
         animator.Play(directionArray[lastDirection]);
     }
 
-    
+
     //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll die Idle Animation darstellen.
     public void AnimateIdleWeapon(Vector2 direction)
     {
-        string[] directionArray; //= null;
+        if (weaponAnimator == null)
+            return;
 
-        //Animator parentAnimator = GetComponentInParent<Animator>();
-        //Debug.Log(parentAnimator);
-        //Falls die Combat-Stance des Charakters im Animation-Controller ist #IsometricPlayer.Attack(), führe folgende Animationen aus.
-        /*
-        if (charCombat.weaponAttackAnimator.GetBool("isAttacking") == true && isPerformingAction == false)
+        weaponAnimator.enabled = true;
+
+        // Drehung erfolgt immer – egal ob gerade angegriffen wird
+        RotateWeaponToDirection();
+
+        // Nur Idle abspielen, wenn nicht gerade Attack läuft
+        if (!weaponAnimator.GetBool("isAttacking"))
         {
-
-            //Wähle entsprechende AnimationsArray aus
-            directionArray = weaponSwing;
-
-            //Berechne die letzte Blickrichtung in Abhängigkeit vom DirectionCollider (direction).
-            lastWeaponDirection = DirectionToIndex(direction, 8);
-            //print(lastWeaponDirection); - funktioniert.
-            charCombat.weaponRootAnimator.SetTrigger(directionArray[lastWeaponDirection]);
-
+            weaponAnimator.Play("Idle");
         }
-        */
-
-        //Falls der Character nicht am Angreifen ist #IsometricPlayer.Attack(), führe die Standrad-Waffenanimation aus.
-        if (weaponAttackAnimator.GetBool("isAttacking") == false)
-        {
-            weaponRootAnimator.enabled = true;
-
-            //Wähle entsprechende AnimationsArray aus
-            directionArray = runDirections;
-
-            //Spiele die Animation ab.
-            weaponRootAnimator.Play(directionArray[lastDirection]);
-
-        }
-        else
-            weaponRootAnimator.enabled = true;
     }
 
 
@@ -202,59 +176,64 @@ public class IsometricRenderer : MonoBehaviour
     private AnimatorOverrideController weaponOverrideController;
     public void PlayWeaponAttack(AnimationClip clip, Animator weaponAttackAnimator)
     {
-        if (clip == null)
+        if (clip == null || weaponAttackAnimator == null)
         {
-            Debug.LogWarning("Kein Clip übergeben!");
+            Debug.LogWarning("Kein Clip oder Animator übergeben!");
             return;
         }
 
-        Debug.Log("PlayWeaponAttack was called.");
+        // Richtung berechnen & Waffe drehen
+        //Vector3 dir = DirectionCollider.instance.dirVector - PlayerManager.instance.player.transform.position;
+        RotateWeaponToDirection();
 
-        // 1. Rotation setzen
-        Vector3 dir = DirectionCollider.instance.dirVector - PlayerManager.instance.player.transform.position;
-        RotateWeaponTowardDirection(dir);
-
-        // 2. Ensure override controller exists
-        if (weaponOverrideController == null || weaponAttackAnimator.runtimeAnimatorController != weaponOverrideController)
-        {
-            weaponOverrideController = new AnimatorOverrideController(weaponAttackAnimator.runtimeAnimatorController);
-            weaponAttackAnimator.runtimeAnimatorController = weaponOverrideController;
-        }
-
-        // 3. Override the correct clip BEFORE triggering the animation
-        Debug.Log("Set Clip to: " + clip.name + " and setting it to " + weaponAttackAnimator.gameObject.name + ". \n " + weaponOverrideController);
-        weaponOverrideController["Placeholder"] = clip;
-
-        // 4. Jetzt Trigger und Bool setzen
+        // Animation abspielen
         weaponAttackAnimator.ResetTrigger("AttackTrigger");
         weaponAttackAnimator.SetTrigger("AttackTrigger");
-        //weaponAttackAnimator.SetBool("isAttacking", true);
-    }
+        weaponAttackAnimator.SetBool("isAttacking", true); // optional, je nach Animator Setup
 
-    private void RotateWeaponTowardDirection(Vector3 direction)
-    {
-        if (direction == Vector3.zero)
-            return;
-        Debug.Log(direction);
-        // Richtung normalisieren (rein zur Sicherheit)
-        direction.y = 0; // Nur horizontale Rotation
-        Vector3 lookDir = direction.normalized;
-
-        // Rotation berechnen
-        Quaternion lookRotation = Quaternion.LookRotation(lookDir);
-
-        // Objekt (z. B. Waffe) drehen
-        weaponAttackAnimator.transform.rotation = lookRotation;
+        isPerformingAction = true;
+        StartCoroutine(ResetActionAfterAnimation());
     }
 
     public void OnAttackAnimationEnd()
     {
-        Animator parentAnimator = GetComponentInParent<Animator>();
-        if (parentAnimator != null)
+        if (weaponAnimator != null)
         {
-            parentAnimator.SetBool("isAttacking", false);
+            weaponAnimator.SetBool("isAttacking", false);
         }
+        isPerformingAction = false;
     }
+
+    private void RotateWeaponToDirection()
+    {
+        Vector3 worldDirection = DirectionCollider.instance.dirVector;
+
+        if (worldDirection == Vector3.zero)
+            return;
+
+        worldDirection.y = 0;
+        Vector3 lookDir = worldDirection.normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(lookDir);
+
+        SpriteRenderer weaponSprite = weaponAnimator?.GetComponent<SpriteRenderer>();
+        if (weaponSprite != null)
+        {
+            // Optional: Basiswert merken
+            //int baseOrder = 5000;
+            //Debug.Log(GetComponent<MobsCamScript>());
+
+            // Wenn Blickrichtung "nach oben", dann weiter hinten rendern
+            if (worldDirection.z > 0)
+                weaponAnimator.GetComponent<MobsCamScript>().ReduceSpriteStartingPoint();
+            else
+                weaponAnimator.GetComponent<MobsCamScript>().ResetSpriteStartingPoint();
+        }
+
+        weaponPivot.rotation = lookRotation;
+
+        Debug.DrawRay(weaponPivot.position, worldDirection.normalized * 2, Color.red);
+    }
+
 
 
     //helper functions
