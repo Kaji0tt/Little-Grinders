@@ -9435,6 +9435,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0631f36ac84554335b5b1f70f25312fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponRootAnimator: {fileID: 756602943}
+  weaponAttackAnimator: {fileID: 659654133}
   isPerformingAction: 0
   spriteSheet: {fileID: 0}
   mirrorSpritesheet: 0
@@ -9614,8 +9616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba2752cc5a79b14abe768d8cc43f484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponRootAnimator: {fileID: 756602943}
-  weaponAttackAnimator: {fileID: 659654133}
 --- !u!1001 &310200179
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42718,7 +42718,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1155331145}
   m_Direction: 2
   m_Value: 1.0000001
-  m_Size: 0.46374425
+  m_Size: 0.4637443
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -66150,6 +66150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0631f36ac84554335b5b1f70f25312fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponRootAnimator: {fileID: 0}
+  weaponAttackAnimator: {fileID: 0}
   isPerformingAction: 0
   spriteSheet: {fileID: 0}
   mirrorSpritesheet: 0
