@@ -51,7 +51,7 @@ public class EnemyController : MonoBehaviour
 
 
 
-    public LootTable lootTable;
+    //public LootTable lootTable;
 
 
     ///----Position/Ziel/Direction----
