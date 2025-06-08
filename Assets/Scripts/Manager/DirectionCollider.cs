@@ -22,7 +22,23 @@ public class DirectionCollider : MonoBehaviour
     public List<EnemyController> collidingEnemyControllers = new List<EnemyController>();
     //public List<GameObject> collidingEnemyControllers = new List<GameObject>();
 
+    private void OnDrawGizmos()
+    {
+        // Alle SphereCollider-Komponenten im GameObject und seinen Kindern finden
+        SphereCollider collider = GetComponent<SphereCollider>();
 
+        Gizmos.color = Color.cyan;
+
+        // Weltposition der Kugel berechnen
+        Vector3 worldPos = collider.transform.TransformPoint(collider.center);
+        float worldRadius = collider.radius * Mathf.Max(
+            collider.transform.lossyScale.x,
+            collider.transform.lossyScale.y,
+            collider.transform.lossyScale.z);
+
+        // Zeichne die Kugel
+        Gizmos.DrawWireSphere(worldPos, worldRadius);
+    }
 
     void Update()
     {

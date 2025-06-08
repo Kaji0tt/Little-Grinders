@@ -298,35 +298,24 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float incoming_damage, int range_radius_ofDMG)
     {
-        //Debug.Log("Ich, " + gameObject.name + " bekomme " + incoming_damage + " Schaden.");
-
-        //float player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
 
         if (PlayerDistance() <= range_radius_ofDMG)
         {
-            incoming_damage = 10 * (incoming_damage * incoming_damage) / (mobStats.Armor.Value + (10 * incoming_damage));            // DMG & Armor als werte
+            incoming_damage = 10 * (incoming_damage * incoming_damage) / (mobStats.Armor.Value + (10 * incoming_damage));
 
             incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
 
             //Schadesberechnung
             mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
-            //Debug.Log("Abzgl. Rüstung müsste das mein Leben von: " + mobStats.Hp.Value + ", um " + incoming_damage + " reduzieren");
-            //Sound-Array mit den dazugehörigen Sound-Namen
-            //string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
-
-            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-            //if (AudioManager.instance != null)
-
-            //Play a Sound at random.
-            //AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
-            //GameEvents.Instance.EnemyWasAttacked(incoming_damage);
-
             GameEvents.Instance.EnemyWasAttacked(incoming_damage, transform);
+
+            // Knockback
+            ApplyKnockback();
 
             //Setze den Entitie State auf "Hit"
             // Nur Hit-Animation, wenn NICHT im Angriff
-            if (!(myEntitieState is AttackState))
+            if (!(myEntitieState is HitState) && !isDead)
             {
                 TransitionTo(new HitState(this));
             }
@@ -364,6 +353,47 @@ public class EnemyController : MonoBehaviour
 
         }
     }
+
+    private void ApplyKnockback()
+    {
+        //if (DirectionCollider.instance == null) return;
+
+        Vector3 knockbackDirection = (transform.position - PlayerManager.instance.player.transform.position).normalized;
+
+        // Knockback-Distanz
+        float knockbackDistance = 0.2f;
+
+        // Stelle sicher, dass wir nur horizontal verschieben
+        knockbackDirection.y = 0;
+
+        // Berechne neues Ziel
+        Vector3 targetPosition = transform.position + knockbackDirection * knockbackDistance;
+
+        // Bewegung direkt setzen oder animieren
+        StartCoroutine(KnockbackRoutine(targetPosition, 0.3f));
+    }
+
+    private IEnumerator KnockbackRoutine(Vector3 targetPos, float duration)
+    {
+        float elapsed = 0f;
+        Vector3 startPos = transform.position;
+
+        // Optionale Deaktivierung der NavMesh-Steuerung
+        myNavMeshAgent.enabled = false;
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector3.Lerp(startPos, targetPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPos;
+
+        // NavMeshAgent reaktivieren
+        myNavMeshAgent.enabled = true;
+    }
+
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.
     public virtual void OnTriggerEnter(Collider collider)
     {
