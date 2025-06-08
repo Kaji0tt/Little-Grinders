@@ -53,9 +53,8 @@ public class AudioManager : MonoBehaviour
 
 
 
-
         //Übertrage alle Einstellungen wie Clip, Loop und Volume auf die entsprechend hinterlegten Sounds.
-        foreach(Sound s in sounds)
+        foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
@@ -173,6 +172,9 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         Play("MainMusic");
+
+        // ⬇️ Event abonnieren
+        GameEvents.Instance.OnEnemyWasAttacked += PlayEnemyHitSound;
     }
 
     private void Update()
@@ -291,7 +293,17 @@ public class AudioManager : MonoBehaviour
                 s.source.volume = effectSlider.value;
             }
     }
-   
+
     #endregion
-     
+
+
+    private void PlayEnemyHitSound(float damage, Transform transform)
+    {
+        string[] hitSounds = { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
+
+        string chosenSound = hitSounds[UnityEngine.Random.Range(0, hitSounds.Length)];
+
+        Play(chosenSound);
+    }
+
 }

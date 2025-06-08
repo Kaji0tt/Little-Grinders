@@ -28,10 +28,10 @@ public class EQSlotWeapon : EQSlotBase
         base.Equip(item); // Nutzt die allgemeine Logik für das Ausrüsten von Items
 
         //Greife auf den IsometricRenderer des Spielers zu, um das Waffen-Sprite zu setzen
-        CharacterCombat charRend = PlayerManager.instance.player.GetComponent<CharacterCombat>();
+        IsometricRenderer isoRenderer = PlayerManager.instance.player.GetComponent<IsometricRenderer>();
 
         //Greife auf das Sprite-Renderer der RootAnimation zu:
-        SpriteRenderer weaponSprite = charRend.weaponRootAnimator.GetComponent<SpriteRenderer>();
+        SpriteRenderer weaponSprite = isoRenderer.weaponAnimator.GetComponent<SpriteRenderer>();
 
         weaponSprite.sprite = item.icon; //Null?
 

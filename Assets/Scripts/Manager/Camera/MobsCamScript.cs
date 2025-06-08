@@ -14,8 +14,21 @@ public class MobsCamScript : MonoBehaviour
     [SerializeField] //5000 is Standard value, from which the Distance is being substracted.
     private int sortingOrderBase = 5000;
 
+    //private int originalSortingBase;
+
     private SpriteRenderer sprite;
 
+    public void ReduceSpriteStartingPoint()
+    {
+        //originalSortingBase = sortingOrderBase;
+
+        sortingOrderBase = 4800;
+    }
+
+    public void ResetSpriteStartingPoint()
+    {
+        sortingOrderBase = 5000;
+    }
 
     void Start()
     {

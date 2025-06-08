@@ -29,7 +29,10 @@ public class EnemyController : MonoBehaviour
 
     //[Header("Interface Referenzen")]
     public GameObject hpBar { get; private set; }
-    private Slider enemyHpSlider;
+    public Canvas combatCanvas { get; private set; }
+
+    public Slider enemyHpSlider { get; private set; }
+
 
     /// <summary>
     /// Bullet Types - finde eine bessere Methode die entsprechenden Scripte abzurufen.
@@ -253,8 +256,8 @@ public class EnemyController : MonoBehaviour
 
         if (mobStats.Hp.Value < maxHpForUI)
         {
-            if(!mobStats.isDead)
-            hpBar.SetActive(true);
+            if (!mobStats.isDead)
+                hpBar.GetComponent<CanvasGroup>().alpha = 1;
 
             if (Input.GetKey(KeyCode.LeftShift) && !mobStats.isDead)  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
             {
@@ -305,17 +308,21 @@ public class EnemyController : MonoBehaviour
 
             incoming_damage = Mathf.Clamp(incoming_damage, 1, int.MaxValue);
 
+            //Schadesberechnung
             mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
             //Debug.Log("Abzgl. Rüstung müsste das mein Leben von: " + mobStats.Hp.Value + ", um " + incoming_damage + " reduzieren");
             //Sound-Array mit den dazugehörigen Sound-Namen
-            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
+            //string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
 
             //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-            if (AudioManager.instance != null)
+            //if (AudioManager.instance != null)
 
-                //Play a Sound at random.
-                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+            //Play a Sound at random.
+            //AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+            //GameEvents.Instance.EnemyWasAttacked(incoming_damage);
+
+            GameEvents.Instance.EnemyWasAttacked(incoming_damage, transform);
 
             //Setze den Entitie State auf "Hit"
             // Nur Hit-Animation, wenn NICHT im Angriff

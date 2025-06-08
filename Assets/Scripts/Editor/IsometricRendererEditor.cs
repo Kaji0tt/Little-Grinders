@@ -4,33 +4,64 @@ using UnityEngine;
 [CustomEditor(typeof(IsometricRenderer))]
 public class IsometricRendererEditor : Editor
 {
+    SerializedProperty weaponAnimatorProp;
+    SerializedProperty isPerformingActionProp;
+    SerializedProperty weaponPivotProp;
+    SerializedProperty spriteSheetProp;
+    SerializedProperty mirrorSpritesheetProp;
+
+    void OnEnable()
+    {
+        weaponAnimatorProp = serializedObject.FindProperty("weaponAnimator");
+        isPerformingActionProp = serializedObject.FindProperty("isPerformingAction");
+        weaponPivotProp = serializedObject.FindProperty("weaponPivot");
+        spriteSheetProp = serializedObject.FindProperty("spriteSheet");
+        mirrorSpritesheetProp = serializedObject.FindProperty("mirrorSpritesheet");
+    }
+
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        serializedObject.Update();
 
         IsometricRenderer iso = (IsometricRenderer)target;
 
-        if (iso.spriteSheet == null)
+        bool isCharacter = iso.CompareTag("Player");
+
+        if (isCharacter)
         {
-            EditorGUILayout.HelpBox("Bitte ein SpriteSheet zuweisen!", MessageType.Warning);
-            return;
+            EditorGUILayout.PropertyField(weaponAnimatorProp);
+            EditorGUILayout.PropertyField(isPerformingActionProp);
+            EditorGUILayout.PropertyField(weaponPivotProp);
         }
-
-        if (GUILayout.Button("🎞 Generate Animations from SpriteSheet"))
+        else
         {
-            var controller = EnemyAnimationUtility.CreateGroupedAnimationsFromSpriteSheet(iso.spriteSheet.name, iso.spriteSheet);
-            if (controller != null)
+            EditorGUILayout.PropertyField(spriteSheetProp);
+            EditorGUILayout.PropertyField(mirrorSpritesheetProp);
+
+            if (iso.spriteSheet == null)
             {
-                Animator animator = iso.gameObject.GetComponent<Animator>();
-                if (animator == null)
-                    animator = iso.gameObject.AddComponent<Animator>();
+                EditorGUILayout.HelpBox("Bitte ein SpriteSheet zuweisen!", MessageType.Warning);
+            }
+            else
+            {
+                if (GUILayout.Button("🎞 Generate Animations from SpriteSheet"))
+                {
+                    var controller = EnemyAnimationUtility.CreateGroupedAnimationsFromSpriteSheet(iso.spriteSheet.name, iso.spriteSheet);
+                    if (controller != null)
+                    {
+                        Animator animator = iso.gameObject.GetComponent<Animator>();
+                        if (animator == null)
+                            animator = iso.gameObject.AddComponent<Animator>();
 
-                animator.runtimeAnimatorController = controller;
+                        animator.runtimeAnimatorController = controller;
 
-                // Optional: GameObject im Editor hervorheben
-                Selection.activeGameObject = iso.gameObject;
-                EditorGUIUtility.PingObject(iso.gameObject);
+                        Selection.activeGameObject = iso.gameObject;
+                        EditorGUIUtility.PingObject(iso.gameObject);
+                    }
+                }
             }
         }
+
+        serializedObject.ApplyModifiedProperties();
     }
 }

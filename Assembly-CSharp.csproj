@@ -141,6 +141,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardExpanding2D.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\Gradient.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\ScrollRect\FancyScrollRectCell.cs" />
+    <Compile Include="Assets\Scripts\Combat\DamagePopUpManager.cs" />
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotBrust.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAnimator.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Talente\Teleport.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardPopup2D.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\HandScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\DiamondGraph.cs" />
+    <Compile Include="Assets\Resources\WorldPrefabs\DamagePopup\DamagePopup.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UIPolygon.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ScrollSnap.cs" />
