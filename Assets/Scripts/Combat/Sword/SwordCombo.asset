@@ -13,15 +13,12 @@ MonoBehaviour:
   m_Name: SwordCombo
   m_EditorClassIdentifier: 
   comboSteps:
-  - animationClip: {fileID: 7400000, guid: 36afddbb7db3fe54cac13647dfc03014, type: 2}
-    attackStepName: Sword_1
+  - animationClip: {fileID: 7400000, guid: fd5db987a7ab7604f81d5a4476262c8b, type: 2}
     damageMultiplier: 1
     timeToNextAttack: 0.5
-  - animationClip: {fileID: 7400000, guid: 5375b16e1eb97954389b68e49c471047, type: 2}
-    attackStepName: Sword_2
+  - animationClip: {fileID: 7400000, guid: 31660fc91a6e1134b9009f975e285d5d, type: 2}
     damageMultiplier: 1.2
     timeToNextAttack: 0.5
-  - animationClip: {fileID: 7400000, guid: 7ed87b34757d29c488d9cbe9bf5b743d, type: 2}
-    attackStepName: Sword_Smash
+  - animationClip: {fileID: 7400000, guid: fe6fc6651e5f55543a023e724928ae8b, type: 2}
     damageMultiplier: 1.5
     timeToNextAttack: 1

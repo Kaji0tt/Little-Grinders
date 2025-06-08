@@ -34,7 +34,11 @@ public class GameEvents : MonoBehaviour
 
     // Kampf-Events
     public event Action<float> OnPlayerHasAttacked;
+    public event Action<float> OnPlayerWasAttacked;
     public event Action<float> OnEnemyHasAttacked;
+    public event Action<float, Transform> OnEnemyWasAttacked;
+
+
 
     // Sound-Event
     public static event Action<string> PlaySound;
@@ -72,15 +76,13 @@ public class GameEvents : MonoBehaviour
     {
         OnPlayerHasAttacked?.Invoke(damage);
     }
-
     public void PlayerWasAttacked(float damage)
     {
-        //OnPlayerWasAttacked?.Invoke(damage);
+        OnPlayerWasAttacked?.Invoke(damage);
     }
-
-    public void EnemyHasAttacked(float damage)
+    public void EnemyWasAttacked(float damage, Transform enemyTransform)
     {
-        OnEnemyHasAttacked?.Invoke(damage);
+        OnEnemyWasAttacked?.Invoke(damage, enemyTransform);
     }
 
     public void EnemyWasAttacked(float damage)

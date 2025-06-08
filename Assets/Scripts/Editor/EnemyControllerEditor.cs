@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 [CustomEditor(typeof(EnemyController))]
 public class EnemyControllerEditor : Editor
 {
-    private static readonly string materialPath = "Materials/SpriteMAT URP";
+    private static readonly string materialPath = "SpriteMAT URP";
 
     private void OnEnable()
     {

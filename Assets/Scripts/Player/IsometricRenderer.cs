@@ -80,7 +80,12 @@ public class IsometricRenderer : MonoBehaviour
         animator = GetComponent<Animator>();
         isPerformingAction = false;
 
-        //myController = GetComponent<EnemyController>();
+        //RuntimController setzen!
+        if (weaponAnimator != null)
+        {
+            weaponOverrideController = new AnimatorOverrideController(weaponAnimator.runtimeAnimatorController);
+            weaponAnimator.runtimeAnimatorController = weaponOverrideController;
+        }
 
     }
     public void Play(AnimationState state)
@@ -185,6 +190,11 @@ public class IsometricRenderer : MonoBehaviour
         // Richtung berechnen & Waffe drehen
         //Vector3 dir = DirectionCollider.instance.dirVector - PlayerManager.instance.player.transform.position;
         RotateWeaponToDirection();
+
+
+        // 3. Override the correct clip BEFORE triggering the animation
+        //Debug.Log("Set Clip to: " + clip.name + " and setting it to " + weaponAttackAnimator.gameObject.name + ". \n " + weaponOverrideController);
+        weaponOverrideController["Placeholder"] = clip;
 
         // Animation abspielen
         weaponAttackAnimator.ResetTrigger("AttackTrigger");
