@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public enum LootTable { tier1, tier2, tier3, tier4, tier5 }
+//public enum LootTable { tier1, tier2, tier3, tier4, tier5 }
 
 public class Enemy : MonoBehaviour
 {
