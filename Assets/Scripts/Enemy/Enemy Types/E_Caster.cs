@@ -78,7 +78,7 @@ public class E_Caster : EnemyController
     {
         //Calculate the Direction of the Player and Offset the Origin of the Projectile by "projectileOffsetXY"
 
-        if (gameObject.GetComponent<IsometricRenderer>().DirectionToIndex(CalculatePlayerDirection(), 4) < 2)
+        if (gameObject.GetComponent<IsometricRenderer>().DirectionToIndex(TargetDirection(), 4) < 2)
         Instantiate(projectile, new Vector3(transform.position.x + projectileOffsetXY, transform.position.y + projectileOriginY, transform.position.z), Quaternion.identity, transform).GetComponent<_projectile>()._pDamage = projectileDamage;
 
 

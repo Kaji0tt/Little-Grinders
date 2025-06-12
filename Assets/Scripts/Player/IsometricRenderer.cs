@@ -39,8 +39,9 @@ public class IsometricRenderer : MonoBehaviour
     public bool isPerformingAction = false;
 
     //The animator the IsoRenderer refers to. Typically attached to the animated GameObject, e.g. the Enemy.
-    Animator animator;
+    private Animator myAnimator;
 
+    private EnemyController myEnemyController;
 
     /// <summary>
     /// Enemy Section:
@@ -66,6 +67,8 @@ public class IsometricRenderer : MonoBehaviour
     public bool mirrorSpritesheet = false;
 
 
+
+
     [HideInInspector] public RuntimeAnimatorController generatedAnimator;
 
     private void Reset()
@@ -77,7 +80,8 @@ public class IsometricRenderer : MonoBehaviour
     private void Awake()
     {
         //cache the animator component
-        animator = GetComponent<Animator>();
+        myAnimator = GetComponent<Animator>();
+        myEnemyController = GetComponent<EnemyController>();
         isPerformingAction = false;
 
         //RuntimController setzen!
@@ -88,15 +92,19 @@ public class IsometricRenderer : MonoBehaviour
         }
 
     }
+
     public void Play(AnimationState state)
     {
+        //Bestimme die Blickrichtung des Controllers
+        SetFacingDirection(myEnemyController.TargetDirection());
+
         currentState = state;
 
         if (!animationVariants.TryGetValue(state, out string[] variants))
             return;
 
         string chosenAnim = variants[Random.Range(0, variants.Length)];
-        animator.Play(chosenAnim);
+        myAnimator.Play(chosenAnim);
 
         if (state == AnimationState.Attack || state == AnimationState.Cast || state == AnimationState.Die)
         {
@@ -107,7 +115,7 @@ public class IsometricRenderer : MonoBehaviour
 
     public float GetCurrentAnimationLength()
     {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo stateInfo = myAnimator.GetCurrentAnimatorStateInfo(0);
         return stateInfo.length;
     }
 
@@ -122,7 +130,6 @@ public class IsometricRenderer : MonoBehaviour
         isPerformingAction = false;
 
     }
-
 
     public void ToggleActionState(bool active)
     {
@@ -150,7 +157,7 @@ public class IsometricRenderer : MonoBehaviour
         }
 
 
-        animator.Play(directionArray[lastDirection]);
+        myAnimator.Play(directionArray[lastDirection]);
     }
 
 
@@ -250,6 +257,28 @@ public class IsometricRenderer : MonoBehaviour
 
     //this function converts a Vector2 direction to an index to a slice around a circle
     //this goes in a counter-clockwise direction.
+
+    /// <summary>
+    /// Spiegelt das GameObject basierend auf der Blickrichtung (nur X-Achse).
+    /// </summary>
+    /// <param name="direction">Die Zielrichtung (z.B. Richtung zum Spieler)</param>
+    public void SetFacingDirection(Vector2 direction)
+    {
+        if (direction.x < -0.01f)
+        {
+            // Nach links gucken → spiegeln
+            transform.localScale = new Vector3(3f, 3f, 3f);
+        }
+        else if (direction.x > 0.01f)
+        {
+            // Nach rechts gucken → normal
+            transform.localScale = new Vector3(-3f, 3f, 3f);
+        }
+
+        // Optional: Falls du vertikale Spiegelung mal brauchst
+        // if (direction.y < 0) transform.localScale = new Vector3(...);
+    }
+
 
     //why would this be static? cant remember, lets make it nonstatic, so i might acces it from enemy-controller scripts.
     public int DirectionToIndex(Vector2 dir, int sliceCount){

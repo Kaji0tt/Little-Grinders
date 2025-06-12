@@ -223,21 +223,21 @@ public class EnemyController : MonoBehaviour
     }
     #endregion
 
-    public float PlayerDistance()
+    public float TargetDistance()
 	{
 		float distance = Vector3.Distance(Player.position, transform.position);
         return distance;
 	}
 	
-    public Vector2 CalculatePlayerDirection()
+    public Vector2 TargetDirection()
     {
         Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
 
-        Vector2 inputVector = new Vector2(Direction.x * -1, Direction.z);
+        Vector2 outputVector = new Vector2(Direction.x * -1, Direction.z);
 
-        inputVector = Vector2.ClampMagnitude(inputVector, 1);
+        outputVector = Vector2.ClampMagnitude(outputVector, 1);
 
-        return inputVector;
+        return outputVector;
     }
 	
 
@@ -299,7 +299,7 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(float incoming_damage, int range_radius_ofDMG)
     {
 
-        if (PlayerDistance() <= range_radius_ofDMG)
+        if (TargetDistance() <= range_radius_ofDMG)
         {
             incoming_damage = 10 * (incoming_damage * incoming_damage) / (mobStats.Armor.Value + (10 * incoming_damage));
 

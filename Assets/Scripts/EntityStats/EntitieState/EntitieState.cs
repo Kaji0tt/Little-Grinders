@@ -137,7 +137,7 @@ public class ChaseState : EntitieState
         controller.MoveToPlayer();
 
         // Wenn Ziel wieder außerhalb der Aggro-Reichweite ist
-        if (controller.PlayerDistance() > controller.aggroRange)
+        if (controller.TargetDistance() > controller.aggroRange)
         {
             controller.myIsoRenderer.Play(AnimationState.Idle);
             controller.StopMoving();
