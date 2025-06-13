@@ -103,6 +103,7 @@ public class EnemyController : MonoBehaviour
             //Debug.Log("Troubleshooten warum Attack abgespielt wird, wenn State == Chase & isPerformingAction == false");
         }
 
+        myIsoRenderer.SetFacingDirection(TargetDirection());
     }
 
     public void SetLocalDirectionVariables()
@@ -118,7 +119,7 @@ public class EnemyController : MonoBehaviour
     {
         //Get Renderer Component.
         if (myIsoRenderer == null)
-            myIsoRenderer = gameObject.GetComponent<IsometricRenderer>();
+            myIsoRenderer = GetComponentInChildren<IsometricRenderer>();
 
         //Add the MobCamScript.
         if (gameObject.GetComponent<MobsCamScript>() == null)
@@ -129,7 +130,7 @@ public class EnemyController : MonoBehaviour
 
         // Automatische Referenzierung der UI-Elemente
         if (hpBar == null)
-            hpBar = transform.GetChild(1).gameObject;
+            hpBar = transform.GetChild(2).gameObject;
 
         if (enemyHpSlider == null && hpBar != null)
             enemyHpSlider = hpBar.GetComponentInChildren<Slider>();
@@ -239,8 +240,6 @@ public class EnemyController : MonoBehaviour
 
         return outputVector;
     }
-	
-
 
     private void CalculateHPCanvas()
     {
