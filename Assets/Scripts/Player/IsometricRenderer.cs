@@ -81,7 +81,7 @@ public class IsometricRenderer : MonoBehaviour
     {
         //cache the animator component
         myAnimator = GetComponent<Animator>();
-        myEnemyController = GetComponent<EnemyController>();
+        myEnemyController = GetComponentInParent<EnemyController>();
         isPerformingAction = false;
 
         //RuntimController setzen!
@@ -96,7 +96,7 @@ public class IsometricRenderer : MonoBehaviour
     public void Play(AnimationState state)
     {
         //Bestimme die Blickrichtung des Controllers
-        SetFacingDirection(myEnemyController.TargetDirection());
+        //SetFacingDirection(myEnemyController.TargetDirection());
 
         currentState = state;
 
@@ -136,6 +136,27 @@ public class IsometricRenderer : MonoBehaviour
         isPerformingAction = active;
     }
 
+    /// <summary>
+    /// Spiegelt das GameObject basierend auf der Blickrichtung (nur X-Achse).
+    /// </summary>
+    /// <param name="direction">Die Zielrichtung (z.B. Richtung zum Spieler)</param>
+    public void SetFacingDirection(Vector2 direction)
+    {
+        if (direction.x < -0.01f)
+        {
+            // Nach links gucken → spiegeln
+            transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+        else if (direction.x > 0.01f)
+        {
+            // Nach rechts gucken → normal
+            transform.localScale = new Vector3(-1f, 1f, 1f);
+        }
+
+        // Optional: Falls du vertikale Spiegelung mal brauchst
+        // if (direction.y < 0) transform.localScale = new Vector3(...);
+    }
+
     public void SetPlayerDirection(Vector2 direction){
 
 
@@ -159,6 +180,8 @@ public class IsometricRenderer : MonoBehaviour
 
         myAnimator.Play(directionArray[lastDirection]);
     }
+
+
 
 
     //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll die Idle Animation darstellen.
@@ -258,26 +281,7 @@ public class IsometricRenderer : MonoBehaviour
     //this function converts a Vector2 direction to an index to a slice around a circle
     //this goes in a counter-clockwise direction.
 
-    /// <summary>
-    /// Spiegelt das GameObject basierend auf der Blickrichtung (nur X-Achse).
-    /// </summary>
-    /// <param name="direction">Die Zielrichtung (z.B. Richtung zum Spieler)</param>
-    public void SetFacingDirection(Vector2 direction)
-    {
-        if (direction.x < -0.01f)
-        {
-            // Nach links gucken → spiegeln
-            transform.localScale = new Vector3(3f, 3f, 3f);
-        }
-        else if (direction.x > 0.01f)
-        {
-            // Nach rechts gucken → normal
-            transform.localScale = new Vector3(-3f, 3f, 3f);
-        }
 
-        // Optional: Falls du vertikale Spiegelung mal brauchst
-        // if (direction.y < 0) transform.localScale = new Vector3(...);
-    }
 
 
     //why would this be static? cant remember, lets make it nonstatic, so i might acces it from enemy-controller scripts.
