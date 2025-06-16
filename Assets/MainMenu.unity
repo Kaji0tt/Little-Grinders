@@ -32319,8 +32319,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 920448030}
   m_HandleRect: {fileID: 920448029}
   m_Direction: 2
-  m_Value: 0.981068
-  m_Size: 0.57585037
+  m_Value: 0.98106784
+  m_Size: 0.5758503
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -33960,6 +33960,7 @@ GameObject:
   - component: {fileID: 1300116311}
   - component: {fileID: 1300116312}
   - component: {fileID: 1300116313}
+  - component: {fileID: 1300116314}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: Untagged
@@ -34065,6 +34066,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc98318064aee74cb08a25a51384b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1300116314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300116307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f2777d8ca105d409aa745b3f821dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagePopupPrefab: {fileID: 4483410326512327473, guid: 28a423ea1ac670942968c05975813fd1,
+    type: 3}
 --- !u!1 &1300290822
 GameObject:
   m_ObjectHideFlags: 0

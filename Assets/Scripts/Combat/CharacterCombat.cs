@@ -216,7 +216,7 @@ public class CharacterCombat : MonoBehaviour
 
         foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
         {
-            if (enemy != null)
+            if (enemy != null && !enemy.mobStats.isDead)
             {
                 enemy.TakeDamage(damage, playerStats.Range);
             }

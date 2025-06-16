@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DamagePopupManager : MonoBehaviour
 {
@@ -8,21 +9,46 @@ public class DamagePopupManager : MonoBehaviour
 
     private void Awake()
     {
+        // Überprüfen, ob eine Instanz bereits existiert
         if (Instance == null)
-            Instance = this;
-        else
+        {
+            Instance = this; // Setze die aktuelle Instanz
+            DontDestroyOnLoad(gameObject); // Optional: Behalte dieses Objekt bei Szenenwechseln
+        }
+        else if (Instance != this)
+        {
+            // Falls eine andere Instanz bereits existiert, zerstöre diese neue Instanz
             Destroy(gameObject);
+        }
     }
 
     private void OnEnable()
     {
-        GameEvents.Instance.OnEnemyWasAttacked += ShowDamagePopup;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        UnsubscribeFromEvent();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UnsubscribeFromEvent();
+
         if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnEnemyWasAttacked += ShowDamagePopup;
+        }
+    }
+
+    private void UnsubscribeFromEvent()
+    {
+        if (GameEvents.Instance != null)
+        {
             GameEvents.Instance.OnEnemyWasAttacked -= ShowDamagePopup;
+        }
     }
 
     public void ShowDamagePopup(float damage, Transform enemyTransform)
@@ -33,11 +59,12 @@ public class DamagePopupManager : MonoBehaviour
         //Setze Slider als Parent
         Transform slideTransform = enemyTransform.GetComponent<EnemyController>().enemyHpSlider.transform;
 
+        Debug.Log("Manager here:" + gameObject.name);
         // Instanziiere das Popup als Kind des Enemies
-        GameObject popup = Instantiate(damagePopupPrefab, slideTransform);
+        GameObject popup = Instantiate(damagePopupPrefab);
 
         // Setze die lokale Position des Popups auf den Offset (z. B. hpBar Position)
-        popup.transform.localPosition = slideTransform.position;
+        popup.transform.position = slideTransform.position;
 
         // Setze die lokale Position
         //popup.transform.localPosition = localOffset;

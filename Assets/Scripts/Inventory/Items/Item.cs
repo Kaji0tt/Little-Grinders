@@ -35,6 +35,7 @@ public class Item : ScriptableObject
     public int armor;
     public int attackPower;
     public int abilityPower;
+    public int reg;
 
 
 
@@ -46,6 +47,7 @@ public class Item : ScriptableObject
     public float p_abilityPower;
     public float p_attackSpeed;
     public float p_movementSpeed;
+    public float p_reg;
 
     [Space]
     [Header("Actives")]
@@ -57,6 +59,11 @@ public class Item : ScriptableObject
     public float c_percent;
 
 
+    //wahrscheinlich sollte jedes Item eine bestimmte Nische ausfüllen können.
+    //Jede Niesche sollte dann von 2-3 Base Items bestückt sein
+    //somit wäre jeder Spielstil grundlegend abgedeckt.
+    // auch könnten die verschiedenen Waffen-Combos per zufall rollen
+    public int level_needed;
 
 
 }
@@ -86,8 +93,9 @@ public class ItemInstance :  IMoveable, IUseable
     public int armor;
     public int attackPower;
     public int abilityPower;
+    public int reg;
 
-    public int[] flatValues = new int[4];
+    public int[] flatValues = new int[5];
 
 
     //Percent Values
@@ -97,8 +105,9 @@ public class ItemInstance :  IMoveable, IUseable
     public float p_abilityPower;
     public float p_attackSpeed;
     public float p_movementSpeed;
+    public float p_reg;
 
-    public float[] percentValues = new float[6];
+    public float[] percentValues = new float[7];
 
 
     //Actives
@@ -109,11 +118,11 @@ public class ItemInstance :  IMoveable, IUseable
     public float c_percent;
 
     //Store StatModifiers
-    private StatModifier[] flatStatMods = new StatModifier[4];
-    private StatModifier[] percentStatMods = new StatModifier[6];
+    private StatModifier[] flatStatMods = new StatModifier[5];
+    private StatModifier[] percentStatMods = new StatModifier[7];
 
     //Store finalStringInfo
-    private string[] modStrings = new string[11];
+    private string[] modStrings = new string[12];
 
     [HideInInspector]
     public List<ItemModsData> addedItemMods = new List<ItemModsData>(); //??
@@ -181,6 +190,12 @@ public class ItemInstance :  IMoveable, IUseable
             abilityPower = flatValues[3];
         }
 
+        if (item.reg != 0)
+        {
+            flatValues[4] = item.abilityPower;
+            abilityPower = flatValues[4];
+        }
+
         //Write Array for PercentValues
         if (item.p_hp != 0)
         {
@@ -218,7 +233,13 @@ public class ItemInstance :  IMoveable, IUseable
             p_movementSpeed = item.p_movementSpeed;
         }
 
-        if(useable)
+        if (item.p_reg != 0)
+        {
+            percentValues[6] = item.p_reg;
+            p_reg = item.p_reg;
+        }
+
+        if (useable)
         {
             useable = true;
 

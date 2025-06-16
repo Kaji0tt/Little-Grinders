@@ -217,11 +217,7 @@ public class HitState : EntitieState
         {
             //controller.myIsoRenderer.ToggleActionState(false);
 
-            if (controller.isDead)
-            {
-                controller.TransitionTo(new DeadState(controller));
-            }
-            else if (controller.IsPlayerInAttackRange())
+            if (controller.IsPlayerInAttackRange())
             {
                 controller.TransitionTo(new AttackState(controller));
             }
