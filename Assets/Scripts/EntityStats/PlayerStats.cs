@@ -18,7 +18,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
     }
     #endregion
 
-    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed, Regeneration;
+    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed, Regeneration, CriticalChance, CritcalDamage;
 
     public static event Action eventLevelUp;
 

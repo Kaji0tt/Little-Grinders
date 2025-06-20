@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class MobStats : MonoBehaviour, IEntitie
 {
-    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
+    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed, Regeneration;
 
     public bool isDead { get; private set; } = false;
 
@@ -14,6 +14,7 @@ public class MobStats : MonoBehaviour, IEntitie
     {
         CalculateMobStats();
         //Debug.Log(gameObject.name + ": My Health Base is " + Hp.BaseValue + ", after Calculation it is:" + Hp.Value);
+        StartCoroutine(Regenerate());
 
     }
 
@@ -42,6 +43,9 @@ public class MobStats : MonoBehaviour, IEntitie
                 return MovementSpeed;
 
             case EntitieStats.AttackSpeed:
+                return AttackSpeed;
+
+            case EntitieStats.Regeneration:
                 return AttackSpeed;
 
             default:
@@ -225,6 +229,20 @@ public class MobStats : MonoBehaviour, IEntitie
         }
 
         else Set_currentHp(healAmount);
+    }
+
+    public bool isRegenerating = true;
+
+    IEnumerator Regenerate()
+    {
+        while (isRegenerating)
+        {
+            yield return new WaitForSeconds(1);
+            if (currentHp < Hp.Value)
+            {
+                currentHp = Mathf.Min(currentHp + Regeneration.Value, Hp.Value);
+            }
+        }
     }
 
     public void Die()

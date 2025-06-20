@@ -12,23 +12,49 @@ public class DamagePopup : MonoBehaviour
     private float scaleDuration = 0.2f;
     private float elapsed;
 
-    private Vector3 moveVector = new Vector3(0, 1f, 0.5f); // Richtung nach oben + leicht zur Kamera
-    private Vector3 startScale = Vector3.one * 2f;
-    private Vector3 maxScale = Vector3.one * 3.5f;
-
+    private Vector3 moveVector = new Vector3(0, 1f, 0.5f);
+    private Vector3 startScale = Vector3.one * .1f;
+    private Vector3 startScaleCrit = Vector3.one * .3f;
+    private Vector3 maxScale = Vector3.one * .5f;
 
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
 
         damageText = GetComponentInChildren<TextMeshProUGUI>();
+
+        if (damageText == null)
+        {
+            Debug.LogError("TextMeshProUGUI not found in children!");
+        }
     }
 
     public void Setup(float damage)
     {
-        damageText.text = damage.ToString("0");
+        if (damageText != null)
+        {
+            Debug.Log("No Crit!");
+            damageText.text = damage.ToString("0");
+            damageText.color = Color.white;
+        }
         transform.localScale = startScale;
+
+        if(canvasGroup != null && canvasGroup.isActiveAndEnabled)
         canvasGroup.alpha = 1f;
+    }
+
+    public void SetupCrit(float damage)
+    {
+        if (damageText != null)
+        {
+            Debug.Log("Crit!");
+            damageText.text = damage.ToString("0");
+            damageText.color = Color.red;
+        }
+        transform.localScale = startScaleCrit;
+
+        if (canvasGroup != null && canvasGroup.isActiveAndEnabled)
+            canvasGroup.alpha = 1f;
     }
 
     private void Update()

@@ -36,7 +36,7 @@ public class GameEvents : MonoBehaviour
     public event Action<float> OnPlayerHasAttacked;
     public event Action<float> OnPlayerWasAttacked;
     public event Action<float> OnEnemyHasAttacked;
-    public event Action<float, Transform> OnEnemyWasAttacked;
+    public event Action<float, Transform, bool> OnEnemyWasAttacked;
 
 
 
@@ -80,9 +80,9 @@ public class GameEvents : MonoBehaviour
     {
         OnPlayerWasAttacked?.Invoke(damage);
     }
-    public void EnemyWasAttacked(float damage, Transform enemyTransform)
+    public void EnemyWasAttacked(float damage, Transform enemyTransform, bool crit)
     {
-        OnEnemyWasAttacked?.Invoke(damage, enemyTransform);
+        OnEnemyWasAttacked?.Invoke(damage, enemyTransform, crit);
     }
 
     public void EnemyWasAttacked(float damage)

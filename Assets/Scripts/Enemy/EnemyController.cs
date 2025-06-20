@@ -27,11 +27,23 @@ public class EnemyController : MonoBehaviour
     //public Transform myTarget;
 
 
-    //[Header("Interface Referenzen")]
+    [Header("Interface Visualisierung")]
     public GameObject hpBar { get; private set; }
     public Canvas combatCanvas { get; private set; }
 
     public Slider enemyHpSlider { get; private set; }
+
+    public GameObject targetIndicator;
+
+    /// <summary>
+    /// Schaltet den Zielindikator für diesen Gegner an oder aus.
+    /// </summary>
+    /// <param name="active">true = anzeigen, false = verstecken</param>
+    public void SetTargetIndicatorActive(bool active)
+    {
+        if (targetIndicator != null)
+            targetIndicator.SetActive(active);
+    }
 
 
     /// <summary>
@@ -83,7 +95,6 @@ public class EnemyController : MonoBehaviour
         // Spätestens wenn ich mehrere Level habe und der Spawn vom Player neu gesetzt wird, wird ein durchgehender Singleton nötig sein.
         SetLocalDirectionVariables();
 
-
         AddEssentialComponents();
 
         //Recalculate BaseStats in dependency of Map-Level
@@ -93,17 +104,17 @@ public class EnemyController : MonoBehaviour
     }
     void Update()
     {
-        CalculateHPCanvas();
+
         myEntitieState?.Update();
 
-        if(gameObject.name == "Dustling Start 1")
+        if(!mobStats.isDead)
         {
-            //Debug.Log(myEntitieState.ToString());
-            //Debug.Log(myIsoRenderer.isPerformingAction);
-            //Debug.Log("Troubleshooten warum Attack abgespielt wird, wenn State == Chase & isPerformingAction == false");
+            CalculateHPCanvas();
+            myIsoRenderer.SetFacingDirection(TargetDirection());
         }
+        else
+            hpBar.GetComponent<CanvasGroup>().alpha = 0;
 
-        myIsoRenderer.SetFacingDirection(TargetDirection());
     }
 
     public void SetLocalDirectionVariables()
@@ -128,6 +139,8 @@ public class EnemyController : MonoBehaviour
         if (myNavMeshAgent == null)
             myNavMeshAgent = GetComponent<NavMeshAgent>();
 
+        Debug.Log(gameObject.name);
+
         // Automatische Referenzierung der UI-Elemente
         if (hpBar == null)
             hpBar = transform.GetChild(2).gameObject;
@@ -138,7 +151,8 @@ public class EnemyController : MonoBehaviour
 
     #region Action StateMachine
     public void TransitionTo(EntitieState newState)
-    {   if(!mobStats.isDead)
+    {   
+        if(!mobStats.isDead)
         {
             myEntitieState?.Exit();
             myEntitieState = newState;
@@ -188,8 +202,11 @@ public class EnemyController : MonoBehaviour
 
     public void StopMoving()
     {
-        if (myNavMeshAgent == enabled)
-        myNavMeshAgent.SetDestination(transform.position);
+        if (myNavMeshAgent != null && myNavMeshAgent.isActiveAndEnabled)
+        {
+            myNavMeshAgent.SetDestination(transform.position);
+        }
+
     }
 
     //public void MoveToTarget()
@@ -215,10 +232,9 @@ public class EnemyController : MonoBehaviour
         // Laufziel berechnen – z. B. 2 Meter in diese Richtung
         Vector3 destination = transform.position + currentDirection * 2f;
 
+        if(!mobStats.isDead)
         myNavMeshAgent.SetDestination(destination);
         //Vector3 toPlayer = PlayerManager.instance.player.transform.position - transform.position;
-
-
 
 
     }
@@ -283,9 +299,11 @@ public class EnemyController : MonoBehaviour
 
         if (mobStats.Hp.Value <= 0)
         {
+
+
             if(!mobStats.isDead)
             {
-                StopMoving();
+                //StopMoving();
                 TransitionTo(new DeadState(this));
             }
 
@@ -295,7 +313,7 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    public void TakeDamage(float incoming_damage, int range_radius_ofDMG)
+    public void TakeDamage(float incoming_damage, int range_radius_ofDMG, bool isCrit)
     {
 
         if (TargetDistance() <= range_radius_ofDMG)
@@ -307,9 +325,12 @@ public class EnemyController : MonoBehaviour
             //Schadesberechnung
             mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
-            GameEvents.Instance.EnemyWasAttacked(incoming_damage, transform);
+
+            ///Upsi
+            GameEvents.Instance.EnemyWasAttacked(incoming_damage, transform, isCrit);
 
             // Knockback
+            if(!mobStats.isDead)
             ApplyKnockback();
 
             //Setze den Entitie State auf "Hit"
@@ -378,7 +399,7 @@ public class EnemyController : MonoBehaviour
         Vector3 startPos = transform.position;
 
         // Optionale Deaktivierung der NavMesh-Steuerung
-        myNavMeshAgent.enabled = false;
+        //myNavMeshAgent.SetDestination(transform.position);
 
         while (elapsed < duration)
         {
@@ -390,7 +411,7 @@ public class EnemyController : MonoBehaviour
         transform.position = targetPos;
 
         // NavMeshAgent reaktivieren
-        myNavMeshAgent.enabled = true;
+        //myNavMeshAgent.enabled = true;
     }
 
     //Überarbeitungswürdig. Soll schließlich eine Abfrage für Collision mit sämtlichen Projektilen ergeben.

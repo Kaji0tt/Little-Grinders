@@ -199,26 +199,38 @@ public class CharacterCombat : MonoBehaviour
         // Berechne Delay für den Trefferpunkt
         float delay = (1f / playerStats.AttackSpeed.Value) * currentStep.timeToNextAttack;
 
+
+
         // Berechne Schaden
         float baseDamage = playerStats.AttackPower.Value;
         float finalDamage = baseDamage * currentStep.damageMultiplier;
 
-        StartCoroutine(DelayedHit(delay, finalDamage));
+        //Crit-Check
+        if(Random.value < playerStats.CriticalChance.Value)
+        {
+            finalDamage *= playerStats.CritcalDamage.Value;
+            StartCoroutine(DelayedHit(delay, finalDamage, true));
+        }
+        else
+            StartCoroutine(DelayedHit(delay, finalDamage, false));
+
+
+
 
         lastAttackTime = Time.time;
         currentComboIndex++;
     }
 
     // Coroutine, die Schaden und Sound nach einer gewissen Verzögerung ausführt
-    IEnumerator DelayedHit(float delay, float damage)
+    IEnumerator DelayedHit(float delay, float damage, bool isCrit)
     {
         yield return new WaitForSeconds(delay);
 
         foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
         {
-            if (enemy != null)
+            if (enemy != null && !enemy.mobStats.isDead)
             {
-                enemy.TakeDamage(damage, playerStats.Range);
+                enemy.TakeDamage(damage, playerStats.Range, isCrit);
             }
         }
 
@@ -299,6 +311,13 @@ public class CharacterCombat : MonoBehaviour
 
     }
 
+
+    private EnemyController currentTarget;
+
+    public void SetCurrentTarget(EnemyController target)
+    {
+        currentTarget = target;
+    }
 
     // ---- RANGED ATTACK ----- Not implemented yet.
     void RangedAttack(Vector3 worldPos)
