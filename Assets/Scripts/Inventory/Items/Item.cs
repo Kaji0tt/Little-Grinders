@@ -4,7 +4,19 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum ItemType {Kopf, Brust, Beine, Schuhe, Schmuck, Weapon, Consumable}
+[System.Flags]
+public enum ItemType
+{
+    None = 0,
+    Kopf = 1 << 0,
+    Brust = 1 << 1,
+    Beine = 1 << 2,
+    Schuhe = 1 << 3,
+    Schmuck = 1 << 4,
+    Weapon = 1 << 5,
+    Consumable = 1 << 6,
+    All = ~0 // optional, wenn du "alle Slots erlaubt" brauchst
+}
 //public enum ItemRarity {Unbrauchbar, Gewöhnlich, Ungewöhnlich, Selten, Episch, Legendär}
 
 
@@ -20,8 +32,10 @@ public class Item : ScriptableObject
     [SerializeField]
     public ItemType itemType;
     public WeaponCombo weaponCombo;
+    //
+    //public string itemRarity;   // [Currently gettin Implemented]: https://www.youtube.com/watch?v=dvSYloBxzrU
     [HideInInspector]
-    public string itemRarity;   // [Currently gettin Implemented]: https://www.youtube.com/watch?v=dvSYloBxzrU
+    public Rarity itemRarity;
     public int Range;
     public bool RangedWeapon;
     public Sprite icon;        //scale item.sprite always to correct size, for ItemWorld to Spawn it in according size aswell. either here or in itemworld
@@ -78,14 +92,17 @@ public class ItemInstance :  IMoveable, IUseable
     public string ItemDescription;
     public string ItemValueInfo;
     public ItemType itemType;
+    public Rarity itemRarity;
     public WeaponCombo weaponCombo;
-    public string itemRarity = "Gewöhnlich";
+    //public string itemRarity = "Gewöhnlich";
 
     public int Range;
     public bool RangedWeapon;
     public Sprite icon { get; private set; }       
     public int percent;
-    public int baseLevel;
+    [Range(1, 100)]
+    public int requiredLevel = 1;
+    public int baseLevel { get; private set; }
 
 
     //Flat Values
@@ -125,19 +142,11 @@ public class ItemInstance :  IMoveable, IUseable
     private string[] modStrings = new string[12];
 
     [HideInInspector]
-    public List<ItemModsData> addedItemMods = new List<ItemModsData>(); //??
+    public List<ItemMod> addedItemMods = new List<ItemMod>(); //??
 
-    //BadManner
-    //[HideInInspector]
-    //public int amount = 1;
+
 
     private IMoveable MyMoveable;
-
-    //private IUseable MyUseAble;
-
-
-    //Wird eigentlich nicht verwendet, sollte aber im Konstruktor gecalled werden.
-    //public ItemModsData[] myItemMods; 
 
     
     public ItemInstance(Item item)
@@ -163,7 +172,9 @@ public class ItemInstance :  IMoveable, IUseable
         RangedWeapon = item.RangedWeapon;
         icon = item.icon;
         percent = item.percent;
-        baseLevel = item.baseLevel;
+        item.baseLevel = GlobalMap.instance != null && GlobalMap.instance.currentMap != null
+            ? GlobalMap.instance.currentMap.mapLevel
+            : 1;
 
         //Berechnung der Werte der spezifischen Item Instanz.
         #region Clone&RollItem
@@ -262,9 +273,17 @@ public class ItemInstance :  IMoveable, IUseable
 
     private float RollItemValue(float baseValue)
     {
-        // +10% oder -10%
         float variance = (UnityEngine.Random.value * 0.2f) - 0.1f;
-        return baseValue * (1 + variance);
+
+        int mapLevel = GlobalMap.instance != null && GlobalMap.instance.currentMap != null
+            ? GlobalMap.instance.currentMap.mapLevel
+            : 1;
+
+        // Leveldifferenz-Faktor, max ±20% Skalierung
+        float levelFactor = Mathf.Clamp((float)mapLevel / (float)baseLevel, 0.5f, 1.5f);
+
+        // Beispiel: 10% zufällige Varianz + Levelanpassung
+        return baseValue * (1 + variance) * levelFactor;
     }
 
 
@@ -366,6 +385,7 @@ public class ItemInstance :  IMoveable, IUseable
     }
 
     //Serialize information about Item and its Mods (not used currently)
+    /*
     public ItemModsData[] SaveItemMods(ItemInstance item)
     {
         ItemModsData[] myArray = item.addedItemMods.ToArray();
@@ -373,7 +393,7 @@ public class ItemInstance :  IMoveable, IUseable
         return myArray;
 
     }
-
+    */
     public void Use()
     {
         //Inventory inventory = PlayerManager.instance.player.Inventory;

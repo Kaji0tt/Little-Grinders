@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0008a759365df48b189b7596caabd7, type: 3}
+  m_Name: 1_Critical Damage
+  m_EditorClassIdentifier: 
+  modName: Flat_CriticalDamage
+  description: Adds the given Value to the Character.
+  targetStat: 8
+  baseValue: 0.1
+  modType: 0
+  rarityScalings:
+  - rarity: 0
+    multiplier: 1
+    displayName: des Fanatikers
+  - rarity: 1
+    multiplier: 1.5
+    displayName: des gierigen Fanatikers
+  - rarity: 2
+    multiplier: 2
+    displayName: "des blutr\xFCnstigen Fanatikers"
+  - rarity: 3
+    multiplier: 3
+    displayName: des wahnsinnigen Fanatikers
+  - rarity: 4
+    multiplier: 5
+    displayName: des gottlosen Fanatikers
+  allowedItemTypes: 16
+  scalingPerLevel: 0.01

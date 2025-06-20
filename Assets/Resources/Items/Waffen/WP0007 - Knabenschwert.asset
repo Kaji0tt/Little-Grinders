@@ -15,7 +15,7 @@ MonoBehaviour:
   ItemID: WP0007
   ItemName: Knabenschwert
   ItemDescription: "Nicht sonderlich gef\xE4hrlich, aber flink."
-  itemType: 5
+  itemType: 32
   weaponCombo: {fileID: 11400000, guid: d1865f57f14481a4c8cd889105280ff4, type: 2}
   itemRarity: 0
   Range: 1
@@ -38,6 +38,5 @@ MonoBehaviour:
   p_reg: 0
   usable: 0
   itemPotion: {fileID: 0}
-  itemAbility: {fileID: 0}
   c_percent: 3.2
   level_needed: 0

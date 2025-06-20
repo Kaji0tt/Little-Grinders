@@ -15,24 +15,28 @@ MonoBehaviour:
   ItemID: BR0004
   ItemName: Schwerer Brustpanzer
   ItemDescription: "Klobig und Schwer, aber \xE4u\xDFerst Robust!"
-  itemType: 1
-  itemRarity: 
+  itemType: 2
+  weaponCombo: {fileID: 0}
+  itemRarity: 0
   Range: 0
   RangedWeapon: 0
   icon: {fileID: -8304323217459320487, guid: 9763de6cd2bf1e046b1c57a9ab65adca, type: 3}
   percent: 10
   baseLevel: 3
+  activeItem: 0
   hp: 0
   armor: 20
   attackPower: 0
   abilityPower: 0
+  reg: 0
   p_hp: 0
   p_armor: 0.01
   p_attackPower: 0
   p_abilityPower: 0
   p_attackSpeed: 0
   p_movementSpeed: -0.05
-  c_hp: 0
+  p_reg: 0
   usable: 0
+  itemPotion: {fileID: 0}
   c_percent: 0
-  itemAction: {fileID: 0}
+  level_needed: 0

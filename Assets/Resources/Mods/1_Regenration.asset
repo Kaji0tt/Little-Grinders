@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0008a759365df48b189b7596caabd7, type: 3}
+  m_Name: 1_Regenration
+  m_EditorClassIdentifier: 
+  modName: Flat_Regeneration
+  description: Adds the given Value to the Character.
+  targetStat: 6
+  baseValue: 1
+  modType: 0
+  rarityScalings:
+  - rarity: 0
+    multiplier: 1
+    displayName: des Hirten
+  - rarity: 1
+    multiplier: 1.2
+    displayName: des geduldigen Hirten
+  - rarity: 2
+    multiplier: 1.5
+    displayName: des friedfertigen Hirten
+  - rarity: 3
+    multiplier: 2.5
+    displayName: des gesandten Hirten
+  - rarity: 4
+    multiplier: 5
+    displayName: "des g\xF6ttlichen Hirten"
+  allowedItemTypes: -1
+  scalingPerLevel: 0.05

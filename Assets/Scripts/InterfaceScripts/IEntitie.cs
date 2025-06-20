@@ -1,7 +1,19 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum EntitieStats { Hp, AbilityPower, AttackPower, MovementSpeed, AttackSpeed, Armor, Regeneration, None}
+public enum EntitieStats 
+{ 
+    Hp, 
+    AbilityPower, 
+    AttackPower, 
+    MovementSpeed, 
+    AttackSpeed, 
+    Armor, 
+    Regeneration, 
+    CriticalChance, 
+    CritcalDamage, 
+    None 
+}
 
 //Es sollte eine Funktion geben, die in IEntitie zwischen Player und Mob unterscheiden kann.
 public interface IEntitie

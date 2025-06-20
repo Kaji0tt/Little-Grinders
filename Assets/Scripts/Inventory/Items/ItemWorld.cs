@@ -65,15 +65,7 @@ public class ItemWorld : MonoBehaviour
 
         switch (item.itemRarity)
         {
-            case "Unbrauchbar":
-                rarityColor = Color.red;
-                itemWorldRend.material.SetColor("_Color", Color.red);
-                lightSource.color = new Color(1, 0, 0, 0.5f);
-                lightSource.range = 0.2f;
-                lightSource.intensity = 0.005f;
-                break;
-
-            case "Gewöhnlich":
+            case Rarity.Common:
                 rarityColor = Color.white;
                 itemWorldRend.material.SetColor("_Color", Color.white);
                 lightSource.color = new Color(0, 1, 0, 0.2f);
@@ -81,7 +73,7 @@ public class ItemWorld : MonoBehaviour
                 lightSource.intensity = 0f;
                 break;
 
-            case "Ungewöhnlich":
+            case Rarity.Uncommon:
                 rarityColor = Color.green;
                 itemWorldRend.material.SetColor("_Color", Color.green);
                 itemWorldRend.material.SetFloat("_OffSet", 0.0010f);
@@ -91,7 +83,7 @@ public class ItemWorld : MonoBehaviour
                 AudioManager.instance.Play("Drop_Uncommon");
                 break;
 
-            case "Selten":
+            case Rarity.Rare:
                 rarityColor = Color.blue;
                 itemWorldRend.material.SetColor("_Color", Color.blue);
                 itemWorldRend.material.SetFloat("_OffSet", 0.0015f);
@@ -101,7 +93,7 @@ public class ItemWorld : MonoBehaviour
                 AudioManager.instance.Play("Drop_Rare");
                 break;
 
-            case "Episch":
+            case Rarity.Epic:
                 rarityColor = Color.magenta;
                 itemWorldRend.material.SetColor("_Color", Color.magenta);
                 itemWorldRend.material.SetFloat("_OffSet", 0.8f);
@@ -111,7 +103,7 @@ public class ItemWorld : MonoBehaviour
                 AudioManager.instance.Play("Drop_Epic");
                 break;
 
-            case "Legendär":
+            case Rarity.Legendary:
                 rarityColor = new Color(0.54f, 0.32f, 0.13f, 1);
                 itemWorldRend.material.SetColor("_Color", rarityColor);
                 itemWorldRend.material.SetFloat("_OffSet", 1f);

@@ -19,26 +19,26 @@ public class ItemDatabase : MonoBehaviour
 
     private static List<List<Item>> totalLoottable = new List<List<Item>>();
 
+
+    //Sollte längerfristig automatisch initialisiert werden über Ressource Folder
     List<Item> currentDropTable = new List<Item>();
 
-    int itemsTotalCount;
+    List<Item> allItems = new List<Item>();
+    public ItemModDefinition[] allModDefs { get; private set; }
 
     int totalWeight;
 
     private int percentSum = 0;
 
+
+
     private void Awake()
     {
         instance = this;
 
-        itemsTotalCount = tier1.Count + tier2.Count + tier3.Count + tier4.Count + tier5.Count;
+        allModDefs = Resources.LoadAll<ItemModDefinition>("ItemMods");
 
-        totalLoottable.Add(tier1);
-        totalLoottable.Add(tier2);
-        totalLoottable.Add(tier3);
-        totalLoottable.Add(tier4);
-        totalLoottable.Add(tier5);
-
+        allItems.AddRange(Resources.LoadAll<Item>("Items"));
     }
 
 
@@ -53,10 +53,6 @@ public class ItemDatabase : MonoBehaviour
         currentDropTable.Clear();
 
         totalWeight = 0;
-
-        //int dropRange = 2;
-
-        //int dropTable = (int)Mathf.Floor(level / WorldModifiers.instance.dropTableTierRange);
 
         CalculateTotalWeight(playerStats);
 
@@ -74,41 +70,39 @@ public class ItemDatabase : MonoBehaviour
             {
                 position = position + new Vector3(Random.Range(-.5f, .5f), .1f, Random.Range(-.5f, .5f));
 
-                //print("Item: " + item.ItemName + " was choosen.");
-
-                ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(new ItemInstance(item)));
+                //itemRolls -> neues Item providen
+                ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(new ItemInstance(item), 1));
 
                 break;
             }
         }
 
     }
-
     int CalculateTotalWeight(PlayerStats playerStats)
     {
-        foreach (List<Item> itemList in totalLoottable)
+        int mapLevel = playerStats.level;
+
+        currentDropTable.Clear();
+        totalWeight = 0;
+
+        foreach (Item item in allItems)
         {
-            foreach (Item item in itemList)
-            {
-                //Berechne den Einfluss des Spielerleves in Abhängigkeit vom Baselevel des Items
-                float levelInfluence = Mathf.Clamp01((float)playerStats.level / (float)item.baseLevel);
+            // Leveldifferenz zwischen Maplevel und Item-Level
+            float levelDiff = Mathf.Abs(item.baseLevel - mapLevel);
 
-                //An dieser Stelle sollte zu einem späteren Zeitpunkt weitere Modifier errechnet werden, oder dies geschieht in WorldModifiers direkt.
-                //float mapInfluence
+            // Je näher das Item-Level am Maplevel, desto höher das Gewicht
+            // z. B. Exponentialer Abfall: je weiter weg, desto drastischer der Drop in Chance
+            float weightFactor = 1f / (1f + Mathf.Pow(levelDiff, 1.5f));
 
-                //Speichere das errechnete Gewicht in neuer Variabel, um das original Item nicht zu modifizieren. Da wir mit int's arbeiten, 100 um mehr Varianz zu erhalten.
-                item.c_percent = item.percent  * levelInfluence;
+            // Skalieren mit Originalgewicht (z. B. 100) → du kannst auch ein separates Feld benutzen
+            item.c_percent = item.percent * weightFactor;
 
-                //Füge das errechnete Gewicht des Items zum komplett Gewicht hinzu
-                totalWeight += (int)item.c_percent;
-
-                currentDropTable.Add(item);
-            }
+            totalWeight += (int)item.c_percent;
+            currentDropTable.Add(item);
         }
 
-        //Errechne eine 66% Chance, das nichts gedropped wird.
-        totalWeight = ((totalWeight / 100) * 300);
-
+        // Optional: Chance dass gar nichts droppt
+        totalWeight = (totalWeight / 100) * 300;
 
         return totalWeight;
     }

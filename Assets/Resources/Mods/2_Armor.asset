@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0008a759365df48b189b7596caabd7, type: 3}
+  m_Name: 2_Armor
+  m_EditorClassIdentifier: 
+  modName: Perc_Armor
+  description: Adds percentage amount of given stat to the Character.
+  targetStat: 5
+  baseValue: 0.05
+  modType: 1
+  rarityScalings:
+  - rarity: 0
+    multiplier: 1
+    displayName: ', der Bindung I'
+  - rarity: 1
+    multiplier: 1.2
+    displayName: ', der Bindung II'
+  - rarity: 2
+    multiplier: 1.8
+    displayName: ', der Bindung III'
+  - rarity: 3
+    multiplier: 2.5
+    displayName: ', der Bindung IV'
+  - rarity: 4
+    multiplier: 3.5
+    displayName: ', der Bindung V'
+  allowedItemTypes: 6
+  scalingPerLevel: 0.05

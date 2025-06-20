@@ -148,7 +148,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Scroller\MovementType.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\IUseable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\SelectionBox\ExampleSelectable.cs" />
-    <Compile Include="Assets\Scripts\Inventory\Items\ItemMods.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FlowLayoutGroup.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyCellGroup.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\AutoCompleteComboBox.cs" />
@@ -163,6 +162,7 @@
     <Compile Include="Assets\Scripts\Manager\SaveGame\PlayerLoad.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\HexColorField.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollRectExtensions.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Items\ItemModDefintion.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollRectTweener.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\PlayerSave.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorSampler.cs" />
