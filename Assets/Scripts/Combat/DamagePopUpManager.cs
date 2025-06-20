@@ -51,7 +51,7 @@ public class DamagePopupManager : MonoBehaviour
         }
     }
 
-    public void ShowDamagePopup(float damage, Transform enemyTransform)
+    public void ShowDamagePopup(float damage, Transform enemyTransform, bool crit)
     {
         // Lokale Offset-Position relativ zum Enemy
         //Vector3 localOffset = enemyTransform.GetComponent<EnemyController>().hpBar.transform.position;
@@ -71,8 +71,11 @@ public class DamagePopupManager : MonoBehaviour
         popup.transform.localRotation = Quaternion.identity; // Optional: Falls du Rotation resetten willst
         popup.transform.localScale = Vector3.one;            // Optional: Falls das Prefab gestretched wirkt
 
-        // Setup
-        popup.GetComponent<DamagePopup>().Setup(damage);
+        if(!crit)
+            popup.GetComponent<DamagePopup>().Setup(damage);
+
+        if(crit)
+            popup.GetComponent<DamagePopup>().SetupCrit(damage);
     }
 
 }

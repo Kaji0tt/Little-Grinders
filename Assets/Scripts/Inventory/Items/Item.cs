@@ -53,7 +53,7 @@ public class Item : ScriptableObject
     [Header("Actives")]
     public bool usable;
     public Potion itemPotion;
-    public Ability itemAbility;
+    //public Ability itemAbility;
 
     [HideInInspector]
     public float c_percent;
@@ -139,7 +139,7 @@ public class ItemInstance :  IMoveable, IUseable
     //Wird eigentlich nicht verwendet, sollte aber im Konstruktor gecalled werden.
     //public ItemModsData[] myItemMods; 
 
-    //Klone die vom SO geerbten Daten in die Instanz des Items
+    
     public ItemInstance(Item item)
     {
         ItemID = item.ItemID;
@@ -165,79 +165,81 @@ public class ItemInstance :  IMoveable, IUseable
         percent = item.percent;
         baseLevel = item.baseLevel;
 
-        //Derzeit werden nur die Boni von den Mods equipped.
-        #region CloneItem
-        //Write Array for FlatValues
+        //Berechnung der Werte der spezifischen Item Instanz.
+        #region Clone&RollItem
         if (item.hp != 0)
         {
-            flatValues[0] = item.hp;
+            flatValues[0] = Mathf.RoundToInt(RollItemValue(item.hp));
             hp = flatValues[0];
         }
+
         if (item.armor != 0)
         {
-            flatValues[1] = item.armor;
+            flatValues[1] = Mathf.RoundToInt(RollItemValue(item.armor));
             armor = flatValues[1];
         }
+
         if (item.attackPower != 0)
         {
-            flatValues[2] = item.attackPower;
+            flatValues[2] = Mathf.RoundToInt(RollItemValue(item.attackPower));
             attackPower = flatValues[2];
         }
 
         if (item.abilityPower != 0)
         {
-            flatValues[3] = item.abilityPower;
+            flatValues[3] = Mathf.RoundToInt(RollItemValue(item.abilityPower));
             abilityPower = flatValues[3];
         }
 
         if (item.reg != 0)
         {
-            flatValues[4] = item.abilityPower;
-            abilityPower = flatValues[4];
+            flatValues[4] = Mathf.RoundToInt(RollItemValue(item.reg));
+            reg = flatValues[4];
         }
 
-        //Write Array for PercentValues
+        // Prozentuale Berechnung des Gegenstands auf 2 Nachkommastellen.
         if (item.p_hp != 0)
         {
-            percentValues[0] = item.p_hp;
+            percentValues[0] = Mathf.Round(RollItemValue(item.p_hp) * 100) / 100f;
             p_hp = percentValues[0];
         }
 
         if (item.p_armor != 0)
         {
-            percentValues[1] = item.p_armor;
+            percentValues[1] = Mathf.Round(RollItemValue(item.p_armor) * 100) / 100f;
             p_armor = percentValues[1];
         }
 
         if (item.p_attackPower != 0)
         {
-            percentValues[2] = item.p_attackPower;
+            percentValues[2] = Mathf.Round(RollItemValue(item.p_attackPower) * 100) / 100f;
             p_attackPower = percentValues[2];
         }
 
         if (item.p_abilityPower != 0)
         {
-            percentValues[3] = item.p_abilityPower;
+            percentValues[3] = Mathf.Round(RollItemValue(item.p_abilityPower) * 100) / 100f;
             p_abilityPower = percentValues[3];
         }
 
         if (item.p_attackSpeed != 0)
         {
-            percentValues[4] = item.p_attackSpeed;
-            p_attackSpeed = item.p_attackSpeed;
+            percentValues[4] = Mathf.Round(RollItemValue(item.p_attackSpeed) * 100) / 100f;
+            p_attackSpeed = percentValues[4];
         }
 
         if (item.p_movementSpeed != 0)
         {
-            percentValues[5] = item.p_movementSpeed;
-            p_movementSpeed = item.p_movementSpeed;
+            percentValues[5] = Mathf.Round(RollItemValue(item.p_movementSpeed) * 100) / 100f;
+            p_movementSpeed = percentValues[5];
         }
 
         if (item.p_reg != 0)
         {
-            percentValues[6] = item.p_reg;
-            p_reg = item.p_reg;
+            percentValues[6] = Mathf.Round(RollItemValue(item.p_reg) * 100) / 100f;
+            p_reg = percentValues[6];
         }
+
 
         if (useable)
         {
@@ -257,6 +259,13 @@ public class ItemInstance :  IMoveable, IUseable
 
     }
 
+
+    private float RollItemValue(float baseValue)
+    {
+        // +10% oder -10%
+        float variance = (UnityEngine.Random.value * 0.2f) - 0.1f;
+        return baseValue * (1 + variance);
+    }
 
 
     public string GetName()

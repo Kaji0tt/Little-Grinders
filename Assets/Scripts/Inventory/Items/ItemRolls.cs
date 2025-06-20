@@ -4,23 +4,15 @@ using UnityEngine;
 
 public class ItemRolls : MonoBehaviour
 {
-    //private string[] waffenRollsLegendary = new string[] { "- Ikarus Omen", " - Kitava's Qual", " - Blutrabes Erbe", " - Tyraels Gabe", " - Illidans Rache" };
+    //Ggf. könnte man einzelne Rolls erstellen - und diese sind, je nach roll, intensiver.
 
     public ItemMods[] wLegendaryRolls; //{ get; set; }
 
-    //private string[] waffenRollsEpic = new string[] { "Essenzpeiniger", "Weltenzerstörer", "aus Mithril geschaffen", "von Titanen gerfertigt", "im Seelenfeuer geschmiedet" };
-
     public ItemMods[] wEpicRolls; //{ get; set; }
-
-    //private string[] waffenRollsRare = new string[] { "aus Eryx", "von Pandorra", "aus Himmelsrand", "aus Uldaman", "Runenverziert", "mit Edelsteinen besetzt"};
 
     public ItemMods[] wRareRolls; //{ get; set; }
 
-    //private string[] waffenRollsUncommon = new string[] { "gefährlich", "magisch", "zwergisch", "geschärft", "gesegnet", "leicht", "pulsierend", "berüchtigt" };
-
     public ItemMods[] wUncommonRolls; //{ get; set; }
-
-    //private string[] waffenRollsNegative = new string[] { "rostend", "stumpf", "abgenutzt", "zerbrechlich", "veraltet", "verflucht", "kräfte zehrend", "schwerfällig" };
 
     public ItemMods[] wUnbrauchbarRolls; //{ get; set; }
 
@@ -32,6 +24,38 @@ public class ItemRolls : MonoBehaviour
     private int[] rarityChances = new int[6];
 
     private float[] _rarityChances;
+
+    #region Modifier Concepts
+    /// <summary>
+    /// (Of Flat)
+    /// +Add Flatt      (je Type)             wUncommon -> +2 auf AD
+    ///                                       wRare     -> +5 auf AD
+    ///                                       wEpic     -> +10 auf AD
+    ///                                       wLegendary-> +15 auf AD                                   
+    /// (Of Percent)
+    /// +Add Percent      (je Type)           wUncommon -> +2%   auf AD
+    ///                                       wRare     -> +5%   auf AD
+    ///                                       wEpic     -> +10%  auf AD
+    ///                                       wLegendary-> +15%  auf AD                                   
+    /// (Of Flat Fortune)
+    /// +Add Range of item      (je Type)     wUncommon -> +/-2  auf AD
+    ///                                       wRare     -> +/-5  auf AD
+    ///                                       wEpic     -> +/-10 auf AD
+    ///                                       wLegendary-> +/-15 auf AD                                   
+    /// (Of Percent Fortune)
+    /// +Add Range of item      (je Type)     wUncommon -> +/-2%  auf AD
+    ///                                       wRare     -> +/-5%  auf AD
+    ///                                       wEpic     -> +/-10% auf AD
+    ///                                       wLegendary-> +/-15% auf AD                                
+    /// (Of Aptitude)
+    /// +Add Ability                          wUncommon -> Base      1+3
+    ///                                       wRare     -> Enhanced  4+6 
+    ///                                       wEpic     -> Ultimate  7+9
+    ///                                       wLegendary-> Unique    10+
+    ///                                       
+    /// 
+    /// </summary>
+    #endregion
 
     #region New Concept for Item-Rolls
     ///--- Rarity of Item ---
@@ -71,17 +95,7 @@ public class ItemRolls : MonoBehaviour
 
     private void Start()
     {
-        /*
-        ItemMods[] wUnbrauchbarRolls = Resources.LoadAll<ItemMods>("Mods/Unbrauchbar");
 
-        ItemMods[] wUncommonRolls = Resources.LoadAll<ItemMods>("Mods/Ungewöhnlich");
-
-        ItemMods[] wRareRolls = Resources.LoadAll<ItemMods>("Mods/Selten");
-
-        ItemMods[] wEpicRolls = Resources.LoadAll<ItemMods>("Mods/Episch");
-
-        ItemMods[] wLegendaryRolls = Resources.LoadAll<ItemMods>("Mods/Legendary");
-        */
     }
 
     public ItemInstance RollItem(ItemInstance item)

@@ -297,7 +297,7 @@ public class AudioManager : MonoBehaviour
     #endregion
 
 
-    private void PlayEnemyHitSound(float damage, Transform transform)
+    private void PlayEnemyHitSound(float damage, Transform transform, bool crit)
     {
         string[] hitSounds = { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
 

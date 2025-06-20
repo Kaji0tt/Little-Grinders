@@ -14,6 +14,7 @@ public class DamagePopup : MonoBehaviour
 
     private Vector3 moveVector = new Vector3(0, 1f, 0.5f);
     private Vector3 startScale = Vector3.one * .1f;
+    private Vector3 startScaleCrit = Vector3.one * .3f;
     private Vector3 maxScale = Vector3.one * .5f;
 
     private void Awake()
@@ -32,12 +33,28 @@ public class DamagePopup : MonoBehaviour
     {
         if (damageText != null)
         {
+            Debug.Log("No Crit!");
             damageText.text = damage.ToString("0");
+            damageText.color = Color.white;
         }
         transform.localScale = startScale;
 
         if(canvasGroup != null && canvasGroup.isActiveAndEnabled)
         canvasGroup.alpha = 1f;
+    }
+
+    public void SetupCrit(float damage)
+    {
+        if (damageText != null)
+        {
+            Debug.Log("Crit!");
+            damageText.text = damage.ToString("0");
+            damageText.color = Color.red;
+        }
+        transform.localScale = startScaleCrit;
+
+        if (canvasGroup != null && canvasGroup.isActiveAndEnabled)
+            canvasGroup.alpha = 1f;
     }
 
     private void Update()

@@ -280,6 +280,9 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
             Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
             inputVector = Vector2.ClampMagnitude(inputVector, 1);
             isoRenderer.SetPlayerDirection(inputVector); // Setze die Blickrichtung des IsoRenderers basierend auf der Tastatureingabe
+
+            //Animate Weapon
+            isoRenderer.AnimateIdleWeapon(inputVector);
         }
         isoRenderer.AnimateIdleWeapon(DirectionCollider.instance.dirVector);
         //isoRenderer.PlayWeaponAttack()

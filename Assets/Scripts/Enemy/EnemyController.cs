@@ -27,11 +27,23 @@ public class EnemyController : MonoBehaviour
     //public Transform myTarget;
 
 
-    //[Header("Interface Referenzen")]
+    [Header("Interface Visualisierung")]
     public GameObject hpBar { get; private set; }
     public Canvas combatCanvas { get; private set; }
 
     public Slider enemyHpSlider { get; private set; }
+
+    public GameObject targetIndicator;
+
+    /// <summary>
+    /// Schaltet den Zielindikator für diesen Gegner an oder aus.
+    /// </summary>
+    /// <param name="active">true = anzeigen, false = verstecken</param>
+    public void SetTargetIndicatorActive(bool active)
+    {
+        if (targetIndicator != null)
+            targetIndicator.SetActive(active);
+    }
 
 
     /// <summary>
@@ -301,7 +313,7 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    public void TakeDamage(float incoming_damage, int range_radius_ofDMG)
+    public void TakeDamage(float incoming_damage, int range_radius_ofDMG, bool isCrit)
     {
 
         if (TargetDistance() <= range_radius_ofDMG)
@@ -313,7 +325,9 @@ public class EnemyController : MonoBehaviour
             //Schadesberechnung
             mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
-            GameEvents.Instance.EnemyWasAttacked(incoming_damage, transform);
+
+            ///Upsi
+            GameEvents.Instance.EnemyWasAttacked(incoming_damage, transform, isCrit);
 
             // Knockback
             if(!mobStats.isDead)

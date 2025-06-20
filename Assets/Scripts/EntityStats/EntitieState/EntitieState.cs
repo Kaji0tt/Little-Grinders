@@ -45,6 +45,8 @@ public class IdleState : EntitieState
 
     public override void Enter()
     {
+        Debug.Log("Idle Enter is called");
+        controller.mobStats.isRegenerating = true;
 
         controller.StopMoving();
 
@@ -111,6 +113,12 @@ public class IdleState : EntitieState
                 controller.myIsoRenderer.Play(AnimationState.Walk);
 
         }
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Idle exit was called");
+        controller.mobStats.isRegenerating = false;
     }
 }
 

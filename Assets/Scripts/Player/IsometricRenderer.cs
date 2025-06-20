@@ -193,6 +193,7 @@ public class IsometricRenderer : MonoBehaviour
         weaponAnimator.enabled = true;
 
         // Drehung erfolgt immer – egal ob gerade angegriffen wird
+        
         RotateWeaponToDirection();
 
         // Nur Idle abspielen, wenn nicht gerade Attack läuft
