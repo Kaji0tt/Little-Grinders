@@ -36,7 +36,7 @@ public class ItemDatabase : MonoBehaviour
     {
         instance = this;
 
-        allModDefs = Resources.LoadAll<ItemModDefinition>("ItemMods");
+        allModDefs = Resources.LoadAll<ItemModDefinition>("Mods");
 
         allItems.AddRange(Resources.LoadAll<Item>("Items"));
     }
@@ -70,12 +70,22 @@ public class ItemDatabase : MonoBehaviour
             {
                 position = position + new Vector3(Random.Range(-.5f, .5f), .1f, Random.Range(-.5f, .5f));
 
+
+                ItemInstance newItem = new ItemInstance(item);
+
                 //itemRolls -> neues Item providen
-                ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(new ItemInstance(item), 1));
+                ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(newItem, 1));
+
+                Debug.Log("Mods insg.: " + newItem.addedItemMods.Count );
+
+                newItem.AppendModNamesToItemName();
+                
+                newItem.UpdateItemDescriptionWithMods();
 
                 break;
             }
         }
+
 
     }
     int CalculateTotalWeight(PlayerStats playerStats)

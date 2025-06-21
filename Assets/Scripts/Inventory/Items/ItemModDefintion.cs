@@ -35,6 +35,49 @@ public class ItemModDefinition : ScriptableObject
 
 }
 
+
+//Mit der rollRarity kann in definition der Anzaigename nachgesehen werden. Eine Funktion "GetName" welche den passend zur rarityVerfügbaren Namen anzeigt wäre sinnvoll.
+[System.Serializable]
+public class ItemMod
+{
+    public ItemModDefinition definition;
+    public Rarity rollRarity;
+    public float rolledValue;
+
+    // Initialisiert den Mod basierend auf Kartenlevel und Rarity
+    public void Initialize(int mapLevel)
+    {
+        if (definition != null)
+        {
+            rolledValue = definition.GetValue(mapLevel, rollRarity);
+        }
+    }
+
+    // Gibt den dynamischen Anzeigenamen zurück basierend auf der Rarity
+    public string GetName()
+    {
+        if (definition == null || definition.rarityScalings == null)
+            return "";
+
+        var scaling = definition.rarityScalings
+            .FirstOrDefault(r => r.rarity == rollRarity);
+
+        return scaling?.displayName ?? definition.modName;
+    }
+
+    // Gibt die Beschreibung mit Wert, Zielstat und statischer Textbeschreibung zurück
+    public string GetDescription()
+    {
+        if (definition == null) return "";
+
+        string valueStr = definition.modType == ModType.Percent || definition.modType == ModType.PercentFortune
+            ? $"+{rolledValue * 100f:F1}%"
+            : $"+{rolledValue:F1}";
+
+        return $"{valueStr} {definition.targetStat}\n{definition.description}";
+    }
+}
+
 [System.Serializable]
 public class RarityScaling
 {

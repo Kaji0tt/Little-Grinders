@@ -286,6 +286,87 @@ public class ItemInstance :  IMoveable, IUseable
         return baseValue * (1 + variance) * levelFactor;
     }
 
+    public void AppendModNamesToItemName()
+    {
+        if (addedItemMods == null || addedItemMods.Count == 0)
+            return;
+
+        string modSuffixes = "";
+
+        foreach (var mod in addedItemMods)
+        {
+            // Hole rarity-spezifischen Displaynamen
+            string suffix = mod.GetName();
+
+            if (!string.IsNullOrEmpty(suffix))
+                modSuffixes += " " + suffix;
+        }
+
+        ItemName += modSuffixes;
+    }
+
+    public void UpdateItemDescriptionWithMods()
+    {
+        if (addedItemMods == null || addedItemMods.Count == 0)
+            return;
+
+        string modDescriptions = "";
+
+        foreach (var mod in addedItemMods)
+        {
+            string modText = mod.GetDescription(); // z.B. "+5% Crit Chance"
+            if (!string.IsNullOrEmpty(modText))
+                modDescriptions += "\n" + modText;
+        }
+
+        ItemDescription += modDescriptions;
+    }
+
+    public void ApplyItemMods()
+    {
+        foreach (var mod in addedItemMods)
+        {
+            if (mod == null) continue;
+
+            switch (mod.definition.targetStat)
+            {
+                case EntitieStats.Hp:
+                    if (mod.isPercent) p_hp += mod.value;
+                    else hp += Mathf.RoundToInt(mod.value);
+                    break;
+
+                case EntitieStats.Armor:
+                    if (mod.isPercent) p_armor += mod.value;
+                    else armor += Mathf.RoundToInt(mod.value);
+                    break;
+
+                case EntitieStats.AttackPower:
+                    if (mod.isPercent) p_attackPower += mod.value;
+                    else attackPower += Mathf.RoundToInt(mod.value);
+                    break;
+
+                case EntitieStats.AbilityPower:
+                    if (mod.isPercent) p_abilityPower += mod.value;
+                    else abilityPower += Mathf.RoundToInt(mod.value);
+                    break;
+
+                case EntitieStats.AttackSpeed:
+                    if (mod.isPercent) p_attackSpeed += mod.value;
+                    break;
+
+                case EntitieStats.MovementSpeed:
+                    if (mod.isPercent) p_movementSpeed += mod.value;
+                    break;
+
+                case EntitieStats.Reg:
+                    if (mod.isPercent) p_reg += mod.value;
+                    else reg += Mathf.RoundToInt(mod.value);
+                    break;
+
+
+            }
+        }
+    }
 
     public string GetName()
     {

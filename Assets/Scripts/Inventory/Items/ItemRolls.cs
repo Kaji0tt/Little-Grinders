@@ -12,23 +12,6 @@ public enum Rarity
     Legendary
 }
 
-public class ItemMod
-{
-    public ItemModDefinition definition;
-    public Rarity rollRarity;
-    public float rolledValue;
-
-    public void Initialize(int mapLevel)
-    {
-        rolledValue = definition.GetValue(mapLevel, rollRarity);
-    }
-
-    public string GetDisplayText()
-    {
-        return $"{definition.modName}: +{rolledValue} {definition.targetStat}";
-    }
-}
-
 public class ItemRolls : MonoBehaviour
 {
     private ItemModDefinition[] allModDefs;
@@ -50,6 +33,7 @@ public class ItemRolls : MonoBehaviour
 
         while (Random.value < modRollChance && mods.Count < maxMods)
         {
+            Debug.Log("Random.vale rolled lower than .4, picking one of " + ItemDatabase.instance.allModDefs.Count() + " mods.");
             var validDefs = ItemDatabase.instance.allModDefs.Where(def => (def.allowedItemTypes & itemTemplate.itemType) != 0).ToArray();
             if (validDefs.Length == 0) break;
 
@@ -67,6 +51,9 @@ public class ItemRolls : MonoBehaviour
 
             mods.Add(mod);
         }
+
+        //Füge die gerollten Mods dem Item hinzu.
+        itemTemplate.addedItemMods = mods;
 
         //Setze die ItemRarity zur höchsten Rarity der verfügbaren Rolls.
         Rarity highestRarity = mods.Count > 0 ? mods.Max(m => m.rollRarity) : Rarity.Common;
@@ -88,7 +75,3 @@ public class ItemRolls : MonoBehaviour
         return rarities.Last();
     }
 }
-
-    
-
-

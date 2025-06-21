@@ -117,7 +117,7 @@ public class IdleState : EntitieState
 
     public override void Exit()
     {
-        Debug.Log("Idle exit was called");
+        //Debug.Log("Idle exit was called");
         controller.mobStats.isRegenerating = false;
     }
 }
