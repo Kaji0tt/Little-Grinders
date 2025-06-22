@@ -59,7 +59,7 @@ public class DamagePopupManager : MonoBehaviour
         //Setze Slider als Parent
         Transform slideTransform = enemyTransform.GetComponent<EnemyController>().enemyHpSlider.transform;
 
-        Debug.Log("Manager here:" + gameObject.name);
+        //Debug.Log("Manager here:" + gameObject.name);
         // Instanziiere das Popup als Kind des Enemies
         GameObject popup = Instantiate(damagePopupPrefab);
 

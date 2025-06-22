@@ -63,6 +63,7 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
         int currentSlot = 0;
 
         // Zuerst das Dictionary der Consumables durchlaufen
+        /*
         foreach (var kvp in inventory.GetConsumableDict())
         {
             if (currentSlot >= maxSlots) break;
@@ -74,6 +75,7 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
             CreateInventorySlot(item, itemAmount, ref x, ref y, SlotCellSize);
             currentSlot++;
         }
+        */
 
         // Dann die Liste der Nicht-Consumables durchlaufen
         foreach (ItemInstance item in inventory.GetItemList())

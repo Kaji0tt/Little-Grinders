@@ -194,7 +194,7 @@ public class CharacterCombat : MonoBehaviour
 
         // Animation abspielen
         isoRenderer.weaponAnimator.speed = playerStats.AttackSpeed.Value;
-        Debug.Log(currentStep.animationClip.name);
+        //Debug.Log(currentStep.animationClip.name);
 
         // Berechne Delay für den Trefferpunkt
         float delay = (1f / playerStats.AttackSpeed.Value) * currentStep.timeToNextAttack;

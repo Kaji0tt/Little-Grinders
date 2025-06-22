@@ -444,37 +444,35 @@ public class UI_Manager : MonoBehaviour
 
     public void ShowItemTooltip(Vector3 position, ItemInstance item)
     {
- 
         tooltip.SetActive(true);
-
         tooltip.transform.position = position;
 
         if (item != null)
         {
-            string color = string.Empty;
-            //In dieser Line sollten in Dependency of item.Rarity <color> Hexes definiert werden. (Geschlossen um item.ItemName)
-            if (item.itemRarity == "Legendär")
-                color = "#db8535";
+            string colorHex = GetRarityColor(item.itemRarity);
 
-            if (item.itemRarity == "Episch")
-                color = "#783391";
+            string itemDescription = string.Format(
+                "<b><color={0}> {1} </color></b>\n{2}\n{3}",
+                colorHex,
+                item.ItemName,
+                item.ItemDescription,
+                item.ItemValueInfo
+            );
 
-            if (item.itemRarity == "Selten")
-                color = "#282b8f";
-
-            if (item.itemRarity == "Ungewöhnlich")
-                color = "#30bf4f";
-
-            if (item.itemRarity == "Gewöhnlich")
-                color = "#c9c9c9";
-
-            if (item.itemRarity == "Unbrauchbar")
-                color = "#8c6d6d";
-
-            string itemDescription = string.Format("<b><color={0}> {1} </color></b>\n{2}\n{3}", color, item.ItemName, item.ItemDescription, item.ItemValueInfo);
-            
             Tooltip.instance.SetText(itemDescription);
-            //tooltip.SetText() = string.Format("<b><color={0}> {1} </color></b>\n{2}\n{3}", color, item.ItemName, item.ItemDescription, item.ItemValueInfo);
+        }
+    }
+
+    private string GetRarityColor(Rarity rarity)
+    {
+        switch (rarity)
+        {
+            case Rarity.Legendary: return "#db8535";
+            case Rarity.Epic: return "#783391";
+            case Rarity.Rare: return "#282b8f";
+            case Rarity.Uncommon: return "#30bf4f";
+            case Rarity.Common: return "#c9c9c9";
+            default: return "#8c6d6d"; // Optional: für unbekannt oder "Schrott"
         }
     }
 

@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 [CustomEditor(typeof(Item))]
 public class ItemEditor : Editor
@@ -11,6 +12,35 @@ public class ItemEditor : Editor
     public override void OnInspectorGUI()
     {
         Item item = (Item)target;
+
+        // Versuche automatisch ItemType zu setzen (nur wenn noch None)
+        if (item.itemType == ItemType.None)
+        {
+            string assetPath = AssetDatabase.GetAssetPath(item);
+            string folderName = System.IO.Path.GetDirectoryName(assetPath).Split('/').Last().ToLower();
+
+            switch (folderName)
+            {
+                case "waffen":
+                    item.itemType = ItemType.Weapon;
+                    break;
+                case "hosen":
+                    item.itemType = ItemType.Beine;
+                    break;
+                case "brueste":
+                    item.itemType = ItemType.Brust;
+                    break;
+                case "kopf":
+                    item.itemType = ItemType.Kopf;
+                    break;
+                case "schmuck":
+                    item.itemType = ItemType.Schmuck;
+                    break;
+                case "consumable":
+                    item.itemType = ItemType.Consumable;
+                    break;
+            }
+        }
 
         // Standard Informationen
         item.ItemName = EditorGUILayout.TextField("Item Name", item.ItemName);
@@ -34,15 +64,12 @@ public class ItemEditor : Editor
 
         if (showPercentValues)
         {
-            // Beispiel: item.attackSpeedBoost, item.criticalChanceBoost etc.
             item.p_hp = EditorGUILayout.FloatField("HP Boost (%)", item.p_hp);
             item.p_armor = EditorGUILayout.FloatField("Armor Boost (%)", item.p_armor);
             item.p_attackPower = EditorGUILayout.FloatField("Attack Power Boost (%)", item.p_attackPower);
             item.p_abilityPower = EditorGUILayout.FloatField("Ability Power Boost (%)", item.p_abilityPower);
             item.p_attackSpeed = EditorGUILayout.FloatField("Attack Speed Boost (%)", item.p_attackSpeed);
             item.p_movementSpeed = EditorGUILayout.FloatField("Movement Speed Boost (%)", item.p_movementSpeed);
-
-    // weitere percentbasierte Werte...
         }
 
         // "Flat Values" ausklappbar machen
@@ -50,13 +77,11 @@ public class ItemEditor : Editor
 
         if (showFlatValues)
         {
-            // Beispiel: item.damage, item.health, etc.
             item.hp = EditorGUILayout.IntField("Health (+)", item.hp);
             item.armor = EditorGUILayout.IntField("Armor (+)", item.armor);
             item.attackPower = EditorGUILayout.IntField("Attack Power (+)", item.attackPower);
             item.abilityPower = EditorGUILayout.IntField("Ability Power (+)", item.abilityPower);
             item.reg = EditorGUILayout.IntField("Regeneration (+)", item.reg);
-            // weitere flat Werte...
         }
 
         if (GUI.changed)

@@ -26,11 +26,11 @@ public class PlayerSave
 
     public string brust_r, hose_r, kopf_r, schmuck_r, schuhe_r, weapon_r;
 
-    public List<ItemModsData> modsBrust = new List<ItemModsData>(), modsHose = new List<ItemModsData>(), modsKopf = new List<ItemModsData>(), modsSchmuck = new List<ItemModsData>(), modsSchuhe = new List<ItemModsData>(), modsWeapon = new List<ItemModsData>();
+    //public List<ItemModsData> modsBrust = new List<ItemModsData>(), modsHose = new List<ItemModsData>(), modsKopf = new List<ItemModsData>(), modsSchmuck = new List<ItemModsData>(), modsSchuhe = new List<ItemModsData>(), modsWeapon = new List<ItemModsData>();
 
     //Inventory
 
-    public List<ItemModsData>[] inventoryItemMods;
+    //public List<ItemModsData>[] inventoryItemMods;
 
     public string[] inventoryItemRarity;
 
@@ -91,7 +91,7 @@ public class PlayerSave
         SaveThePlayer();
 
         /// Items Speichern
-        SaveTheItems();
+        //SaveTheItems();
 
         ///Skill-Points speichern.
         SaveTheTalents(); //Es muss noch herausgefunden werden, wie viele Talenttree-Skillpoints unverteilt sind und die abgespeichert werden!
@@ -158,7 +158,7 @@ public class PlayerSave
 
         // Initialisiere die Arrays basierend auf der Gesamtanzahl der Items (Consumables + Non-Consumables)
         int totalItemCount = conDict.Count + itemList.Count;
-        inventoryItemMods = new List<ItemModsData>[totalItemCount];
+        //inventoryItemMods = new List<ItemMod>[totalItemCount];
         inventoryItemRarity = new string[totalItemCount];
 
         int currentItem = 0;
@@ -177,8 +177,8 @@ public class PlayerSave
                 inventorySave.Add(item.ItemID);
 
                 // Speichere die Mods und die Rarity für das aktuelle Item
-                inventoryItemMods[currentItem] = item.addedItemMods;
-                inventoryItemRarity[currentItem] = item.itemRarity;
+                //inventoryItemMods[currentItem] = item.addedItemMods;
+                //inventoryItemRarity[currentItem] = item.itemRarity;
 
                 currentItem++;
             }
@@ -191,8 +191,8 @@ public class PlayerSave
             inventorySave.Add(item.ItemID);
 
             // Speichere die Mods und die Rarity für das aktuelle Item
-            inventoryItemMods[currentItem] = item.addedItemMods;
-            inventoryItemRarity[currentItem] = item.itemRarity;
+            //inventoryItemMods[currentItem] = item.addedItemMods;
+            //inventoryItemRarity[currentItem] = item.itemRarity;
 
             currentItem++;
         }
@@ -215,7 +215,7 @@ public class PlayerSave
         TalentTreeManager talentTree = TalentTreeManager.instance;
 
     }
-
+    /*
     private void SaveTheItems()
     {
         foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems)
@@ -310,7 +310,7 @@ public class PlayerSave
             }
         }
     }
-
+    */
     private void SaveThePlayer()
     {
         level = PlayerManager.instance.player.GetComponent<PlayerStats>().level;

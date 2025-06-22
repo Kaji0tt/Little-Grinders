@@ -49,8 +49,8 @@ public abstract class EQSlotBase : MonoBehaviour, IEquipableSlot
     {
         if (equippedItem == null) return;
 
-        Debug.Log(equippedItem.ItemName);
-        Debug.Log(PlayerManager.instance.player.gameObject.name);
+        //Debug.Log(equippedItem.ItemName);
+        //Debug.Log(PlayerManager.instance.player.gameObject.name);
         PlayerManager.instance.player.Inventory.AddItem(equippedItem);
         PlayerManager.instance.player.Dequip(equippedItem);
 

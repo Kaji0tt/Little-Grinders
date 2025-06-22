@@ -13,13 +13,13 @@ public class PlayerLoad : MonoBehaviour
         LoadPlayerStats(data);
 
         //Die Gegenstände werden initialisiert und neu angezogen.
-        LoadEquippedItems(data);
+        //LoadEquippedItems(data);
 
         //Skillpunkte werden geladen.
         LoadSkillPoints(data);
 
         // Inventar wird geladen.
-        LoadInventory(data);
+        //LoadInventory(data);
 
         // ActionButtons werden geladen.
         LoadActionbar(data);
@@ -29,6 +29,7 @@ public class PlayerLoad : MonoBehaviour
         LoadGlobalMap(data);
         
     }
+
     /*
     public void LoadScenePlayer(PlayerSave data)
     {
@@ -65,7 +66,7 @@ public class PlayerLoad : MonoBehaviour
             }
         }
     }
-
+    /*
     private void LoadInventory(PlayerSave data)
     {
         int currentItem = 0;
@@ -79,7 +80,7 @@ public class PlayerLoad : MonoBehaviour
 
         }
     }
-
+    */
     private void LoadSkillPoints(PlayerSave data)
     {
         TalentTreeManager talentTree = TalentTreeManager.instance;
@@ -145,7 +146,7 @@ public class PlayerLoad : MonoBehaviour
 
         }
     }
-
+    /*
     private void LoadEquippedItems(PlayerSave data)
     {
         if (data.brust != null)
@@ -166,6 +167,7 @@ public class PlayerLoad : MonoBehaviour
         if (data.weapon != null)
             FindFirstObjectByType<EQSlotWeapon>().LoadItem(ItemRolls.GetItemStats(data.weapon, data.modsWeapon, data.weapon_r));
     }
+    */
 
     private void LoadPlayerStats(PlayerSave data)
     {

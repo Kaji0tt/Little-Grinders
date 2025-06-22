@@ -147,7 +147,7 @@ public class TalentTreeGenerator : MonoBehaviour
         // Wenn der Knoten bereits das Maximum an Verbindungen hat, verlasse die Methode
         if (parent.myConnectedNodes.Count >= 3)
         {
-            Debug.Log($"Node {parent.ID} hat bereits die maximale Anzahl an Verbindungen (3). Abbruch.");
+            //Debug.Log($"Node {parent.ID} hat bereits die maximale Anzahl an Verbindungen (3). Abbruch.");
             return;
         }
 

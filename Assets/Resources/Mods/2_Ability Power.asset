@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0008a759365df48b189b7596caabd7, type: 3}
+  m_Name: 2_Ability Power
+  m_EditorClassIdentifier: 
+  modName: Perc_AbilityPower
+  description: Adds percentage amount of given stat to the Character.
+  targetStat: 1
+  baseValue: 0.1
+  modType: 1
+  rarityScalings:
+  - rarity: 0
+    multiplier: 1
+    displayName: ', der Mystik I'
+  - rarity: 1
+    multiplier: 2
+    displayName: ', der Mystik II'
+  - rarity: 2
+    multiplier: 3
+    displayName: ', der Mystik III'
+  - rarity: 3
+    multiplier: 5
+    displayName: ', der Mystik IV'
+  - rarity: 4
+    multiplier: 7.5
+    displayName: ', der Mystik V'
+  allowedItemTypes: 61
+  scalingPerLevel: 0.1
