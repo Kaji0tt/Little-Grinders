@@ -50,6 +50,8 @@ public class Item : ScriptableObject
     public int attackPower;
     public int abilityPower;
     public int reg;
+    public int critChance;
+    public int critDamage;
 
 
 
@@ -62,6 +64,8 @@ public class Item : ScriptableObject
     public float p_attackSpeed;
     public float p_movementSpeed;
     public float p_reg;
+    public float p_critChance;
+    public float p_critDamage;
 
     [Space]
     [Header("Actives")]
@@ -104,29 +108,6 @@ public class ItemInstance :  IMoveable, IUseable
     public int requiredLevel = 1;
     public int baseLevel { get; private set; }
 
-
-    //Flat Values
-    public int hp;
-    public int armor;
-    public int attackPower;
-    public int abilityPower;
-    public int reg;
-
-    public int[] flatValues = new int[5];
-
-
-    //Percent Values
-    public float p_hp;
-    public float p_armor;
-    public float p_attackPower;
-    public float p_abilityPower;
-    public float p_attackSpeed;
-    public float p_movementSpeed;
-    public float p_reg;
-
-    public float[] percentValues = new float[7];
-
-
     //Actives
     public bool useable;
     public Potion itemPotion;
@@ -135,16 +116,14 @@ public class ItemInstance :  IMoveable, IUseable
     public float c_percent;
 
     //Store StatModifiers
-    private StatModifier[] flatStatMods = new StatModifier[5];
-    private StatModifier[] percentStatMods = new StatModifier[7];
+    public Dictionary<EntitieStats, int> flatStats = new();
+    public Dictionary<EntitieStats, float> percentStats = new();
 
-    //Store finalStringInfo
-    private string[] modStrings = new string[12];
+    private Dictionary<EntitieStats, StatModifier> flatStatMods = new();
+    private Dictionary<EntitieStats, StatModifier> percentStatMods = new();
 
     [HideInInspector]
     public List<ItemMod> addedItemMods = new List<ItemMod>(); //??
-
-
 
     private IMoveable MyMoveable;
 
@@ -177,7 +156,9 @@ public class ItemInstance :  IMoveable, IUseable
             : 1;
 
         //Berechnung der Werte der spezifischen Item Instanz.
+
         #region Clone&RollItem
+        /*
         if (item.hp != 0)
         {
             flatValues[0] = Mathf.RoundToInt(RollItemValue(item.hp));
@@ -207,6 +188,19 @@ public class ItemInstance :  IMoveable, IUseable
             flatValues[4] = Mathf.RoundToInt(RollItemValue(item.reg));
             reg = flatValues[4];
         }
+
+        if (item.critChance != 0)
+        {
+            flatValues[5] = Mathf.RoundToInt(RollItemValue(item.critChance));
+            critChance = flatValues[5];
+        }
+
+        if (item.critDamage != 0)
+        {
+            flatValues[6] = Mathf.RoundToInt(RollItemValue(item.critDamage));
+            critDamage = flatValues[6];
+        }
+
 
         // Prozentuale Berechnung des Gegenstands auf 2 Nachkommastellen.
         if (item.p_hp != 0)
@@ -251,25 +245,70 @@ public class ItemInstance :  IMoveable, IUseable
             p_reg = percentValues[6];
         }
 
+        if (item.p_critChance != 0)
+        {
+            percentValues[7] = Mathf.Round(RollItemValue(item.p_critChance) * 100) / 100f;
+            p_critChance = percentValues[7];
+        }
+
+        if (item.p_critDamage != 0)
+        {
+            percentValues[8] = Mathf.Round(RollItemValue(item.p_critDamage) * 100) / 100f;
+            p_critDamage = percentValues[8];
+        }
+
 
         if (useable)
         {
             useable = true;
 
         }
+        */
         #endregion
 
 
+        // Flat Stats
+        AddRolledFlat(item.hp, EntitieStats.Hp);
+        AddRolledFlat(item.armor, EntitieStats.Armor);
+        AddRolledFlat(item.attackPower, EntitieStats.AttackPower);
+        AddRolledFlat(item.abilityPower, EntitieStats.AbilityPower);
+        AddRolledFlat(item.reg, EntitieStats.Regeneration);
+        AddRolledFlat(item.critChance, EntitieStats.CriticalChance);
+        AddRolledFlat(item.critDamage, EntitieStats.CritcalDamage);
 
+        // Percent Stats
+        AddRolledPercent(item.p_hp, EntitieStats.Hp);
+        AddRolledPercent(item.p_armor, EntitieStats.Armor);
+        AddRolledPercent(item.p_attackPower, EntitieStats.AttackPower);
+        AddRolledPercent(item.p_abilityPower, EntitieStats.AbilityPower);
+        AddRolledPercent(item.p_attackSpeed, EntitieStats.AttackSpeed);
+        AddRolledPercent(item.p_movementSpeed, EntitieStats.MovementSpeed);
+        AddRolledPercent(item.p_reg, EntitieStats.Regeneration);
+        AddRolledPercent(item.p_critChance, EntitieStats.CriticalChance);
+        AddRolledPercent(item.p_critDamage, EntitieStats.CritcalDamage);
 
         SetValueDescription(this);
         //Die Rolls müssen in der ItemInstance gecalled werden.
 
- 
-
-
     }
 
+    private void AddRolledFlat(int baseValue, EntitieStats stat)
+    {
+        if (baseValue != 0)
+        {
+            int rolled = Mathf.RoundToInt(RollItemValue(baseValue));
+            flatStats[stat] = rolled;
+        }
+    }
+
+    private void AddRolledPercent(float baseValue, EntitieStats stat)
+    {
+        if (baseValue != 0)
+        {
+            float rolled = Mathf.Round(RollItemValue(baseValue) * 100f) / 100f;
+            percentStats[stat] = rolled;
+        }
+    }
 
     private float RollItemValue(float baseValue)
     {
@@ -321,51 +360,42 @@ public class ItemInstance :  IMoveable, IUseable
 
         ItemDescription += modDescriptions;
     }
-
+        
+    // Wendet alle Modifikatoren aus addedItemMods auf die flatStats und percentStats an
     public void ApplyItemMods()
     {
         foreach (var mod in addedItemMods)
         {
-            if (mod == null) continue;
+            if (mod == null || mod.definition == null) continue;
 
-            switch (mod.definition.targetStat)
+            var stat = mod.definition.targetStat;
+
+            if (mod.IsPercent)
             {
-                case EntitieStats.Hp:
-                    if (mod.isPercent) p_hp += mod.value;
-                    else hp += Mathf.RoundToInt(mod.value);
-                    break;
+                // Wenn bereits ein Prozentwert existiert, addiere dazu
+                if (percentStats.ContainsKey(stat))
+                    percentStats[stat] += mod.rolledValue;
+                else
+                    percentStats[stat] = mod.rolledValue;
+            }
+            else
+            {
+                int intValue = Mathf.RoundToInt(mod.rolledValue);
 
-                case EntitieStats.Armor:
-                    if (mod.isPercent) p_armor += mod.value;
-                    else armor += Mathf.RoundToInt(mod.value);
-                    break;
-
-                case EntitieStats.AttackPower:
-                    if (mod.isPercent) p_attackPower += mod.value;
-                    else attackPower += Mathf.RoundToInt(mod.value);
-                    break;
-
-                case EntitieStats.AbilityPower:
-                    if (mod.isPercent) p_abilityPower += mod.value;
-                    else abilityPower += Mathf.RoundToInt(mod.value);
-                    break;
-
-                case EntitieStats.AttackSpeed:
-                    if (mod.isPercent) p_attackSpeed += mod.value;
-                    break;
-
-                case EntitieStats.MovementSpeed:
-                    if (mod.isPercent) p_movementSpeed += mod.value;
-                    break;
-
-                case EntitieStats.Reg:
-                    if (mod.isPercent) p_reg += mod.value;
-                    else reg += Mathf.RoundToInt(mod.value);
-                    break;
-
-
+                // Wenn bereits ein Flatwert existiert, addiere dazu
+                if (flatStats.ContainsKey(stat))
+                    flatStats[stat] += intValue;
+                else
+                    flatStats[stat] = intValue;
             }
         }
+
+        // Aktualisiere Name und Beschreibung
+        AppendModNamesToItemName();
+        //UpdateItemDescriptionWithMods();
+
+        // Tooltip-Text neu aufbauen
+        SetValueDescription(this);
     }
 
     public string GetName()
@@ -373,67 +403,40 @@ public class ItemInstance :  IMoveable, IUseable
         return ItemName;
     }
 
-    /* Incoming - Use soll es ermöglichen, aktive Fähigkeiten auf den Items zu besitzen, welche über die ActionBar gecastet werden sollen.
-    public void Use()
-    {
-        
-    }
-    */
-
     //Wird gecalled, wenn das Item im Inventar angeklickt wird. Dadurch werden die Stats den playerStats hinzugefügt.
     public void Equip(PlayerStats playerStats)
     {
-        //Derzeit werden nur die Boni von den Mods equipped.
-        for (int i = 0; i < flatValues.Length; i++)
+        foreach (var kvp in flatStats)
         {
-            //Store Modifiers wird nicht von ItemRolls berührt
-            flatStatMods[i] = new StatModifier(flatValues[i], StatModType.Flat, this);
+            var mod = new StatModifier(kvp.Value, StatModType.Flat, this);
+            flatStatMods[kvp.Key] = mod;
+            playerStats.GetStat(kvp.Key).AddModifier(mod);
         }
 
-
-        for (int i = 0; i < percentValues.Length; i++)
+        foreach (var kvp in percentStats)
         {
-            percentStatMods[i] = new StatModifier(percentValues[i], StatModType.PercentAdd, this);
+            var mod = new StatModifier(kvp.Value, StatModType.PercentAdd, this);
+            percentStatMods[kvp.Key] = mod;
+            playerStats.GetStat(kvp.Key).AddModifier(mod);
         }
-
-
-
-        //Add Modifiers to Character
-        if (flatStatMods[0] != null) playerStats.Hp.AddModifier(flatStatMods[0]);
-        if (flatStatMods[1] != null) playerStats.Armor.AddModifier(flatStatMods[1]);
-        if (flatStatMods[2] != null) playerStats.AttackPower.AddModifier(flatStatMods[2]);
-        if (flatStatMods[3] != null) playerStats.AbilityPower.AddModifier(flatStatMods[3]);
-
-
-        if (percentStatMods[0] != null) playerStats.Hp.AddModifier(percentStatMods[0]);
-        if (percentStatMods[1] != null) playerStats.Armor.AddModifier(percentStatMods[1]);
-        if (percentStatMods[2] != null) playerStats.AttackPower.AddModifier(percentStatMods[2]);
-        if (percentStatMods[3] != null) playerStats.AbilityPower.AddModifier(percentStatMods[3]);
-        if (percentStatMods[4] != null) playerStats.AttackSpeed.AddModifier(percentStatMods[4]);
-        if (percentStatMods[5] != null) playerStats.MovementSpeed.AddModifier(percentStatMods[5]);
 
         if (Range != 0) playerStats.Range += Range;
         //Implementierung von Special Effekten
-
-
     }
 
     //Wird gecalled, wenn die ausgerüsteten Items angeklickt werden. Zuständig hierfür sind die Klassen #EQSlot[Kopf, Schuhe, ...], welche in den entsprechenden InterfaceObjekten im Canvas liegen.
     public void Unequip(PlayerStats playerStats)
     {
 
-        if (flatStatMods[0] != null) playerStats.Hp.RemoveModifier(flatStatMods[0]);
-        if (flatStatMods[1] != null) playerStats.Armor.RemoveModifier(flatStatMods[1]);
-        if (flatStatMods[2] != null) playerStats.AttackPower.RemoveModifier(flatStatMods[2]);
-        if (flatStatMods[3] != null) playerStats.AbilityPower.RemoveModifier(flatStatMods[3]);
+        foreach (var kvp in flatStatMods)
+        {
+            playerStats.GetStat(kvp.Key).RemoveModifier(kvp.Value);
+        }
 
-
-        if (percentStatMods[0] != null) playerStats.Hp.RemoveModifier(percentStatMods[0]);
-        if (percentStatMods[1] != null) playerStats.Armor.RemoveModifier(percentStatMods[1]);
-        if (percentStatMods[2] != null) playerStats.AttackPower.RemoveModifier(percentStatMods[2]);
-        if (percentStatMods[3] != null) playerStats.AbilityPower.RemoveModifier(percentStatMods[3]);
-        if (percentStatMods[4] != null) playerStats.AttackSpeed.RemoveModifier(percentStatMods[4]);
-        if (percentStatMods[5] != null) playerStats.MovementSpeed.RemoveModifier(percentStatMods[5]);
+        foreach (var kvp in percentStatMods)
+        {
+            playerStats.GetStat(kvp.Key).RemoveModifier(kvp.Value);
+        }
 
         if (Range != 0) playerStats.Range -= Range;
         //Implementierung von Special Effekten
@@ -442,39 +445,23 @@ public class ItemInstance :  IMoveable, IUseable
     //Schreibe die Beschreibung für den Tooltip
     public void SetValueDescription(ItemInstance item)
     {
-        if (item.flatValues[0] != 0) item.modStrings[0] = "\nHp: " +                                item.flatValues[0]; else item.modStrings[0] = "";
-        if (item.flatValues[1] != 0) item.modStrings[1] = "\nArmor: " +                             item.flatValues[1]; else item.modStrings[1] = "";
-        if (item.flatValues[2] != 0) item.modStrings[2] = "\nAttack Power: " +                      item.flatValues[2]; else item.modStrings[2] = "";
-        if (item.flatValues[3] != 0) item.modStrings[3] = "\nAbility Power: " +                     item.flatValues[3]; else item.modStrings[3] = "";
-        if (item.percentValues[0] != 0) item.modStrings[4] = "\nErhöht HP um " +                    item.percentValues[0] * 100 + "%"; else item.modStrings[4] = "";
-        if (item.percentValues[1] != 0) item.modStrings[5] = "\nErhöht Armor um " +                 item.percentValues[1] * 100 + "%"; else item.modStrings[5] = "";
-        if (item.percentValues[2] != 0) item.modStrings[6] = "\nErhöht Attack Power um " +          item.percentValues[2] * 100 + "%"; else item.modStrings[6] = "";
-        if (item.percentValues[3] != 0) item.modStrings[7] = "\nErhöht Ability Power um " +         item.percentValues[3] * 100 + "%"; else item.modStrings[7] = "";
-        if (item.percentValues[4] != 0) item.modStrings[8] = "\nErhöht Attack Speed um " +          item.percentValues[4] * 100 + "%"; else item.modStrings[8] = "";
-        if (item.percentValues[5] != 0) item.modStrings[9] = "\nErhöht deinen Movementspeed um " +  item.percentValues[5] * 100 + "%"; else item.modStrings[9] = "";
+        item.ItemValueInfo = "";
 
-        //Setze die Beschreibung auf die Beschreibung des Scriptable Objects des Trankes.
-        if (item.useable)
-            if (item.itemPotion != null)
-                item.modStrings[10] = item.itemPotion.descr;
+        foreach (var kvp in flatStats)
+        {
+            if (kvp.Value != 0)
+                item.ItemValueInfo += $"\n{kvp.Key}: {kvp.Value}";
+        }
 
-        string finalString;
-        finalString = modStrings[0] + modStrings[1] + modStrings[2] + modStrings[3] + modStrings[4] + modStrings[5] + modStrings[6] + modStrings[7] + modStrings[8] + modStrings[9] + modStrings[10];
-
-        this.ItemValueInfo = finalString;
-        //return finalString;
-    }
-
-    //Serialize information about Item and its Mods (not used currently)
-    /*
-    public ItemModsData[] SaveItemMods(ItemInstance item)
-    {
-        ItemModsData[] myArray = item.addedItemMods.ToArray();
-
-        return myArray;
+        foreach (var kvp in percentStats)
+        {
+            if (kvp.Value != 0)
+                item.ItemValueInfo += $"\nErhöht {kvp.Key} um {kvp.Value * 100}%";
+        }
 
     }
-    */
+
+
     public void Use()
     {
         //Inventory inventory = PlayerManager.instance.player.Inventory;
@@ -483,22 +470,6 @@ public class ItemInstance :  IMoveable, IUseable
         PlayerManager.instance.player.Inventory.RemoveItem(this);
         //An dieser Stelle sollte die Referenz zu einem bestimmten Spell geschehen. So bleibt sicher gestellt, dass jedes individuelle Item
         //unterschiedliche Spells abrufen kann.
-        /*
-        Debug.Log("Item is beeing used.");
-
-        if (itemType == ItemType.Consumable)
-        {
-            Debug.Log("Item is a consumable");
-            if (inventory.itemList.Contains(this))
-            {
-                Debug.Log("Inventory contains this consumable");
-                PlayerManager.instance.player.Inventory.RemoveItem(this);
-                Use();
-            };
-
-        };
-
-        */
     }
 
     public bool IsOnCooldown()

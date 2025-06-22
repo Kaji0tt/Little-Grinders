@@ -76,11 +76,11 @@ public class ItemDatabase : MonoBehaviour
                 //itemRolls -> neues Item providen
                 ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(newItem, 1));
 
-                Debug.Log("Mods insg.: " + newItem.addedItemMods.Count );
+                //Debug.Log("Mods insg.: " + newItem.addedItemMods.Count );
 
-                newItem.AppendModNamesToItemName();
+                //newItem.AppendModNamesToItemName();
                 
-                newItem.UpdateItemDescriptionWithMods();
+                //newItem.UpdateItemDescriptionWithMods();
 
                 break;
             }

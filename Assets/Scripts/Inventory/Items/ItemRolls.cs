@@ -55,6 +55,8 @@ public class ItemRolls : MonoBehaviour
         //Füge die gerollten Mods dem Item hinzu.
         itemTemplate.addedItemMods = mods;
 
+        itemTemplate.ApplyItemMods();
+
         //Setze die ItemRarity zur höchsten Rarity der verfügbaren Rolls.
         Rarity highestRarity = mods.Count > 0 ? mods.Max(m => m.rollRarity) : Rarity.Common;
         itemTemplate.itemRarity = highestRarity;

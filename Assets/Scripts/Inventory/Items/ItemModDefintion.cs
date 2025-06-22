@@ -43,6 +43,8 @@ public class ItemMod
     public ItemModDefinition definition;
     public Rarity rollRarity;
     public float rolledValue;
+    public bool IsPercent => definition != null &&
+    (definition.modType == ModType.Percent || definition.modType == ModType.PercentFortune);
 
     // Initialisiert den Mod basierend auf Kartenlevel und Rarity
     public void Initialize(int mapLevel)
