@@ -65,7 +65,7 @@ public class KeyManager : MonoBehaviour
 
         BindKey("STATS", KeyCode.E);
         BindKey("SKILLS", KeyCode.P);
-        BindKey("PICK", KeyCode.Q);
+        BindKey("PICK", KeyCode.F);
         BindKey("MAP", KeyCode.M);
 
         BindKey("SLOT1", KeyCode.Alpha1);

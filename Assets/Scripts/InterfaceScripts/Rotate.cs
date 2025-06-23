@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class Rotate : MonoBehaviour
 {
-    public float rotationSpeed = 50f; // Grad pro Sekunde
+    public float speed = 90f;
+    private float currentYRotation = 0f;
 
     void Update()
     {
-        transform.Rotate(new Vector3(0f,1f,0f), rotationSpeed);
+        currentYRotation += speed * Time.deltaTime;
+        currentYRotation %= 360f; // optional, um es schön sauber zu halten
+
+        transform.localEulerAngles = new Vector3(90f, currentYRotation, 0f);
     }
 }
