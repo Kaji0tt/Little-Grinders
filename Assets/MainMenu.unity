@@ -340,24 +340,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -4815,24 +4803,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -6113,24 +6089,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -6440,24 +6404,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -11631,24 +11583,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -11912,24 +11852,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -32558,24 +32486,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -57960,7 +57876,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1172845272}
   m_Direction: 2
   m_Value: 0.999996
-  m_Size: 0.46374425
+  m_Size: 0.46374422
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /*
@@ -17,6 +18,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public IUseable MyUseable { get; private set; }
     public IMoveable MyMoveable { get; private set; }
 
+    public ItemType myItemType { get; private set; }
     public Button MyButton { get; private set; }
     public Sprite icon { get; private set; }
     public Image image { get; private set; }
@@ -180,6 +182,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             cdText.CrossFadeAlpha(0, 1, true);
         }
     }
+
     public void UpdateVisual()
     {
         if (HandScript.instance.MyMoveable != null)
@@ -192,15 +195,22 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void SetUseable(IUseable useable)
     {
         this.MyUseable = useable;
-        cdButton.SetActive(true);
-        cdButton.GetComponent<Text>().text = useable.GetName();
+        //cdButton.SetActive(true);
+        //cdButton.GetComponent<Text>().text = useable.GetName();
         playerInventory = PlayerManager.instance.player.inventory;
         UpdateVisual();
 
 
     }
 
-    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // cdButton beim Laden der Szene neu setzen
+        if (cdButton == null && transform.childCount > 1)
+        {
+            cdButton = transform.GetChild(1).gameObject;
+        }
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         /*
@@ -222,21 +232,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             HandScript.instance.TakeMoveable(MyMoveable);
         }
     }
-
-
-
-    /*
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        
-        if (HandScript.instance.MyMoveable != null)
-        {
-            SetUseable(HandScript.instance.MyMoveable as IUseable);
-            HandScript.instance.Put();
-        }
-        
-    }
-    */
+    
 
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -275,5 +271,9 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         MyButton.image.color = Color.white;
     }
 
+    public void SetItemType(ItemType type)
+    {
+        myItemType = type;
+    }
 
 }

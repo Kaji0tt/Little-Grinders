@@ -11,9 +11,13 @@ public class PlayerStats : MonoBehaviour, IEntitie
 {
     #region Singleton
     public static PlayerStats instance;
+
+    public CharacterCombat characterCombat;
     private void Awake()
     {
         instance = this;
+
+        characterCombat = GetComponent<CharacterCombat>();
 
     }
     #endregion

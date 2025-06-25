@@ -448,6 +448,13 @@ MonoBehaviour:
   tutorialUI2: {fileID: 390888548}
   tutorialUI3: {fileID: 620910760}
   firstItem: {fileID: 11400000, guid: e75c10005c7195047b430fa9c1ccb863, type: 2}
+  mods:
+  - definition: {fileID: 11400000, guid: 9837d3c2948164f4da880536dd08e963, type: 2}
+    rollRarity: 0
+    rolledValue: 4
+  - definition: {fileID: 11400000, guid: 1fbc9bd3acb882c49834690b1c2efaa1, type: 2}
+    rollRarity: 0
+    rolledValue: 1
   tutorialBox: {fileID: 0}
 --- !u!4 &4126180 stripped
 Transform:
@@ -9567,6 +9574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f6d3ae06fa5fe49969792463a83bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterCombat: {fileID: 0}
   Hp:
     BaseValue: 100
   Armor:
@@ -10219,6 +10227,7 @@ Transform:
   m_Children:
   - {fileID: 2069144589}
   - {fileID: 1489625890}
+  - {fileID: 1180687620}
   - {fileID: 1046803633}
   - {fileID: 345525332}
   - {fileID: 1506703929}
@@ -15996,26 +16005,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    reg: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    p_reg: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -29464,26 +29459,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    reg: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    p_reg: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -30506,26 +30487,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    reg: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    p_reg: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -36010,26 +35977,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    reg: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    p_reg: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -37750,15 +37703,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b7486835ddc99f4cbbf9a6449f72ed7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityName: Regeneration
   description: 'Verleiht dem Spieler einen Basis Regenerationswert von 1.
 
     Schaltet
     den prozeduralen, passiven Talentbaum frei.'
-  cooldownTime: 0
-  activeTime: 0
-  isPersistent: 0
-  tickTimer: 1
   image: {fileID: 21300000, guid: 29c3e65250b84ed4999d0530e9c268fe, type: 3}
   regValue: 1
 --- !u!1 &1141123218
@@ -38109,26 +38057,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    reg: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    p_reg: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -39339,6 +39273,53 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1180687619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1180687620}
+  - component: {fileID: 1180687621}
+  m_Layer: 0
+  m_Name: c.TargetSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1180687620
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180687619}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1630736997}
+  m_Father: {fileID: 327848170}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1180687621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180687619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d33553b2fadef24dbb06ea379c7ba0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxMouseDistance: 1
+  targetIndicator: {fileID: 1630736996}
 --- !u!1 &1184135688
 GameObject:
   m_ObjectHideFlags: 0
@@ -42935,7 +42916,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1155331145}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.46374425
+  m_Size: 0.46374422
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -53871,7 +53852,6 @@ GameObject:
   - component: {fileID: 1489625891}
   - component: {fileID: 1489625894}
   - component: {fileID: 1489625888}
-  - component: {fileID: 1489625896}
   m_Layer: 0
   m_Name: c.ScriptController
   m_TagString: GameController
@@ -54103,30 +54083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28532e31c0e8a4344b872fcbe861f1d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wLegendaryRolls:
-  - {fileID: 11400000, guid: 62922b5e0e5651a4ebba5ecbfbbbfbf3, type: 2}
-  - {fileID: 11400000, guid: ace63cf4080f0714ebba1d60f04fbcb9, type: 2}
-  wEpicRolls:
-  - {fileID: 11400000, guid: 1b4ceb43e4a365046bb15ac66285065b, type: 2}
-  - {fileID: 11400000, guid: 4df3394230a4abe408d1a59c6991bacf, type: 2}
-  wRareRolls:
-  - {fileID: 11400000, guid: 0345cec3e21e0634997505f1b88f3303, type: 2}
-  - {fileID: 11400000, guid: d84443bbd45046c4a9dd3e3c94a7fe3e, type: 2}
-  - {fileID: 11400000, guid: b6df6d9023109d146b6e4327a59d1558, type: 2}
-  wUncommonRolls:
-  - {fileID: 11400000, guid: f3bc1fd16d1845e47a0e216af1a29353, type: 2}
-  - {fileID: 11400000, guid: abb2abb7c68c4b34a972f4c4453c0960, type: 2}
-  - {fileID: 11400000, guid: 97d10d3304c278941bbfbf70dc0d1082, type: 2}
-  wUnbrauchbarRolls:
-  - {fileID: 11400000, guid: 5a803bc07cb2043409a8f4efbf148d85, type: 2}
-  - {fileID: 11400000, guid: f787d7e5e9ea3254db1b530de5742a20, type: 2}
-  - {fileID: 11400000, guid: 0b49a18b028d6ab45ac8538ac9692b97, type: 2}
-  - {fileID: 11400000, guid: 84e9fc82add5858438123c7227402458, type: 2}
-  - {fileID: 11400000, guid: 602ef468043ad7f4e98477caa87be9eb, type: 2}
-  modsOnItem: []
-  levelModifier: 0
-  worldModifier: 0
-  bossModifier: 0
+  luckModifier: 0
 --- !u!114 &1489625894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54156,19 +54113,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePopupPrefab: {fileID: 4483410326512327473, guid: 28a423ea1ac670942968c05975813fd1,
     type: 3}
---- !u!114 &1489625896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1489625881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d33553b2fadef24dbb06ea379c7ba0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxMouseDistance: 1
 --- !u!1 &1490778865
 GameObject:
   m_ObjectHideFlags: 0
@@ -58211,6 +58155,108 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!1 &1630736996
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1630736997}
+  - component: {fileID: 1630736999}
+  - component: {fileID: 1630736998}
+  m_Layer: 0
+  m_Name: TargetIndicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1630736997
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630736996}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1180687620}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1630736998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630736996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9797c98bc2768b34d878e0e2d6b47cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 90
+--- !u!212 &1630736999
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630736996}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 2411663306746112254, guid: 5b65512fe46780744992ac125cc3a7b2,
+    type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 6.71, y: 6.63}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1632111607
 GameObject:
   m_ObjectHideFlags: 0
@@ -71112,26 +71158,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    reg: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    p_reg: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0
@@ -78450,26 +78482,12 @@ MonoBehaviour:
     ItemDescription: 
     ItemValueInfo: 
     itemType: 0
+    itemRarity: 0
     weaponCombo: {fileID: 0}
-    itemRarity: 
     Range: 0
     RangedWeapon: 0
     percent: 0
-    baseLevel: 0
-    hp: 0
-    armor: 0
-    attackPower: 0
-    abilityPower: 0
-    reg: 0
-    flatValues: 
-    p_hp: 0
-    p_armor: 0
-    p_attackPower: 0
-    p_abilityPower: 0
-    p_attackSpeed: 0
-    p_movementSpeed: 0
-    p_reg: 0
-    percentValues: []
+    requiredLevel: 0
     useable: 0
     itemPotion: {fileID: 0}
     c_percent: 0

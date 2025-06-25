@@ -4,6 +4,9 @@ public class TargetSystem : MonoBehaviour
 {
     public float maxMouseDistance = 1.0f;
 
+    [Header("Ziel-Indikator")]
+    public GameObject targetIndicator; // Verweis auf das eine Zielobjekt
+
     private void Update()
     {
         var playerPos = PlayerManager.instance.player.transform.position;
@@ -13,8 +16,6 @@ public class TargetSystem : MonoBehaviour
 
         EnemyController selectedTarget = null;
         float closestToMouse = Mathf.Infinity;
-
-        Debug.Log(enemiesInRange.Count);
 
         foreach (EnemyController enemy in enemiesInRange)
         {
@@ -31,14 +32,20 @@ public class TargetSystem : MonoBehaviour
             }
         }
 
-        // Zielindikator aktualisieren
-        foreach (EnemyController enemy in enemiesInRange)
+        // Ziel-Indikator setzen
+        if (selectedTarget != null && !selectedTarget.mobStats.isDead)
         {
-            if (enemy == null) continue;
-            enemy.SetTargetIndicatorActive(enemy == selectedTarget);
+            targetIndicator.SetActive(true);
+            Vector3 indicatorPos = selectedTarget.transform.position;
+            indicatorPos.y += 0.1f; // Optional: leicht über Boden
+            targetIndicator.transform.position = indicatorPos;
+        }
+        else
+        {
+            targetIndicator.SetActive(false);
         }
 
-        // 👉 Hier: Ziel im Kampfsystem setzen
+        // Ziel im Kampfsystem setzen
         var combat = PlayerManager.instance.player.GetComponent<CharacterCombat>();
         combat.SetCurrentTarget(selectedTarget);
     }

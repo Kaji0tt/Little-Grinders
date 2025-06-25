@@ -8,22 +8,22 @@ using UnityEngine.UI;
 
 public abstract class Ability : MonoBehaviour, IMoveable, IUseable, IDragHandler, IEndDragHandler
 {
-    public string abilityName;
-    [TextArea]
+    private string abilityName;
+
     public string description;
-    [Space]
-    public float cooldownTime;
+
+    private float cooldownTime;
     private float _cooldown;
 
-    public float activeTime;
+    private float activeTime;
     private float _activeTime;
 
-    public bool isPersistent; // Falls true, bleibt die Fähigkeit aktiv
+    private bool isPersistent; // Falls true, bleibt die Fähigkeit aktiv
 
-    float tickerTimer;
+    private float tickTimer;
 
-    [HideInInspector]
-    public float tickTimer = 1;
+
+    private float _tickTimer;
 
     public Sprite image;
     public Sprite icon => image;
@@ -37,6 +37,21 @@ public abstract class Ability : MonoBehaviour, IMoveable, IUseable, IDragHandler
     public enum AbilityState { ready, active, cooldown };
     AbilityState state = AbilityState.ready;
 
+    public void Initialize(AbilityData abilityData, PlayerStats playerStats)
+    {
+        ///Initialize all Variables provided by Scriptable Object;
+        abilityName = abilityData.abilityName;
+        description = abilityData.description;
+        cooldownTime = abilityData.cooldownTime;
+        _cooldown = cooldownTime;
+        isPersistent = abilityData.isPersistent;
+        tickTimer = abilityData.tickTimer;
+        _tickTimer = tickTimer;
+        image = abilityData.icon;
+
+    }
+
+
     void Start()
     {
         _activeTime = activeTime;
@@ -47,19 +62,17 @@ public abstract class Ability : MonoBehaviour, IMoveable, IUseable, IDragHandler
     void Update()
     {
 
-
-
         if (state == AbilityState.active)
         {
             if (isPersistent)
             {
                 // Permanente Fähigkeiten ignorieren activeTime und ticken einfach weiter
-                tickerTimer -= Time.deltaTime;
+                tickTimer -= Time.deltaTime;
 
-                if (tickerTimer <= 0)
+                if (tickTimer <= 0)
                 {
                     CallAbilityFunctions("tick", PlayerManager.instance.player.GetComponent<PlayerStats>());
-                    tickerTimer = tickTimer;
+                    tickTimer = _tickTimer;
                 }
             }
             else
@@ -67,12 +80,12 @@ public abstract class Ability : MonoBehaviour, IMoveable, IUseable, IDragHandler
                 if (_activeTime > 0)
                 {
                     _activeTime -= Time.deltaTime;
-                    tickerTimer -= Time.deltaTime;
+                    tickTimer -= Time.deltaTime;
 
-                    if (tickerTimer <= 0)
+                    if (tickTimer <= 0)
                     {
                         CallAbilityFunctions("tick", PlayerManager.instance.player.GetComponent<PlayerStats>());
-                        tickerTimer = tickTimer;
+                        tickTimer = _tickTimer;
                     }
                 }
                 else

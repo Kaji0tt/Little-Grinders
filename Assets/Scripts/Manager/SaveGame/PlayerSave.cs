@@ -331,7 +331,7 @@ public class PlayerSave
             //Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtonIndex[i]);
             if(slot.MyUseable is Ability)
             {
-                savedActionButtons[i - 1] = (slot.MyUseable as Ability).abilityName;
+                //savedActionButtons[i - 1] = (slot.MyUseable as Ability).abilityName;
             }
             else if (slot.MyUseable is ItemInstance)
             {

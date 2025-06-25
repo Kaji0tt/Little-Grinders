@@ -7,8 +7,6 @@ public class Heal : Ability
 {
     public float regValue = 1f;  // Menge an HP pro Tick
 
-
-
     private bool isApplied = false; // Zustand der Heilung
 
     public override void UseBase(IEntitie entitie)

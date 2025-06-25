@@ -11,30 +11,27 @@ public enum Rarity
     Epic,
     Legendary
 }
-
 public class ItemRolls : MonoBehaviour
 {
+    public float luckModifier = 0f; // Von außen manipulierbar (z. B. per Inspector, aus anderem Script etc.)
+
     private ItemModDefinition[] allModDefs;
 
-    // Mod-Roll-Chance (z. B. 50% Wahrscheinlichkeit, dass ein weiterer Mod gerollt wird)
-    private const float modRollChance = 0.4f;
-
-    // Raritätenverteilung (fix / hardcoded)
     private readonly Rarity[] rarities = { Rarity.Common, Rarity.Uncommon, Rarity.Rare, Rarity.Epic, Rarity.Legendary };
-    private readonly float[] rarityWeights = { 0.6f, 0.25f, 0.1f, 0.04f, 0.01f };
+    private readonly float[] baseRarityWeights = { 0.6f, 0.25f, 0.1f, 0.04f, 0.01f };
 
     int maxMods = 6;
+
     public ItemInstance RollItem(ItemInstance itemTemplate, int mapLevel)
     {
-        //ItemInstance instance = new ItemInstance(itemTemplate);
-
-
         List<ItemMod> mods = new List<ItemMod>();
 
-        while (Random.value < modRollChance && mods.Count < maxMods)
+        while (ShouldRollAnotherMod(mods.Count))
         {
-            Debug.Log("Random.vale rolled lower than .4, picking one of " + ItemDatabase.instance.allModDefs.Count() + " mods.");
-            var validDefs = ItemDatabase.instance.allModDefs.Where(def => (def.allowedItemTypes & itemTemplate.itemType) != 0).ToArray();
+            var validDefs = ItemDatabase.instance.allModDefs
+                .Where(def => (def.allowedItemTypes & itemTemplate.itemType) != 0)
+                .ToArray();
+
             if (validDefs.Length == 0) break;
 
             var def = validDefs[UnityEngine.Random.Range(0, validDefs.Length)];
@@ -52,27 +49,41 @@ public class ItemRolls : MonoBehaviour
             mods.Add(mod);
         }
 
-        //Füge die gerollten Mods dem Item hinzu.
         itemTemplate.addedItemMods = mods;
-
         itemTemplate.ApplyItemMods();
 
-        //Setze die ItemRarity zur höchsten Rarity der verfügbaren Rolls.
         Rarity highestRarity = mods.Count > 0 ? mods.Max(m => m.rollRarity) : Rarity.Common;
         itemTemplate.itemRarity = highestRarity;
 
-        //instance = GetItemStats(itemTemplate.ID, modDataList, highestRarity);
         return itemTemplate;
+    }
+
+    private bool ShouldRollAnotherMod(int currentModCount)
+    {
+        if (currentModCount >= maxMods) return false;
+
+        float adjustedChance = Mathf.Clamp01(0.4f + luckModifier * 0.2f); // z. B. Luck +1 → 60%, Luck -1 → 20%
+        return Random.value < adjustedChance;
     }
 
     private Rarity RollRarity()
     {
-        float total = rarityWeights.Sum();
-        float roll = Random.value * total;
-        for (int i = 0; i < rarityWeights.Length; i++)
+        // Modifiziere die Wahrscheinlichkeiten basierend auf luckModifier
+        float[] adjustedWeights = new float[baseRarityWeights.Length];
+        for (int i = 0; i < baseRarityWeights.Length; i++)
         {
-            if (roll < rarityWeights[i]) return rarities[i];
-            roll -= rarityWeights[i];
+            float rarityFactor = i / (float)(baseRarityWeights.Length - 1); // Common = 0.0, Legendary = 1.0
+            float boost = 1f + (rarityFactor * luckModifier); // z. B. Legendary wird bei luckModifier > 0 mehr geboostet
+            adjustedWeights[i] = baseRarityWeights[i] * Mathf.Max(0.1f, boost);
+        }
+
+        float total = adjustedWeights.Sum();
+        float roll = Random.value * total;
+
+        for (int i = 0; i < adjustedWeights.Length; i++)
+        {
+            if (roll < adjustedWeights[i]) return rarities[i];
+            roll -= adjustedWeights[i];
         }
         return rarities.Last();
     }

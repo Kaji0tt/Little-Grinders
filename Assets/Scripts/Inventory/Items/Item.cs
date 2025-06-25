@@ -21,7 +21,7 @@ public enum ItemType
 
 
 
-[CreateAssetMenu(fileName = "Item0000", menuName = "Assets/Item")]
+[CreateAssetMenu(fileName = "Item0000", menuName = "Items/Item")]
 public class Item : ScriptableObject
 {
     [Header("Details")]

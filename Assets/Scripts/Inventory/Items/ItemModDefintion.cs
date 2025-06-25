@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using UnityEngine;
 
+
+//ItemTypes that use Active Abilities: Kopf, Brust, Weapon, Beine, Schuhe. Schmuck soll eine Passiv Fähigkeit werden.
 [CreateAssetMenu(fileName = "NewMod", menuName = "Items/Mod Definition")]
 public class ItemModDefinition : ScriptableObject
 {
@@ -12,6 +14,9 @@ public class ItemModDefinition : ScriptableObject
 
     public ModType modType; // Flat, Percent, etc.
     public RarityScaling[] rarityScalings;
+
+    [Tooltip("Wenn der Mod eine Fähigkeit sein soll, verweise hier auf die entsprechende Ability")]
+    public AbilityData modAbilityData;
 
     [Tooltip("Auf welchen Item Typen diese Modifikation verüfgbar sein soll.")]
     public ItemType allowedItemTypes;

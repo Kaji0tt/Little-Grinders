@@ -58,7 +58,7 @@ public class ItemWorld : MonoBehaviour
         itemWorldText = transform.GetComponentInChildren<TextMeshProUGUI>();
 
         // Template aus Settings, z. B.: "F to pick up {item.ItemName}"
-        string template = "F to pick up {item.ItemName}";//Settings.PickupPromptText;
+        string template = "{item.ItemName}";//Settings.PickupPromptText;
 
         // Farbcodes nach Rarity
         Color rarityColor = Color.white;

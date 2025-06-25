@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class UI_Manager : MonoBehaviour
 {
@@ -46,7 +47,6 @@ public class UI_Manager : MonoBehaviour
 
     //[SerializeField]
     //private Button[] actionButtons;
-    private Button aBtn1, aBtn2, aBtn3, aBtn4, aBtn5;
 
 
     //private IsometricPlayer isometricPlayer;
@@ -126,7 +126,7 @@ public class UI_Manager : MonoBehaviour
 
         keyBindButtons = GameObject.FindGameObjectsWithTag("KeyBindings");
 
-        foreach(GameObject keyBindBtn in keyBindButtons)
+        foreach (GameObject keyBindBtn in keyBindButtons)
         {
             keyBindBtn.AddComponent<UI_Btn_Listener>();
         }
@@ -162,7 +162,7 @@ public class UI_Manager : MonoBehaviour
 
     private void Start()
     {
-        
+
 
         CheckForUI_Elements();
 
@@ -272,7 +272,7 @@ public class UI_Manager : MonoBehaviour
     private void Update()
     {
 
-        if(!IsInMainMenu())
+        if (!IsInMainMenu())
         {
             CheckForUserAction();
         }
@@ -283,11 +283,11 @@ public class UI_Manager : MonoBehaviour
 
     private void CheckForUserAction()
     {
-        if(Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H))
         {
             PlayerManager.instance.player.GetComponent<PlayerStats>().Gain_xp(600);
             foreach (Item item in itemsOnStart)
-            PlayerManager.instance.player.Inventory.AddItem(new ItemInstance(item));
+                PlayerManager.instance.player.Inventory.AddItem(new ItemInstance(item));
 
         }
 
@@ -397,7 +397,43 @@ public class UI_Manager : MonoBehaviour
 
 
     }
-    
+
+    /// <summary>
+    /// Action Button Segment
+    /// </summary>
+
+    private Button aBtn1, aBtn2, aBtn3, aBtn4, aBtn5;
+
+    public List<ActionButton> actionButtons { get; private set; } = new List<ActionButton>();
+
+    public void AssignAbilityFromMod(ItemModDefinition modDef)
+    {
+        if (modDef == null || modDef.modAbilityData == null)
+            return;
+
+        ItemType itemType = modDef.allowedItemTypes;
+
+        ActionButton targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == itemType);
+
+        if (targetButton != null)
+        {
+            // Hole die Ability-Komponente aus dem Prefab
+            Ability ability = modDef.modAbilityData.myAbilityPrefab.GetComponent<Ability>();
+
+            if (ability != null)
+            {
+                targetButton.LoadAbilityUseable(ability);
+            }
+            else
+            {
+                Debug.LogWarning($"Ability-Komponente nicht gefunden im Prefab für {modDef.name}.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Kein ActionButton für ItemType {itemType} gefunden.");
+        }
+    }
 
     private void ActionButtonOnClick(int btnIndex)
     {
@@ -567,11 +603,23 @@ public class UI_Manager : MonoBehaviour
 
                     aBtn1 = interfaceElement.GetComponent<Button>();
 
+                    ActionButton _aBtn1 = aBtn1.GetComponent<ActionButton>();
+
+                    _aBtn1.SetItemType(ItemType.Weapon);
+
+                    actionButtons.Add(_aBtn1);
+
                     break;
 
                 case InterfaceElementDeclaration.AB2:
 
                     aBtn2 = interfaceElement.GetComponent<Button>();
+
+                    ActionButton _aBtn2 = aBtn2.GetComponent<ActionButton>();
+
+                    _aBtn2.SetItemType(ItemType.Kopf);
+
+                    actionButtons.Add(_aBtn2);
 
                     break;
 
@@ -579,17 +627,35 @@ public class UI_Manager : MonoBehaviour
 
                     aBtn3 = interfaceElement.GetComponent<Button>();
 
+                    ActionButton _aBtn3 = aBtn3.GetComponent<ActionButton>();
+
+                    _aBtn3.SetItemType(ItemType.Brust);
+
+                    actionButtons.Add(_aBtn3);
+
                     break;
 
                 case InterfaceElementDeclaration.AB4:
 
                     aBtn4 = interfaceElement.GetComponent<Button>();
 
+                    ActionButton _aBtn4 = aBtn4.GetComponent<ActionButton>();
+
+                    _aBtn4.SetItemType(ItemType.Beine);
+
+                    actionButtons.Add(_aBtn4);
+
                     break;
 
                 case InterfaceElementDeclaration.AB5:
 
                     aBtn5 = interfaceElement.GetComponent<Button>();
+
+                    ActionButton _aBtn5 = aBtn5.GetComponent<ActionButton>();
+
+                    _aBtn5.SetItemType(ItemType.Schuhe);
+
+                    actionButtons.Add(_aBtn5);
 
                     break;
 
@@ -598,7 +664,6 @@ public class UI_Manager : MonoBehaviour
 
             }
         }
-
 
     }
 
