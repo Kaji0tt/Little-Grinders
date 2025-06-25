@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 
-public class MobStats : MonoBehaviour, IEntitie
+public class MobStats : MonoBehaviour
 {
     public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed, Regeneration;
 

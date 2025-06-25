@@ -116,15 +116,15 @@ public class PlayerLoad : MonoBehaviour
             if (talent.unlocked)
             {
                 //Falls es sich nicht um ein AbilityTalent handelt, füge die Effekte hinzu.
-                if (talent.GetType() != typeof(AbilityTalent))
-                {
+                //if (talent.GetType() != typeof(AbilityTalent))
+                //{
 
-                    for (int i = 1; i <= talent.currentCount; i++)
+                //    for (int i = 1; i <= talent.currentCount; i++)
                         //talent.ApplyPassivePointsAndEffects(talent); Ehemaliger Ansatz, aber ApplyPassivePointsAndEffects sieht hinfällig im vgl. TryUseTalent aus
-                        TalentTreeManager.instance.TryUseTalent(talent);
-                }
-                else
-                {
+                //        TalentTreeManager.instance.TryUseTalent(talent);
+                //}
+                
+                
                     foreach(TalentSave savedTalent in data.talentsToBeSaved)
                     if(talent.talentName == savedTalent.talentName)
                     {
@@ -132,9 +132,9 @@ public class PlayerLoad : MonoBehaviour
                             //print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
                             /// 07.03: Spells als Affixes, Rebuilding.
                             /// talent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
-                        }
+                    }
 
-                }
+                
 
                 talent.Unlock();
             }

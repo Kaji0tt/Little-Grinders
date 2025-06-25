@@ -8,7 +8,7 @@ using TMPro;
 
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IEntitie
 {
     //Create Variabel for the Player (through PlayerManager Singleton)
     //Transform character_transform;
@@ -444,6 +444,52 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+
+    //Damit EnemyController als IEntite gehandelt werden kann, hat VisualStudio hier diesen sexy absatz empfohlen. Danke VS Code.
+    public void Die()
+    {
+        ((IEntitie)mobStats).Die();
+    }
+
+    public float Get_currentHp()
+    {
+        return ((IEntitie)mobStats).Get_currentHp();
+    }
+
+    public float Get_maxHp()
+    {
+        return ((IEntitie)mobStats).Get_maxHp();
+    }
+
+    public CharStats GetStat(EntitieStats stat)
+    {
+        return ((IEntitie)mobStats).GetStat(stat);
+    }
+
+    public Transform GetTransform()
+    {
+        return ((IEntitie)mobStats).GetTransform();
+    }
+
+    public List<BuffInstance> GetBuffs()
+    {
+        return ((IEntitie)mobStats).GetBuffs();
+    }
+
+    public void Heal(int healAmount)
+    {
+        ((IEntitie)mobStats).Heal(healAmount);
+    }
+
+    public void ApplyBuff(BuffInstance buff)
+    {
+        ((IEntitie)mobStats).ApplyBuff(buff);
+    }
+
+    public void RemoveBuff(BuffInstance buff)
+    {
+        ((IEntitie)mobStats).RemoveBuff(buff);
+    }
 }
 
 

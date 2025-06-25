@@ -448,6 +448,13 @@ MonoBehaviour:
   tutorialUI2: {fileID: 390888548}
   tutorialUI3: {fileID: 620910760}
   firstItem: {fileID: 11400000, guid: e75c10005c7195047b430fa9c1ccb863, type: 2}
+  mods:
+  - definition: {fileID: 11400000, guid: 9837d3c2948164f4da880536dd08e963, type: 2}
+    rollRarity: 0
+    rolledValue: 4
+  - definition: {fileID: 11400000, guid: 1fbc9bd3acb882c49834690b1c2efaa1, type: 2}
+    rollRarity: 0
+    rolledValue: 1
   tutorialBox: {fileID: 0}
 --- !u!4 &4126180 stripped
 Transform:
@@ -9567,6 +9574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f6d3ae06fa5fe49969792463a83bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterCombat: {fileID: 0}
   Hp:
     BaseValue: 100
   Armor:
@@ -37695,15 +37703,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b7486835ddc99f4cbbf9a6449f72ed7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityName: Regeneration
   description: 'Verleiht dem Spieler einen Basis Regenerationswert von 1.
 
     Schaltet
     den prozeduralen, passiven Talentbaum frei.'
-  cooldownTime: 0
-  activeTime: 0
-  isPersistent: 0
-  tickTimer: 1
   image: {fileID: 21300000, guid: 29c3e65250b84ed4999d0530e9c268fe, type: 3}
   regValue: 1
 --- !u!1 &1141123218

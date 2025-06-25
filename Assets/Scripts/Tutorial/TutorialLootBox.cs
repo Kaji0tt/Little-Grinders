@@ -23,7 +23,7 @@ public class TutorialLootBox : MonoBehaviour
 
     public Item firstItem;
 
-
+    public List<ItemMod> mods = new List<ItemMod>();
 
     [SerializeField]
     Tutorial tutorialBox;
@@ -69,7 +69,15 @@ public class TutorialLootBox : MonoBehaviour
 
             Vector3 spawnPos = new Vector3(PlayerManager.instance.player.transform.position.x + .5f, gameObject.transform.position.y, PlayerManager.instance.player.transform.position.z + .9f);
 
-            ItemWorld.SpawnItemWorld(spawnPos, new ItemInstance(firstItem));
+            ItemInstance firstDrop = new ItemInstance(firstItem);
+
+            firstDrop.addedItemMods = mods;
+
+            firstDrop.ApplyItemMods();
+
+            ItemWorld.SpawnItemWorld(spawnPos, firstDrop);
+
+
 
             LootBoxOpenedSprite();
 

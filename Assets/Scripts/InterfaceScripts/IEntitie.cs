@@ -36,7 +36,7 @@ public interface IEntitie
 
     //public void TakeDamage(float damage, int range);
 
-    //public void TakeDirectDamage(float damage, float range);
+    public void TakeDirectDamage(float damage, float range);
 
     public void Heal(int healAmount);
 

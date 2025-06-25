@@ -49,25 +49,55 @@ public class GameEvents : MonoBehaviour
         {
             case ItemType.Kopf:
                 OnEquipKopf?.Invoke(item);
+                CheckAndAssignItemAbility(item);
                 break;
             case ItemType.Brust:
                 OnEquipBrust?.Invoke(item);
+                CheckAndAssignItemAbility(item);
                 break;
             case ItemType.Beine:
                 OnEquipHose?.Invoke(item);
+                CheckAndAssignItemAbility(item);
                 break;
             case ItemType.Schuhe:
                 OnEquipSchuhe?.Invoke(item);
+                CheckAndAssignItemAbility(item);
                 break;
             case ItemType.Schmuck:
                 OnEquipSchmuck?.Invoke(item);
+                CheckAndAssignItemAbility(item);
                 break;
             case ItemType.Weapon:
                 OnEquipWeapon?.Invoke(item);
+                CheckAndAssignItemAbility(item);
                 break;
             default:
                 Debug.LogWarning("Unknown item type: " + item.itemType);
                 break;
+        }
+    }
+
+    private void CheckAndAssignItemAbility(ItemInstance itemToCheck)
+    {
+        bool hasAbilityMod = false;
+
+        foreach (ItemMod mod in itemToCheck.addedItemMods)
+        {
+            if (mod.definition.modAbilityData != null)
+            {
+                UI_Manager.instance.AssignAbilityFromMod(mod.definition);
+                hasAbilityMod = true;
+            }
+        }
+
+        // Falls keine Ability in einem Mod gefunden wurde → Button zurücksetzen
+        if (!hasAbilityMod)
+        {
+            foreach (ActionButton actionButton in UI_Manager.instance.actionButtons)
+            {
+                if (actionButton.myItemType == itemToCheck.itemType)
+                    actionButton.SetUseable(null);
+            }
         }
     }
 

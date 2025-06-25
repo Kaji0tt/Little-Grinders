@@ -10,7 +10,7 @@ public class KeyManager : MonoBehaviour
 {
     private static KeyManager instance;
 
-    public static KeyManager MyInstance
+    public static KeyManager MyInstance 
     {
         get
         {
@@ -74,7 +74,6 @@ public class KeyManager : MonoBehaviour
         BindKey("SLOT4", KeyCode.Alpha4);
         BindKey("SLOT5", KeyCode.Alpha5);
         
-
     }
 
 

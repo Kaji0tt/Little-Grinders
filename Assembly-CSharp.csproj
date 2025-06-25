@@ -105,6 +105,7 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ClickThrough.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\NonDrawingGraphic.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\TalentTree\SectorVisualizer.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Voidwither.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemWorld.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\SaveLoadMenu.cs" />
     <Compile Include="Assets\Scripts\Player\IsometricPlayer.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ShaderLibrary.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Scroller\ScrollDirection.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\AbilityData.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\SVBoxSlider.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\CloneItem.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\BezierPath.cs" />
@@ -359,7 +361,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Core\FancyScrollView.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\AbilityTalent.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\MenuSystem\Menu.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ExtensionsToggle.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\BestFitOutline.cs" />
