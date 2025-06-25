@@ -431,6 +431,7 @@ public class UI_Manager : MonoBehaviour
         }
         else
         {
+            //Es scheint aktuell so zu sein, dass itemType als mod durchgegangen wird.
             Debug.LogWarning($"Kein ActionButton für ItemType {itemType} gefunden.");
         }
     }

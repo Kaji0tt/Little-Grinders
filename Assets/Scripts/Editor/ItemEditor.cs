@@ -45,11 +45,13 @@ public class ItemEditor : Editor
         // Standard Informationen
         item.ItemName = EditorGUILayout.TextField("Item Name", item.ItemName);
         item.itemType = (ItemType)EditorGUILayout.EnumPopup("Item Type", item.itemType);
+        item.level_needed = EditorGUILayout.IntField("Required Level", item.level_needed);
         item.icon = (Sprite)EditorGUILayout.ObjectField("Icon", item.icon, typeof(Sprite), false);
 
         // Textarea für Beschreibung
         EditorGUILayout.LabelField("Description", EditorStyles.boldLabel);
         item.ItemDescription = EditorGUILayout.TextArea(item.ItemDescription, GUILayout.MinHeight(60));
+
 
         // Falls Waffe
         if (item.itemType == ItemType.Weapon)

@@ -34,7 +34,7 @@ public class ItemRolls : MonoBehaviour
 
             if (validDefs.Length == 0) break;
 
-            var def = validDefs[UnityEngine.Random.Range(0, validDefs.Length)];
+            var def = validDefs[Random.Range(0, validDefs.Length)];
             var rarity = RollRarity();
 
             float rolledValue = def.GetValue(mapLevel, rarity);
@@ -62,7 +62,7 @@ public class ItemRolls : MonoBehaviour
     {
         if (currentModCount >= maxMods) return false;
 
-        float adjustedChance = Mathf.Clamp01(0.4f + luckModifier * 0.2f); // z. B. Luck +1 → 60%, Luck -1 → 20%
+        float adjustedChance = Mathf.Clamp01(0.3f + luckModifier * 0.2f); // z. B. Luck +1 → 50%, Luck -1 → 10%
         return Random.value < adjustedChance;
     }
 
