@@ -21,17 +21,17 @@ PrefabInstance:
     - target: {fileID: 3458640627601143649, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.68
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3458640627601143649, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.97
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3458640627601143649, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.21
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3458640627601143649, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
@@ -166,7 +166,7 @@ PrefabInstance:
     - target: {fileID: 3458640627601143663, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.25
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3458640627601143663, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
@@ -176,7 +176,7 @@ PrefabInstance:
     - target: {fileID: 3458640627601143663, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
       propertyPath: InitialModule.startSpeed.scalar
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3458640627601143663, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
@@ -191,17 +191,17 @@ PrefabInstance:
     - target: {fileID: 3458640627601143663, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3458640627601143663, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 1.5
+      value: 1.05
       objectReference: {fileID: 0}
     - target: {fileID: 3458640627601143663, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}
       propertyPath: InitialModule.startRotation.scalar
-      value: 0.03508112
+      value: 0.02687807
       objectReference: {fileID: 0}
     - target: {fileID: 3458640627601143663, guid: 41ea76bd5647d6a48a5f76ac20d14401,
         type: 3}

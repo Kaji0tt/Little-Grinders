@@ -239,7 +239,7 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
                 else
                 {
-                    Debug.Log("In: SetTalentUIVariables() konnte kein Node gefunden werden.");
+                    //Debug.Log("In: SetTalentUIVariables() konnte kein Node gefunden werden.");
                     textComponent.text = $"{currentCount}/{maxCount}";
                 }
 

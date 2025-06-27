@@ -13,19 +13,19 @@ public class Voidwither : Ability
 
         if (playerStats == null)
         {
-            Debug.LogWarning("Voidwither konnte keine PlayerStats referenzieren.");
+            // Debug.LogWarning("Voidwither konnte keine PlayerStats referenzieren.");
             return;
         }
 
         // Event abonnieren
         GameEvents.Instance.OnEnemyWasAttacked += ApplyVoidwitherEffect;
 
-        Debug.Log("Voidwither aktiviert.");
+        // Debug.Log("Voidwither aktiviert.");
     }
 
     public override void OnTick(IEntitie entitie)
     {
-        // Kein Tick benötigt
+        // Kein Tick benÃ¶tigt
     }
 
     public override void OnCooldown(IEntitie entitie)
@@ -33,7 +33,7 @@ public class Voidwither : Ability
         // Event abbestellen
         GameEvents.Instance.OnEnemyWasAttacked -= ApplyVoidwitherEffect;
 
-        Debug.Log("Voidwither deaktiviert.");
+        // Debug.Log("Voidwither deaktiviert.");
     }
 
     private void ApplyVoidwitherEffect(float baseDamage, Transform enemyTransform, bool crit)
@@ -49,6 +49,6 @@ public class Voidwither : Ability
         target.TakeDirectDamage(bonusDamage, playerStats.Range);
 
         // Optional: FX anzeigen
-        Debug.Log($"Voidwither verursacht {bonusDamage} magischen Zusatzschaden an {enemyTransform.name}");
+        // Debug.Log($"Voidwither verursacht {bonusDamage} magischen Zusatzschaden an {enemyTransform.name}");
     }
 }

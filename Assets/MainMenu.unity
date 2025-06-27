@@ -33846,6 +33846,7 @@ GameObject:
   - component: {fileID: 1300116312}
   - component: {fileID: 1300116313}
   - component: {fileID: 1300116314}
+  - component: {fileID: 1300116315}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: Untagged
@@ -33964,6 +33965,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damagePopupPrefab: {fileID: 4483410326512327473, guid: 28a423ea1ac670942968c05975813fd1,
+    type: 3}
+--- !u!114 &1300116315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300116307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff8fb257dad993439449c2f2edff3b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelUpEffectPrefab: {fileID: 5274634831037766978, guid: e84125b036e4afd4fa0f7b86e9dfb384,
     type: 3}
 --- !u!1 &1300290822
 GameObject:
@@ -57869,7 +57884,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1172845272}
   m_Direction: 2
   m_Value: 0.999996
-  m_Size: 0.46374422
+  m_Size: 0.46374425
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
