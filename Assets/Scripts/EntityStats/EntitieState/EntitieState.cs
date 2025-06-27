@@ -45,7 +45,7 @@ public class IdleState : EntitieState
 
     public override void Enter()
     {
-        Debug.Log("Idle Enter is called");
+        //Debug.Log("Idle Enter is called");
         controller.mobStats.isRegenerating = true;
 
         controller.StopMoving();

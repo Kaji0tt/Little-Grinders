@@ -140,21 +140,18 @@ public class IsometricRenderer : MonoBehaviour
     /// Spiegelt das GameObject basierend auf der Blickrichtung (nur X-Achse).
     /// </summary>
     /// <param name="direction">Die Zielrichtung (z.B. Richtung zum Spieler)</param>
+    
+    private Vector2 lastNonZeroDirection = Vector2.right;
+
     public void SetFacingDirection(Vector2 direction)
     {
-        if (direction.x < -0.01f)
-        {
-            // Nach links gucken → spiegeln
-            transform.localScale = new Vector3(1f, 1f, 1f);
-        }
-        else if (direction.x > 0.01f)
-        {
-            // Nach rechts gucken → normal
-            transform.localScale = new Vector3(-1f, 1f, 1f);
-        }
+        if (direction.sqrMagnitude > 0.01f)
+            lastNonZeroDirection = direction;
 
-        // Optional: Falls du vertikale Spiegelung mal brauchst
-        // if (direction.y < 0) transform.localScale = new Vector3(...);
+        if (lastNonZeroDirection.x < -0.01f)
+            transform.localScale = new Vector3(-1f, 1f, 1f);
+        else if (lastNonZeroDirection.x > 0.01f)
+            transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public void SetPlayerDirection(Vector2 direction){

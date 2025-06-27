@@ -15,6 +15,8 @@ Kannst du das bitte so formulieren, dass das Handscript schaut, ob die Maus aktu
 */
 public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
 {
+    private AbilityData myAbilityData;
+
     public IUseable MyUseable { get; private set; }
     public IMoveable MyMoveable { get; private set; }
 
@@ -249,17 +251,15 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     /// Laden von Spielerdaten:
 
-    public void LoadAbilityUseable(Ability ability)
+    public void LoadAbilityData(AbilityData abilityData)
     {
-        MyUseable = ability;
-        MyMoveable = ability;
-        MyButton = GetComponent<Button>();
-        playerInventory = PlayerManager.instance.player.inventory;
-
-        MyButton.image.sprite = ability.icon; // Setze das Icon des Spells
+        myAbilityData = abilityData;
+        MyUseable = myAbilityData.myAbilityPrefab.GetComponent<Ability>(); // Noch kein Runner vorhanden
+        MyButton.image.sprite = abilityData.icon;
         MyButton.image.color = Color.white;
+        cdButton.SetActive(false); // Noch keine Abklingzeit
     }
-
+    /*
     public void LoadItemUseable(ItemInstance item)
     {
         MyUseable = item; // Stelle sicher, dass ItemInstance IUseable implementiert
@@ -270,7 +270,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         MyButton.image.sprite = item.icon; // Setze das Icon des Items
         MyButton.image.color = Color.white;
     }
-
+    */
     public void SetItemType(ItemType type)
     {
         myItemType = type;

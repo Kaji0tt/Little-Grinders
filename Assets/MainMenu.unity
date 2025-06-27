@@ -28289,19 +28289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba209d0e519e3ee459b03476f17a7f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  passive: 0
-  myAbility: {fileID: 0}
-  talentName: Voidexplosion
-  myTypes: 
-  value: 0
-  circle: {fileID: 0}
-  maxCount: 1
-  icon: {fileID: 0}
-  unlocked: 1
-  childTalent:
-  - {fileID: 727172710}
-  - {fileID: 550338120}
-  - {fileID: 841418216}
 --- !u!114 &1129854909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32016,19 +32003,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba209d0e519e3ee459b03476f17a7f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  passive: 0
-  myAbility: {fileID: 0}
-  talentName: Heilung
-  myTypes: 
-  value: 0
-  circle: {fileID: 0}
-  maxCount: 1
-  icon: {fileID: 0}
-  unlocked: 1
-  childTalent:
-  - {fileID: 1933207072}
-  - {fileID: 1108470594}
-  - {fileID: 1499897451}
 --- !u!114 &1243800722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32041,12 +32015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b7486835ddc99f4cbbf9a6449f72ed7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityName: Heilung
   description: Heilt den sofort Spieler um 10 + 10%AP.
-  cooldownTime: 15
-  activeTime: 0.5
-  isPersistent: 0
-  tickTimer: 1
   image: {fileID: 9112533196635184193, guid: 4a1d20c61ab08a14f9b2fe5c33e8bcf0, type: 3}
   regValue: 1
 --- !u!114 &1243800723
@@ -43969,6 +43938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1647432967}
   - component: {fileID: 1647432966}
+  - component: {fileID: 1647432968}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -44056,6 +44026,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1647432968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647432965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &1653067414
 GameObject:
   m_ObjectHideFlags: 0

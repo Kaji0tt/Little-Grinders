@@ -110,7 +110,15 @@ public class EnemyController : MonoBehaviour, IEntitie
         if(!mobStats.isDead)
         {
             CalculateHPCanvas();
-            myIsoRenderer.SetFacingDirection(TargetDirection());
+
+            // 👉 Statt TargetDirection verwenden wir die echte Bewegung
+            Vector3 moveDirection = myNavMeshAgent.velocity;
+
+            // Optional glätten, falls nötig
+            if (moveDirection.sqrMagnitude > 0.01f)
+            {
+                myIsoRenderer.SetFacingDirection(new Vector2(moveDirection.x, moveDirection.z));
+            }
         }
         else
             hpBar.GetComponent<CanvasGroup>().alpha = 0;
@@ -139,7 +147,7 @@ public class EnemyController : MonoBehaviour, IEntitie
         if (myNavMeshAgent == null)
             myNavMeshAgent = GetComponent<NavMeshAgent>();
 
-        Debug.Log(gameObject.name);
+        //Debug.Log(gameObject.name);
 
         // Automatische Referenzierung der UI-Elemente
         if (hpBar == null)

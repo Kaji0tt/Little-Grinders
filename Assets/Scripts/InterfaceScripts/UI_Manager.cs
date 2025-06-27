@@ -37,8 +37,6 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-
-
     #endregion
 
     public GameObject tooltip;
@@ -106,10 +104,6 @@ public class UI_Manager : MonoBehaviour
             //DeactivateIngameInterface();
             AllStartMethods();
         }
-
-
-
-
 
     }
 
@@ -415,14 +409,16 @@ public class UI_Manager : MonoBehaviour
 
         ActionButton targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == itemType);
 
+        Debug.Log(targetButton.name + " was found for Button. modDef is " + modDef.name + " and has " + itemType.ToString() + " as type.");
+
         if (targetButton != null)
         {
             // Hole die Ability-Komponente aus dem Prefab
-            Ability ability = modDef.modAbilityData.myAbilityPrefab.GetComponent<Ability>();
+            AbilityData ability = modDef.modAbilityData;
 
             if (ability != null)
             {
-                targetButton.LoadAbilityUseable(ability);
+                targetButton.LoadAbilityData(ability);
             }
             else
             {
@@ -547,6 +543,8 @@ public class UI_Manager : MonoBehaviour
     //Überprüfe, ob die UI Elemente wirklich nicht Null sind.
     void CheckForUI_Elements()
     {
+        actionButtons.Clear();
+
         InterfaceElement[] interfaceElements = FindObjectsOfType<InterfaceElement>();
 
         foreach(InterfaceElement interfaceElement in interfaceElements)
@@ -664,6 +662,12 @@ public class UI_Manager : MonoBehaviour
                     break;
 
             }
+
+            foreach (var btn in actionButtons)
+            {
+                //Debug.Log($"Button: {btn.name} | ItemType: {btn.myItemType}");
+            }
+
         }
 
     }
