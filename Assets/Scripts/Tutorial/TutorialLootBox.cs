@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 // Siehe #Lootbox - eine gesonderte Klasse für die Lootbox im Tutorial.
 public class TutorialLootBox : MonoBehaviour
 {
+    private const string Message = "Ein Item in 'firstItems' ist null. Bitte überprüfen Sie die Zuweisung.";
     SpriteRenderer sprite;
     public Sprite newSprite;
     private bool lootBoxOpened = false;
@@ -21,9 +22,12 @@ public class TutorialLootBox : MonoBehaviour
     [SerializeField]
     private GameObject tutorialUI3;
 
-    public Item firstItem;
+    public Item[] firstItems;
 
-    public List<ItemMod> mods = new List<ItemMod>();
+    // ALT: public List<ItemMod> mods = new List<ItemMod>();
+    // NEU: Eine Liste von Mod-Definitionen, die du im Inspector zuweisen kannst.
+    [Header("Mods to apply for testing")]
+    public List<ItemModDefinition> modsToApply = new List<ItemModDefinition>();
 
     [SerializeField]
     Tutorial tutorialBox;
@@ -69,19 +73,45 @@ public class TutorialLootBox : MonoBehaviour
 
             Vector3 spawnPos = new Vector3(PlayerManager.instance.player.transform.position.x + .5f, gameObject.transform.position.y, PlayerManager.instance.player.transform.position.z + .9f);
 
-            ItemInstance firstDrop = new ItemInstance(firstItem);
+            foreach (Item item in firstItems)
+            {
+                if (item == null)
+                {
+                    Debug.LogWarning(message: Message);
+                    continue; // Überspringe null Items
+                }
 
-            firstDrop.addedItemMods = mods;
+                ItemInstance firstItem = new ItemInstance(item);
+                
+                // --- NEUE LOGIK ZUM ANWENDEN VON MODS ---
+                foreach (var modDef in modsToApply)
+                {
+                    // Prüfe, ob der Item-Typ des Items in den erlaubten Typen des Mods enthalten ist.
+                    if (modDef != null && (modDef.allowedItemTypes & firstItem.itemType) != 0)
+                    {
+                        // Erstelle eine neue Mod-Instanz aus der Definition
+                        ItemMod newMod = new ItemMod { definition = modDef };
+                        
+                        // Für Testzwecke weisen wir eine feste Seltenheit zu.
+                        newMod.rollRarity = Rarity.Rare; 
+                        
+                        // Initialisiere den Mod, um den 'rolledValue' zu berechnen
+                        int mapLevel = GlobalMap.instance != null ? GlobalMap.instance.currentMap.mapLevel : 1;
+                        newMod.Initialize(mapLevel);
 
-            firstDrop.ApplyItemMods();
+                        // Füge den gültigen Mod zum Item hinzu
+                        firstItem.addedItemMods.Add(newMod);
+                    }
+                }
 
-            ItemWorld.SpawnItemWorld(spawnPos, firstDrop);
+                // Wende die hinzugefügten Mods an (aktualisiert Stats, Namen, etc.)
+                firstItem.ApplyItemMods();
 
+                ItemWorld.SpawnItemWorld(spawnPos, firstItem);
+            }
 
 
             LootBoxOpenedSprite();
-
-
         }
     }
 

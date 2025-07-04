@@ -1,279 +1,220 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-/*
- * Moini! Ich bin aktuell dabei meine AbilityTalent Klasse aufzuräumen, bzw. redundant zu machen. Dabei ist mir etwas aufgefallen:
-Mein Handyscript, bzw. die EventSystems von Unity machen quatsch bzgl. meiner PointerEvent daten. Ich habe gefühlt in jede Klasse alles reingehauen, was sich auf PointerDragEvent kram bezieht. Aber: Am schlausten scheint es mir, wenn das HandScript einzig und allein das IEndDragHandler Event verarbeitet und alle Sachen, die gezogen werden sollen sich ausschließlich mit IDragHandler zum aufnehmen des Drags beschäftigen.
-
-Kannst du das bitte so formulieren, dass das Handscript schaut, ob die Maus aktuell über einem SpielObjekt im Interface hovert, dass ein IUseable bestitzt, und wenn ja, dann soll bitte 
-*/
-public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
+public class ActionButton : MonoBehaviour
 {
-    private AbilityData myAbilityData;
-
+    // MyUseable bleibt die zentrale Referenz zur Fähigkeit.
     public IUseable MyUseable { get; private set; }
-    public IMoveable MyMoveable { get; private set; }
 
-    public ItemType myItemType { get; private set; }
+    // ALT: public ItemType myItemType { get; private set; }
+    // NEU: Mache den ItemType im Inspector zuweisbar.
+    [Tooltip("Für welchen Ausrüstungs-Slot ist dieser Button zuständig?")]
+    public ItemType myItemType;
+
+    // Referenzen zu den UI-Komponenten
     public Button MyButton { get; private set; }
-    public Sprite icon { get; private set; }
-    public Image image { get; private set; }
-
-    private string itemName;
-
-    public GameObject cdButton;
+    private Image myIcon;
+    private GameObject cdOverlay;
     private Text cdText;
-    private Inventory playerInventory;
 
-    void Start()
+    // Hält eine Referenz zum erstellten Fähigkeits-Objekt, um es später aufräumen zu können.
+    private GameObject currentAbilityObject;
+
+    [Header("Visual Feedback Settings")]
+    [SerializeField] private Color activeColor = Color.white;
+    [SerializeField] private Color cooldownColor = Color.gray;
+    [SerializeField] private float pulseSpeed = 2.5f;
+
+    void Awake()
     {
+        // Referenzen holen
         MyButton = GetComponent<Button>();
-        MyButton.image = GetComponent<Image>();
-        MyButton.onClick.AddListener(OnClick);
-        cdText = GetComponentInChildren<Text>();
         
+        // Wir suchen jetzt explizit nach dem Kind-Objekt namens "Image",
+        // um sicherzustellen, dass 'myIcon' auf die korrekte, sichtbare Komponente verweist.
+        Transform iconTransform = transform.Find("Image");
+        if (iconTransform != null)
+        {
+            myIcon = iconTransform.GetComponent<Image>();
+        }
+        else
+        {
+            Debug.LogWarning($"ActionButton '{gameObject.name}' konnte kein Kind-Objekt namens 'Image' für das Icon finden.", this);
+        }
 
+        // Annahme: Das Cooldown-Overlay ist ein Kind-Objekt namens "CD"
+        Transform overlayTransform = transform.Find("CD");
+        if (overlayTransform != null)
+        {
+            cdOverlay = overlayTransform.gameObject;
+            cdText = cdOverlay.GetComponentInChildren<Text>();
+
+            //Outline für den Cooldown-Text hinzufügen
+            if (cdText != null)
+            {
+                // Hole die Outline-Komponente oder füge eine neue hinzu, falls keine existiert.
+                Outline outline = cdText.GetComponent<Outline>() ?? cdText.gameObject.AddComponent<Outline>();
+                
+                // Konfiguriere die Outline nach deinem Wunsch.
+                outline.effectColor = Color.green;
+                outline.effectDistance = new Vector2(1.2f, -1.2f);
+            }
+        }
+
+        // Listener für den Klick hinzufügen
+        MyButton.onClick.AddListener(OnClick);
+
+        // Button initial leeren
+        Clear();
     }
 
+    /// <summary>
+    /// Wird aufgerufen, wenn der Button geklickt wird.
+    /// Die Logik ist jetzt extrem einfach.
+    /// </summary>
     public void OnClick()
     {
-
-        // Überprüfe, ob es sich um ein Item handelt
-        if (MyUseable != null && MyUseable is ItemInstance)
+        if (MyUseable != null)
         {
-            // Hole den Namen des IUseable und überprüfe die Verfügbarkeit im Inventar
-            string itemName = MyUseable.GetName();
-
-            // Finde das Item im Inventar basierend auf dem Namen
-            ItemInstance itemInInventory = FindItemInInventory(itemName);
-
-            if (itemInInventory != null)
-            {
-                int itemAmount = PlayerManager.instance.player.inventory.GetItemAmount(itemInInventory);
-
-                if (itemAmount > 0)
-                {
-                    MyUseable.Use(); // Nur verwenden, wenn noch Aufladungen vorhanden sind
-                }
-                else
-                {
-                    // Optional: Deaktiviere den Button, wenn das Item leer ist
-                    Debug.Log("Item " + itemName + " is out of stock. 2");
-                    MyButton.image.color = Color.gray; // Visuelles Feedback
-                }
-            }
-            else
-            {
-                MyButton.image.color = Color.black; // Visuelles Feedback
-                Debug.Log("Item " + itemName + " is out of stock. 1");
-            }
-
-
+            // Ruft einfach die Use-Methode der Fähigkeit auf.
+            // Die Fähigkeit selbst weiß, ob sie bereit ist oder nicht.
+            MyUseable.Use();
         }
-        else if (MyUseable != null)
-        {
-
-            MyUseable.Use(); // Nur verwenden, wenn es sich nicht um ein aktives Item handelt.
-        }
-
-        else
-        {
-            Debug.Log("No Spell on current Action Button! ");
-        }
-
     }
 
-    private ItemInstance FindItemInInventory(string itemName)
-    {
-        // Durchlaufe alle Items im Inventar und suche nach dem Item anhand des Namens
-        foreach (ItemInstance item in PlayerManager.instance.player.inventory.GetItemList())
-        {
-            if (item.ItemName == itemName)
-            {
-                return item;
-            }
-        }
-
-        // Auch Consumables durchsuchen (falls sie im Dictionary sind)
-        foreach (var kvp in PlayerManager.instance.player.inventory.GetConsumableDict())
-        {
-            string consumableItemID = kvp.Key;
-            ItemInstance consumableItem = new ItemInstance(ItemDatabase.GetItemByID(consumableItemID));
-
-            if (consumableItem.ItemName == itemName)
-            {
-                return consumableItem;
-            }
-        }
-
-        // Wenn das Item nicht gefunden wurde, gib null zurück
-        return null;
-    }
-
+    /// <summary>
+    /// Aktualisiert die visuelle Darstellung des Buttons (Cooldown, Aktiv-Status, Aufladungen).
+    /// </summary>
     void Update()
     {
-        // Überprüfe, ob es sich um ein Item handelt
-        if (MyUseable != null && MyUseable is ItemInstance)
+        if (MyUseable == null)
         {
-            // Hole den Namen des Items und prüfe die Menge im Inventar
-            string itemName = MyUseable.GetName();
-            ItemInstance itemInInventory = FindItemInInventory(itemName);
-
-            if(itemInInventory != null)
-            {
-                int itemAmount = PlayerManager.instance.player.inventory.GetItemAmount(itemInInventory);
-                if (itemAmount > 0)
-                {
-
-                    // Wenn keine Aufladungen mehr vorhanden sind, Button ausgrauen
-                    MyButton.image.color = Color.white;
-                    cdText.CrossFadeAlpha(1, 1, true);
-                    cdText.text = itemAmount.ToString();
-                    cdText.color = Color.white;
-
-                }
-                else
-                {
-                    cdText.CrossFadeAlpha(0, 1, true);
-                    MyButton.image.color = Color.gray;
-                                               //MyUseable = null; // Entferne die Verwendung
-                }
-            }
-
-            else
-            {
-                cdText.CrossFadeAlpha(0, 1, true);
-                MyButton.image.color = Color.gray; // Item ist aufgebraucht
-                                                   //MyUseable = null; // Entferne die Verwendung
-            }
-
+            return; // Nichts zu tun, wenn keine Fähigkeit zugewiesen ist.
         }
-        else if (MyUseable != null) // Cooldown- und Aktivierungslogik für Fähigkeiten
+
+        // Zustand 1: Fähigkeit ist AKTIV (z.B. Channeling, Persistent)
+        if (MyUseable.IsActive())
         {
-            // Prüfe, ob die Fähigkeit auf Cooldown ist
-            if (MyUseable.IsOnCooldown())
+            if (cdOverlay != null) cdOverlay.SetActive(true);
+            if (myIcon != null)
             {
-                cdText.CrossFadeAlpha(1, 1, true);
-                cdText.color = Color.white;
-                MyButton.image.color = Color.grey;
-                cdButton.SetActive(true);
-                cdText.text = MyUseable.CooldownTimer().ToString("F1");
+                // Pulsierender Effekt für die aktive Zeit
+                float pingPong = Mathf.PingPong(Time.time * pulseSpeed, 1.0f);
+                Color darkPulseColor = activeColor * 0.6f;
+                darkPulseColor.a = activeColor.a;
+                myIcon.color = Color.Lerp(activeColor, darkPulseColor, pingPong);
             }
+            if (cdText != null)
+            {
+                cdText.text = MyUseable.GetActiveTime().ToString("F1");
+            }
+        }
+        // Zustand 2: Fähigkeit ist nicht aktiv (Bereit, Cooldown oder hat Aufladungen)
+        else
+        {
+            int currentCharges = MyUseable.GetCurrentCharges();
+            int maxCharges = MyUseable.GetMaxCharges();
+
+            // Fall A: Die Fähigkeit hat mehrere Aufladungen
+            if (maxCharges > 1)
+            {
+                if(cdOverlay != null) cdOverlay.SetActive(true); // Overlay immer sichtbar bei Aufladungen
+                myIcon.color = (currentCharges > 0) ? Color.white : cooldownColor; // Grau nur bei 0 Aufladungen
+
+                // Text formatieren: "Charges: Cooldown"
+                string chargesText = currentCharges.ToString();
+                if (currentCharges < maxCharges)
+                {
+                    // Wenn Aufladungen regenerieren, zeige den Timer für die nächste an.
+                    chargesText += $": {MyUseable.GetCooldown():F1}";
+                }
+                cdText.text = chargesText;
+            }
+            // Fall B: Standard-Fähigkeit mit einer Aufladung (altes Verhalten)
             else
             {
-                cdText.CrossFadeAlpha(0, 1, true);
-                MyButton.image.color = Color.white;
-                cdButton.SetActive(false);
+                if (MyUseable.IsOnCooldown())
+                {
+                    if (cdOverlay != null) cdOverlay.SetActive(true);
+                    if (myIcon != null) myIcon.color = cooldownColor;
+                    if (cdText != null) cdText.text = MyUseable.GetCooldown().ToString("F1");
+                }
+                else // Bereit
+                {
+                    if (cdOverlay != null) cdOverlay.SetActive(false);
+                    if (myIcon != null) myIcon.color = Color.white;
+                }
             }
+        }
+    }
 
-            // Zeige, ob die Fähigkeit aktiv ist
-            if (MyUseable.IsActive())
+    /// <summary>
+    /// Weist diesem Button eine neue Fähigkeit basierend auf den Daten zu.
+    /// Erstellt eine Instanz der Fähigkeit aus dem Prefab.
+    /// </summary>
+    public void SetAbility(AbilityData data)
+    {
+        // Zuerst die alte Fähigkeit entfernen und aufräumen.
+        Clear();
+
+        if (data == null || data.abilityPrefab == null)
+        {
+            return; // Nichts zu tun, wenn keine gültigen Daten vorhanden sind.
+        }
+
+        // Erstelle eine neue Instanz der Fähigkeit aus dem Prefab.
+        currentAbilityObject = Instantiate(data.abilityPrefab, transform);
+        
+        // Holen Sie sich die Ability-Komponente von der neuen Instanz.
+        Ability abilityComponent = currentAbilityObject.GetComponent<Ability>();
+
+        if (abilityComponent != null)
+        {
+            // --- DAS IST DER ENTSCHEIDENDE FIX ---
+            // Initialisiere die neue Fähigkeit mit den übergebenen Daten.
+            abilityComponent.Initialize(data);
+
+            // Weise die initialisierte Fähigkeit als benutzbares Objekt zu.
+            MyUseable = abilityComponent;
+
+            // Aktualisiere das Icon auf dem Button.
+            if (myIcon != null)
             {
-                MyButton.image.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+                myIcon.sprite = data.icon;
+                myIcon.enabled = true;
+                myIcon.color = Color.white;
             }
         }
         else
         {
-            // Wenn MyUseable null ist (kein Item oder keine Fähigkeit)
-            cdText.CrossFadeAlpha(0, 1, true);
+            Debug.LogError($"Das Prefab '{data.abilityPrefab.name}' in AbilityData '{data.name}' hat keine 'Ability'-Komponente!");
+            Destroy(currentAbilityObject); // Zerstöre das nutzlose Objekt.
         }
     }
 
-    public void UpdateVisual()
+    /// <summary>
+    /// Setzt den Button zurück und entfernt die Fähigkeit.
+    /// </summary>
+    public void Clear()
     {
-        if (HandScript.instance.MyMoveable != null)
+        // Zerstöre das alte Fähigkeits-GameObject, falls vorhanden.
+        if (currentAbilityObject != null)
         {
-            MyButton.image.sprite = HandScript.instance.MyMoveable.icon;
-            MyButton.image.color = Color.white;
+            Destroy(currentAbilityObject);
         }
-    }
 
-    public void SetUseable(IUseable useable)
-    {
-        this.MyUseable = useable;
-        //cdButton.SetActive(true);
-        //cdButton.GetComponent<Text>().text = useable.GetName();
-        playerInventory = PlayerManager.instance.player.inventory;
-        UpdateVisual();
+        MyUseable = null;
+        currentAbilityObject = null;
 
-
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // cdButton beim Laden der Szene neu setzen
-        if (cdButton == null && transform.childCount > 1)
+        if (myIcon != null)
         {
-            cdButton = transform.GetChild(1).gameObject;
+            myIcon.sprite = null;
+            myIcon.enabled = false;
         }
-    }
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        /*
-        if (HandScript.instance.MyMoveable != null && HandScript.instance.MyMoveable is IUseable)
+        if (cdOverlay != null)
         {
-            SetUseable(HandScript.instance.MyMoveable as IUseable);
-            MyMoveable = HandScript.instance.Put();
-        }
-        */
-    }
-    
-
-    public void OnPointerExit(PointerEventData eventData) { }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (MyMoveable != null)
-        {
-            HandScript.instance.TakeMoveable(MyMoveable);
+            cdOverlay.SetActive(false);
         }
     }
-    
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        Debug.Log("ActionButton OnEndDrag triggered.");
-        if (HandScript.instance.MyMoveable != null)
-        {
-            SetUseable(HandScript.instance.MyUseable);
-
-            HandScript.instance.Put();
-
-            icon = MyMoveable.icon;
-        }
-    }
-
-    /// Laden von Spielerdaten:
-
-    public void LoadAbilityData(AbilityData abilityData)
-    {
-        myAbilityData = abilityData;
-        MyUseable = myAbilityData.myAbilityPrefab.GetComponent<Ability>(); // Noch kein Runner vorhanden
-        MyButton.image.sprite = abilityData.icon;
-        MyButton.image.color = Color.white;
-        cdButton.SetActive(false); // Noch keine Abklingzeit
-    }
-    /*
-    public void LoadItemUseable(ItemInstance item)
-    {
-        MyUseable = item; // Stelle sicher, dass ItemInstance IUseable implementiert
-        MyMoveable = item; // Stelle sicher, dass ItemInstance IMoveable implementiert
-        MyButton = GetComponent<Button>();
-        playerInventory = PlayerManager.instance.player.inventory;
-
-        MyButton.image.sprite = item.icon; // Setze das Icon des Items
-        MyButton.image.color = Color.white;
-    }
-    */
-    public void SetItemType(ItemType type)
-    {
-        myItemType = type;
-    }
-
 }

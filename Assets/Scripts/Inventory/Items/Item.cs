@@ -88,7 +88,7 @@ public class Item : ScriptableObject
 
 //Erstelle eine ItemInstance, welche Serialized werden kann und aus dem ScriptableObject mit den oben genannten Variabeln ausgelesen wird.
 [Serializable]
-public class ItemInstance :  IMoveable, IUseable
+public class ItemInstance :  IMoveable
 {
 
     public string ItemID;

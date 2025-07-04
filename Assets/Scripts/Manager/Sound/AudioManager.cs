@@ -4,20 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Linq;
 
 public class AudioManager : MonoBehaviour
 {
-    //Definieren, welche Sounds es gibt, für mehr Übersicht im Inspektor.
-    public List<Sound> interfaceSounds, musicSounds, atmosphereSounds, effectSounds;
-
-    //Das Array Sounds, welches alle vorhergehenden Listen ordnet.
-
-    public List<Sound> sounds;
-
-    //Für den Signleton
+    private Dictionary<string, List<Sound>> soundGroups = new Dictionary<string, List<Sound>>();
     public static AudioManager instance;
 
-    //Slider Initialisieren, welche über Unity und Ingame für die Optionen dienen.
     public Slider interfaceSlider, musicSlider, atmosphereSlider, effectSlider;
 
     private bool atmoPlaying = false;
@@ -40,9 +33,8 @@ public class AudioManager : MonoBehaviour
         //Der AudioManager muss Szeneübergreifen bestehen bleiben.
         DontDestroyOnLoad(gameObject);
 
-        //Erstelle einen Array aus Sound-Listen, um diese in der finalen "Sounds" Liste zu speichern.
-        List<Sound>[] allSounds = new List<Sound>[] { interfaceSounds, musicSounds, atmosphereSounds, effectSounds };
-        PopulateSounds(allSounds);
+        // --- NEUE AUTOMATISCHE LADE-LOGIK ---
+        LoadAndGroupSounds();
 
         //Falls eine neue Szene geladen wird:
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -50,40 +42,89 @@ public class AudioManager : MonoBehaviour
 
         //Setze die neuen Slider
         AwakeSetSliders();
+    }
 
+    /// <summary>
+    /// Lädt alle Sounds aus den kategoriespezifischen Unterordnern und gruppiert sie.
+    /// </summary>
+    private void LoadAndGroupSounds()
+    {
+        // Lade Sounds für jede Kategorie aus dem entsprechenden Unterordner.
+        LoadSoundsFromFolder("Sounds/Music", SoundType.Music);
+        LoadSoundsFromFolder("Sounds/Effects", SoundType.Effect);
+        LoadSoundsFromFolder("Sounds/Interface", SoundType.Interface);
+        LoadSoundsFromFolder("Sounds/Atmosphere", SoundType.Atmosphere);
 
+        Debug.Log($"AudioManager: {soundGroups.Values.Sum(list => list.Count)} Sounds geladen und in {soundGroups.Count} Gruppen sortiert.");
+    }
 
-        //Übertrage alle Einstellungen wie Clip, Loop und Volume auf die entsprechend hinterlegten Sounds.
-        foreach (Sound s in sounds)
+    /// <summary>
+    /// Eine Hilfsmethode, die alle Clips aus einem bestimmten Ordner lädt und verarbeitet.
+    /// </summary>
+    private void LoadSoundsFromFolder(string folderPath, SoundType type)
+    {
+        AudioClip[] clips = Resources.LoadAll<AudioClip>(folderPath);
+        foreach (var clip in clips)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;
-            
-            s.source.loop = s.loop;
+            string groupKey = GetSoundGroupKey(clip.name);
 
-            if (s.soundType == SoundType.Music)
+            Sound newSound = new Sound
             {
-                s.source.volume = PlayerPrefs.GetFloat("musicVol");
-                musicSounds.Add(s);               
-            }
+                name = clip.name,
+                clip = clip,
+                soundType = type, // Weise den korrekten Typ zu!
+                source = gameObject.AddComponent<AudioSource>()
+            };
+            newSound.source.clip = newSound.clip;
+            newSound.source.playOnAwake = false;
 
-            if (s.soundType == SoundType.Atmosphere)
+            if (!soundGroups.ContainsKey(groupKey))
             {
-                s.source.volume = PlayerPrefs.GetFloat("atmosphereVol");
-                atmosphereSounds.Add(s);
+                soundGroups[groupKey] = new List<Sound>();
             }
+            soundGroups[groupKey].Add(newSound);
+        }
+    }
 
-            if (s.soundType == SoundType.Interface)
-            {
-                s.source.volume = PlayerPrefs.GetFloat("interfaceVol");
-                interfaceSounds.Add(s);
-            }
+    /// <summary>
+    /// Ermittelt den Gruppenschlüssel aus einem Clip-Namen (z.B. "Wurf" aus "Wurf_1").
+    /// </summary>
+    private string GetSoundGroupKey(string clipName)
+    {
+        int lastUnderscore = clipName.LastIndexOf('_');
+        if (lastUnderscore != -1 && char.IsDigit(clipName.Last()))
+        {
+            // Wenn ein Unterstrich da ist und das letzte Zeichen eine Ziffer ist,
+            // nimm den Teil vor dem Unterstrich.
+            return clipName.Substring(0, lastUnderscore);
+        }
+        // Ansonsten ist der ganze Name der Schlüssel (z.B. für "MainMusic").
+        return clipName;
+    }
 
-            if (s.soundType == SoundType.Effect)
+    /// <summary>
+    /// Spielt einen zufälligen Sound aus der angegebenen Gruppe ab.
+    /// </summary>
+    public void PlaySound(string groupKey)
+    {
+        if (soundGroups.TryGetValue(groupKey, out List<Sound> group))
+        {
+            if (group.Count > 0)
             {
-                s.source.volume = PlayerPrefs.GetFloat("effectVol");
-                effectSounds.Add(s);
+                // Wähle einen zufälligen Sound aus der Gruppe aus.
+                Sound soundToPlay = group[UnityEngine.Random.Range(0, group.Count)];
+                
+                // Die Lautstärke wird jetzt durch die Slider-Methoden gesetzt.
+                soundToPlay.source.Play();
             }
+            else
+            {
+                Debug.LogWarning($"Sound-Gruppe '{groupKey}' ist leer.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Sound-Gruppe '{groupKey}' nicht gefunden.");
         }
     }
 
@@ -126,11 +167,6 @@ public class AudioManager : MonoBehaviour
     private void AwakeSetSliders()
     {
         
-        musicSounds = new List<Sound>();
-        interfaceSounds = new List<Sound>();
-        effectSounds = new List<Sound>();
-        atmosphereSounds = new List<Sound>();
-        
         if (musicSlider != null)
             musicSlider.value = PlayerPrefs.GetFloat("musicVol");
 
@@ -144,46 +180,13 @@ public class AudioManager : MonoBehaviour
             atmosphereSlider.value = PlayerPrefs.GetFloat("atmosphereVol");
     }
 
-    void PopulateSounds(List<Sound>[] soundList)
-    {
-        for (int i = 0; i < soundList.Length; i++)
-        {
-            //print(i + " count: " + soundList[i].Count);
-            foreach (Sound sound in soundList[i])
-            {
-                //print("Sound: " + sound.name + " added to sounds List");
-
-                sounds.Add(sound);
-
-
-                if (i == 0)
-                    sound.soundType = SoundType.Interface;
-                if (i == 1)
-                    sound.soundType = SoundType.Music;
-                if (i == 2)
-                    sound.soundType = SoundType.Atmosphere;
-                if (i == 3)
-                    sound.soundType = SoundType.Effect;
-
-            }
-        }
-    }
-
-    void Start()
-    {
-        Play("MainMusic");
-
-        // ⬇️ Event abonnieren
-        GameEvents.Instance.OnEnemyWasAttacked += PlayEnemyHitSound;
-    }
-
     private void Update()
     {
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
             if (!atmoPlaying)
             {
-                Play("ForestNight");
+                PlaySound("ForestNight");
                 atmoPlaying = true;
             }
         }
@@ -207,7 +210,7 @@ public class AudioManager : MonoBehaviour
             if(rnd == 1)
             {
                 //Hier sollte nachher auf ein Array verwiesen werden, mit unterschiedlichen Tracks von Mirco
-                Play("MainMusic");
+                PlaySound("MainMusic");
                 musicPlaying = true;
             }
             else
@@ -219,91 +222,65 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void Play(string name)
+    #region Sound Options - ANGEPASST
+    public void SetMusicVolume(float newValue)
     {
-        Sound s = sounds.Find(sound => sound.name == name);
-        if (s == null)
-        {
-            Debug.Log("Couldn't find Sound of Name: " + s.name);
-            return;
-        }
-
-        s.source.Play();
-
-
-        //Hier könnte die Ref zu einem Slider aus dem Options-Menü bzgl. SoundType sein
-        //s.volume = options.interface.value;
-
-    }
-
-
-    
-    #region Sound Options
-    public void SetMusicVolume(float newValue) //Set of Values should be configured in UI_Manager.cs, setting of source.volume should be conf
-    {
-        musicSlider.value = newValue;
-
+        SetVolumeForType(SoundType.Music, newValue);
+        if (musicSlider != null) musicSlider.value = newValue;
         PlayerPrefs.SetFloat("musicVol", newValue);
-
-        
-        if(musicSounds.Count != 0)
-        foreach(Sound s in musicSounds)
-        {
-            s.source.volume = musicSlider.value;
-        }        
     }
     
-    internal void SetInterfaceVolume(float newValue)
+    public void SetInterfaceVolume(float newValue)
     {
-        interfaceSlider.value = newValue;
-
+        SetVolumeForType(SoundType.Interface, newValue);
+        if (interfaceSlider != null) interfaceSlider.value = newValue;
         PlayerPrefs.SetFloat("interfaceVol", newValue);
-
-
-        if (interfaceSounds.Count != 0)
-            foreach (Sound s in interfaceSounds)
-            {
-                s.source.volume = interfaceSlider.value;
-            }
     }
 
-    internal void SetAtmosphereVolume(float newValue)
+    public void SetAtmosphereVolume(float newValue)
     {
-        atmosphereSlider.value = newValue;
-
+        SetVolumeForType(SoundType.Atmosphere, newValue);
+        if (atmosphereSlider != null) atmosphereSlider.value = newValue;
         PlayerPrefs.SetFloat("atmosphereVol", newValue);
-
-
-        if (atmosphereSounds.Count != 0)
-            foreach (Sound s in atmosphereSounds)
-            {
-                s.source.volume = atmosphereSlider.value;
-            }
     }
-    internal void SetEffectVolume(float newValue)
+
+    public void SetEffectVolume(float newValue)
     {
-        effectSlider.value = newValue;
-
+        SetVolumeForType(SoundType.Effect, newValue);
+        if (effectSlider != null) effectSlider.value = newValue;
         PlayerPrefs.SetFloat("effectVol", newValue);
-
-
-        if (effectSounds.Count != 0)
-            foreach (Sound s in effectSounds)
-            {
-                s.source.volume = effectSlider.value;
-            }
     }
 
+    /// <summary>
+    /// Eine zentrale Methode, um die Lautstärke für eine ganze Kategorie zu setzen.
+    /// </summary>
+    private void SetVolumeForType(SoundType type, float volume)
+    {
+        // Gehe durch alle Sound-Gruppen...
+        foreach (var group in soundGroups.Values)
+        {
+            // ...und durch alle Sounds in jeder Gruppe.
+            foreach (var sound in group)
+            {
+                // Wenn der Sound zur richtigen Kategorie gehört, setze die Lautstärke.
+                if (sound.soundType == type)
+                {
+                    sound.source.volume = volume;
+                }
+            }
+        }
+    }
     #endregion
 
 
     private void PlayEnemyHitSound(float damage, Transform transform, bool crit)
     {
-        string[] hitSounds = { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
+        // Der alte Code:
+        // string[] hitSounds = { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
+        // string chosenSound = hitSounds[UnityEngine.Random.Range(0, hitSounds.Length)];
+        // PlaySound(chosenSound);
 
-        string chosenSound = hitSounds[UnityEngine.Random.Range(0, hitSounds.Length)];
-
-        Play(chosenSound);
+        // Der neue, einfache Aufruf:
+        PlaySound("Mob_ZombieHit");
     }
-
 }

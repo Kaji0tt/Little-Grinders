@@ -203,8 +203,8 @@ public class PlayerStats : MonoBehaviour, IEntitie
             Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
             tutorialScript.ShowTutorial(6);
             */
-            if(AudioManager.instance != null)
-            AudioManager.instance.Play("Level-UP");
+            //if(AudioManager.instance != null)
+            //AudioManager.instance.Play("Level-UP");
 
         }
         #endregion
@@ -227,7 +227,14 @@ public class PlayerStats : MonoBehaviour, IEntitie
 
     public void Start()
     {
-        Gain_xp(1);
+        // Setzt den Spieler in einen sauberen Startzustand.
+        // Level 1, 0 XP, volle Lebenspunkte.
+        this.level = 1;
+        this.xp = 0;
+        Set_maxHp();
+        Load_currentHp(Get_maxHp());
+
+        // Die Regeneration kann wie gewohnt starten.
         StartCoroutine(Regenerate());
     }
 
@@ -278,7 +285,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
 
     public Transform GetTransform()
     {
-        return transform;
+        return this.transform;
     }
 
     public void TakeDamage(float damage, int range)
@@ -321,18 +328,24 @@ public class PlayerStats : MonoBehaviour, IEntitie
         else Set_currentHp(healAmount);
     }
 
+    /// <summary>
+    /// Berechnet die benötigten XP für den Aufstieg zum NÄCHSTEN Level.
+    /// </summary>
     public int LevelUp_need()
     {
-        float max_xp;
-        max_xp = (Mathf.Log(1 + Mathf.Pow(level, 3)) * 300) / 2.5f; // log(​1 +​x ^​3) *​300 /​2.5
+        // Wir berechnen die XP-Anforderung immer für das aktuelle Level.
+        // Ein Spieler auf Level 1 muss die XP für Level 1 sammeln, um Level 2 zu werden.
+        float max_xp = (Mathf.Log(1 + Mathf.Pow(level, 3)) * 300) / 2.5f;
         int xp_needed = Mathf.CeilToInt(max_xp);
-        return xp_needed;
+        
+        // Ein Level-Up sollte niemals 0 XP kosten. Wir geben einen Mindestwert zurück.
+        return Mathf.Max(1, xp_needed);
     }
 
     public virtual void Die()
     {
         //Debug.Log(transform.name + "ist gestorben.");
-        AudioManager.instance.Play("Dead2");
+        AudioManager.instance.PlaySound("Dead2");
         SceneManager.LoadScene(0);
         Time.timeScale = 1f;
     }

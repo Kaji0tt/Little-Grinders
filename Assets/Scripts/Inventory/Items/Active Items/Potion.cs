@@ -41,7 +41,7 @@ public class Potion : ScriptableObject
 }
 
 [CreateAssetMenu(fileName = "MinorHealPotion", menuName = "Active/Potions/MinorHealPotion")]
-public class MinorHealPotion : Potion, IUseable
+public class MinorHealPotion : Potion
 {
 
     new public int hp = 20;

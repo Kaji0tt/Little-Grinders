@@ -20,6 +20,13 @@ public class Voidwither : Ability
         // Event abonnieren
         GameEvents.Instance.OnEnemyWasAttacked += ApplyVoidwitherEffect;
 
+        // Spiele Start-Effekt ab
+        if (VFX_Manager.instance == null)
+        {
+            Debug.LogWarning("VFX_Manager ist nicht initialisiert. Kein Effekt wird abgespielt.");
+            return;
+        }   
+        VFX_Manager.instance?.PlayEffect("CFX_VoidwitherStart", playerStats);
         // Debug.Log("Voidwither aktiviert.");
     }
 
@@ -49,6 +56,14 @@ public class Voidwither : Ability
         target.TakeDirectDamage(bonusDamage, playerStats.Range);
 
         // Optional: FX anzeigen
+        if (VFX_Manager.instance != null)
+        {
+            VFX_Manager.instance.PlayEffect("CFX_SwordHitVoid", enemyTransform.GetComponent<EnemyController>());
+        }
+        if(AudioManager.instance != null)
+        {
+            AudioManager.instance.PlaySound("Wurf_05");
+        }
         // Debug.Log($"Voidwither verursacht {bonusDamage} magischen Zusatzschaden an {enemyTransform.name}");
     }
 }
