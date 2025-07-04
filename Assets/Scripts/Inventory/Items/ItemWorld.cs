@@ -80,7 +80,7 @@ public class ItemWorld : MonoBehaviour
                 lightSource.color = new Color(0, 1, 0, 0.5f);
                 lightSource.range = 1f;
                 lightSource.intensity = 0.01f;
-                AudioManager.instance.Play("Drop_Uncommon");
+                AudioManager.instance.PlaySound("Drop_Uncommon");
                 break;
 
             case Rarity.Rare:
@@ -90,7 +90,7 @@ public class ItemWorld : MonoBehaviour
                 lightSource.color = Color.blue;
                 lightSource.range = 1f;
                 lightSource.intensity = 0.1f;
-                AudioManager.instance.Play("Drop_Rare");
+                AudioManager.instance.PlaySound("Drop_Rare");
                 break;
 
             case Rarity.Epic:
@@ -100,7 +100,7 @@ public class ItemWorld : MonoBehaviour
                 lightSource.color = Color.magenta;
                 lightSource.range = 1f;
                 lightSource.intensity = 0.5f;
-                AudioManager.instance.Play("Drop_Epic");
+                AudioManager.instance.PlaySound("Drop_Epic");
                 break;
 
             case Rarity.Legendary:
@@ -110,7 +110,7 @@ public class ItemWorld : MonoBehaviour
                 lightSource.color = rarityColor;
                 lightSource.range = 1f;
                 lightSource.intensity = 1f;
-                AudioManager.instance.Play("Drop_Legendary");
+                AudioManager.instance.PlaySound("Drop_Legendary");
                 break;
         }
 

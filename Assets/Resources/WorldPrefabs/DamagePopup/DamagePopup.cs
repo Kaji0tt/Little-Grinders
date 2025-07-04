@@ -33,7 +33,7 @@ public class DamagePopup : MonoBehaviour
     {
         if (damageText != null)
         {
-            Debug.Log("No Crit!");
+            //Debug.Log("No Crit!");
             damageText.text = damage.ToString("0");
             damageText.color = Color.white;
         }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This is a bad name convention and kind of an heritage of old system. "Regenerate Base" would be the correct name, as it is first regeneration point unlocked for the player.#
 public class Heal : Ability
 {
     public float regValue = 1f;  // Menge an HP pro Tick
@@ -27,7 +28,7 @@ public class Heal : Ability
 
             isApplied = true;
 
-            Debug.Log("Reg Value is applied");
+            //Debug.Log("Reg Value is applied");
         }
         Debug.Log("Regvalue should have been applied.");
     }

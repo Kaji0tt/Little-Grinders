@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0008a759365df48b189b7596caabd7, type: 3}
   m_Name: 2_Regeneration
   m_EditorClassIdentifier: 
-  modName: Perc_Regeneration
+  modName: Prozentuale Regeneration
   description: Adds percentage amount of given stat to the Character.
   targetStat: 6
   baseValue: 0.02
@@ -33,5 +33,6 @@ MonoBehaviour:
   - rarity: 4
     multiplier: 30
     displayName: ', der Quelle V'
+  modAbilityData: {fileID: 0}
   allowedItemTypes: 22
   scalingPerLevel: 0.1

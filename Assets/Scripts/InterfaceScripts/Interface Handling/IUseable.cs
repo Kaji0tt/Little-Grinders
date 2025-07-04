@@ -11,7 +11,10 @@ public interface IUseable
 
     float GetCooldown();
 
-    float CooldownTimer();
-
     bool IsActive();
+
+    float GetActiveTime();
+
+    int GetCurrentCharges();
+    int GetMaxCharges();
 }

@@ -14,11 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Voidwither
   description: Hits deal an aditional amount of AP as damage.
-  cooldownTime: 0
-  activeTime: 0
-  tickInterval: 0
-  tickTimer: 0
-  isPersistent: 1
   icon: {fileID: 21300000, guid: 5703e47a859f4fe4db66c3fe17bae277, type: 3}
-  myAbilityPrefab: {fileID: 7862544568155297354, guid: 7f92051c21dd4b84db3c1e19b545bdd1,
+  properties: 32
+  abilityPrefab: {fileID: 7862544568155297354, guid: 7f92051c21dd4b84db3c1e19b545bdd1,
     type: 3}
+  range: 0
+  areaOfEffectRadius: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0
+  channelTime: 0
+  activeTime: 6
+  tickTimer: 1
+  cooldownTime: 15
+  maxCharges: 1

@@ -1,238 +1,188 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-
-public abstract class Ability : MonoBehaviour, IMoveable, IUseable, IDragHandler, IEndDragHandler
+public abstract class Ability : MonoBehaviour, IUseable
 {
-    private string abilityName;
-
+    #region Ability Data
+    // --- DATEN, DIE VON ABILITYDATA GELADEN WERDEN ---
+    protected SpellProperty properties;
+    protected string abilityName;
     public string description;
+    protected Sprite icon;
+    protected float cooldownTime;
+    protected float activeTime;
+    protected float tickTimer;
+    protected float range;
+    protected float areaOfEffectRadius;
+    protected GameObject projectilePrefab;
+    protected float projectileSpeed;
+    protected float channelTime;
+    protected int maxCharges;
+    #endregion
 
-    private float cooldownTime;
-    private float _cooldown;
+    #region State Machine
+    // --- ZUSTANDS-MASCHINE ---
+    public enum AbilityState { Ready, Active, Channeling, Cooldown }
+    protected AbilityState state = AbilityState.Ready;
 
-    private float activeTime;
-    private float _activeTime;
+    // --- LAUFZEIT-TIMER UND ZÄHLER ---
+    private int currentCharges;
+    private float chargeCooldownTimer; // Timer für die nächste Aufladung
+    private float activeTimer;         // Timer für die Dauer von 'Persistent'
+    private float channelTimer;        // Timer für die Dauer von 'Channeling'
+    private float tickCooldownTimer;   // Timer für den nächsten Tick
+    #endregion
 
-    private bool isPersistent; // Falls true, bleibt die F�higkeit aktiv
-
-    private float tickTimer;
-
-
-    private float _tickTimer;
-
-    public Sprite image;
-    public Sprite icon => image;
-
-
-    #region Abilitiy Stuff
-
-
-    //Ggf. sollten States in einer anderen Klasse / einem Manager reguliert werden?
-    [HideInInspector]
-    public enum AbilityState { ready, active, cooldown };
-    AbilityState state = AbilityState.ready;
-
-    public void Initialize(AbilityData abilityData, PlayerStats playerStats)
+    /// <summary>
+    /// Initialisiert die Fähigkeit mit allen Werten aus dem AbilityData-Asset.
+    /// </summary>
+    public void Initialize(AbilityData data)
     {
-        ///Initialize all Variables provided by Scriptable Object;
-        abilityName = abilityData.abilityName;
-        description = abilityData.description;
-        cooldownTime = abilityData.cooldownTime;
-        _cooldown = cooldownTime;
-        isPersistent = abilityData.isPersistent;
-        tickTimer = abilityData.tickTimer;
-        _tickTimer = tickTimer;
-        image = abilityData.icon;
+        if (data == null) return;
 
+        // Lade alle Daten aus dem ScriptableObject
+        this.properties = data.properties;
+        this.abilityName = data.abilityName;
+        this.description = data.description;
+        this.icon = data.icon;
+        this.cooldownTime = data.cooldownTime;
+        this.activeTime = data.activeTime;
+        this.tickTimer = data.tickTimer;
+        this.range = data.range;
+        this.areaOfEffectRadius = data.areaOfEffectRadius;
+        this.projectilePrefab = data.projectilePrefab;
+        this.projectileSpeed = data.projectileSpeed;
+        this.channelTime = data.channelTime;
+        this.maxCharges = data.maxCharges;
+
+        // Initialisiere das Aufladungssystem
+        this.currentCharges = this.maxCharges;
+        this.chargeCooldownTimer = 0;
     }
 
-
-    void Start()
+    /// <summary>
+    /// Die zentrale Update-Logik, die alle Timer und Zustände verwaltet.
+    /// </summary>
+    protected virtual void Update()
     {
-        _activeTime = activeTime;
-        _cooldown = cooldownTime;
+        HandleChargeCooldown();
+        HandleChanneling();
+        HandleActiveDuration();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-        if (state == AbilityState.active)
-        {
-            if (isPersistent)
-            {
-                // Permanente F�higkeiten ignorieren activeTime und ticken einfach weiter
-                tickTimer -= Time.deltaTime;
-
-                if (tickTimer <= 0)
-                {
-                    CallAbilityFunctions("tick", PlayerManager.instance.player.GetComponent<PlayerStats>());
-                    tickTimer = _tickTimer;
-                }
-            }
-            else
-            {
-                if (_activeTime > 0)
-                {
-                    _activeTime -= Time.deltaTime;
-                    tickTimer -= Time.deltaTime;
-
-                    if (tickTimer <= 0)
-                    {
-                        CallAbilityFunctions("tick", PlayerManager.instance.player.GetComponent<PlayerStats>());
-                        tickTimer = _tickTimer;
-                    }
-                }
-                else
-                {
-                    OnCooldown(PlayerManager.instance.player.GetComponent<PlayerStats>());
-                    CallAbilityFunctions("cooldown", PlayerManager.instance.player.GetComponent<PlayerStats>());
-                    state = AbilityState.cooldown;
-                    _activeTime = activeTime;
-                }
-            }
-        }
-
-        //During Cooldown State, reduce the Cooldown Time
-        if (state == AbilityState.cooldown)
-        {
-            //print("ability is on cooldown" + cooldownTime);
-            if (cooldownTime > 0)
-            {
-                cooldownTime -= Time.deltaTime;
-
-                //image.color = Color.grey;
-            }
-
-            else
-            {
-                state = AbilityState.ready;
-
-                cooldownTime = _cooldown;
-
-                //image.color = Color.white;
-            }
-
-        }
-
-
-
-    }
-
-
+    /// <summary>
+    /// Wird aufgerufen, wenn der Spieler die Fähigkeit benutzen will.
+    /// </summary>
     public void Use()
     {
-        if (state == AbilityState.ready)
+        if (state != AbilityState.Ready) return; // Kann nur im Ready-State benutzt werden
+        if (currentCharges <= 0) return;         // Benötigt mindestens eine Aufladung
+
+        currentCharges--;
+        if (chargeCooldownTimer <= 0) // Starte den Cooldown, wenn er nicht schon läuft
         {
-
-            state = AbilityState.active;
-
-
-            UseBase(PlayerManager.instance.player.GetComponent<PlayerStats>());
+            chargeCooldownTimer = cooldownTime;
         }
 
+        // Entscheide basierend auf den Properties, was als Nächstes passiert
+        if (properties.HasFlag(SpellProperty.Channeling))
+        {
+            state = AbilityState.Channeling;
+            channelTimer = channelTime;
+            tickCooldownTimer = 0; // Erster Tick sofort
+        }
+        else if (properties.HasFlag(SpellProperty.Persistent))
+        {
+            state = AbilityState.Active;
+            activeTimer = activeTime;
+            tickCooldownTimer = 0; // Erster Tick sofort
+            UseBase(PlayerManager.instance.playerStats); // Effekt sofort auslösen
+        }
+        else // Für Instant-Fähigkeiten wie Enigma
+        {
+            UseBase(PlayerManager.instance.playerStats);
+            // Instant-Fähigkeiten gehen nicht in den Active-State, sie sind sofort fertig.
+        }
+    }
+
+    #region Timer Handling
+    private void HandleChargeCooldown()
+    {
+        if (currentCharges < maxCharges)
+        {
+            chargeCooldownTimer -= Time.deltaTime;
+            if (chargeCooldownTimer <= 0)
+            {
+                currentCharges++;
+                // Wenn wir immer noch nicht voll sind, starte den Cooldown für die nächste Aufladung
+                if (currentCharges < maxCharges)
+                {
+                    chargeCooldownTimer = cooldownTime;
+                }
+            }
+        }
+    }
+
+    private void HandleChanneling()
+    {
+        if (state != AbilityState.Channeling) return;
+
+        channelTimer -= Time.deltaTime;
+        tickCooldownTimer -= Time.deltaTime;
+
+        if (tickCooldownTimer <= 0)
+        {
+            OnTick(PlayerManager.instance.playerStats);
+            tickCooldownTimer = tickTimer;
+        }
+
+        if (channelTimer <= 0)
+        {
+            // Channeling beendet, löse den finalen Effekt aus
+            UseBase(PlayerManager.instance.playerStats);
+            state = AbilityState.Ready;
+        }
+    }
+
+    private void HandleActiveDuration()
+    {
+        if (state != AbilityState.Active) return;
+
+        activeTimer -= Time.deltaTime;
+        tickCooldownTimer -= Time.deltaTime;
+
+        if (tickCooldownTimer <= 0)
+        {
+            OnTick(PlayerManager.instance.playerStats);
+            tickCooldownTimer = tickTimer;
+        }
+
+        if (activeTimer <= 0)
+        {
+            OnCooldown(PlayerManager.instance.playerStats); // Signalisiert das Ende des Effekts
+            state = AbilityState.Ready;
+        }
     }
     #endregion
 
-
-    public void SetState(AbilityState newState)
-    {
-        state = newState;
-    }
-
-
-    public virtual void CallAbilityFunctions(string action, IEntitie entitie)
-    {
-        if (action == "use")
-            UseBase(entitie);
-
-        if (action == "tick")
-            OnTick(entitie);
-
-        if (action == "cooldown")
-            OnCooldown(entitie);      
-    }
-
+    #region Abstract & Interface Methods
+    // --- ABSTRAKTE METHODEN (BLEIBEN GLEICH) ---
+    // Wird bei Instant/Channeling-Ende/Persistent-Start ausgelöst
     public abstract void UseBase(IEntitie entitie);
-
-
+    // Wird bei jedem Tick von Persistent/Channeling ausgelöst
     public abstract void OnTick(IEntitie entitie);
-
-
+    // Wird am Ende von Persistent ausgelöst
     public abstract void OnCooldown(IEntitie entitie);
 
-
-
-
-
-    public string GetName()
-    {
-        return abilityName;
-    }
-
-    public bool IsOnCooldown()
-    {
-        if (state == AbilityState.cooldown)
-            return true;
-        else
-            return false;
-    }
-
-    public float GetCooldown()
-    {
-        return cooldownTime;
-    }
-
-    public float CooldownTimer()
-    {
-        return cooldownTime;
-    }
-
-    public bool IsActive()
-    {
-        if (state == AbilityState.active)
-            return true;
-        else
-            return false;
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-            HandScript.instance.TakeMoveable(this);
-    }
-
-
-    // Diese Methode wird ausgef�hrt, wenn das Ziehen des Objekts endet
-    public void OnEndDrag(PointerEventData eventData)
-    {
-
-        // Liste f�r die Raycast-Ergebnisse
-        List<RaycastResult> results = new List<RaycastResult>();
-
-        // Raycast durchf�hren und Ergebnisse sammeln
-        EventSystem.current.RaycastAll(eventData, results);
-
-        // Ergebnisse �berpr�fen
-        foreach (RaycastResult result in results)
-        {
-            ActionButton actionButton = result.gameObject.GetComponent<ActionButton>();
-            if (actionButton != null)
-            {
-                // SetUseable aufrufen, wenn ActionButton gefunden wird
-                actionButton.SetUseable(this);
-                Debug.Log("Item dropped onto ActionButton, SetUseable called.");
-                return;
-            }
-        }
-
-
-    }
-
+    // --- INTERFACE-METHODEN (ANGEPASST) ---
+    public bool IsOnCooldown() => currentCharges == 0 && chargeCooldownTimer > 0;
+    public float GetCooldown() => chargeCooldownTimer;
+    public bool IsActive() => state == AbilityState.Active || state == AbilityState.Channeling;
+    public float GetActiveTime() => (state == AbilityState.Active) ? activeTimer : channelTimer;
+    public int GetCurrentCharges() => currentCharges;
+    public int GetMaxCharges() => maxCharges;
+    public string GetName() => abilityName;
+    #endregion
 }
 
 

@@ -18,7 +18,7 @@ public class ItemModDefinition : ScriptableObject
     [Tooltip("Wenn der Mod eine Fähigkeit sein soll, verweise hier auf die entsprechende Ability")]
     public AbilityData modAbilityData;
 
-    [Tooltip("Auf welchen Item Typen diese Modifikation verüfgbar sein soll.")]
+    [Tooltip("Auf welchen Item Typen diese Modifikation verfügbar sein soll.")]
     public ItemType allowedItemTypes;
 
     [Header("Skalierung pro Level")]

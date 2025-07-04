@@ -110,7 +110,15 @@ public class EnemyController : MonoBehaviour, IEntitie
         if(!mobStats.isDead)
         {
             CalculateHPCanvas();
-            myIsoRenderer.SetFacingDirection(TargetDirection());
+
+            // 👉 Statt TargetDirection verwenden wir die echte Bewegung
+            Vector3 moveDirection = myNavMeshAgent.velocity;
+
+            // Optional glätten, falls nötig
+            if (moveDirection.sqrMagnitude > 0.01f)
+            {
+                myIsoRenderer.SetFacingDirection(new Vector2(moveDirection.x, moveDirection.z));
+            }
         }
         else
             hpBar.GetComponent<CanvasGroup>().alpha = 0;
@@ -139,7 +147,7 @@ public class EnemyController : MonoBehaviour, IEntitie
         if (myNavMeshAgent == null)
             myNavMeshAgent = GetComponent<NavMeshAgent>();
 
-        Debug.Log(gameObject.name);
+        //Debug.Log(gameObject.name);
 
         // Automatische Referenzierung der UI-Elemente
         if (hpBar == null)
@@ -171,14 +179,11 @@ public class EnemyController : MonoBehaviour, IEntitie
         if (playerStats != null)
         {
 
-            //Sound-Array mit den dazugehörigen Sound-Namen
-            string[] hitSounds = new string[] { "Mob_ZombieAttack1", "Mob_ZombieAttack2", "Mob_ZombieAttack3" };
-
             //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
             if (AudioManager.instance != null)
 
-                //Play a Sound at random.
-                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+                //Spiele einen zufälligen Sound ab aus der Sound Gruppe "Grunt_Hit"
+                AudioManager.instance.PlaySound("Grunt_Hit");
 
             //Füge dem Spieler Schaden entsprechend der AttackPower hinzu. int Range derzeit irrelevant (0)
             playerStats.TakeDamage(mobStats.AttackPower.Value, 0);
@@ -362,7 +367,7 @@ public class EnemyController : MonoBehaviour, IEntitie
             if (AudioManager.instance != null)
 
                 //Play a Sound at random.
-                AudioManager.instance.Play(hitSounds[UnityEngine.Random.Range(0, 2)]);
+                AudioManager.instance.PlaySound(hitSounds[UnityEngine.Random.Range(0, 2)]);
 
 
             //Setze den Entitie State auf "Hit"
@@ -468,7 +473,7 @@ public class EnemyController : MonoBehaviour, IEntitie
 
     public Transform GetTransform()
     {
-        return ((IEntitie)mobStats).GetTransform();
+        return this.transform;
     }
 
     public List<BuffInstance> GetBuffs()

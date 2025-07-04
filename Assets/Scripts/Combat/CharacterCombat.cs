@@ -261,8 +261,8 @@ public class CharacterCombat : MonoBehaviour
 
         if (AudioManager.instance != null)
         {
-            string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };
-            AudioManager.instance.Play(attackSounds[Random.Range(0, attackSounds.Length)]);
+            //string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };
+            AudioManager.instance.PlaySound("Attack");
         }
 
         GameEvents.Instance.PlayerHasAttacked(damage);
@@ -337,7 +337,7 @@ public class CharacterCombat : MonoBehaviour
     }
 
 
-    private EnemyController currentTarget;
+    public EnemyController currentTarget {get; private set;}
 
     public void SetCurrentTarget(EnemyController target)
     {

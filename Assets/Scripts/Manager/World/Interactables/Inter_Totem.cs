@@ -63,7 +63,7 @@ public class Inter_Totem : Interactable
         lightBulb.intensity = 0;
 
         if (AudioManager.instance != null)
-            AudioManager.instance.Play("TotemCall");
+            AudioManager.instance.PlaySound("TotemCall");
 
         mobsSpawned = true;
     }
@@ -80,7 +80,7 @@ public class Inter_Totem : Interactable
             {
                 if (AudioManager.instance != null && !soundPlayed)
                 {
-                    AudioManager.instance.Play("TotemClear");
+                    AudioManager.instance.PlaySound("TotemClear");
                     soundPlayed = true;
                 }
 

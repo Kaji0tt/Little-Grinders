@@ -93,7 +93,7 @@ public class Scene_LoadNextScene : MonoBehaviour
         if(AudioManager.instance != null)
         {
             string[] nextMapSound = { "NextMap1", "NextMap2" };
-            AudioManager.instance.Play(nextMapSound[UnityEngine.Random.Range(0, 2)]);
+            AudioManager.instance.PlaySound(nextMapSound[UnityEngine.Random.Range(0, 2)]);
 
         }
 

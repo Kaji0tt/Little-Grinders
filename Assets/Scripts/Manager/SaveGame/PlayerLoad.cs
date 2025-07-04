@@ -213,7 +213,8 @@ public class PlayerLoad : MonoBehaviour
             
                 if (talent.talentName == data.savedActionButtons[i] && talent.passive == false)
                 {
-                    slot.LoadAbilityUseable(talent.myAbility); // Zauber in den Slot laden
+                   
+                    //Get Each equipped Item and set Ability
                     itemLoaded = true; // Markiere, dass ein Item geladen wurde
                     break; // Beende die Schleife, wenn der Zauber gefunden wurde
                 }
@@ -228,8 +229,9 @@ public class PlayerLoad : MonoBehaviour
                 // Erstelle eine neue ItemInstance aus dem Item, wenn es gefunden wurde
                 if (item != null)
                 {
-                    ItemInstance itemInstance = new ItemInstance(item); // Erstelle eine neue ItemInstance
-                    slot.LoadItemUseable(itemInstance); // ItemInstance in den Slot laden
+                    //Usable werden ausgeklammert vorerst. Es soll keine Potions mehr geben.
+                    //ItemInstance itemInstance = new ItemInstance(item); // Erstelle eine neue ItemInstance
+                   // slot.LoadItemUseable(itemInstance); // ItemInstance in den Slot laden
                     itemLoaded = true;
                 }
             }

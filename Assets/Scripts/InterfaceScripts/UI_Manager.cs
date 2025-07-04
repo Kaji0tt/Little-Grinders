@@ -37,8 +37,6 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-
-
     #endregion
 
     public GameObject tooltip;
@@ -107,10 +105,6 @@ public class UI_Manager : MonoBehaviour
             AllStartMethods();
         }
 
-
-
-
-
     }
 
     private void OnDisable()
@@ -140,7 +134,7 @@ public class UI_Manager : MonoBehaviour
      * Richtig Chaos hier.
      * Alle Elemente sollten während des HauptMenüs bereits da sein.
      * CanvasGroup Ingame sollte deaktiviert werden, sobald alle Überschreibungen für KeyManager da sind. 
-     * Also: CurrentScene = HauptMenü -> CanvasIngame.active(false)
+     * Also: CurrentScene = Hauptmenü -> CanvasIngame.active(false)
      *       CurrentScene != HauptmMenü -> CanvasIngame.active(true)
      *       
      * So kann ein Schreiben später relevanter Daten bereits im Startbildschirm geschehen.
@@ -336,16 +330,17 @@ public class UI_Manager : MonoBehaviour
             OpenCloseMenu(skillTab);
             if (skillTab.alpha == 0)
                 if (AudioManager.instance != null)
-                    AudioManager.instance.Play("OpenSkills");
+                    AudioManager.instance.PlaySound("Ingame_SubMenuOpen");
                 else
                 if (AudioManager.instance != null)
-                    AudioManager.instance.Play("CloseMenu");
+                    AudioManager.instance.PlaySound("Ingame_SubMenuClose");
 
         }
 
         if (Input.GetKeyDown(KeyManager.MyInstance.Keybinds["STATS"]) && !GameIsPaused)
         {
             OpenCloseMenu(inventoryTab);
+            AudioManager.instance.PlaySound("Ingame_SubMenuOpen");
         }
 
         if (Input.GetKeyDown(KeyManager.MyInstance.Keybinds["MAP"]) && !GameIsPaused)
@@ -353,10 +348,10 @@ public class UI_Manager : MonoBehaviour
             OpenCloseMenu(mapTab);
             if (mapTab.alpha == 0)
                 if (AudioManager.instance != null)
-                    AudioManager.instance.Play("OpenMap");
+                    AudioManager.instance.PlaySound("Ingame_SubMenuOpen");
                 else
                 if (AudioManager.instance != null)
-                    AudioManager.instance.Play("CloseMenu");
+                    AudioManager.instance.PlaySound("Ingame_SubMenuClose");
         }
 
         //Make it possible to close all Menues by ESCAPE
@@ -406,33 +401,63 @@ public class UI_Manager : MonoBehaviour
 
     public List<ActionButton> actionButtons { get; private set; } = new List<ActionButton>();
 
-    public void AssignAbilityFromMod(ItemModDefinition modDef)
+    /// <summary>
+    /// Weist eine Fähigkeit aus einem Mod dem korrekten ActionButton zu.
+    /// </summary>
+    private void AssignAbilityFromMod(ItemModDefinition modDef, ItemType itemType)
     {
-        if (modDef == null || modDef.modAbilityData == null)
-            return;
+        if (modDef == null || modDef.modAbilityData == null) return;
 
-        ItemType itemType = modDef.allowedItemTypes;
-
+        // Finde den korrekten Button, dessen myItemType mit dem des Items übereinstimmt.
         ActionButton targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == itemType);
 
         if (targetButton != null)
         {
-            // Hole die Ability-Komponente aus dem Prefab
-            Ability ability = modDef.modAbilityData.myAbilityPrefab.GetComponent<Ability>();
-
-            if (ability != null)
-            {
-                targetButton.LoadAbilityUseable(ability);
-            }
-            else
-            {
-                Debug.LogWarning($"Ability-Komponente nicht gefunden im Prefab für {modDef.name}.");
-            }
+            // Dein Debug-Log, jetzt sicher.
+            Debug.Log($"'{targetButton.name}' wurde für den Item-Typ '{itemType}' gefunden. Weise Fähigkeit '{modDef.modAbilityData.name}' zu.");
+            targetButton.SetAbility(modDef.modAbilityData);
         }
         else
         {
-            //Es scheint aktuell so zu sein, dass itemType als mod durchgegangen wird.
-            Debug.LogWarning($"Kein ActionButton für ItemType {itemType} gefunden.");
+            Debug.LogWarning($"Kein ActionButton für den Item-Typ '{itemType}' im UI_Manager gefunden.");
+        }
+    }
+
+    /// <summary>
+    /// Aktualisiert den entsprechenden ActionButton für ein ausgerüstetes Item.
+    /// Weist die Fähigkeit zu, falls eine vorhanden ist, oder leert den Button, falls nicht.
+    /// Diese Methode wird von GameEvents aufgerufen, wenn sich die Ausrüstung ändert.
+    /// </summary>
+    public void UpdateAbilityForEquippedItem(ItemInstance equippedItem)
+    {
+        if (equippedItem == null) return;
+
+        bool hasAbilityMod = false;
+
+        // Suche nach einem Mod mit einer Fähigkeit auf dem Item.
+        foreach (var mod in equippedItem.addedItemMods)
+        {
+            if (mod.definition.modAbilityData != null)
+            {
+                // Fähigkeit gefunden, weise sie zu.
+                AssignAbilityFromMod(mod.definition, equippedItem.itemType);
+                hasAbilityMod = true;
+                break; // Es kann nur eine Fähigkeit pro Item geben.
+            }
+        }
+
+        // Wenn nach der Prüfung aller Mods keine Fähigkeit gefunden wurde,
+        // muss der zugehörige ActionButton geleert werden.
+        if (!hasAbilityMod)
+        {
+            // Finde den korrekten Button, der zum Item-Typ passt.
+            ActionButton targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == equippedItem.itemType);
+
+            if (targetButton != null)
+            {
+                // Rufe die korrekte Methode zum Leeren auf.
+                targetButton.Clear();
+            }
         }
     }
 
@@ -547,6 +572,8 @@ public class UI_Manager : MonoBehaviour
     //Überprüfe, ob die UI Elemente wirklich nicht Null sind.
     void CheckForUI_Elements()
     {
+        actionButtons.Clear();
+
         InterfaceElement[] interfaceElements = FindObjectsOfType<InterfaceElement>();
 
         foreach(InterfaceElement interfaceElement in interfaceElements)
@@ -606,7 +633,7 @@ public class UI_Manager : MonoBehaviour
 
                     ActionButton _aBtn1 = aBtn1.GetComponent<ActionButton>();
 
-                    _aBtn1.SetItemType(ItemType.Weapon);
+                    //_aBtn1.SetItemType(ItemType.Weapon);
 
                     actionButtons.Add(_aBtn1);
 
@@ -618,7 +645,7 @@ public class UI_Manager : MonoBehaviour
 
                     ActionButton _aBtn2 = aBtn2.GetComponent<ActionButton>();
 
-                    _aBtn2.SetItemType(ItemType.Kopf);
+                    //_aBtn2.SetItemType(ItemType.Kopf);
 
                     actionButtons.Add(_aBtn2);
 
@@ -630,7 +657,7 @@ public class UI_Manager : MonoBehaviour
 
                     ActionButton _aBtn3 = aBtn3.GetComponent<ActionButton>();
 
-                    _aBtn3.SetItemType(ItemType.Brust);
+                    //_aBtn3.SetItemType(ItemType.Brust);
 
                     actionButtons.Add(_aBtn3);
 
@@ -642,7 +669,7 @@ public class UI_Manager : MonoBehaviour
 
                     ActionButton _aBtn4 = aBtn4.GetComponent<ActionButton>();
 
-                    _aBtn4.SetItemType(ItemType.Beine);
+                    //_aBtn4.SetItemType(ItemType.Beine);
 
                     actionButtons.Add(_aBtn4);
 
@@ -654,7 +681,7 @@ public class UI_Manager : MonoBehaviour
 
                     ActionButton _aBtn5 = aBtn5.GetComponent<ActionButton>();
 
-                    _aBtn5.SetItemType(ItemType.Schuhe);
+                    //_aBtn5.SetItemType(ItemType.Schuhe);
 
                     actionButtons.Add(_aBtn5);
 
@@ -664,6 +691,12 @@ public class UI_Manager : MonoBehaviour
                     break;
 
             }
+
+            foreach (var btn in actionButtons)
+            {
+                //Debug.Log($"Button: {btn.name} | ItemType: {btn.myItemType}");
+            }
+
         }
 
     }
