@@ -63,14 +63,10 @@ public class AbilityDataEditor : Editor
         SpellProperty properties = (SpellProperty)propertiesProp.enumValueFlag;
 
         if (properties.HasFlag(SpellProperty.Ranged))
-        {
             EditorGUILayout.PropertyField(rangeProp);
-        }
 
         if (properties.HasFlag(SpellProperty.AoE))
-        {
             EditorGUILayout.PropertyField(areaOfEffectRadiusProp);
-        }
 
         if (properties.HasFlag(SpellProperty.Projectile))
         {
@@ -78,10 +74,10 @@ public class AbilityDataEditor : Editor
             EditorGUILayout.PropertyField(projectileSpeedProp);
         }
 
-        if (properties.HasFlag(SpellProperty.Persistent))
+        if (properties.HasFlag(SpellProperty.Active))
         {
-            EditorGUILayout.PropertyField(activeTimeProp, new GUIContent("Persistent Duration"));
-            EditorGUILayout.PropertyField(tickTimerProp, new GUIContent("Persistent Tick Rate"));
+            EditorGUILayout.PropertyField(activeTimeProp, new GUIContent("Active Duration"));
+            EditorGUILayout.PropertyField(tickTimerProp, new GUIContent("Active Tick Rate"));
         }
 
         if (properties.HasFlag(SpellProperty.Channeling))

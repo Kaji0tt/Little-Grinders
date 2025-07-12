@@ -1,7 +1,9 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Ability), true)] // "true" sorgt dafür, dass auch Unterklassen (wie Heal) erfasst werden
+/*
+
+[CustomEditor(typeof(Ability), true)] // "true" sorgt dafï¿½r, dass auch Unterklassen (wie Heal) erfasst werden
 public class EditorAbilityInspector : Editor
 {
     public override void OnInspectorGUI()
@@ -26,3 +28,4 @@ public class EditorAbilityInspector : Editor
         so.ApplyModifiedProperties();
     }
 }
+*/

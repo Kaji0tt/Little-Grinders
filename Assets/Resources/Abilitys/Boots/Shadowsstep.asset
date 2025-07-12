@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 351c9b7016e88d745b3b853fd8efea58, type: 3}
+  m_Name: Shadowsstep
+  m_EditorClassIdentifier: 
+  abilityName: Shadowstep
+  description: "Teleportiert den Spieler hinter einen ausgew\xE4hlten Gegner und
+    f\xFCgt X AD Schaden hinzu."
+  icon: {fileID: 21300000, guid: 806d9d749a9f97a4498cf5929889f182, type: 3}
+  properties: 153
+  abilityPrefab: {fileID: 2808114333705048808, guid: 5269bd6cbc2fbc3468593fc85d5df0c7,
+    type: 3}
+  range: 7
+  areaOfEffectRadius: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0
+  channelTime: 0
+  activeTime: 0
+  tickTimer: 0
+  cooldownTime: 7
+  maxCharges: 1

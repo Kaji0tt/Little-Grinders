@@ -100,6 +100,10 @@ public class EnemyController : MonoBehaviour, IEntitie
         //Recalculate BaseStats in dependency of Map-Level
         maxHpForUI = mobStats.Hp.Value;
 
+        //Setze die NavMeshAgent-Speed Eigenschaft entsprechend der MobStats.MovementSpeed.Value 
+        if (myNavMeshAgent != null && mobStats != null)
+            myNavMeshAgent.speed = mobStats.MovementSpeed.Value;
+
         TransitionTo(new IdleState(this));
     }
     void Update()
@@ -170,32 +174,31 @@ public class EnemyController : MonoBehaviour, IEntitie
 
     public void PerformAttack()
     {
-
-
         // TODO: Schadenslogik, Cooldowns etc.
         PlayerStats playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
 
-
         if (playerStats != null)
         {
-
             //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-            if (AudioManager.instance != null)
-
+            //if (AudioManager.instance != null)
                 //Spiele einen zufälligen Sound ab aus der Sound Gruppe "Grunt_Hit"
-                AudioManager.instance.PlaySound("Grunt_Hit");
+                //AudioManager.instance.PlaySound("Grunt_Hit");
+
+            // 3% Chance auf kritischen Treffer
+            bool isCrit = UnityEngine.Random.value < 0.03f;
+            float damage = mobStats.AttackPower.Value;
+            if (isCrit)
+                damage *= 2;
 
             //Füge dem Spieler Schaden entsprechend der AttackPower hinzu. int Range derzeit irrelevant (0)
-            playerStats.TakeDamage(mobStats.AttackPower.Value, 0);
+            playerStats.TakeDamage(damage, isCrit);
 
             //Calle Außerdem das GameEvent, dass der Spieler angegriffen wurde.
             //GameEvents.current.PlayerWasAttacked(mobStats, mobStats.AttackPower.Value);
-            //myIsoRenderer.PlayAttack();
-
+            
             //Der Versuch einen AttackSpeed zu integrieren - je kleiner der mobStats.AttackSpeed.Value, desto mehr Zeit zwischen den Angriffen.
             //mobStats.attackCD = 1f / mobStats.AttackSpeed.Value;
         }
-
     }
 
     public bool IsPlayerInAttackRange()
@@ -240,7 +243,6 @@ public class EnemyController : MonoBehaviour, IEntitie
         if(!mobStats.isDead)
         myNavMeshAgent.SetDestination(destination);
         //Vector3 toPlayer = PlayerManager.instance.player.transform.position - transform.position;
-
 
     }
     #endregion
@@ -317,6 +319,16 @@ public class EnemyController : MonoBehaviour, IEntitie
 
     }
 
+    public string GetBasePrefabName()
+    {
+        // Entfernt ggf. "(Clone)" und Ziffern am Ende
+        string n = gameObject.name;
+        int parenIndex = n.IndexOf(" (");
+        if (parenIndex > 0)
+            n = n.Substring(0, parenIndex);
+        // Optional: Noch weitere Bereinigung, falls nötig
+        return n;
+    }
 
     public void TakeDamage(float incoming_damage, int range_radius_ofDMG, bool isCrit)
     {
@@ -335,8 +347,8 @@ public class EnemyController : MonoBehaviour, IEntitie
             GameEvents.Instance.EnemyWasAttacked(incoming_damage, transform, isCrit);
 
             // Knockback
-            if(!mobStats.isDead)
-            ApplyKnockback();
+            if (!mobStats.isDead)
+                ApplyKnockback();
 
             //Setze den Entitie State auf "Hit"
             // Nur Hit-Animation, wenn NICHT im Angriff
@@ -360,19 +372,13 @@ public class EnemyController : MonoBehaviour, IEntitie
 
             mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
 
-            //Sound-Array mit den dazugehörigen Sound-Namen
-            string[] hitSounds = new string[] { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
-
-            //Falls der AudioManager aus dem Hauptmenü nicht vorhanden ist, soll kein Sound abgespielt werden.
-            if (AudioManager.instance != null)
-
-                //Play a Sound at random.
-                AudioManager.instance.PlaySound(hitSounds[UnityEngine.Random.Range(0, 2)]);
-
-
             //Setze den Entitie State auf "Hit"
-            //TransitionTo(new HitState(this));
             myIsoRenderer.Play(AnimationState.Hit);
+
+            if (!(myEntitieState is HitState) && !isDead)
+            {
+                TransitionTo(new HitState(this));
+            }
 
             //pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
 

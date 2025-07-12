@@ -6,7 +6,7 @@ using System;
 using TMPro;
 
 
-public enum InterfaceElementDeclaration { Inventar, Map, Skilltab, Tooltip, MainMenu, AB1, AB2, AB3, AB4, AB5 }
+public enum InterfaceElementDeclaration { Inventar, Map, Skilltab, Tooltip, MainMenu, Weapon, Kopf, Brust, Beine, Schuhe }
 public class InterfaceElement : MonoBehaviour
 {
     public InterfaceElementDeclaration interfaceElementEnum;

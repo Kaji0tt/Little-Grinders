@@ -62,7 +62,7 @@ public class Voidgrasp : Ability
         }
 
         // 3. Warte 1 Sekunde
-            yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f);
 
         // 4. Neue Mausposition holen
         Ray ray2 = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -85,9 +85,16 @@ public class Voidgrasp : Ability
         }
 
         // 6. Optional: VFX/Sound abspielen
-        Debug.Log("Voidgrasp: Gegner teleportiert!");
+        //Debug.Log("Voidgrasp: Gegner teleportiert!");
     }
 
     public override void OnTick(IEntitie entitie) { }
     public override void OnCooldown(IEntitie entitie) { }
+    
+    protected override void ApplyRarityScaling(float rarityScaling)
+    {
+
+        Debug.Log($"[Voidgrasp] rarityScaling angewendet: {rarityScaling}");
+
+    }
 }

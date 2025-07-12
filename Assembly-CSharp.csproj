@@ -117,6 +117,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\switchToRectTransform.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ContentScrollSnapHorizontal.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionsInputManager.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Shadowstep.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\PaginationManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\SuperellipsePoints.cs" />
     <Compile Include="Assets\Scripts\Player\IsometricRenderer.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\UIParticleSystem.cs" />
     <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotWeapon.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_Sprite.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Voltleap.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\Tooltip.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Talente\Steinwurf.cs" />
     <Compile Include="Assets\Scripts\Manager\SceneManagement\Scene_OnSceneLoad.cs" />
@@ -350,6 +352,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Core\FancyScrollView.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\MenuSystem\Menu.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\EssenceDrain.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ExtensionsToggle.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\BestFitOutline.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\DropDownListButton.cs" />
@@ -385,6 +388,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\TextPic.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\ExpValueText.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\AbilityTemplate.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Phase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\CurlyUI\CUIBezierCurve.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\PrefabTheme.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ReorderableList\ReorderableListDebug.cs" />
@@ -444,6 +448,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\SoftMaskShader.shader" />
     <None Include="Assets\Scripts\TalentSystem\Talente\OUTDATED - ReadMe.txt" />
+    <None Include="Assets\Resources\Sounds\AfterSoundExport.txt" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Premultiply Blend.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle VertexLit Blended.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />

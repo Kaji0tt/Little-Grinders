@@ -12,7 +12,7 @@ public class Heal : Ability
 
     public override void UseBase(IEntitie entitie)
     {
-        if(!isApplied)
+        if (!isApplied)
         {
             PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
@@ -41,5 +41,11 @@ public class Heal : Ability
     public override void OnCooldown(IEntitie entitie)
     {
 
+    }
+    
+        protected override void ApplyRarityScaling(float rarityScaling)
+    {
+        // Hier MUSS die Kindklasse den Wert verwenden!
+        Debug.Log($"[EssenceDrain] rarityScaling angewendet: {rarityScaling}");
     }
 }

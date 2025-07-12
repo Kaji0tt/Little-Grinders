@@ -33,7 +33,7 @@ public class ItemModDefinition : ScriptableObject
         return baseValue * levelMultiplier * rarityMultiplier;
     }
 
-    private float GetRarityMultiplier(Rarity rarity)
+    public float GetRarityMultiplier(Rarity rarity)
     {
         return rarityScalings.FirstOrDefault(r => r.rarity == rarity)?.multiplier ?? 1f;
     }

@@ -34,6 +34,7 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(ItemInstance item, int amount = 1)
     {
+        Debug.Log($"Adding item: {item.ItemName} with amount: {amount}");
         // Zähle nur die Anzahl der Slots für nicht-consumable Items und die eindeutigen Consumables
         int totalSlots = consumableInventory.Count + itemList.Count;
 

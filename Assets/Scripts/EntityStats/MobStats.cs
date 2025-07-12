@@ -247,9 +247,10 @@ public class MobStats : MonoBehaviour
 
     public void Die()
     {
+        Debug.Log($"{gameObject.name} Die() called. isDead={isDead}");
 
-        if(!isDead)
-        StartCoroutine(DelayedDeath());
+        if (!isDead)
+            StartCoroutine(DelayedDeath());
     }
 
     private IEnumerator DelayedDeath()
