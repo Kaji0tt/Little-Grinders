@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -119,31 +120,47 @@ public class ActionButton : MonoBehaviour
             // Fall A: Die Fähigkeit hat mehrere Aufladungen
             if (maxCharges > 1)
             {
-                if(cdOverlay != null) cdOverlay.SetActive(true); // Overlay immer sichtbar bei Aufladungen
-                myIcon.color = (currentCharges > 0) ? Color.white : cooldownColor; // Grau nur bei 0 Aufladungen
+                if(cdOverlay != null) cdOverlay.SetActive(true);
+                myIcon.color = (currentCharges > 0) ? Color.white : cooldownColor;
 
-                // Text formatieren: "Charges: Cooldown"
                 string chargesText = currentCharges.ToString();
                 if (currentCharges < maxCharges)
                 {
-                    // Wenn Aufladungen regenerieren, zeige den Timer für die nächste an.
                     chargesText += $": {MyUseable.GetCooldown():F1}";
                 }
                 cdText.text = chargesText;
+                cdText.color = Color.white;
+                var outline = cdText.GetComponent<Outline>();
+                if (outline != null) outline.effectColor = Color.black;
             }
-            // Fall B: Standard-Fähigkeit mit einer Aufladung (altes Verhalten)
+            // Fall B: Standard-Fähigkeit mit einer Aufladung (inkl. Active-Fähigkeiten im Cooldown)
             else
             {
-                if (MyUseable.IsOnCooldown())
+                // NEU: Cooldown-Anzeige auch für Active-Fähigkeiten nach Ablauf!
+                float cooldown = MyUseable.GetCooldown();
+                if (cooldown > 0)
                 {
                     if (cdOverlay != null) cdOverlay.SetActive(true);
                     if (myIcon != null) myIcon.color = cooldownColor;
-                    if (cdText != null) cdText.text = MyUseable.GetCooldown().ToString("F1");
+                    if (cdText != null)
+                    {
+                        cdText.text = cooldown.ToString("F1");
+                        cdText.color = new Color(0.85f, 0.85f, 0.85f); // Hellgrau
+                        var outline = cdText.GetComponent<Outline>();
+                        if (outline != null) outline.effectColor = Color.black;
+                    }
                 }
                 else // Bereit
                 {
                     if (cdOverlay != null) cdOverlay.SetActive(false);
                     if (myIcon != null) myIcon.color = Color.white;
+                    if (cdText != null)
+                    {
+                        cdText.text = "";
+                        cdText.color = Color.white;
+                        var outline = cdText.GetComponent<Outline>();
+                        if (outline != null) outline.effectColor = Color.black;
+                    }
                 }
             }
         }
@@ -153,7 +170,7 @@ public class ActionButton : MonoBehaviour
     /// Weist diesem Button eine neue Fähigkeit basierend auf den Daten zu.
     /// Erstellt eine Instanz der Fähigkeit aus dem Prefab.
     /// </summary>
-    public void SetAbility(AbilityData data)
+    public void SetAbility(AbilityData data, float rarityMultiplier)
     {
         // Zuerst die alte Fähigkeit entfernen und aufräumen.
         Clear();
@@ -173,9 +190,14 @@ public class ActionButton : MonoBehaviour
         {
             // --- DAS IST DER ENTSCHEIDENDE FIX ---
             // Initialisiere die neue Fähigkeit mit den übergebenen Daten.
-            abilityComponent.Initialize(data);
+            abilityComponent.Initialize(data, rarityMultiplier);
 
-            // Weise die initialisierte Fähigkeit als benutzbares Objekt zu.
+            // Setze den SlotNamen der Fähigkeit.
+            // Dies ist wichtig, damit die Fähigkeit weiß, über welche Taste sie im KeyManager aufgerufen wird.
+            abilityComponent.SetSlotName(myItemType.ToString().ToUpper());
+
+            //abilityComponent.SetRarityScaling(rarityMultiplier); // NEU: Wert setzen!
+
             MyUseable = abilityComponent;
 
             // Aktualisiere das Icon auf dem Button.
@@ -215,6 +237,29 @@ public class ActionButton : MonoBehaviour
         if (cdOverlay != null)
         {
             cdOverlay.SetActive(false);
+        }
+    }
+
+    public ItemInstance CurrentItemInstance { get; private set; }
+
+    public void SetItemInstance(ItemInstance item)
+    {
+        CurrentItemInstance = item;
+        Clear();
+
+        if (item == null)
+            return;
+
+        // Suche nach dem ersten Mod mit Ability
+        var mod = item.addedItemMods.FirstOrDefault(m => m.definition.modAbilityData != null);
+        if (mod != null)
+        {
+            var abilityData = mod.definition.modAbilityData;
+            float rarityMultiplier = mod.definition.GetRarityMultiplier(mod.rollRarity);
+
+
+            // Setze die Ability wie gehabt
+            SetAbility(abilityData, rarityMultiplier);
         }
     }
 }

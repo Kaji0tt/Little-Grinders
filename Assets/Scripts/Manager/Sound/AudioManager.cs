@@ -87,11 +87,11 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Ermittelt den Gruppenschlüssel aus einem Clip-Namen (z.B. "Wurf" aus "Wurf_1").
+    /// Ermittelt den Gruppenschlüssel aus einem Clip-Namen (z.B. "Wurf" aus "Wurf-1").
     /// </summary>
     private string GetSoundGroupKey(string clipName)
     {
-        int lastUnderscore = clipName.LastIndexOf('_');
+        int lastUnderscore = clipName.LastIndexOf('-');
         if (lastUnderscore != -1 && char.IsDigit(clipName.Last()))
         {
             // Wenn ein Unterstrich da ist und das letzte Zeichen eine Ziffer ist,
@@ -273,14 +273,43 @@ public class AudioManager : MonoBehaviour
     #endregion
 
 
-    private void PlayEnemyHitSound(float damage, Transform transform, bool crit)
+    /// <summary>
+    /// Spielt einen Sound über die AudioSource einer Entität ab.
+    /// </summary>
+    public void PlayEntitySound(string groupKey, GameObject entity)
     {
-        // Der alte Code:
-        // string[] hitSounds = { "Mob_ZombieHit1", "Mob_ZombieHit2", "Mob_ZombieHit3" };
-        // string chosenSound = hitSounds[UnityEngine.Random.Range(0, hitSounds.Length)];
-        // PlaySound(chosenSound);
+        if (entity == null)
+        {
+            Debug.LogWarning("[AudioManager] PlayEntitySound: entity ist null!");
+            return;
+        }
 
-        // Der neue, einfache Aufruf:
-        PlaySound("Mob_ZombieHit");
+        AudioClip clip = GetClip(groupKey);
+        if (clip == null)
+        {
+            Debug.LogWarning($"[AudioManager] PlayEntitySound: Kein Clip für '{groupKey}' gefunden.");
+            return;
+        }
+
+        var audioSource = entity.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogWarning($"[AudioManager] PlayEntitySound: Keine AudioSource an {entity.name} gefunden.");
+            return;
+        }
+
+        audioSource.PlayOneShot(clip);
+    }
+
+    /// <summary>
+    /// Gibt einen zufälligen AudioClip aus einer Sound-Gruppe zurück.
+    /// </summary>
+    public AudioClip GetClip(string groupKey)
+    {
+        if (soundGroups.TryGetValue(groupKey, out List<Sound> group) && group.Count > 0)
+        {
+            return group[UnityEngine.Random.Range(0, group.Count)].clip;
+        }
+        return null;
     }
 }

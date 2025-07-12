@@ -98,6 +98,12 @@ public class IdleState : EntitieState
 
     private void TryWander()
     {
+        // Sound nur mit 1/10 Wahrscheinlichkeit abspielen
+        if (AudioManager.instance != null && Random.value < 0.1f)
+        {
+            string soundName = controller.GetBasePrefabName() + "_Wander";
+            AudioManager.instance.PlayEntitySound(soundName, controller.gameObject);
+        }
 
         Vector3 randomDirection = Random.insideUnitSphere * myWanderRadius;
         randomDirection += mySpawnPoint;
@@ -171,35 +177,47 @@ public class AttackState : EntitieState
         if (controller.myIsoRenderer != null)
         {
             controller.myIsoRenderer.Play(AnimationState.Attack);
+            
+            if (AudioManager.instance != null)
+            {
+                string soundName = controller.GetBasePrefabName() + "_Attack";
+                AudioManager.instance.PlayEntitySound(soundName, controller.gameObject);
+            }
         }
         attackTime = controller.myIsoRenderer.GetCurrentAnimationLength();
     }
 
-    public override void Update()
+public override void Update()
+{
+    // NEU: Sofort prüfen, ob Spieler noch in Reichweite ist
+    if (!controller.IsPlayerInAttackRange())
     {
-        attackTime -= Time.deltaTime;
+        controller.TransitionTo(new IdleState(controller));
+        return;
+    }
 
-        if (controller.isDead)
+    attackTime -= Time.deltaTime;
+
+    if (controller.isDead)
+    {
+        controller.TransitionTo(null);
+        return;
+    }
+
+    if (attackTime <= 0f)
+    {
+        // Wieder angreifen oder zurück zu Chase
+        if (controller.IsPlayerInAttackRange())
         {
-            controller.TransitionTo(null);
-            return;
+           // Debug.Log("Create new Attack from Update of AttackState");
+            controller.TransitionTo(new AttackState(controller));
         }
-
-        if (attackTime <= 0f)
+        else
         {
-            // Wieder angreifen oder zurück zu Chase
-            if (controller.IsPlayerInAttackRange())
-            {
-                //Debug.Log("Ich bin hier, im Update von AttackState.");
-                controller.TransitionTo(new AttackState(controller));
-            }
-            else
-            {
-                //Debug.Log("Ouh! Player out of range, lets Chase!");
-                controller.TransitionTo(new IdleState(controller));
-            }
+            controller.TransitionTo(new IdleState(controller));
         }
     }
+}
 }
 
 public class HitState : EntitieState
@@ -212,6 +230,12 @@ public class HitState : EntitieState
     {
         //controller.myIsoRenderer.ToggleActionState(true);
         controller.myIsoRenderer.Play(AnimationState.Hit);
+
+        if (AudioManager.instance != null)
+        {
+            string soundName = controller.GetBasePrefabName() + "_Hitted";
+            AudioManager.instance.PlayEntitySound(soundName, controller.gameObject);
+        }
 
         // Dynamisch: echte Animationslänge holen
         hitTimer = controller.myIsoRenderer.GetCurrentAnimationLength();
@@ -227,10 +251,12 @@ public class HitState : EntitieState
 
             if (controller.IsPlayerInAttackRange())
             {
+                //Debug.Log("Ich bin hier, im Update von HitState.");
                 controller.TransitionTo(new AttackState(controller));
             }
             else
             {
+                //Debug.Log("Ouh! Player out of range, lets Chase!");
                 controller.TransitionTo(new ChaseState(controller));
             }
         }
@@ -247,6 +273,11 @@ public class DeadState : EntitieState
         controller.hpBar.SetActive(false);
         //controller.myIsoRenderer.ToggleActionState(false);
         controller.myIsoRenderer.Play(AnimationState.Die);
+        if (AudioManager.instance != null)
+        {
+            string soundName = controller.GetBasePrefabName() + "_Die";
+            AudioManager.instance.PlayEntitySound(soundName, controller.gameObject);
+        }
         controller.mobStats.Die();
     }
 }

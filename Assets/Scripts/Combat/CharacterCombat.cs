@@ -164,68 +164,43 @@ public class CharacterCombat : MonoBehaviour
 
     void Attack()
     {
-        //Debug.Log("Attack was called!");
-        //Wenn derzeit keine Combo durchgeführt wird oder keine Schritte enthalten sind, führe keine Combo durch.
         if (currentCombo == null || currentCombo.comboSteps.Count == 0)
         {
             Debug.LogWarning("Keine Combo definiert oder keine Schritte enthalten.");
             return;
         }
 
-        // Reset Combo, wenn zu lange her
         if (Time.time - lastAttackTime > comboResetTime)
         {
             currentComboIndex = 0;
         }
 
-        // Stelle sicher, dass Index innerhalb der Liste liegt
         if (currentComboIndex >= currentCombo.comboSteps.Count)
         {
             currentComboIndex = 0;
         }
-
 
         if (currentTarget != null)
         {
             StartCoroutine(MoveTowardsTarget(currentTarget.transform.position, 0.1f, 0.3f));
         }
 
-
         AttackStep currentStep = currentCombo.comboSteps[currentComboIndex];
 
-        // Neue Zeile: Starte die Animation mit dem Clip aus dem aktuellen AttackStep
         isoRenderer.PlayWeaponAttack(currentStep.animationClip, isoRenderer.weaponAnimator);
-        //Speed anpassen.
-        //weaponAttackAnimator.speed = playerStats.AttackSpeed.Value;
-
-
-        // Animation abspielen
         isoRenderer.weaponAnimator.speed = playerStats.AttackSpeed.Value;
-        //Debug.Log(currentStep.animationClip.name);
 
-        // Berechne Delay für den Trefferpunkt
-        float delay = (1f / playerStats.AttackSpeed.Value) * currentStep.timeToNextAttack;
-
-
-
-        // Berechne Schaden
-        float baseDamage = playerStats.AttackPower.Value;
-        float finalDamage = baseDamage * currentStep.damageMultiplier;
-
-        //Crit-Check
-        if(Random.value < playerStats.CriticalChance.Value)
-        {
-            finalDamage *= playerStats.CritcalDamage.Value;
-            StartCoroutine(DelayedHit(delay, finalDamage, true));
-        }
-        else
-            StartCoroutine(DelayedHit(delay, finalDamage, false));
-
-
-
+        float delay = 1f / playerStats.AttackSpeed.Value * currentStep.timeToNextAttack;
 
         lastAttackTime = Time.time;
         currentComboIndex++;
+
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.PlaySound("Attack");
+        }
+
+        StartCoroutine(DelayedHit(delay, currentStep));
     }
 
     IEnumerator MoveTowardsTarget(Vector3 targetPos, float moveDistance, float duration)
@@ -247,26 +222,56 @@ public class CharacterCombat : MonoBehaviour
     }
 
     // Coroutine, die Schaden und Sound nach einer gewissen Verzögerung ausführt
-    IEnumerator DelayedHit(float delay, float damage, bool isCrit)
+    IEnumerator DelayedHit(float delay, AttackStep currentStep)
     {
         yield return new WaitForSeconds(delay);
+
+        float baseDamage = playerStats.AttackPower.Value;
 
         foreach (EnemyController enemy in DirectionCollider.instance.collidingEnemyControllers)
         {
             if (enemy != null && !enemy.mobStats.isDead)
             {
-                enemy.TakeDamage(damage, playerStats.Range, isCrit);
+                bool isCrit = Random.value < playerStats.CriticalChance.Value;
+                float finalDamage = CalculateFinalDamage(baseDamage, currentStep.damageMultiplier, isCrit, enemy.mobStats);
+                enemy.TakeDamage(finalDamage, playerStats.Range, isCrit);
             }
         }
 
-        if (AudioManager.instance != null)
+        GameEvents.Instance.PlayerHasAttacked(baseDamage * currentStep.damageMultiplier);
+        SpawnAttackVFX();
+    }
+
+    /// <summary>
+    /// Calculates the final damage dealt to a target, factoring in base damage, multipliers, critical hits, and target armor.
+    /// </summary>
+    /// <param name="baseDamage">The base damage value before modifiers.</param>
+    /// <param name="damageMultiplier">The multiplier for the current attack step.</param>
+    /// <param name="isCrit">Whether the attack is a critical hit.</param>
+    /// <param name="mobStats">The target's stats, used for armor reduction.</param>
+    float CalculateFinalDamage(float damage, float damageMultiplier, bool isCrit, MobStats mobStats)
+    {   
+        // Berechne den Schaden basierend auf dem Multiplikator des AttackSteps
+        damage *= damageMultiplier;
+
+        //Prüfe ob der resultierende Schaden als kritischer Treffer zählt
+        if (isCrit)
         {
-            //string[] attackSounds = new string[] { "Attack1", "Attack2", "Attack3", "Attack4", "Attack5", "Attack6" };
-            AudioManager.instance.PlaySound("Attack");
+            damage *= playerStats.CriticalDamage.Value; // Critical Damage Multiplier
         }
 
-        GameEvents.Instance.PlayerHasAttacked(damage);
-        SpawnAttackVFX();
+        // Wenn MobStats nicht null ist, wende Rüstung an
+        // und berechne den Schaden entsprechend der Rüstungsformel.
+        if (mobStats != null)
+        {
+            // Apply armor as a percentage reduction: damage * 100 / (100 + armor)
+            float armor = Mathf.Max(0f, mobStats.Armor.Value);
+            damage *= 100f / (100f + armor);
+            damage = Mathf.Max(damage, 1f); // Minimum 1 Schaden
+        }
+        // Debug-Ausgabe für den Schaden
+        //Debug.Log($"Calculated Damage: {damage} (Base: {damage}, Multiplier: {damageMultiplier}, Crit: {isCrit}, Armor: {mobStats?.Armor.Value})");
+        return damage;
     }
 
     void SpawnAttackVFX()

@@ -49,4 +49,11 @@ public class Enigma : Ability
     // Diese Methoden werden für eine sofortige Fähigkeit nicht benötigt, müssen aber existieren.
     public override void OnTick(IEntitie entitie) { }
     public override void OnCooldown(IEntitie entitie) { }
+
+        protected override void ApplyRarityScaling(float rarityScaling)
+    {
+        Debug.Log($"[Enigma] rarityScaling angewendet: {rarityScaling}");
+        // Beispiel: areaOfEffectRadius *= rarityScaling;
+        //           projectileSpeed *= rarityScaling;
+    }
 }

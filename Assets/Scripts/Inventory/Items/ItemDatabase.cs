@@ -44,7 +44,7 @@ public class ItemDatabase : MonoBehaviour
 
     public void GetWeightDrop(Vector3 position)
     {
-
+        Debug.Log($"GetWeightDrop called at {position}");
 
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
@@ -76,7 +76,7 @@ public class ItemDatabase : MonoBehaviour
                 //itemRolls -> neues Item providen
                 ItemWorld.SpawnItemWorld(position, itemRolls.RollItem(newItem, 1));
 
-                //Debug.Log("Mods insg.: " + newItem.addedItemMods.Count );
+                Debug.Log($"Item {item.ItemName} with ID {item.ItemID} dropped at position {position} with roll {roll} and percentSum {percentSum}");
 
                 //newItem.AppendModNamesToItemName();
                 

@@ -25,7 +25,7 @@ public class Voidwither : Ability
         {
             Debug.LogWarning("VFX_Manager ist nicht initialisiert. Kein Effekt wird abgespielt.");
             return;
-        }   
+        }
         VFX_Manager.instance?.PlayEffect("CFX_VoidwitherStart", playerStats);
         // Debug.Log("Voidwither aktiviert.");
     }
@@ -60,10 +60,18 @@ public class Voidwither : Ability
         {
             VFX_Manager.instance.PlayEffect("CFX_SwordHitVoid", enemyTransform.GetComponent<EnemyController>());
         }
-        if(AudioManager.instance != null)
+        if (AudioManager.instance != null)
         {
             AudioManager.instance.PlaySound("Wurf_05");
         }
         // Debug.Log($"Voidwither verursacht {bonusDamage} magischen Zusatzschaden an {enemyTransform.name}");
+    }
+    
+        protected override void ApplyRarityScaling(float rarityScaling)
+    {
+        // Hier MUSS die Kindklasse den Wert verwenden!
+        Debug.Log($"[Voidwiether] rarityScaling angewendet: {rarityScaling}");
+        // Beispiel: areaOfEffectRadius *= rarityScaling;
+        //           projectileSpeed *= rarityScaling;
     }
 }

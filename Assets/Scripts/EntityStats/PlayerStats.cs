@@ -22,7 +22,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
     }
     #endregion
 
-    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed, Regeneration, CriticalChance, CritcalDamage;
+    public CharStats Hp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed, Regeneration, CriticalChance, CriticalDamage;
 
     public static event Action eventLevelUp;
 
@@ -288,23 +288,39 @@ public class PlayerStats : MonoBehaviour, IEntitie
         return this.transform;
     }
 
-    public void TakeDamage(float damage, int range)
+    public void TakeDamage(float damage, bool criticalHit)
     {
-        //Die Angriffsreichweite der Mobs (range) spielt derzeit keine rolle. Alle Angriffsverweise auf den Spieler können somit schließlich einen beliebigen Wert besitzen.
-        damage = 10 * (damage * damage) / (Armor.Value + (10 * damage));            // DMG & Armor als werte
+        // Die Angriffsreichweite der Mobs (range) spielt derzeit keine Rolle. 
+        // Alle Angriffsverweise auf den Spieler können somit schließlich einen beliebigen Wert besitzen.
+        damage = 10 * (damage * damage) / (Armor.Value + (10 * damage)); // DMG & Armor als Werte
         damage = Mathf.Clamp(damage, 1, int.MaxValue);
-        
-        //Berichte den GameEvents vom verursachten Schaden am Spieler.
+
+        // Sound abspielen, abhängig davon, ob kritischer Treffer
+        if (AudioManager.instance != null)
+        {
+            if (criticalHit)
+            {
+                AudioManager.instance.PlaySound("Player_Hitted_Critical");
+                if(VFX_Manager.instance != null)
+                    // VFX-Manager ruft den Effekt auf, der am Spieler abgespielt werden soll.
+                VFX_Manager.instance.PlayEffect("VFX_BloodSplash", this);
+            }
+
+            else
+                AudioManager.instance.PlaySound("Player_Hitted");
+        }
+
+        // Berichte den GameEvents vom verursachten Schaden am Spieler.
         GameEvents.Instance.PlayerWasAttacked(damage);
 
-        //Ziehe den Schaden vom Spielerleben ab.
+        // Ziehe den Schaden vom Spielerleben ab.
         Set_currentHp(-damage);
 
-        //Falls das Leben gegen 0 geht, stirbt der Spieler.
+        // Falls das Leben gegen 0 geht, stirbt der Spieler.
         if (currentHp <= 0)
             Die();
-
     }
+
 
     public void TakeDirectDamage(float damage, float range)
     {

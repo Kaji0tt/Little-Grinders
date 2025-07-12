@@ -10,9 +10,10 @@ public enum SpellProperty
     Projectile = 1 << 2,
     Targeted = 1 << 3,
     Movement = 1 << 4,
-    Persistent = 1 << 5,
+    Persistent = 1 << 5, // NEU: Immer aktiv, passiv lauschend
     Channeling = 1 << 6,
     Instant = 1 << 7,
+    Active = 1 << 8,
 }
 
 [CreateAssetMenu(menuName = "Active/Ability")]
@@ -29,20 +30,16 @@ public class AbilityData : ScriptableObject
     public GameObject abilityPrefab;
 
     [Header("Mechanics (Conditional)")]
-    // Diese Felder werden vom Custom Editor gesteuert
     public float range;
     public float areaOfEffectRadius;
     public GameObject projectilePrefab;
     public float projectileSpeed;
     public float channelTime;
-    public float activeTime; // Wird jetzt für 'Persistent' genutzt
-    public float tickTimer;  // Wird für 'Persistent' und 'Channeling' genutzt
+    public float activeTime; // NEU: Für Active-Fähigkeiten
+    public float tickTimer;  // Für Active und Channeling
 
     [Header("Core Stats")]
     public float cooldownTime;
     [Tooltip("Wie viele Aufladungen hat die Fähigkeit maximal? Default: 1 für Standardfähigkeiten.")]
     public int maxCharges = 1;
-
-    // Das alte 'isPersistent' wird entfernt, da es jetzt durch den Enum gesteuert wird.
-    // public bool isPersistent;
 }

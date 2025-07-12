@@ -129,41 +129,11 @@ public class UI_Manager : MonoBehaviour
 
     }
 
-
-    /*
-     * Richtig Chaos hier.
-     * Alle Elemente sollten während des HauptMenüs bereits da sein.
-     * CanvasGroup Ingame sollte deaktiviert werden, sobald alle Überschreibungen für KeyManager da sind. 
-     * Also: CurrentScene = Hauptmenü -> CanvasIngame.active(false)
-     *       CurrentScene != HauptmMenü -> CanvasIngame.active(true)
-     *       
-     * So kann ein Schreiben später relevanter Daten bereits im Startbildschirm geschehen.
-     * On
-     * 
-     * 
-     * 
-     * 
-     */
-
-
-    /*
-    private void DeactivateIngameInterface()
-    {
-
-        canvasIG.SetActive(false);
-    }
-    */
-
     private void Start()
     {
 
 
         CheckForUI_Elements();
-
-
-        //BindKeysInManager();
-
-        RefreshKeyBindText();
 
 
         mainMenuKey = KeyCode.Escape;
@@ -172,16 +142,6 @@ public class UI_Manager : MonoBehaviour
             pickKey = KeyManager.MyInstance.Keybinds["PICK"];
 
         toggleCamKey = KeyCode.Tab;
-
-
-        /*
-        if (SceneManager.GetActiveScene().name == "MainMenu")
-        {
-            canvasIG.SetActive(false);
-        }
-        */
-        //isometricPlayer = GetComponent<IsometricPlayer>();
-
 
 
 
@@ -206,8 +166,6 @@ public class UI_Manager : MonoBehaviour
             pickKey = KeyManager.MyInstance.Keybinds["PICK"];
         */
         toggleCamKey = KeyCode.Tab;
-
-
     }
 
     public void BindKeysInManager()
@@ -223,19 +181,23 @@ public class UI_Manager : MonoBehaviour
         KeyManager.MyInstance.BindKey("PICK", KeyCode.Q);
         KeyManager.MyInstance.BindKey("MAP", KeyCode.M);
 
-        KeyManager.MyInstance.BindKey("SLOT1", KeyCode.Alpha1);
-        KeyManager.MyInstance.BindKey("SLOT2", KeyCode.Alpha2);
-        KeyManager.MyInstance.BindKey("SLOT3", KeyCode.Alpha3);
-        KeyManager.MyInstance.BindKey("SLOT4", KeyCode.Alpha4);
-        KeyManager.MyInstance.BindKey("SLOT5", KeyCode.Alpha5);
+        KeyManager.MyInstance.BindKey("WEAPON", KeyCode.Alpha1);
+        KeyManager.MyInstance.BindKey("KOPF", KeyCode.Alpha2);
+        KeyManager.MyInstance.BindKey("BRUST", KeyCode.Alpha3);
+        KeyManager.MyInstance.BindKey("BEINE", KeyCode.Alpha4);
+        KeyManager.MyInstance.BindKey("SCHUHE", KeyCode.Alpha5);
     }
 
     private void RefreshKeyBindText()
     {
-        //Debug.Log("Inside: RefreshKeyBindText()  Method!");
+        if (keyBindButtons == null || keyBindButtons.Length == 0)
+        {
+            Debug.LogWarning("keyBindButtons ist nicht initialisiert oder leer!");
+            return;
+        }
+
         foreach (KeyValuePair<string, KeyCode> kvp in KeyManager.MyInstance.Keybinds)
         {
-            //Debug.Log("Inside: KeyManager.MyInstance.KeyBinds collection!! Key:" + kvp.Key.ToString());
             UpdateKeyText(kvp.Key, kvp.Value);
         }
     }
@@ -243,18 +205,30 @@ public class UI_Manager : MonoBehaviour
     //Es sollte noch geschaut werden, inwiefern das UI nach Szenen-Wechsel gespeichert werden kann.
     public void UpdateKeyText(string key, KeyCode code)
     {
-        //Debug.Log("Inside: UpdateKeyText for Key:" + key + " with Code: " + code.ToString());
-        TextMeshProUGUI tmp = Array.Find(keyBindButtons, x => x.name == key).GetComponentInChildren<TextMeshProUGUI>();
-
-
-        //Debug.Log("you got updatekeytext running.");
-        if (code.ToString().Contains("Alpha"))
+        if (keyBindButtons == null)
         {
-            tmp.text = code.ToString().Substring(5);
+            Debug.LogWarning("keyBindButtons ist noch nicht initialisiert!");
+            return;
         }
+
+        GameObject btnObj = Array.Find(keyBindButtons, x => x.name.ToUpper().Contains(key.ToUpper()));
+        if (btnObj == null)
+        {
+            Debug.LogWarning($"Kein Button mit Name '{key}' gefunden!");
+            return;
+        }
+
+        TextMeshProUGUI tmp = btnObj.GetComponentInChildren<TextMeshProUGUI>();
+        if (tmp == null)
+        {
+            Debug.LogWarning($"Kein TextMeshProUGUI für Button '{key}' gefunden!");
+            return;
+        }
+
+        if (code.ToString().Contains("Alpha"))
+            tmp.text = code.ToString().Substring(5);
         else
             tmp.text = code.ToString();
-
     }
 
 
@@ -285,27 +259,27 @@ public class UI_Manager : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT1"]) && !GameIsPaused)
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["WEAPON"]) && !GameIsPaused)
         {
             ActionButtonOnClick(0);
         }
 
-        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT2"]) && !GameIsPaused)
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["KOPF"]) && !GameIsPaused)
         {
             ActionButtonOnClick(1);
         }
 
-        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT3"]) && !GameIsPaused)
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["BRUST"]) && !GameIsPaused)
         {
             ActionButtonOnClick(2);
         }
 
-        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT4"]) && !GameIsPaused)
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["BEINE"]) && !GameIsPaused)
         {
             ActionButtonOnClick(3);
         }
 
-        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SLOT5"]) && !GameIsPaused)
+        if (Input.GetKeyDown(KeyManager.MyInstance.ActionBinds["SCHUHE"]) && !GameIsPaused)
         {
             ActionButtonOnClick(4);
         }
@@ -404,18 +378,16 @@ public class UI_Manager : MonoBehaviour
     /// <summary>
     /// Weist eine Fähigkeit aus einem Mod dem korrekten ActionButton zu.
     /// </summary>
-    private void AssignAbilityFromMod(ItemModDefinition modDef, ItemType itemType)
+    private void AssignAbilityFromMod(ItemInstance item, ItemType itemType)
     {
-        if (modDef == null || modDef.modAbilityData == null) return;
+        if (item == null) return;
 
-        // Finde den korrekten Button, dessen myItemType mit dem des Items übereinstimmt.
         ActionButton targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == itemType);
 
         if (targetButton != null)
         {
-            // Dein Debug-Log, jetzt sicher.
-            Debug.Log($"'{targetButton.name}' wurde für den Item-Typ '{itemType}' gefunden. Weise Fähigkeit '{modDef.modAbilityData.name}' zu.");
-            targetButton.SetAbility(modDef.modAbilityData);
+            //Debug.Log($"'{targetButton.name}' wird mit ItemInstance '{item.ItemName}' belegt.");
+            targetButton.SetItemInstance(item);
         }
         else
         {
@@ -432,32 +404,17 @@ public class UI_Manager : MonoBehaviour
     {
         if (equippedItem == null) return;
 
-        bool hasAbilityMod = false;
+        bool hasAbilityMod = equippedItem.addedItemMods.Any(mod => mod.definition.modAbilityData != null);
 
-        // Suche nach einem Mod mit einer Fähigkeit auf dem Item.
-        foreach (var mod in equippedItem.addedItemMods)
+        if (hasAbilityMod)
         {
-            if (mod.definition.modAbilityData != null)
-            {
-                // Fähigkeit gefunden, weise sie zu.
-                AssignAbilityFromMod(mod.definition, equippedItem.itemType);
-                hasAbilityMod = true;
-                break; // Es kann nur eine Fähigkeit pro Item geben.
-            }
+            AssignAbilityFromMod(equippedItem, equippedItem.itemType);
         }
-
-        // Wenn nach der Prüfung aller Mods keine Fähigkeit gefunden wurde,
-        // muss der zugehörige ActionButton geleert werden.
-        if (!hasAbilityMod)
+        else
         {
-            // Finde den korrekten Button, der zum Item-Typ passt.
             ActionButton targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == equippedItem.itemType);
-
             if (targetButton != null)
-            {
-                // Rufe die korrekte Methode zum Leeren auf.
                 targetButton.Clear();
-            }
         }
     }
 
@@ -627,64 +584,30 @@ public class UI_Manager : MonoBehaviour
 
                     break;
                     */
-                case InterfaceElementDeclaration.AB1:
-
+                case InterfaceElementDeclaration.Weapon:
                     aBtn1 = interfaceElement.GetComponent<Button>();
-
                     ActionButton _aBtn1 = aBtn1.GetComponent<ActionButton>();
-
-                    //_aBtn1.SetItemType(ItemType.Weapon);
-
                     actionButtons.Add(_aBtn1);
-
                     break;
-
-                case InterfaceElementDeclaration.AB2:
-
+                case InterfaceElementDeclaration.Kopf:
                     aBtn2 = interfaceElement.GetComponent<Button>();
-
                     ActionButton _aBtn2 = aBtn2.GetComponent<ActionButton>();
-
-                    //_aBtn2.SetItemType(ItemType.Kopf);
-
                     actionButtons.Add(_aBtn2);
-
                     break;
-
-                case InterfaceElementDeclaration.AB3:
-
+                case InterfaceElementDeclaration.Brust:
                     aBtn3 = interfaceElement.GetComponent<Button>();
-
                     ActionButton _aBtn3 = aBtn3.GetComponent<ActionButton>();
-
-                    //_aBtn3.SetItemType(ItemType.Brust);
-
                     actionButtons.Add(_aBtn3);
-
                     break;
-
-                case InterfaceElementDeclaration.AB4:
-
+                case InterfaceElementDeclaration.Beine:
                     aBtn4 = interfaceElement.GetComponent<Button>();
-
                     ActionButton _aBtn4 = aBtn4.GetComponent<ActionButton>();
-
-                    //_aBtn4.SetItemType(ItemType.Beine);
-
                     actionButtons.Add(_aBtn4);
-
                     break;
-
-                case InterfaceElementDeclaration.AB5:
-
+                case InterfaceElementDeclaration.Schuhe:
                     aBtn5 = interfaceElement.GetComponent<Button>();
-
                     ActionButton _aBtn5 = aBtn5.GetComponent<ActionButton>();
-
-                    //_aBtn5.SetItemType(ItemType.Schuhe);
-
                     actionButtons.Add(_aBtn5);
-
                     break;
 
                 default:
