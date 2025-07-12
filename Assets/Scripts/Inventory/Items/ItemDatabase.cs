@@ -79,7 +79,7 @@ public class ItemDatabase : MonoBehaviour
                 Debug.Log($"Item {item.ItemName} with ID {item.ItemID} dropped at position {position} with roll {roll} and percentSum {percentSum}");
 
                 //newItem.AppendModNamesToItemName();
-                
+
                 //newItem.UpdateItemDescriptionWithMods();
 
                 break;
@@ -135,10 +135,10 @@ public class ItemDatabase : MonoBehaviour
     {
         //Debug.Log("Searching for item with ID: " + ID);
 
-        for(int i = 0; i < totalLoottable.Count; i++)
+        for (int i = 0; i < totalLoottable.Count; i++)
         {
-            
-            foreach(Item item in totalLoottable[i])
+
+            foreach (Item item in totalLoottable[i])
             {
 
                 if (item.ItemID == ID)
@@ -186,6 +186,20 @@ public class ItemDatabase : MonoBehaviour
 
         Debug.Log("No item with ID: " + name + " found.");
 
+        return null;
+    }
+    
+    public ItemModDefinition GetModDefinitionByName(string modName)
+    {
+        if (allModDefs == null) return null;
+
+        foreach (var modDef in allModDefs)
+        {
+            if (modDef.name == modName)
+                return modDef;
+        }
+
+        Debug.LogWarning($"No ItemModDefinition found with name: {modName}");
         return null;
     }
 

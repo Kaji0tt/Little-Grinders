@@ -72,7 +72,6 @@ public class GameEvents : MonoBehaviour
 
         // Der GameEvent-Manager ruft jetzt nur noch die zentrale UI-Methode auf.
         // Er muss nicht mehr wissen, WIE das UI die Fähigkeit zuweist.
-        UI_Manager.instance.UpdateAbilityForEquippedItem(item);
     }
 
     // Kampfaktionen

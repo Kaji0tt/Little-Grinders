@@ -42,7 +42,7 @@ public class ItemRolls : MonoBehaviour
             var mod = new ItemMod
             {
                 definition = def,
-                rollRarity = rarity,
+                rolledRarity = rarity,
                 rolledValue = rolledValue
             };
 
@@ -52,7 +52,7 @@ public class ItemRolls : MonoBehaviour
         itemTemplate.addedItemMods = mods;
         itemTemplate.ApplyItemMods();
 
-        Rarity highestRarity = mods.Count > 0 ? mods.Max(m => m.rollRarity) : Rarity.Common;
+        Rarity highestRarity = mods.Count > 0 ? mods.Max(m => m.rolledRarity) : Rarity.Common;
         itemTemplate.itemRarity = highestRarity;
 
         return itemTemplate;

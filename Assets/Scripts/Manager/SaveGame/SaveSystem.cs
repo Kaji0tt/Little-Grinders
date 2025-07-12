@@ -5,15 +5,64 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem 
 {
+    private static string playerPath => Application.persistentDataPath + "/player.xxs";
 
-    //Derzeit verwende ich keine weiteren Konstruktor für den PlayerSave! Im Tutorial hatte er die PlayerStats mit angebgebn, sind hinfällig vorerst.
-    public static void SavePlayer()
+    // Prüft, ob ein Savegame existiert
+    public static bool HasSave()
+    {
+        return File.Exists(playerPath);
+    }
+
+    // Lädt das Savegame inkl. Seed
+    public static PlayerSave LoadPlayer()
+    {
+        if (HasSave())
+        {
+            try
+            {
+                FileInfo fileInfo = new FileInfo(playerPath);
+                if (fileInfo.Length == 0)
+                {
+                    Debug.LogWarning("Save file is empty. Creating new save.");
+                    return NewSave();
+                }
+
+                BinaryFormatter formatter = new BinaryFormatter();
+                FileStream stream = new FileStream(playerPath, FileMode.Open);
+
+                PlayerSave data = formatter.Deserialize(stream) as PlayerSave;
+                stream.Close();
+
+                Debug.Log("Player Data loaded.");
+                return data;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError("Failed to load save file: " + ex.Message + "\nCreating new save.");
+                return NewSave();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Save file not found. Creating new save.");
+            return NewSave();
+        }
+    }
+
+    // Erstellt ein neues Savegame mit zufälligem Seed (mind. 10 Zeichen)
+    public static PlayerSave NewSave()
+    {
+        PlayerSave save = new PlayerSave();
+        save.talentTreeSeed = UnityEngine.Random.Range(1000000000, int.MaxValue);
+        SavePlayer(save);
+        return save;
+    }
+
+    // Speichert das Savegame inkl. Seed
+    public static void SavePlayer(PlayerSave data)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/player.xxs";
-        FileStream stream = new FileStream(path, FileMode.Create);
-
-        PlayerSave data = new PlayerSave();
+        FileStream stream = new FileStream(playerPath, FileMode.Create);
 
         formatter.Serialize(stream, data);
         stream.Close();
@@ -21,30 +70,7 @@ public static class SaveSystem
         Debug.Log("SAVE TROUBLESHOOT -- player.xxs saved");
     }
 
-    public static PlayerSave LoadPlayer ()
-    {
-        string path = Application.persistentDataPath + "/player.xxs";
-        if (File.Exists(path))
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
-
-            PlayerSave data = formatter.Deserialize(stream) as PlayerSave;
-            stream.Close();
-
-            Debug.Log("Player Data loaded.");
-
-            return data;
-        }
-        else
-        {
-            Debug.LogError("Save file not found in " + path);
-
-            return null;
-        }
-    }
-
-    
+    // Szenen-Save bleibt wie gehabt
     public static void SaveScenePlayer()
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -75,12 +101,8 @@ public static class SaveSystem
         }
         else
         {
-
             Debug.LogError("Save file not found in " + path);
-
             return null;
-
         }
     }
-    
 }

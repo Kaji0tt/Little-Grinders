@@ -14,7 +14,7 @@ public class SaveLoadMenu : MonoBehaviour
     public void SaveGame()
     {
 
-        SaveSystem.SavePlayer();
+        SaveSystem.SavePlayer(SaveSystem.NewSave());
         LogScript.instance.ShowLog("The Game has been saved!");
 
     }
@@ -31,7 +31,7 @@ public class SaveLoadMenu : MonoBehaviour
         //Der Int wird im späteren Verlauf den Status des gewählen SavedGames reflektieren, damit man mehrere Saves haben kann.
         PlayerPrefs.SetInt("Load", 1);
 
-        SceneManager.LoadScene(data.MyScene);
+        //SceneManager.LoadScene(data.MyScene);
 
         //FindObjectOfType<PlayerLoad>().LoadPlayer(data);
 

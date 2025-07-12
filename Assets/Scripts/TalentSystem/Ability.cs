@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 
 public abstract class Ability : MonoBehaviour, IUseable
 {
@@ -95,17 +97,22 @@ public abstract class Ability : MonoBehaviour, IUseable
             if (Input.GetKeyUp(slotKey))
             {
                 OnChannelEnd();
-                UseBase(PlayerManager.instance.playerStats);
 
-                if (maxCharges == 1 && chargeCooldownTimer <= 0)
+                if (!IsPointerOverUI())
                 {
-                    chargeCooldownTimer = cooldownTime;
-                    state = AbilityState.Cooldown;
+                    UseBase(PlayerManager.instance.playerStats);
+
+                    if (maxCharges == 1 && chargeCooldownTimer <= 0)
+                    {
+                        chargeCooldownTimer = cooldownTime;
+                        state = AbilityState.Cooldown;
+                    }
+                    else
+                    {
+                        state = AbilityState.Ready;
+                    }
                 }
-                else
-                {
-                    state = AbilityState.Ready;
-                }
+
                 return;
             }
 
@@ -136,6 +143,7 @@ public abstract class Ability : MonoBehaviour, IUseable
     /// </summary>
     public void Use()
     {
+        if (IsPointerOverUI()) return;
         if (state != AbilityState.Ready) return;
         if (currentCharges <= 0) return;
 
@@ -221,38 +229,38 @@ public abstract class Ability : MonoBehaviour, IUseable
         }
     }
 
-private void HandleActiveDuration()
-{
-    if (state != AbilityState.Active) return;
-
-    activeTimer -= Time.deltaTime;
-    tickCooldownTimer -= Time.deltaTime;
-
-    if (tickCooldownTimer <= 0)
+    private void HandleActiveDuration()
     {
-        OnTick(PlayerManager.instance.playerStats);
-        tickCooldownTimer = tickTimer;
-    }
+        if (state != AbilityState.Active) return;
 
-    if (activeTimer <= 0)
-    {
-        OnCooldown(PlayerManager.instance.playerStats);
+        activeTimer -= Time.deltaTime;
+        tickCooldownTimer -= Time.deltaTime;
 
-        // Cooldown nur setzen, wenn es keine weiteren Charges gibt
-        if (maxCharges == 1 && chargeCooldownTimer <= 0)
+        if (tickCooldownTimer <= 0)
         {
-            chargeCooldownTimer = cooldownTime;
-            state = AbilityState.Cooldown; // NEU: State explizit auf Cooldown setzen
+            OnTick(PlayerManager.instance.playerStats);
+            tickCooldownTimer = tickTimer;
         }
-        else
+
+        if (activeTimer <= 0)
         {
-            state = AbilityState.Ready;
+            OnCooldown(PlayerManager.instance.playerStats);
+
+            // Cooldown nur setzen, wenn es keine weiteren Charges gibt
+            if (maxCharges == 1 && chargeCooldownTimer <= 0)
+            {
+                chargeCooldownTimer = cooldownTime;
+                state = AbilityState.Cooldown; // NEU: State explizit auf Cooldown setzen
+            }
+            else
+            {
+                state = AbilityState.Ready;
+            }
         }
     }
-}
 
     private void HandleCooldown()
-{
+    {
         if (state != AbilityState.Cooldown) return;
 
         chargeCooldownTimer -= Time.deltaTime;
@@ -263,31 +271,6 @@ private void HandleActiveDuration()
             // Optional: Debug.Log($"[Ability] {abilityName} ist wieder bereit!");
         }
     }
-    #endregion
-
-    #region Abstract & Interface Methods
-    // --- ABSTRAKTE METHODEN (BLEIBEN GLEICH) ---
-    // Wird bei Instant/Channeling-Ende/Persistent-Start ausgelöst
-    public abstract void UseBase(IEntitie entitie);
-    // Wird bei jedem Tick von Persistent/Channeling ausgelöst
-    public abstract void OnTick(IEntitie entitie);
-    // Wird am Ende von Persistent ausgelöst
-    public abstract void OnCooldown(IEntitie entitie);
-
-        // Channeling-Hooks (können von Kindklassen überschrieben werden)
-    protected virtual void OnChannelEnter() { }
-    protected virtual void OnChannelUpdate() { }
-    protected virtual void OnChannelExit() { }
-
-    // --- INTERFACE-METHODEN (ANGEPASST) ---
-    public bool IsOnCooldown() => currentCharges == 0 && chargeCooldownTimer > 0;
-    public float GetCooldown() => chargeCooldownTimer;
-    public bool IsActive() => state == AbilityState.Active || state == AbilityState.Channeling;
-    public float GetActiveTime() => (state == AbilityState.Active) ? activeTimer : channelTimer;
-    public int GetCurrentCharges() => currentCharges;
-    public int GetMaxCharges() => maxCharges;
-    public string GetName() => abilityName;
-    #endregion
 
     private StatModifier channelSlowMod;
 
@@ -338,6 +321,38 @@ private void HandleActiveDuration()
         Debug.Log("[Ability] Channeling abgebrochen!");
     }
 
+    #endregion
+
+    #region Abstract & Interface Methods
+    // --- ABSTRAKTE METHODEN (BLEIBEN GLEICH) ---
+    // Wird bei Instant/Channeling-Ende/Persistent-Start ausgelöst
+    public abstract void UseBase(IEntitie entitie);
+    // Wird bei jedem Tick von Persistent/Channeling ausgelöst
+    public abstract void OnTick(IEntitie entitie);
+    // Wird am Ende von Persistent ausgelöst
+    public abstract void OnCooldown(IEntitie entitie);
+
+        // Channeling-Hooks (können von Kindklassen überschrieben werden)
+    protected virtual void OnChannelEnter() { }
+    protected virtual void OnChannelUpdate() { }
+    protected virtual void OnChannelExit() { }
+
+    // --- INTERFACE-METHODEN (ANGEPASST) ---
+    public bool IsOnCooldown() => currentCharges == 0 && chargeCooldownTimer > 0;
+    public float GetCooldown() => chargeCooldownTimer;
+    public bool IsActive() => state == AbilityState.Active || state == AbilityState.Channeling;
+    public float GetActiveTime() => (state == AbilityState.Active) ? activeTimer : channelTimer;
+    public int GetCurrentCharges() => currentCharges;
+    public int GetMaxCharges() => maxCharges;
+    public string GetName() => abilityName;
+    #endregion
+
+
+    // Beispiel für die zentrale Prüfung in Ability:
+    protected bool IsPointerOverUI()
+    {
+        return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+    }
     protected string myHotkey = "None"; // Default, kann beim Setzen überschrieben werden
 
     public void SetSlotName(string newHotkey) { myHotkey = newHotkey;}

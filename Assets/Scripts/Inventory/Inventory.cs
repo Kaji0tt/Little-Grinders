@@ -99,14 +99,21 @@ public class Inventory : MonoBehaviour
         return 0; // Item nicht im Inventar oder kein Consumable
     }
 
-    public void UseItem(ItemInstance item)
+    public void EquipItem(ItemInstance item)
     {
-        //Diese Stelle könnte praktisch werden, um visuals anzupassen. Also, dass Standard Sprite sich anpasst und die
-        //Gegenstände wirklicn anzieh!
-        if (item.useable && item != null)
-        item.Use();
+        var allSlots = GameObject.FindObjectsOfType<Int_SlotBtn>();
+        var equipSlot = allSlots.FirstOrDefault(slot => slot.slotType == item.itemType);
 
-        useItemAction(item);
+        if (equipSlot != null)
+        {
+            equipSlot.SetItem(item, this); // 'this' ist das Inventory
+        }
+        else
+        {
+            Debug.LogWarning($"Kein Equip-Slot für ItemType {item.itemType} gefunden!");
+        }
+
+        useItemAction?.Invoke(item);
     }
 
     public Dictionary<string, int> GetConsumableDict()

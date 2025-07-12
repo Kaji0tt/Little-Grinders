@@ -40,12 +40,33 @@ public class TalentTreeGenerator : MonoBehaviour
     private int nextID = 0;
 
 
+    private int treeSeed; // Seed für den Talentbaum, um Konsistenz zu gewährleisten
 
     private void Start()
     {
-        //1.
-        GenerateTree();
+        PlayerSave save = null;
+        bool validSave = false;
 
+        if (SaveSystem.HasSave())
+        {
+            save = SaveSystem.LoadPlayer();
+
+            // Prüfe, ob Save und Seed gültig sind
+            if (save != null && save.talentTreeSeed > 0)
+            {
+                validSave = true;
+                treeSeed = save.talentTreeSeed;
+            }
+        }
+
+        if (!validSave)
+        {
+            save = SaveSystem.NewSave();
+            treeSeed = save.talentTreeSeed;
+        }
+
+        UnityEngine.Random.InitState(treeSeed);
+        GenerateTree();
     }
 
     //2.

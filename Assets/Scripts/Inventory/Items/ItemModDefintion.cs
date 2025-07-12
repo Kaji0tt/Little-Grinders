@@ -46,7 +46,7 @@ public class ItemModDefinition : ScriptableObject
 public class ItemMod
 {
     public ItemModDefinition definition;
-    public Rarity rollRarity;
+    public Rarity rolledRarity;
     public float rolledValue;
     public bool IsPercent => definition != null &&
     (definition.modType == ModType.Percent || definition.modType == ModType.PercentFortune);
@@ -56,7 +56,7 @@ public class ItemMod
     {
         if (definition != null)
         {
-            rolledValue = definition.GetValue(mapLevel, rollRarity);
+            rolledValue = definition.GetValue(mapLevel, rolledRarity);
         }
     }
 
@@ -67,7 +67,7 @@ public class ItemMod
             return "";
 
         var scaling = definition.rarityScalings
-            .FirstOrDefault(r => r.rarity == rollRarity);
+            .FirstOrDefault(r => r.rarity == rolledRarity);
 
         return scaling?.displayName ?? definition.modName;
     }

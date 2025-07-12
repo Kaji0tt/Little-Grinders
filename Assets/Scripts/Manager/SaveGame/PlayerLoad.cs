@@ -7,247 +7,125 @@ using UnityEngine.SceneManagement;
 
 public class PlayerLoad : MonoBehaviour
 {
-
     public void LoadPlayer(PlayerSave data)
     {
         LoadPlayerStats(data);
-
-        //Die Gegenstände werden initialisiert und neu angezogen.
-        //LoadEquippedItems(data);
-
-        //Skillpunkte werden geladen.
-        LoadSkillPoints(data);
-
-        // Inventar wird geladen.
-        //LoadInventory(data);
-
-        // ActionButtons werden geladen.
-        LoadActionbar(data);
-
-        //Map-Daten werden geladen. 
-        if(data.currentMap != null)
-        LoadGlobalMap(data);
-        
-    }
-
-    /*
-    public void LoadScenePlayer(PlayerSave data)
-    {
-        LoadPlayerStats(data);
-
-        //Die Gegenstände werden initialisiert und neu angezogen.
         LoadEquippedItems(data);
-
-        //Skillpunkte werden geladen.
         LoadSkillPoints(data);
-
-        // Inventar wird geladen.
         LoadInventory(data);
+        LoadTalents(data);
 
-        // ActionButtons werden geladen.
-        LoadActionbar(data);
-
+        if (data.currentMap != null)
+            LoadGlobalMap(data);
     }
-    */
-
-    private void LoadActionbar(PlayerSave data)
-    {
-        ActionButton[] actionButtons = FindObjectsOfType<ActionButton>();
-
-        foreach (ActionButton slot in actionButtons)
-        {
-            if (slot.gameObject.name.StartsWith("ActionButton"))
-            {
-                // Extrahiere die Slot-Nummer dynamisch aus dem Namen (z.B. "ActionButton1" => 0)
-                int slotIndex = int.Parse(slot.gameObject.name.Replace("ActionButton", "")) - 1;
-
-                // Lade den Slot mit der entsprechenden gespeicherten Aktion
-                LoadActionbarSlot(slotIndex, slot, data);
-            }
-        }
-    }
-    /*
-    private void LoadInventory(PlayerSave data)
-    {
-        int currentItem = 0;
-
-        foreach (string item in data.inventorySave)
-        {
-
-            PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(ItemRolls.GetItemStats(item, data.inventoryItemMods[currentItem], data.inventoryItemRarity[currentItem]));
-
-            currentItem += 1;
-
-        }
-    }
-    */
-    private void LoadSkillPoints(PlayerSave data)
-    {
-        TalentTreeManager talentTree = TalentTreeManager.instance;
-
-        talentTree.ResetTalents();
-
-        foreach (TalentSave savedTalent in data.talentsToBeSaved)
-        {
-            //Debug.Log("loading Talent: " + savedTalent.talentName + " loading it for " + talentTree.gameObject.name);
-            for (int i = 0; i < talentTree.allTalents.Count; i++)
-            {
-                if (talentTree.allTalents[i].name == savedTalent.talentName)
-                {
-                    talentTree.allTalents[i].Set_currentCount(savedTalent.talentPoints);
-
-                    talentTree.allTalents[i].unlocked = savedTalent.unlocked;
-
-                    talentTree.allTalents[i].UpdateTalent();
-                }
-
-            }
-
-
-            talentTree.UpdateTalentPointText();
-
-
-
-        }
-
-
-        foreach (Talent_UI talent in talentTree.allTalents)
-        {
-            if (talent.unlocked)
-            {
-                //Falls es sich nicht um ein AbilityTalent handelt, füge die Effekte hinzu.
-                //if (talent.GetType() != typeof(AbilityTalent))
-                //{
-
-                //    for (int i = 1; i <= talent.currentCount; i++)
-                        //talent.ApplyPassivePointsAndEffects(talent); Ehemaliger Ansatz, aber ApplyPassivePointsAndEffects sieht hinfällig im vgl. TryUseTalent aus
-                //        TalentTreeManager.instance.TryUseTalent(talent);
-                //}
-                
-                
-                    foreach(TalentSave savedTalent in data.talentsToBeSaved)
-                    if(talent.talentName == savedTalent.talentName)
-                    {
-                            //print("JUHU; FOUND: " + savedTalent.talentName + ", got the Spec: " + (Ability.AbilitySpecialization)savedTalent.spec);
-                            //print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
-                            /// 07.03: Spells als Affixes, Rebuilding.
-                            /// talent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
-                    }
-
-                
-
-                talent.Unlock();
-            }
-
-            else
-            {
-                talent.Lock();
-            }
-
-        }
-    }
-    /*
-    private void LoadEquippedItems(PlayerSave data)
-    {
-        if (data.brust != null)
-            FindFirstObjectByType<EQSlotBrust>().LoadItem(ItemRolls.GetItemStats(data.brust, data.modsBrust, data.brust_r));
-
-        if (data.hose != null)
-            FindFirstObjectByType<EQSlotHose>().LoadItem(ItemRolls.GetItemStats(data.hose, data.modsHose, data.hose_r));
-
-        if (data.kopf != null)
-            FindFirstObjectByType<EQSlotKopf>().LoadItem(ItemRolls.GetItemStats(data.kopf, data.modsKopf, data.kopf_r));
-
-        if (data.schuhe != null)
-            FindFirstObjectByType<EQSlotSchuhe>().LoadItem(ItemRolls.GetItemStats(data.schuhe, data.modsSchuhe, data.schuhe_r));
-
-        if (data.schmuck != null)
-            FindFirstObjectByType<EQSlotSchmuck>().LoadItem(ItemRolls.GetItemStats(data.schmuck, data.modsSchmuck, data.schmuck_r));
-
-        if (data.weapon != null)
-            FindFirstObjectByType<EQSlotWeapon>().LoadItem(ItemRolls.GetItemStats(data.weapon, data.modsWeapon, data.weapon_r));
-    }
-    */
 
     private void LoadPlayerStats(PlayerSave data)
     {
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+        playerStats.level = data.mySavedLevel;
+        playerStats.xp = data.mySavedXp;
+        playerStats.Load_currentHp(data.hp);
+        playerStats.Set_SkillPoints(data.mySavedSkillpoints);
+    }
 
-        playerStats.level = data.level;
+    private void LoadSkillPoints(PlayerSave data)
+    {
+        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+        playerStats.Set_SkillPoints(data.mySavedSkillpoints);
+    }
 
-        playerStats.xp = data.xp;
+    private void LoadEquippedItems(PlayerSave data)
+    {
+        // Entferne aktuelle Ausrüstung
+        Int_SlotBtn[] slotButtons = GameObject.FindObjectsOfType<Int_SlotBtn>();
+        foreach (var slotBtn in slotButtons)
+        {
+            slotBtn.ClearSlot(); // Falls vorhanden, Methode zum Leeren des Slots
+        }
 
-        playerStats.Load_currentHp(data.Hp);
+        // Setze gespeicherte Ausrüstung
+        foreach (var kvp in data.mySavedEquip)
+        {
+            string slotKey = kvp.Key;
+            SavedItem savedItem = kvp.Value;
 
-        playerStats.Set_SkillPoints(data.skillPoints);
+            // Finde passenden SlotButton anhand des ItemType
+            var slotBtn = slotButtons.FirstOrDefault(btn => btn.slotType.ToString().ToUpper() == slotKey);
+            if (slotBtn != null)
+            {
+                // Hole das Inventar des Spielers
+                var inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
+
+                // Erzeuge ItemInstance aus SavedItem
+                ItemInstance itemInstance = CreateItemInstanceFromSave(savedItem);
+                slotBtn.SetItem(itemInstance, inventory); // Methode zum Setzen des Items im Slot
+            }
+        }
+    }
+
+    private void LoadInventory(PlayerSave data)
+    {
+        var inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
+        //inventory.Clear(); // Methode zum Leeren des Inventars
+
+        foreach (var savedItem in data.mySavedInventory)
+        {
+            ItemInstance itemInstance = CreateItemInstanceFromSave(savedItem);
+            inventory.AddItem(itemInstance, savedItem.amount);
+        }
+    }
+
+    private void LoadTalents(PlayerSave data)
+    {
+        // Die K.I. hat hier einen Clear veranlasst, der vorerst entfernt wurde.         
+
+        // Lade geskillte Talente
+        foreach (TalentSave save in data.mySavedTalents)
+        {
+            TalentNode node = TalentTreeGenerator.instance.allNodes.FirstOrDefault(n => n.ID == save.nodeID);
+            if (node != null)
+            {
+                node.myCurrentCount = save.currentCount;
+                node.Unlock();
+                // Optional: weitere Felder setzen
+            }
+        }
     }
 
     private void LoadGlobalMap(PlayerSave data)
     {
         if (data.exploredMaps.Count != 0)
         {
-            print("GlobalMap should be loading: " + data.exploredMaps.Count + " maps.");
             GlobalMap.instance.exploredMaps = data.exploredMaps;
-
             GlobalMap.instance.Set_CurrentMap(data.currentMap);
-
             GlobalMap.instance.lastSpawnpoint = data.lastSpawnpoint;
-
         }
         else
-            print("something is wrong with the playerlaod");
-
-
+        {
+            print("something is wrong with the playerload");
+        }
     }
 
-    void LoadActionbarSlot(int i, ActionButton slot, PlayerSave data)
+    // Hilfsmethode zum Erzeugen einer ItemInstance aus SavedItem
+    private ItemInstance CreateItemInstanceFromSave(SavedItem savedItem)
     {
-        // Überprüfen, ob Daten für diesen Slot vorhanden sind
-        if (data.savedActionButtons[i] != null)
+        Item baseItem = ItemDatabase.GetItemByID(savedItem.itemID);
+        ItemInstance instance = new ItemInstance(baseItem);
+
+        if (Enum.TryParse<Rarity>(savedItem.rarity, out var rarity))
+            instance.itemRarity = rarity;
+
+        instance.addedItemMods.Clear();
+        foreach (var modSave in savedItem.mods)
         {
-            bool itemLoaded = false;
-
-            // Überprüfen, ob der gespeicherte Name einem Zauber entspricht
-            foreach (Talent_UI talent in TalentTreeManager.instance.allTalents)
-            {
-            
-                if (talent.talentName == data.savedActionButtons[i] && talent.passive == false)
-                {
-                   
-                    //Get Each equipped Item and set Ability
-                    itemLoaded = true; // Markiere, dass ein Item geladen wurde
-                    break; // Beende die Schleife, wenn der Zauber gefunden wurde
-                }
-            }
-
-            // Überprüfen, ob der gespeicherte Name einem Item entspricht (wenn noch nichts geladen wurde)
-            if (!itemLoaded)
-            {
-                // Hole das Item basierend auf der ID
-                Item item = ItemDatabase.GetItemByID(data.savedActionButtons[i]);
-
-                // Erstelle eine neue ItemInstance aus dem Item, wenn es gefunden wurde
-                if (item != null)
-                {
-                    //Usable werden ausgeklammert vorerst. Es soll keine Potions mehr geben.
-                    //ItemInstance itemInstance = new ItemInstance(item); // Erstelle eine neue ItemInstance
-                   // slot.LoadItemUseable(itemInstance); // ItemInstance in den Slot laden
-                    itemLoaded = true;
-                }
-            }
-
-            // Füge eine Fehlerüberprüfung hinzu
-            if (!itemLoaded)
-            {
-                Debug.LogWarning($"Kein Zauber oder Item gefunden für Actionbar-Slot {i}: {data.savedActionButtons[i]}");
-            }
+            var modDef = ItemDatabase.instance.GetModDefinitionByName(modSave.modName);
+            var mod = new ItemMod();
+            mod.definition = modDef;
+            mod.rolledRarity = Enum.TryParse<Rarity>(modSave.modRarity, out var modRarity) ? modRarity : Rarity.Common;
+            instance.addedItemMods.Add(mod);
         }
-        else
-        {
-            Debug.LogWarning($"Keine gespeicherten Daten für Actionbar-Slot {i}");
-        }
+
+        return instance;
     }
-
-
 }
 

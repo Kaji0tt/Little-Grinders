@@ -75,7 +75,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\Manager\ParticleManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardStack2D.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotSchmuck.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\Tweening\ITweenValue.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Item Handling\Int_ItemPickup.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
@@ -129,7 +128,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\Gradient.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\ScrollRect\FancyScrollRectCell.cs" />
     <Compile Include="Assets\Scripts\Combat\DamagePopUpManager.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotBrust.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAnimator.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Talente\Teleport.cs" />
     <Compile Include="Assets\Scripts\Inventory\UI_Inventory.cs" />
@@ -159,14 +157,12 @@
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAnimationUtility.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotHose.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\SortingOrder.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewContext.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorLabel.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy Types\_projectile.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\UI_GlobalMap.cs" />
     <Compile Include="Assets\Scripts\Manager\GameAssets.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotBase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\DropDownList.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\TiltWindow.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\Tweening\FloatTween.cs" />
@@ -176,7 +172,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ExtentionMethods.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemAssets.cs" />
     <Compile Include="Assets\Scripts\Combat\TargetSystem.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotSchuhe.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ActionButton.cs" />
     <Compile Include="Assets\UI_Map.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Mesh.cs" />
@@ -247,7 +242,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Inventory\IDescribable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\UIParticleSystem.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotWeapon.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_Sprite.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Voltleap.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\Tooltip.cs" />
@@ -288,8 +282,8 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\TooltipTrigger.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\SaveSystem.cs" />
-    <Compile Include="Assets\Scripts\Manager\SaveGame\TalentSave.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\HSVUtil.cs" />
+    <Compile Include="Assets\Scripts\Manager\PlayerSaveManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_InfiniteScroll.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_UI.cs" />
     <Compile Include="Assets\Scripts\Combat\WeaponCombo.cs" />
@@ -369,7 +363,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RescalingPanels\RescaleDragPanel.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\EnvCamScript.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotKopf.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\ItemSpells\ItemActionScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\CableCurve.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\SelectableScaler.cs" />

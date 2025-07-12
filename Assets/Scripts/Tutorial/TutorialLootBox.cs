@@ -93,7 +93,7 @@ public class TutorialLootBox : MonoBehaviour
                         ItemMod newMod = new ItemMod { definition = modDef };
                         
                         // Für Testzwecke weisen wir eine feste Seltenheit zu.
-                        newMod.rollRarity = Rarity.Rare; 
+                        newMod.rolledRarity = Rarity.Rare; 
                         
                         // Initialisiere den Mod, um den 'rolledValue' zu berechnen
                         int mapLevel = GlobalMap.instance != null ? GlobalMap.instance.currentMap.mapLevel : 1;

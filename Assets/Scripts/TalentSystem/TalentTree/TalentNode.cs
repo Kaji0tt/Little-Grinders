@@ -12,10 +12,6 @@ public class TalentNode
     /// </summary>
     public int ID; // Eindeutige ID
 
-    //public List<TalentNode> myChildren; // Verknüpfte Talente
-
-    //public List<TalentNode> myParents; // Vorgänger-Knoten
-
     public List<TalentNode> myConnectedNodes = new();
 
     public int Depth; // Entfernung von der Wurzel
@@ -43,6 +39,11 @@ public class TalentNode
 
     public bool hasExpanded = false;
 
+    public void Unlock()
+    {
+        isUnlocked = true;
+        myTalentUI?.Unlock();
+    }
 
     //Generierung der Urpsrungstalente 
     public TalentNode(int id, TalentNode parent, int depth, TalentType type)

@@ -27,7 +27,7 @@ public class Scene_LoadNextScene : MonoBehaviour
                 //GlobalMap.instance.lastSpawnpoint = "SpawnRight";
 
                 //Speichere anschließend den Spieler
-                SaveSystem.SavePlayer();
+                SaveSystem.SavePlayer(SaveSystem.NewSave());
 
                 //Lade die nächste Szene
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -38,7 +38,7 @@ public class Scene_LoadNextScene : MonoBehaviour
             //Falls der Spieler den Collider zum MapWechsel berührt, während er bereits in der Prozeduralen Szene ist, ScanExitDirection
             else
             {
-                SaveSystem.SavePlayer();
+                SaveSystem.SavePlayer(SaveSystem.NewSave());
 
                 LoadNextMap(ScanExitDirection(gameObject.name));
 

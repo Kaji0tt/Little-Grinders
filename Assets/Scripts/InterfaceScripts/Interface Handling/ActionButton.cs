@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class ActionButton : MonoBehaviour
 {
     // MyUseable bleibt die zentrale Referenz zur Fähigkeit.
@@ -255,7 +254,7 @@ public class ActionButton : MonoBehaviour
         if (mod != null)
         {
             var abilityData = mod.definition.modAbilityData;
-            float rarityMultiplier = mod.definition.GetRarityMultiplier(mod.rollRarity);
+            float rarityMultiplier = mod.definition.GetRarityMultiplier(mod.rolledRarity);
 
 
             // Setze die Ability wie gehabt

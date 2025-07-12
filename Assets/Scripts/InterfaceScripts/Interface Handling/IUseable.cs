@@ -1,5 +1,4 @@
 ﻿
-
 //Useable sollten dringend so überarbeitet werden, dass eine Entitie mitgegeben wird.
 public interface IUseable
 {

@@ -274,7 +274,7 @@ public class ItemInstance :  IMoveable
         AddRolledFlat(item.abilityPower, EntitieStats.AbilityPower);
         AddRolledFlat(item.reg, EntitieStats.Regeneration);
         AddRolledFlat(item.critChance, EntitieStats.CriticalChance);
-        AddRolledFlat(item.critDamage, EntitieStats.CritcalDamage);
+        AddRolledFlat(item.critDamage, EntitieStats.CriticalDamage);
 
         // Percent Stats
         AddRolledPercent(item.p_hp, EntitieStats.Hp);
@@ -285,7 +285,7 @@ public class ItemInstance :  IMoveable
         AddRolledPercent(item.p_movementSpeed, EntitieStats.MovementSpeed);
         AddRolledPercent(item.p_reg, EntitieStats.Regeneration);
         AddRolledPercent(item.p_critChance, EntitieStats.CriticalChance);
-        AddRolledPercent(item.p_critDamage, EntitieStats.CritcalDamage);
+        AddRolledPercent(item.p_critDamage, EntitieStats.CriticalDamage);
 
         SetValueDescription(this);
         //Die Rolls müssen in der ItemInstance gecalled werden.

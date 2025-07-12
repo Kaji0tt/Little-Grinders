@@ -129,7 +129,7 @@ public class ItemWorld : MonoBehaviour
 
                 if (itemCount < 15)
                 {
-                    //Debug.Log($"[ItemWorld] AddItem CALLED: Instanz {instanceId}, Item {item?.ItemName}, Player {isoPlayer.gameObject.name}, Frame {Time.frameCount}");
+                    //First Stop
                     isoPlayer.inventory.AddItem(item);
 
                     //Debug.Log($"[ItemWorld] DestroySelf CALLED: Instanz {instanceId}, Item {item?.ItemName}, Frame {Time.frameCount}");

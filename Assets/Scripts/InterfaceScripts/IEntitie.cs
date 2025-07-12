@@ -11,7 +11,7 @@ public enum EntitieStats
     Armor, 
     Regeneration, 
     CriticalChance, 
-    CritcalDamage, 
+    CriticalDamage, 
     None 
 }
 

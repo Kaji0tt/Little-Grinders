@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using CodeMonkey.Utils;
 using TMPro;
+using System.Linq;
 
 public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExitHandler
 {
@@ -22,10 +23,6 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
 
     private void Awake()
     {
-        /*
-        Int_Inventory = transform.Find("Inventory");
-        Int_Slot = Int_Inventory.Find("Slot");
-        */
     }
 
 
@@ -48,6 +45,8 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
     {
         RefreshInventoryItems();
     }
+
+    
     private void RefreshInventoryItems()
     {
         foreach (Transform child in Int_Inventory)
@@ -61,21 +60,6 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
         float SlotCellSize = 50f;
         int maxSlots = 15;
         int currentSlot = 0;
-
-        // Zuerst das Dictionary der Consumables durchlaufen
-        /*
-        foreach (var kvp in inventory.GetConsumableDict())
-        {
-            if (currentSlot >= maxSlots) break;
-
-            string itemID = kvp.Key;
-            int itemAmount = kvp.Value;
-
-            ItemInstance item = new ItemInstance(ItemDatabase.GetItemByID(itemID)); // Hole das Item basierend auf der ID
-            CreateInventorySlot(item, itemAmount, ref x, ref y, SlotCellSize);
-            currentSlot++;
-        }
-        */
 
         // Dann die Liste der Nicht-Consumables durchlaufen
         foreach (ItemInstance item in inventory.GetItemList())
@@ -92,38 +76,38 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
     {
         RectTransform SlotRectTransform = Instantiate(Int_Slot, Int_Inventory).GetComponent<RectTransform>();
         SlotRectTransform.gameObject.SetActive(true);
-        SlotRectTransform.GetComponent<Int_SlotBtn>().StoreItem(item);
+        Int_SlotBtn intSlotBtn = SlotRectTransform.GetComponent<Int_SlotBtn>();
+
+        intSlotBtn.StoreItem(item);
 
         SlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
         {
-            if (item.itemType == ItemType.Consumable)
-            {
-                ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemByID(item.ItemID)); //Trigger 1
-                inventory.UseItem(duplicateItem);
-                inventory.RemoveItem(duplicateItem);
-            }
-            else
-            {
-                inventory.UseItem(item);
-                inventory.RemoveItem(item);
-            }
+            Debug.Log($"[UI_Inventory] Button clicked! SlotType: {intSlotBtn.slotType}, StoredItem: {(intSlotBtn.storedItem != null ? intSlotBtn.storedItem.GetName() : "null")}, InventoryCount: {inventory.GetItemList().Count}");
 
-            GameEvents.Instance.EquipChanged(item);
-            Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
-        };
+            // Ausrüsten: Wenn Inventar-Slot angeklickt wird
+            if (intSlotBtn.slotType == ItemType.None && item != null)
+            {
+                // Suche Equip-Slot mit passendem ItemType
+                var allSlots = GameObject.FindObjectsOfType<Int_SlotBtn>();
+                var equipSlot = allSlots.FirstOrDefault(slot => slot.slotType == item.itemType);
 
-        SlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
-        {
-            if (item.itemType == ItemType.Consumable)
-            {
-                ItemInstance duplicateItem = new ItemInstance(ItemDatabase.GetItemByID(item.ItemID));
-                inventory.RemoveItem(duplicateItem);
-                ItemWorld.DropItem(PlayerManager.instance.player.transform.position, duplicateItem);
-            }
-            else
-            {
-                inventory.RemoveItem(item);
-                ItemWorld.DropItem(PlayerManager.instance.player.transform.position, item);
+                if (equipSlot != null)
+                {
+                    // Falls im Equip-Slot schon ein Item liegt, ins Inventar zurücklegen
+                    if (equipSlot.storedItem.ItemName != "")
+                    {
+                        Debug.Log($"[UI_Inventory] Tausche Item: {equipSlot.storedItem.GetName()} zurück ins Inventar!");
+                        inventory.AddItem(equipSlot.storedItem, 1);
+                    }
+
+                    // Jetzt Item ausrüsten
+                    equipSlot.StoreItem(item);
+                    inventory.RemoveItem(item);
+                }
+                else
+                {
+                    Debug.LogWarning($"[UI_Inventory] Kein Equip-Slot für ItemType {item.itemType} gefunden!");
+                }
             }
 
             Int_Slot.GetComponent<Int_SlotBtn>().HideItem();
@@ -134,9 +118,7 @@ public class UI_Inventory : MonoBehaviour //, IPointerEnterHandler, IPointerExit
         Image image = SlotRectTransform.Find("image").GetComponent<Image>();
         image.sprite = item.icon;
 
-        // Finde das TMPro-Element und setze den Text für die Menge
         TextMeshProUGUI uiText = SlotRectTransform.Find("amount").GetComponent<TextMeshProUGUI>();
-
         if (amount > 1)
             uiText.SetText(amount.ToString());
         else

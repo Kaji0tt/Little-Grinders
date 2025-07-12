@@ -4,123 +4,95 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [System.Serializable]
+public class SavedItem
+{
+    public string itemID;
+    public string rarity;
+    public List<ItemModSave> mods = new List<ItemModSave>();
+    public int amount; // Für Consumables
+}
+
+[System.Serializable]
+public class ActionbarSlotSave
+{
+    public string slotType; // "Ability" oder "Item"
+    public string id;       // AbilityName oder ItemID
+}
+
+[System.Serializable]
+public class ItemModSave
+{
+    public string modName;
+    public float savedValue;
+    public string modRarity;
+}
+
+[System.Serializable]
+public class TalentSave
+{
+    public int nodeID;
+    public int currentCount;
+    // Optional: public List<TalentType> types;
+}
+
+[System.Serializable]
 public class PlayerSave
 {
+    // Spieler-Stats
+    public int mySavedLevel;
+    public float hp, armor, attackPower, abilityPower, movementSpeed, attackSpeed, regeneration, criticalChance, criticalDamage;
+    public int mySavedXp;
+    public float[] mySavedPosition;
 
-    #region PlayerSave
+    // Ausrüstungsslots (z.B. "Brust", "Kopf", ...)
+    public Dictionary<string, SavedItem> mySavedEquip = new Dictionary<string, SavedItem>();
 
-    public int level;
+    // Inventar
+    public List<SavedItem> mySavedInventory = new List<SavedItem>();
 
-    public float Hp, maxHp, Armor, AttackPower, AbilityPower, MovementSpeed, AttackSpeed;
+    // Talente
+    public int talentTreeSeed;
+    public List<TalentSave> mySavedTalents = new List<TalentSave>();
+    public int mySavedSkillpoints;
 
-    public float[] position;
-
-    public int xp;
-    #endregion
-
-    #region ItemSave
-
-    //EQ SLOTS
-
-    public string brust, hose, kopf, schmuck, schuhe, weapon;
-
-    public string brust_r, hose_r, kopf_r, schmuck_r, schuhe_r, weapon_r;
-
-    //public List<ItemModsData> modsBrust = new List<ItemModsData>(), modsHose = new List<ItemModsData>(), modsKopf = new List<ItemModsData>(), modsSchmuck = new List<ItemModsData>(), modsSchuhe = new List<ItemModsData>(), modsWeapon = new List<ItemModsData>();
-
-    //Inventory
-
-    //public List<ItemModsData>[] inventoryItemMods;
-
-    public string[] inventoryItemRarity;
-
-    public List<string> inventorySave = new List<string>();
-
-    #endregion
-
-    #region TalentsToBeSaved
-
-    public List<TalentSave> talentsToBeSaved = new List<TalentSave>();
-
-    public int skillPoints;
-
-    public int savedLP;
-    public int savedCP;
-    public int savedVP;
-
-    #endregion
-
-    #region ActionsButtons
-
-    public string[] savedActionButtons { get; set; }
-
-    //public bool IsItem { get; set; } Not yet Implemented  
-
-    public int[] savedActionButtonIndex  { get; set; }
-
-    #endregion
-
-    #region SceneSave
-
-    public int loadIndex;
-
-    public int MyScene = 1;
-
-    public List<MapSave> exploredMaps;
-
+    // Szene/Map
+    public int currentScene;
+    public string lastSpawnpoint;
+    public float globalMapX, globalMapY;
+    public List<MapSave> exploredMaps = new List<MapSave>();
     public MapSave currentMap;
 
-    public string lastSpawnpoint;
-
-    public float globalMapX; public float globalMapY;
-
-
-    #endregion
-
-    #region KeybindSave
 
 
 
-    #endregion
-
-
-
+    // Konstruktor, Save-Methoden etc.
     public PlayerSave()
     {
-        ///Player Speichern
+        ///Player speichern.
+        /// Aktuell werden keine weiteren Stats gespeichert außer das aktuelle Leben, da
+        /// sich diese über die Stat-Modifier dynamisch ändern.
         SaveThePlayer();
 
         /// Items Speichern
-        //SaveTheItems();
+        SaveTheInventory();
+        SaveTheEquipment();
 
         ///Skill-Points speichern.
-        SaveTheTalents(); //Es muss noch herausgefunden werden, wie viele Talenttree-Skillpoints unverteilt sind und die abgespeichert werden!
+        SaveTheTalents();
 
-        ///Inventar speichern.
-        SaveTheInventory();
-
-        ///Action Buttons.
-        SaveTheActionButtons();
-
-        ///Szene Speichern.
-        SaveKeyBinds();
-        
-        loadIndex = 1;
+        /// Aktuelle Position speichern.
+        mySavedPosition = new float[3];
 
         ///Save GlobalMap Settings
-        if(SceneManager.GetActiveScene().buildIndex != 1)
-        SaveTheGlobalMap();
+        if (SceneManager.GetActiveScene().buildIndex != 1)
+            SaveTheGlobalMap();
 
-    }
-
-    private void SaveKeyBinds()
-    {
     }
 
     private void SaveTheGlobalMap()
     {
         //GlobalMap only gets saved as the player is in Scene 2.
-        MyScene = 2;
+        //MyScene = 2;
 
         exploredMaps = GlobalMap.instance.exploredMaps;
 
@@ -132,213 +104,108 @@ public class PlayerSave
 
     }
 
-    private void SaveTheActionButtons()
-    {
-        ActionButton[] actionButtons = Object.FindObjectsOfType<ActionButton>();
-
-        // Setze die Größe der Arrays entsprechend der Anzahl der ActionButtons dynamisch
-        savedActionButtons = new string[actionButtons.Length];
-        savedActionButtonIndex = new int[actionButtons.Length];
-
-        foreach (ActionButton slot in actionButtons)
-        {
-            // Extrahiere die Nummer aus dem ActionButton-Namen, z.B. "ActionButton1" => 1
-            if (slot.gameObject.name.StartsWith("ActionButton"))
-            {
-                int slotIndex = int.Parse(slot.gameObject.name.Replace("ActionButton", "")) - 1;
-                SaveActionbarSlot(slotIndex, slot); // Speichere den Slot dynamisch basierend auf der Slot-Nummer
-            }
-        }
-    }
-    private void SaveTheInventory()
-    {
-        // Hole das Item-Dictionary vom Inventar (Consumables) und die Liste der Non-Consumables
-        var conDict = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetConsumableDict();
-        var itemList = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.GetItemList();
-
-        // Initialisiere die Arrays basierend auf der Gesamtanzahl der Items (Consumables + Non-Consumables)
-        int totalItemCount = conDict.Count + itemList.Count;
-        //inventoryItemMods = new List<ItemMod>[totalItemCount];
-        inventoryItemRarity = new string[totalItemCount];
-
-        int currentItem = 0;
-
-        // Iteriere über das Dictionary der Consumables (Key: ItemID, Value: Anzahl)
-        foreach (KeyValuePair<string, int> entry in conDict)
-        {
-            // Hole das ItemInstance basierend auf der ItemID
-            ItemInstance item = new ItemInstance(ItemDatabase.GetItemByID(entry.Key));
-            int amount = entry.Value;
-
-            // Speichere die ItemID so oft, wie das Item vorhanden ist (Anzahl)
-            for (int i = 0; i < amount; i++)
-            {
-                // Füge die ItemID zur Speicherliste hinzu
-                inventorySave.Add(item.ItemID);
-
-                // Speichere die Mods und die Rarity für das aktuelle Item
-                //inventoryItemMods[currentItem] = item.addedItemMods;
-                //inventoryItemRarity[currentItem] = item.itemRarity;
-
-                currentItem++;
-            }
-        }
-
-        // Iteriere über die Liste der Non-Consumables
-        foreach (ItemInstance item in itemList)
-        {
-            // Speichere die ItemID des Non-Consumable-Items
-            inventorySave.Add(item.ItemID);
-
-            // Speichere die Mods und die Rarity für das aktuelle Item
-            //inventoryItemMods[currentItem] = item.addedItemMods;
-            //inventoryItemRarity[currentItem] = item.itemRarity;
-
-            currentItem++;
-        }
-    }
-
-    private void SaveTheTalents()
-    {
-        //TalentTree talentTree = GameObject.Find("TalentTree").GetComponent<TalentTree>();
-
-        Talent_UI[] allTalents = Object.FindObjectsOfType<Talent_UI>();
-
-        foreach (Talent_UI talent in allTalents)
-        {
-            //Debug.Log(talent.talentName + "Spezialisierung: " + (int)talent.abilitySpecialization);
-            talentsToBeSaved.Add(new TalentSave(talent.name, talent.currentCount, talent.unlocked));
-        }
-
-        //Debug.Log(allTalents.Length);
-
-        TalentTreeManager talentTree = TalentTreeManager.instance;
-
-    }
-    /*
-    private void SaveTheItems()
-    {
-        foreach (ItemInstance item in PlayerManager.instance.player.GetComponent<IsometricPlayer>().equippedItems)
-        {
-            switch (item.itemType)
-            {
-                case ItemType.Kopf:
-
-                    kopf = item.ItemID;
-
-                    kopf_r = item.itemRarity;
-
-                    foreach (ItemModsData mod in item.addedItemMods)
-                    {
-                        modsKopf.Add(mod);
-                    }
-
-
-                    break;
-
-                case ItemType.Brust:
-
-                    brust = item.ItemID;
-
-                    brust_r = item.itemRarity;
-
-                    foreach (ItemModsData mod in item.addedItemMods)
-                    {
-
-                        modsBrust.Add(mod);
-                    }
-
-                    break;
-
-                case ItemType.Beine:
-
-                    hose = item.ItemID;
-
-                    hose_r = item.itemRarity;
-
-
-                    foreach (ItemModsData mod in item.addedItemMods)
-                    {
-                        modsHose.Add(mod);
-                    }
-
-                    break;
-
-                case ItemType.Schuhe:
-
-                    schuhe = item.ItemID;
-
-                    schuhe_r = item.itemRarity;
-
-                    foreach (ItemModsData mod in item.addedItemMods)
-                    {
-                        modsSchuhe.Add(mod);
-                    }
-
-                    break;
-
-                case ItemType.Schmuck:
-
-                    schmuck = item.ItemID;
-
-                    schmuck_r = item.itemRarity;
-
-                    foreach (ItemModsData mod in item.addedItemMods)
-                    {
-                        modsSchmuck.Add(mod);
-                    }
-
-                    break;
-
-                case ItemType.Weapon:
-
-                    weapon = item.ItemID;
-
-                    weapon_r = item.itemRarity;
-
-                    foreach (ItemModsData mod in item.addedItemMods)
-                    {
-
-                        modsWeapon.Add(mod);
-                    }
-
-                    break;
-                case ItemType.Consumable:
-                    //Placeholder. Call for ItemDelte or something. --> Irgendwie, wird das irgendwo anders schon gemacht.
-                    break;
-
-            }
-        }
-    }
-    */
+    /// <summary>
+    /// Speichert die Spieler-Stats.   
     private void SaveThePlayer()
     {
-        level = PlayerManager.instance.player.GetComponent<PlayerStats>().level;
+        mySavedLevel = PlayerManager.instance.player.GetComponent<PlayerStats>().level;
 
-        Hp = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_currentHp();
+        hp = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_currentHp();
 
-        xp = PlayerManager.instance.player.GetComponent<PlayerStats>().xp;
+        mySavedXp = PlayerManager.instance.player.GetComponent<PlayerStats>().xp;
 
-        skillPoints = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints();
+        mySavedSkillpoints = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints();
     }
 
-    private void SaveActionbarSlot(int i, ActionButton slot)
+    /// <summary>
+    /// Speichert das Inventar.
+    /// </summary>
+    private void SaveTheInventory()
     {
-        if (slot.MyUseable != null)
+        var inventory = PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory;
+        mySavedInventory.Clear();
+
+        // Non-Consumables
+        foreach (ItemInstance item in inventory.GetItemList())
         {
-            savedActionButtonIndex[i-1] = i;
+            mySavedInventory.Add(PlayerSave.SaveFromInstance(item));
+        }
 
-            //Debug.Log("Found Useable at" + i + " and Saving at Index " + savedActionButtonIndex[i]);
-            if(slot.MyUseable is Ability)
+        // Consumables
+        foreach (var kvp in inventory.GetConsumableDict())
+        {
+            ItemInstance item = new ItemInstance(ItemDatabase.GetItemByID(kvp.Key));
+            mySavedInventory.Add(PlayerSave.SaveFromInstance(item, kvp.Value));
+        }
+    }
+
+    /// <summary>
+    /// Speichert die ausgerüsteten Gegenstände.
+    /// </summary>
+    private void SaveTheEquipment()
+    {
+        mySavedEquip.Clear();
+
+        // Alle Int_SlotBtn-Instanzen in der Szene finden
+        Int_SlotBtn[] slotButtons = GameObject.FindObjectsOfType<Int_SlotBtn>();
+
+        foreach (var slotBtn in slotButtons)
+        {
+            // Nur speichern, wenn ein Item vorhanden ist
+            if (slotBtn.storedItem != null)
             {
-                //savedActionButtons[i - 1] = (slot.MyUseable as Ability).abilityName;
+                // Nutze den ItemType als Key (z.B. "KOPF", "BRUST", ...)
+                string slotKey = slotBtn.storedItem.itemType.ToString().ToUpper();
+
+                mySavedEquip[slotKey] = PlayerSave.SaveFromInstance(slotBtn.storedItem);
             }
-            else if (slot.MyUseable is ItemInstance)
+        }
+    }
+
+    public static SavedItem SaveFromInstance(ItemInstance itemInstance, int amount = 1)
+    {
+        var save = new SavedItem();
+        save.itemID = itemInstance.ItemID;
+        save.rarity = itemInstance.itemRarity.ToString();
+        save.amount = amount;
+
+        // Mods speichern
+        foreach (var mod in itemInstance.addedItemMods)
+        {
+            var modSave = new ItemModSave();
+            modSave.modName = mod.definition.modName;
+            modSave.savedValue = mod.rolledValue;
+            modSave.modRarity = mod.rolledRarity.ToString();
+            save.mods.Add(modSave);
+        }
+
+        return save;
+    }
+    
+    /// <summary>
+    /// Speichert alle geskillten Talente.
+    /// </summary>
+    private void SaveTheTalents()
+    {
+        mySavedTalents.Clear();
+
+        // Hole alle TalentNodes aus dem TalentTreeGenerator
+        foreach (TalentNode node in TalentTreeGenerator.instance.allNodes)
+        {
+            // Nur geskillte Talente speichern
+            if (node.myCurrentCount > 0)
             {
-                savedActionButtons[i - 1] = (slot.MyUseable as ItemInstance).ItemID;
+                TalentSave save = new TalentSave();
+                save.nodeID = node.ID;
+                save.currentCount = node.myCurrentCount;
+                // Optional: weitere Felder wie Typen, Werte etc. hinzufügen
+
+                mySavedTalents.Add(save);
             }
-
-
         }
     }
 }
+
+
+
+
