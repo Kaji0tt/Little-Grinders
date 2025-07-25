@@ -21,6 +21,8 @@ public class HandScript : MonoBehaviour, IEndDragHandler
 
     private Image image;
 
+    public int slotIndex;
+
     [SerializeField]
     private Vector3 offset;
 
@@ -52,8 +54,30 @@ public class HandScript : MonoBehaviour, IEndDragHandler
 
             if (Input.GetKeyUp(KeyCode.Mouse0)) // Linksklick loslassen -> Ablegen
             {
-                Put(); // Hier könnte spezifische Logik für die Actionbar hinzugefügt werden
+                // Wenn kein Drop-Target gefunden wurde, Item zurück zum ursprünglichen Slot
+                ReturnItemToOriginalSlot();
             }
+        }
+    }
+
+    private void ReturnItemToOriginalSlot()
+    {
+        if (MyMoveable != null)
+        {
+            ItemInstance item = MyMoveable as ItemInstance;
+            if (item != null)
+            {
+                // Item zurück zum ursprünglichen Slot
+                if (slotIndex >= 0)
+                {
+                    UI_Inventory.instance.inventory.AddItemAtIndex(item, slotIndex);
+                }
+                else
+                {
+                    UI_Inventory.instance.inventory.AddItemToFirstFreeSlot(item);
+                }
+            }
+            Put(); // Item aus Hand entfernen
         }
     }
 

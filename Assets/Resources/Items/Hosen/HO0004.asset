@@ -28,8 +28,10 @@ MonoBehaviour:
   hp: 5
   armor: 20
   attackPower: 7
-  abilityPower: 5
+  abilityPower: 2
   reg: 0
+  critChance: 0
+  critDamage: 0
   p_hp: 0
   p_armor: 0.01
   p_attackPower: 0
@@ -37,7 +39,9 @@ MonoBehaviour:
   p_attackSpeed: 0
   p_movementSpeed: 0
   p_reg: 0
+  p_critChance: 0
+  p_critDamage: 0
   usable: 0
   itemPotion: {fileID: 0}
-  c_percent: 0
-  level_needed: 0
+  c_percent: 0.17968787
+  level_needed: 7

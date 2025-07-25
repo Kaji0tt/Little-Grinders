@@ -77,6 +77,13 @@ public class ItemMod
     {
         if (definition == null) return "";
 
+        // Spezialbehandlung für Aptitude Mods
+        if (definition.modType == ModType.Aptitude)
+        {
+            return $"Fügt dem Spieler die Fähigkeit {definition.modName} hinzu.";
+        }
+
+        // Standard-Beschreibung für andere Mod-Typen
         string valueStr = definition.modType == ModType.Percent || definition.modType == ModType.PercentFortune
             ? $"+{rolledValue * 100f:F1}%"
             : $"+{rolledValue:F1}";

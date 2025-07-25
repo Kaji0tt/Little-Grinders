@@ -245,6 +245,7 @@ public class IsometricRenderer : MonoBehaviour
     private void RotateWeaponToDirection()
     {
         Vector3 worldDirection = DirectionCollider.instance.dirVector;
+        //Debug.Log($"[WeaponRotation] dirVector: {worldDirection}");
 
         if (worldDirection == Vector3.zero)
             return;

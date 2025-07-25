@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -51,79 +52,81 @@ public class CameraFollow : MonoBehaviour
     {
 
         if (Input.mouseScrollDelta.y != 0 && Time.timeScale == 1f)
-            if(!IsMouseOverUIWithIgnores())
-            Zoom();
+            if (!IsMouseOverUIWithIgnores())
+                Zoom();
 
-        //Vector3 CameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
-
-        //Berechne Abstand zur Kamera
+        // Berechne Abstand zur Kamera
         float distSelfCamera = (PlayerManager.instance.player.transform.position - CameraManager.instance.activeCam.transform.position).sqrMagnitude;
 
-        
 
-        foreach (RaycastHit hit in raycastHits.ToList())
+        // Raycast von Spieler zur Kamera
+        Vector3 playerPos = PlayerManager.instance.player.transform.position;
+        Vector3 camPos = transform.position;
+        Vector3 direction = (camPos - playerPos).normalized;
+        float distance = Vector3.Distance(playerPos, camPos);
+
+        raycastHits = Physics.RaycastAll(playerPos, direction, distance);
+
+        //Debug.Log($"[CameraFollow] Raycast from {playerPos} to {camPos} | Direction: {direction} | Distance: {distance} | Hits: {raycastHits.Length}");
+
+        // Sammle alle getroffenen "Env"-Objekte in ein HashSet
+        HashSet<GameObject> hitEnvObjects = new HashSet<GameObject>();
+        foreach (RaycastHit hit in raycastHits)
         {
-
-
-            if(hit.collider == null)
+            if (hit.collider != null)
             {
-                //Work-Around für hit.collier == null - im Prinzip, fährt er mit dem Code dann fort. Scheint zu gehen.
-                raycastHits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), distSelfCamera);
-            }
-            else
-            {
-                if (hit.collider.transform.GetComponent<SpriteRenderer>() != null)
+                //Debug.Log($"[CameraFollow] RaycastHit: {hit.collider.gameObject.name} | Tag: {hit.collider.gameObject.tag}");
+                if (hit.collider.gameObject.CompareTag("Env"))
                 {
-                    SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
-
-                    if (spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
+                    hitEnvObjects.Add(hit.collider.gameObject);
+                    SpriteRenderer sr = hit.collider.gameObject.GetComponent<SpriteRenderer>();
+                    if (sr != null)
                     {
-                        spriterend.color = new Color(1, 1, 1, 1);
-
-                        //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
+                        //Debug.Log($"[CameraFollow] SpriteRenderer FOUND on {hit.collider.gameObject.name}");
+                    }
+                    else
+                    {
+                        //Debug.LogWarning($"[CameraFollow] SpriteRenderer MISSING on {hit.collider.gameObject.name}");
                     }
                 }
             }
-
-
+            else
+            {
+                //Debug.LogWarning("[CameraFollow] RaycastHit with NULL collider!");
+            }
         }
 
-        //Populate die Variabel anhand von Kameraausrichtung neu.
-        raycastHits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), distSelfCamera);
-        //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.green, distSelfCamera);
-
-        //print(distSelfCamera);
-
-        if (raycastHits.ToList().Count != 0)
-            foreach (RaycastHit hit in raycastHits.ToList())
+        // Setze für jedes "Env"-Objekt die Transparenz je nach Raycast-Hit
+        foreach (GameObject envObj in GameObject.FindGameObjectsWithTag("Env"))
+        {
+            SpriteRenderer sr = envObj.GetComponent<SpriteRenderer>();
+            if (sr != null)
             {
-                SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
-
-                if (spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
+                var renderer = sr as Renderer;
+                if (hitEnvObjects.Contains(envObj))
                 {
-                    spriterend.color = new Color(1, 1, 1, 0.7f);
-
-                    //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
+                    sr.color = new Color(1, 1, 1, 0.3f);
+                    // LightProbeUsage auf 4 (Custom Provided) setzen
+                    renderer.lightProbeUsage = UnityEngine.Rendering.LightProbeUsage.CustomProvided;
+                    // Schattenwurf deaktivieren
+                    renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    //Debug.Log($"[CameraFollow] Set TRANSPARENT & LightProbeUsage=CustomProvided & Shadows=Off: {envObj.name}");
+                }
+                else
+                {
+                    sr.color = new Color(1, 1, 1, 1f);
+                    // LightProbeUsage zurück auf Blend Probes (Standard: 1)
+                    renderer.lightProbeUsage = UnityEngine.Rendering.LightProbeUsage.BlendProbes;
+                    // Schattenwurf wieder aktivieren (z.B. On)
+                    renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                    //Debug.Log($"[CameraFollow] Set OPAQUE & LightProbeUsage=BlendProbes & Shadows=On: {envObj.name}");
                 }
             }
-
-        
-        if(raycastHits.Length != 0)
-        for (int i = 0; i < raycastHits.Length; i++)
-        {
-            RaycastHit hit = raycastHits[i];
-
-            SpriteRenderer spriterend = hit.collider.transform.GetComponent<SpriteRenderer>();
-
-            if(spriterend && hit.collider.transform.gameObject.tag == "Env") //&& 
+            else
             {
-                spriterend.color = new Color(1, 1, 1, 0.3f);
-
-                //lowAlphaSprites.Add(hit.collider.transform.GetComponent<SpriteRenderer>());
+                //Debug.LogWarning($"[CameraFollow] SpriteRenderer MISSING on EnvObj: {envObj.name}");
             }
-
-        }          
-        
+        }
     }
 
     private bool IsMouseOverUIWithIgnores() //C @CodeMonkey
@@ -176,7 +179,5 @@ public class CameraFollow : MonoBehaviour
         PlayerManager.instance.player.GetComponent<IsometricPlayer>().userFOV = zoom;
 
     }
-
-
 
 }

@@ -53,9 +53,7 @@ public class CharacterCombat : MonoBehaviour
 
     private WeaponCombo currentCombo => equippedWeapon?.weaponCombo;
 
-    private ItemInstance equippedWeapon =>
-        PlayerManager.instance.player.equippedItems
-            .FirstOrDefault(i => i.itemType == ItemType.Weapon);
+    private ItemInstance equippedWeapon => PlayerManager.GetEquippedWeapon();
 
     #endregion
 
@@ -205,20 +203,45 @@ public class CharacterCombat : MonoBehaviour
 
     IEnumerator MoveTowardsTarget(Vector3 targetPos, float moveDistance, float duration)
     {
-        Vector3 direction = (targetPos - transform.position).normalized;
+        // Prüfe Distanz - wenn zu nah, nicht bewegen
+        float distanceToTarget = Vector3.Distance(transform.position, targetPos);
+        if (distanceToTarget < 0.5f)
+        {
+            yield break; // Bewegung abbrechen
+        }
+
+        // Nur horizontale Richtung verwenden
+        Vector3 direction = (targetPos - transform.position);
+        direction.y = 0; // Y-Komponente entfernen
+        direction = direction.normalized;
+
         Vector3 startPos = transform.position;
         Vector3 endPos = startPos + direction * moveDistance;
+
+        // Sicherstellen, dass die Bewegung nicht zu nah an den Gegner heranführt
+        float finalDistance = Vector3.Distance(endPos, targetPos);
+        if (finalDistance < 0.3f)
+        {
+            // Reduziere moveDistance, um einen Mindestabstand zu halten
+            moveDistance = Mathf.Max(0.1f, distanceToTarget - 0.3f);
+            endPos = startPos + direction * moveDistance;
+        }
 
         float elapsed = 0f;
 
         while (elapsed < duration)
         {
-            transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+            Vector3 currentPos = Vector3.Lerp(startPos, endPos, elapsed / duration);
+            currentPos.y = startPos.y; // Y-Koordinate fixieren
+            
+            transform.position = currentPos;
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = endPos;
+        Vector3 finalPos = endPos;
+        finalPos.y = startPos.y;
+        transform.position = finalPos;
     }
 
     // Coroutine, die Schaden und Sound nach einer gewissen Verzögerung ausführt

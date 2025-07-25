@@ -2,7 +2,9 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-public class ActionButton : MonoBehaviour
+using UnityEngine.EventSystems;
+
+public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // MyUseable bleibt die zentrale Referenz zur Fähigkeit.
     public IUseable MyUseable { get; private set; }
@@ -25,6 +27,10 @@ public class ActionButton : MonoBehaviour
     [SerializeField] private Color activeColor = Color.white;
     [SerializeField] private Color cooldownColor = Color.gray;
     [SerializeField] private float pulseSpeed = 2.5f;
+
+    [Header("Target Range Visual Feedback")]
+    [SerializeField] private Color outOfRangeColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+    [SerializeField] private Color inRangeColor = Color.white;
 
     void Awake()
     {
@@ -68,7 +74,7 @@ public class ActionButton : MonoBehaviour
         // Button initial leeren
         Clear();
     }
-
+    
     /// <summary>
     /// Wird aufgerufen, wenn der Button geklickt wird.
     /// Die Logik ist jetzt extrem einfach.
@@ -120,7 +126,10 @@ public class ActionButton : MonoBehaviour
             if (maxCharges > 1)
             {
                 if(cdOverlay != null) cdOverlay.SetActive(true);
-                myIcon.color = (currentCharges > 0) ? Color.white : cooldownColor;
+                
+                // NEU: Range-Check für Multi-Charge Abilities
+                Color iconColor = (currentCharges > 0) ? GetRangeBasedColor() : cooldownColor;
+                if (myIcon != null) myIcon.color = iconColor;
 
                 string chargesText = currentCharges.ToString();
                 if (currentCharges < maxCharges)
@@ -132,10 +141,9 @@ public class ActionButton : MonoBehaviour
                 var outline = cdText.GetComponent<Outline>();
                 if (outline != null) outline.effectColor = Color.black;
             }
-            // Fall B: Standard-Fähigkeit mit einer Aufladung (inkl. Active-Fähigkeiten im Cooldown)
+            // Fall B: Standard-Fähigkeit mit einer Aufladung
             else
             {
-                // NEU: Cooldown-Anzeige auch für Active-Fähigkeiten nach Ablauf!
                 float cooldown = MyUseable.GetCooldown();
                 if (cooldown > 0)
                 {
@@ -152,7 +160,10 @@ public class ActionButton : MonoBehaviour
                 else // Bereit
                 {
                     if (cdOverlay != null) cdOverlay.SetActive(false);
-                    if (myIcon != null) myIcon.color = Color.white;
+                    
+                    // NEU: Range-Check für Single-Charge Abilities
+                    if (myIcon != null) myIcon.color = GetRangeBasedColor();
+                    
                     if (cdText != null)
                     {
                         cdText.text = "";
@@ -163,6 +174,54 @@ public class ActionButton : MonoBehaviour
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// NEU: Prüft die Reichweite zur aktuellen Zielposition und gibt die entsprechende Farbe zurück.
+    /// </summary>
+    private Color GetRangeBasedColor()
+    {
+        if (MyUseable == null) return inRangeColor;
+
+        if (MyUseable is Ability ability && ability.HasRange())
+        {
+            return ability.IsInRange() ? inRangeColor : outOfRangeColor;
+        }
+
+        return inRangeColor;
+    }
+
+    // NEU: Tooltip-Funktionalität beim Hovern
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (MyUseable == null)
+        {
+            return;
+        }
+        
+        if (UI_Manager.instance == null)
+        {
+            return;
+        }
+        
+        string description = MyUseable.GetDescription();
+        
+        if (string.IsNullOrEmpty(description))
+        {
+            return;
+        }
+        
+        UI_Manager.instance.ShowTooltip(description);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (UI_Manager.instance == null)
+        {
+            return;
+        }
+        
+        UI_Manager.instance.HideTooltip();
     }
 
     /// <summary>
@@ -243,8 +302,8 @@ public class ActionButton : MonoBehaviour
 
     public void SetItemInstance(ItemInstance item)
     {
-        CurrentItemInstance = item;
         Clear();
+        CurrentItemInstance = item;
 
         if (item == null)
             return;
@@ -255,7 +314,6 @@ public class ActionButton : MonoBehaviour
         {
             var abilityData = mod.definition.modAbilityData;
             float rarityMultiplier = mod.definition.GetRarityMultiplier(mod.rolledRarity);
-
 
             // Setze die Ability wie gehabt
             SetAbility(abilityData, rarityMultiplier);

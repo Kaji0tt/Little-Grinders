@@ -11,16 +11,10 @@ public class ItemDatabase : MonoBehaviour
     //private enum LootTable;
     //Loottable loot;
 
-    public List<Item> tier1;
-    public List<Item> tier2;
-    public List<Item> tier3;
-    public List<Item> tier4;
-    public List<Item> tier5;
-
-    private static List<List<Item>> totalLoottable = new List<List<Item>>();
+    //private static List<List<Item>> totalLoottable = new List<List<Item>>();
 
 
-    //Sollte längerfristig automatisch initialisiert werden über Ressource Folder
+    //Temporär für die Dropchance
     List<Item> currentDropTable = new List<Item>();
 
     List<Item> allItems = new List<Item>();
@@ -34,11 +28,18 @@ public class ItemDatabase : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
 
-        allModDefs = Resources.LoadAll<ItemModDefinition>("Mods");
 
+        allModDefs = Resources.LoadAll<ItemModDefinition>("Mods");
         allItems.AddRange(Resources.LoadAll<Item>("Items"));
+
+        Debug.Log("ItemDatabase initialized.");
     }
 
 
@@ -91,29 +92,33 @@ public class ItemDatabase : MonoBehaviour
     int CalculateTotalWeight(PlayerStats playerStats)
     {
         int mapLevel = playerStats.level;
+        const float MIN_WEIGHT_FACTOR = 0.1f; // Mindestens 10% Chance
 
         currentDropTable.Clear();
         totalWeight = 0;
 
         foreach (Item item in allItems)
         {
-            // Leveldifferenz zwischen Maplevel und Item-Level
-            float levelDiff = Mathf.Abs(item.baseLevel - mapLevel);
+            float levelDiff = item.baseLevel - mapLevel;
+            float weightFactor;
 
-            // Je näher das Item-Level am Maplevel, desto höher das Gewicht
-            // z. B. Exponentialer Abfall: je weiter weg, desto drastischer der Drop in Chance
-            float weightFactor = 1f / (1f + Mathf.Pow(levelDiff, 1.5f));
+            if (levelDiff <= 0) 
+            {
+                // Items gleich/niedriger: Volle Chance
+                weightFactor = 1f;
+            }
+            else 
+            {
+                // Items höher: Reduziert, aber mindestens 10%
+                weightFactor = Mathf.Max(MIN_WEIGHT_FACTOR, 1f / (1f + Mathf.Pow(levelDiff, 1.5f)));
+            }
 
-            // Skalieren mit Originalgewicht (z. B. 100) → du kannst auch ein separates Feld benutzen
             item.c_percent = item.percent * weightFactor;
-
             totalWeight += (int)item.c_percent;
             currentDropTable.Add(item);
         }
 
-        // Optional: Chance dass gar nichts droppt
         totalWeight = (totalWeight / 100) * 300;
-
         return totalWeight;
     }
 
@@ -131,61 +136,29 @@ public class ItemDatabase : MonoBehaviour
         return result;
     }
 
-    public static Item GetItemByID(string ID)
+    public Item GetItemByID(string ID)
     {
-        //Debug.Log("Searching for item with ID: " + ID);
-
-        for (int i = 0; i < totalLoottable.Count; i++)
+        foreach (Item item in allItems)
         {
-
-            foreach (Item item in totalLoottable[i])
+            if (item.ItemID == ID)
             {
-
-                if (item.ItemID == ID)
-                {
-                    Item foundItem = item;
-
-                    //Es sollten nun Instanzen von Items geladen werden. Mit dieser Loop werden die Items der SO gefunden, nicht jedoch die Instanzen.
-                    //print("Found item: " + foundItem.ItemName);
-
-                    return foundItem;
-                }
-
+                return item;
             }
-
         }
-
-        Debug.Log("No item with ID: " + ID + " found.");
-
+        Debug.LogWarning($"No item with ID: {ID} found in allItems.");
         return null;
     }
 
-    public static Item GetItemByName(string name)
+    public Item GetItemByName(string name)
     {
-        //Debug.Log("Searching for item with ID: " + ID);
-
-        for (int i = 0; i < totalLoottable.Count; i++)
+        foreach (Item item in allItems)
         {
-
-            foreach (Item item in totalLoottable[i])
+            if (item.ItemName == name)
             {
-
-                if (item.ItemName == name)
-                {
-                    Item foundItem = item;
-
-                    //Es sollten nun Instanzen von Items geladen werden. Mit dieser Loop werden die Items der SO gefunden, nicht jedoch die Instanzen.
-                    //print("Found item: " + foundItem.ItemName);
-
-                    return foundItem;
-                }
-
+                return item;
             }
-
         }
-
-        Debug.Log("No item with ID: " + name + " found.");
-
+        Debug.LogWarning($"No item with name: {name} found in allItems.");
         return null;
     }
     
@@ -195,7 +168,7 @@ public class ItemDatabase : MonoBehaviour
 
         foreach (var modDef in allModDefs)
         {
-            if (modDef.name == modName)
+            if (modDef.modName == modName)
                 return modDef;
         }
 

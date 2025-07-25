@@ -1,6 +1,7 @@
 ﻿using UnityEngine.AI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 //The MapGenHandler is the main Class in the Second-Scene (Procedual Map-Generation) and is used to coordinate FieldLayouts and Create them.
 //It is also managing the Save-Load functionality for explored maps, for yet unknown reasons.
@@ -16,8 +17,8 @@ public class MapGenHandler : MonoBehaviour
     #endregion
 
 
-    [SerializeField]
-    NavMeshSurface navMeshSurface;
+
+    public NavMeshSurface navMeshSurface;
 
     [SerializeField]
     private GameObject[] fieldsPosObj;
@@ -37,118 +38,166 @@ public class MapGenHandler : MonoBehaviour
 
     void Start()
     {
-
-        //If the Player enters the World-Map Scene, it should load its current save.
-        if (!PlayerPrefs.HasKey("Load"))
+        Debug.Log("=== [MapGenHandler.Start] START ===");
+        
+        PlayerLoad playerLoad = FindObjectOfType<PlayerLoad>();
+        bool isLoadFromMenu = PlayerPrefs.HasKey("Load");
+        
+        if (isLoadFromMenu)
         {
-            PlayerLoad playerLoad = FindObjectOfType<PlayerLoad>();
-
+            Debug.Log("[MapGenHandler.Start] === LOAD-PFAD ===");
             PlayerSave data = SaveSystem.LoadPlayer();
+            
+            if (data != null)
+            {
+                // Map-Generierung...
+                if (data.currentMap == null)
+                {
+                    SpawnPoint spawnToUse = (data.lastSpawnpoint != default) ? data.lastSpawnpoint : SpawnPoint.SpawnRight;
+                    CreateANewMap(spawnToUse);
+                }
+                else
+                {
+                    LoadMap(data.currentMap, data.lastSpawnpoint);
+                }
+                
+                PlayerPrefs.DeleteKey("Load");
+                
+                // UI Updates...
+                if (UI_GlobalMap.instance != null)
+                {
+                    UI_GlobalMap.instance.CalculateExploredMaps();
+                }
+                
+                if (LogScript.instance != null)
+                {
+                    LogScript.instance.ShowLog("Game loaded (from menu or tutorial)");
+                }
+                
+                // PLAYER LADEN (ohne Talente)
+                Debug.Log("[MapGenHandler.Start] Rufe playerLoad.LoadPlayer() auf");
+                playerLoad.LoadPlayer(data);
 
-            CreateANewMap("SpawnRight");
+                // UI Updates NACH dem Laden der Daten
+                if (UI_GlobalMap.instance != null)
+                {
+                    UI_GlobalMap.instance.CalculateExploredMaps();
+                }
 
-            playerLoad.LoadPlayer(data);
+                if (LogScript.instance != null)
+                {
+                    LogScript.instance.ShowLog("Game loaded (from menu or tutorial)");
+                }
 
-            LogScript.instance.ShowLog("Loaded playerLoad automaticly and created a new Map, \n from within the first Scene (No PlayerPref Key: Load found)");
+                // TALENTE VERZÖGERT LADEN
+                Debug.Log("[MapGenHandler.Start] Starte verzögertes Talent-Laden");
+                StartCoroutine(LoadTalentsAfterTreeGeneration(playerLoad, data));
+            }
         }
-
-        //else it should load the data.
         else
         {
-
-            PlayerLoad playerLoad = FindObjectOfType<PlayerLoad>();
-
-            PlayerSave data = SaveSystem.LoadPlayer();
-
-
-
-            if (data.currentMap == null)
+            Debug.Log("[MapGenHandler.Start] === NEUES SPIEL PFAD ===");
+            PlayerSave data = SaveSystem.NewSave();
+            CreateANewMap(SpawnPoint.SpawnRight);
+            
+            if (LogScript.instance != null)
             {
-                LogScript.instance.ShowLog("creating a new Map, \n since data.currentMap == null");
-                CreateANewMap("SpawnRight");
+                LogScript.instance.ShowLog("New map created (no load flag)");
             }
-
-            else
-            {
-                //Load the Map from data. Load the last Spawnpoint from data - it is from within the second scene only used, to teleport the character transform.
-                //see LoadPrefabs for this function, since im to stupid to call it from elsewhere.
-                LoadMap(data.currentMap, data.lastSpawnpoint);
-
-            }
-
-            PlayerPrefs.DeleteKey("Load");
-
+            
             playerLoad.LoadPlayer(data);
-
-            UI_GlobalMap.instance.CalculateExploredMaps();
-
-            LogScript.instance.ShowLog("Loaded with Key: Load (Should be called, when loaded from menu )");
-
-
         }
-
-        //print(GlobalMap.exploredMaps.Count + " Maps are currently explored. We are moving on " + GlobalMap.GetNextMap().mapIndexX + "," + GlobalMap.GetNextMap().mapIndexY);
-
+        
+        Debug.Log("=== [MapGenHandler.Start] ENDE ===");
     }
 
-    public void CreateANewMap(string playerSpawn)
+    private IEnumerator LoadTalentsAfterTreeGeneration(PlayerLoad playerLoad, PlayerSave data)
     {
+        Debug.Log("[LoadTalentsAfterTreeGeneration] Warte auf TalentTree-Generierung...");
+        
+        // Warte bis TalentTreeGenerator existiert und Tree generiert ist
+        while (TalentTreeGenerator.instance == null || 
+               TalentTreeGenerator.instance.allNodes == null || 
+               TalentTreeGenerator.instance.allNodes.Count == 0)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        
+        // Zusätzliche Sicherheit: Ein Frame warten nach der Generierung
+        yield return new WaitForEndOfFrame();
+        
+        Debug.Log("[LoadTalentsAfterTreeGeneration] TalentTree bereit - lade Talente");
+        playerLoad.LoadTalentsDelayed(data);
+    }
+
+    public void CreateANewMap(SpawnPoint playerSpawn)
+    {
+        Debug.Log($"=== [CreateANewMap] START mit SpawnPoint: {playerSpawn} ===");
+        
         //Roll the Theme of the Map and Populate the PrefabCollection accordingly.
+        Debug.Log("[CreateANewMap] PopulatePrefabCollection...");
         PrefabCollection.instance.PopulatePrefabCollection();
 
         //Create a new Map Layout
+        Debug.Log("[CreateANewMap] DefineFieldArray...");
         DefineFieldArray();
+        Debug.Log("[CreateANewMap] CreateMapLayout...");
         CreateMapLayout();
+        Debug.Log("[CreateANewMap] AssigneFieldType...");
         AssigneFieldType();
+        Debug.Log("[CreateANewMap] LoadPrefabs...");
         LoadPrefabs(playerSpawn);
 
         //Build NavMesh for Enemys
+        Debug.Log("[CreateANewMap] BuildNavMesh...");
         navMeshSurface.BuildNavMesh();
 
-        //FOR TOMOROW
-        //SaveLevelObjects();
-
         //tell global map about the newly created map
+        Debug.Log("[CreateANewMap] CreateAndSaveNewMap...");
         GlobalMap.instance.CreateAndSaveNewMap();
-
-
+        
+        Debug.Log("=== [CreateANewMap] ENDE ===");
     }
 
-
-    public void LoadMap(MapSave map, string spawnPoint)
+    public void LoadMap(MapSave map, SpawnPoint spawnPoint)
     {
+        Debug.Log($"=== [LoadMap] START mit Map: {map?.ToString() ?? "null"}, SpawnPoint: {spawnPoint} ===");
+        
         if(map != null)
         {
+            Debug.Log($"[LoadMap] Map gefunden - Theme: {map.mapTheme}");
+            
             //Load the according theme to Prefab-Collection
+            Debug.Log("[LoadMap] PopulatePrefabCollection mit Map...");
             PrefabCollection.instance.PopulatePrefabCollection(map);
 
             //Load existing Map Layout from Save file
+            Debug.Log("[LoadMap] Lade Map Layout aus Save Datei...");
             for (int i = 0; i < 81; i++)
             {
                 fieldsPosObj[i].GetComponent<FieldPos>().Type = map.fieldType[i];
             }
+            Debug.Log("[LoadMap] Map Layout geladen");
 
+            Debug.Log("[LoadMap] Set_CurrentMap...");
             GlobalMap.instance.Set_CurrentMap(map);
 
+            Debug.Log("[LoadMap] LoadPrefabs...");
             LoadPrefabs(spawnPoint);
 
             //Build NavMesh for Enemys
+            Debug.Log("[LoadMap] BuildNavMesh...");
             navMeshSurface.BuildNavMesh();
 
-            Debug.Log("Map loaded from Save Data or GlobalMap");
+            Debug.Log("[LoadMap] Map erfolgreich aus Save Data geladen");
         }
-
         else
         {
-            Debug.Log("Creating new Map, since it was not yet explored.");
-
+            Debug.Log("[LoadMap] Map ist null - erstelle neue Map");
             CreateANewMap(spawnPoint);
         }
-
-
-
-
-
+        
+        Debug.Log("=== [LoadMap] ENDE ===");
     }
 
     public void ResetThisMap()
@@ -410,7 +459,7 @@ public class MapGenHandler : MonoBehaviour
         }
     }
 
-    private void LoadPrefabs(string playerSpawn)
+    private void LoadPrefabs(SpawnPoint playerSpawn)
     {
         for (int i = 0; i < fieldsPosObj.Length; i++)
         {
@@ -440,28 +489,24 @@ public class MapGenHandler : MonoBehaviour
             //Set the Player Position in dependency of FieldPos.Type and field.characterSpawn position.
             switch (playerSpawn)
             {
-                case "SpawnRight":
+                case SpawnPoint.SpawnRight:
                     if (fieldsPosObj[i].GetComponent<FieldPos>().Type == FieldType.OutsideExitRight)
                         PlayerManager.instance.player.transform.position = field.GetComponent<OutsideVegLoader>().characterSpawn.transform.position;
-
                     break;
 
-                case "SpawnLeft":
+                case SpawnPoint.SpawnLeft:
                     if (fieldsPosObj[i].GetComponent<FieldPos>().Type == FieldType.OutsideExitLeft)
                         PlayerManager.instance.player.transform.position = field.GetComponent<OutsideVegLoader>().characterSpawn.transform.position;
-
                     break;
 
-                case "SpawnTop":
+                case SpawnPoint.SpawnTop:
                     if (fieldsPosObj[i].GetComponent<FieldPos>().Type == FieldType.OutsideExitTop)
                         PlayerManager.instance.player.transform.position = field.GetComponent<OutsideVegLoader>().characterSpawn.transform.position;
-
                     break;
 
-                case "SpawnBot":
+                case SpawnPoint.SpawnBot:
                     if (fieldsPosObj[i].GetComponent<FieldPos>().Type == FieldType.OutsideExitBot)
                         PlayerManager.instance.player.transform.position = field.GetComponent<OutsideVegLoader>().characterSpawn.transform.position;
-
                     break;
 
                 default: break;

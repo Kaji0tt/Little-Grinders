@@ -62,7 +62,8 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
         if (myAbility != null)
         {
-            description = myAbility.description; // Setzt die Beschreibung für aktive Talente
+            Debug.Log("Diese my Ability ist nicht null wird gecalled.");
+            description = "<b>Divine Root</b>\nUnlocks the talent tree and provides 1 passive health regeneration. \nThis is the foundation of your character's survival capabilities.";
             maxCount = 1;
         }
 
@@ -161,11 +162,15 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     public void SetDescription()
     {
-        if (myAbility == null )
+        if (myAbility == null)
             description = "<b>ID: " + myNode.ID + "</b>\n Increases the players <b>" + string.Join(", ", myTypes) + "</b> by <b>" + value.ToString() + "%</b> per skillpoint invested. ";
         else
-            description = myAbility.description;
+        {
+            Debug.Log("###Wird nicht gecalled.");
+            description = "<b>Divine Root</b>\n\nUnlocks the talent tree and provides 1 passive health regeneration. This is the foundation of your character's survival capabilities.";
 
+        }
+           
     }
 
 
@@ -377,6 +382,10 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(myAbility != null)
+        {
+            description = "<b>Divine Root</b>\nUnlocks the talent tree and provides 1 passive health regeneration. \nThis is the foundation of your character's survival capabilities.";
+        }
         UI_Manager.instance.ShowTooltip(description);
         circle.gameObject.SetActive(true);
 

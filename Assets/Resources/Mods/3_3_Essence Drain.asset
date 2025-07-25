@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0008a759365df48b189b7596caabd7, type: 3}
+  m_Name: 3_3_Essence Drain
+  m_EditorClassIdentifier: 
+  modName: Essence Drain
+  description: Zieht Gegnern im Umkreis Leben ab.
+  targetStat: 0
+  baseValue: 1
+  modType: 4
+  rarityScalings:
+  - rarity: 0
+    multiplier: 1
+    displayName: Essence Drain
+  - rarity: 1
+    multiplier: 1.2
+    displayName: Essence Drain II
+  - rarity: 2
+    multiplier: 1.5
+    displayName: Essence Drain III
+  - rarity: 3
+    multiplier: 3
+    displayName: Essence Drain IV
+  - rarity: 4
+    multiplier: 6
+    displayName: Essence Drain V
+  modAbilityData: {fileID: 11400000, guid: faf08fe1184d07741b34d481484fdbc2, type: 2}
+  allowedItemTypes: 2
+  scalingPerLevel: 0.05

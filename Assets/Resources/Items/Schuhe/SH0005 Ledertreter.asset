@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemID: SH0005
   ItemName: Ledertreter
-  ItemDescription: "Hohe Stiefel, schmiegt sich dem Fu\xDF an. N\xFCtzlich bei der
-    Pirsch.\n"
+  ItemDescription: "Hohe Stiefel, schmiegt sich dem Fu\xDF an. Man, sind die bequem!\n"
   itemType: 8
   weaponCombo: {fileID: 0}
   itemRarity: 0
@@ -25,19 +24,23 @@ MonoBehaviour:
   percent: 20
   baseLevel: 15
   activeItem: 0
-  hp: 5
-  armor: 5
+  hp: 15
+  armor: 15
   attackPower: 0
   abilityPower: 0
   reg: 0
+  critChance: 0
+  critDamage: 0
   p_hp: 0
   p_armor: 0
   p_attackPower: 0
   p_abilityPower: 0
   p_attackSpeed: 0
-  p_movementSpeed: 0.5
+  p_movementSpeed: 0.15
   p_reg: 0
+  p_critChance: 0
+  p_critDamage: 0
   usable: 0
   itemPotion: {fileID: 0}
-  c_percent: 0
-  level_needed: 0
+  c_percent: 0.41777933
+  level_needed: 8

@@ -9,68 +9,94 @@ public class Tooltip : MonoBehaviour
     public static Tooltip instance;
     private void Awake()
     {
-
-
         Tooltip[] sceneInstances = FindObjectsOfType<Tooltip>();
         if (sceneInstances.Length >= 2)
         {
             Destroy(sceneInstances[0]);
         }
         instance = this;
-
     }
-
     #endregion
+
     public Canvas canvas;
-
     private RectTransform rect;
-
     private Text tooltipText;
-
-
+    
+    [Header("Positioning")]
+    [SerializeField] private float offsetX = 15f;
+    [SerializeField] private float offsetY = 15f;
+    [SerializeField] private float edgeMargin = 20f;
+    
     private void Start()
     {
         rect = GetComponent<RectTransform>();
-
         tooltipText = GetComponentInChildren<Text>();
-
-        //gameObject.SetActive(false);
+        
+        // Ensure Tooltip starts hidden
+        if (gameObject.activeSelf)
+            gameObject.SetActive(false);
     }
+
     public void Update()
     {
-        if(IsFullyOnScreen())
-        {
-            rect.pivot = new Vector2(0, 1);
-            transform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y + 5f, 0);
-        }
-
-        else
-        {
-            rect.pivot = new Vector2(1, 0);
-            transform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y - 5f, 0);
-        }
-
-
+        if (!gameObject.activeSelf) return;
+        PositionTooltip();
     }
 
-    public bool IsFullyOnScreen()
+    private void PositionTooltip()
     {
-
-        RectTransform CanvasRect = canvas.GetComponent<RectTransform>();
-
-        if ((rect.anchoredPosition.x * -1) + rect.sizeDelta.x >= (CanvasRect.sizeDelta.x / 2))
+        // Convert mouse position to canvas space
+        Vector2 mousePos = Input.mousePosition;
+        Vector2 tooltipSize = rect.sizeDelta;
+        
+        // Alternative size calculation for ContentSizeFitter compatibility
+        Vector2 alternativeSize = new Vector2(rect.rect.width, rect.rect.height);
+        
+        // Use positive size if sizeDelta is invalid
+        if (tooltipSize.x <= 0 || tooltipSize.y <= 0)
         {
-
-            return true;
+            tooltipSize = alternativeSize;
         }
-
-        return false;
+        
+        // Canvas boundaries for Screen Space Overlay
+        float canvasWidth = Screen.width;
+        float canvasHeight = Screen.height;
+        
+        // Default position (right of cursor)
+        rect.pivot = new Vector2(0, 1);
+        Vector2 position = mousePos + new Vector2(offsetX, offsetY);
+        
+        // Check if tooltip would go off right edge
+        if (position.x + tooltipSize.x > canvasWidth - edgeMargin)
+        {
+            // Position to the left of cursor
+            rect.pivot = new Vector2(1, 1);
+            position.x = mousePos.x - offsetX;
+        }
+        
+        // Check if tooltip would go off bottom edge
+        if (position.y - tooltipSize.y < edgeMargin)
+        {
+            // Adjust Y pivot to show above cursor
+            rect.pivot = new Vector2(rect.pivot.x, 0);
+            position.y = mousePos.y + offsetY;
+        }
+        
+        // Check if tooltip would go off top edge
+        if (position.y > canvasHeight - edgeMargin)
+        {
+            // Adjust Y pivot to show below cursor
+            rect.pivot = new Vector2(rect.pivot.x, 1);
+            position.y = mousePos.y - offsetY;
+        }
+        
+        // Apply position
+        transform.position = new Vector3(position.x, position.y, 0);
     }
 
     public void SetText(string newText)
     {
         tooltipText = GetComponentInChildren<Text>();
-
         tooltipText.text = newText;
     }
 }

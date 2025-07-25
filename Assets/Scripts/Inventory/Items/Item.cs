@@ -128,24 +128,16 @@ public class ItemInstance :  IMoveable
     private IMoveable MyMoveable;
 
     
-    public ItemInstance(Item item)
+    public ItemInstance(Item item, bool skipRolls = false)
     {
         ItemID = item.ItemID;
         ItemName = item.ItemName;
         ItemDescription = item.ItemDescription;
         itemType = item.itemType;
-
         weaponCombo = item.weaponCombo;
-        //Noch nicht implementiert. Das Interface MyUseAble wird wichtig, wenn wir aktive Fähigkeiten oder Tränke über die ActionBar abrufen können wollen.
-        if(itemType == ItemType.Consumable)
-        {
-            MyMoveable = this;
-        }
+        // ... weitere Initialisierung ...
 
-        if (item.itemPotion != null)
-            itemPotion = item.itemPotion;
-        
-        //ItemRarity wird ausgelassen, da es erst im Roll berechnet wird.
+        addedItemMods = new List<ItemMod>();
 
         Range = item.Range;
         RangedWeapon = item.RangedWeapon;
@@ -155,141 +147,30 @@ public class ItemInstance :  IMoveable
             ? GlobalMap.instance.currentMap.mapLevel
             : 1;
 
-        //Berechnung der Werte der spezifischen Item Instanz.
-
-        #region Clone&RollItem
-        /*
-        if (item.hp != 0)
+        if (!skipRolls)
         {
-            flatValues[0] = Mathf.RoundToInt(RollItemValue(item.hp));
-            hp = flatValues[0];
+            // Flat Stats
+            AddRolledFlat(item.hp, EntitieStats.Hp);
+            AddRolledFlat(item.armor, EntitieStats.Armor);
+            AddRolledFlat(item.attackPower, EntitieStats.AttackPower);
+            AddRolledFlat(item.abilityPower, EntitieStats.AbilityPower);
+            AddRolledFlat(item.reg, EntitieStats.Regeneration);
+            AddRolledFlat(item.critChance, EntitieStats.CriticalChance);
+            AddRolledFlat(item.critDamage, EntitieStats.CriticalDamage);
+
+            // Percent Stats
+            AddRolledPercent(item.p_hp, EntitieStats.Hp);
+            AddRolledPercent(item.p_armor, EntitieStats.Armor);
+            AddRolledPercent(item.p_attackPower, EntitieStats.AttackPower);
+            AddRolledPercent(item.p_abilityPower, EntitieStats.AbilityPower);
+            AddRolledPercent(item.p_attackSpeed, EntitieStats.AttackSpeed);
+            AddRolledPercent(item.p_movementSpeed, EntitieStats.MovementSpeed);
+            AddRolledPercent(item.p_reg, EntitieStats.Regeneration);
+            AddRolledPercent(item.p_critChance, EntitieStats.CriticalChance);
+            AddRolledPercent(item.p_critDamage, EntitieStats.CriticalDamage);
         }
-
-        if (item.armor != 0)
-        {
-            flatValues[1] = Mathf.RoundToInt(RollItemValue(item.armor));
-            armor = flatValues[1];
-        }
-
-        if (item.attackPower != 0)
-        {
-            flatValues[2] = Mathf.RoundToInt(RollItemValue(item.attackPower));
-            attackPower = flatValues[2];
-        }
-
-        if (item.abilityPower != 0)
-        {
-            flatValues[3] = Mathf.RoundToInt(RollItemValue(item.abilityPower));
-            abilityPower = flatValues[3];
-        }
-
-        if (item.reg != 0)
-        {
-            flatValues[4] = Mathf.RoundToInt(RollItemValue(item.reg));
-            reg = flatValues[4];
-        }
-
-        if (item.critChance != 0)
-        {
-            flatValues[5] = Mathf.RoundToInt(RollItemValue(item.critChance));
-            critChance = flatValues[5];
-        }
-
-        if (item.critDamage != 0)
-        {
-            flatValues[6] = Mathf.RoundToInt(RollItemValue(item.critDamage));
-            critDamage = flatValues[6];
-        }
-
-
-        // Prozentuale Berechnung des Gegenstands auf 2 Nachkommastellen.
-        if (item.p_hp != 0)
-        {
-            percentValues[0] = Mathf.Round(RollItemValue(item.p_hp) * 100) / 100f;
-            p_hp = percentValues[0];
-        }
-
-        if (item.p_armor != 0)
-        {
-            percentValues[1] = Mathf.Round(RollItemValue(item.p_armor) * 100) / 100f;
-            p_armor = percentValues[1];
-        }
-
-        if (item.p_attackPower != 0)
-        {
-            percentValues[2] = Mathf.Round(RollItemValue(item.p_attackPower) * 100) / 100f;
-            p_attackPower = percentValues[2];
-        }
-
-        if (item.p_abilityPower != 0)
-        {
-            percentValues[3] = Mathf.Round(RollItemValue(item.p_abilityPower) * 100) / 100f;
-            p_abilityPower = percentValues[3];
-        }
-
-        if (item.p_attackSpeed != 0)
-        {
-            percentValues[4] = Mathf.Round(RollItemValue(item.p_attackSpeed) * 100) / 100f;
-            p_attackSpeed = percentValues[4];
-        }
-
-        if (item.p_movementSpeed != 0)
-        {
-            percentValues[5] = Mathf.Round(RollItemValue(item.p_movementSpeed) * 100) / 100f;
-            p_movementSpeed = percentValues[5];
-        }
-
-        if (item.p_reg != 0)
-        {
-            percentValues[6] = Mathf.Round(RollItemValue(item.p_reg) * 100) / 100f;
-            p_reg = percentValues[6];
-        }
-
-        if (item.p_critChance != 0)
-        {
-            percentValues[7] = Mathf.Round(RollItemValue(item.p_critChance) * 100) / 100f;
-            p_critChance = percentValues[7];
-        }
-
-        if (item.p_critDamage != 0)
-        {
-            percentValues[8] = Mathf.Round(RollItemValue(item.p_critDamage) * 100) / 100f;
-            p_critDamage = percentValues[8];
-        }
-
-
-        if (useable)
-        {
-            useable = true;
-
-        }
-        */
-        #endregion
-
-
-        // Flat Stats
-        AddRolledFlat(item.hp, EntitieStats.Hp);
-        AddRolledFlat(item.armor, EntitieStats.Armor);
-        AddRolledFlat(item.attackPower, EntitieStats.AttackPower);
-        AddRolledFlat(item.abilityPower, EntitieStats.AbilityPower);
-        AddRolledFlat(item.reg, EntitieStats.Regeneration);
-        AddRolledFlat(item.critChance, EntitieStats.CriticalChance);
-        AddRolledFlat(item.critDamage, EntitieStats.CriticalDamage);
-
-        // Percent Stats
-        AddRolledPercent(item.p_hp, EntitieStats.Hp);
-        AddRolledPercent(item.p_armor, EntitieStats.Armor);
-        AddRolledPercent(item.p_attackPower, EntitieStats.AttackPower);
-        AddRolledPercent(item.p_abilityPower, EntitieStats.AbilityPower);
-        AddRolledPercent(item.p_attackSpeed, EntitieStats.AttackSpeed);
-        AddRolledPercent(item.p_movementSpeed, EntitieStats.MovementSpeed);
-        AddRolledPercent(item.p_reg, EntitieStats.Regeneration);
-        AddRolledPercent(item.p_critChance, EntitieStats.CriticalChance);
-        AddRolledPercent(item.p_critDamage, EntitieStats.CriticalDamage);
 
         SetValueDescription(this);
-        //Die Rolls müssen in der ItemInstance gecalled werden.
-
     }
 
     private void AddRolledFlat(int baseValue, EntitieStats stat)
@@ -353,14 +234,14 @@ public class ItemInstance :  IMoveable
 
         foreach (var mod in addedItemMods)
         {
-            string modText = mod.GetDescription(); // z.B. "+5% Crit Chance"
+            string modText = mod.GetDescription(); // Nutzt die neue Logik aus ItemMod
             if (!string.IsNullOrEmpty(modText))
                 modDescriptions += "\n" + modText;
         }
 
         ItemDescription += modDescriptions;
     }
-        
+
     // Wendet alle Modifikatoren aus addedItemMods auf die flatStats und percentStats an
     public void ApplyItemMods()
     {
@@ -396,6 +277,8 @@ public class ItemInstance :  IMoveable
 
         // Tooltip-Text neu aufbauen
         SetValueDescription(this);
+
+        UpdateItemDescriptionWithMods();
     }
 
     public string GetName()
@@ -403,9 +286,81 @@ public class ItemInstance :  IMoveable
         return ItemName;
     }
 
+    public static ItemInstance FromSave(SavedItem savedItem)
+    {
+        Debug.Log($"=== [ItemInstance.FromSave] START für Item: {savedItem.itemID} ===");
+        
+        Item baseItem = ItemDatabase.instance.GetItemByID(savedItem.itemID);
+        if (baseItem == null)
+        {
+            Debug.LogError($"Item with ID {savedItem.itemID} not found in database.");
+            return null;
+        }
+
+        ItemInstance instance = new ItemInstance(baseItem, skipRolls: true);
+        
+        // Setze gespeicherte Basisdaten
+        instance.ItemName = savedItem.itemName ?? baseItem.ItemName;
+        instance.ItemDescription = savedItem.itemDescription ?? baseItem.ItemDescription;
+        instance.requiredLevel = savedItem.requiredLevel;
+
+        if (Enum.TryParse<Rarity>(savedItem.rarity, out var rarity))
+            instance.itemRarity = rarity;
+
+        Debug.Log($"[ItemInstance.FromSave] Basis-Daten gesetzt: {instance.ItemName}, Level: {instance.requiredLevel}, Rarity: {instance.itemRarity}");
+
+        // Lade Flat Stats aus Save
+        instance.flatStats.Clear();
+        foreach (var kvp in savedItem.flatStats)
+        {
+            if (Enum.TryParse<EntitieStats>(kvp.Key, out var stat))
+            {
+                instance.flatStats[stat] = kvp.Value;
+                Debug.Log($"[ItemInstance.FromSave] Flat Stat geladen: {stat} = {kvp.Value}");
+            }
+        }
+
+        // Lade Percent Stats aus Save
+        instance.percentStats.Clear();
+        foreach (var kvp in savedItem.percentStats)
+        {
+            if (Enum.TryParse<EntitieStats>(kvp.Key, out var stat))
+            {
+                instance.percentStats[stat] = kvp.Value;
+                Debug.Log($"[ItemInstance.FromSave] Percent Stat geladen: {stat} = {kvp.Value}%");
+            }
+        }
+
+        // Lade Item Mods
+        instance.addedItemMods.Clear();
+        foreach (var modSave in savedItem.mods)
+        {
+            var modDef = ItemDatabase.instance.GetModDefinitionByName(modSave.modName);
+            if (modDef == null)
+            {
+                Debug.LogWarning($"ModDefinition '{modSave.modName}' not found for item '{savedItem.itemID}'");
+                continue;
+            }
+            var mod = new ItemMod();
+            mod.definition = modDef;
+            mod.rolledRarity = Enum.TryParse<Rarity>(modSave.modRarity, out var modRarity) ? modRarity : Rarity.Common;
+            mod.rolledValue = modSave.savedValue;
+            instance.addedItemMods.Add(mod);
+            Debug.Log($"[ItemInstance.FromSave] Mod geladen: {modDef.modName} = {mod.rolledValue}");
+        }
+
+        // Item Description mit neuen Stats aufbauen
+        instance.SetValueDescription(instance);
+
+        Debug.Log($"[ItemInstance.FromSave] === FERTIG === ItemInstance erstellt für: {instance.ItemName}");
+        return instance;
+    }
+
     //Wird gecalled, wenn das Item im Inventar angeklickt wird. Dadurch werden die Stats den playerStats hinzugefügt.
     public void Equip(PlayerStats playerStats)
     {
+
+
         foreach (var kvp in flatStats)
         {
             var mod = new StatModifier(kvp.Value, StatModType.Flat, this);
@@ -461,16 +416,6 @@ public class ItemInstance :  IMoveable
 
     }
 
-
-    public void Use()
-    {
-        //Inventory inventory = PlayerManager.instance.player.Inventory;
-
-        itemPotion.Use();
-        PlayerManager.instance.player.Inventory.RemoveItem(this);
-        //An dieser Stelle sollte die Referenz zu einem bestimmten Spell geschehen. So bleibt sicher gestellt, dass jedes individuelle Item
-        //unterschiedliche Spells abrufen kann.
-    }
 
     public bool IsOnCooldown()
     {

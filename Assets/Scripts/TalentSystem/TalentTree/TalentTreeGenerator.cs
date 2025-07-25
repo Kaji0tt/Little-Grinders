@@ -44,34 +44,45 @@ public class TalentTreeGenerator : MonoBehaviour
 
     private void Start()
     {
-        PlayerSave save = null;
-        bool validSave = false;
-
-        if (SaveSystem.HasSave())
+        Debug.Log("=== [TalentTreeGenerator.Start] START ===");
+        
+        // HIER: Verwende einen gespeicherten Seed aus PlayerSave, falls verfügbar
+        // Aber LADE NICHT und SPEICHERE NICHT hier!
+        
+        // Prüfe, ob bereits ein Seed gesetzt wurde (von außen)
+        if (treeSeed <= 0)
         {
-            save = SaveSystem.LoadPlayer();
-
-            // Prüfe, ob Save und Seed gültig sind
-            if (save != null && save.talentTreeSeed > 0)
-            {
-                validSave = true;
-                treeSeed = save.talentTreeSeed;
-            }
+            // Fallback: Erzeuge einen neuen Seed nur für die Generierung
+            treeSeed = UnityEngine.Random.Range(1000000000, int.MaxValue);
+            Debug.Log($"[TalentTreeGenerator] Kein Seed vorhanden - verwende temporären Seed: {treeSeed}");
         }
-
-        if (!validSave)
+        else
         {
-            save = SaveSystem.NewSave();
-            treeSeed = save.talentTreeSeed;
+            Debug.Log($"[TalentTreeGenerator] Verwende vorhandenen Seed: {treeSeed}");
         }
 
         UnityEngine.Random.InitState(treeSeed);
         GenerateTree();
+        
+        Debug.Log("=== [TalentTreeGenerator.Start] ENDE ===");
+    }
+    
+    // NEUE Methode: Seed von außen setzen
+    public void SetTalentTreeSeed(int seed)
+    {
+        Debug.Log($"[TalentTreeGenerator.SetTalentTreeSeed] Seed gesetzt: {seed}");
+        treeSeed = seed;
+    }
+
+    // NEUE Methode: Aktuellen Seed abrufen
+    public int GetTalentTreeSeed()
+    {
+        return treeSeed;
     }
 
     //2.
     public void GenerateTree()
-    { 
+    {
         TalentType[] rootTypes = { TalentType.HP, TalentType.AS, TalentType.AD, TalentType.AR, TalentType.AP, TalentType.RE };
 
         // 2.1. Root-Nodes erstellen (ohne ExpandNode)
@@ -90,7 +101,7 @@ public class TalentTreeGenerator : MonoBehaviour
         for (int i = 0; i <= depthGeneration; i++)
         {
             foreach (TalentNode node in GetNodesAtDepth(i))
-            ExpandNode(node);         
+                ExpandNode(node);
         }
 
     }

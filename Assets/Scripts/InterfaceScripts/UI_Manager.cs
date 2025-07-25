@@ -255,7 +255,7 @@ public class UI_Manager : MonoBehaviour
         {
             PlayerManager.instance.player.GetComponent<PlayerStats>().Gain_xp(600);
             foreach (Item item in itemsOnStart)
-                PlayerManager.instance.player.Inventory.AddItem(new ItemInstance(item));
+                UI_Inventory.instance.inventory.AddItemToFirstFreeSlot(new ItemInstance(item));
 
         }
 
@@ -400,22 +400,41 @@ public class UI_Manager : MonoBehaviour
     /// Weist die Fähigkeit zu, falls eine vorhanden ist, oder leert den Button, falls nicht.
     /// Diese Methode wird von GameEvents aufgerufen, wenn sich die Ausrüstung ändert.
     /// </summary>
-    public void UpdateAbilityForEquippedItem(ItemInstance equippedItem)
+    public void UpdateAbilityForEquippedItem(ItemInstance equippedItem, ItemType itemType = ItemType.None)
     {
-        if (equippedItem == null) return;
-
-        bool hasAbilityMod = equippedItem.addedItemMods.Any(mod => mod.definition.modAbilityData != null);
-
-        if (hasAbilityMod)
+        if (equippedItem == null)
         {
-            AssignAbilityFromMod(equippedItem, equippedItem.itemType);
+            // Nur den spezifischen Button leeren, wenn itemType bekannt ist
+            if (itemType != ItemType.None)
+            {
+                var buttonToClear = actionButtons.FirstOrDefault(btn => btn.myItemType == itemType);
+                if (buttonToClear != null)
+                    buttonToClear.SetItemInstance(null);
+            }
+            return;
         }
-        else
+
+        var targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == equippedItem.itemType);
+        if (targetButton != null)
         {
-            ActionButton targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == equippedItem.itemType);
-            if (targetButton != null)
-                targetButton.Clear();
+            if (equippedItem.addedItemMods == null || !equippedItem.addedItemMods.Any(m => m.definition != null && m.definition.modAbilityData != null))
+            {
+                targetButton.SetItemInstance(null);
+            }
+            else
+            {
+                targetButton.SetItemInstance(equippedItem);
+            }
         }
+
+        if (equippedItem.addedItemMods == null || !equippedItem.addedItemMods.Any())
+            return;
+
+        var abilityMods = equippedItem.addedItemMods.Where(mod => mod.definition != null && mod.definition.modAbilityData != null).ToList();
+        if (!abilityMods.Any())
+            return;
+
+        AssignAbilityFromMod(equippedItem, equippedItem.itemType);
     }
 
     private void ActionButtonOnClick(int btnIndex)
@@ -497,12 +516,6 @@ public class UI_Manager : MonoBehaviour
 
     public void ShowTooltip(string description)
     {
-        /*
-        if (description != null)
-        {
-            tooltipText.text = description;
-        }
-        */
         tooltip.SetActive(true);
 
 

@@ -30,7 +30,7 @@ public class Heal : Ability
 
             //Debug.Log("Reg Value is applied");
         }
-        Debug.Log("Regvalue should have been applied.");
+        //Debug.Log("Regvalue should have been applied.");
     }
 
     public override void OnTick(IEntitie entitie)
@@ -46,6 +46,6 @@ public class Heal : Ability
         protected override void ApplyRarityScaling(float rarityScaling)
     {
         // Hier MUSS die Kindklasse den Wert verwenden!
-        Debug.Log($"[EssenceDrain] rarityScaling angewendet: {rarityScaling}");
+        //Debug.Log($"[EssenceDrain] rarityScaling angewendet: {rarityScaling}");
     }
 }

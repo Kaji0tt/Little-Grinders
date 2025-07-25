@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
+using System.Collections;
 
 public class AudioManager : MonoBehaviour
 {
@@ -42,6 +43,18 @@ public class AudioManager : MonoBehaviour
 
         //Setze die neuen Slider
         AwakeSetSliders();
+        
+        // NEU: Spiele Hauptmenü-Musik direkt hier ab
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            StartCoroutine(PlayMenuMusicDelayed());
+        }
+    }
+
+    private IEnumerator PlayMenuMusicDelayed()
+    {
+        yield return new WaitForEndOfFrame();
+        PlaySound("MenuMusic_1");
     }
 
     /// <summary>
@@ -295,6 +308,11 @@ public class AudioManager : MonoBehaviour
         if (audioSource == null)
         {
             Debug.LogWarning($"[AudioManager] PlayEntitySound: Keine AudioSource an {entity.name} gefunden.");
+            return;
+        }
+        if (audioSource != audioSource.enabled)
+        {
+            Debug.LogWarning($"[AudioManager] PlayEntitySound: AudioSource an {entity.name} ist deaktiviert.");
             return;
         }
 

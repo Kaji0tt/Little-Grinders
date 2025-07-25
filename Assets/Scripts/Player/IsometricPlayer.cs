@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 
 ///Bezogen auf das Debuff / Bufff System, bzw. die Abilities:
-///Auf dem Spieler liegt eine Liste von Abilities - wenn der Spieler ein AbilityTalent benutzt, wird nach der Ability in der entsprechenden Liste gesucht, welche sich mit der BaseAbility vom AbilityTalent gleicht.
+///Au    dem Spieler liegt eine Liste von Abilities - wenn der Spieler ein AbilityTalent benutzt, wird nach der Ability in der entsprechenden Liste gesucht, welche sich mit der BaseAbility vom AbilityTalent gleicht.
 ///Eine InterfaceKlasse DeBuffSystem könnte auf die OnTicks(), OnUse(), und OnCooldowns() von Abilities zugreifen und die... - Ne das stupid.
 public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 {
@@ -46,25 +46,15 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
     public List<ItemInstance> equippedItems = new List<ItemInstance>();
 
-    //[SerializeField] private UI_Inventory uiInventory;
-
-    /// <summary>
-    /// 
-    /// Eigene Classe Vorteile:
-    /// Ausgerüstete Items könnten Aktive Fähigkeiten haben - voll cool.
-    /// 
-    /// Einzelne Liste:
-    /// Einfach.
-    /// 
-    /// </summary>
 
     #endregion
 
     #region Implementation - Interface Objekte und Texte
 
     GameObject uiInventoryTab;
-    private Text uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText, ui_Level;
+    private TextMeshProUGUI uiHealthText, ui_invHealthText, ui_invArmorText, ui_invAttackPowerText, ui_invAbilityPowerText, ui_invAttackSpeedText, ui_invMovementSpeedText, ui_invRegText, ui_invCritChanceText;
     private TextMeshProUGUI xp_Text;
+    private Text ui_Level;
     private GameObject hp_Text;
     private Image HpImage, XpImage;
     private float maxHP;
@@ -107,34 +97,39 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         rangedWeapon = false;
 
         //Isometric Camera
-        forward = Camera.main.transform.forward;
-        forward.y = 0;
-        forward = Vector3.Normalize(forward);
-        right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
+        if (Camera.main != null)
+        {
+            forward = Camera.main.transform.forward;
+            forward.y = 0;
+            forward = Vector3.Normalize(forward);
+            right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
+        }
+        else
+        {
+            Debug.LogError("Camera.main not found! Movement vectors not initialized.");
+            forward = Vector3.forward;
+            right = Vector3.right;
+        }
         //weaponGameObject = GameObject.Find("WeaponAnim");
 
 
-        //Item Management
-        inventory = new Inventory(UseItem);//UseItem = Welche Methode wird in Isometric Player bei Nutzung ausgelöst.
-        UI_Inventory uiInventory = GameObject.Find("UI_Inventory").GetComponent<UI_Inventory>();
-        uiInventory.SetInventory(inventory);
-        uiInventory.SetCharakter(this);
-
         //PlayerStats & UI
         //GameEvents.current.LevelUpdate += UpdateLevel;
-        uiInventoryTab = GameObject.Find("Inventory Tab");              
+        uiInventoryTab = GameObject.Find("Inventory Tab");
         ui_Level = GameObject.Find("LevelText").GetComponent<Text>();
         GameObject uiXp = GameObject.Find("XpText");
         //////////////////////Das ist ja fucking eklig, finde eine Alternative um die Texte zu initialisieren!!!!!
         playerStats.Set_currentHp(playerStats.Get_maxHp());
 
         //PlayerStat Inventory - ***********Initialisieren von Texten**********
-        ui_invHealthText = GameObject.Find("ui_invHp").GetComponent<Text>();
-        ui_invArmorText = GameObject.Find("ui_invArmor").GetComponent<Text>();
-        ui_invAttackPowerText = GameObject.Find("ui_invAttP").GetComponent<Text>();
-        ui_invAbilityPowerText = GameObject.Find("ui_invAbiP").GetComponent<Text>();
-        ui_invAttackSpeedText = GameObject.Find("ui_invAttS").GetComponent<Text>();
-        ui_invMovementSpeedText = GameObject.Find("ui_invMS").GetComponent<Text>();
+        ui_invHealthText = GameObject.Find("ui_invHp").GetComponent<TextMeshProUGUI>();
+        ui_invArmorText = GameObject.Find("ui_invArmor").GetComponent<TextMeshProUGUI>();
+        ui_invAttackPowerText = GameObject.Find("ui_invAttP").GetComponent<TextMeshProUGUI>();
+        ui_invAbilityPowerText = GameObject.Find("ui_invAbiP").GetComponent<TextMeshProUGUI>();
+        ui_invAttackSpeedText = GameObject.Find("ui_invAttS").GetComponent<TextMeshProUGUI>();
+        ui_invMovementSpeedText = GameObject.Find("ui_invMS").GetComponent<TextMeshProUGUI>();
+        ui_invRegText = GameObject.Find("ui_invReg").GetComponent<TextMeshProUGUI>();
+        ui_invCritChanceText = GameObject.Find("ui_invCrC").GetComponent<TextMeshProUGUI>();
         //ui_HpOrbTxt = GameObject.Find("HpOrbTxt").GetComponent<Text>();
 
 
@@ -232,11 +227,19 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     private void Update()
     {
         //GodMode
-        if(Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             TroubleShootGodMode();
 
         }
+
+        // Quick Fix: Spieler aus dem Boden teleportieren
+        if (transform.position.y < -5f)
+        {
+            transform.position = new Vector3(transform.position.x, 3f, transform.position.z);
+            Debug.LogWarning("Player fell through ground - teleported back up!");
+        }
+
 
         //Input Methods
         if (Input.GetKey(KeyCode.LeftShift))  //Sollte über Menü einstellbar sein #UI_Manager
@@ -295,6 +298,8 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         ui_invAbilityPowerText.text = "Ability: " + playerStats.AbilityPower.Value;
         ui_invAttackSpeedText.text = "Speed: " + playerStats.AttackSpeed.Value;
         ui_invMovementSpeedText.text = "Movement: " + playerStats.MovementSpeed.Value;
+        ui_invRegText.text = "Regeneration: " + playerStats.Regeneration.Value;
+        ui_invCritChanceText.text = "Crit. Chance: " + playerStats.CriticalChance.Value;
 
     }
 
@@ -311,16 +316,28 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     //Bewege den Charakter über die HorizontalKeys / VerticalKeys aus den ProjectSettings
     void Move()
     {
-        //Generiere einen Vector anhand der InputDaten aus den PlayerPrefs in Unity
         Vector3 ActualSpeed = right * Input.GetAxis("HorizontalKey") + forward * Input.GetAxis("VerticalKey");
-
-        //Der Vector sollte auf 1 geclamped werden, da durch 2 Inputs (e.g. A + W) doppelte Geschwindigkeit erreicht werden.
         ActualSpeed = Vector3.ClampMagnitude(ActualSpeed, 1);
 
-        //Bewege den Rigidbody anhand des Vectors, multipliziert durch MovementSpeed
-        //rbody.AddForce(ActualSpeed * playerStats.MovementSpeed.Value, ForceMode.Force);
-        rbody.MovePosition(transform.position + Time.deltaTime * ActualSpeed * playerStats.MovementSpeed.Value);
+        Vector3 targetPosition = transform.position + Time.deltaTime * ActualSpeed * playerStats.MovementSpeed.Value;
 
+        // Debug: Prüfe alle relevanten Werte auf NaN
+        if (
+            float.IsNaN(targetPosition.x) || float.IsNaN(targetPosition.y) || float.IsNaN(targetPosition.z) ||
+            float.IsNaN(ActualSpeed.x) || float.IsNaN(ActualSpeed.y) || float.IsNaN(ActualSpeed.z) ||
+            float.IsNaN(playerStats.MovementSpeed.Value) ||
+            float.IsNaN(transform.position.x) || float.IsNaN(transform.position.y) || float.IsNaN(transform.position.z)
+        )
+        {
+            Debug.LogError(
+                $"[MovePosition NaN] transform.position: {transform.position}, " +
+                $"ActualSpeed: {ActualSpeed}, MovementSpeed: {playerStats.MovementSpeed.Value}, " +
+                $"targetPosition: {targetPosition}"
+            );
+            return; // Verhindere MovePosition bei NaN
+        }
+
+        rbody.MovePosition(targetPosition);
     }
 
     //Funktion um das erweiterte UI einzublenden (Statistiken)
@@ -330,17 +347,6 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         hp_Text.SetActive(true);
         hp_Text.GetComponent<TextMeshProUGUI>().text = Mathf.RoundToInt(playerStats.Get_currentHp()) + "\n" + Mathf.RoundToInt(playerStats.Hp.Value);
         xp_Text.text = playerStats.xp + "/" + playerStats.LevelUp_need();
-    }
-    
-    private void UseItem(ItemInstance item)
-    {
-        item.Equip(playerStats);
-        equippedItems.Add(item);
-    }
-    public void Dequip (ItemInstance item)
-    {
-        item.Unequip(playerStats);
-        equippedItems.Remove(item);
     }
     
     public Inventory Inventory

@@ -32,7 +32,7 @@ public class GlobalMap : MonoBehaviour
     public Vector2 currentPosition;
 
     //Saving the last SpawnPoint, the player entered the Map in.
-    public string lastSpawnpoint;
+    public SpawnPoint lastSpawnpoint = SpawnPoint.SpawnRight;
 
     //Currently not used Method to get the Coordinates of a specific map.
     public Vector2 GetMapCoordinates(MapSave map)

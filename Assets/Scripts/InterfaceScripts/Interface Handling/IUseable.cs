@@ -1,8 +1,8 @@
-﻿
-//Useable sollten dringend so überarbeitet werden, dass eine Entitie mitgegeben wird.
+﻿//Useable sollten dringend so überarbeitet werden, dass eine Entitie mitgegeben wird.
 public interface IUseable
 {
     string GetName();
+    string GetDescription(); // NEU
 
     void Use();
 

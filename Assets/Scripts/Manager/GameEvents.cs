@@ -37,6 +37,10 @@ public class GameEvents : MonoBehaviour
     public event Action<float> OnPlayerWasAttacked;
     public event Action<float> OnEnemyHasAttacked;
     public event Action<float, Transform, bool> OnEnemyWasAttacked;
+    
+    // Neue Events für Bladevortex
+    public event Action<EnemyController, bool> OnEnemyTookDamage; // Enemy, isCrit
+    public event Action<EnemyController> OnEnemyDied;
 
 
 
@@ -92,5 +96,16 @@ public class GameEvents : MonoBehaviour
     {
         //OnEnemyWasAttacked?.Invoke(damage);
 
+    }
+    
+    // Neue Methoden für Bladevortex
+    public void EnemyTookDamage(EnemyController enemy, bool isCrit)
+    {
+        OnEnemyTookDamage?.Invoke(enemy, isCrit);
+    }
+    
+    public void EnemyDied(EnemyController enemy)
+    {
+        OnEnemyDied?.Invoke(enemy);
     }
 }

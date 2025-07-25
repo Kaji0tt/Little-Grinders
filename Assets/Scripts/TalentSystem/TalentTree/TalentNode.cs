@@ -43,6 +43,7 @@ public class TalentNode
     {
         isUnlocked = true;
         myTalentUI?.Unlock();
+        TalentTreeManager.instance.UpdateTalentTree(this);
     }
 
     //Generierung der Urpsrungstalente 

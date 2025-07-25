@@ -34,6 +34,10 @@ public class LogScript : MonoBehaviour
 
     private IEnumerator ShowLogRoutine(string logtxt, float duration)
     {
+        if (text == null)
+        {
+            text = GetComponent<Text>();
+        }
         text.text = logtxt;
 
         text.canvasRenderer.SetAlpha(0f);              // Unsichtbar starten

@@ -112,45 +112,31 @@ public class ItemWorld : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        //Debug.Log($"[ItemWorld] OnTriggerStay: Instanz {instanceId}, Item {item?.ItemName}, Collider {collider.name}, Frame {Time.frameCount}");
-
         if (collider.isTrigger && !isBeingCollected)
         {
-            IsometricPlayer isoPlayer = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
+            // Hole das Inventory über UI_Inventory
+            var inventory = UI_Inventory.instance.inventory;
 
             if (Input.GetKey(UI_Manager.instance.pickKey))
             {
-                isBeingCollected = true; // <-- Flag setzen, damit die Logik nur einmal ausgeführt wird
+                isBeingCollected = true;
 
-                //Debug.Log($"[ItemWorld] PICKUP PRESSED: Instanz {instanceId}, Item {item?.ItemName}, Player {isoPlayer.gameObject.name}, Frame {Time.frameCount}");
+                // Prüfe, ob ein freier Slot existiert und füge das Item hinzu
+                bool added = inventory.AddItemToFirstFreeSlot(item);
 
-                int itemCount = isoPlayer.inventory.itemList.Count + isoPlayer.inventory.GetConsumableDict().Count;
-                //Debug.Log($"[ItemWorld] Inventory Count: {itemCount}, Instanz {instanceId}");
-
-                if (itemCount < 15)
+                if (added)
                 {
-                    //First Stop
-                    isoPlayer.inventory.AddItem(item);
-
-                    //Debug.Log($"[ItemWorld] DestroySelf CALLED: Instanz {instanceId}, Item {item?.ItemName}, Frame {Time.frameCount}");
                     DestroySelf();
                 }
                 else
                 {
-                    //Debug.LogWarning($"[ItemWorld] Inventar voll: Instanz {instanceId}, Item {item?.ItemName}, Player {isoPlayer.gameObject.name}, Frame {Time.frameCount}");
-                    isBeingCollected = false; // Falls Inventar voll, Flag zurücksetzen
+                    // Inventar voll
+                    isBeingCollected = false;
                 }
             }
         }
     }
 
-/*
-    public ItemInstance GetItem()
-    {
-        Debug.Log($"[ItemWorld] GetItem CALLED: Instanz {instanceId}, Item {item?.ItemName}, Frame {Time.frameCount}");
-        return item;
-    }
-*/
     public void DestroySelf()
     {
         //Debug.Log($"[ItemWorld] DestroySelf EXECUTED: Instanz {instanceId}, Item {item?.ItemName}, Frame {Time.frameCount}");

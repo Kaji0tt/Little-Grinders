@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0008a759365df48b189b7596caabd7, type: 3}
+  m_Name: 3_3_Vital Discharge
+  m_EditorClassIdentifier: 
+  modName: Vital Discharge
+  description: Consumes every .5 seconds 3% (x 1 / 2 / 3 / 5) of maximum Life and
+    deals it with 30% AP to Enemys around 2.5 range of player.
+  targetStat: 0
+  baseValue: 1
+  modType: 4
+  rarityScalings:
+  - rarity: 1
+    multiplier: 1
+    displayName: '- Vital Discharge'
+  - rarity: 2
+    multiplier: 2
+    displayName: '- Vital Discharge II'
+  - rarity: 3
+    multiplier: 3
+    displayName: '- Vital Discharge III'
+  - rarity: 4
+    multiplier: 5
+    displayName: '- Vital Discharge IV'
+  modAbilityData: {fileID: 11400000, guid: ea73d154c8c857d4ab23c4c3d628f58f, type: 2}
+  allowedItemTypes: 2
+  scalingPerLevel: 0.05

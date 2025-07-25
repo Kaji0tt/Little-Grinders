@@ -5,124 +5,68 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public event EventHandler OnItemListChanged;
-    private Action<ItemInstance> useItemAction;
+    // Visuelles Inventar
+    public UI_Inventory uiInventory;
 
-    // Dictionary speichert die Consumable ItemID (String) und die zugehörige Anzahl
-    private Dictionary<string, int> consumableInventory;
+    // Dictionary: SlotIndex -> ItemInstance (statisches Inventar mit festen Plätzen)
+    public Dictionary<int, ItemInstance> itemDict = new Dictionary<int, ItemInstance>();
 
-    // Liste speichert alle Nicht-Consumables individuell
-    public List<ItemInstance> itemList;
+    // Optional: Consumables, falls benötigt
+    private Dictionary<string, int> consumableInventory = new Dictionary<string, int>();
 
-    public Inventory(List<ItemInstance> itemList)
+    // Fügt ein Item an einem bestimmten Slot hinzu
+    public void AddItemAtIndex(ItemInstance item, int slotIndex)
     {
-        this.itemList = itemList;
+        itemDict[slotIndex] = item;
+        Debug.Log($"[Inventory] AddItemAtIndex: Slot {slotIndex} bekommt Item '{item?.GetName()}'");
+        if (uiInventory != null)
+            uiInventory.OnInventorySlotChanged(slotIndex, item);
     }
 
-    public Inventory(Action<ItemInstance> useItemAction)
+    // Entfernt das Item aus einem bestimmten Slot
+    public void RemoveItemAtIndex(int slotIndex)
     {
-        this.useItemAction = useItemAction;
-        consumableInventory = new Dictionary<string, int>();
-        itemList = new List<ItemInstance>();
+        if (itemDict.ContainsKey(slotIndex))
+        {
+            Debug.Log($"[Inventory] RemoveItemAtIndex: Entferne Item '{itemDict[slotIndex]?.GetName()}' aus Slot {slotIndex}");
+            itemDict[slotIndex] = null;
+            if (uiInventory != null)
+                uiInventory.OnInventorySlotChanged(slotIndex, null);
+        }
     }
 
-    // 22.10.2024 AI-Tag
-    // This was created with assistance from Muse, a Unity Artificial Intelligence product
-
-    // 22.10.2024 AI-Tag
-    // This was created with assistance from Muse, a Unity Artificial Intelligence product
-
-    public void AddItem(ItemInstance item, int amount = 1)
+    // Gibt das Item an einem bestimmten Slot zurück
+    public ItemInstance GetItemAtIndex(int slotIndex)
     {
-        Debug.Log($"Adding item: {item.ItemName} with amount: {amount}");
-        // Zähle nur die Anzahl der Slots für nicht-consumable Items und die eindeutigen Consumables
-        int totalSlots = consumableInventory.Count + itemList.Count;
-
-        // Überprüfe das Limit nur für neue nicht-consumable Items
-        if (item.itemType != ItemType.Consumable && totalSlots >= 15)
-        {
-            Debug.LogWarning("Inventar ist voll!");
-            return;
-        }
-
-        if (item.itemType == ItemType.Consumable)
-        {
-            if (consumableInventory.ContainsKey(item.ItemID))
-            {
-                consumableInventory[item.ItemID] += amount;
-            }
-            else
-            {
-                consumableInventory[item.ItemID] = amount;
-            }
-        }
-        else
-        {
-            itemList.Add(item);
-        }
-
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+        itemDict.TryGetValue(slotIndex, out var item);
+        return item;
     }
 
-    public void RemoveItem(ItemInstance item, int amount = 1)
-    {
-        if (item.itemType == ItemType.Consumable)
-        {
-            if (consumableInventory.ContainsKey(item.ItemID))
-            {
-                consumableInventory[item.ItemID] -= amount;
-
-                // Entferne das Item, wenn die Menge <= 0 ist
-                if (consumableInventory[item.ItemID] <= 0)
-                {
-                    consumableInventory.Remove(item.ItemID);
-                }
-            }
-        }
-        else
-        {
-            // Entferne das Item aus der Liste der Nicht-Consumables
-            itemList.Remove(item);
-        }
-
-        // Benachrichtige Listener, dass sich das Inventar geändert hat
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
-    }
-
-    // Gibt die Anzahl eines bestimmten Consumable-Items im Inventar zurück
-    public int GetItemAmount(ItemInstance item)
-    {
-        if (item.itemType == ItemType.Consumable && consumableInventory.ContainsKey(item.ItemID))
-        {
-            return consumableInventory[item.ItemID];
-        }
-        return 0; // Item nicht im Inventar oder kein Consumable
-    }
-
-    public void EquipItem(ItemInstance item)
-    {
-        var allSlots = GameObject.FindObjectsOfType<Int_SlotBtn>();
-        var equipSlot = allSlots.FirstOrDefault(slot => slot.slotType == item.itemType);
-
-        if (equipSlot != null)
-        {
-            equipSlot.SetItem(item, this); // 'this' ist das Inventory
-        }
-        else
-        {
-            Debug.LogWarning($"Kein Equip-Slot für ItemType {item.itemType} gefunden!");
-        }
-
-        useItemAction?.Invoke(item);
-    }
-
-    public Dictionary<string, int> GetConsumableDict()
-    {
-        return consumableInventory;
-    }
-
+    // Gibt alle Items als Liste zurück (z.B. für UI)
     public List<ItemInstance> GetItemList()
     {
-        return itemList;
+        // Gibt die Items in Slot-Reihenfolge zurück
+        return itemDict.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value).ToList();
+    }
+
+    // Gibt das gesamte Dictionary zurück (z.B. für UI)
+    public Dictionary<int, ItemInstance> GetItemDict()
+    {
+        return itemDict;
+    }
+
+    public bool AddItemToFirstFreeSlot(ItemInstance item)
+    {
+        // Gehe alle möglichen Indizes durch (z.B. 0 bis 14 für 15 Slots)
+        for (int i = 0; i < uiInventory.inventorySlots.Count; i++)
+        {
+            if (!itemDict.ContainsKey(i) || itemDict[i] == null)
+            {
+                AddItemAtIndex(item, i);
+                return true;
+            }
+        }
+        Debug.LogWarning("[Inventory] Kein freier Slot gefunden!");
+        return false;
     }
 }

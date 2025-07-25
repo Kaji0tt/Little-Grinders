@@ -9,6 +9,10 @@ public class CameraManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        if (activeCam == null)
+        activeCam = mainCam;
+
     }
     #endregion
     public GameObject mainCamGO;
@@ -19,16 +23,13 @@ public class CameraManager : MonoBehaviour
 
     public Camera activeCam;
 
-    private void Update()
-    {
-        if (activeCam == null)
-            activeCam = mainCam;
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+    void Update()
+    {
+        
+         if (Input.GetKeyDown(KeyCode.Tab))
             activeCam = mapCam;
         else
-            activeCam = mainCam;
-
-    }
+            activeCam = mainCam;   }
 
 }
