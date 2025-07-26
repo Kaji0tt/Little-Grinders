@@ -31,7 +31,3 @@ playstyle.
 - While the game is meant to be a Singleplayer Game, Online-Profiles are thought of, to compare digital penises with other gamers.
 - Thus, its also important for the player to have great possibilities in individualizing his or her character, to show of how unique the character actually is.
 - Also, this includes the possibilitie for longterm mtx.
-
-Update 01.01.25:
-Last Stable Build findet sich in der Cloud unter folgendem Link
-https://mega.nz/file/ew0UjJ4J#IDDXX0i6uB6tORl1F6mHU5EqLQTO3fmYJCyH3lcj8Gc
