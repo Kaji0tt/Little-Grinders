@@ -291,6 +291,9 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayEntitySound(string groupKey, GameObject entity)
     {
+        AudioClip clip = GetClip(groupKey);
+        var audioSource = entity.GetComponent<AudioSource>();
+        /*
         if (entity == null)
         {
             Debug.LogWarning("[AudioManager] PlayEntitySound: entity ist null!");
@@ -315,8 +318,10 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning($"[AudioManager] PlayEntitySound: AudioSource an {entity.name} ist deaktiviert.");
             return;
         }
+        */
 
-        audioSource.PlayOneShot(clip);
+        if (audioSource == enabled)
+            audioSource.PlayOneShot(clip);
     }
 
     /// <summary>

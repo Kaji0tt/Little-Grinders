@@ -152,7 +152,7 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
     void FixedUpdate()
     {
 
-        MapView();
+        //MapView();
 
         Move();
 
@@ -204,34 +204,9 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
     }
 
-    private void MapView()
-    {
-        if (Input.GetKey(UI_Manager.instance.toggleCamKey))
-        {
-            if (CameraManager.instance.mainCamGO.activeSelf)
-            {
-                CameraManager.instance.mainCamGO.SetActive(false);
-                CameraManager.instance.mapCamGO.SetActive(true);
-            }
-        }
-        else
-        {   //Brutal ist das hässlich bruder, ganz dringend beim CameraManager 
-            CameraManager.instance.mainCamGO.SetActive(true);
-            if(userFOV <= 20 && userFOV >= 10)
-                CameraManager.instance.mainCam.fieldOfView = userFOV;
-            CameraManager.instance.mapCamGO.SetActive(false);
-        }
-    }
-
     //Wird jeden Frame berechnet.
     private void Update()
     {
-        //GodMode
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            TroubleShootGodMode();
-
-        }
 
         // Quick Fix: Spieler aus dem Boden teleportieren
         if (transform.position.y < -5f)
@@ -242,7 +217,9 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
 
 
         //Input Methods
-        if (Input.GetKey(KeyCode.LeftShift))  //Sollte über Menü einstellbar sein #UI_Manager
+        if (KeyManager.MyInstance?.Keybinds != null && 
+            KeyManager.MyInstance.Keybinds.ContainsKey("SHOW VALUES") && 
+            Input.GetKey(KeyManager.MyInstance.Keybinds["SHOW VALUES"]))
             ShowStatText();
         else
         {
@@ -285,9 +262,9 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
             isoRenderer.SetPlayerDirection(inputVector); // Setze die Blickrichtung des IsoRenderers basierend auf der Tastatureingabe
 
             //Animate Weapon
-            isoRenderer.AnimateIdleWeapon(inputVector);
+            //isoRenderer.AnimateIdleWeapon();
         }
-        isoRenderer.AnimateIdleWeapon(DirectionCollider.instance.dirVector);
+        //isoRenderer.AnimateIdleWeapon();
         //isoRenderer.PlayWeaponAttack()
 
         //print(inputVector);

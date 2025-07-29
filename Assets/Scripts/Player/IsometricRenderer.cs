@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -181,32 +181,43 @@ public class IsometricRenderer : MonoBehaviour
 
 
 
-    //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll die Idle Animation darstellen.
-    public void AnimateIdleWeapon(Vector2 direction)
-    {
-        if (weaponAnimator == null)
-            return;
 
-        weaponAnimator.enabled = true;
-
-        // Drehung erfolgt immer – egal ob gerade angegriffen wird
-        
-        RotateWeaponToDirection();
-
-        // Nur Idle abspielen, wenn nicht gerade Attack läuft
-        if (!weaponAnimator.GetBool("isAttacking"))
-        {
-            weaponAnimator.Play("Idle");
-        }
-    }
 
 
 
     /// <summary>
     /// Weapon Animation
     /// </summary>
-
+    /// 
+    #region Weapon Animation
     private AnimatorOverrideController weaponOverrideController;
+
+    private bool isCurrentlyIdle = false;
+
+        //Das WaffenObjekt, auf welchem der entsprechende Animation-Controller liegt, soll die Idle Animation darstellen.
+    public void AnimateIdleWeapon()
+    {
+        if (weaponAnimator == null)
+            return;
+
+        weaponAnimator.enabled = true;
+        weaponAnimator.SetBool("isAttacking", false);
+        RotateWeaponToDirection();
+
+        if (!weaponAnimator.GetBool("isAttacking") && !isPerformingAction)
+        {
+            if (!isCurrentlyIdle)
+            {
+                weaponAnimator.Play("Idle");
+                isCurrentlyIdle = true;
+            }
+        }
+        else
+        {
+            isCurrentlyIdle = false;
+        }
+    }
+
     public void PlayWeaponAttack(AnimationClip clip, Animator weaponAttackAnimator)
     {
         if (clip == null || weaponAttackAnimator == null)
@@ -216,7 +227,6 @@ public class IsometricRenderer : MonoBehaviour
         }
 
         // Richtung berechnen & Waffe drehen
-        //Vector3 dir = DirectionCollider.instance.dirVector - PlayerManager.instance.player.transform.position;
         RotateWeaponToDirection();
 
 
@@ -233,12 +243,48 @@ public class IsometricRenderer : MonoBehaviour
         StartCoroutine(ResetActionAfterAnimation());
     }
 
-    public void OnAttackAnimationEnd()
+    //Spielt Animation mit spezifischer Dauer ab
+    public void PlayWeaponAttackWithDuration(AnimationClip clip, float duration)
     {
+        if (clip == null || weaponAnimator == null)
+        {
+            Debug.LogWarning("Kein Clip oder Animator übergeben!");
+            return;
+        }
+
+        // Richtung berechnen & Waffe drehen
+        RotateWeaponToDirection();
+
+        // Animation-Speed basierend auf gewünschter Dauer berechnen
+        float originalClipLength = clip.length;
+        float requiredSpeed = originalClipLength / duration;
+        
+        // Speed setzen
+        weaponAnimator.speed = requiredSpeed;
+
+        // Override the correct clip BEFORE triggering the animation
+        weaponOverrideController["Placeholder"] = clip;
+
+        // Animation abspielen
+        weaponAnimator.Play("Attack", 0, 0f);
+        weaponAnimator.SetBool("isAttacking", true);
+
+        isPerformingAction = true;
+        StartCoroutine(ResetActionAfterDuration(duration));
+    }
+
+    // NEUE Coroutine: Reset nach spezifischer Dauer
+    private IEnumerator ResetActionAfterDuration(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
         if (weaponAnimator != null)
         {
-            weaponAnimator.SetBool("isAttacking", false);
+            //weaponAnimator.SetBool("isAttacking", false);
+            weaponAnimator.speed = 1f; // Speed zurücksetzen
+            isCurrentlyIdle = false; // Erlaube Idle-Animation wieder
         }
+        
         isPerformingAction = false;
     }
 
@@ -273,16 +319,12 @@ public class IsometricRenderer : MonoBehaviour
         Debug.DrawRay(weaponPivot.position, worldDirection.normalized * 2, Color.red);
     }
 
-
+    #endregion
 
     //helper functions
 
-    //this function converts a Vector2 direction to an index to a slice around a circle
-    //this goes in a counter-clockwise direction.
 
-
-
-
+    #region Helper Functions
     //why would this be static? cant remember, lets make it nonstatic, so i might acces it from enemy-controller scripts.
     public int DirectionToIndex(Vector2 dir, int sliceCount){
         //get the normalized direction
@@ -322,5 +364,5 @@ public class IsometricRenderer : MonoBehaviour
         return hashArray;
     }
 
-
+    #endregion
 }

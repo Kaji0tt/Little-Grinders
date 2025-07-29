@@ -27,9 +27,9 @@ public class Int_Chest : MonoBehaviour
         if (other == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && !isOpened)
         {
             // Hole die Pick-Taste aus dem KeyManager
-            KeyCode pickKey = KeyManager.MyInstance.Keybinds["PICK"];
+            //KeyCode pickKey = KeyManager.MyInstance.Keybinds["PICK"];
             
-            if (Input.GetKeyDown(pickKey))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 OpenChest();
             }

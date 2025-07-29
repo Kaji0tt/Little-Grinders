@@ -31,7 +31,7 @@ public class ParticleCamScript : MonoBehaviour
     {
         //transform.LookAt(Camera.main.transform);
 
-        CameraPosition = CameraManager.instance.mainCam.transform.position;
+        CameraPosition = CameraManager.instance.GetCameraPosition();
         DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;
 
         if (particle != null)
@@ -40,7 +40,7 @@ public class ParticleCamScript : MonoBehaviour
 
         //11.09
         //Die Folgenden Lines of Code sollten wohl verwendet werden, um Attack Animationen / Kampf zu berechnen,
-        //allerdings führen sie aus unbekannten Gründen zu einem Null Error, deshalb erstmal ausgeklammert.
+        //allerdings fï¿½hren sie aus unbekannten Grï¿½nden zu einem Null Error, deshalb erstmal ausgeklammert.
 
         /*playerPosition = GameObject.Find("Charakter").transform.position;
         agentDest.SetDestination(playerPosition);

@@ -343,7 +343,10 @@ public class EnemyController : MonoBehaviour, IEntitie
             if (!mobStats.isDead)
                 hpBar.GetComponent<CanvasGroup>().alpha = 1;
 
-            if (Input.GetKey(KeyCode.LeftShift) && !mobStats.isDead)  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
+
+            if (KeyManager.MyInstance?.Keybinds != null && 
+                KeyManager.MyInstance.Keybinds.ContainsKey("SHOW VALUES") && 
+                Input.GetKey(KeyManager.MyInstance.Keybinds["SHOW VALUES"]) && !mobStats.isDead)
             {
                 TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
@@ -446,7 +449,8 @@ public class EnemyController : MonoBehaviour, IEntitie
             }
 
             //pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
-
+            //Damage Popup für direkten Schaden - aktuell hardcoded auf false für Crits
+            GameEvents.Instance.EnemyTookDirectDamage(incoming_damage, this, false);
         }
     }
 

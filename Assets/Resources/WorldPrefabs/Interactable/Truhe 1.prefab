@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4385241946764260072}
   - component: {fileID: 3891122309051569479}
+  - component: {fileID: 7218774131827540207}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -53,6 +54,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5234756, y: 0.732306, z: 0.7944107}
   m_Center: {x: 0.015125275, y: 0.35368514, z: 0.057967186}
+--- !u!114 &7218774131827540207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47186180402772923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc6db4c34b013914dbf3a4fba369801c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOpened: 0
+  openedSprite: {fileID: -7594309884363804855, guid: 0e3f1980cc3d3734c82c1d10c6602d85,
+    type: 3}
+  dropRadius: 1
+  dropHeightOffset: 0.1
 --- !u!1 &5820662847681281949
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,7 +83,6 @@ GameObject:
   - component: {fileID: 5653794707245443536}
   - component: {fileID: 1131012407973740707}
   - component: {fileID: 1287354106041935359}
-  - component: {fileID: -5508795203059249796}
   m_Layer: 0
   m_Name: Truhe 1
   m_TagString: Untagged
@@ -182,20 +199,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.9319382, y: 0.72, z: 0.13173294}
   m_Center: {x: 0.024730682, y: 0.36, z: 0.049741745}
---- !u!114 &-5508795203059249796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5820662847681281949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc6db4c34b013914dbf3a4fba369801c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOpened: 0
-  openedSprite: {fileID: -7594309884363804855, guid: 0e3f1980cc3d3734c82c1d10c6602d85,
-    type: 3}
-  dropRadius: 1
-  dropHeightOffset: 0.1

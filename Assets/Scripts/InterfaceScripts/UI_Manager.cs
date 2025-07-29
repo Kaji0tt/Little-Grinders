@@ -167,68 +167,12 @@ public class UI_Manager : MonoBehaviour
         */
         toggleCamKey = KeyCode.Tab;
     }
-
-    public void BindKeysInManager()
+    public void UpdateAllKeyTexts()
     {
-
-        KeyManager.MyInstance.BindKey("UP", KeyCode.W);
-        KeyManager.MyInstance.BindKey("LEFT", KeyCode.A);
-        KeyManager.MyInstance.BindKey("DOWN", KeyCode.S);
-        KeyManager.MyInstance.BindKey("RIGHT", KeyCode.D);
-
-        KeyManager.MyInstance.BindKey("STATS", KeyCode.E);
-        KeyManager.MyInstance.BindKey("SKILLS", KeyCode.P);
-        KeyManager.MyInstance.BindKey("PICK", KeyCode.Q);
-        KeyManager.MyInstance.BindKey("MAP", KeyCode.M);
-
-        KeyManager.MyInstance.BindKey("WEAPON", KeyCode.Alpha1);
-        KeyManager.MyInstance.BindKey("KOPF", KeyCode.Alpha2);
-        KeyManager.MyInstance.BindKey("BRUST", KeyCode.Alpha3);
-        KeyManager.MyInstance.BindKey("BEINE", KeyCode.Alpha4);
-        KeyManager.MyInstance.BindKey("SCHUHE", KeyCode.Alpha5);
-    }
-
-    private void RefreshKeyBindText()
-    {
-        if (keyBindButtons == null || keyBindButtons.Length == 0)
+        foreach (var button in FindObjectsOfType<KeyBindButton>())
         {
-            Debug.LogWarning("keyBindButtons ist nicht initialisiert oder leer!");
-            return;
+            button.UpdateKeyText();
         }
-
-        foreach (KeyValuePair<string, KeyCode> kvp in KeyManager.MyInstance.Keybinds)
-        {
-            UpdateKeyText(kvp.Key, kvp.Value);
-        }
-    }
-
-    //Es sollte noch geschaut werden, inwiefern das UI nach Szenen-Wechsel gespeichert werden kann.
-    public void UpdateKeyText(string key, KeyCode code)
-    {
-        if (keyBindButtons == null)
-        {
-            Debug.LogWarning("keyBindButtons ist noch nicht initialisiert!");
-            return;
-        }
-
-        GameObject btnObj = Array.Find(keyBindButtons, x => x.name.ToUpper().Contains(key.ToUpper()));
-        if (btnObj == null)
-        {
-            Debug.LogWarning($"Kein Button mit Name '{key}' gefunden!");
-            return;
-        }
-
-        TextMeshProUGUI tmp = btnObj.GetComponentInChildren<TextMeshProUGUI>();
-        if (tmp == null)
-        {
-            Debug.LogWarning($"Kein TextMeshProUGUI für Button '{key}' gefunden!");
-            return;
-        }
-
-        if (code.ToString().Contains("Alpha"))
-            tmp.text = code.ToString().Substring(5);
-        else
-            tmp.text = code.ToString();
     }
 
 

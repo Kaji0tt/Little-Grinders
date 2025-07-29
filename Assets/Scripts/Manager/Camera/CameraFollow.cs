@@ -8,58 +8,282 @@ using UnityEngine.Rendering;
 
 public class CameraFollow : MonoBehaviour
 {
-
     public float smoothSpeed = 0.125f;
 
-
-    [SerializeField]
-    private float min = 10f;
-    [SerializeField]
-    private float max = 20f;
-
+    [SerializeField] private float min = 10f;
+    [SerializeField] private float max = 20f;
     private float zoom;
 
-    //List<RaycastHit> hitsList = new List<RaycastHit>();
+    [Header("Overview Settings")]
+    [SerializeField] private Vector3 overviewPositionOffset = new Vector3(0, 8, -4);
+    [SerializeField] private Vector3 overviewRotationOffset = new Vector3(20, 0, 0);
+    [SerializeField] private float overviewFieldOfView = 70f;
+    [SerializeField] private float transitionSpeed = 3f;
+
+    [Header("Camera Lock Settings")]
+    [SerializeField] private bool cameraLocked = true; // Standard: Kamera ist gelockt
+    [SerializeField] private float mouseInfluenceStrength = 2f; // Wie stark der Einfluss ist
+    [SerializeField] private float mouseInfluenceMaxDistance = 5f; // Maximale Entfernung vom Player
+    [SerializeField] private float mouseInfluenceSmoothing = 2f; // Wie schnell sich die Kamera anpasst
+
+    // Overview System
+    private bool isInOverviewMode = false;
+    private Vector3 originalLocalPosition;
+    private Vector3 originalLocalRotation;
+    private float originalFieldOfView;
+
+    // Camera Lock System
+    private Vector3 mouseInfluenceOffset = Vector3.zero;
+
+    // Direkte Kamera-Referenz
+    private Camera cam;
 
     RaycastHit[] raycastHits;
 
-    //List<SpriteRenderer> lowAlphaSprites = new List<SpriteRenderer>();
-
-    //public float zoomSpeed = 4f;
-    //private float currentZoom = 10f;
-    /*
-    private bool perspectiveView;
-
-    private Action[] toggleCamPos = new Action[4];
-
-    private int activeCam = 0;
-    */
-    void Awake()
-    {
-        //toggleCamPos[0] = CamPos1;
-        //toggleCamPos[1] = CamPos2;
-        //toggleCamPos[2] = CamPos3;
-        //toggleCamPos[3] = CamPos4;
-
-    }
-
     void Start()
     {
+        // Direkte Kamera-Referenz
+        cam = GetComponent<Camera>();
+        
+        if (cam == null)
+        {
+            Debug.LogError("CameraFollow: No Camera component found on this GameObject!");
+            return;
+        }
+
+        // Ursprungs-Einstellungen speichern
+        originalLocalPosition = transform.localPosition;
+        originalLocalRotation = transform.localEulerAngles;
+        originalFieldOfView = cam.fieldOfView;
+
         raycastHits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), Mathf.Infinity);
     }
 
     private void Update()
     {
+        if (cam == null) return;
 
-        if (Input.mouseScrollDelta.y != 0 && Time.timeScale == 1f)
+        // Zoom-Kontrolle (nur wenn nicht im Overview-Modus)
+        if (!isInOverviewMode && Input.mouseScrollDelta.y != 0 && Time.timeScale == 1f)
+        {
             if (!IsMouseOverUIWithIgnores())
                 Zoom();
+        }
 
-        // Berechne Abstand zur Kamera
-        float distSelfCamera = (PlayerManager.instance.player.transform.position - CameraManager.instance.activeCam.transform.position).sqrMagnitude;
+        // Overview-Kontrolle
+        HandleOverviewInput();
 
+        // Camera Lock Kontrolle
+        HandleCameraLockInput();
 
-        // Raycast von Spieler zur Kamera
+        // Mouse Influence berechnen (nur wenn nicht gelockt und nicht im Overview)
+        if (!cameraLocked && !isInOverviewMode)
+        {
+            UpdateMouseInfluence();
+        }
+        
+        // Kamera-Transitions
+        UpdateCameraTransition();
+
+        // Raycast-System für Transparenz
+        HandleEnvironmentTransparency();
+    }
+
+    private void HandleOverviewInput()
+    {
+        // Tab gedrückt - Overview Mode
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            EnableOverviewMode();
+        }
+        
+        // Tab losgelassen - Normal Mode
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            DisableOverviewMode();
+        }
+    }
+
+    private void HandleCameraLockInput()
+    {
+        // Debug: Prüfe KeyManager-Status
+        if (KeyManager.MyInstance == null)
+        {
+            Debug.LogWarning("KeyManager.MyInstance is null!");
+            return;
+        }
+
+        if (!KeyManager.MyInstance.Keybinds.ContainsKey("CAMERA LOCK"))
+        {
+            Debug.LogWarning("CAMERA LOCK key not found in Keybinds!");
+            return;
+        }
+
+        KeyCode lockKey = KeyManager.MyInstance.Keybinds["CAMERA LOCK"];
+        
+        // Debug: Zeige aktuellen Key
+        if (Input.GetKeyDown(KeyCode.Mouse2)) // Direkte Prüfung
+        {
+            Debug.Log("Mouse2 pressed directly!");
+        }
+        
+        if (Input.GetKeyDown(lockKey))
+        {
+            Debug.Log($"Camera lock key pressed: {lockKey}");
+            ToggleCameraLock();
+        }
+    }
+
+    private void ToggleCameraLock()
+    {
+        cameraLocked = !cameraLocked;
+
+        if (LogScript.instance != null)
+        {
+            string status = cameraLocked ? "LOCKED" : "UNLOCKED";
+            LogScript.instance.ShowLog($"Camera {status}", 1.5f);
+        }
+
+        // Reset Mouse Influence wenn Kamera gelockt wird
+        if (cameraLocked)
+        {
+            mouseInfluenceOffset = Vector3.zero;
+        }
+    }
+
+    private void UpdateMouseInfluence()
+    {
+        // Screen-Edge basierte Mouse Influence
+        Vector3 targetInfluence = CalculateScreenEdgeInfluence();
+
+        // Sanfte Interpolation zum Ziel-Offset
+        mouseInfluenceOffset = Vector3.Lerp(
+            mouseInfluenceOffset, 
+            targetInfluence, 
+            Time.deltaTime * mouseInfluenceSmoothing
+        );
+    }
+
+    private Vector3 CalculateScreenEdgeInfluence()
+    {
+        Vector2 mouseScreenPos = new Vector2(
+            Input.mousePosition.x / Screen.width,
+            Input.mousePosition.y / Screen.height
+        );
+
+        Vector2 screenOffset = mouseScreenPos - Vector2.one * 0.5f;
+
+        // Debug-Output
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            Debug.Log($"Mouse Screen: {mouseScreenPos}, Offset: {screenOffset}");
+        }
+
+        // WICHTIG: Verwende WELT-Koordinaten, nicht lokale!
+        // Da die Kamera im Player-Objekt ist und dessen Rotation erbt,
+        // müssen wir die Transformation in Welt-Koordinaten machen
+
+        // Hole die Parent-Transform (Player) für Welt-Orientierung
+        Transform playerTransform = transform.parent;
+        
+        Vector3 worldForward = Vector3.forward;
+        Vector3 worldRight = Vector3.right;
+
+        if (playerTransform != null)
+        {
+            // Verwende die Player-Transform für die Welt-Orientierung
+            worldForward = playerTransform.forward;
+            worldForward.y = 0;
+            worldForward = Vector3.Normalize(worldForward);
+            worldRight = Quaternion.Euler(new Vector3(0, 90, 0)) * worldForward;
+        }
+
+        // Berechne Einfluss in Welt-Koordinaten
+        Vector3 worldInfluence = (worldRight * screenOffset.x + worldForward * screenOffset.y) * mouseInfluenceStrength;
+
+        // Transformiere zurück in lokale Koordinaten der Kamera
+        Vector3 localInfluence = transform.InverseTransformDirection(worldInfluence);
+
+        // Debug-Output
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            Debug.Log($"World Forward: {worldForward}, World Right: {worldRight}");
+            Debug.Log($"World Influence: {worldInfluence}, Local Influence: {localInfluence}");
+        }
+
+        return Vector3.ClampMagnitude(localInfluence, mouseInfluenceMaxDistance);
+    }
+
+    private void EnableOverviewMode()
+    {
+        if (isInOverviewMode) return;
+        
+        isInOverviewMode = true;
+
+        if (LogScript.instance != null)
+        {
+            LogScript.instance.ShowLog("Overview Mode ON", 1f);
+        }
+    }
+
+    private void DisableOverviewMode()
+    {
+        if (!isInOverviewMode) return;
+        
+        isInOverviewMode = false;
+
+        if (LogScript.instance != null)
+        {
+            LogScript.instance.ShowLog("Overview Mode OFF", 1f);
+        }
+    }
+
+    private void UpdateCameraTransition()
+    {
+        // Berechne Basis-Zielwerte basierend auf Overview-Modus
+        Vector3 baseTargetPosition = isInOverviewMode ? 
+            originalLocalPosition + overviewPositionOffset : 
+            originalLocalPosition;
+
+        Vector3 targetRotation = isInOverviewMode ? 
+            originalLocalRotation + overviewRotationOffset : 
+            originalLocalRotation;
+
+        float targetFOV = isInOverviewMode ? 
+            overviewFieldOfView : 
+            originalFieldOfView;
+
+        // Füge Mouse Influence hinzu (nur wenn nicht im Overview-Modus)
+        Vector3 finalTargetPosition = baseTargetPosition;
+        if (!isInOverviewMode)
+        {
+            finalTargetPosition += mouseInfluenceOffset;
+        }
+
+        // Sanfte Interpolation
+        transform.localPosition = Vector3.Lerp(
+            transform.localPosition, 
+            finalTargetPosition, 
+            Time.deltaTime * transitionSpeed
+        );
+
+        transform.localRotation = Quaternion.Lerp(
+            transform.localRotation,
+            Quaternion.Euler(targetRotation),
+            Time.deltaTime * transitionSpeed
+        );
+
+        cam.fieldOfView = Mathf.Lerp(
+            cam.fieldOfView,
+            targetFOV,
+            Time.deltaTime * transitionSpeed
+        );
+    }
+
+    private void HandleEnvironmentTransparency()
+    {
+        if (PlayerManager.instance?.player == null) return;
+
         Vector3 playerPos = PlayerManager.instance.player.transform.position;
         Vector3 camPos = transform.position;
         Vector3 direction = (camPos - playerPos).normalized;
@@ -67,36 +291,15 @@ public class CameraFollow : MonoBehaviour
 
         raycastHits = Physics.RaycastAll(playerPos, direction, distance);
 
-        //Debug.Log($"[CameraFollow] Raycast from {playerPos} to {camPos} | Direction: {direction} | Distance: {distance} | Hits: {raycastHits.Length}");
-
-        // Sammle alle getroffenen "Env"-Objekte in ein HashSet
         HashSet<GameObject> hitEnvObjects = new HashSet<GameObject>();
         foreach (RaycastHit hit in raycastHits)
         {
-            if (hit.collider != null)
+            if (hit.collider != null && hit.collider.gameObject.CompareTag("Env"))
             {
-                //Debug.Log($"[CameraFollow] RaycastHit: {hit.collider.gameObject.name} | Tag: {hit.collider.gameObject.tag}");
-                if (hit.collider.gameObject.CompareTag("Env"))
-                {
-                    hitEnvObjects.Add(hit.collider.gameObject);
-                    SpriteRenderer sr = hit.collider.gameObject.GetComponent<SpriteRenderer>();
-                    if (sr != null)
-                    {
-                        //Debug.Log($"[CameraFollow] SpriteRenderer FOUND on {hit.collider.gameObject.name}");
-                    }
-                    else
-                    {
-                        //Debug.LogWarning($"[CameraFollow] SpriteRenderer MISSING on {hit.collider.gameObject.name}");
-                    }
-                }
-            }
-            else
-            {
-                //Debug.LogWarning("[CameraFollow] RaycastHit with NULL collider!");
+                hitEnvObjects.Add(hit.collider.gameObject);
             }
         }
 
-        // Setze für jedes "Env"-Objekt die Transparenz je nach Raycast-Hit
         foreach (GameObject envObj in GameObject.FindGameObjectsWithTag("Env"))
         {
             SpriteRenderer sr = envObj.GetComponent<SpriteRenderer>();
@@ -106,42 +309,27 @@ public class CameraFollow : MonoBehaviour
                 if (hitEnvObjects.Contains(envObj))
                 {
                     sr.color = new Color(1, 1, 1, 0.3f);
-                    // LightProbeUsage auf 4 (Custom Provided) setzen
-                    renderer.lightProbeUsage = UnityEngine.Rendering.LightProbeUsage.CustomProvided;
-                    // Schattenwurf deaktivieren
-                    renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                    //Debug.Log($"[CameraFollow] Set TRANSPARENT & LightProbeUsage=CustomProvided & Shadows=Off: {envObj.name}");
+                    renderer.lightProbeUsage = LightProbeUsage.CustomProvided;
+                    renderer.shadowCastingMode = ShadowCastingMode.Off;
                 }
                 else
                 {
                     sr.color = new Color(1, 1, 1, 1f);
-                    // LightProbeUsage zurück auf Blend Probes (Standard: 1)
-                    renderer.lightProbeUsage = UnityEngine.Rendering.LightProbeUsage.BlendProbes;
-                    // Schattenwurf wieder aktivieren (z.B. On)
-                    renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-                    //Debug.Log($"[CameraFollow] Set OPAQUE & LightProbeUsage=BlendProbes & Shadows=On: {envObj.name}");
+                    renderer.lightProbeUsage = LightProbeUsage.BlendProbes;
+                    renderer.shadowCastingMode = ShadowCastingMode.On;
                 }
-            }
-            else
-            {
-                //Debug.LogWarning($"[CameraFollow] SpriteRenderer MISSING on EnvObj: {envObj.name}");
             }
         }
     }
 
-    private bool IsMouseOverUIWithIgnores() //C @CodeMonkey
+    private bool IsMouseOverUIWithIgnores()
     {
-        //Erstelle eine lokale Variabel von der Position der Maus
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
         pointerEventData.position = Input.mousePosition;
 
-        //Erstelle eine Liste aus Raycast-Daten
         List<RaycastResult> raycastResultList = new List<RaycastResult>();
-
-        //Erstelle Raycasts von der Position der Maus und speichere ihre Ergebnisse in der Liste
         EventSystem.current.RaycastAll(pointerEventData, raycastResultList);
 
-        //Filter die Liste auf vom Raycast getroffene Objekte und entferne jene, welche das ClickThrough Skript besitzen.
         for (int i = 0; i < raycastResultList.Count; i++)
         {
             if (raycastResultList[i].gameObject.GetComponent<ClickThrough>() != null)
@@ -156,28 +344,38 @@ public class CameraFollow : MonoBehaviour
 
     void Zoom()
     {
-        //Ggf. sollten die Mausrad zoomies invertiert werden.
-        //float _zoom = Camera.main.fieldOfView;
-
-        //float max, min;
         max = 20.0f;
         min = 10.0f;
 
         if (Input.mouseScrollDelta.y > 0 && zoom > min)
         {
-            CameraManager.instance.mainCam.fieldOfView = CameraManager.instance.mainCam.fieldOfView - Input.mouseScrollDelta.y;
-            //PlayerManager.instance.player.GetComponent<IsometricPlayer>().userFOV = CameraManager.instance.mainCam.fieldOfView;
+            cam.fieldOfView = cam.fieldOfView - Input.mouseScrollDelta.y;
         }
 
         if (Input.mouseScrollDelta.y < 0 && zoom < max)
         {
-            CameraManager.instance.mainCam.fieldOfView = CameraManager.instance.mainCam.fieldOfView - Input.mouseScrollDelta.y;
-            //PlayerManager.instance.player.GetComponent<IsometricPlayer>().userFOV = CameraManager.instance.mainCam.fieldOfView;
+            cam.fieldOfView = cam.fieldOfView - Input.mouseScrollDelta.y;
         }
-        zoom = CameraManager.instance.mainCam.fieldOfView;
+        
+        zoom = cam.fieldOfView;
 
-        PlayerManager.instance.player.GetComponent<IsometricPlayer>().userFOV = zoom;
+        if (!isInOverviewMode)
+        {
+            originalFieldOfView = zoom;
+        }
 
+        if (PlayerManager.instance?.player != null)
+        {
+            var isometricPlayer = PlayerManager.instance.player.GetComponent<IsometricPlayer>();
+            if (isometricPlayer != null)
+            {
+                isometricPlayer.userFOV = zoom;
+            }
+        }
     }
 
+    // Öffentliche Methoden
+    public bool IsInOverviewMode() => isInOverviewMode;
+    public bool IsCameraLocked() => cameraLocked;
+    public Vector3 GetCameraPosition() => transform.position;
 }

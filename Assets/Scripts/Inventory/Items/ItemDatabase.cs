@@ -34,7 +34,9 @@ public class ItemDatabase : MonoBehaviour
             return;
         }
         instance = this;
-
+        
+        // DontDestroyOnLoad hinzufügen
+        DontDestroyOnLoad(gameObject);
 
         allModDefs = Resources.LoadAll<ItemModDefinition>("Mods");
         allItems.AddRange(Resources.LoadAll<Item>("Items"));

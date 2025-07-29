@@ -8,6 +8,9 @@ public class DamagePopup : MonoBehaviour
     private CanvasGroup canvasGroup;
 
     private float lifetime = 1.0f;
+
+    private bool isCrit = false;
+    private float moveDelay = 0f; // Zeit, bis das Popup sich bewegt
     private float fadeDuration = 0.5f;
     private float scaleDuration = 0.2f;
     private float elapsed;
@@ -31,6 +34,9 @@ public class DamagePopup : MonoBehaviour
 
     public void Setup(float damage)
     {
+        isCrit = false;
+        moveDelay = 0f;
+
         if (damageText != null)
         {
             //Debug.Log("No Crit!");
@@ -39,12 +45,15 @@ public class DamagePopup : MonoBehaviour
         }
         transform.localScale = startScale;
 
-        if(canvasGroup != null && canvasGroup.isActiveAndEnabled)
-        canvasGroup.alpha = 1f;
+        if (canvasGroup != null && canvasGroup.isActiveAndEnabled)
+            canvasGroup.alpha = 1f;
     }
 
     public void SetupCrit(float damage)
     {
+        isCrit = true;
+        moveDelay = 0.8f; // Crits bleiben z.B. 0.8 Sekunden stehen
+
         if (damageText != null)
         {
             Debug.Log("Crit!");
@@ -57,6 +66,22 @@ public class DamagePopup : MonoBehaviour
             canvasGroup.alpha = 1f;
     }
 
+    public void SetupDirect(float damage)
+    {
+        isCrit = false;
+        moveDelay = 0f;
+
+        if (damageText != null)
+        {
+            damageText.text = damage.ToString("0");
+            damageText.color = new Color(0.7f, 0.5f, 1f); // Lila/WeiÃŸlich
+        }
+        transform.localScale = startScale;
+
+        if (canvasGroup != null && canvasGroup.isActiveAndEnabled)
+            canvasGroup.alpha = 1f;
+    }
+
     private void Update()
     {
         elapsed += Time.deltaTime;
@@ -64,8 +89,11 @@ public class DamagePopup : MonoBehaviour
         // 1. Zur Kamera drehen
         transform.forward = Camera.main.transform.forward;
 
-        // 2. Nach oben wandern
-        transform.position += moveVector * Time.deltaTime;
+        // 2. Nach oben wandern (erst nach moveDelay)
+        if (elapsed > moveDelay)
+        {
+            transform.position += moveVector * Time.deltaTime;
+        }
 
         // 3. Skalieren (Pop-in Effekt)
         if (elapsed < scaleDuration)
@@ -81,10 +109,11 @@ public class DamagePopup : MonoBehaviour
             canvasGroup.alpha = Mathf.Lerp(1f, 0f, t);
         }
 
-        // 5. Zerstören am Ende
+        // 5. Zerstï¿½ren am Ende
         if (elapsed > lifetime)
         {
             Destroy(gameObject);
         }
     }
+    
 }

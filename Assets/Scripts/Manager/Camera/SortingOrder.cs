@@ -24,13 +24,9 @@ public class SortingOrder : MonoBehaviour
         // Blick in Kamera Richtung
         //transform.LookAt(Camera.main.transform);
 
-        if(CameraManager.instance.mainCamGO.activeSelf)
-        {
-            CameraPosition = CameraManager.instance.mainCamGO.transform.position;
-            DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;
-            sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
-        }
-
+        CameraPosition = CameraManager.instance.GetCameraPosition();
+        DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;
+        sprite.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
 
 
     }
