@@ -16,27 +16,43 @@ public class TalentTreeManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        Debug.Log("=== [TalentTreeManager.Awake] START ===");
 
         //FindObjectsByType<Talent_UI>(FindObjectsSortMode.None); // true, um auch inaktive Objekte einzuschließen
 
         allTalents.Clear();
 
-        foreach (Talent_UI talent in FindObjectsByType<Talent_UI>(FindObjectsSortMode.None))
+        var foundTalents = FindObjectsByType<Talent_UI>(FindObjectsSortMode.None);
+        Debug.Log($"[Awake] Gefundene Talent_UI Objekte: {foundTalents.Length}");
+
+        foreach (Talent_UI talent in foundTalents)
         {
+            Debug.Log($"[Awake] Füge Talent hinzu: {talent.name}");
+            Debug.Log($"[Awake] - passive: {talent.passive}");
+            Debug.Log($"[Awake] - myAbility: {(talent.myAbility != null ? talent.myAbility.name : "null")}");
+            Debug.Log($"[Awake] - myNode: {(talent.myNode != null ? $"ID={talent.myNode.ID}" : "null")}");
+            Debug.Log($"[Awake] - currentCount: {talent.currentCount}");
+            
             allTalents.Add(talent);
             talent.SetTalentUIVariables();
         }
 
-        //Sorge dafür, das alle Talente locked sind, welche zu Beginn nicht freigeschaltet sind.
-        ResetTalents();
+        Debug.Log($"[Awake] Finale Anzahl allTalents: {allTalents.Count}");
 
-        //Ziehe die 
-        //DrawTalentTreeLines();
+        if (!PlayerPrefs.HasKey("Load"))
+        {
+            Debug.Log("[Awake] Kein 'Load' PlayerPref gefunden - resetze Talente");
+            ResetTalents();
+            UpdateTalentPointText(); // Nur hier aufrufen
+        }
+        else
+        {
+            Debug.Log("[Awake] 'Load' PlayerPref gefunden - Talente werden später geladen");
+            // UpdateTalentPointText() wird später in PlayerLoad.LoadTalents() aufgerufen
+        }
 
         UpdateTalentPointText();
-
-
-
+        Debug.Log("=== [TalentTreeManager.Awake] ENDE ===");
     }
 
 
@@ -69,42 +85,77 @@ public class TalentTreeManager : MonoBehaviour
 
     public void TryUseTalent(Talent_UI clickedTalent)
     {
+        Debug.Log("=== [TryUseTalent] START ===");
+        Debug.Log($"[TryUseTalent] Talent: {clickedTalent.name}");
+        Debug.Log($"[TryUseTalent] Aktuelle Skillpoints: {PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints()}");
+        Debug.Log($"[TryUseTalent] Talent currentCount: {clickedTalent.currentCount}");
+        Debug.Log($"[TryUseTalent] Talent unlocked: {clickedTalent.unlocked}");
+        Debug.Log($"[TryUseTalent] Talent passive: {clickedTalent.passive}");
+        Debug.Log($"[TryUseTalent] Talent myAbility: {(clickedTalent.myAbility != null ? clickedTalent.myAbility.name : "null")}");
+        Debug.Log($"[TryUseTalent] Talent myNode: {(clickedTalent.myNode != null ? $"ID={clickedTalent.myNode.ID}" : "null")}");
 
-        
         //Nur wenn der Spieler auch über Skillpunkte verfügt
         if (PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints() > 0 && clickedTalent.Click())
         {
+            Debug.Log($"[TryUseTalent] ✓ Talent-Click erfolgreich! Neue currentCount: {clickedTalent.currentCount}");
+
+            // Skillpoints reduzieren (für alle Talente)
+            PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
+            Debug.Log($"[TryUseTalent] Skillpoints reduziert. Neue Anzahl: {PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints()}");
+
+            UpdateTalentPointText();
 
             if(clickedTalent.myNode != null)
             {
-                PlayerManager.instance.player.GetComponent<PlayerStats>().Decrease_SkillPoints(1);
-
-                UpdateTalentPointText();
-
+                Debug.Log($"[TryUseTalent] Node-basiertes Talent verarbeiten");
                 clickedTalent.myNode.myCurrentCount++;
+                Debug.Log($"[TryUseTalent] Node.myCurrentCount erhöht auf: {clickedTalent.myNode.myCurrentCount}");
 
                 UpdateTalentTree(clickedTalent.myNode);
 
-                //Füge die EIgenschaften des Talents dem Spieler hinzu
+                //Füge die Eigenschaften des Talents dem Spieler hinzu
                 ApplyPassivePointsAndEffects(clickedTalent);
             }
 
-
             //Zusätzliche Abfrage für die Root Ability (Sie kann durch ein bool in UseBase nur 1x verwendet werden)
             if (clickedTalent.myAbility != null)
+            {
+                Debug.Log($"[TryUseTalent] Ability-basiertes Talent verarbeiten");
                 clickedTalent.myAbility.UseBase(PlayerStats.instance);
+                Debug.Log($"[TryUseTalent] Ability.UseBase() aufgerufen");
+            }
 
             //Füge das Talent der Liste von Talenten hinzu.
-            allTalents.Add(clickedTalent);
+            if (!allTalents.Contains(clickedTalent))
+            {
+                allTalents.Add(clickedTalent);
+                Debug.Log($"[TryUseTalent] Talent zur allTalents-Liste hinzugefügt");
+            }
+            else
+            {
+                Debug.Log($"[TryUseTalent] Talent bereits in allTalents-Liste vorhanden");
+            }
 
             if(clickedTalent.myNode != null && clickedTalent.myNode.myCurrentCount <= 1)
             {
+                Debug.Log($"[TryUseTalent] Prüfe Node-Expansion");
                 if (!clickedTalent.myNode.IsExpanded())
+                {
                     TalentTreeGenerator.instance.ExpandNode(clickedTalent.myNode);
+                    Debug.Log($"[TryUseTalent] Node expandiert");
+                }
 
                 TalentTreeGenerator.instance.ExpandBranch(clickedTalent.myNode);
+                Debug.Log($"[TryUseTalent] Branch expandiert");
             }
-        }        
+
+            Debug.Log($"[TryUseTalent] === ENDE === Talent erfolgreich verwendet");
+        }
+        else
+        {
+            Debug.LogWarning($"[TryUseTalent] ❌ Talent konnte nicht verwendet werden!");
+            Debug.LogWarning($"[TryUseTalent] Grund: Skillpoints: {PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints()}, Talent unlocked: {clickedTalent.unlocked}");
+        }
     }
 
     void OnEnable()
@@ -122,9 +173,13 @@ public class TalentTreeManager : MonoBehaviour
     public void ApplyPassivePointsAndEffects(Talent_UI clickedTalent)
     {
         var playerStats = PlayerStats.instance;
+        Debug.Log($"[ApplyPassivePointsAndEffects] Talent: {clickedTalent.name}");
+        Debug.Log($"[ApplyPassivePointsAndEffects] Anzahl myTypes: {clickedTalent.myTypes.Count}");
 
         foreach (TalentType type in clickedTalent.myTypes)
         {
+            Debug.Log($"[ApplyPassivePointsAndEffects] Verarbeite TalentType: {type}");
+            
             EntitieStats stat = type switch
             {
                 TalentType.HP => EntitieStats.Hp,
@@ -138,19 +193,25 @@ public class TalentTreeManager : MonoBehaviour
 
             if (stat != EntitieStats.None)
             {
-                //Debug.Log("Cool, adding" + stat + "  with " +  skilledTalent.value + " as PercentMult to the Player.");
-                playerStats.GetStat(stat).AddModifier(new StatModifier(clickedTalent.value * 0.01f, StatModType.PercentAdd));
+                float modifierValue = clickedTalent.value * 0.01f;
+                Debug.Log($"[ApplyPassivePointsAndEffects] Füge Modifier hinzu: {stat} += {modifierValue} (PercentAdd)");
+                Debug.Log($"[ApplyPassivePointsAndEffects] Wert vor Modifier: {playerStats.GetStat(stat).Value}");
+                
+                playerStats.GetStat(stat).AddModifier(new StatModifier(modifierValue, StatModType.PercentAdd));
+                
+                Debug.Log($"[ApplyPassivePointsAndEffects] Wert nach Modifier: {playerStats.GetStat(stat).Value}");
             }
             else
             {
-                Console.WriteLine("Entweder wurde einem passiven Talent kein Typ zugewiesen, oder es handelt sich um einen Sockel");
+                Debug.LogWarning($"[ApplyPassivePointsAndEffects] Ungültiger TalentType: {type}");
             }
         }
-
     }
 
     public void ResetTalents()
     {
+        Debug.Log("[ResetTalents] Alle Talente werden zurückgesetzt.");
+
         foreach (Talent_UI talent in allTalents)
         {
             if (talent == defaultTalent)
@@ -164,9 +225,17 @@ public class TalentTreeManager : MonoBehaviour
 
     public void UpdateTalentPointText()
     {
-        if(PlayerManager.instance.player != null)
+        // Null-Prüfung hinzufügen
+        if(PlayerManager.instance != null && PlayerManager.instance.player != null)
         {
             talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
+        }
+        else
+        {
+            Debug.Log("[UpdateTalentPointText] PlayerManager oder Player noch nicht verfügbar - überspringe Aktualisierung");
+            // Optional: Setze einen Standardwert
+            if (talentPointText != null)
+                talentPointText.text = "0";
         }
     }
 

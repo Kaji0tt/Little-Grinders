@@ -79,10 +79,24 @@ public class VFX_Manager : MonoBehaviour
             return;
         }
 
+        PlayEffect(effectName, entitie.GetTransform());
+    }
+
+    /// <summary>
+    /// Public method to play any effect by name, parented to a transform.
+    /// </summary>
+    /// <param name="effectName">The name of the effect defined in the vfxList.</param>
+    /// <param name="parentTransform">The transform to which the effect will be parented.</param>
+    public void PlayEffect(string effectName, Transform parentTransform)
+    {
+        if (parentTransform == null)
+        {
+            Debug.LogWarning($"VFX_Manager: Provided transform for effect '{effectName}' is null.");
+            return;
+        }
+
         if (vfxDictionary.TryGetValue(effectName, out GameObject effectPrefab))
         {
-            Transform parentTransform = entitie.GetTransform();
-
             // Instanziiert den Effekt an der Position der Entität und setzt diese als Parent.
             GameObject effectInstance = Instantiate(effectPrefab, parentTransform.position, Quaternion.identity, parentTransform);
 
@@ -109,7 +123,6 @@ public class VFX_Manager : MonoBehaviour
             // 4. Wenden Sie die korrigierte localScale an.
             effectInstance.transform.localScale = newLocalScale;
 
-
             if (effectInstance == null)
             {
                 Debug.LogWarning($"VFX_Manager: Failed to instantiate prefab for '{effectName}'. The prefab might be invalid or corrupted.");
@@ -119,6 +132,35 @@ public class VFX_Manager : MonoBehaviour
             // Zerstört das Effekt-GameObject nach 10 Sekunden.
             // Dies ist eine einfache und robuste Methode, die sicherstellt, dass keine Effekte
             // in der Szene zurückbleiben. Sie setzt voraus, dass die Effekte von selbst starten.
+            Destroy(effectInstance, 10f);
+        }
+        else
+        {
+            // Add a warning if the effect name is not found in the dictionary
+            Debug.LogWarning($"VFX_Manager: Effect with name '{effectName}' not found. Check if the prefab exists in the 'Resources/VFX' folder and that the name is spelled correctly.");
+        }
+    }
+
+    /// <summary>
+    /// Public method to play any effect by name at a specific position and rotation without parenting.
+    /// </summary>
+    /// <param name="effectName">The name of the effect defined in the vfxList.</param>
+    /// <param name="position">The world position where the effect should be spawned.</param>
+    /// <param name="rotation">The rotation for the effect.</param>
+    public void PlayEffect(string effectName, Vector3 position, Quaternion rotation)
+    {
+        if (vfxDictionary.TryGetValue(effectName, out GameObject effectPrefab))
+        {
+            // Instanziiert den Effekt an der gegebenen Position und Rotation ohne Parent.
+            GameObject effectInstance = Instantiate(effectPrefab, position, rotation);
+
+            if (effectInstance == null)
+            {
+                Debug.LogWarning($"VFX_Manager: Failed to instantiate prefab for '{effectName}'. The prefab might be invalid or corrupted.");
+                return;
+            }
+
+            // Zerstört das Effekt-GameObject nach 10 Sekunden.
             Destroy(effectInstance, 10f);
         }
         else

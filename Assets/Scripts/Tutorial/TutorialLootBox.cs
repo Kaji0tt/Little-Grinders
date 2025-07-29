@@ -24,6 +24,10 @@ public class TutorialLootBox : MonoBehaviour
 
     public Item[] firstItems;
 
+    public Int_SlotBtn weaponSlotBtn;
+
+    public EnemyController armoredEnemy;
+
     // ALT: public List<ItemMod> mods = new List<ItemMod>();
     // NEU: Eine Liste von Mod-Definitionen, die du im Inspector zuweisen kannst.
     [Header("Mods to apply for testing")]
@@ -35,9 +39,13 @@ public class TutorialLootBox : MonoBehaviour
     void OnEnable()
     {
         PlayerStats.eventLevelUp += ShowNextUI;
-
-
-
+        PlayerStats.eventLevelUp += CheckLevelUpTutorial;
+        // Event für Waffen-Ausrüstung hinzufügen
+        StartCoroutine(CheckWeaponEquipped());
+        // Event für Talentpunkt-Verwendung hinzufügen
+        StartCoroutine(CheckTalentPointSpent());
+        // Event für gepanzerten Gegner hinzufügen
+        StartCoroutine(CheckArmoredEnemyDefeated());
     }
 
     private void Start()
@@ -62,6 +70,8 @@ public class TutorialLootBox : MonoBehaviour
     void OnDisable()
     {
         PlayerStats.eventLevelUp -= ShowNextUI;
+        PlayerStats.eventLevelUp -= CheckLevelUpTutorial;
+        // Coroutines werden automatisch gestoppt
     }
 
 
@@ -93,7 +103,7 @@ public class TutorialLootBox : MonoBehaviour
                         ItemMod newMod = new ItemMod { definition = modDef };
                         
                         // Für Testzwecke weisen wir eine feste Seltenheit zu.
-                        newMod.rollRarity = Rarity.Rare; 
+                        newMod.rolledRarity = Rarity.Rare; 
                         
                         // Initialisiere den Mod, um den 'rolledValue' zu berechnen
                         int mapLevel = GlobalMap.instance != null ? GlobalMap.instance.currentMap.mapLevel : 1;
@@ -136,7 +146,7 @@ public class TutorialLootBox : MonoBehaviour
 
         yield return new WaitForSeconds(3.5f); // oder automatisch
         
-        LogScript.instance.ShowLog("Open the inventory on \"C\" and do \"Mouse1\" on the sword.");
+        LogScript.instance.ShowLog("Open the inventory on \"C\" and do \"Mouse1\" on the sword to equip it.");
 
     }
 
@@ -153,4 +163,112 @@ public class TutorialLootBox : MonoBehaviour
 
     }
 
+    private IEnumerator CheckWeaponEquipped()
+    {
+        // Warten bis weaponSlotBtn verfügbar ist
+        yield return new WaitUntil(() => weaponSlotBtn != null);
+        
+        // Überwachen ob eine Waffe ausgerüstet wurde
+        while (weaponSlotBtn.GetEquippedItem() == null)
+        {
+            yield return new WaitForSeconds(0.1f); // Alle 0.1 Sekunden prüfen
+        }
+        
+        // Waffe wurde ausgerüstet - Log anzeigen
+        StartCoroutine(PostEquipLog());
+    }
+
+    private IEnumerator PostEquipLog()
+    {
+        LogScript.instance.ShowLog("You seem to be prepared. Give attention to the \"Voidwither\" effect on your weapon.");
+        
+        yield return new WaitForSeconds(3f);
+        
+        LogScript.instance.ShowLog("Activate it by pressing \"Mouse2\" before entering the fight to gather some experience.");
+    }
+
+    private void CheckLevelUpTutorial()
+    {
+        if (PlayerManager.instance.playerStats.Get_level() == 2)
+        {
+            StartCoroutine(ShowTalentTreeTutorial());
+        }
+    }
+
+    private IEnumerator ShowTalentTreeTutorial()
+    {
+        yield return new WaitForSeconds(1f); // Kurze Verzögerung nach Level-Up
+        
+        LogScript.instance.ShowLog("Congratulations! You reached Level 2!");
+        
+        yield return new WaitForSeconds(3f);
+        
+        LogScript.instance.ShowLog("Press \"X\" to open your Talent Tree and spend your Skill Point!");
+        
+        yield return new WaitForSeconds(6f);
+        
+        LogScript.instance.ShowLog("Choose wisely - each point shapes your adventure!");
+        
+    }
+
+    private IEnumerator CheckTalentPointSpent()
+    {
+        // Warten bis TalentTreeManager verfügbar ist
+        yield return new WaitUntil(() => TalentTreeManager.instance != null && TalentTreeManager.instance.defaultTalent != null);
+        
+        // Überwachen ob das defaultTalent geskillt wurde
+        while (TalentTreeManager.instance.defaultTalent.currentCount == 0)
+        {
+            yield return new WaitForSeconds(0.3f); // Alle 0.3 Sekunden prüfen
+        }
+        
+        // DefaultTalent wurde geskillt - Tutorial anzeigen
+        StartCoroutine(ShowTalentSpentTutorial());
+    }
+
+    private IEnumerator ShowTalentSpentTutorial()
+    {
+        yield return new WaitForSeconds(1f); // Kurze Verzögerung
+        
+        LogScript.instance.ShowLog("Excellent! You unlocked regeneration. From now on, you're growing stronger!");
+        
+        yield return new WaitForSeconds(3f);
+        
+        LogScript.instance.ShowLog("There's an armored enemy waiting for you west of the camp.");
+        
+        yield return new WaitForSeconds(4f);
+        
+        LogScript.instance.ShowLog("Remember: Ability Power damage ignores armor completely!");
+        
+    }
+
+    private IEnumerator CheckArmoredEnemyDefeated()
+    {
+        // Warten bis armoredEnemy verfügbar ist
+        yield return new WaitUntil(() => armoredEnemy != null);
+        
+        // Überwachen ob der gepanzerte Gegner besiegt wurde
+        while (!armoredEnemy.isDead)
+        {
+            yield return new WaitForSeconds(0.5f); // Alle 0.5 Sekunden prüfen
+        }
+        
+        // Gepanzerter Gegner wurde besiegt - Finales Tutorial anzeigen
+        StartCoroutine(ShowFinalTutorial());
+    }
+
+    private IEnumerator ShowFinalTutorial()
+    {
+        yield return new WaitForSeconds(0.5f); // Kurze Verzögerung nach dem Kampf
+
+        LogScript.instance.ShowLog("Excellent! You are now well prepared for your adventures!");
+
+        yield return new WaitForSeconds(3f);
+
+        LogScript.instance.ShowLog("Enter the open world to the west. Use \"M\" to navigate during your explorations. Good luck, adventurer!");
+        
+        yield return new WaitForSeconds(5f);
+        
+        LogScript.instance.ShowLog("Good luck, little grinder!");
+    }
 }

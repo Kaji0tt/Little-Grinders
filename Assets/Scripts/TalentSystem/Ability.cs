@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 
 public abstract class Ability : MonoBehaviour, IUseable
 {
@@ -71,11 +74,17 @@ public abstract class Ability : MonoBehaviour, IUseable
         rarityScaling = value;
         ApplyRarityScaling(rarityScaling); // Jede Kindklasse muss jetzt reagieren!
     }
+    // NEU: Für Reichweiten-Checks
+    protected Vector3 currentTargetPosition;
+   
     /// <summary>
     /// Die zentrale Update-Logik, die alle Timer und Zustände verwaltet.
     /// </summary>
     protected virtual void Update()
     {
+        // NEU: Zielposition aktualisieren (nur für Targeted Abilities)
+        UpdateTargetPosition();
+
         HandleChargeCooldown();
         HandleChanneling();
         HandleActiveDuration();
@@ -95,17 +104,22 @@ public abstract class Ability : MonoBehaviour, IUseable
             if (Input.GetKeyUp(slotKey))
             {
                 OnChannelEnd();
-                UseBase(PlayerManager.instance.playerStats);
 
-                if (maxCharges == 1 && chargeCooldownTimer <= 0)
+                if (!IsPointerOverUI())
                 {
-                    chargeCooldownTimer = cooldownTime;
-                    state = AbilityState.Cooldown;
+                    UseBase(PlayerManager.instance.playerStats);
+
+                    if (maxCharges == 1 && chargeCooldownTimer <= 0)
+                    {
+                        chargeCooldownTimer = cooldownTime;
+                        state = AbilityState.Cooldown;
+                    }
+                    else
+                    {
+                        state = AbilityState.Ready;
+                    }
                 }
-                else
-                {
-                    state = AbilityState.Ready;
-                }
+
                 return;
             }
 
@@ -123,6 +137,16 @@ public abstract class Ability : MonoBehaviour, IUseable
             OnPersistentUpdate();
     }
 
+
+    // NEU: Kann von Kindklassen überschrieben werden, um spezifische Ziele zu setzen
+    protected virtual void UpdateTargetPosition()
+    {
+        if (properties.HasFlag(SpellProperty.Targeted))
+        {
+            currentTargetPosition = GetTargetPosition();
+        }
+    }
+
     /// <summary>
     /// Kann von Kindklassen überschrieben werden, um eigene Update-Logik einzubauen.
     /// </summary>
@@ -136,6 +160,7 @@ public abstract class Ability : MonoBehaviour, IUseable
     /// </summary>
     public void Use()
     {
+        if (IsPointerOverUI()) return;
         if (state != AbilityState.Ready) return;
         if (currentCharges <= 0) return;
 
@@ -221,38 +246,38 @@ public abstract class Ability : MonoBehaviour, IUseable
         }
     }
 
-private void HandleActiveDuration()
-{
-    if (state != AbilityState.Active) return;
-
-    activeTimer -= Time.deltaTime;
-    tickCooldownTimer -= Time.deltaTime;
-
-    if (tickCooldownTimer <= 0)
+    private void HandleActiveDuration()
     {
-        OnTick(PlayerManager.instance.playerStats);
-        tickCooldownTimer = tickTimer;
-    }
+        if (state != AbilityState.Active) return;
 
-    if (activeTimer <= 0)
-    {
-        OnCooldown(PlayerManager.instance.playerStats);
+        activeTimer -= Time.deltaTime;
+        tickCooldownTimer -= Time.deltaTime;
 
-        // Cooldown nur setzen, wenn es keine weiteren Charges gibt
-        if (maxCharges == 1 && chargeCooldownTimer <= 0)
+        if (tickCooldownTimer <= 0)
         {
-            chargeCooldownTimer = cooldownTime;
-            state = AbilityState.Cooldown; // NEU: State explizit auf Cooldown setzen
+            OnTick(PlayerManager.instance.playerStats);
+            tickCooldownTimer = tickTimer;
         }
-        else
+
+        if (activeTimer <= 0)
         {
-            state = AbilityState.Ready;
+            OnCooldown(PlayerManager.instance.playerStats);
+
+            // Cooldown nur setzen, wenn es keine weiteren Charges gibt
+            if (maxCharges == 1 && chargeCooldownTimer <= 0)
+            {
+                chargeCooldownTimer = cooldownTime;
+                state = AbilityState.Cooldown; // NEU: State explizit auf Cooldown setzen
+            }
+            else
+            {
+                state = AbilityState.Ready;
+            }
         }
     }
-}
 
     private void HandleCooldown()
-{
+    {
         if (state != AbilityState.Cooldown) return;
 
         chargeCooldownTimer -= Time.deltaTime;
@@ -263,31 +288,6 @@ private void HandleActiveDuration()
             // Optional: Debug.Log($"[Ability] {abilityName} ist wieder bereit!");
         }
     }
-    #endregion
-
-    #region Abstract & Interface Methods
-    // --- ABSTRAKTE METHODEN (BLEIBEN GLEICH) ---
-    // Wird bei Instant/Channeling-Ende/Persistent-Start ausgelöst
-    public abstract void UseBase(IEntitie entitie);
-    // Wird bei jedem Tick von Persistent/Channeling ausgelöst
-    public abstract void OnTick(IEntitie entitie);
-    // Wird am Ende von Persistent ausgelöst
-    public abstract void OnCooldown(IEntitie entitie);
-
-        // Channeling-Hooks (können von Kindklassen überschrieben werden)
-    protected virtual void OnChannelEnter() { }
-    protected virtual void OnChannelUpdate() { }
-    protected virtual void OnChannelExit() { }
-
-    // --- INTERFACE-METHODEN (ANGEPASST) ---
-    public bool IsOnCooldown() => currentCharges == 0 && chargeCooldownTimer > 0;
-    public float GetCooldown() => chargeCooldownTimer;
-    public bool IsActive() => state == AbilityState.Active || state == AbilityState.Channeling;
-    public float GetActiveTime() => (state == AbilityState.Active) ? activeTimer : channelTimer;
-    public int GetCurrentCharges() => currentCharges;
-    public int GetMaxCharges() => maxCharges;
-    public string GetName() => abilityName;
-    #endregion
 
     private StatModifier channelSlowMod;
 
@@ -338,6 +338,159 @@ private void HandleActiveDuration()
         Debug.Log("[Ability] Channeling abgebrochen!");
     }
 
+    // NEU: Methoden für Reichweiten-Checks
+    public virtual bool HasRange() 
+    { 
+        return range > 0; 
+    }
+
+    public virtual float GetRange() 
+    { 
+        return range; 
+    }
+
+    public virtual Vector3 GetTargetPosition() 
+    {
+        // Für Targeted Abilities: Nutze das TargetSystem
+        if (properties.HasFlag(SpellProperty.Targeted))
+        {
+            // Hole das aktuelle Ziel aus dem Combat-System
+            var characterCombat = PlayerManager.instance.player.GetComponent<CharacterCombat>();
+            if (characterCombat != null && characterCombat.currentTarget != null)
+            {
+                return characterCombat.currentTarget.transform.position;
+            }
+        }
+        
+        // Für alle anderen Abilities mit Reichweite: Mausposition auf dem Boden
+        return GetMouseWorldPosition();
+    }
+
+    // NEU: Kann von Kindklassen überschrieben werden, um spezifische Ziele zu setzen
+    private Vector3 GetMouseWorldPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        // Raycast auf den Floor mit spezifischem LayerMask
+        int floorLayerMask = LayerMask.GetMask("Floor");
+        if (Physics.Raycast(ray, out RaycastHit hit, 200f, floorLayerMask))
+        {
+            return hit.point;
+        }
+        
+        // Alternative: Raycast auf alle Objekte mit Floor-Tag
+        if (Physics.Raycast(ray, out RaycastHit floorHit, 200f))
+        {
+            if (floorHit.collider.CompareTag("Floor"))
+            {
+                return floorHit.point;
+            }
+        }
+        
+        // Fallback: Mausposition auf Y=0 Ebene projizieren
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        if (groundPlane.Raycast(ray, out float distance))
+        {
+            return ray.GetPoint(distance);
+        }
+        
+        // Letzter Fallback: Spielerposition
+        return transform.position;
+    }
+
+    // NEU: Methode für Range-Check speziell für UI-Feedback
+    public virtual bool IsInRange()
+    {
+        if (range <= 0) return true; // Keine Reichweitenbeschränkung
+    
+        Vector3 playerPosition = PlayerManager.instance.player.transform.position;
+    
+        if (properties.HasFlag(SpellProperty.Targeted))
+        {
+            // Für Targeted Abilities: Prüfe aktuelles Target
+            var characterCombat = PlayerManager.instance.player.GetComponent<CharacterCombat>();
+            if (characterCombat?.currentTarget != null)
+            {
+                float distance = Vector3.Distance(playerPosition, characterCombat.currentTarget.transform.position);
+                return distance <= range;
+            }
+            return false; // Kein Target = nicht in Reichweite
+        }
+        else
+        {
+            // Für Ground-Targeted: Prüfe Mausposition
+            Vector3 targetPosition = GetMouseWorldPosition();
+            float distance = Vector3.Distance(playerPosition, targetPosition);
+            return distance <= range;
+        }
+    }
+
+    #endregion
+
+    #region Abstract & Interface Methods
+    // --- ABSTRAKTE METHODEN (BLEIBEN GLEICH) ---
+    // Wird bei Instant/Channeling-Ende/Persistent-Start ausgelöst
+    public abstract void UseBase(IEntitie entitie);
+    // Wird bei jedem Tick von Persistent/Channeling ausgelöst
+    public abstract void OnTick(IEntitie entitie);
+    // Wird am Ende von Persistent ausgelöst
+    public abstract void OnCooldown(IEntitie entitie);
+
+        // Channeling-Hooks (können von Kindklassen überschrieben werden)
+    protected virtual void OnChannelEnter() { }
+    protected virtual void OnChannelUpdate() { }
+    protected virtual void OnChannelExit() { }
+
+    // --- INTERFACE-METHODEN (ANGEPASST) ---
+    public bool IsOnCooldown() => currentCharges == 0 && chargeCooldownTimer > 0;
+    public float GetCooldown() => chargeCooldownTimer;
+    public bool IsActive() => state == AbilityState.Active || state == AbilityState.Channeling;
+    public float GetActiveTime() => (state == AbilityState.Active) ? activeTimer : channelTimer;
+    public int GetCurrentCharges() => currentCharges;
+    public int GetMaxCharges() => maxCharges;
+    public string GetName() => abilityName;
+    // NEU: Interface-Implementierung für Description
+    public string GetDescription() 
+    { 
+        // Automatischer Umbruch alle 50-60 Zeichen
+        return FormatDescription(description);
+    }
+
+    private string FormatDescription(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return text;
+        
+        const int maxLineLength = 50;
+        var words = text.Split(' ');
+        var lines = new List<string>();
+        var currentLine = "";
+        
+        foreach (var word in words)
+        {
+            if ((currentLine + " " + word).Length > maxLineLength && !string.IsNullOrEmpty(currentLine))
+            {
+                lines.Add(currentLine.Trim());
+                currentLine = word;
+            }
+            else
+            {
+                currentLine += (string.IsNullOrEmpty(currentLine) ? "" : " ") + word;
+            }
+        }
+        
+        if (!string.IsNullOrEmpty(currentLine))
+            lines.Add(currentLine.Trim());
+            
+        return string.Join("\n", lines);
+    }
+    #endregion
+
+
+    // Beispiel für die zentrale Prüfung in Ability:
+    protected bool IsPointerOverUI()
+    {
+        return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+    }
     protected string myHotkey = "None"; // Default, kann beim Setzen überschrieben werden
 
     public void SetSlotName(string newHotkey) { myHotkey = newHotkey;}

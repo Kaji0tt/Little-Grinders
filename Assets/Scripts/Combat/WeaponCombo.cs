@@ -5,4 +5,7 @@ using UnityEngine;
 public class WeaponCombo : ScriptableObject
 {
     public List<AttackStep> comboSteps;
+
+    public float comboCooldown = 1; // Zeit zwischen den Schritten der Kombos
+
 }

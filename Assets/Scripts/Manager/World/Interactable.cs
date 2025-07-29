@@ -19,7 +19,7 @@ public class Interactable : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
         //Falls Q gedrückt wird, während der Collider des Spielers mit dem des Objektes auf dem dieses Skript liegt kollidiert, und die Truhe noch nicht geöffnet wurde
-        if (Input.GetKeyDown(KeyCode.Q) && collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && interactableUsed == false)
+        if (Input.GetKeyDown(KeyManager.MyInstance.Keybinds["PICK"]) && collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && interactableUsed == false)
         {
             //Ändere den entsprechenden Bool
             interactableUsed = true;

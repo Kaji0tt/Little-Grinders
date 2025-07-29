@@ -14,26 +14,55 @@ public class SaveLoadMenu : MonoBehaviour
     public void SaveGame()
     {
 
-        SaveSystem.SavePlayer();
+        SaveSystem.SavePlayer(SaveSystem.NewSave());
         LogScript.instance.ShowLog("The Game has been saved!");
 
     }
 
+    public void StartNewGame()
+    {
+        // Lösche alten Spielstand
+        SaveSystem.DeleteSave();
+        
+        // Stelle sicher, dass kein "Load" Key gesetzt ist
+        PlayerPrefs.DeleteKey("Load");
+        
+        // Lade direkt zur Intro-Szene (buildIndex 1)
+        SceneManager.LoadScene(1);
+    }
+
     public void LoadGame()
     {
-        //Should not be here.
+        // Prüfe, ob überhaupt ein Spielstand existiert
+        if (!SaveSystem.HasSave())
+        {
+            Debug.LogError("No save data found!");
+            LogScript.instance.ShowLog("No save game found!");
+            return;
+        }
+
         Time.timeScale = 1f;
-
-
 
         PlayerSave data = SaveSystem.LoadPlayer();
 
-        //Der Int wird im späteren Verlauf den Status des gewählen SavedGames reflektieren, damit man mehrere Saves haben kann.
+        if (data == null)
+        {
+            Debug.LogError("Save data is corrupted!");
+            return;
+        }
+
+        // Setze Load-Flag
         PlayerPrefs.SetInt("Load", 1);
 
-        SceneManager.LoadScene(data.MyScene);
+        // Direkt zur ProceduralMap Scene laden (Index 2)
+        int sceneToLoad = 2;
+        
+        // Optional: Falls currentScene gespeichert und > 1 ist, das verwenden
+        if (data.currentScene > 1)
+        {
+            sceneToLoad = data.currentScene;
+        }
 
-        //FindObjectOfType<PlayerLoad>().LoadPlayer(data);
-
+        SceneManager.LoadScene(sceneToLoad);
     }
 }

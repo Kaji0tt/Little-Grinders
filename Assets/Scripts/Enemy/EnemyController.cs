@@ -59,8 +59,14 @@ public class EnemyController : MonoBehaviour, IEntitie
     public bool isDead = false;
     //public int level;
 
-
-
+    [Space]
+    [Header("Custom Range")]
+    [Tooltip("Benutzerdefinierte Reichweite für Tests")]
+    public float customRange = 5f;
+    [Tooltip("Farbe für Custom Range Gizmo")]
+    public Color customRangeColor = Color.green;
+    [Tooltip("Custom Range Gizmo anzeigen")]
+    public bool showCustomRange = false;
 
 
     //public LootTable lootTable;
@@ -81,8 +87,16 @@ public class EnemyController : MonoBehaviour, IEntitie
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
     void OnDrawGizmosSelected()
     {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, aggroRange);
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawWireSphere(transform.position, aggroRange);
+            
+        Vector3 position = transform.position;
+        // Custom Range
+        if (showCustomRange)
+        {
+            Gizmos.color = customRangeColor;
+            Gizmos.DrawWireSphere(position, customRange);
+        }
     }
 
     void Start()
@@ -104,16 +118,21 @@ public class EnemyController : MonoBehaviour, IEntitie
         if (myNavMeshAgent != null && mobStats != null)
             myNavMeshAgent.speed = mobStats.MovementSpeed.Value;
 
+        // Audio Setup
+        SetupAudioSource();
+
         TransitionTo(new IdleState(this));
     }
     void Update()
     {
 
         myEntitieState?.Update();
+        UpdateAudioVolume();
 
-        if(!mobStats.isDead)
+        if (!mobStats.isDead)
         {
             CalculateHPCanvas();
+
 
             // 👉 Statt TargetDirection verwenden wir die echte Bewegung
             Vector3 moveDirection = myNavMeshAgent.velocity;
@@ -151,8 +170,6 @@ public class EnemyController : MonoBehaviour, IEntitie
         if (myNavMeshAgent == null)
             myNavMeshAgent = GetComponent<NavMeshAgent>();
 
-        //Debug.Log(gameObject.name);
-
         // Automatische Referenzierung der UI-Elemente
         if (hpBar == null)
             hpBar = transform.GetChild(2).gameObject;
@@ -160,6 +177,58 @@ public class EnemyController : MonoBehaviour, IEntitie
         if (enemyHpSlider == null && hpBar != null)
             enemyHpSlider = hpBar.GetComponentInChildren<Slider>();
     }
+
+    #region Audio Management
+
+    [Header("Audio Settings")]
+    [Tooltip("Distanz unter der das Audio-Volume auf 0 gesetzt wird")]
+    public float audioMuteDistance = 70f;
+    private AudioSource myAudioSource;
+
+
+    private void SetupAudioSource()
+    {
+        myAudioSource = GetComponent<AudioSource>();
+    }
+
+    private void UpdateAudioVolume()
+    {
+        if (myAudioSource == null) return;
+        float distanceToPlayer = GetDistanceToPlayer();
+        
+        // AudioSource ein-/ausschalten basierend auf Distanz
+        if (distanceToPlayer >= audioMuteDistance)
+        {
+            // Wenn weit entfernt: AudioSource deaktivieren
+            if (myAudioSource.enabled)
+                myAudioSource.enabled = false;
+        }
+        else
+        {
+            // Wenn nah genug: AudioSource aktivieren
+            if (!myAudioSource.enabled)
+                myAudioSource.enabled = true;
+        }
+    }
+    #endregion
+
+    #region Distance Calculations
+    /// <summary>
+    /// Berechnet die Entfernung zum Spieler
+    /// </summary>
+    /// <returns>Entfernung als float</returns>
+    public float GetDistanceToPlayer()
+    {
+        if (Player == null) return float.MaxValue;
+        return Vector3.Distance(Player.position, transform.position);
+    }
+
+    // Alte Funktion für Backward Compatibility (optional entfernen)
+    public float TargetDistance()
+    {
+        return GetDistanceToPlayer();
+    }
+    #endregion
 
     #region Action StateMachine
     public void TransitionTo(EntitieState newState)
@@ -204,8 +273,7 @@ public class EnemyController : MonoBehaviour, IEntitie
     public bool IsPlayerInAttackRange()
     {
         if (Player == null) return false;
-        //myTarget
-        return Vector3.Distance(transform.position, Player.position) <= attackRange;
+        return GetDistanceToPlayer() <= attackRange;
     }
 
     public void StopMoving()
@@ -246,12 +314,6 @@ public class EnemyController : MonoBehaviour, IEntitie
 
     }
     #endregion
-
-    public float TargetDistance()
-	{
-		float distance = Vector3.Distance(Player.position, transform.position);
-        return distance;
-	}
 	
     public Vector2 TargetDirection()
     {
@@ -281,7 +343,10 @@ public class EnemyController : MonoBehaviour, IEntitie
             if (!mobStats.isDead)
                 hpBar.GetComponent<CanvasGroup>().alpha = 1;
 
-            if (Input.GetKey(KeyCode.LeftShift) && !mobStats.isDead)  //Sollte am Ende auf KeyCode.LeftAlt geändert werden.
+
+            if (KeyManager.MyInstance?.Keybinds != null && 
+                KeyManager.MyInstance.Keybinds.ContainsKey("SHOW VALUES") && 
+                Input.GetKey(KeyManager.MyInstance.Keybinds["SHOW VALUES"]) && !mobStats.isDead)
             {
                 TextMeshProUGUI[] statText = GetComponentsInChildren<TextMeshProUGUI>();
 
@@ -333,7 +398,7 @@ public class EnemyController : MonoBehaviour, IEntitie
     public void TakeDamage(float incoming_damage, int range_radius_ofDMG, bool isCrit)
     {
 
-        if (TargetDistance() <= range_radius_ofDMG)
+        if (GetDistanceToPlayer() <= range_radius_ofDMG)
         {
             incoming_damage = 10 * (incoming_damage * incoming_damage) / (mobStats.Armor.Value + (10 * incoming_damage));
 
@@ -345,9 +410,12 @@ public class EnemyController : MonoBehaviour, IEntitie
 
             ///Upsi
             GameEvents.Instance.EnemyWasAttacked(incoming_damage, transform, isCrit);
+            
+            // NEU: Event für Bladevortex - Schaden erhalten
+            GameEvents.Instance.EnemyTookDamage(this, isCrit);
 
             // Knockback
-            if (!mobStats.isDead)
+            if (!mobStats.isDead && gameObject.activeSelf)
                 ApplyKnockback();
 
             //Setze den Entitie State auf "Hit"
@@ -365,7 +433,7 @@ public class EnemyController : MonoBehaviour, IEntitie
     //Take Direct Damage ignoriert die Rüstungswerte der Entitie - besonders relevant für AP Schaden.
     public virtual void TakeDirectDamage(float incoming_damage, float range_radius_ofDMG)
     {
-        float player_distance = Vector3.Distance(PlayerManager.instance.player.transform.position, transform.position);
+        float player_distance = GetDistanceToPlayer();
 
         if (player_distance <= range_radius_ofDMG)
         {
@@ -381,7 +449,8 @@ public class EnemyController : MonoBehaviour, IEntitie
             }
 
             //pulled = true; // Alles in AggroRange sollte ebenfalls gepulled werden.
-
+            //Damage Popup für direkten Schaden - aktuell hardcoded auf false für Crits
+            GameEvents.Instance.EnemyTookDirectDamage(incoming_damage, this, false);
         }
     }
 
@@ -459,6 +528,9 @@ public class EnemyController : MonoBehaviour, IEntitie
     //Damit EnemyController als IEntite gehandelt werden kann, hat VisualStudio hier diesen sexy absatz empfohlen. Danke VS Code.
     public void Die()
     {
+        // NEU: Event für Bladevortex - Gegner gestorben
+        GameEvents.Instance.EnemyDied(this);
+        
         ((IEntitie)mobStats).Die();
     }
 

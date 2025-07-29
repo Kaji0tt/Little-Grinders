@@ -70,14 +70,27 @@ public class InterfaceDragging : MonoBehaviour,IBeginDragHandler, IDragHandler, 
 
         desiredScale = ClampDesiredScale(desiredScale);
 
-        transform.localScale = desiredScale;
+        // Safety check to prevent scale from becoming 0 or negative
+        if (desiredScale.x > 0 && desiredScale.y > 0 && desiredScale.z > 0)
+        {
+            transform.localScale = desiredScale;
+        }
     }
 
     private Vector3 ClampDesiredScale(Vector3 desiredScale)
     {
-        desiredScale = Vector3.Max(new Vector3(maxZoomOut, maxZoomOut, maxZoomOut), desiredScale);
-        //desiredScale = Vector3.Min(initialScale, desiredScale);
-        desiredScale = Vector3.Min(new Vector3(maxZoomIn, maxZoomIn, maxZoomIn), desiredScale);
+        // Ensure minimum scale is never 0 or negative
+        float actualMaxZoomOut = Mathf.Max(0.1f, maxZoomOut);
+        float actualMaxZoomIn = Mathf.Max(actualMaxZoomOut, maxZoomIn);
+        
+        // If maxZoomIn is 0 or smaller than maxZoomOut, use initialScale as upper limit
+        if (maxZoomIn <= maxZoomOut)
+        {
+            actualMaxZoomIn = Mathf.Max(initialScale.x, actualMaxZoomOut);
+        }
+        
+        desiredScale = Vector3.Max(new Vector3(actualMaxZoomOut, actualMaxZoomOut, actualMaxZoomOut), desiredScale);
+        desiredScale = Vector3.Min(new Vector3(actualMaxZoomIn, actualMaxZoomIn, actualMaxZoomIn), desiredScale);
         return desiredScale;
     }
 }

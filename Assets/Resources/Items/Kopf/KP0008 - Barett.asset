@@ -26,18 +26,22 @@ MonoBehaviour:
   baseLevel: 8
   activeItem: 0
   hp: 5
-  armor: 1
+  armor: 0
   attackPower: 0
-  abilityPower: 2
-  reg: 0
+  abilityPower: 10
+  reg: 3
+  critChance: 0
+  critDamage: 0
   p_hp: 0
   p_armor: 0
   p_attackPower: 0
-  p_abilityPower: 0.01
+  p_abilityPower: 0.03
   p_attackSpeed: 0
   p_movementSpeed: 0
   p_reg: 0
+  p_critChance: 0
+  p_critDamage: 0
   usable: 0
   itemPotion: {fileID: 0}
-  c_percent: 0
+  c_percent: 1.2741338
   level_needed: 0

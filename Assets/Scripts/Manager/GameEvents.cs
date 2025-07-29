@@ -38,6 +38,11 @@ public class GameEvents : MonoBehaviour
     public event Action<float> OnEnemyHasAttacked;
     public event Action<float, Transform, bool> OnEnemyWasAttacked;
 
+    // Neue Events für Bladevortex
+    public event Action<EnemyController, bool> OnEnemyTookDamage; // Enemy, isCrit
+    public event Action<float, EnemyController, bool> OnEnemyTookDirectDamage; // Enemy, isCrit
+    public event Action<EnemyController> OnEnemyDied;
+
 
 
     // Sound-Event
@@ -72,7 +77,6 @@ public class GameEvents : MonoBehaviour
 
         // Der GameEvent-Manager ruft jetzt nur noch die zentrale UI-Methode auf.
         // Er muss nicht mehr wissen, WIE das UI die Fähigkeit zuweist.
-        UI_Manager.instance.UpdateAbilityForEquippedItem(item);
     }
 
     // Kampfaktionen
@@ -93,5 +97,21 @@ public class GameEvents : MonoBehaviour
     {
         //OnEnemyWasAttacked?.Invoke(damage);
 
+    }
+
+    // Neue Methoden für Bladevortex
+    public void EnemyTookDamage(EnemyController enemy, bool isCrit)
+    {
+        OnEnemyTookDamage?.Invoke(enemy, isCrit);
+    }
+
+    public void EnemyDied(EnemyController enemy)
+    {
+        OnEnemyDied?.Invoke(enemy);
+    }
+    
+        public void EnemyTookDirectDamage(float damage, EnemyController enemyController, bool isCrit)
+    {
+        OnEnemyTookDirectDamage?.Invoke(damage, enemyController, isCrit);
     }
 }

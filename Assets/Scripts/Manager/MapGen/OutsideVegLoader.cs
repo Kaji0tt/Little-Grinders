@@ -708,8 +708,14 @@ public class OutsideVegLoader : MonoBehaviour
         {
             if (Random.Range(0, chance) == 1)
             {
-                Instantiate(prefabCollection.GetRandomEnemie(), entitieSpawn[i].transform.position,
-                    Quaternion.identity).transform.SetParent(MapGenHandler.instance.mobParentObj.transform);
+                GameObject enemyPrefab = prefabCollection.GetRandomEnemie();
+                GameObject mob = Instantiate(enemyPrefab, entitieSpawn[i].transform.position, Quaternion.identity);
+                mob.name = enemyPrefab.name;
+                mob.transform.SetParent(MapGenHandler.instance.mobParentObj.transform);
+
+                // Entferne "(Clone)" aus dem Namen
+                if (mob.name.Contains("(Clone)"))
+                    mob.name = mob.name.Replace("(Clone)", "").Trim();
             }
             Destroy(entitieSpawn[i]);
         }

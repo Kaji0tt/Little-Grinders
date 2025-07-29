@@ -57,8 +57,8 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Bar.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\CameraManager.cs" />
-    <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_Portal.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UILineConnector.cs" />
+    <Compile Include="Assets\Resources\WorldPrefabs\Interactable\Inter_HealFountain.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buffs\Poison.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\OptionsMenu.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\SpellButton.cs" />
@@ -69,13 +69,12 @@
     <Compile Include="Assets\Scripts\Manager\MapGen\MapGenHandler.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\MonoSpacing.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\FieldPos.cs" />
+    <Compile Include="Assets\Scripts\SaveSystemTester.cs" />
     <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\UI_BuffHolder.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollConflictManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
-    <Compile Include="Assets\Scripts\Manager\ParticleManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardStack2D.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotSchmuck.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\Tweening\ITweenValue.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Item Handling\Int_ItemPickup.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
@@ -91,13 +90,13 @@
     <Compile Include="Assets\Scripts\Tutorial\TutorialLootBox.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ClickThrough.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\NonDrawingGraphic.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\TalentTree\SectorVisualizer.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Voidwither.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemWorld.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\SaveLoadMenu.cs" />
     <Compile Include="Assets\Scripts\Player\IsometricPlayer.cs" />
     <Compile Include="Assets\Scripts\Inventory\Equipment.cs" />
     <Compile Include="Assets\Scripts\Manager\SceneManagement\SceneLoader.cs" />
+    <Compile Include="Assets\Resources\WorldPrefabs\Interactable\Int_Totem.cs" />
     <Compile Include="Assets\Scripts\TroubleShootPlayerPrefs.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\IMoveable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UICornerCut.cs" />
@@ -117,6 +116,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\switchToRectTransform.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ContentScrollSnapHorizontal.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionsInputManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\SaveGame\MonoBehaviourHelper.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Shadowstep.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\PaginationManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\SuperellipsePoints.cs" />
@@ -124,12 +124,12 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Schuhe.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buff.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UIPrimitiveBase.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Vital Discharge.cs" />
     <Compile Include="Assets\Scripts\Manager\PlayerManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardExpanding2D.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\Gradient.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\ScrollRect\FancyScrollRectCell.cs" />
     <Compile Include="Assets\Scripts\Combat\DamagePopUpManager.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotBrust.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAnimator.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Talente\Teleport.cs" />
     <Compile Include="Assets\Scripts\Inventory\UI_Inventory.cs" />
@@ -158,15 +158,12 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyAnimationUtility.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotHose.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\SortingOrder.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewContext.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorLabel.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy Types\_projectile.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\UI_GlobalMap.cs" />
     <Compile Include="Assets\Scripts\Manager\GameAssets.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotBase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\DropDownList.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\TiltWindow.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\Tweening\FloatTween.cs" />
@@ -176,7 +173,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ExtentionMethods.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemAssets.cs" />
     <Compile Include="Assets\Scripts\Combat\TargetSystem.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotSchuhe.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ActionButton.cs" />
     <Compile Include="Assets\UI_Map.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\World_Mesh.cs" />
@@ -234,26 +230,27 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\CLZF2.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\MusicVol.cs" />
-    <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_HealFountain.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\Events\ColorChangedEvent.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\MobsCamScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\Events\HSVChangedEvent.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Bruteforce.cs" />
     <Compile Include="Assets\Scripts\Combat\AttackStep.cs" />
     <Compile Include="Assets\Scripts\EntityStats\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyData.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\HorizontalScrollSnap.cs" />
     <Compile Include="Assets\IG_Canvas_MM.cs" />
+    <Compile Include="Assets\Resources\WorldPrefabs\PreBuildTiles\PreBuildSpawns.cs" />
     <Compile Include="Assets\Scripts\Inventory\SortingOrderCanvas.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Inventory\IDescribable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\UIParticleSystem.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotWeapon.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_Sprite.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Voltleap.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\Tooltip.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Talente\Steinwurf.cs" />
     <Compile Include="Assets\Scripts\Manager\SceneManagement\Scene_OnSceneLoad.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RangeSlider.cs" />
+    <Compile Include="Assets\Resources\WorldPrefabs\Interactable\Int_Chest.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\UI_Knob.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\OutsideVegLoader.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\TabNavigationHelper.cs" />
@@ -288,13 +285,14 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\TooltipTrigger.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\SaveSystem.cs" />
-    <Compile Include="Assets\Scripts\Manager\SaveGame\TalentSave.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\HSVUtil.cs" />
+    <Compile Include="Assets\Scripts\Manager\PlayerSaveManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_InfiniteScroll.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\Button_UI.cs" />
     <Compile Include="Assets\Scripts\Combat\WeaponCombo.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\KeyBindButton.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\MapSave.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Core\FancyCell.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorPickerPresets.cs" />
@@ -312,7 +310,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\ComboBox.cs" />
     <Compile Include="Assets\Scripts\Enemy\SummonedMob.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\EnvLookAt.cs" />
-    <Compile Include="Assets\Prefabs\Management\PreBuildTiles\PreBuildSpawns.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\LetterSpacing.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardPopup2D.cs" />
@@ -351,6 +348,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Core\FancyScrollView.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Kettenschlag.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\MenuSystem\Menu.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\EssenceDrain.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ExtensionsToggle.cs" />
@@ -369,7 +367,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RescalingPanels\RescaleDragPanel.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\EnvCamScript.cs" />
-    <Compile Include="Assets\Scripts\Inventory\EQSlotScripts\EQSlotKopf.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\ItemSpells\ItemActionScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\CableCurve.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\SelectableScaler.cs" />
@@ -394,9 +391,11 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ReorderableList\ReorderableListDebug.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_TweenScale.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buffs\WeakArmor.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\EchoBarrier.cs" />
     <Compile Include="Assets\Scripts\EntityStats\EntitieState\EntitieState.cs" />
     <Compile Include="Assets\Scripts\Enemy\AEPull.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_Bar.cs" />
+    <Compile Include="Assets\Resources\WorldPrefabs\Interactable\Inter_Portal.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\VerticalScrollSnap.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\IFancyCellGroupContext.cs" />
@@ -407,6 +406,7 @@
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Enigma.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\TileSizeFitter.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Kopf.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Spells\Bladevortex.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\Accordion.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Brust.cs" />
     <Compile Include="Assets\Scripts\Combat\WeaponAnimation\AttackStateBehaviour.cs" />
@@ -463,7 +463,6 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Blend.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
-    <None Include="Assets\Approach for Level Design.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Fonts\Font License.txt" />
@@ -975,6 +974,10 @@
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>Library\PackageCache\com.unity.analytics@6cc66d58ac08\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.1.5f1\Editor\Data\PlaybackEngines\MacStandaloneSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="netstandard">

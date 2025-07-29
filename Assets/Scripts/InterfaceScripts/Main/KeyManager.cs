@@ -27,136 +27,138 @@ public class KeyManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Hält den KeyManager über Szenenwechsel hinweg
+            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {
-            Destroy(gameObject); // Falls eine weitere Instanz erstellt wird, zerstöre sie
+            Destroy(gameObject);
         }
     }
 
-
     public Dictionary<string, KeyCode> Keybinds { get; private set; }
-
     public Dictionary<string, KeyCode> ActionBinds { get; private set; }
 
     private string bindName;
 
-    public string[] keyNames = { "UP", "LEFT", "DOWN", "RIGHT", "STATS", "SKILLS", "PICK", "MAP", "WEAPON", "KOPF", "BRUST", "BEINE", "SCHUHE" };
-
-
+    public string[] keyNames = { "UP", "LEFT", "DOWN", "RIGHT", "STATS", "SKILLS", "CAMERA LOCK", "SHOW VALUES", "PICK", "MAP", "WEAPON", "KOPF", "BRUST", "BEINE", "SCHUHE" };
 
     void Start()
     {
+        // Initialisiere Dictionaries
         Keybinds = new Dictionary<string, KeyCode>();
-
         ActionBinds = new Dictionary<string, KeyCode>();
 
+        // Lade oder setze Defaults für alle Keys
+        InitializeKeyBindings();
 
+        // Debug-Output
+        Debug.Log($"KeyManager initialized. CAMERA LOCK is bound to: {Keybinds["CAMERA LOCK"]}");
+    }
 
-        //Possibly use Playerprefs on BindKey - e.g. PlayerPrefs.SetInt(key, KeyCode-to-number);
-        //Then on load or start, if(PlayerPrefs.GetKey(key)), BindKey(PlayerPrefs.GetKey)
-        //else do this assignment called below.
-
+    private void InitializeKeyBindings()
+    {
         foreach (var key in keyNames)
         {
+            KeyCode defaultKey = GetDefaultKeyCode(key);
             string prefKey = "KeyBind_" + key;
+
             if (PlayerPrefs.HasKey(prefKey))
             {
-                BindKey(key, (KeyCode)PlayerPrefs.GetInt(prefKey));
+                // Lade aus PlayerPrefs
+                KeyCode savedKey = (KeyCode)PlayerPrefs.GetInt(prefKey);
+                SetKeyBinding(key, savedKey);
             }
             else
             {
-                // Standardwerte setzen
-                switch (key)
-                {
-                    case "UP":
-                        BindKey(key, KeyCode.W);
-                        break;
-                    case "LEFT":
-                        BindKey(key, KeyCode.A);
-                        break;
-                    case "DOWN":
-                        BindKey(key, KeyCode.S);
-                        break;
-                    case "RIGHT":
-                        BindKey(key, KeyCode.D);
-                        break;
-                    case "STATS":
-                        BindKey(key, KeyCode.C);
-                        break;
-                    case "SKILLS":
-                        BindKey(key, KeyCode.X);
-                        break;
-                    case "PICK":
-                        BindKey(key, KeyCode.F);
-                        break;
-                    case "MAP":
-                        BindKey(key, KeyCode.M);
-                        break;
-                    case "WEAPON":
-                        BindKey(key, KeyCode.Mouse1);
-                        break;
-                    case "KOPF":
-                        BindKey(key, KeyCode.E);
-                        break;
-                    case "BRUST":
-                        BindKey(key, KeyCode.R);
-                        break;
-                    case "BEINE":
-                        BindKey(key, KeyCode.Q);
-                        break;
-                    case "SCHUHE":
-                        BindKey(key, KeyCode.Space);
-                        break;
-                }
+                // Setze Default und speichere es
+                SetKeyBinding(key, defaultKey);
+                PlayerPrefs.SetInt(prefKey, (int)defaultKey);
             }
+        }
+
+        PlayerPrefs.Save();
+
+        // Nach dem Initialisieren alle KeyBindButtons updaten
+        if (UI_Manager.instance != null)
+            UI_Manager.instance.UpdateAllKeyTexts();
+    }
+
+    private KeyCode GetDefaultKeyCode(string key)
+    {
+        switch (key)
+        {
+            case "UP": return KeyCode.W;
+            case "LEFT": return KeyCode.A;
+            case "DOWN": return KeyCode.S;
+            case "RIGHT": return KeyCode.D;
+            case "STATS": return KeyCode.C;
+            case "SKILLS": return KeyCode.X;
+            case "CAMERA LOCK": return KeyCode.Mouse2; // Mittlere Maustaste
+            case "SHOW VALUES": return KeyCode.LeftAlt;
+            case "PICK": return KeyCode.F;
+            case "MAP": return KeyCode.M;
+            case "WEAPON": return KeyCode.Mouse1;
+            case "KOPF": return KeyCode.E;
+            case "BRUST": return KeyCode.R;
+            case "BEINE": return KeyCode.LeftShift;
+            case "SCHUHE": return KeyCode.Space;
+            default: return KeyCode.None;
         }
     }
 
+    private void SetKeyBinding(string key, KeyCode keyCode)
+    {
+        // Bestimme das richtige Dictionary
+        Dictionary<string, KeyCode> targetDict = IsActionKey(key) ? ActionBinds : Keybinds;
 
+        // Setze das Key Binding
+        targetDict[key] = keyCode;
+
+        // Update UI falls vorhanden
+        if (UI_Manager.instance != null)
+            UI_Manager.instance.UpdateAllKeyTexts(); // <-- immer alle Buttons updaten!
+    }
+
+    private bool IsActionKey(string key)
+    {
+        return key == "WEAPON" || key == "KOPF" || key == "BRUST" || key == "BEINE" || key == "SCHUHE";
+    }
 
     public void BindKey(string key, KeyCode keyBind)
     {
-        // Prüfe, ob es sich um einen Action-Slot handelt
-        Dictionary<string, KeyCode> currentDictionary = Keybinds;
-        switch (key)
+        // Null/Empty Check hinzufügen
+        if (string.IsNullOrEmpty(key))
         {
-            case "WEAPON":
-            case "KOPF":
-            case "BRUST":
-            case "BEINE":
-            case "SCHUHE":
-                currentDictionary = ActionBinds;
-                break;
-            default:
-                currentDictionary = Keybinds;
-                break;
+            Debug.LogError($"BindKey called with null/empty key! KeyCode: {keyBind}");
+            return;
         }
 
-        if (!currentDictionary.ContainsKey(key))
+        // Prüfe, ob es sich um einen Action-Slot handelt
+        Dictionary<string, KeyCode> currentDictionary = IsActionKey(key) ? ActionBinds : Keybinds;
+
+        // Rest bleibt gleich...
+        if (currentDictionary.ContainsValue(keyBind))
         {
-            currentDictionary.Add(key, keyBind);
-            UI_Manager.instance.UpdateKeyText(key, keyBind);
-        }
-        else if (currentDictionary.ContainsValue(keyBind))
-        {
-            string myKey = currentDictionary.FirstOrDefault(x => x.Value == keyBind).Key;
-            currentDictionary[myKey] = KeyCode.None;
-            UI_Manager.instance.UpdateKeyText(key, KeyCode.None);
+            string conflictKey = currentDictionary.FirstOrDefault(x => x.Value == keyBind).Key;
+            if (conflictKey != key)
+            {
+                currentDictionary[conflictKey] = KeyCode.None;
+                if (UI_Manager.instance != null)
+                    UI_Manager.instance.UpdateAllKeyTexts(); // <-- Konflikt-Button auch updaten
+            }
         }
 
         currentDictionary[key] = keyBind;
-        UI_Manager.instance.UpdateKeyText(key, keyBind);
+        if (UI_Manager.instance != null)
+            UI_Manager.instance.UpdateAllKeyTexts(); // <-- immer alle Buttons updaten
 
-        // Speichern in PlayerPrefs
         PlayerPrefs.SetInt("KeyBind_" + key, (int)keyBind);
         PlayerPrefs.Save();
 
         bindName = string.Empty;
+
+        Debug.Log($"Key binding updated: {key} = {keyBind}");
     }
-
-
 
     public void KeyBindOnClick(string bindName)
     {
@@ -165,47 +167,55 @@ public class KeyManager : MonoBehaviour
 
     private void OnGUI()
     {
-        if (bindName != string.Empty)
+        // Nur wenn bindName NICHT null oder leer ist
+        if (!string.IsNullOrEmpty(bindName))
         {
             Event e = Event.current;
 
-            if (e.isKey)
+            // Nur auf KeyDown-Events reagieren
+            if (e.type == EventType.KeyDown)
             {
-                BindKey(bindName, e.keyCode);
+                // Escape zum Abbrechen
+                if (e.keyCode == KeyCode.Escape)
+                {
+                    Debug.Log($"Key binding for '{bindName}' cancelled.");
+                    bindName = string.Empty;
+                    return;
+                }
+
+                // Verhindere problematische Keys
+                if (e.keyCode != KeyCode.None)
+                {
+                    BindKey(bindName, e.keyCode);
+                }
             }
         }
     }
-    
 
-    /*
-    Dein KeyManager ist schon ziemlich solide und übersichtlich!
-Er trennt Action-Slots und normale Keybinds, unterstützt dynamisches Rebinding und ist Singleton-basiert.
-Hier sind einige Verbesserungsvorschläge für mehr Robustheit und Komfort:
+    // Debug-Methode zum Testen
+    [ContextMenu("Debug Key Bindings")]
+    public void DebugKeyBindings()
+    {
+        Debug.Log("=== Key Bindings Debug ===");
+        foreach (var kvp in Keybinds)
+        {
+            Debug.Log($"{kvp.Key}: {kvp.Value}");
+        }
+        foreach (var kvp in ActionBinds)
+        {
+            Debug.Log($"{kvp.Key}: {kvp.Value} (Action)");
+        }
+    }
 
-1. PlayerPrefs für Persistenz
-Speichere die Keybinds beim Ändern und lade sie beim Start, damit die Einstellungen nach einem Neustart erhalten bleiben.
-
-2. Doppelte Keybinds verhindern
-Aktuell kann ein Key mehreren Aktionen zugewiesen werden.
-Du könntest eine Warnung ausgeben oder das verhindern.
-
-3. UI-Feedback beim Rebinding
-Zeige im UI an, dass gerade ein Key geändert wird (z.B. „Drücke eine Taste...“).
-
-4. Mouse- und Sondertasten-Support
-Prüfe, ob auch Maustasten und Sondertasten (z.B. Escape, Tab) korrekt behandelt werden.
-
-5. Refactoring: Dictionary-Auswahl
-Du könntest die Dictionary-Auswahl in eine eigene Methode auslagern, um Redundanz zu vermeiden.
-
-6. Events für Keybind-Änderungen
-Falls andere Systeme auf Keybind-Änderungen reagieren sollen, könntest du ein Event auslösen.
-
-7. Fehlerbehandlung
-Prüfe, ob der Key existiert, bevor du ihn bindest, und gib ggf. eine Warnung aus.
-
-Fazit:
-Dein System ist schon sehr gut!
-Mit Persistenz, besserem UI-Feedback und etwas Refactoring wird es noch benutzerfreundlicher und robuster.
-    */
+    // Methode zum Zurücksetzen der PlayerPrefs (falls nötig)
+    [ContextMenu("Reset All Key Bindings")]
+    public void ResetKeyBindings()
+    {
+        foreach (var key in keyNames)
+        {
+            PlayerPrefs.DeleteKey("KeyBind_" + key);
+        }
+        PlayerPrefs.Save();
+        Debug.Log("All key bindings reset. Restart the game to apply defaults.");
+    }
 }

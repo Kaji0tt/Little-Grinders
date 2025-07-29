@@ -64,6 +64,16 @@ public class MobStats : MonoBehaviour
         //Alles noch nicht durchdacht, für pre alpha 0.3 solls reichen.
         if (GlobalMap.instance != null)
         {
+            if(GlobalMap.instance.currentMap != null)
+            {
+                //Debug.Log("Current Map Level: " + GlobalMap.instance.currentMap.mapLevel);
+                level = GlobalMap.instance.currentMap.mapLevel;
+            }
+            else
+            {
+                Debug.LogError("Current Map is null, cannot calculate mob stats.");
+                return;
+            }
             //Das Level des Mobs skaliert mit dem Level der Karte
             level = level + GlobalMap.instance.currentMap.mapLevel;
 

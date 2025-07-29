@@ -40,6 +40,7 @@ public class DamagePopupManager : MonoBehaviour
         if (GameEvents.Instance != null)
         {
             GameEvents.Instance.OnEnemyWasAttacked += ShowDamagePopup;
+            GameEvents.Instance.OnEnemyTookDirectDamage += ShowDirectDamagePopup; // NEU
         }
     }
 
@@ -48,6 +49,7 @@ public class DamagePopupManager : MonoBehaviour
         if (GameEvents.Instance != null)
         {
             GameEvents.Instance.OnEnemyWasAttacked -= ShowDamagePopup;
+            GameEvents.Instance.OnEnemyTookDirectDamage -= ShowDirectDamagePopup; // NEU
         }
     }
 
@@ -64,18 +66,32 @@ public class DamagePopupManager : MonoBehaviour
         GameObject popup = Instantiate(damagePopupPrefab);
 
         // Setze die lokale Position des Popups auf den Offset (z. B. hpBar Position)
-        popup.transform.position = slideTransform.position;
+        Vector3 randomOffset = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(0f, 0.3f), 0);
+        popup.transform.position = slideTransform.position + randomOffset;
 
         // Setze die lokale Position
         //popup.transform.localPosition = localOffset;
         popup.transform.localRotation = Quaternion.identity; // Optional: Falls du Rotation resetten willst
         popup.transform.localScale = Vector3.one;            // Optional: Falls das Prefab gestretched wirkt
 
-        if(!crit)
+        if (!crit)
             popup.GetComponent<DamagePopup>().Setup(damage);
 
-        if(crit)
+        if (crit)
             popup.GetComponent<DamagePopup>().SetupCrit(damage);
+    }
+    
+    // NEU: Methode für direkten Schaden
+    public void ShowDirectDamagePopup(float damage, EnemyController enemyC, bool isCrit)
+    {
+        Transform slideTransform = enemyC.enemyHpSlider.transform;
+        GameObject popup = Instantiate(damagePopupPrefab);
+        Vector3 randomOffset = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(0f, 0.3f), 0);
+        popup.transform.position = slideTransform.position + randomOffset;
+        popup.transform.localRotation = Quaternion.identity;
+        popup.transform.localScale = Vector3.one;
+
+        popup.GetComponent<DamagePopup>().SetupDirect(damage); // NEU
     }
 
 }

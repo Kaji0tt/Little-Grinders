@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 351c9b7016e88d745b3b853fd8efea58, type: 3}
+  m_Name: Kettenschlag
+  m_EditorClassIdentifier: 
+  abilityName: Kettenschlag
+  description: "Wirft die Klinge auf den ausgew\xE4hlten Gegner. Falls sich im Umkreis
+    von 1.5 vom getroffenen Gegner ein weiterer Feind befindet, springt die Klinge
+    im Anschluss auf diesen weiter. Insgesamt kann die Klinge bis zu 5 mal springen.
+    Mit jedem Sprung nimmt der Schaden ab.\nSpr\xFCnge: 5 / 6 / 7 / 9\nSchaden: 100%
+    / 200% / 300% / 500%"
+  icon: {fileID: 21300000, guid: 73f0c8207279ea14bab28840214f9727, type: 3}
+  properties: 141
+  abilityPrefab: {fileID: 42773410292950158, guid: 2219ae64a4b554a47bc4d7042b311e49,
+    type: 3}
+  range: 5
+  areaOfEffectRadius: 0
+  projectilePrefab: {fileID: 7992832929963653943, guid: ab08a6016b6509d40ad149dfe598bab6,
+    type: 3}
+  projectileSpeed: 3
+  channelTime: 0
+  activeTime: 0
+  tickTimer: 0
+  cooldownTime: 6
+  maxCharges: 1

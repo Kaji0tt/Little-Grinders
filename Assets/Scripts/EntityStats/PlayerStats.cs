@@ -277,6 +277,12 @@ public class PlayerStats : MonoBehaviour, IEntitie
             case EntitieStats.Regeneration:
                 return Regeneration;
 
+            case EntitieStats.CriticalChance:
+                return CriticalChance;
+
+            case EntitieStats.CriticalDamage:
+                return CriticalDamage;
+
             default:
                 Debug.Log("No Stat.Value found.");
                 return null;

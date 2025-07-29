@@ -295,7 +295,7 @@ MonoBehaviour:
     m_Value: 0
   response:
     m_OverrideState: 1
-    m_Value: 0.8
+    m_Value: 0.875
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
@@ -389,7 +389,7 @@ MonoBehaviour:
   master:
     m_OverrideState: 1
     m_Value:
-      <length>k__BackingField: 2
+      <length>k__BackingField: 3
       m_Loop: 0
       m_ZeroValue: 0
       m_Range: 1
@@ -397,19 +397,28 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
+          time: 0.033402923
           value: 0
-          inSlope: 1
-          outSlope: 1
+          inSlope: 0.7948471
+          outSlope: 0.7948471
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 1
-          outSlope: 1
+          time: 0.3716075
+          value: 0.5152838
+          inSlope: 2.1664064
+          outSlope: 2.1664064
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.84968686
+          value: 0.8995633
+          inSlope: 0.11306507
+          outSlope: 0.11306507
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
@@ -699,10 +708,10 @@ MonoBehaviour:
   active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 9
   tint:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1.6
 --- !u!114 &7082172418576773254
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -721,7 +730,7 @@ MonoBehaviour:
     m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   highlights:
     m_OverrideState: 1
-    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    m_Value: {r: 0.5471698, g: 0.45798853, b: 0.45167318, a: 1}
   balance:
     m_OverrideState: 1
     m_Value: 0
@@ -746,7 +755,7 @@ MonoBehaviour:
     m_Value: 0
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 1, g: 0.9801077, b: 0.9386792, a: 1}
   hueShift:
     m_OverrideState: 1
     m_Value: 0

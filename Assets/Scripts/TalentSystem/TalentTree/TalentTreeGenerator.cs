@@ -40,17 +40,49 @@ public class TalentTreeGenerator : MonoBehaviour
     private int nextID = 0;
 
 
+    private int treeSeed; // Seed für den Talentbaum, um Konsistenz zu gewährleisten
 
     private void Start()
     {
-        //1.
-        GenerateTree();
+        Debug.Log("=== [TalentTreeGenerator.Start] START ===");
+        
+        // HIER: Verwende einen gespeicherten Seed aus PlayerSave, falls verfügbar
+        // Aber LADE NICHT und SPEICHERE NICHT hier!
+        
+        // Prüfe, ob bereits ein Seed gesetzt wurde (von außen)
+        if (treeSeed <= 0)
+        {
+            // Fallback: Erzeuge einen neuen Seed nur für die Generierung
+            treeSeed = UnityEngine.Random.Range(1000000000, int.MaxValue);
+            Debug.Log($"[TalentTreeGenerator] Kein Seed vorhanden - verwende temporären Seed: {treeSeed}");
+        }
+        else
+        {
+            Debug.Log($"[TalentTreeGenerator] Verwende vorhandenen Seed: {treeSeed}");
+        }
 
+        UnityEngine.Random.InitState(treeSeed);
+        GenerateTree();
+        
+        Debug.Log("=== [TalentTreeGenerator.Start] ENDE ===");
+    }
+    
+    // NEUE Methode: Seed von außen setzen
+    public void SetTalentTreeSeed(int seed)
+    {
+        Debug.Log($"[TalentTreeGenerator.SetTalentTreeSeed] Seed gesetzt: {seed}");
+        treeSeed = seed;
+    }
+
+    // NEUE Methode: Aktuellen Seed abrufen
+    public int GetTalentTreeSeed()
+    {
+        return treeSeed;
     }
 
     //2.
     public void GenerateTree()
-    { 
+    {
         TalentType[] rootTypes = { TalentType.HP, TalentType.AS, TalentType.AD, TalentType.AR, TalentType.AP, TalentType.RE };
 
         // 2.1. Root-Nodes erstellen (ohne ExpandNode)
@@ -69,7 +101,7 @@ public class TalentTreeGenerator : MonoBehaviour
         for (int i = 0; i <= depthGeneration; i++)
         {
             foreach (TalentNode node in GetNodesAtDepth(i))
-            ExpandNode(node);         
+                ExpandNode(node);
         }
 
     }

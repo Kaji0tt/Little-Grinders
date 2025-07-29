@@ -16,7 +16,7 @@ MonoBehaviour:
   ItemName: Durin's Fluch
   ItemDescription: "Damit kommst du aufjedenfall \xFCberall vorbei!"
   itemType: 32
-  weaponCombo: {fileID: 0}
+  weaponCombo: {fileID: 11400000, guid: d1865f57f14481a4c8cd889105280ff4, type: 2}
   itemRarity: 0
   Range: 2
   RangedWeapon: 0
@@ -29,6 +29,8 @@ MonoBehaviour:
   attackPower: 30
   abilityPower: 15
   reg: 0
+  critChance: 0
+  critDamage: 0
   p_hp: 0
   p_armor: 0
   p_attackPower: 0.05
@@ -36,7 +38,9 @@ MonoBehaviour:
   p_attackSpeed: 0.5
   p_movementSpeed: 0
   p_reg: 0
+  p_critChance: 0
+  p_critDamage: 0
   usable: 0
   itemPotion: {fileID: 0}
-  c_percent: 0
-  level_needed: 0
+  c_percent: 0.078710996
+  level_needed: 18

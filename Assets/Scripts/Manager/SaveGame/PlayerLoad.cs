@@ -7,247 +7,470 @@ using UnityEngine.SceneManagement;
 
 public class PlayerLoad : MonoBehaviour
 {
-
     public void LoadPlayer(PlayerSave data)
     {
-        LoadPlayerStats(data);
-
-        //Die Gegenstände werden initialisiert und neu angezogen.
-        //LoadEquippedItems(data);
-
-        //Skillpunkte werden geladen.
-        LoadSkillPoints(data);
-
-        // Inventar wird geladen.
-        //LoadInventory(data);
-
-        // ActionButtons werden geladen.
-        LoadActionbar(data);
-
-        //Map-Daten werden geladen. 
-        if(data.currentMap != null)
-        LoadGlobalMap(data);
+        Debug.Log("=== [PlayerLoad.LoadPlayer] START ===");
         
-    }
-
-    /*
-    public void LoadScenePlayer(PlayerSave data)
-    {
-        LoadPlayerStats(data);
-
-        //Die Gegenstände werden initialisiert und neu angezogen.
-        LoadEquippedItems(data);
-
-        //Skillpunkte werden geladen.
-        LoadSkillPoints(data);
-
-        // Inventar wird geladen.
-        LoadInventory(data);
-
-        // ActionButtons werden geladen.
-        LoadActionbar(data);
-
-    }
-    */
-
-    private void LoadActionbar(PlayerSave data)
-    {
-        ActionButton[] actionButtons = FindObjectsOfType<ActionButton>();
-
-        foreach (ActionButton slot in actionButtons)
+        if (data != null)
         {
-            if (slot.gameObject.name.StartsWith("ActionButton"))
+            // WICHTIG: Seed ZUERST setzen, VOR allem anderen!
+            if (TalentTreeGenerator.instance != null && data.talentTreeSeed > 0)
             {
-                // Extrahiere die Slot-Nummer dynamisch aus dem Namen (z.B. "ActionButton1" => 0)
-                int slotIndex = int.Parse(slot.gameObject.name.Replace("ActionButton", "")) - 1;
+                Debug.Log($"[PlayerLoad.LoadPlayer] Setze TalentTreeSeed: {data.talentTreeSeed}");
+                TalentTreeGenerator.instance.SetTalentTreeSeed(data.talentTreeSeed);
+            }
+            
+            Debug.Log("[PlayerLoad.LoadPlayer] LoadPlayerStats...");
+            LoadPlayerStats(data);
+            
+            Debug.Log("[PlayerLoad.LoadPlayer] LoadInventory...");
+            LoadInventory(data);
+            
+            Debug.Log("[PlayerLoad.LoadPlayer] LoadEquippedItems...");
+            LoadEquippedItems(data);
+            
+            Debug.Log("[PlayerLoad.LoadPlayer] LoadSkillPoints...");
+            LoadSkillPoints(data);
+            
+            // TALENTE WERDEN SPÄTER GELADEN - siehe unten!
 
-                // Lade den Slot mit der entsprechenden gespeicherten Aktion
-                LoadActionbarSlot(slotIndex, slot, data);
+            if (data.currentMap != null)
+            {
+                Debug.Log("[PlayerLoad.LoadPlayer] LoadGlobalMap...");
+                LoadGlobalMap(data);
             }
         }
+        
+        Debug.Log("=== [PlayerLoad.LoadPlayer] ENDE ===");
     }
-    /*
-    private void LoadInventory(PlayerSave data)
+
+    // NEUE Methode: Talente zeitversetzt laden
+    public void LoadTalentsDelayed(PlayerSave data)
     {
-        int currentItem = 0;
-
-        foreach (string item in data.inventorySave)
+        Debug.Log("=== [PlayerLoad.LoadTalentsDelayed] START ===");
+        
+        // Warte bis TalentTreeGenerator fertig ist
+        if (TalentTreeGenerator.instance != null && TalentTreeGenerator.instance.allNodes.Count > 0)
         {
-
-            PlayerManager.instance.player.GetComponent<IsometricPlayer>().Inventory.AddItem(ItemRolls.GetItemStats(item, data.inventoryItemMods[currentItem], data.inventoryItemRarity[currentItem]));
-
-            currentItem += 1;
-
+            Debug.Log("[PlayerLoad.LoadTalentsDelayed] TalentTree ist bereit - lade Talente");
+            LoadTalents(data);
         }
+        else
+        {
+            Debug.Log("[PlayerLoad.LoadTalentsDelayed] TalentTree noch nicht bereit - starte Coroutine");
+            StartCoroutine(WaitForTalentTreeAndLoad(data));
+        }
+        
+        Debug.Log("=== [PlayerLoad.LoadTalentsDelayed] ENDE ===");
     }
-    */
-    private void LoadSkillPoints(PlayerSave data)
+
+    private IEnumerator WaitForTalentTreeAndLoad(PlayerSave data)
     {
-        TalentTreeManager talentTree = TalentTreeManager.instance;
-
-        talentTree.ResetTalents();
-
-        foreach (TalentSave savedTalent in data.talentsToBeSaved)
+        Debug.Log("[WaitForTalentTreeAndLoad] Warte auf TalentTree...");
+        
+        // Warte bis der TalentTree generiert ist
+        while (TalentTreeGenerator.instance == null || 
+               TalentTreeGenerator.instance.allNodes == null || 
+               TalentTreeGenerator.instance.allNodes.Count == 0)
         {
-            //Debug.Log("loading Talent: " + savedTalent.talentName + " loading it for " + talentTree.gameObject.name);
-            for (int i = 0; i < talentTree.allTalents.Count; i++)
-            {
-                if (talentTree.allTalents[i].name == savedTalent.talentName)
-                {
-                    talentTree.allTalents[i].Set_currentCount(savedTalent.talentPoints);
-
-                    talentTree.allTalents[i].unlocked = savedTalent.unlocked;
-
-                    talentTree.allTalents[i].UpdateTalent();
-                }
-
-            }
-
-
-            talentTree.UpdateTalentPointText();
-
-
-
+            yield return new WaitForEndOfFrame();
         }
-
-
-        foreach (Talent_UI talent in talentTree.allTalents)
-        {
-            if (talent.unlocked)
-            {
-                //Falls es sich nicht um ein AbilityTalent handelt, füge die Effekte hinzu.
-                //if (talent.GetType() != typeof(AbilityTalent))
-                //{
-
-                //    for (int i = 1; i <= talent.currentCount; i++)
-                        //talent.ApplyPassivePointsAndEffects(talent); Ehemaliger Ansatz, aber ApplyPassivePointsAndEffects sieht hinfällig im vgl. TryUseTalent aus
-                //        TalentTreeManager.instance.TryUseTalent(talent);
-                //}
-                
-                
-                    foreach(TalentSave savedTalent in data.talentsToBeSaved)
-                    if(talent.talentName == savedTalent.talentName)
-                    {
-                            //print("JUHU; FOUND: " + savedTalent.talentName + ", got the Spec: " + (Ability.AbilitySpecialization)savedTalent.spec);
-                            //print("Talent:" + talent.talentName + " got the Spec:" + talent.abilityTalent.baseAbility.abilitySpec);
-                            /// 07.03: Spells als Affixes, Rebuilding.
-                            /// talent.baseAbility.abilitySpec = (Ability.AbilitySpecialization)savedTalent.spec;
-                    }
-
-                
-
-                talent.Unlock();
-            }
-
-            else
-            {
-                talent.Lock();
-            }
-
-        }
+        
+        Debug.Log("[WaitForTalentTreeAndLoad] TalentTree bereit - lade Talente");
+        LoadTalents(data);
     }
-    /*
-    private void LoadEquippedItems(PlayerSave data)
-    {
-        if (data.brust != null)
-            FindFirstObjectByType<EQSlotBrust>().LoadItem(ItemRolls.GetItemStats(data.brust, data.modsBrust, data.brust_r));
-
-        if (data.hose != null)
-            FindFirstObjectByType<EQSlotHose>().LoadItem(ItemRolls.GetItemStats(data.hose, data.modsHose, data.hose_r));
-
-        if (data.kopf != null)
-            FindFirstObjectByType<EQSlotKopf>().LoadItem(ItemRolls.GetItemStats(data.kopf, data.modsKopf, data.kopf_r));
-
-        if (data.schuhe != null)
-            FindFirstObjectByType<EQSlotSchuhe>().LoadItem(ItemRolls.GetItemStats(data.schuhe, data.modsSchuhe, data.schuhe_r));
-
-        if (data.schmuck != null)
-            FindFirstObjectByType<EQSlotSchmuck>().LoadItem(ItemRolls.GetItemStats(data.schmuck, data.modsSchmuck, data.schmuck_r));
-
-        if (data.weapon != null)
-            FindFirstObjectByType<EQSlotWeapon>().LoadItem(ItemRolls.GetItemStats(data.weapon, data.modsWeapon, data.weapon_r));
-    }
-    */
 
     private void LoadPlayerStats(PlayerSave data)
     {
+        Debug.Log("=== [LoadPlayerStats] START ===");
+        
+        if (PlayerManager.instance?.player != null)
+        {
+            PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+            if (playerStats != null)
+            {
+                Debug.Log($"[LoadPlayerStats] Vor dem Laden: Level={playerStats.level}, XP={playerStats.xp}, HP={playerStats.Get_currentHp()}");
+
+                playerStats.level = data.mySavedLevel;
+                playerStats.xp = data.mySavedXp;
+                playerStats.Load_currentHp(data.hp);
+                playerStats.Set_SkillPoints(data.mySavedSkillpoints);
+
+                Debug.Log($"[LoadPlayerStats] Nach dem Laden: Level={playerStats.level}, XP={playerStats.xp}, HP={playerStats.Get_currentHp()}, Skillpoints={playerStats.Get_SkillPoints()}");
+            }
+            else
+            {
+                Debug.LogError("[LoadPlayerStats] ❌ PlayerStats Komponente nicht gefunden!");
+            }
+        }
+        else
+        {
+            Debug.LogError("[LoadPlayerStats] ❌ PlayerManager.instance oder player ist null!");
+        }
+        
+        Debug.Log("=== [LoadPlayerStats] ENDE ===");
+    }
+
+    private void LoadSkillPoints(PlayerSave data)
+    {
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+        Debug.Log($"[LoadSkillPoints] Lade Skillpunkte: {data.mySavedSkillpoints}");
+        playerStats.Set_SkillPoints(data.mySavedSkillpoints);
+    }
 
-        playerStats.level = data.level;
+    private void LoadEquippedItems(PlayerSave data)
+    {
+        Debug.Log("=== [LoadEquippedItems] START ===");
+        Debug.Log($"[LoadEquippedItems] Zu ladende Ausrüstung: {data.mySavedEquip.Count}");
+        
+        // Finde alle Equip-Slots
+        var allSlots = UnityEngine.Object.FindObjectsByType<Int_SlotBtn>(FindObjectsSortMode.None);
+        var equipSlots = allSlots.Where(slot => slot.slotType != ItemType.None).ToList();
+        
+        Debug.Log($"[LoadEquippedItems] Gefundene Equip-Slots: {equipSlots.Count}");
+        
+        // Entferne aktuelle Ausrüstung
+        foreach (var equipSlot in equipSlots)
+        {
+            Debug.Log($"[LoadEquippedItems] Clearing slot {equipSlot.slotType}");
+            equipSlot.ClearSlot();
+        }
 
-        playerStats.xp = data.xp;
+        // Setze gespeicherte Ausrüstung
+        foreach (var kvp in data.mySavedEquip)
+        {
+            string slotKey = kvp.Key;
+            SavedItem savedItem = kvp.Value;
 
-        playerStats.Load_currentHp(data.Hp);
+            Debug.Log($"[LoadEquippedItems] Versuche zu laden: {slotKey} -> {savedItem.itemID}");
 
-        playerStats.Set_SkillPoints(data.skillPoints);
+            var equipSlot = equipSlots.FirstOrDefault(slot => slot.slotType.ToString().ToUpper() == slotKey);
+            
+            if (equipSlot != null)
+            {
+                ItemInstance itemInstance = CreateItemInstanceFromSave(savedItem);
+                
+                if (itemInstance != null)
+                {
+                    Debug.Log($"[LoadEquippedItems] Equipping {itemInstance.GetName()} in slot {equipSlot.slotType}");
+                    equipSlot.StoreItem(itemInstance);
+                    
+                    Debug.Log($"[LoadEquippedItems] Applying stats for {itemInstance.GetName()}");
+                    itemInstance.Equip(PlayerManager.instance.player.playerStats);
+                    UI_Manager.instance.UpdateAbilityForEquippedItem(itemInstance);
+                }
+                else
+                {
+                    Debug.LogError($"[LoadEquippedItems] ❌ Fehler beim Erstellen von ItemInstance für {savedItem.itemID}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[LoadEquippedItems] ⚠️ Kein Equip-Slot gefunden für Typ {slotKey}");
+            }
+        }
+        
+        Debug.Log("=== [LoadEquippedItems] ENDE ===");
+    }
+    
+    private void LoadInventory(PlayerSave data)
+    {
+        Debug.Log("=== [LoadInventory] START ===");
+        Debug.Log($"[LoadInventory] Zu ladende Items: {data.mySavedInventory.Count}");
+        
+        if (UI_Inventory.instance?.inventory != null)
+        {
+            var inventory = UI_Inventory.instance.inventory;
+            
+            // Leere das Inventar vorher
+            Debug.Log("[LoadInventory] Leere aktuelles Inventar...");
+            for (int i = 0; i < UI_Inventory.instance.inventorySlots.Count; i++)
+                inventory.RemoveItemAtIndex(i);
+
+            foreach (var savedItem in data.mySavedInventory)
+            {
+                ItemInstance itemInstance = CreateItemInstanceFromSave(savedItem);
+                if (itemInstance != null)
+                {
+                    inventory.AddItemAtIndex(itemInstance, savedItem.slotIndex);
+                    Debug.Log($"[LoadInventory] Item geladen: Slot {savedItem.slotIndex} -> {itemInstance.GetName()}");
+                }
+                else
+                {
+                    Debug.LogError($"[LoadInventory] ❌ Fehler beim Laden von Item: {savedItem.itemID}");
+                }
+            }
+            
+            Debug.Log($"[LoadInventory] Inventar erfolgreich geladen");
+        }
+        else
+        {
+            Debug.LogError("[LoadInventory] ❌ UI_Inventory.instance oder inventory ist null!");
+        }
+        
+        Debug.Log("=== [LoadInventory] ENDE ===");
+    }
+
+    private void LoadTalents(PlayerSave data)
+    {
+        Debug.Log("=== [LoadTalents] START ===");
+        Debug.Log($"[LoadTalents] Anzahl gespeicherte Talente: {data.mySavedTalents.Count}");
+        Debug.Log($"[LoadTalents] Anzahl allTalents: {TalentTreeManager.instance.allTalents.Count}");
+        
+        int loadedCount = 0;
+
+        // Alle gespeicherten Talente durchgehen
+        for (int i = 0; i < data.mySavedTalents.Count; i++)
+        {
+            TalentSave save = data.mySavedTalents[i];
+            Debug.Log($"[LoadTalents] === TALENT {i+1}/{data.mySavedTalents.Count} ===");
+            Debug.Log($"[LoadTalents] isAbilityTalent: {save.isAbilityTalent}");
+            Debug.Log($"[LoadTalents] currentCount: {save.currentCount}");
+            Debug.Log($"[LoadTalents] nodeID: {save.nodeID}");
+            Debug.Log($"[LoadTalents] abilityName: '{save.abilityName}'");
+
+            bool talentFound = false;
+
+            if (save.isAbilityTalent)
+            {
+                Debug.Log($"[LoadTalents] Suche Ability-Talent mit Name: '{save.abilityName}'");
+                
+                // Lade Ability-basierte Talente
+                foreach (Talent_UI talent in TalentTreeManager.instance.allTalents)
+                {
+                    Debug.Log($"[LoadTalents] - Prüfe Talent '{talent.name}': myAbility={(talent.myAbility != null ? talent.myAbility.name : "null")}, passive={talent.passive}");
+                    
+                    if (talent.myAbility != null && talent.myAbility.name == save.abilityName)
+                    {
+                        Debug.Log($"[LoadTalents] ✓ MATCH! Lade Ability-Talent: {talent.name}");
+                        talent.Set_currentCount(save.currentCount);
+                        talent.Unlock();
+                        
+                        //Hardcoded fix für Regeneration
+                        if (PlayerStats.instance.Regeneration.Value < 1)
+                        {
+                            PlayerStats.instance.Regeneration.AddModifier(new StatModifier(1, StatModType.Flat));
+                            Debug.Log($"[LoadTalents] Regeneration hinzugefügt, neuer Wert: {PlayerStats.instance.Regeneration.Value}");
+                        }
+
+                        // WICHTIG: UI aktualisieren!
+                        talent.SetTalentUIVariables();
+                        talent.UpdateTalent();
+                        
+                        // Falls es das defaultTalent ist, Root-Nodes freischalten
+                        if (talent == TalentTreeManager.instance.defaultTalent)
+                        {
+                            Debug.Log($"[LoadTalents] DefaultTalent geladen - schalte Root-Nodes frei");
+                            UnlockRootNodes();
+                        }
+                        
+                        Debug.Log($"[LoadTalents] Ability-Talent geladen: {talent.name}, Count={save.currentCount}");
+                        loadedCount++;
+                        talentFound = true;
+                        break;
+                    }
+                }
+                
+                if (!talentFound)
+                {
+                    Debug.LogError($"[LoadTalents] ❌ Ability-Talent nicht gefunden: '{save.abilityName}'");
+                }
+            }
+            else
+            {
+                Debug.Log($"[LoadTalents] Suche Node-Talent mit ID: {save.nodeID}");
+                
+                if (TalentTreeGenerator.instance != null && TalentTreeGenerator.instance.allNodes != null)
+                {
+                    Debug.Log($"[LoadTalents] TalentTreeGenerator verfügbar mit {TalentTreeGenerator.instance.allNodes.Count} Nodes");
+                    
+                    // Suche zuerst in den generierten Nodes
+                    TalentNode foundNode = TalentTreeGenerator.instance.allNodes.FirstOrDefault(n => n.ID == save.nodeID);
+                    
+                    if (foundNode != null)
+                    {
+                        Debug.Log($"[LoadTalents] ✓ Node gefunden in TalentTreeGenerator: ID={foundNode.ID}");
+                        
+                        // Setze die Werte in der Node
+                        foundNode.myCurrentCount = save.currentCount;
+                        foundNode.Unlock();
+                        
+                        // Finde das zugehörige UI-Element, falls vorhanden
+                        if (foundNode.myTalentUI != null)
+                        {
+                            Debug.Log($"[LoadTalents] ✓ UI-Element gefunden: {foundNode.myTalentUI.name}");
+                            foundNode.myTalentUI.Set_currentCount(save.currentCount);
+                            foundNode.myTalentUI.Unlock();
+                            foundNode.myTalentUI.SetTalentUIVariables(); // UI-Text aktualisieren
+                            foundNode.myTalentUI.UpdateTalent();
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[LoadTalents] Node hat kein UI-Element: ID={foundNode.ID}");
+                        }
+                        
+                        TalentTreeManager.instance.UpdateTalentTree(foundNode);
+                        Debug.Log($"[LoadTalents] Node-Talent geladen: NodeID={save.nodeID}, Count={save.currentCount}");
+                        loadedCount++;
+                        talentFound = true;
+                    }
+                    else
+                    {
+                        Debug.LogError($"[LoadTalents] ❌ Node nicht gefunden in TalentTreeGenerator: ID={save.nodeID}");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[LoadTalents] ⚠️ TalentTreeGenerator oder allNodes ist null");
+                }
+                
+                // Fallback: Suche in allTalents (für den Fall, dass doch UI-Elemente vorhanden sind)
+                if (!talentFound)
+                {
+                    Debug.Log($"[LoadTalents] Fallback: Suche in TalentTreeManager.allTalents");
+                    foreach (Talent_UI talent in TalentTreeManager.instance.allTalents)
+                    {
+                        Debug.Log($"[LoadTalents] - Prüfe Talent '{talent.name}': myNode={(talent.myNode != null ? $"ID={talent.myNode.ID}" : "null")}, passive={talent.passive}");
+                        
+                        if (talent.myNode != null && talent.myNode.ID == save.nodeID)
+                        {
+                            Debug.Log($"[LoadTalents] ✓ FALLBACK MATCH! Lade Node-Talent: {talent.name}");
+                            talent.Set_currentCount(save.currentCount);
+                            talent.myNode.myCurrentCount = save.currentCount;
+                            talent.Unlock();
+                            talent.myNode.Unlock();
+                            talent.SetTalentUIVariables(); // UI-Text aktualisieren
+                            talent.UpdateTalent();
+                            TalentTreeManager.instance.UpdateTalentTree(talent.myNode);
+                            Debug.Log($"[LoadTalents] Fallback: Node-Talent geladen: NodeID={save.nodeID}, Count={save.currentCount}");
+                            loadedCount++;
+                            talentFound = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!talentFound)
+                {
+                    Debug.LogError($"[LoadTalents] ❌ Node-Talent konnte nirgends gefunden werden: ID={save.nodeID}");
+                }
+            }
+        }
+
+        Debug.Log($"[LoadTalents] === ENDE === Insgesamt geladen: {loadedCount} Talente");
+        
+        // Debug: Zeige finale Zustände aller Talente
+        Debug.Log("=== [LoadTalents] FINALE ZUSTÄNDE ===");
+        foreach (Talent_UI talent in TalentTreeManager.instance.allTalents)
+        {
+            Debug.Log($"[LoadTalents] Final: '{talent.name}' - Count: {talent.currentCount}, Unlocked: {talent.unlocked}, Ability: {(talent.myAbility != null ? talent.myAbility.name : "null")}, Node: {(talent.myNode != null ? $"ID={talent.myNode.ID}" : "null")}");
+        }
+        
+        // WICHTIG: Nach dem Laden alle UI-Elemente aktualisieren und Root-Nodes prüfen
+        UpdateAllTalentUI();
+    }
+
+    private void UnlockRootNodes()
+    {
+        Debug.Log("[UnlockRootNodes] Prüfe und schalte Root-Nodes frei");
+        
+        if (TalentTreeGenerator.instance != null && TalentTreeGenerator.instance.allNodes != null)
+        {
+            foreach (TalentNode node in TalentTreeGenerator.instance.allNodes)
+            {
+                if (node.Depth == 0) // Root-Nodes
+                {
+                    Debug.Log($"[UnlockRootNodes] Root-Node gefunden: ID={node.ID}");
+                    
+                    // Prüfe, ob Regeneration >= 1 ist (Bedingung für Root-Node-Unlock)
+                    if (PlayerStats.instance.Regeneration.Value >= 1)
+                    {
+                        node.Unlock();
+                        
+                        // Aktualisiere auch das UI-Element, falls vorhanden
+                        if (node.myTalentUI != null)
+                        {
+                            node.myTalentUI.Unlock();
+                            node.myTalentUI.SetTalentUIVariables();
+                            node.myTalentUI.UpdateTalent();
+                            Debug.Log($"[UnlockRootNodes] Root-Node freigeschaltet: ID={node.ID}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[UnlockRootNodes] Root-Node hat kein UI-Element: ID={node.ID}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"[UnlockRootNodes] Regeneration zu niedrig für Root-Node: {PlayerStats.instance.Regeneration.Value}");
+                    }
+                }
+            }
+        }
+    }
+
+    private void UpdateAllTalentUI()
+    {
+        Debug.Log("[UpdateAllTalentUI] Aktualisiere alle Talent-UIs");
+        
+        // Aktualisiere alle Talent_UI Elemente
+        foreach (Talent_UI talent in TalentTreeManager.instance.allTalents)
+        {
+            talent.SetTalentUIVariables();
+            talent.UpdateTalent();
+            Debug.Log($"[UpdateAllTalentUI] UI aktualisiert für: {talent.name}");
+        }
+        
+        // Aktualisiere auch die Skillpoint-Anzeige
+        TalentTreeManager.instance.UpdateTalentPointText();
+        Debug.Log("[UpdateAllTalentUI] Alle UIs aktualisiert");
     }
 
     private void LoadGlobalMap(PlayerSave data)
     {
+        Debug.Log("=== [LoadGlobalMap] START ===");
+        Debug.Log($"[LoadGlobalMap] ExploredMaps Count: {data.exploredMaps.Count}");
+        Debug.Log($"[LoadGlobalMap] CurrentMap null: {data.currentMap == null}");
+        Debug.Log($"[LoadGlobalMap] LastSpawnpoint: {data.lastSpawnpoint}");
+        
         if (data.exploredMaps.Count != 0)
         {
-            print("GlobalMap should be loading: " + data.exploredMaps.Count + " maps.");
-            GlobalMap.instance.exploredMaps = data.exploredMaps;
-
-            GlobalMap.instance.Set_CurrentMap(data.currentMap);
-
-            GlobalMap.instance.lastSpawnpoint = data.lastSpawnpoint;
-
+            if (GlobalMap.instance != null)
+            {
+                GlobalMap.instance.exploredMaps = data.exploredMaps;
+                GlobalMap.instance.Set_CurrentMap(data.currentMap);
+                GlobalMap.instance.lastSpawnpoint = data.lastSpawnpoint;
+                
+                Debug.Log("[LoadGlobalMap] ✓ GlobalMap erfolgreich geladen");
+            }
+            else
+            {
+                Debug.LogError("[LoadGlobalMap] ❌ GlobalMap.instance ist null!");
+            }
         }
         else
-            print("something is wrong with the playerlaod");
-
-
+        {
+            Debug.LogError("[LoadGlobalMap] ❌ Keine exploredMaps gefunden - etwas ist falsch!");
+        }
+        
+        Debug.Log("=== [LoadGlobalMap] ENDE ===");
     }
 
-    void LoadActionbarSlot(int i, ActionButton slot, PlayerSave data)
+    // Hilfsmethode zum Erzeugen einer ItemInstance aus SavedItem
+    private ItemInstance CreateItemInstanceFromSave(SavedItem savedItem)
     {
-        // Überprüfen, ob Daten für diesen Slot vorhanden sind
-        if (data.savedActionButtons[i] != null)
+        Debug.Log($"[CreateItemInstanceFromSave] Erstelle ItemInstance für: {savedItem.itemID}");
+        
+        ItemInstance instance = ItemInstance.FromSave(savedItem);
+        
+        if (instance == null)
         {
-            bool itemLoaded = false;
-
-            // Überprüfen, ob der gespeicherte Name einem Zauber entspricht
-            foreach (Talent_UI talent in TalentTreeManager.instance.allTalents)
-            {
-            
-                if (talent.talentName == data.savedActionButtons[i] && talent.passive == false)
-                {
-                   
-                    //Get Each equipped Item and set Ability
-                    itemLoaded = true; // Markiere, dass ein Item geladen wurde
-                    break; // Beende die Schleife, wenn der Zauber gefunden wurde
-                }
-            }
-
-            // Überprüfen, ob der gespeicherte Name einem Item entspricht (wenn noch nichts geladen wurde)
-            if (!itemLoaded)
-            {
-                // Hole das Item basierend auf der ID
-                Item item = ItemDatabase.GetItemByID(data.savedActionButtons[i]);
-
-                // Erstelle eine neue ItemInstance aus dem Item, wenn es gefunden wurde
-                if (item != null)
-                {
-                    //Usable werden ausgeklammert vorerst. Es soll keine Potions mehr geben.
-                    //ItemInstance itemInstance = new ItemInstance(item); // Erstelle eine neue ItemInstance
-                   // slot.LoadItemUseable(itemInstance); // ItemInstance in den Slot laden
-                    itemLoaded = true;
-                }
-            }
-
-            // Füge eine Fehlerüberprüfung hinzu
-            if (!itemLoaded)
-            {
-                Debug.LogWarning($"Kein Zauber oder Item gefunden für Actionbar-Slot {i}: {data.savedActionButtons[i]}");
-            }
+            Debug.LogError($"[CreateItemInstanceFromSave] ❌ Fehler beim Erstellen der ItemInstance für ID: {savedItem.itemID}");
+            return null;
         }
-        else
-        {
-            Debug.LogWarning($"Keine gespeicherten Daten für Actionbar-Slot {i}");
-        }
+
+        Debug.Log($"[CreateItemInstanceFromSave] ✓ ItemInstance erfolgreich erstellt: {instance.ItemName}");
+        return instance;
     }
-
-
 }
 

@@ -16,7 +16,7 @@ MonoBehaviour:
   ItemName: "Krumms\xE4bel"
   ItemDescription: 
   itemType: 32
-  weaponCombo: {fileID: 0}
+  weaponCombo: {fileID: 11400000, guid: d1865f57f14481a4c8cd889105280ff4, type: 2}
   itemRarity: 0
   Range: 1
   RangedWeapon: 0
@@ -29,6 +29,8 @@ MonoBehaviour:
   attackPower: 10
   abilityPower: 0
   reg: 0
+  critChance: 0
+  critDamage: 0
   p_hp: 0
   p_armor: 0
   p_attackPower: 0
@@ -36,7 +38,9 @@ MonoBehaviour:
   p_attackSpeed: 0.05
   p_movementSpeed: 0
   p_reg: 0
+  p_critChance: 0
+  p_critDamage: 0
   usable: 0
   itemPotion: {fileID: 0}
-  c_percent: 0
-  level_needed: 0
+  c_percent: 2.6120389
+  level_needed: 5

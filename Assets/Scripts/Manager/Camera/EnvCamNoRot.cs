@@ -71,22 +71,15 @@ public class EnvCamNoRot : MonoBehaviour
         //Enable Shadow Casting for the Sprite
         sprite.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 
-        //---  LookAt wurde vorerst Disabled, macht Perspektivisch wenig Sinn ---
-        //child.LookAt(Camera.main.transform); 
-        //child.Rotate(0, 25, 0);                           
+        //Finde Position der Kamera
+        CameraPosition = CameraManager.instance.GetCameraPosition();
 
-        if (CameraManager.instance.mainCamGO.activeSelf)
-        {
-            //Finde Position der Kamera
-            CameraPosition = CameraManager.instance.mainCamGO.transform.position;
+        //Berechne Abstand zur Kamera
+        float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
 
-            //Berechne Abstand zur Kamera
-            float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
-
-            //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
-            sprite.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
-            sprite.sortingLayerName = "Umgebung_col Layer";
-        }
+        //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
+        sprite.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
+        sprite.sortingLayerName = "Umgebung_col Layer";
 
     }
 
@@ -94,18 +87,15 @@ public class EnvCamNoRot : MonoBehaviour
     {
         particle = child.GetComponent<ParticleSystemRenderer>();
 
-        if (CameraManager.instance.mainCamGO.activeSelf)
-        {
-            //Finde Position der Kamera
-            CameraPosition = CameraManager.instance.mainCamGO.transform.position;
+        //Finde Position der Kamera
+        CameraPosition = CameraManager.instance.GetCameraPosition();
 
-            //Berechne Abstand zur Kamera
-            float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
+        //Berechne Abstand zur Kamera
+        float distSelfCamera = (child.position - CameraPosition).sqrMagnitude;
 
-            //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
-            particle.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
-            particle.sortingLayerName = "Umgebung_col Layer";
-        }
+        //Verändere die Sorting-Order entsprechend zum Abstand. Damit Layern die Sprite's schließlich automatisch korrekt.
+        particle.sortingOrder = (int)(sortingOrderBase - distSelfCamera) + sO_OffSet;
+        particle.sortingLayerName = "Umgebung_col Layer";
 
     }
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor.EditorTools;
+using UnityEngine;
 
 [System.Serializable]
 public class AttackStep
@@ -7,8 +8,13 @@ public class AttackStep
     // Später sollten Animationen manuell erstellt werden über Transform-Pos Änderung.
     public AnimationClip animationClip;
     //public string attackStepName;
+    [Tooltip("Multiplikator für den Schaden dieses AttackSteps")]
     public float damageMultiplier = 1f;
-    public float timeToNextAttack = 1f; // Optional: Zeitfenster für die nächste Eingabe
+    [Tooltip("Wie lange dieser AttackStep dauern soll")]
+    public float timeForAttackStep = 1f; // Optional: Zeitfenster für die nächste Eingabe
+                                         //[Tooltip("Zeit für Combo-Input (unabhängig von AttackStep-Dauer)")]
+    public float dashDistance = .5f;
+    //public float comboWindowTime = 0.8f; // Zeit für Combo-Input (unabhängig von AttackStep-Dauer)
 
 
     /// <summary>
