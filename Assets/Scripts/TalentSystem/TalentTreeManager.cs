@@ -115,6 +115,9 @@ public class TalentTreeManager : MonoBehaviour
 
                 //Füge die Eigenschaften des Talents dem Spieler hinzu
                 ApplyPassivePointsAndEffects(clickedTalent);
+                
+                // Check if this talent unlocks spell sockets
+                CheckAndUnlockSpellSockets(clickedTalent);
             }
 
             //Zusätzliche Abfrage für die Root Ability (Sie kann durch ein bool in UseBase nur 1x verwendet werden)
@@ -155,6 +158,53 @@ public class TalentTreeManager : MonoBehaviour
         {
             Debug.LogWarning($"[TryUseTalent] ❌ Talent konnte nicht verwendet werden!");
             Debug.LogWarning($"[TryUseTalent] Grund: Skillpoints: {PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints()}, Talent unlocked: {clickedTalent.unlocked}");
+        }
+    }
+    
+    private void CheckAndUnlockSpellSockets(Talent_UI talent)
+    {
+        // Define which talents unlock which socket types
+        // This is a simple implementation - you might want to make this data-driven
+        
+        if (SpellSocketManager.instance == null) return;
+        
+        // Example socket unlock conditions based on talent types
+        foreach (TalentType talentType in talent.myTypes)
+        {
+            switch (talentType)
+            {
+                case TalentType.AP:
+                    if (talent.currentCount >= 3) // Unlock AP socket after 3 points in AP talents
+                    {
+                        SpellSocketManager.instance.UnlockSocket(SpellSocketType.AP, 0);
+                        Debug.Log($"[TalentTreeManager] Unlocked AP spell socket!");
+                    }
+                    break;
+                    
+                case TalentType.AD:
+                    if (talent.currentCount >= 3) // Unlock AD socket after 3 points in AD talents
+                    {
+                        SpellSocketManager.instance.UnlockSocket(SpellSocketType.AD, 0);
+                        Debug.Log($"[TalentTreeManager] Unlocked AD spell socket!");
+                    }
+                    break;
+                    
+                case TalentType.AS:
+                    if (talent.currentCount >= 2) // Movement-related - unlock Movement socket
+                    {
+                        SpellSocketManager.instance.UnlockSocket(SpellSocketType.Movement, 0);
+                        Debug.Log($"[TalentTreeManager] Unlocked Movement spell socket!");
+                    }
+                    break;
+                    
+                case TalentType.RE:
+                    if (talent.currentCount >= 2) // Utility-related - unlock Utility socket
+                    {
+                        SpellSocketManager.instance.UnlockSocket(SpellSocketType.Utility, 0);
+                        Debug.Log($"[TalentTreeManager] Unlocked Utility spell socket!");
+                    }
+                    break;
+            }
         }
     }
 

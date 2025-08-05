@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-// Der Enum bleibt so, wie du ihn erweitert hast.
+// Extended for pace-enhancing spell clusters
 [System.Flags]
 public enum SpellProperty
 {
@@ -14,6 +14,12 @@ public enum SpellProperty
     Channeling = 1 << 6,
     Instant = 1 << 7,
     Active = 1 << 8,
+    
+    // Pace-enhancing clusters
+    PaceMovement = 1 << 9,  // Movement cluster for pace enhancement
+    PaceUtility = 1 << 10,  // Utility cluster for pace enhancement
+    PaceAP = 1 << 11,       // Ability Power cluster for pace enhancement
+    PaceAD = 1 << 12,       // Attack Damage cluster for pace enhancement
 }
 
 [CreateAssetMenu(menuName = "Active/Ability")]
