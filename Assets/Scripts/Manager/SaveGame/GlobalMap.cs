@@ -84,11 +84,26 @@ public class GlobalMap : MonoBehaviour
             //Debug.Log(fieldType[i]);
         }
 
+        // Save current interactables
+        newMap.SaveInteractables();
+
         currentMap = newMap;
 
         exploredMaps.Add(newMap);
 
         OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// Updates the current map with latest interactable states
+    /// </summary>
+    public void UpdateCurrentMapInteractables()
+    {
+        if (currentMap != null)
+        {
+            currentMap.SaveInteractables();
+            Debug.Log("[GlobalMap] Updated current map interactables");
+        }
     }
 
 

@@ -234,6 +234,23 @@ public class PrefabCollection : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Gets a specific interactable prefab by name
+    /// </summary>
+    public GameObject GetInteractableByName(string name)
+    {
+        foreach (GameObject interactable in interactablesPF)
+        {
+            if (interactable.name == name)
+            {
+                return interactable;
+            }
+        }
+        
+        Debug.LogWarning($"[PrefabCollection] Interactable with name '{name}' not found. Using random interactable.");
+        return GetRandomInteractable();
+    }
+
     public GameObject GetRandomPreBuildTile()
     {
         //print("The length of the current Pre-Build Tiles is: " + preBuildTiles.Length);
