@@ -78,7 +78,14 @@ public class DamagePopupManager : MonoBehaviour
             popup.GetComponent<DamagePopup>().Setup(damage);
 
         if (crit)
+        {
             popup.GetComponent<DamagePopup>().SetupCrit(damage);
+            // Enhanced feedback: Additional screen shake for critical hits
+            if (ScreenShakeManager.Instance != null)
+            {
+                ScreenShakeManager.Instance.TriggerShake(ScreenShakeManager.ShakeType.Heavy);
+            }
+        }
     }
     
     // NEU: Methode für direkten Schaden
