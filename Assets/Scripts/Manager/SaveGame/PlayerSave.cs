@@ -132,6 +132,13 @@ public class PlayerSave
 
         if (GlobalMap.instance != null)
         {
+            // Update current map with latest interactable states before saving
+            if (GlobalMap.instance.currentMap != null)
+            {
+                Debug.Log("[SaveTheGlobalMap] Updating current map interactables...");
+                GlobalMap.instance.currentMap.SaveInteractables();
+            }
+            
             exploredMaps = GlobalMap.instance.exploredMaps;
             currentMap = GlobalMap.instance.currentMap;
             lastSpawnpoint = GlobalMap.instance.lastSpawnpoint;

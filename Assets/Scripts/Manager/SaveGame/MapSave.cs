@@ -175,9 +175,17 @@ public class MapSave
                 if (saveData.isUsed && interactableComponent.newSprite != null)
                 {
                     SpriteRenderer spriteRenderer = restoredInteractable.GetComponentInParent<SpriteRenderer>();
+                    if (spriteRenderer == null)
+                    {
+                        spriteRenderer = restoredInteractable.GetComponentInChildren<SpriteRenderer>();
+                    }
                     if (spriteRenderer != null)
                     {
                         spriteRenderer.sprite = interactableComponent.newSprite;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[MapSave] Could not find SpriteRenderer for used interactable: {saveData.interactableType}");
                     }
                 }
             }
