@@ -174,8 +174,22 @@ public class IsometricRenderer : MonoBehaviour
 
         }
 
-
-        myAnimator.Play(directionArray[lastDirection]);
+        // Enhanced feedback: Smooth animation transitions
+        string targetAnimation = directionArray[lastDirection];
+        
+        // Check if we're already playing this animation to avoid unnecessary calls
+        AnimatorStateInfo currentState = myAnimator.GetCurrentAnimatorStateInfo(0);
+        if (!currentState.IsName(targetAnimation))
+        {
+            myAnimator.Play(targetAnimation);
+            
+            // Add subtle feedback for movement state changes
+            if (direction.magnitude > 0.2f && FeedbackSystemManager.Instance != null)
+            {
+                // Very light feedback for starting movement
+                FeedbackSystemManager.Instance.TriggerCustomScreenShake(0.05f, 0.01f);
+            }
+        }
     }
 
 
