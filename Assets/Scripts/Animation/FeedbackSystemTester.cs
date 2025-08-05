@@ -12,6 +12,8 @@ public class FeedbackSystemTester : MonoBehaviour
     [SerializeField] private KeyCode testCriticalHitKey = KeyCode.F3;
     [SerializeField] private KeyCode testLevelUpKey = KeyCode.F4;
     [SerializeField] private KeyCode testStatusEffectKey = KeyCode.F5;
+    [SerializeField] private KeyCode testDamageFlashKey = KeyCode.F6;
+    [SerializeField] private KeyCode testHealFlashKey = KeyCode.F7;
 
     [Header("Test Settings")]
     [SerializeField] private Sprite testIcon;
@@ -51,6 +53,18 @@ public class FeedbackSystemTester : MonoBehaviour
         if (Input.GetKeyDown(testStatusEffectKey))
         {
             TestStatusEffect();
+        }
+
+        // Test damage flash
+        if (Input.GetKeyDown(testDamageFlashKey))
+        {
+            TestDamageFlash();
+        }
+
+        // Test heal flash
+        if (Input.GetKeyDown(testHealFlashKey))
+        {
+            TestHealFlash();
         }
     }
 
@@ -124,6 +138,34 @@ public class FeedbackSystemTester : MonoBehaviour
         }
     }
 
+    private void TestDamageFlash()
+    {
+        Debug.Log("Testing Damage Flash (F6)");
+        
+        if (FeedbackSystemManager.Instance != null)
+        {
+            FeedbackSystemManager.Instance.TriggerDamageTakenFeedback();
+        }
+        else
+        {
+            Debug.LogWarning("FeedbackSystemManager not found!");
+        }
+    }
+
+    private void TestHealFlash()
+    {
+        Debug.Log("Testing Heal Flash (F7)");
+        
+        if (FeedbackSystemManager.Instance != null)
+        {
+            FeedbackSystemManager.Instance.TriggerHealingFeedback();
+        }
+        else
+        {
+            Debug.LogWarning("FeedbackSystemManager not found!");
+        }
+    }
+
     private void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10, 10, 300, 200));
@@ -135,6 +177,8 @@ public class FeedbackSystemTester : MonoBehaviour
         GUILayout.Label("F3 - Test Critical Hit");
         GUILayout.Label("F4 - Test Level Up");
         GUILayout.Label("F5 - Test Status Effect");
+        GUILayout.Label("F6 - Test Damage Flash");
+        GUILayout.Label("F7 - Test Heal Flash");
         
         GUILayout.Space(10);
         
@@ -143,6 +187,7 @@ public class FeedbackSystemTester : MonoBehaviour
         GUILayout.Label($"ScreenShake: {(ScreenShakeManager.Instance != null ? "✓" : "✗")}");
         GUILayout.Label($"HitStop: {(HitStopManager.Instance != null ? "✓" : "✗")}");
         GUILayout.Label($"StatusEffects: {(StatusEffectVisualManager.Instance != null ? "✓" : "✗")}");
+        GUILayout.Label($"ScreenOverlay: {(ScreenOverlayManager.Instance != null ? "✓" : "✗")}");
         GUILayout.Label($"FeedbackManager: {(FeedbackSystemManager.Instance != null ? "✓" : "✗")}");
         
         GUILayout.EndArea();

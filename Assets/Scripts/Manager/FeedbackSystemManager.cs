@@ -13,6 +13,7 @@ public class FeedbackSystemManager : MonoBehaviour
     [SerializeField] private bool enableHitStop = true;
     [SerializeField] private bool enableEnhancedPopups = true;
     [SerializeField] private bool enableStatusEffects = true;
+    [SerializeField] private bool enableScreenOverlays = true;
 
     [Header("Feedback Intensity Multipliers")]
     [Range(0f, 2f)]
@@ -24,6 +25,7 @@ public class FeedbackSystemManager : MonoBehaviour
     private ScreenShakeManager screenShake;
     private HitStopManager hitStop;
     private StatusEffectVisualManager statusEffects;
+    private ScreenOverlayManager screenOverlay;
 
     private void Awake()
     {
@@ -69,6 +71,15 @@ public class FeedbackSystemManager : MonoBehaviour
             GameObject statusManager = new GameObject("StatusEffectVisualManager");
             statusManager.transform.SetParent(transform);
             statusEffects = statusManager.AddComponent<StatusEffectVisualManager>();
+        }
+
+        // Find or create screen overlay manager
+        screenOverlay = FindObjectOfType<ScreenOverlayManager>();
+        if (screenOverlay == null && enableScreenOverlays)
+        {
+            GameObject overlayManager = new GameObject("ScreenOverlayManager");
+            overlayManager.transform.SetParent(transform);
+            screenOverlay = overlayManager.AddComponent<ScreenOverlayManager>();
         }
     }
 
@@ -141,6 +152,39 @@ public class FeedbackSystemManager : MonoBehaviour
         if (enableHitStop && hitStop != null)
         {
             hitStop.TriggerHitStop(HitStopManager.HitStopType.Light);
+        }
+    }
+
+    /// <summary>
+    /// Triggers feedback for taking damage
+    /// </summary>
+    public void TriggerDamageTakenFeedback()
+    {
+        if (enableScreenOverlays && screenOverlay != null)
+        {
+            screenOverlay.TriggerDamageFlash();
+        }
+    }
+
+    /// <summary>
+    /// Triggers feedback for healing
+    /// </summary>
+    public void TriggerHealingFeedback()
+    {
+        if (enableScreenOverlays && screenOverlay != null)
+        {
+            screenOverlay.TriggerHealFlash();
+        }
+    }
+
+    /// <summary>
+    /// Updates health percentage for overlay effects
+    /// </summary>
+    public void UpdateHealthPercent(float healthPercent)
+    {
+        if (enableScreenOverlays && screenOverlay != null)
+        {
+            screenOverlay.UpdateHealthPercent(healthPercent);
         }
     }
 
