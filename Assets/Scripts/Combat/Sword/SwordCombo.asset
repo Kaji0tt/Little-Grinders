@@ -15,14 +15,16 @@ MonoBehaviour:
   comboSteps:
   - animationClip: {fileID: 7400000, guid: fd5db987a7ab7604f81d5a4476262c8b, type: 2}
     damageMultiplier: 1
-    timeForAttackStep: 0.5
+    timeForAttackStep: 0.7
     dashDistance: 1
   - animationClip: {fileID: 7400000, guid: 31660fc91a6e1134b9009f975e285d5d, type: 2}
     damageMultiplier: 1.2
-    timeForAttackStep: 0.5
+    timeForAttackStep: 0.7
     dashDistance: 1
   - animationClip: {fileID: 7400000, guid: fe6fc6651e5f55543a023e724928ae8b, type: 2}
     damageMultiplier: 1.5
-    timeForAttackStep: 0.8
+    timeForAttackStep: 1.2
     dashDistance: 2
   comboCooldown: 1
+  trailEffect: {fileID: 3090917823808282046, guid: cf13d981498afa94fbfbd01a56ab1015,
+    type: 3}

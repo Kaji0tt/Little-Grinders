@@ -53,9 +53,14 @@ public class EnemyController : MonoBehaviour, IEntitie
 
 
     [Header("Combat Referenzen")]
+    [Tooltip("Statistiken des Gegners")]
     public MobStats mobStats { get; private set; }
-    public float attackRange, aggroRange;
+    [Tooltip("Angriffsverhalten des Gegners")]
+    public IAttackBehavior attackBehavior;
+    [Tooltip("Reichweite des Angriffs und die Distanz und wie nah der Gegner an den Spieler heran darf, bevor er stoppt")]
+    public float attackRange, aggroRange, stoppingDistance;
     private float maxHpForUI;
+    [HideInInspector]
     public bool isDead = false;
     //public int level;
 
@@ -76,12 +81,7 @@ public class EnemyController : MonoBehaviour, IEntitie
     ///Controller Variables
     Vector3 myForward, myRight;
 
-    /// <summary>
-    /// Intervalle für den Zufälligkeitswert von zu wählenenden Richtungen
-    /// </summary>
-    private float directionTimer = 0f;
-    private readonly float directionInterval = 0.5f;
-    private Vector3 currentDirection = Vector3.zero;
+
 
 
     //Erstelle einen Kreis aus der Aggro-Range für den Editor Modus
@@ -217,23 +217,89 @@ public class EnemyController : MonoBehaviour, IEntitie
     /// Berechnet die Entfernung zum Spieler
     /// </summary>
     /// <returns>Entfernung als float</returns>
-    public float GetDistanceToPlayer()
+    /// 
+        public float GetDistanceToPlayer()
     {
         if (Player == null) return float.MaxValue;
         return Vector3.Distance(Player.position, transform.position);
     }
 
-    // Alte Funktion für Backward Compatibility (optional entfernen)
-    public float TargetDistance()
+        public float TargetDistance()
     {
         return GetDistanceToPlayer();
     }
+
+    /// <summary>
+    /// Intervalle für den Zufälligkeitswert von zu wählenenden Richtungen
+    /// </summary>
+    private float directionTimer = 0f;
+    private readonly float directionInterval = 0.5f;
+    private Vector3 currentDirection = Vector3.zero;
+
+
+    // Alte Funktion für Backward Compatibility (optional entfernen)
+
+    
+    public void MoveToPlayer()
+    {
+        if (myNavMeshAgent == null)
+            myNavMeshAgent = GetComponent<NavMeshAgent>();
+
+        directionTimer -= Time.deltaTime;
+
+        if (directionTimer <= 0f)
+        {
+            //Die Laufrichtung, welche in die Wahrschienlichkeitsrechnung als Hauptziel vergeben wird
+            Vector3 preferredDirection = (Player.position - transform.position).normalized;
+
+            // Gewichtet anhand von Wahrscheinlichkeiten Richtung Spieler laufen
+            currentDirection = MovementHelper.GetWeightedDirection(preferredDirection);
+
+            // Setze das Intervall für die Richtungsdefinition zurück
+            directionTimer = directionInterval;
+        }
+
+        // Laufziel berechnen – z. B. 2 Meter in diese Richtung
+        Vector3 destination = transform.position + currentDirection * 2f;
+
+        if(!mobStats.isDead)
+        myNavMeshAgent.SetDestination(destination);
+        //Vector3 toPlayer = PlayerManager.instance.player.transform.position - transform.position;
+
+    }
+
+    public bool IsPlayerInAttackRange()
+    {
+        if (Player == null) return false;
+        return GetDistanceToPlayer() <= attackRange;
+    }
+
+    public void StopMoving()
+    {
+        if (myNavMeshAgent != null && myNavMeshAgent.isActiveAndEnabled)
+        {
+            myNavMeshAgent.SetDestination(transform.position);
+        }
+
+    }
+
+        public Vector2 TargetDirection()
+    {
+        Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
+
+        Vector2 outputVector = new Vector2(Direction.x * -1, Direction.z);
+
+        outputVector = Vector2.ClampMagnitude(outputVector, 1);
+
+        return outputVector;
+    }
+
     #endregion
 
     #region Action StateMachine
     public void TransitionTo(EntitieState newState)
-    {   
-        if(!mobStats.isDead)
+    {
+        if (!mobStats.isDead)
         {
             myEntitieState?.Exit();
             myEntitieState = newState;
@@ -270,61 +336,11 @@ public class EnemyController : MonoBehaviour, IEntitie
         }
     }
 
-    public bool IsPlayerInAttackRange()
-    {
-        if (Player == null) return false;
-        return GetDistanceToPlayer() <= attackRange;
-    }
 
-    public void StopMoving()
-    {
-        if (myNavMeshAgent != null && myNavMeshAgent.isActiveAndEnabled)
-        {
-            myNavMeshAgent.SetDestination(transform.position);
-        }
 
-    }
 
-    //public void MoveToTarget()
-    public void MoveToPlayer()
-    {
-        if (myNavMeshAgent == null)
-            myNavMeshAgent = GetComponent<NavMeshAgent>();
-
-        directionTimer -= Time.deltaTime;
-
-        if (directionTimer <= 0f)
-        {
-            //Die Laufrichtung, welche in die Wahrschienlichkeitsrechnung als Hauptziel vergeben wird
-            Vector3 preferredDirection = (Player.position - transform.position).normalized;
-
-            // Gewichtet anhand von Wahrscheinlichkeiten Richtung Spieler laufen
-            currentDirection = MovementHelper.GetWeightedDirection(preferredDirection);
-
-            // Setze das Intervall für die Richtungsdefinition zurück
-            directionTimer = directionInterval;
-        }
-
-        // Laufziel berechnen – z. B. 2 Meter in diese Richtung
-        Vector3 destination = transform.position + currentDirection * 2f;
-
-        if(!mobStats.isDead)
-        myNavMeshAgent.SetDestination(destination);
-        //Vector3 toPlayer = PlayerManager.instance.player.transform.position - transform.position;
-
-    }
     #endregion
-	
-    public Vector2 TargetDirection()
-    {
-        Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
 
-        Vector2 outputVector = new Vector2(Direction.x * -1, Direction.z);
-
-        outputVector = Vector2.ClampMagnitude(outputVector, 1);
-
-        return outputVector;
-    }
 
     private void CalculateHPCanvas()
     {

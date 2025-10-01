@@ -1438,7 +1438,7 @@ MonoBehaviour:
   overviewRotationOffset: {x: -20, y: 0, z: 0}
   overviewFieldOfView: 35
   transitionSpeed: 3
-  cameraLocked: 1
+  cameraLocked: 0
   mouseInfluenceStrength: 2
   mouseInfluenceMaxDistance: 5
   mouseInfluenceSmoothing: 2
@@ -4526,6 +4526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dirCollider: {fileID: 199740044}
   dirVector: {x: 0, y: 0, z: 0}
+  targetWorldPosition: {x: 0, y: 0, z: 0}
   collidingEnemyControllers: []
 --- !u!135 &199740047
 SphereCollider:
@@ -14954,7 +14955,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 740210742}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.42208204, y: -0.046554696, z: 0.021710696, w: 0.9051011}
+  m_LocalRotation: {x: 0.36248377, y: -0.46602455, z: 0.21732493, w: 0.7773008}
   m_LocalPosition: {x: -13.510178, y: 8.260615, z: -21.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -14994,8 +14995,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 0.8564334, g: 0.9813256, b: 0.98155135, a: 1}
-  m_Intensity: 0.99799675
+  m_Color: {r: 0.59316736, g: 0.57203376, b: 0.6231884, a: 1}
+  m_Intensity: 0.8044489
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -36863,8 +36864,7 @@ SpriteRenderer:
   m_SortingLayerID: 1784732549
   m_SortingLayer: 1
   m_SortingOrder: 2
-  m_Sprite: {fileID: -2383607654194538100, guid: 49ba478eb0b56784ea728d4165ef457b,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9e157cec2d5b95d44a101b12b6aa4b52, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

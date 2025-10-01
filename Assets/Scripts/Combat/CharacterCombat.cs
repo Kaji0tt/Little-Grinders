@@ -37,6 +37,8 @@ public class CharacterCombat : MonoBehaviour
 
     private WeaponCombo currentCombo => equippedWeapon?.weaponCombo;
 
+    private GameObject activeTrail;
+
     private float comboCooldownTimer = 0f;
 
     private ItemInstance equippedWeapon => PlayerManager.GetEquippedWeapon();
@@ -87,30 +89,19 @@ public class CharacterCombat : MonoBehaviour
 
     private void HandleAttackInputBuffering()
     {
-        // Während Cooldown KEIN Input speichern!
-        //if (currentState == CombatState.Cooldown)
-        //    return;
-
-        //if(IsMouseOverUIWithIgnores() && Input.GetKeyDown(KeyCode.Mouse0))
-        //Debug.Log("[INPUT BUFFER] Input ignoriert, da über UI");
-
+        // Nur Mouse0 wird gepuffert
         if (Input.GetKeyDown(KeyCode.Mouse0) && !IsMouseOverUIWithIgnores())
+        {
+            if (bufferedInputs.Count < MaxBufferedInputs)
             {
-                if (bufferedInputs.Count < MaxBufferedInputs)
-                {
-                    bufferedInputs.Enqueue(Time.time);
-                    //Debug.Log($"[INPUT BUFFER] Input #{bufferedInputs.Count} gepuffert (Zeit: {Time.time:F2}s) | Max: {MaxBufferedInputs}");
-                }
-                else
-                {
-                    //Debug.Log($"[INPUT BUFFER] Buffer voll! Input ignoriert (Max: {MaxBufferedInputs})");
-                }
+                bufferedInputs.Enqueue(Time.time);
             }
+        }
     }
 
     private void HandleBufferClearOnOtherInput()
     {
-        // Erlaube nur WASD und Mouse0, alles andere leert den Buffer
+        // Alles außer Mouse0 leert den Buffer und unterbricht ggf. den CombatState
         if (Input.anyKeyDown)
         {
             bool isMovementKey =
@@ -120,12 +111,17 @@ public class CharacterCombat : MonoBehaviour
                 Input.GetKeyDown(KeyManager.MyInstance.Keybinds["RIGHT"]);
             bool isAttackKey = Input.GetKeyDown(KeyCode.Mouse0);
 
-            if (!isMovementKey && !isAttackKey)
+            if (!isAttackKey && !isMovementKey)
             {
                 if (bufferedInputs.Count > 0)
                 {
-                    Debug.Log("[INPUT BUFFER] Buffer durch andere Taste geleert!");
                     bufferedInputs.Clear();
+                }
+                currentState = CombatState.Cooldown;
+                // Sofortiger Wechsel zu Cooldown bei WASD
+                if (isMovementKey)
+                {   //Ich bin mir noch unsicher, ob Movement as
+                    //currentState = CombatState.Cooldown;
                 }
             }
         }
@@ -134,153 +130,97 @@ public class CharacterCombat : MonoBehaviour
 
     void PlayerCombatStance()
     {
-        // Debug-Ausgabe für aktuellen State und allgemeine Infos
-        Debug.Log($"[STATE] Current: {currentState} | ComboIndex: {currentComboIndex} | Buffer: {bufferedInputs.Count} | isInAttackStep: {isInAttackStep} | AttackStepTimer: {attackStepTimer:F2}s | ComboWindowTime: {comboWindowTime:F2}s, comboCooldownTime: {comboCooldownTimer:F2}s ");
-
         switch (currentState)
         {
             case CombatState.Idle:
                 isoRenderer.AnimateIdleWeapon();
-                Debug.Log($"[IDLE] STATE - Buffer Count: {bufferedInputs.Count}");
                 if (bufferedInputs.Count > 0)
                 {
-                    Debug.Log($"[IDLE] Verarbeite Input - Buffer vor Dequeue: {bufferedInputs.Count}");
                     bufferedInputs.Dequeue();
-                    Debug.Log($"[IDLE] Buffer nach Dequeue: {bufferedInputs.Count}");
-                    
-                    // Setze AttackStep HIER
                     if (currentCombo != null && currentCombo.comboSteps.Count > currentComboIndex)
                     {
                         currentAttackStep = currentCombo.comboSteps[currentComboIndex];
-                        Debug.Log($"[IDLE → ATTACKING] ComboIndex: {currentComboIndex} | AttackStep gesetzt | Buffer: {bufferedInputs.Count}");
+                        if (currentCombo?.TrailEffectOrDefault != null && isoRenderer.weaponAnimator != null)
+                            activeTrail = Instantiate(currentCombo.TrailEffectOrDefault, isoRenderer.weaponAnimator.transform);
+
                         currentState = CombatState.Attacking;
                     }
-                    else
-                    {
-                        Debug.LogError($"[IDLE] ERROR - Combo/ComboSteps null oder Index außerhalb! Combo: {currentCombo} | Index: {currentComboIndex}");
-                    }
-                }
-                else
-                {
-                    Debug.Log($"[IDLE] Kein Input im Buffer - warte...");
                 }
                 break;
 
             case CombatState.Attacking:
-            
-                Debug.Log($"[ATTACKING] STATE ENTRY - ComboIndex: {currentComboIndex}");
-
-                //Setze isInAttackStep zu Beginn des CombatState.Attacking
                 isInAttackStep = true;
                 isoRenderer.weaponAnimator.SetBool("isAttacking", true);
-                Debug.Log($"[ATTACKING] isInAttackStep gesetzt auf: {isInAttackStep}");
 
-                // Setze Slow für den aktuellen AttackStep
                 slowDuration = 0.5f / playerStats.AttackSpeed.Value;
                 slowTimer = slowDuration;
                 currentSlowValue = -0.5f;
                 isSlowing = true;
-                Debug.Log($"[ATTACKING] Slow gesetzt - Duration: {slowDuration:F2}s | Timer: {slowTimer:F2}s");
 
-                // Führe den Angriff aus
                 attackStepTimer = currentAttackStep.timeForAttackStep;
-                Debug.Log($"[ATTACKING] AttackStepTimer gesetzt auf: {attackStepTimer:F2}s für Step: {currentAttackStep.animationClip.name}");
-                
                 PerformAttack();
-                Debug.Log($"[ATTACKING] PerformAttack() ausgeführt");
 
-                Debug.Log($"[ATTACKING → COMBOWINDOW] Reset ComboWindowsTime");
-                comboWindowTime = 1.0f; // Setze ComboWindowTime zurück
-
-                Debug.Log($"[ATTACKING → COMBOWINDOW] State-Wechsel");
+                comboWindowTime = 1.0f;
                 currentState = CombatState.ComboWindow;
                 break;
 
             case CombatState.ComboWindow:
-                Debug.Log($"[COMBOWINDOW] STATE - isInAttackStep: {isInAttackStep} | AttackStepTimer: {attackStepTimer:F2}s | ComboWindowTime: {comboWindowTime:F2}s | Buffer: {bufferedInputs.Count}");
-                
                 if (isInAttackStep)
                 {
-                    Debug.Log($"[COMBOWINDOW] IN ATTACKSTEP - Timer läuft ab...");
                     attackStepTimer -= Time.deltaTime;
 
                     if (attackStepTimer <= 0f)
                     {
-                        Debug.Log($"[COMBOWINDOW] ATTACKSTEP BEENDET - Timer abgelaufen");
                         comboWindowTime = 1.0f;
-                        Debug.Log($"[COMBOWINDOW] ComboWindowTime zurückgesetzt auf: {comboWindowTime:F2}s");
 
                         if (bufferedInputs.Count > 0)
                         {
-                            Debug.Log($"[COMBOWINDOW] Input im Buffer gefunden - Buffer vor Dequeue: {bufferedInputs.Count}");
                             bufferedInputs.Dequeue();
                             currentComboIndex++;
-                            Debug.Log($"[COMBOWINDOW] ComboIndex erhöht: {currentComboIndex - 1} → {currentComboIndex} | Buffer nach Dequeue: {bufferedInputs.Count}");
 
                             if (currentCombo != null && currentCombo.comboSteps.Count > currentComboIndex)
                             {
                                 currentAttackStep = currentCombo.comboSteps[currentComboIndex];
-                                Debug.Log($"[COMBOWINDOW → ATTACKING] Nächster AttackStep gesetzt: {currentAttackStep.animationClip.name} | ComboIndex: {currentComboIndex}");
                                 currentState = CombatState.Attacking;
                             }
                             else
                             {
-                                Debug.Log($"[COMBOWINDOW → COOLDOWN] Combo beendet - keine weiteren Steps | ComboIndex: {currentComboIndex} | Max Steps: {currentCombo?.comboSteps?.Count}");
                                 currentState = CombatState.Cooldown;
                             }
                         }
                         else
                         {
-                            Debug.Log($"[COMBOWINDOW] Kein Input im Buffer - AttackStep beendet ohne Folge-Input");
+                            // Kein Input im Buffer
                         }
-                        
+
                         isInAttackStep = false;
-                        Debug.Log($"[COMBOWINDOW] isInAttackStep gesetzt auf: {isInAttackStep}");
                     }
                 }
                 else
                 {
-                    Debug.Log($"[COMBOWINDOW] NICHT IN ATTACKSTEP - Combo-Fenster läuft...");
                     comboWindowTime -= Time.deltaTime;
 
                     if (bufferedInputs.Count > 0)
                     {
-                        Debug.Log($"[COMBOWINDOW] Input im Buffer während Combo-Fenster - LastAutoProcessTime: {lastAutoProcessTime:F2}s | Current Time: {Time.time:F2}s");
-                        
                         if (Time.time - lastAutoProcessTime >= 0.1f)
                         {
-                            Debug.Log($"[COMBOWINDOW] Auto-Process Delay abgelaufen - verarbeite Input");
-                            Debug.Log($"[COMBOWINDOW] Buffer vor Dequeue: {bufferedInputs.Count}");
                             bufferedInputs.Dequeue();
                             lastAutoProcessTime = Time.time;
                             currentComboIndex++;
-                            Debug.Log($"[COMBOWINDOW] ComboIndex erhöht: {currentComboIndex - 1} → {currentComboIndex} | Buffer nach Dequeue: {bufferedInputs.Count} | LastAutoProcessTime: {lastAutoProcessTime:F2}s");
 
                             if (currentCombo != null && currentCombo.comboSteps.Count > currentComboIndex)
                             {
                                 currentAttackStep = currentCombo.comboSteps[currentComboIndex];
-                                Debug.Log($"[COMBOWINDOW → ATTACKING] Nächster AttackStep gesetzt: {currentAttackStep.animationClip.name} | ComboIndex: {currentComboIndex}");
                                 currentState = CombatState.Attacking;
-                                break;
                             }
                             else
                             {
-                                Debug.Log($"[COMBOWINDOW → COOLDOWN] Combo beendet - keine weiteren Steps | ComboIndex: {currentComboIndex} | Max Steps: {currentCombo?.comboSteps?.Count}");
                                 currentState = CombatState.Cooldown;
                             }
                         }
-                        else
-                        {
-                            Debug.Log($"[COMBOWINDOW] Auto-Process Delay noch aktiv - warte... (${(0.1f - (Time.time - lastAutoProcessTime)):F2}s verbleibend)");
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log($"[COMBOWINDOW] Kein Input im Buffer - Combo-Fenster läuft weiter...{comboWindowTime:F2}s verbleibend");
                     }
                 }
-                
-                // Movement-Slow-Logic (unverändert)
+
                 if (isSlowing)
                 {
                     slowTimer -= Time.deltaTime;
@@ -294,42 +234,38 @@ public class CharacterCombat : MonoBehaviour
                     if (t <= 0)
                     {
                         isSlowing = false;
-                        Debug.Log($"[COMBOWINDOW] Slowing beendet");
                     }
                 }
 
-                // Combo-Fenster abgelaufen
                 if (!isInAttackStep && comboWindowTime <= 0)
                 {
-                    Debug.Log($"[COMBOWINDOW → COOLDOWN] Combo-Fenster abgelaufen ({comboWindowTime:F2}s) - lösche {bufferedInputs.Count} gepufferte Inputs");
-                    bufferedInputs.Clear(); // Buffer komplett löschen
+                    bufferedInputs.Clear();
                     currentState = CombatState.Cooldown;
                 }
                 break;
 
             case CombatState.Cooldown:
-                //isoRenderer.AnimateIdleWeapon();
                 isoRenderer.weaponAnimator.SetBool("isAttacking", false);
-                Debug.Log($"[COOLDOWN] STATE - Timer: {comboCooldownTimer:F2}s | Buffer: {bufferedInputs.Count}");
-                
                 playerStats.MovementSpeed.RemoveModifier(attackSlow);
 
-                // Starte Cooldown-Timer, falls noch nicht gestartet
+                if (activeTrail != null)
+                {
+                    Destroy(activeTrail);
+                    activeTrail = null;
+                }
+
                 if (comboCooldownTimer <= 0f)
                 {
                     comboCooldownTimer = currentCombo?.comboCooldown ?? 1f;
-                    Debug.Log($"[COOLDOWN] Timer gestartet für {comboCooldownTimer:F2}s");
                 }
                 else
                 {
                     comboCooldownTimer -= Time.deltaTime;
-                    Debug.Log($"[COOLDOWN] Timer läuft... {comboCooldownTimer:F2}s verbleibend");
-                    
+
                     if (comboCooldownTimer <= 0f)
                     {
-                        bufferedInputs.Clear(); // Buffer löschen
-                        Debug.Log($"[COOLDOWN → IDLE] Cooldown beendet - ComboIndex zurückgesetzt: {currentComboIndex} → 0 | Buffer geleert");
-                        currentComboIndex = 0; // ComboIndex zurücksetzen!
+                        bufferedInputs.Clear();
+                        currentComboIndex = 0;
                         currentState = CombatState.Idle;
                         comboCooldownTimer = 0f;
                     }
@@ -337,11 +273,9 @@ public class CharacterCombat : MonoBehaviour
                 break;
 
             case CombatState.Casting:
-                Debug.Log($"[CASTING] STATE - Noch nicht implementiert");
                 break;
 
             default:
-                Debug.LogError($"[STATE] UNKNOWN STATE: {currentState}");
                 break;
         }
     }

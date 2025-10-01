@@ -40,7 +40,6 @@ public class AudioManager : MonoBehaviour
         //Falls eine neue Szene geladen wird:
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-
         //Setze die neuen Slider
         AwakeSetSliders();
         
@@ -285,43 +284,45 @@ public class AudioManager : MonoBehaviour
     }
     #endregion
 
-
     /// <summary>
     /// Spielt einen Sound über die AudioSource einer Entität ab.
     /// </summary>
     public void PlayEntitySound(string groupKey, GameObject entity)
     {
-        AudioClip clip = GetClip(groupKey);
-        var audioSource = entity.GetComponent<AudioSource>();
-        /*
         if (entity == null)
         {
-            Debug.LogWarning("[AudioManager] PlayEntitySound: entity ist null!");
             return;
         }
-
+        
         AudioClip clip = GetClip(groupKey);
+        
         if (clip == null)
         {
-            Debug.LogWarning($"[AudioManager] PlayEntitySound: Kein Clip für '{groupKey}' gefunden.");
             return;
         }
-
+        
         var audioSource = entity.GetComponent<AudioSource>();
+        
         if (audioSource == null)
         {
-            Debug.LogWarning($"[AudioManager] PlayEntitySound: Keine AudioSource an {entity.name} gefunden.");
-            return;
+            audioSource = entity.AddComponent<AudioSource>();
+            
+            // Standard-Einstellungen für neue AudioSource
+            audioSource.volume = 1.0f;
+            audioSource.pitch = 1.0f;
+            audioSource.spatialBlend = 0.5f; // 3D Sound
+            audioSource.playOnAwake = false;
         }
-        if (audioSource != audioSource.enabled)
+        
+        // Prüfe AudioSource Zustand
+        if (!audioSource.enabled)
         {
-            Debug.LogWarning($"[AudioManager] PlayEntitySound: AudioSource an {entity.name} ist deaktiviert.");
             return;
         }
-        */
-
-        if (audioSource == enabled)
-            audioSource.PlayOneShot(clip);
+        
+        // Spiele Sound ab
+        audioSource.clip = clip;
+        audioSource.Play();
     }
 
     /// <summary>

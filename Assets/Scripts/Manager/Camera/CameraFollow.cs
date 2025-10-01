@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float transitionSpeed = 3f;
 
     [Header("Camera Lock Settings")]
-    [SerializeField] private bool cameraLocked = true; // Standard: Kamera ist gelockt
+    [SerializeField] private bool cameraLocked = false; // Standard: Kamera ist nicht gelockt
     [SerializeField] private float mouseInfluenceStrength = 2f; // Wie stark der Einfluss ist
     [SerializeField] private float mouseInfluenceMaxDistance = 5f; // Maximale Entfernung vom Player
     [SerializeField] private float mouseInfluenceSmoothing = 2f; // Wie schnell sich die Kamera anpasst
@@ -173,11 +173,6 @@ public class CameraFollow : MonoBehaviour
 
         Vector2 screenOffset = mouseScreenPos - Vector2.one * 0.5f;
 
-        // Debug-Output
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            Debug.Log($"Mouse Screen: {mouseScreenPos}, Offset: {screenOffset}");
-        }
 
         // WICHTIG: Verwende WELT-Koordinaten, nicht lokale!
         // Da die Kamera im Player-Objekt ist und dessen Rotation erbt,

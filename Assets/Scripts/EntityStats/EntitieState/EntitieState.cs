@@ -171,6 +171,9 @@ public class AttackState : EntitieState
 
     public override void Enter()
     {
+        //Setze das Angriffsverhalten
+        controller.attackBehavior?.Enter(controller);
+
         //attackCooldown = 
         //controller.StopMoving();
         controller.PerformAttack();
@@ -189,12 +192,18 @@ public class AttackState : EntitieState
 
 public override void Update()
 {
+    // Hier wird das Angriffsverhalten aktualisiert
+    //controller.myIsoRenderer.ToggleActionState(true);
+    //controller.myIsoRenderer.Play(AnimationState.Attack);
+    //controller.myIsoRenderer.UpdateAnimation();
+    controller.attackBehavior?.Update(controller);
+
     // NEU: Sofort prüfen, ob Spieler noch in Reichweite ist
-    if (!controller.IsPlayerInAttackRange())
-    {
-        controller.TransitionTo(new IdleState(controller));
-        return;
-    }
+        if (!controller.IsPlayerInAttackRange())
+        {
+            controller.TransitionTo(new IdleState(controller));
+            return;
+        }
 
     attackTime -= Time.deltaTime;
 
@@ -204,19 +213,23 @@ public override void Update()
         return;
     }
 
-    if (attackTime <= 0f)
-    {
-        // Wieder angreifen oder zurück zu Chase
-        if (controller.IsPlayerInAttackRange())
+        // Wenn die Angriffsanimation vorbei ist, zurück zu Idle oder erneut angreifen
+        // Wird derzeit ausgeklammert, da dies über AttackBehavior gesteuert wird
+        /*
+        if (attackTime <= 0f)
         {
-           // Debug.Log("Create new Attack from Update of AttackState");
-            controller.TransitionTo(new AttackState(controller));
+            // Wieder angreifen oder zurück zu Chase
+            if (controller.IsPlayerInAttackRange())
+            {
+                // Debug.Log("Create new Attack from Update of AttackState");
+                controller.TransitionTo(new AttackState(controller));
+            }
+            else
+            {
+                controller.TransitionTo(new IdleState(controller));
+            }
         }
-        else
-        {
-            controller.TransitionTo(new IdleState(controller));
-        }
-    }
+        */
 }
 }
 
@@ -271,13 +284,21 @@ public class DeadState : EntitieState
     {
         controller.StopMoving();
         controller.hpBar.SetActive(false);
-        //controller.myIsoRenderer.ToggleActionState(false);
         controller.myIsoRenderer.Play(AnimationState.Die);
+
         if (AudioManager.instance != null)
         {
             string soundName = controller.GetBasePrefabName() + "_Die";
             AudioManager.instance.PlayEntitySound(soundName, controller.gameObject);
         }
+
+            // XP Orbs spawnen
+        int xpToGive = controller.mobStats.Get_xp();
+        if (xpToGive > 0)
+        {
+            XP_OrbSpawner.SpawnXPOrbs(controller.transform.position, xpToGive);
+        }
+
         controller.mobStats.Die();
     }
 }
