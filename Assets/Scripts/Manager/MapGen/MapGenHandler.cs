@@ -33,6 +33,9 @@ public class MapGenHandler : MonoBehaviour
 
     public GameObject[] fieldPosSave { get { return fieldsPosObj; } private set { fieldsPosObj = value; } }
 
+    //Flag to indicate if we're loading a map with saved interactables
+    public bool isLoadingExistingMap { get; private set; } = false;
+
     //public FieldType[] saveFieldTypes { private set; get; }
 
 
@@ -167,6 +170,9 @@ public class MapGenHandler : MonoBehaviour
         {
             Debug.Log($"[LoadMap] Map gefunden - Theme: {map.mapTheme}");
             
+            // Set flag to indicate we're loading an existing map
+            isLoadingExistingMap = true;
+            
             //Load the according theme to Prefab-Collection
             Debug.Log("[LoadMap] PopulatePrefabCollection mit Map...");
             PrefabCollection.instance.PopulatePrefabCollection(map);
@@ -185,11 +191,18 @@ public class MapGenHandler : MonoBehaviour
             Debug.Log("[LoadMap] LoadPrefabs...");
             LoadPrefabs(spawnPoint);
 
+            //Restore saved interactables
+            Debug.Log("[LoadMap] RestoreInteractables...");
+            map.RestoreInteractables();
+
             //Build NavMesh for Enemys
             Debug.Log("[LoadMap] BuildNavMesh...");
             navMeshSurface.BuildNavMesh();
 
             Debug.Log("[LoadMap] Map erfolgreich aus Save Data geladen");
+            
+            // Reset flag after loading is complete
+            isLoadingExistingMap = false;
         }
         else
         {

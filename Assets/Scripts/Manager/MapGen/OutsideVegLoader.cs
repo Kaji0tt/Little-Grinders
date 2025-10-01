@@ -724,6 +724,13 @@ public class OutsideVegLoader : MonoBehaviour
 
     private void LoadInteractable()
     {
+        // Skip interactable generation if we're loading an existing map with saved interactables
+        if (MapGenHandler.instance != null && MapGenHandler.instance.isLoadingExistingMap)
+        {
+            Debug.Log("[OutsideVegLoader] Skipping interactable generation - loading existing map");
+            return;
+        }
+        
         for (int i = 0; i < interactableCollection.Length; i++)
         {
             if(Random.Range(0, 15) == 1)
