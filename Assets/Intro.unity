@@ -28132,8 +28132,7 @@ SpriteRenderer:
   m_SortingLayerID: 1784732549
   m_SortingLayer: 1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 7899164024728940436, guid: 49ba478eb0b56784ea728d4165ef457b,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9e157cec2d5b95d44a101b12b6aa4b52, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -34112,7 +34111,7 @@ MonoBehaviour:
   overviewRotationOffset: {x: -20, y: 0, z: 0}
   overviewFieldOfView: 35
   transitionSpeed: 3
-  cameraLocked: 1
+  cameraLocked: 0
   mouseInfluenceStrength: 2
   mouseInfluenceMaxDistance: 5
   mouseInfluenceSmoothing: 2
@@ -71605,7 +71604,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 0.9811321, g: 0.9344567, b: 0.8746885, a: 1}
-  m_Intensity: 0.8661264
+  m_Intensity: 0.8789725
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -71667,7 +71666,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734299854}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38289988, y: -0.3838075, z: 0.17900185, w: 0.8209981}
+  m_LocalRotation: {x: 0.3869747, y: -0.36459693, z: 0.17004888, w: 0.8297006}
   m_LocalPosition: {x: -13.510178, y: 8.260615, z: -21.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -84244,7 +84243,7 @@ PrefabInstance:
     - target: {fileID: 4264188779855831691, guid: f4cd5eacd5e33ad408a5e070a59ba18c,
         type: 3}
       propertyPath: xp
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4264188779855831691, guid: f4cd5eacd5e33ad408a5e070a59ba18c,
         type: 3}

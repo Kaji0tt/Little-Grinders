@@ -275,9 +275,9 @@ public class MobStats : MonoBehaviour
         if (collider != null)
             Destroy(collider);
 
-        // XP geben
-        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
-        playerStats.Gain_xp(xp);
+        // XP geben - vorerst deaktiveiren, da XP nur noch über Orbs erscheinen soll.
+        //PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
+        //playerStats.Gain_xp(xp);
 
         if (this.level >= 1)
         {
