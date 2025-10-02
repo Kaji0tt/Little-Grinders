@@ -206,7 +206,7 @@ public class MapGenHandler : MonoBehaviour
             var fieldPos = fieldsPosObj[i].GetComponent<FieldPos>();
             int x = fieldPos.ArrayPosX;
             int z = fieldPos.ArrayPosZ;
-            fieldPos.Type = (FieldType)layout[x][z];
+            fieldPos.Type = (FieldType)layout[z][x];
         }
     }
 
