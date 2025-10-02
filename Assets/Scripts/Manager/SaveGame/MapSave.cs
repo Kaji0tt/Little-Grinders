@@ -32,7 +32,6 @@ public class MapSave
     //For Enemy[] loadedEnemies FindObjectsOfType<Enemy>
 
 
-
     //public float [][][] enemyPosition;
 
 
@@ -59,7 +58,6 @@ public class MapSave
 
             //Calculate Map-Level in dependency of floats
             mapLevel = Mathf.Abs(v2.x) > Mathf.Abs(v2.y) ? (int)Mathf.Abs(v2.x) : (int)Mathf.Abs(v2.y);
-
         }
 
         gotTeleporter = false;
@@ -68,9 +66,9 @@ public class MapSave
         if(PrefabCollection.instance != null)
         mapTheme = PrefabCollection.instance.worldType;
 
+        // Sammle alle Interactables der aktuellen Map
+        SaveCurrentMapInteractables();
     }
-
-
 
     private void CalculateMapLevel()
     {
@@ -82,7 +80,32 @@ public class MapSave
         
     }
 
+    // NEU: Interactables für diese Map
+    public List<InteractableSaveData> mapInteractables = new List<InteractableSaveData>();
 
+    private void SaveCurrentMapInteractables()
+    {
+        if (InteractableManager.instance != null)
+        {
+            var allStates = InteractableManager.instance.GetAllStates();
+            
+            // Filtere nur Interactables der aktuellen Map (basierend auf Position oder Map-ID)
+            foreach (var state in allStates.Values)
+            {
+                if (IsInteractableOnCurrentMap(state))
+                {
+                    mapInteractables.Add(state);
+                }
+            }
+        }
+    }
+    
+    private bool IsInteractableOnCurrentMap(InteractableSaveData data)
+    {
+        // Implementiere Logik um zu prüfen ob Interactable zur aktuellen Map gehört
+        // z.B. über Position oder Map-spezifische IDs
+        return true; // Placeholder
+    }
 }
 
 

@@ -48,11 +48,8 @@ public class GlobalMap : MonoBehaviour
             {
                 return map;
             }
-            return null;
-
         }
         return null;
-
     }
 
     public MapSave GetMapByCords(Vector2 cords)
@@ -63,8 +60,6 @@ public class GlobalMap : MonoBehaviour
             {
                 return map;
             }
-
-
         }
 
         Debug.Log("Could not find a Map with Cords: " + cords);
@@ -74,22 +69,61 @@ public class GlobalMap : MonoBehaviour
 
     public void CreateAndSaveNewMap()
     {
-
         MapSave newMap = new MapSave();
 
         for (int i = 0; i < 81; i++)
         {
             newMap.fieldType[i] = MapGenHandler.instance.fieldPosSave[i].GetComponent<FieldPos>().Type;
-
-            //Debug.Log(fieldType[i]);
         }
 
         currentMap = newMap;
-
         exploredMaps.Add(newMap);
 
         OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);
     }
 
+    /// <summary>
+    /// NEU: Generiert alle Nachbar-Maps um die aktuelle Position
+    /// </summary>
+    public void GenerateNeighborMaps(int radius = 1)
+    {
+        Debug.Log($"[GlobalMap] Generiere Nachbar-Maps mit Radius {radius} um Position {currentPosition}");
+        
+        List<Vector2> newMapPositions = new List<Vector2>();
+        
+        // Generiere alle Positionen im angegebenen Radius
+        for (int x = -radius; x <= radius; x++)
+        {
+            for (int y = -radius; y <= radius; y++)
+            {
+                Vector2 neighborPos = new Vector2(currentPosition.x + x, currentPosition.y + y);
+                
+                // Prüfe ob Map bereits existiert
+                if (GetMapByCords(neighborPos) == null)
+                {
+                    newMapPositions.Add(neighborPos);
+                }
+            }
+        }
+        
+        // Generiere alle neuen Maps
+        foreach (Vector2 mapPos in newMapPositions)
+        {
+            MapSave newMap = MapGenHandler.GenerateMapDataOnly((int)mapPos.x, (int)mapPos.y);
+            exploredMaps.Add(newMap);
+        }
+        
+        Debug.Log($"[GlobalMap] {newMapPositions.Count} neue Nachbar-Maps generiert");
+        
+        // Benachrichtige UI über Änderungen
+        OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);
+    }
 
+    /// <summary>
+    /// NEU: Prüft ob neue Nachbar-Maps generiert werden müssen
+    /// </summary>
+    public void CheckAndGenerateNewNeighbors()
+    {
+        GenerateNeighborMaps(1);
+    }
 }

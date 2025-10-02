@@ -85,7 +85,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollRectLinker.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\ParticleCamScript.cs" />
-    <Compile Include="Assets\Scripts\Manager\World\Interactables\Inter_Totem.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UILineRenderer.cs" />
     <Compile Include="Assets\Scripts\Tutorial\TutorialLootBox.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ClickThrough.cs" />
@@ -96,7 +95,6 @@
     <Compile Include="Assets\Scripts\Player\IsometricPlayer.cs" />
     <Compile Include="Assets\Scripts\Inventory\Equipment.cs" />
     <Compile Include="Assets\Scripts\Manager\SceneManagement\SceneLoader.cs" />
-    <Compile Include="Assets\Resources\WorldPrefabs\Interactable\Int_Totem.cs" />
     <Compile Include="Assets\Scripts\TroubleShootPlayerPrefs.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\IMoveable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UICornerCut.cs" />
@@ -120,6 +118,7 @@
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Shadowstep.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\PaginationManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\SuperellipsePoints.cs" />
+    <Compile Include="Assets\Scripts\Manager\MapGen\MapLayoutGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\IsometricRenderer.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Schuhe.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buff.cs" />
@@ -208,10 +207,12 @@
     <Compile Include="Assets\Scripts\TalentSystem\AbilityData.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\SVBoxSlider.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\CloneItem.cs" />
+    <Compile Include="Assets\Scripts\Manager\World\InteractableManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\BezierPath.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\BoundTooltip\BoundTooltipTrigger.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\CooldownManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\StepperSide.cs" />
+    <Compile Include="Assets\Scripts\Manager\World\Interactables\BaseInteractable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UICircle.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\Circle.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\PPVolumeManager.cs" />
@@ -280,7 +281,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\BoxSlider.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_ScrollRectOcclusion.cs" />
     <Compile Include="Assets\Scripts\AbilityEditor.cs" />
-    <Compile Include="Assets\Scripts\Manager\World\Interactable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorPickerControl.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
@@ -295,6 +295,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\KeyBindButton.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\MapSave.cs" />
+    <Compile Include="Assets\Scripts\Manager\MapGen\MapSpawnHandler.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\Core\FancyCell.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorPickerPresets.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\TalentTree\TalentTreeGenerator.cs" />
@@ -345,7 +346,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorImage.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\BoundTooltip\BoundTooltipItem.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Ability.cs" />
-    <Compile Include="Assets\Scripts\Manager\World\Interactables\Lootbox.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\SegmentedControl.cs" />
     <Compile Include="Assets\Scripts\Manager\World\XP_OrbSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
@@ -359,6 +359,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\DropDownListButton.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\ScrollRect\FancyScrollRectContext.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_BarMultiple.cs" />
+    <Compile Include="Assets\Scripts\Manager\SaveGame\InteractableSaveData.cs" />
     <Compile Include="Assets\Scripts\Manager\Sound\Sound.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\UI_Btn_Listener.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\InputFieldEnterSubmit.cs" />
@@ -421,6 +422,7 @@
     <Compile Include="Assets\CodeMonkey\Assets.cs" />
     <Compile Include="Assets\Resources\VFX\Prefabs\Level_Up_FX.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\IEquipableSlot.cs" />
+    <Compile Include="Assets\Scripts\Manager\World\Interactables\TotemInteractable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\Accordion\Tweening\TweenRunner.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\DebugPlayerPref.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\IScrollSnap.cs" />
