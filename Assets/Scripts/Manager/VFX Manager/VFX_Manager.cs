@@ -54,6 +54,11 @@ public class VFX_Manager : MonoBehaviour
             return;
         }
         
+        // Enhanced feedback: Screen shake for level up
+        if (ScreenShakeManager.Instance != null)
+        {
+            ScreenShakeManager.Instance.TriggerShake(ScreenShakeManager.ShakeType.Extreme);
+        }
 
         if (PlayerManager.instance.playerStats != null)
         {

@@ -235,6 +235,12 @@ public class IsometricPlayer : MonoBehaviour //,DeBuffSystem
         XpImage.fillAmount = XpImage.fillAmount = (playerStats.LevelUp_need() > 0f) ? (float)playerStats.xp / playerStats.LevelUp_need() : 0f;
         ui_Level.text = playerStats.level.ToString();
         PPVolumeManager.instance.LowHealthPP(HpImage.fillAmount);
+        
+        // Enhanced feedback: Update health overlay
+        if (FeedbackSystemManager.Instance != null)
+        {
+            FeedbackSystemManager.Instance.UpdateHealthPercent(HpImage.fillAmount);
+        }
         //Postprocessing for LowHealth
 
 
