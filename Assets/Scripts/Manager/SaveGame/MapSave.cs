@@ -37,7 +37,12 @@ public class MapSave
 
     //public bool[][] isMapExplored = new bool[][] { };
 
-    public bool gotTeleporter;
+    // GEÄNDERT: gotTeleporter durch isCleared ersetzt
+    public bool isCleared = false;
+    
+    // NEU: Ob diese Map bereits besucht wurde
+    public bool isVisited = false;
+    
     //Map Level
     public int mapLevel;
 
@@ -59,7 +64,6 @@ public class MapSave
     //For Enemy[] loadedEnemies FindObjectsOfType<Enemy>
 
 
-
     //public float [][][] enemyPosition;
 
 
@@ -72,9 +76,6 @@ public class MapSave
     ///
     public MapSave()
     {
-        //CalculateMapLevel();
-
-
         //Save the Map Coordinates
         if(GlobalMap.instance != null)
         {
@@ -86,114 +87,35 @@ public class MapSave
 
             //Calculate Map-Level in dependency of floats
             mapLevel = Mathf.Abs(v2.x) > Mathf.Abs(v2.y) ? (int)Mathf.Abs(v2.x) : (int)Mathf.Abs(v2.y);
-
         }
 
-        gotTeleporter = false;
+        isCleared = false;
+        isVisited = true; // Diese Map wird gerade erstellt/besucht
 
         //Fetch the current Theme and save it
         if(PrefabCollection.instance != null)
         mapTheme = PrefabCollection.instance.worldType;
 
+        // NEU: Nur für aktuell geladene Maps Interactables sammeln
+        // Für pre-generierte Maps passiert das nicht
+        if (MapGenHandler.instance != null && MapGenHandler.instance.fieldPosSave != null)
+        {
+            SaveCurrentMapInteractables();
+        }
     }
 
-    /// <summary>
-    /// Collects all interactables currently in the scene and saves their state
-    /// </summary>
-    public void SaveInteractables()
+    // NEU: Konstruktor für pre-generierte Maps (ohne aktuelle Szene)
+    public MapSave(int x, int y, int level, WorldType theme, FieldType[] fieldTypes)
     {
-        interactables.Clear();
-        
-        // Find all interactables in the scene
-        Interactable[] sceneInteractables = UnityEngine.Object.FindObjectsOfType<Interactable>();
-        
-        foreach (Interactable interactable in sceneInteractables)
-        {
-            // Get the interactable's name without "(Clone)" suffix
-            string interactableType = interactable.gameObject.name.Replace("(Clone)", "").Trim();
-            
-            // Create save data for this interactable
-            InteractableSave saveData = new InteractableSave(
-                interactable.transform.position,
-                interactableType,
-                interactable.interactableUsed
-            );
-            
-            interactables.Add(saveData);
-        }
-        
-        Debug.Log($"[MapSave] Saved {interactables.Count} interactables");
+        mapIndexX = x;
+        mapIndexY = y;
+        mapLevel = level;
+        mapTheme = theme;
+        fieldType = fieldTypes ?? new FieldType[81];
+        isCleared = false;
+        isVisited = false; // Generierte Maps sind erstmal unbesucht
+        mapInteractables = new List<InteractableSaveData>();
     }
-
-    /// <summary>
-    /// Restores saved interactables to the scene
-    /// </summary>
-    public void RestoreInteractables()
-    {
-        if (interactables == null || interactables.Count == 0)
-        {
-            Debug.Log("[MapSave] No saved interactables to restore");
-            return;
-        }
-
-        PrefabCollection prefabCollection = PrefabCollection.instance;
-        if (prefabCollection == null)
-        {
-            Debug.LogError("[MapSave] PrefabCollection not found, cannot restore interactables");
-            return;
-        }
-
-        GameObject envParent = MapGenHandler.instance?.envParentObj;
-        if (envParent == null)
-        {
-            Debug.LogError("[MapSave] Environment parent object not found");
-            return;
-        }
-
-        foreach (InteractableSave saveData in interactables)
-        {
-            // Get the prefab for this interactable type
-            GameObject prefab = prefabCollection.GetInteractableByName(saveData.interactableType);
-            
-            // Instantiate the interactable at the saved position
-            GameObject restoredInteractable = UnityEngine.Object.Instantiate(
-                prefab, 
-                saveData.GetPosition(), 
-                Quaternion.identity
-            );
-            
-            // Set the parent to the environment parent
-            restoredInteractable.transform.SetParent(envParent.transform);
-            
-            // Restore the used state
-            Interactable interactableComponent = restoredInteractable.GetComponent<Interactable>();
-            if (interactableComponent != null)
-            {
-                interactableComponent.interactableUsed = saveData.isUsed;
-                
-                // If it was used, update the sprite accordingly
-                if (saveData.isUsed && interactableComponent.newSprite != null)
-                {
-                    SpriteRenderer spriteRenderer = restoredInteractable.GetComponentInParent<SpriteRenderer>();
-                    if (spriteRenderer == null)
-                    {
-                        spriteRenderer = restoredInteractable.GetComponentInChildren<SpriteRenderer>();
-                    }
-                    if (spriteRenderer != null)
-                    {
-                        spriteRenderer.sprite = interactableComponent.newSprite;
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"[MapSave] Could not find SpriteRenderer for used interactable: {saveData.interactableType}");
-                    }
-                }
-            }
-        }
-        
-        Debug.Log($"[MapSave] Restored {interactables.Count} interactables");
-    }
-
 
     private void CalculateMapLevel()
     {
@@ -205,7 +127,32 @@ public class MapSave
         
     }
 
+    // NEU: Interactables für diese Map
+    public List<InteractableSaveData> mapInteractables = new List<InteractableSaveData>();
 
+    private void SaveCurrentMapInteractables()
+    {
+        if (InteractableManager.instance != null)
+        {
+            var allStates = InteractableManager.instance.GetAllStates();
+            
+            // Filtere nur Interactables der aktuellen Map (basierend auf Position oder Map-ID)
+            foreach (var state in allStates.Values)
+            {
+                if (IsInteractableOnCurrentMap(state))
+                {
+                    mapInteractables.Add(state);
+                }
+            }
+        }
+    }
+    
+    private bool IsInteractableOnCurrentMap(InteractableSaveData data)
+    {
+        // Implementiere Logik um zu prüfen ob Interactable zur aktuellen Map gehört
+        // z.B. über Position oder Map-spezifische IDs
+        return true; // Placeholder
+    }
 }
 
 

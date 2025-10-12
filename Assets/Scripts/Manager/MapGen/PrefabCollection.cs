@@ -231,7 +231,28 @@ public class PrefabCollection : MonoBehaviour
     public GameObject GetRandomInteractable()
     {
         return interactablesPF[Random.Range(0, interactablesPF.Length)];
+    }
 
+    // NEU: Methode um gezielt ein Totem zu bekommen
+    public GameObject GetTotemPrefab()
+    {
+        // Suche in Interactables nach einem Totem
+        foreach (GameObject interactable in interactablesPF)
+        {
+            if (interactable.GetComponent<TotemInteractable>() != null)
+            {
+                return interactable;
+            }
+        }
+        
+        Debug.LogError("Kein Totem-Prefab gefunden!");
+        return null;
+    }
+
+    // NEU: Public getter für interactables (für OutsideVegLoader)
+    public GameObject[] GetInteractablesPF()
+    {
+        return interactablesPF;
     }
 
     /// <summary>

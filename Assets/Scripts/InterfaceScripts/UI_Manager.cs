@@ -476,10 +476,38 @@ public class UI_Manager : MonoBehaviour
     {
         if (canvas == null)
             CheckForUI_Elements();
+            
+        // Prüfe ob das Menü geöffnet wird (von Alpha 0 auf 1)
+        bool isOpening = canvas.alpha == 0;
+        
         canvas.alpha = canvas.alpha > 0 ? 0 : 1; 
         canvas.blocksRaycasts = canvas.blocksRaycasts == true ? false : true;
+        
+        // NEU: Reset GlobalMap View beim Öffnen
+        if (isOpening && canvas == mapTab)
+        {
+            ResetGlobalMapView();
+        }
     }
 
+    // NEU: Methode zum Zurücksetzen der GlobalMap Ansicht
+    private void ResetGlobalMapView()
+    {
+        // Finde das UI_GlobalMap GameObject und dessen InterfaceDragging Komponente
+        if (mapTab != null)
+        {
+            InterfaceDragging mapDragging = mapTab.GetComponent<InterfaceDragging>();
+            if (mapDragging != null)
+            {
+                mapDragging.ResetViewToInitial();
+                Debug.Log("[UI_Manager] GlobalMap View zurückgesetzt");
+            }
+            else
+            {
+                Debug.LogWarning("[UI_Manager] InterfaceDragging Komponente nicht gefunden auf mapTab");
+            }
+        }
+    }
 
 
 

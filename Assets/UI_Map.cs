@@ -12,11 +12,14 @@ public class UI_Map : MonoBehaviour, IPointerEnterHandler, IDescribable, IPointe
 
     public int mapLevel { get; private set; }
 
-    public bool gotTeleporter { get; private set; }
+    public bool isCleared { get; private set; }
 
     public WorldType mapTheme { get; private set; }
 
     private bool isLoading = false;
+    
+    // NEU: Ob diese Map bereits besucht wurde
+    private bool isExplored = false;
 
     public void PopulateMap(MapSave map)
     {
@@ -28,16 +31,21 @@ public class UI_Map : MonoBehaviour, IPointerEnterHandler, IDescribable, IPointe
 
         levelText.text = mapLevel.ToString();
 
-        gotTeleporter = map.gotTeleporter;
+        isCleared = map.isCleared;
 
         mapTheme = map.mapTheme;
+        
+        // NEU: Prüfe ob Map bereits besucht wurde
+        isExplored = map.isVisited;
 
         // Set random sprite based on theme
         SetRandomThemeSprite();
 
-        if (gotTeleporter)
+        if (isCleared)
             ChangeSprite();
-
+            
+        // NEU: Setze Transparenz für unbesuchte Maps
+        SetTransparencyBasedOnExploration();
     }
 
     private void SetRandomThemeSprite()
@@ -85,9 +93,44 @@ public class UI_Map : MonoBehaviour, IPointerEnterHandler, IDescribable, IPointe
     {
         Image image = GetComponent<Image>();
 
-        // Keep the theme sprite but change the color to indicate teleporter
-        image.color = Color.magenta;
-
+        // GEÄNDERT: Grüne Farbe für geklärte Maps
+        image.color = Color.green;
+    }
+    
+    // NEU: Setze Transparenz basierend auf Erkundungsstatus
+    private void SetTransparencyBasedOnExploration()
+    {
+        Image image = GetComponent<Image>();
+        Text levelText = transform.GetComponentInChildren<Text>();
+        
+        if (!isExplored)
+        {
+            // Unbesuchte Maps: 50% Transparenz
+            Color imageColor = image.color;
+            imageColor.a = 0.5f;
+            image.color = imageColor;
+            
+            if (levelText != null)
+            {
+                Color textColor = levelText.color;
+                textColor.a = 0.5f;
+                levelText.color = textColor;
+            }
+        }
+        else
+        {
+            // Besuchte Maps: Vollständig sichtbar
+            Color imageColor = image.color;
+            imageColor.a = 1f;
+            image.color = imageColor;
+            
+            if (levelText != null)
+            {
+                Color textColor = levelText.color;
+                textColor.a = 1f;
+                levelText.color = textColor;
+            }
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -97,13 +140,16 @@ public class UI_Map : MonoBehaviour, IPointerEnterHandler, IDescribable, IPointe
 
     public string GetDescription()
     {
-        string desc = ("Maplevel: " + mapLevel + "\nTheme: " + mapTheme + "\nPortal found: " + gotTeleporter);
+        string explorationStatus = isExplored ? "Explored" : "Unexplored";
+        string clearStatus = isCleared ? "Cleared!" : "Eclipsed."; // NEU: Angepasste Beschreibung
+        string desc = ("Maplevel: " + mapLevel + "\nTheme: " + mapTheme + "\nStatus: " + clearStatus + "\nExploration: " + explorationStatus);
         return desc;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(gotTeleporter && !isLoading)
+        // NEU: Nur erkundete Maps sind anklickbar (unabhängig vom Cleared-Status)
+        if(!isLoading && isExplored)
         {
             MapGenHandler.instance.ResetThisMap();
             MapGenHandler.instance.LoadMap(GlobalMap.instance.GetMapByCords(mapCords), GlobalMap.instance.lastSpawnpoint);

@@ -10,15 +10,37 @@ using System.Collections;
 public class AudioManager : MonoBehaviour
 {
     private Dictionary<string, List<Sound>> soundGroups = new Dictionary<string, List<Sound>>();
+    
+    // NEU: Aktive Sound-Verwaltung
+    private Dictionary<string, List<ActiveSound>> activeSounds = new Dictionary<string, List<ActiveSound>>();
+    private List<ActiveSound> allActiveSounds = new List<ActiveSound>();
+    
     public static AudioManager instance;
 
     public Slider interfaceSlider, musicSlider, atmosphereSlider, effectSlider;
 
     private bool atmoPlaying = false;
-
     float timeStamp;
-
     bool musicPlaying = false;
+
+    // NEU: Struktur für aktive Sounds
+    [System.Serializable]
+    public class ActiveSound
+    {
+        public string groupKey;
+        public AudioSource source;
+        public GameObject tempGameObject; // Für temporäre AudioSources
+        public bool isLooping;
+        public bool isTemporary; // Wird automatisch zerstört wenn fertig
+        
+        public ActiveSound(string key, AudioSource audioSource, bool loop = false, bool temporary = true)
+        {
+            groupKey = key;
+            source = audioSource;
+            isLooping = loop;
+            isTemporary = temporary;
+        }
+    }
 
     void Awake()
     {
@@ -42,6 +64,9 @@ public class AudioManager : MonoBehaviour
 
         //Setze die neuen Slider
         AwakeSetSliders();
+        
+        // NEU: Starte Sound-Cleanup Coroutine
+        StartCoroutine(CleanupFinishedSounds());
         
         // NEU: Spiele Hauptmenü-Musik direkt hier ab
         if (SceneManager.GetActiveScene().buildIndex == 0)
@@ -114,20 +139,61 @@ public class AudioManager : MonoBehaviour
         return clipName;
     }
 
+
+    #region Sound Verwaltung
     /// <summary>
     /// Spielt einen zufälligen Sound aus der angegebenen Gruppe ab.
     /// </summary>
     public void PlaySound(string groupKey)
+    {
+        PlaySound(groupKey, false, false);
+    }
+
+    /// <summary>
+    /// Spielt einen Sound mit erweiterten Optionen ab.
+    /// </summary>
+    /// <param name="groupKey">Schlüssel der Sound-Gruppe</param>
+    /// <param name="loop">Soll der Sound geloopt werden?</param>
+    /// <param name="trackActive">Soll der Sound in der aktiven Liste verfolgt werden?</param>
+    /// <returns>Referenz auf den aktiven Sound (falls trackActive = true)</returns>
+    public ActiveSound PlaySound(string groupKey, bool loop = false, bool trackActive = false)
     {
         if (soundGroups.TryGetValue(groupKey, out List<Sound> group))
         {
             if (group.Count > 0)
             {
                 // Wähle einen zufälligen Sound aus der Gruppe aus.
-                Sound soundToPlay = group[UnityEngine.Random.Range(0, group.Count)];
+                Sound soundTemplate = group[UnityEngine.Random.Range(0, group.Count)];
                 
-                // Die Lautstärke wird jetzt durch die Slider-Methoden gesetzt.
-                soundToPlay.source.Play();
+                if (trackActive || loop)
+                {
+                    // Erstelle temporäre AudioSource für verwaltete Sounds
+                    GameObject tempGO = new GameObject($"TempAudio_{groupKey}");
+                    AudioSource tempSource = tempGO.AddComponent<AudioSource>();
+                    
+                    // Kopiere Einstellungen vom Template
+                    tempSource.clip = soundTemplate.clip;
+                    tempSource.volume = soundTemplate.source.volume;
+                    tempSource.pitch = soundTemplate.source.pitch;
+                    tempSource.loop = loop;
+                    tempSource.playOnAwake = false;
+                    
+                    // Spiele ab
+                    tempSource.Play();
+                    
+                    // Erstelle ActiveSound und verwalte ihn
+                    ActiveSound activeSound = new ActiveSound(groupKey, tempSource, loop, true);
+                    activeSound.tempGameObject = tempGO;
+                    
+                    AddActiveSound(activeSound);
+                    
+                    return activeSound;
+                }
+                else
+                {
+                    // Standard-Verhalten: Spiele direkt ab
+                    soundTemplate.source.Play();
+                }
             }
             else
             {
@@ -138,12 +204,179 @@ public class AudioManager : MonoBehaviour
         {
             Debug.LogWarning($"Sound-Gruppe '{groupKey}' nicht gefunden.");
         }
+        
+        return null;
     }
 
+    /// <summary>
+    /// Stoppt alle Sounds einer bestimmten Gruppe.
+    /// </summary>
+    public void StopSound(string groupKey)
+    {
+        if (activeSounds.ContainsKey(groupKey))
+        {
+            List<ActiveSound> soundsToStop = new List<ActiveSound>(activeSounds[groupKey]);
+            
+            foreach (ActiveSound activeSound in soundsToStop)
+            {
+                StopActiveSound(activeSound);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Stoppt einen spezifischen aktiven Sound.
+    /// </summary>
+    public void StopActiveSound(ActiveSound activeSound)
+    {
+        if (activeSound != null && activeSound.source != null)
+        {
+            activeSound.source.Stop();
+            
+            RemoveActiveSound(activeSound);
+            
+            // Zerstöre temporäre GameObject falls vorhanden
+            if (activeSound.tempGameObject != null)
+            {
+                Destroy(activeSound.tempGameObject);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Stoppt alle aktuell abspielenden Sounds.
+    /// </summary>
+    public void StopAllSounds()
+    {
+        List<ActiveSound> soundsToStop = new List<ActiveSound>(allActiveSounds);
+        
+        foreach (ActiveSound activeSound in soundsToStop)
+        {
+            StopActiveSound(activeSound);
+        }
+    }
+
+    /// <summary>
+    /// Stoppt alle Sounds eines bestimmten Typs.
+    /// </summary>
+    public void StopSoundsByType(SoundType soundType)
+    {
+        List<ActiveSound> soundsToStop = new List<ActiveSound>();
+        
+        foreach (ActiveSound activeSound in allActiveSounds)
+        {
+            if (soundGroups.ContainsKey(activeSound.groupKey))
+            {
+                var group = soundGroups[activeSound.groupKey];
+                if (group.Count > 0 && group[0].soundType == soundType)
+                {
+                    soundsToStop.Add(activeSound);
+                }
+            }
+        }
+        
+        foreach (ActiveSound activeSound in soundsToStop)
+        {
+            StopActiveSound(activeSound);
+        }
+    }
+
+    /// <summary>
+    /// Fügt einen aktiven Sound zur Verwaltung hinzu.
+    /// </summary>
+    private void AddActiveSound(ActiveSound activeSound)
+    {
+        // Zur globalen Liste hinzufügen
+        allActiveSounds.Add(activeSound);
+        
+        // Zur gruppenspezifischen Liste hinzufügen
+        if (!activeSounds.ContainsKey(activeSound.groupKey))
+        {
+            activeSounds[activeSound.groupKey] = new List<ActiveSound>();
+        }
+        activeSounds[activeSound.groupKey].Add(activeSound);
+    }
+
+    /// <summary>
+    /// Entfernt einen aktiven Sound aus der Verwaltung.
+    /// </summary>
+    private void RemoveActiveSound(ActiveSound activeSound)
+    {
+        allActiveSounds.Remove(activeSound);
+        
+        if (activeSounds.ContainsKey(activeSound.groupKey))
+        {
+            activeSounds[activeSound.groupKey].Remove(activeSound);
+            
+            // Entferne leere Gruppen
+            if (activeSounds[activeSound.groupKey].Count == 0)
+            {
+                activeSounds.Remove(activeSound.groupKey);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Coroutine die automatisch beendete Sounds aufräumt.
+    /// </summary>
+    private IEnumerator CleanupFinishedSounds()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f); // Prüfe jede Sekunde
+            
+            List<ActiveSound> soundsToRemove = new List<ActiveSound>();
+            
+            foreach (ActiveSound activeSound in allActiveSounds)
+            {
+                // Prüfe ob AudioSource noch existiert und spielt
+                if (activeSound.source == null || 
+                    (!activeSound.source.isPlaying && !activeSound.isLooping && activeSound.isTemporary))
+                {
+                    soundsToRemove.Add(activeSound);
+                }
+            }
+            
+            // Entferne beendete Sounds
+            foreach (ActiveSound activeSound in soundsToRemove)
+            {
+                if (activeSound.tempGameObject != null)
+                {
+                    Destroy(activeSound.tempGameObject);
+                }
+                RemoveActiveSound(activeSound);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Prüft ob ein Sound einer bestimmten Gruppe gerade abgespielt wird.
+    /// </summary>
+    public bool IsSoundPlaying(string groupKey)
+    {
+        return activeSounds.ContainsKey(groupKey) && activeSounds[groupKey].Count > 0;
+    }
+
+    /// <summary>
+    /// Gibt alle aktiven Sounds einer Gruppe zurück.
+    /// </summary>
+    public List<ActiveSound> GetActiveSounds(string groupKey)
+    {
+        if (activeSounds.ContainsKey(groupKey))
+        {
+            return new List<ActiveSound>(activeSounds[groupKey]);
+        }
+        return new List<ActiveSound>();
+    }
+
+    #endregion
+
+
+    #region Sound Options
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        
-        foreach(GameObject go in GameObject.FindGameObjectsWithTag("SoundControl"))
+
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("SoundControl"))
         {
             if (go.name == "MusicSlider")
             {
@@ -173,7 +406,7 @@ public class AudioManager : MonoBehaviour
                 effectSlider.value = PlayerPrefs.GetFloat("effectVol");
             }
         }
-        
+
     }
 
     private void AwakeSetSliders()
@@ -234,7 +467,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    #region Sound Options - ANGEPASST
+
     public void SetMusicVolume(float newValue)
     {
         SetVolumeForType(SoundType.Music, newValue);

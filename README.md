@@ -27,7 +27,9 @@ playstyle.
 - Simple isometric combat system, moving with WASD, fighting with the mouse.
 - The combat system still needs alot of improvement. Goal is to have an inuitive combat, thats as arcade as fluent, but diverse depending on chosen playstyle.
 
-┌───── ### Online-Synchronised ###  
-- While the game is meant to be a Singleplayer Game, Online-Profiles are thought of, to compare digital penises with other gamers.
-- Thus, its also important for the player to have great possibilities in individualizing his or her character, to show of how unique the character actually is.
-- Also, this includes the possibilitie for longterm mtx.
+┌───── ### Open-Script Project's ### 
+- Ability-System
+- Mobs: Rare Mobs, Mobs using Abilities, more diverse Mobs
+- Daten Upload zum Server-Profil
+- Sockel-Items mit erweiterten Talent-Baum
+- Buffs

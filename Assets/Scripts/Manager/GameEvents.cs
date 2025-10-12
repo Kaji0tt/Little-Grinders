@@ -38,6 +38,16 @@ public class GameEvents : MonoBehaviour
     public event Action<float> OnEnemyHasAttacked;
     public event Action<float, Transform, bool> OnEnemyWasAttacked;
 
+    // Animation Events
+    public event Action<EnemyController, float> OnEnemyStartAttack; // Enemy, attackDuration
+    public event Action<EnemyController> OnEnemyAttackHit; // Für Impact-Timing
+    public event Action<EnemyController> OnEnemyEndAttack;
+    
+    // Movement Animation Events
+    public event Action<EnemyController> OnEnemyStartIdle;
+    public event Action<EnemyController> OnEnemyStartWalk;
+    public event Action<EnemyController> OnEnemyStartHit;
+
     // Neue Events für Bladevortex
     public event Action<EnemyController, bool> OnEnemyTookDamage; // Enemy, isCrit
     public event Action<float, EnemyController, bool> OnEnemyTookDirectDamage; // Enemy, isCrit
@@ -113,5 +123,37 @@ public class GameEvents : MonoBehaviour
         public void EnemyTookDirectDamage(float damage, EnemyController enemyController, bool isCrit)
     {
         OnEnemyTookDirectDamage?.Invoke(damage, enemyController, isCrit);
+    }
+
+    // Animation Events
+    public void EnemyStartAttack(EnemyController enemy, float attackDuration)
+    {
+        OnEnemyStartAttack?.Invoke(enemy, attackDuration);
+    }
+
+    public void EnemyAttackHit(EnemyController enemy)
+    {
+        OnEnemyAttackHit?.Invoke(enemy);
+    }
+
+    public void EnemyEndAttack(EnemyController enemy)
+    {
+        OnEnemyEndAttack?.Invoke(enemy);
+    }
+    
+    // Movement Animation Events
+    public void EnemyStartIdle(EnemyController enemy)
+    {
+        OnEnemyStartIdle?.Invoke(enemy);
+    }
+    
+    public void EnemyStartWalk(EnemyController enemy)
+    {
+        OnEnemyStartWalk?.Invoke(enemy);
+    }
+    
+    public void EnemyStartHit(EnemyController enemy)
+    {
+        OnEnemyStartHit?.Invoke(enemy);
     }
 }

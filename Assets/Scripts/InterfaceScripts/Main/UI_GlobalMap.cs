@@ -36,7 +36,7 @@ public class UI_GlobalMap : MonoBehaviour
         {
             CalculateExploredMaps();
 
-            exploredMapsTxt.text = GlobalMap.instance.exploredMaps.Count.ToString();
+            exploredMapsTxt.text = GlobalMap.instance.GetVisitedMaps().Count.ToString();
 
             GlobalMap.instance.OnMapListChanged += WorldMap_OnMapListChanged;
         }
@@ -45,9 +45,10 @@ public class UI_GlobalMap : MonoBehaviour
     }
 
 
+
     private void WorldMap_OnMapListChanged(object sender, EventArgs e)
     {
-        exploredMapsTxt.text = GlobalMap.instance.exploredMaps.Count.ToString();
+        exploredMapsTxt.text = GlobalMap.instance.GetVisitedMaps().Count.ToString();
 
         CalculateExploredMaps();
 
@@ -59,15 +60,21 @@ public class UI_GlobalMap : MonoBehaviour
 
     public void CalculateExploredMaps()
     {
-
-        foreach (Transform child in mapCenter)
+        // Zerstöre ALLE UI_Map Kinder, unabhängig vom aktiven Zustand
+        for (int i = mapCenter.childCount - 1; i >= 0; i--)
         {
-            if(child.GetComponent<UI_Map>() && child.gameObject.activeSelf)
-            Destroy(child.gameObject);
+            Transform child = mapCenter.GetChild(i);
+            if (child.GetComponent<UI_Map>() != null)
+            {
+                Destroy(child.gameObject);
+            }
         }
 
-        if(GlobalMap.instance.exploredMaps.Count != 0)
-        foreach (MapSave map in GlobalMap.instance.exploredMaps)
+        // NEU: Zeige alle Maps (explored + generated)
+        List<MapSave> allMaps = GlobalMap.instance.GetAllMaps();
+        
+        if(allMaps.Count != 0)
+        foreach (MapSave map in allMaps)
         {
             UI_Map uiMap = Instantiate(mapGO, position: new Vector2(transform.position.x + (map.mapIndexX * borderScaling), transform.position.y + (map.mapIndexY*borderScaling)), 
                 Quaternion.identity, parent: mapCenter).AddComponent(typeof(UI_Map)) as UI_Map;
@@ -75,10 +82,9 @@ public class UI_GlobalMap : MonoBehaviour
             uiMap.gameObject.SetActive(true);
 
             uiMap.PopulateMap(map);
-
-            
         }
 
-        exploredMapsTxt.text = GlobalMap.instance.exploredMaps.Count.ToString();
+        // Zeige nur die Anzahl der tatsächlich besuchten Maps im Text
+        exploredMapsTxt.text = GlobalMap.instance.GetVisitedMaps().Count.ToString();
     }
 }

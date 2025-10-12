@@ -41,7 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7897559342442069288}
   - component: {fileID: 8321177637713158240}
-  - component: {fileID: 1650147339486145295}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -91,40 +90,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.1128082, y: 2.2611046, z: 1.1397018}
-  m_Center: {x: 0.007118225, y: 0.6305523, z: -0.0035514832}
---- !u!114 &1650147339486145295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532979874946291631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82ad7093e14edda46bd860b6099c7194, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  newSprite: {fileID: 0}
-  interactableUsed: 0
-  spawnPoints:
-  - {fileID: 5442301577994311924}
-  - {fileID: 5954513437166300359}
-  - {fileID: 5829900834571787607}
-  - {fileID: 8014110354097528171}
-  - {fileID: 4530330208320329671}
-  - {fileID: 147565375031365282}
-  - {fileID: 7555558529033965763}
-  - {fileID: 8093328128393808740}
-  - {fileID: 5778471908485048033}
-  - {fileID: 3268203207844116932}
-  - {fileID: 4116913577548971195}
-  spawnedMobs: []
-  lightBulb: {fileID: 4421706151730372220}
+  m_Size: {x: 0.6977539, y: 2.2611046, z: 0.15613556}
+  m_Center: {x: 0.056045532, y: 0.6305523, z: -0.031909943}
 --- !u!1 &3268203207844116932
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +139,7 @@ GameObject:
   - component: {fileID: 3868768381936389191}
   - component: {fileID: 6028785959648927259}
   - component: {fileID: 2666872870297567845}
-  - component: {fileID: 1630143887459943894}
+  - component: {fileID: -4851826162301550846}
   m_Layer: 0
   m_Name: Totem
   m_TagString: Untagged
@@ -278,13 +249,13 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.73, y: 1.77, z: 0.2}
-  m_Center: {x: 0.06, y: 0.885, z: 0}
---- !u!114 &1630143887459943894
+  m_Size: {x: 1.1843033, y: 1.77, z: 0.74170303}
+  m_Center: {x: 0.07620621, y: 0.885, z: 0.0065135956}
+--- !u!114 &-4851826162301550846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -293,9 +264,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 3868768381936389190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6f7dc3a33dd45240ba78dae0d1d9433, type: 3}
+  m_Script: {fileID: 11500000, guid: 82ad7093e14edda46bd860b6099c7194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayName: Ancient Totem
+  interactableID: 1
+  isUsed: 0
+  canBeUsedMultipleTimes: 0
+  useVFXName: VFX_Totem
+  useSoundName: TotemCall
+  interactPrompt: Press [E] to interact
+  spawnPoints:
+  - {fileID: 5442301577994311924}
+  - {fileID: 5954513437166300359}
+  - {fileID: 5829900834571787607}
+  - {fileID: 8014110354097528171}
+  - {fileID: 4530330208320329671}
+  - {fileID: 147565375031365282}
+  - {fileID: 7555558529033965763}
+  - {fileID: 8093328128393808740}
+  - {fileID: 5778471908485048033}
+  - {fileID: 3268203207844116932}
+  - {fileID: 4116913577548971195}
+  lightBulb: {fileID: 4421706151730372220}
+  xpReward: 50
+  dropInterval: 0.5
+  maxDropTime: 5
+  spawnChance: 0.5
 --- !u!1 &4116913577548971195
 GameObject:
   m_ObjectHideFlags: 0

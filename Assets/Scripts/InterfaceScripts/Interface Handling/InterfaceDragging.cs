@@ -21,42 +21,36 @@ public class InterfaceDragging : MonoBehaviour,IBeginDragHandler, IDragHandler, 
     [SerializeField]
     private float maxZoomIn;
 
-    private Vector3 initialScale;
-
-    //private RectTransform rect;
-
+    public Vector3 initialScale { get; private set; }
+    public Vector3 initialPosition { get; private set; }
 
     private void Awake()
     {
         _mainCam = Camera.main;
-        //rect = GetComponent<RectTransform>();
-
+        
         initialScale = transform.localScale;
-
-
+        initialPosition = transform.position;
     }
 
+    // NEU: Öffentliche Methode zum Zurücksetzen von Zoom und Position
+    public void ResetViewToInitial()
+    {
+        transform.localScale = initialScale;
+        transform.position = initialPosition;
+    }
 
     Vector3 GetMousePos()
     {
-
         var mousePos = _mainCam.ScreenToViewportPoint(Input.mousePosition);
-
         mousePos.z = 0;
-
         mousePos *= dragSpeed;
-
         return mousePos;
-
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-
         transform.position = GetMousePos() + _dragOffset;
-
     }
-
 
     public void OnBeginDrag(PointerEventData eventData)
     {

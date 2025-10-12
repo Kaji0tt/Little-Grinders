@@ -442,6 +442,7 @@ public class PlayerLoad : MonoBehaviour
                 GlobalMap.instance.lastSpawnpoint = data.lastSpawnpoint;
                 
                 Debug.Log("[LoadGlobalMap] ✓ GlobalMap erfolgreich geladen");
+                Debug.Log($"[LoadGlobalMap] Geladene exploredMaps: {GlobalMap.instance.exploredMaps.Count}");
             }
             else
             {
