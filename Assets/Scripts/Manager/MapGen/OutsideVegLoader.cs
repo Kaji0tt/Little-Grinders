@@ -130,7 +130,8 @@ public class OutsideVegLoader : MonoBehaviour
 
         //LoadRoadTexture();
         //LoadRandomGroundTexture();
-        LoadEnemies(20);
+        // Removed initial enemy spawning - now handled by EnemyWaveSpawner
+        // LoadEnemies(20);
     }
     
     public void LoadNoVegField()
@@ -143,7 +144,8 @@ public class OutsideVegLoader : MonoBehaviour
 
         //LoadRandomGroundTexture();
 
-        LoadEnemies(3);
+        // Removed initial enemy spawning - now handled by EnemyWaveSpawner
+        // LoadEnemies(3);
 
 
         LoadInteractable();
