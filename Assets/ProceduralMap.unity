@@ -680,6 +680,7 @@ MonoBehaviour:
   weaponAnimator: {fileID: 1922429313}
   weaponPivot: {fileID: 508264284}
   isPerformingAction: 0
+  minMovementSpeed: 0.1
   spriteSheet: {fileID: 0}
   mirrorSpritesheet: 0
   generatedAnimator: {fileID: 0}
@@ -8292,6 +8293,11 @@ MonoBehaviour:
   noonColor: {r: 0.8349056, g: 0.989417, b: 1, a: 1}
   eveningColor: {r: 0.9811321, g: 0.9344567, b: 0.8746885, a: 1}
   nightColor: {r: 0.2721609, g: 0.2721609, b: 0.41509432, a: 1}
+  voidEffectEnabled: 1
+  voidColor: {r: 0.5, g: 0.2, b: 0.8, a: 0.39607844}
+  voidIntensity: 0.323
+  voidAnimationSpeed: 2
+  voidTransitionDuration: 2
 --- !u!114 &401753577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14955,7 +14961,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 740210742}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.32533586, y: -0.57850814, z: 0.2697803, w: 0.6976414}
+  m_LocalRotation: {x: 0.33998817, y: -0.5383791, z: 0.2510692, w: 0.7290544}
   m_LocalPosition: {x: -13.510178, y: 8.260615, z: -21.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -14995,8 +15001,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 0.28397706, g: 0.28319913, b: 0.4227542, a: 1}
-  m_Intensity: 0.7039268
+  m_Color: {r: 0.3982002, g: 0.38990235, b: 0.49679995, a: 1}
+  m_Intensity: 0.74175185
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -38186,7 +38192,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1586091267}
   m_HandleRect: {fileID: 1586091266}
   m_Direction: 2
-  m_Value: 0.34942773
+  m_Value: 0.34942758
   m_Size: 0.37474588
   m_NumberOfSteps: 0
   m_OnValueChanged:

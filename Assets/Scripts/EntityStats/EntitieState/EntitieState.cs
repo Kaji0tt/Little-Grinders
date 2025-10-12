@@ -53,8 +53,8 @@ public class IdleState : EntitieState
         if (controller.myNavMeshAgent == null)
             controller.AddEssentialComponents();
 
-        if (controller.myIsoRenderer != null)
-            controller.myIsoRenderer.Play(AnimationState.Idle);
+        // Animation wird automatisch durch IsometricRenderer Movement-Detection gesteuert
+        // GameEvents.Instance?.EnemyStartIdle(controller);
 
         myIdleTimer = 0f;
         myNextWanderTime = Random.Range(myWaitBetweenWandersMin, myWaitBetweenWandersMax);
@@ -91,8 +91,8 @@ public class IdleState : EntitieState
             controller.myNavMeshAgent.remainingDistance <= controller.myNavMeshAgent.stoppingDistance)
         {
             controller.StopMoving();
-            if (controller.myIsoRenderer != null)
-                controller.myIsoRenderer.Play(AnimationState.Idle);
+            // Animation wird automatisch durch IsometricRenderer Movement-Detection gesteuert
+            // GameEvents.Instance?.EnemyStartIdle(controller);
         }
     }
 
@@ -114,10 +114,8 @@ public class IdleState : EntitieState
         if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, myWanderRadius, NavMesh.AllAreas))
         {
             controller.myNavMeshAgent.SetDestination(hit.position);
-
-            if (controller.myIsoRenderer != null)
-                controller.myIsoRenderer.Play(AnimationState.Walk);
-
+            // Animation wird automatisch durch IsometricRenderer Movement-Detection gesteuert
+            // GameEvents.Instance?.EnemyStartWalk(controller);
         }
     }
 
@@ -134,7 +132,8 @@ public class ChaseState : EntitieState
 
     public override void Enter()
     {
-        controller.myIsoRenderer.Play(AnimationState.Walk);
+        // Animation wird automatisch durch IsometricRenderer Movement-Detection gesteuert
+        // GameEvents.Instance?.EnemyStartWalk(controller);
     }
 
     public override void Update()
@@ -153,7 +152,8 @@ public class ChaseState : EntitieState
         // Wenn Ziel wieder außerhalb der Aggro-Reichweite ist
         if (controller.TargetDistance() > controller.aggroRange)
         {
-            controller.myIsoRenderer.Play(AnimationState.Idle);
+            // Animation wird automatisch durch IsometricRenderer Movement-Detection gesteuert
+            // GameEvents.Instance?.EnemyStartIdle(controller);
             controller.StopMoving();
             controller.TransitionTo(new IdleState(controller));
         }
@@ -173,21 +173,9 @@ public class AttackState : EntitieState
     {
         //Setze das Angriffsverhalten
         controller.attackBehavior?.Enter(controller);
-
-        //attackCooldown = 
-        //controller.StopMoving();
-        controller.PerformAttack();
-        if (controller.myIsoRenderer != null)
-        {
-            controller.myIsoRenderer.Play(AnimationState.Attack);
-            
-            if (AudioManager.instance != null)
-            {
-                string soundName = controller.GetBasePrefabName() + "_Attack";
-                AudioManager.instance.PlayEntitySound(soundName, controller.gameObject);
-            }
-        }
-        attackTime = controller.myIsoRenderer.GetCurrentAnimationLength();
+        
+        // Berechne gewünschte Angriffsdauer basierend auf AttackSpeed
+        attackTime = 1f / controller.mobStats.AttackSpeed.Value;
     }
 
 public override void Update()
@@ -196,7 +184,7 @@ public override void Update()
     //controller.myIsoRenderer.ToggleActionState(true);
     //controller.myIsoRenderer.Play(AnimationState.Attack);
     //controller.myIsoRenderer.UpdateAnimation();
-    controller.attackBehavior?.Update(controller);
+    controller.attackBehavior?.UpdateAttack(controller);
 
     // NEU: Sofort prüfen, ob Spieler noch in Reichweite ist
         if (!controller.IsPlayerInAttackRange())
@@ -242,7 +230,7 @@ public class HitState : EntitieState
     public override void Enter()
     {
         //controller.myIsoRenderer.ToggleActionState(true);
-        controller.myIsoRenderer.Play(AnimationState.Hit);
+        GameEvents.Instance?.EnemyStartHit(controller);
 
         if (AudioManager.instance != null)
         {

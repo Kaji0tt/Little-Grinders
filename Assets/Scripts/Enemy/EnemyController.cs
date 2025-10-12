@@ -176,6 +176,22 @@ public class EnemyController : MonoBehaviour, IEntitie
 
         if (enemyHpSlider == null && hpBar != null)
             enemyHpSlider = hpBar.GetComponentInChildren<Slider>();
+
+        // Attack Behavior Setup
+        if (attackBehavior == null)
+        {
+            // Suche nach einem IAttackBehavior Component
+            var behaviorComponent = GetComponent<IAttackBehavior>();
+            if (behaviorComponent != null)
+            {
+                attackBehavior = behaviorComponent;
+            }
+            else
+            {
+                // Fallback: Component automatisch hinzufügen
+                attackBehavior = gameObject.AddComponent<PendingAttack>();
+            }
+        }
     }
 
     #region Audio Management

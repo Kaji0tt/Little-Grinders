@@ -44,6 +44,13 @@ public class IsometricRenderer : MonoBehaviour
     private EnemyController myEnemyController;
 
     /// <summary>
+    /// Movement Detection für automatische Idle/Walk Übergänge
+    /// </summary>
+    [Header("Movement Detection")]
+    [Tooltip("Mindestgeschwindigkeit für Walk-Animation")]
+    public float minMovementSpeed = 0.1f;
+
+    /// <summary>
     /// Enemy Section:
     /// These variables are only used for the animation of the of Enemy characters.
     /// </summary>
@@ -91,6 +98,54 @@ public class IsometricRenderer : MonoBehaviour
             weaponAnimator.runtimeAnimatorController = weaponOverrideController;
         }
 
+        // Event-Listener für Enemy-Animationen registrieren
+        if (myEnemyController != null)
+        {
+            if (GameEvents.Instance != null)
+            {
+                GameEvents.Instance.OnEnemyStartAttack += OnEnemyStartAttack;
+                GameEvents.Instance.OnEnemyAttackHit += OnEnemyAttackHit;
+                GameEvents.Instance.OnEnemyEndAttack += OnEnemyEndAttack;
+                
+                // Movement Animation Events
+                GameEvents.Instance.OnEnemyStartIdle += OnEnemyStartIdle;
+                GameEvents.Instance.OnEnemyStartWalk += OnEnemyStartWalk;
+                GameEvents.Instance.OnEnemyStartHit += OnEnemyStartHit;
+            }
+        }
+    }
+
+    private void Update()
+    {
+        // Movement Detection nur für Enemies
+        if (myEnemyController != null && !isPerformingAction)
+        {
+            DetectMovementAndUpdateAnimation();
+        }
+    }
+
+    /// <summary>
+    /// Erkennt Bewegung und wechselt automatisch zwischen Idle und Walk Animationen
+    /// </summary>
+    private void DetectMovementAndUpdateAnimation()
+    {
+        // Wenn eine Action ausgeführt wird, keine automatischen Animationswechsel
+        if (isPerformingAction || myEnemyController.mobStats.isDead)
+            return;
+
+        // Prüfe NavMeshAgent Geschwindigkeit
+        bool isCurrentlyMoving = myEnemyController.myNavMeshAgent != null && 
+                                myEnemyController.myNavMeshAgent.velocity.magnitude > minMovementSpeed;
+
+        // Bestimme gewünschten Animationszustand basierend auf Bewegung
+        AnimationState desiredState = isCurrentlyMoving ? AnimationState.Walk : AnimationState.Idle;
+
+        // Wechsle nur wenn sich der gewünschte Zustand vom aktuellen unterscheidet
+        if (currentState != desiredState)
+        {
+            //Debug.Log($"[IsometricRenderer] Switching from {currentState} to {desiredState}");
+            Play(desiredState);
+        }
     }
 
     public void Play(AnimationState state)
@@ -112,6 +167,152 @@ public class IsometricRenderer : MonoBehaviour
             StartCoroutine(ResetActionAfterAnimation());
         }
     }
+
+    /// <summary>
+    /// Spielt eine Animation mit angepasster Geschwindigkeit basierend auf gewünschter Dauer ab
+    /// </summary>
+    /// <param name="state">Der Animationszustand</param>
+    /// <param name="desiredDuration">Gewünschte Dauer der Animation in Sekunden</param>
+    public void PlayAttackWithSpeed(AnimationState state, float desiredDuration)
+    {
+        currentState = state;
+
+        if (!animationVariants.TryGetValue(state, out string[] variants))
+            return;
+
+        string chosenAnim = variants[Random.Range(0, variants.Length)];
+        
+        // Animation starten
+        myAnimator.Play(chosenAnim);
+        
+        // Warte einen Frame, um die korrekte Clip-Länge zu erhalten
+        StartCoroutine(AdjustAnimationSpeed(chosenAnim, desiredDuration));
+
+        if (state == AnimationState.Attack || state == AnimationState.Cast || state == AnimationState.Die)
+        {
+            isPerformingAction = true;
+            StartCoroutine(ResetEnemyActionAfterDuration(desiredDuration));
+        }
+    }
+
+    private IEnumerator AdjustAnimationSpeed(string animName, float desiredDuration)
+    {
+        yield return null; // Warte einen Frame
+        
+        AnimatorStateInfo stateInfo = myAnimator.GetCurrentAnimatorStateInfo(0);
+        float originalLength = stateInfo.length;
+        
+        // Berechne benötigte Geschwindigkeit
+        float requiredSpeed = originalLength / desiredDuration;
+        myAnimator.speed = requiredSpeed;
+        
+        //Debug.Log($"[IsometricRenderer] Animation {animName}: Original={originalLength:F2}s, Desired={desiredDuration:F2}s, Speed={requiredSpeed:F2}x");
+    }
+
+    private IEnumerator ResetEnemyActionAfterDuration(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        
+        // Geschwindigkeit zurücksetzen
+        myAnimator.speed = 1f;
+        isPerformingAction = false;
+    }
+
+    #region Event Handlers
+    /// <summary>
+    /// Event-Handler: Wenn dieser Enemy einen Angriff startet
+    /// </summary>
+    private void OnEnemyStartAttack(EnemyController enemy, float attackDuration)
+    {
+        // Prüfe ob dieses Event für diesen Enemy gedacht ist
+        if (enemy != myEnemyController) return;
+        
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} startet Angriff (Dauer: {attackDuration:F2}s)");
+        
+        // Spiele Attack-Animation mit der richtigen Geschwindigkeit ab
+        PlayAttackWithSpeed(AnimationState.Attack, attackDuration);
+    }
+    
+    /// <summary>
+    /// Event-Handler: Wenn der Angriff den Impact-Punkt erreicht
+    /// </summary>
+    private void OnEnemyAttackHit(EnemyController enemy)
+    {
+        // Prüfe ob dieses Event für diesen Enemy gedacht ist
+        if (enemy != myEnemyController) return;
+        
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} Angriff-Impact!");
+        
+        // Hier könnten Impact-Effects abgespielt werden
+        if (AudioManager.instance != null)
+        {
+            string soundName = enemy.GetBasePrefabName() + "_Attack";
+            AudioManager.instance.PlayEntitySound(soundName, enemy.gameObject);
+        }
+    }
+    
+    /// <summary>
+    /// Event-Handler: Wenn der Angriff beendet ist
+    /// </summary>
+    private void OnEnemyEndAttack(EnemyController enemy)
+    {
+        // Prüfe ob dieses Event für diesen Enemy gedacht ist
+        if (enemy != myEnemyController) return;
+        
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} Angriff beendet");
+        
+        // Animation ist bereits durch PlayAttackWithSpeed gehandhabt
+        // Hier könnten zusätzliche End-Effects eingefügt werden
+    }
+    
+    /// <summary>
+    /// Event-Handler: Wenn Enemy zu Idle wechselt (jetzt optional, da Movement-Detection aktiv)
+    /// </summary>
+    private void OnEnemyStartIdle(EnemyController enemy)
+    {
+        if (enemy != myEnemyController) return;
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} -> Idle Animation (Event)");
+        // Movement-Detection übernimmt jetzt die Steuerung automatisch
+        // Play(AnimationState.Idle);
+    }
+    
+    /// <summary>
+    /// Event-Handler: Wenn Enemy zu Walk wechselt (jetzt optional, da Movement-Detection aktiv)
+    /// </summary>
+    private void OnEnemyStartWalk(EnemyController enemy)
+    {
+        if (enemy != myEnemyController) return;
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} -> Walk Animation (Event)");
+        // Movement-Detection übernimmt jetzt die Steuerung automatisch
+        // Play(AnimationState.Walk);
+    }
+    
+    /// <summary>
+    /// Event-Handler: Wenn Enemy zu Hit wechselt
+    /// </summary>
+    private void OnEnemyStartHit(EnemyController enemy)
+    {
+        if (enemy != myEnemyController) return;
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} -> Hit Animation");
+        Play(AnimationState.Hit);
+    }
+    
+    private void OnDestroy()
+    {
+        // Event-Listener beim Zerstören des Objekts entfernen
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnEnemyStartAttack -= OnEnemyStartAttack;
+            GameEvents.Instance.OnEnemyAttackHit -= OnEnemyAttackHit;
+            GameEvents.Instance.OnEnemyEndAttack -= OnEnemyEndAttack;
+            
+            // Movement Events
+            GameEvents.Instance.OnEnemyStartIdle -= OnEnemyStartIdle;
+            GameEvents.Instance.OnEnemyStartWalk -= OnEnemyStartWalk;
+            GameEvents.Instance.OnEnemyStartHit -= OnEnemyStartHit;
+        }
+    }
+    #endregion
 
     public float GetCurrentAnimationLength()
     {

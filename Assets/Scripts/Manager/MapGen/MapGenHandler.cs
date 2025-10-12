@@ -30,7 +30,7 @@ public class MapGenHandler : MonoBehaviour
     {
         Debug.Log("=== [MapGenHandler.Start] START ===");
         
-        PlayerLoad playerLoad = FindObjectOfType<PlayerLoad>();
+        PlayerLoad playerLoad = FindFirstObjectByType<PlayerLoad>();
         bool isLoadFromMenu = PlayerPrefs.HasKey("Load");
         
         if (isLoadFromMenu)
@@ -142,6 +142,9 @@ public class MapGenHandler : MonoBehaviour
             
             navMeshSurface.BuildNavMesh();
 
+            // NEU: Generiere Nachbarn auch beim Laden existierender Maps
+            StartCoroutine(GenerateNeighborMapsDelayed());
+
             Debug.Log("[LoadExistingMap] Map erfolgreich aus Save Data geladen");
         }
         else
@@ -168,8 +171,28 @@ public class MapGenHandler : MonoBehaviour
     }
 
     /// <summary>
-    /// NEU: Generiert nur das Layout einer Map ohne GameObjects zu erstellen
+    /// NEU: Lädt oder erstellt eine Map für die aktuelle Position
     /// </summary>
+    public void LoadOrCreateMapForCurrentPosition(SpawnPoint playerSpawn)
+    {
+        Debug.Log($"=== [LoadOrCreateMapForCurrentPosition] START mit Position: {GlobalMap.instance.currentPosition}, SpawnPoint: {playerSpawn} ===");
+        
+        // Prüfe ob an der aktuellen Position bereits eine Map existiert
+        MapSave existingMap = GlobalMap.instance.GetMapByCords(GlobalMap.instance.currentPosition);
+        
+        if (existingMap != null)
+        {
+            Debug.Log($"[LoadOrCreateMapForCurrentPosition] Existierende Map gefunden - lade sie");
+            LoadExistingMap(existingMap, playerSpawn);
+        }
+        else
+        {
+            Debug.Log($"[LoadOrCreateMapForCurrentPosition] Keine Map gefunden - erstelle neue");
+            CreateNewMap(playerSpawn);
+        }
+        
+        Debug.Log("=== [LoadOrCreateMapForCurrentPosition] ENDE ===");
+    }
     public static MapSave GenerateMapDataOnly(int mapX, int mapY)
     {
         Debug.Log($"[MapGenHandler] Generiere Map-Daten für Position ({mapX}, {mapY})");
@@ -184,10 +207,15 @@ public class MapGenHandler : MonoBehaviour
         // Wähle zufälliges Theme
         newMap.mapTheme = (WorldType)Random.Range(0, System.Enum.GetValues(typeof(WorldType)).Length);
         
-        // Generiere Layout ohne GameObjects
+        // NEU: Verwende spezifischen Seed für konsistente Generierung
+        int mapSeed = GetMapSeed(mapX, mapY);
+        Random.State previousState = Random.state;
+        Random.InitState(mapSeed);
+        
+        // Generiere Layout mit festem Seed
         int[][] layout = MapLayoutGenerator.GenerateLayout();
         
-        // Konvertiere zu FieldType Array
+        // Konvertiere zu FieldType Array - KI Hinweis: Die Indexierung ist mit Absicht invertiert. Nicht überarbeiten bitte.
         for (int i = 0; i < 81; i++)
         {
             int x = i % 9;
@@ -195,8 +223,20 @@ public class MapGenHandler : MonoBehaviour
             newMap.fieldType[i] = (FieldType)layout[x][z];
         }
         
-        Debug.Log($"[MapGenHandler] Map-Daten generiert für ({mapX}, {mapY}) - Theme: {newMap.mapTheme}, Level: {newMap.mapLevel}");
+        // Stelle vorherigen Random-State wieder her
+        Random.state = previousState;
+        
+        Debug.Log($"[MapGenHandler] Map-Daten generiert für ({mapX}, {mapY}) - Theme: {newMap.mapTheme}, Level: {newMap.mapLevel}, Seed: {mapSeed}");
         return newMap;
+    }
+    
+    /// <summary>
+    /// NEU: Generiert einen konsistenten Seed basierend auf Map-Koordinaten
+    /// </summary>
+    private static int GetMapSeed(int mapX, int mapY)
+    {
+        // Kombiniere X,Y zu einem einzigartigen Seed
+        return (mapX * 1000) + mapY + 12345; // Offset für Variation
     }
 
     private void AssignFieldTypes(int[][] layout)
@@ -253,7 +293,14 @@ public class MapGenHandler : MonoBehaviour
     // Legacy method für Kompatibilität  
     public void LoadMap(MapSave map, SpawnPoint spawnPoint)
     {
-        LoadExistingMap(map, spawnPoint);
+        if (map != null)
+        {
+            LoadExistingMap(map, spawnPoint);
+        }
+        else
+        {
+            CreateNewMap(spawnPoint);
+        }
     }
 
     // Restliche Methoden bleiben unverändert...
@@ -317,7 +364,7 @@ public class MapGenHandler : MonoBehaviour
             }
         }
 
-        OutsideVegLoader[] outsideVegPrefabs = FindObjectsOfType<OutsideVegLoader>(); 
+        OutsideVegLoader[] outsideVegPrefabs = FindObjectsByType<OutsideVegLoader>(FindObjectsSortMode.None); 
         foreach(OutsideVegLoader prefab in outsideVegPrefabs)
         {
             Destroy(prefab.gameObject);

@@ -83,6 +83,7 @@ GameObject:
   - component: {fileID: 5653794707245443536}
   - component: {fileID: 1131012407973740707}
   - component: {fileID: 1287354106041935359}
+  - component: {fileID: -1536332193980073784}
   m_Layer: 0
   m_Name: Truhe 1
   m_TagString: Untagged
@@ -199,3 +200,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.9319382, y: 0.72, z: 0.13173294}
   m_Center: {x: 0.024730682, y: 0.36, z: 0.049741745}
+--- !u!114 &-1536332193980073784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5820662847681281949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f879184bbec19f45a10fbf8aa4d17cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayName: Interactable
+  interactableID: 2
+  isUsed: 0
+  canBeUsedMultipleTimes: 0
+  useVFXName: 
+  useSoundName: 
+  interactPrompt: Press [E] to interact
+  closedSprite: {fileID: 0}
+  openedSprite: {fileID: 0}
+  dropRadius: 1
+  dropHeightOffset: 0.1
+  startOpened: 0

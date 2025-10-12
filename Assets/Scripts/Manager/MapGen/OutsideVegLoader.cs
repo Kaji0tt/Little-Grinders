@@ -724,13 +724,72 @@ public class OutsideVegLoader : MonoBehaviour
 
     private void LoadInteractable()
     {
+        bool totemSpawned = false;
+        
+        // Garantiere mindestens 1 Totem pro Map
         for (int i = 0; i < interactableCollection.Length; i++)
         {
-            if(Random.Range(0, 15) == 1)
+            bool shouldSpawn = false;
+            
+            if (!totemSpawned)
             {
-                Instantiate(prefabCollection.GetRandomInteractable(), interactableCollection[i].transform.position,
-                    Quaternion.identity).transform.SetParent(envParentObj.transform);
+                // Erste Chance: Spawne mit höherer Wahrscheinlichkeit wenn noch kein Totem da ist
+                shouldSpawn = Random.Range(0, 8) == 1; // Höhere Chance für erstes Totem
+            }
+            else
+            {
+                // Normale Spawn-Chance für weitere Interactables
+                shouldSpawn = Random.Range(0, 15) == 1;
+            }
+
+            if (shouldSpawn)
+            {
+                GameObject spawnedInteractable = Instantiate(prefabCollection.GetRandomInteractable(), 
+                    interactableCollection[i].transform.position, Quaternion.identity);
+                
+                spawnedInteractable.transform.SetParent(envParentObj.transform);
+                
+                // Prüfe ob ein Totem gespawnt wurde
+                if (spawnedInteractable.GetComponent<TotemInteractable>() != null)
+                {
+                    totemSpawned = true;
+                }
             }
         }
+        
+        // Falls kein Totem gespawnt wurde, erzwinge eins am letzten verfügbaren Platz
+        if (!totemSpawned && interactableCollection.Length > 0)
+        {
+            // Hole einen Totem-Prefab aus der Collection
+            GameObject totemPrefab = prefabCollection.GetTotemPrefab();
+            
+            if (totemPrefab != null)
+            {
+                int randomIndex = Random.Range(0, interactableCollection.Length);
+                GameObject forcedTotem = Instantiate(totemPrefab, 
+                    interactableCollection[randomIndex].transform.position, Quaternion.identity);
+                
+                forcedTotem.transform.SetParent(envParentObj.transform);
+                Debug.Log("Erzwungenes Totem gespawnt an Position: " + randomIndex);
+            }
+            else
+            {
+                Debug.LogWarning("Kein Totem-Prefab in der PrefabCollection gefunden!");
+            }
+        }
+    }
+    
+    private GameObject FindTotemPrefab()
+    {
+        // Durchsuche die Interactables nach einem Totem
+        GameObject[] interactables = prefabCollection.GetInteractablesPF();
+        foreach (GameObject interactable in interactables)
+        {
+            if (interactable.GetComponent<TotemInteractable>() != null)
+            {
+                return interactable;
+            }
+        }
+        return null;
     }
 }

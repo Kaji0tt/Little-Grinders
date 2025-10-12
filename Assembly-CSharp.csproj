@@ -112,7 +112,9 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\IEntitie.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buffs\BuffDatabase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\switchToRectTransform.cs" />
+    <Compile Include="Assets\UnityAssetStore\Matthew Guz\Orbs Effects FREE\Scripts\CameraRotation.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ContentScrollSnapHorizontal.cs" />
+    <Compile Include="Assets\Scripts\Manager\PPVolumeManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionsInputManager.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\MonoBehaviourHelper.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Shadowstep.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\SuperellipsePoints.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\MapLayoutGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\IsometricRenderer.cs" />
+    <Compile Include="Assets\Scripts\Manager\World\Interactables\ChestInteractable.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Schuhe.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buff.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UIPrimitiveBase.cs" />
@@ -145,11 +148,14 @@
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\InterfaceElement.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ReorderableList\ReorderableList.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\CameraFollow.cs" />
+    <Compile Include="Assets\UnityAssetStore\CodeMonkey\CMDebug.cs" />
+    <Compile Include="Assets\UnityAssetStore\CodeMonkey\Assets.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\TestCompression.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\PlayerLoad.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\HexColorField.cs" />
     <Compile Include="Assets\Scripts\_projectile.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollRectExtensions.cs" />
+    <Compile Include="Assets\UnityAssetStore\Matthew Guz\Orbs Effects FREE\Scripts\OrbitScript.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemModDefintion.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollRectTweener.cs" />
     <Compile Include="Assets\Scripts\Manager\SaveGame\PlayerSave.cs" />
@@ -229,14 +235,12 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\CLZF2.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\MusicVol.cs" />
-    <Compile Include="Assets\Matthew Guz\Orbs Effects FREE\Scripts\OrbitScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\Events\ColorChangedEvent.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\MobsCamScript.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\Events\HSVChangedEvent.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Spells\Bruteforce.cs" />
     <Compile Include="Assets\Scripts\Combat\AttackStep.cs" />
     <Compile Include="Assets\Scripts\EntityStats\PlayerStats.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyData.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\HorizontalScrollSnap.cs" />
     <Compile Include="Assets\IG_Canvas_MM.cs" />
     <Compile Include="Assets\Resources\WorldPrefabs\PreBuildTiles\PreBuildSpawns.cs" />
@@ -251,7 +255,6 @@
     <Compile Include="Assets\Scripts\Manager\VFX Manager\VFX_XPOrb.cs" />
     <Compile Include="Assets\Scripts\Manager\SceneManagement\Scene_OnSceneLoad.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RangeSlider.cs" />
-    <Compile Include="Assets\Resources\WorldPrefabs\Interactable\Int_Chest.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\UI_Knob.cs" />
     <Compile Include="Assets\Scripts\Manager\MapGen\OutsideVegLoader.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\TabNavigationHelper.cs" />
@@ -277,7 +280,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\DragCorrector.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\TalentTree\TalentNode.cs" />
     <Compile Include="Assets\Scripts\Manager\DirectionCollider.cs" />
-    <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\BoxSlider.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_ScrollRectOcclusion.cs" />
     <Compile Include="Assets\Scripts\AbilityEditor.cs" />
@@ -307,7 +309,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_MagneticInfiniteScroll.cs" />
     <Compile Include="Assets\Scripts\Manager\VFX Manager\VFX_Manager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewCell.cs" />
-    <Compile Include="Assets\Matthew Guz\Orbs Effects FREE\Scripts\CameraRotation.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionMethods.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorSlider.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\ComboBox.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ScrollSnapScrollbarHelper.cs" />
     <Compile Include="Assets\Scripts\Manager\Sound\AudioManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\HoverTooltip.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Enemy Types\SteadyCloseAttack.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\ShineEffect.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Hose.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UISelectableExtension.cs" />
@@ -399,7 +401,6 @@
     <Compile Include="Assets\Scripts\EntityStats\EntitieState\EntitieState.cs" />
     <Compile Include="Assets\Scripts\Enemy\AEPull.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\UI_Bar.cs" />
-    <Compile Include="Assets\Resources\WorldPrefabs\Interactable\Inter_Portal.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\VerticalScrollSnap.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\IFancyCellGroupContext.cs" />
@@ -419,7 +420,6 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\UIVerticalScroller.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buffs\Reflection.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\RadialLayout.cs" />
-    <Compile Include="Assets\CodeMonkey\Assets.cs" />
     <Compile Include="Assets\Resources\VFX\Prefabs\Level_Up_FX.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\IEquipableSlot.cs" />
     <Compile Include="Assets\Scripts\Manager\World\Interactables\TotemInteractable.cs" />
@@ -437,10 +437,10 @@
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Add.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Roboto-Bold - License.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
-    <None Include="Assets\Matthew Guz\Orbs Effects FREE\Documentation\Readme IMPORTANT.txt" />
+    <None Include="Assets\UnityAssetStore\Matthew Guz\Orbs Effects FREE\Documentation\Readme IMPORTANT.txt" />
     <None Include="Assets\Shader\SpriteShadows.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Unity - OFL.txt" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_SETTINGS.cginc" />
+    <None Include="Assets\UnityAssetStore\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_SETTINGS.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIScreen.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Multiply.shader" />
@@ -448,7 +448,7 @@
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Roboto-Bold - AFL.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR.cginc" />
+    <None Include="Assets\UnityAssetStore\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR.cginc" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UILinearDodge.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Alpha Blend.shader" />
@@ -459,7 +459,7 @@
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Premultiply Blend.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle VertexLit Blended.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\CodeMonkey\README.txt" />
+    <None Include="Assets\UnityAssetStore\CodeMonkey\README.txt" />
     <None Include="Assets\Sprites\Mobs\Ghost Crawler\BoneNames.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle MultiplyDouble.shader" />
@@ -473,8 +473,8 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Fonts\Font License.txt" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_PASSES.cginc" />
+    <None Include="Assets\UnityAssetStore\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
+    <None Include="Assets\UnityAssetStore\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_PASSES.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UISoftAdditive.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle AddSmooth.shader" />
@@ -482,7 +482,7 @@
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UIImageCrop.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_URP.cginc" />
+    <None Include="Assets\UnityAssetStore\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_URP.cginc" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Scripts\Animation würde auch so funktionieren.txt" />
@@ -1826,15 +1826,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.2D.Animation.Samples.Runtime.csproj" />
+    <ProjectReference Include="KinoBloom.Runtime.csproj" />
     <ProjectReference Include="NavMeshComponentsEditor.csproj" />
     <ProjectReference Include="Unity.2D.Animation.Samples.Editor.csproj" />
-    <ProjectReference Include="CFXREditor.csproj" />
-    <ProjectReference Include="KinoBloom.Runtime.csproj" />
     <ProjectReference Include="CFXRDemo.csproj" />
     <ProjectReference Include="CFXR.WelcomeScreen.csproj" />
-    <ProjectReference Include="NavMeshComponents.csproj" />
+    <ProjectReference Include="CFXREditor.csproj" />
     <ProjectReference Include="CFXRRuntime.csproj" />
     <ProjectReference Include="ToonyColorsPro.Demo.Editor.csproj" />
+    <ProjectReference Include="NavMeshComponents.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <ItemGroup>

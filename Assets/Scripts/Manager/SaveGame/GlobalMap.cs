@@ -16,7 +16,7 @@ public class GlobalMap : MonoBehaviour
 
     public event EventHandler OnMapListChanged;
 
-    //List of explored Map. Each MapSave that is constructed will be added to this List.
+    //List of all Maps. Each MapSave that is constructed will be added to this List.
     public List<MapSave> exploredMaps = new List<MapSave>();
 
     //Current Map the Player is moving on. Set on every SceneLoad / MapSwap (Scene_OnSceneLoad.cs)
@@ -26,6 +26,27 @@ public class GlobalMap : MonoBehaviour
     {
         currentMap = map;
         currentPosition = new Vector2(map.mapIndexX, map.mapIndexY);
+        
+        // Markiere Map als besucht
+        map.isVisited = true;
+        
+        // Generiere neue Nachbarn um die neue Position (aber nicht sofort, um Konflikte zu vermeiden)
+        StartCoroutine(DelayedNeighborGeneration());
+        
+        OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);
+    }
+    
+    // NEU: Öffentliche Methode um das Event von außen zu triggern
+    public void TriggerMapListChanged()
+    {
+        OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);
+    }
+    
+    private IEnumerator DelayedNeighborGeneration()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.1f); // Kurze Verzögerung
+        CheckAndGenerateNewNeighbors();
     }
 
     //The current Position of WorldChunks/Cordinates loaded
@@ -42,14 +63,7 @@ public class GlobalMap : MonoBehaviour
 
     public MapSave ScanIfNextMapIsExplored()
     {
-        foreach (MapSave map in exploredMaps)
-        {
-            if (map.mapIndexX == currentPosition.x && map.mapIndexY == currentPosition.y)
-            {
-                return map;
-            }
-        }
-        return null;
+        return GetMapByCords(currentPosition);
     }
 
     public MapSave GetMapByCords(Vector2 cords)
@@ -63,13 +77,26 @@ public class GlobalMap : MonoBehaviour
         }
 
         Debug.Log("Could not find a Map with Cords: " + cords);
-
         return null;
+    }
+
+    // NEU: Prüfe ob Map bereits existiert (in beiden Listen)
+    public bool MapExistsAtCords(Vector2 cords)
+    {
+        return GetMapByCords(cords) != null;
+    }
+
+    // NEU: Prüfe ob Map besucht wurde
+    public bool IsMapExplored(Vector2 cords)
+    {
+        MapSave map = GetMapByCords(cords);
+        return map != null && map.isVisited;
     }
 
     public void CreateAndSaveNewMap()
     {
         MapSave newMap = new MapSave();
+        newMap.isVisited = true; // Diese Map wird gerade besucht
 
         for (int i = 0; i < 81; i++)
         {
@@ -99,21 +126,23 @@ public class GlobalMap : MonoBehaviour
                 Vector2 neighborPos = new Vector2(currentPosition.x + x, currentPosition.y + y);
                 
                 // Prüfe ob Map bereits existiert
-                if (GetMapByCords(neighborPos) == null)
+                if (!MapExistsAtCords(neighborPos))
                 {
                     newMapPositions.Add(neighborPos);
                 }
             }
         }
         
-        // Generiere alle neuen Maps
+        // Generiere alle neuen Maps und füge sie direkt zu exploredMaps hinzu (aber als unbesucht)
         foreach (Vector2 mapPos in newMapPositions)
         {
             MapSave newMap = MapGenHandler.GenerateMapDataOnly((int)mapPos.x, (int)mapPos.y);
+            newMap.isVisited = false; // Als unbesucht markieren
             exploredMaps.Add(newMap);
+            Debug.Log($"[GlobalMap] Neue Map generiert: ({mapPos.x}, {mapPos.y}) - Theme: {newMap.mapTheme}");
         }
         
-        Debug.Log($"[GlobalMap] {newMapPositions.Count} neue Nachbar-Maps generiert");
+        Debug.Log($"[GlobalMap] {newMapPositions.Count} neue Nachbar-Maps generiert. Total maps: {exploredMaps.Count}");
         
         // Benachrichtige UI über Änderungen
         OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);
@@ -124,6 +153,26 @@ public class GlobalMap : MonoBehaviour
     /// </summary>
     public void CheckAndGenerateNewNeighbors()
     {
-        GenerateNeighborMaps(1);
+        GenerateNeighborMaps(2); // Größerer Radius für bessere Übersicht
+    }
+
+    // Getter für alle Maps für UI
+    public List<MapSave> GetAllMaps()
+    {
+        return exploredMaps;
+    }
+    
+    // Getter für nur besuchte Maps (für Save-System Kompatibilität)
+    public List<MapSave> GetVisitedMaps()
+    {
+        List<MapSave> visitedMaps = new List<MapSave>();
+        foreach(MapSave map in exploredMaps)
+        {
+            if(map.isVisited)
+            {
+                visitedMaps.Add(map);
+            }
+        }
+        return visitedMaps;
     }
 }

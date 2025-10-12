@@ -187,6 +187,7 @@ MonoBehaviour:
   weaponAnimator: {fileID: 0}
   weaponPivot: {fileID: 0}
   isPerformingAction: 0
+  minMovementSpeed: 0.1
   spriteSheet: {fileID: 648834624, guid: f0c1c8a38ee96454482b8e131cdd6887, type: 3}
   mirrorSpritesheet: 0
   generatedAnimator: {fileID: 0}
@@ -464,12 +465,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.5812604, y: 1, z: 1}
+  m_Center: {x: -0.16281389, y: 0, z: 0}
 --- !u!1 &7839687458832828465
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,6 +482,7 @@ GameObject:
   - component: {fileID: 7839687458832828457}
   - component: {fileID: 6924341141967954}
   - component: {fileID: 764865214548323693}
+  - component: {fileID: -3914968387557056489}
   - component: {fileID: 7839687458832828460}
   - component: {fileID: 7839687458832828462}
   - component: {fileID: 7084725296111636664}
@@ -556,11 +558,26 @@ MonoBehaviour:
   targetIndicator: {fileID: 0}
   attackRange: 1
   aggroRange: 5
+  stoppingDistance: 0
   isDead: 0
   customRange: 10
   customRangeColor: {r: 0, g: 1, b: 0, a: 1}
   showCustomRange: 1
   audioMuteDistance: 10
+--- !u!114 &-3914968387557056489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7839687458832828465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13131c4283b7fb84b9b589e45712e1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseTime: 1
+  holdDistance: 5
 --- !u!195 &7839687458832828460
 NavMeshAgent:
   m_ObjectHideFlags: 0

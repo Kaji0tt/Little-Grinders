@@ -406,6 +406,7 @@ MonoBehaviour:
   weaponAnimator: {fileID: 0}
   weaponPivot: {fileID: 0}
   isPerformingAction: 0
+  minMovementSpeed: 0.1
   spriteSheet: {fileID: 1777558368, guid: eaf0fad500b43f047920b37270923571, type: 3}
   mirrorSpritesheet: 0
   generatedAnimator: {fileID: 0}
@@ -584,6 +585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2349575936830353764}
   - component: {fileID: 2999525891467434921}
+  - component: {fileID: 2342705021548537678}
   - component: {fileID: 943255847105335781}
   - component: {fileID: 2966563936801362225}
   - component: {fileID: 7914199610718838779}
@@ -645,6 +647,20 @@ MonoBehaviour:
   castCD: 1
   attackCD: 1
   isRegenerating: 1
+--- !u!114 &2342705021548537678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3847897704082383918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21aea2fb9f89e574fad7ec2e217d2a0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseTime: 0.5
+  additionalDistance: 0.5
 --- !u!114 &943255847105335781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658,8 +674,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetIndicator: {fileID: 0}
-  attackRange: 1
+  attackRange: 1.5
   aggroRange: 3
+  stoppingDistance: 0
   isDead: 0
   customRange: 10
   customRangeColor: {r: 0, g: 1, b: 0, a: 1}

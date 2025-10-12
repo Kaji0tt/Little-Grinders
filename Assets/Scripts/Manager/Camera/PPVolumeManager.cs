@@ -52,8 +52,21 @@ public class PPVolumeManager : MonoBehaviour
     [Tooltip("Farbe für Nachtstimmung (Directional Light)")]
     public Color nightColor;
 
+    [Space]
+    [Header("Void Effect Settings - DEPRECATED")]
+    [Tooltip("Diese Einstellungen sind deprecated - Void-Effekte werden jetzt in spezifischen Komponenten verwaltet")]
+    public bool voidEffectEnabled = true;
+    public Color voidColor = new Color(0.5f, 0.2f, 0.8f, 1f);
+    [Range(0f, 1f)]
+    public float voidIntensity = 0.7f;
+    public float voidAnimationSpeed = 2f;
+    public float voidTransitionDuration = 2f;
+
     #endregion
 
+    // Private Variablen - nur für allgemeine Funktionen
+    private bool statusActive = false; // Flag to prevent day/night updates
+    
     void Start()
     {
         //TestDayNightCycle(5f); // Testen Sie den Tag-Nacht-Zyklus für 5 Sekunden
@@ -73,6 +86,9 @@ public class PPVolumeManager : MonoBehaviour
 
     public void UpdateDayNightFromSystemTime()
     {
+        // Skip day/night updates if void effect is active
+        if (statusActive) return;
+        
         DateTime now = DateTime.Now;
         // Berechne Minuten seit Mitternacht
         float minutes = now.Hour * 60f + now.Minute;
@@ -83,6 +99,9 @@ public class PPVolumeManager : MonoBehaviour
 
     public void SetDayNightAmbience(float time01)
     {
+        // Skip day/night updates if void effect is active
+        if (statusActive) return;
+        
         // time01: 0 = Mitternacht, 0.25 = Morgen, 0.5 = Mittag, 0.75 = Abend, 1 = Mitternacht
 
         // LiftGammaGain-Farbe bestimmen
@@ -91,6 +110,7 @@ public class PPVolumeManager : MonoBehaviour
         LiftGammaGain liftGammaGain;
         if (volume.profile.TryGet<LiftGammaGain>(out liftGammaGain))
         {
+            liftGammaGain.lift.overrideState = true; // KORREKTUR: Override aktivieren
             liftGammaGain.lift.value = liftColor;
             //Debug.Log($"[PPVolumeManager] LiftGammaGain set to {liftColor} at time01={time01:F2}");
         }
@@ -140,6 +160,7 @@ public class PPVolumeManager : MonoBehaviour
 
         if (volume.profile.TryGet<Vignette>(out vignette))
         {
+            vignette.intensity.overrideState = true; // KORREKTUR: Override aktivieren
             vignette.intensity.value = Mathf.Lerp(vigMaxVol, vigStandardVol, value);
         }
     }
@@ -171,4 +192,184 @@ public class PPVolumeManager : MonoBehaviour
         Debug.Log("[PPVolumeManager] Day-Night Cycle Test completed, resetting to midnight.");
         SetDayNightAmbience(0f);
     }
+
+    #region Generic Post-Processing Methods
+    
+    /// <summary>
+    /// Setzt die Vignetten-Farbe des aktiven Profils
+    /// </summary>
+    /// <param name="newColor">Die neue Farbe für die Vignette</param>
+    public void SetVignetteColor(Color newColor)
+    {
+        if (volume != null && volume.profile != null)
+        {
+            if (volume.profile.TryGet<Vignette>(out var vignette))
+            {
+                vignette.color.overrideState = true;
+                vignette.color.value = newColor;
+                Debug.Log($"[PPVolumeManager] Vignetten-Farbe geändert zu: {newColor}");
+                
+                // Erzwinge Volume-Update
+                RefreshVolume();
+            }
+            else
+            {
+                Debug.LogWarning("[PPVolumeManager] Vignette-Effekt nicht im aktiven Profil gefunden!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[PPVolumeManager] Volume oder Profil ist null!");
+        }
+    }
+    
+    /// <summary>
+    /// Setzt die Vignetten-Intensität des aktiven Profils
+    /// </summary>
+    /// <param name="intensity">Neue Intensität für die Vignette (0-1)</param>
+    public void SetVignetteIntensity(float intensity)
+    {
+        if (volume != null && volume.profile != null)
+        {
+            if (volume.profile.TryGet<Vignette>(out var vignette))
+            {
+                vignette.intensity.overrideState = true;
+                vignette.intensity.value = Mathf.Clamp01(intensity);
+                RefreshVolume();
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Setzt die Lift Gamma Gain Werte für Farbkorrektur
+    /// </summary>
+    /// <param name="liftColor">Neue Lift-Farbe als Vector4</param>
+    public void SetLiftGammaGain(Vector4 liftColor)
+    {
+        if (volume != null && volume.profile != null)
+        {
+            if (volume.profile.TryGet<LiftGammaGain>(out var liftGammaGain))
+            {
+                liftGammaGain.lift.overrideState = true;
+                liftGammaGain.lift.value = liftColor;
+                RefreshVolume();
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Setzt die Sättigung für Color Adjustments
+    /// </summary>
+    /// <param name="saturation">Neue Sättigung (-100 bis 100)</param>
+    public void SetSaturation(float saturation)
+    {
+        if (volume != null && volume.profile != null)
+        {
+            if (volume.profile.TryGet<ColorAdjustments>(out var colorAdjustments))
+            {
+                colorAdjustments.saturation.overrideState = true;
+                colorAdjustments.saturation.value = Mathf.Clamp(saturation, -100f, 100f);
+                RefreshVolume();
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Setzt die Chromatic Aberration Intensität
+    /// </summary>
+    /// <param name="intensity">Neue Intensität für Chromatic Aberration (0-1)</param>
+    public void SetChromaticAberration(float intensity)
+    {
+        if (volume != null && volume.profile != null)
+        {
+            if (volume.profile.TryGet<ChromaticAberration>(out var chromaticAberration))
+            {
+                chromaticAberration.intensity.overrideState = true;
+                chromaticAberration.intensity.value = Mathf.Clamp01(intensity);
+                RefreshVolume();
+            }
+            else
+            {
+                Debug.LogWarning("[PPVolumeManager] Chromatic Aberration-Effekt nicht im aktiven Profil gefunden!");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Aktiviert oder deaktiviert Day/Night-Updates
+    /// </summary>
+    /// <param name="active">Ob Day/Night-Updates aktiv sein sollen</param>
+    public void SetDayNightUpdates(bool active)
+    {
+        statusActive = !active; // statusActive verhindert Day/Night-Updates
+        Debug.Log($"[PPVolumeManager] Day/Night-Updates {(active ? "aktiviert" : "deaktiviert")}");
+    }
+    
+    /// <summary>
+    /// Gibt die aktuellen Vignette-Werte zurück
+    /// </summary>
+    /// <returns>Tuple mit (Farbe, Intensität)</returns>
+    public (Color color, float intensity) GetVignetteValues()
+    {
+        if (volume != null && volume.profile != null)
+        {
+            if (volume.profile.TryGet<Vignette>(out var vignette))
+            {
+                return (vignette.color.value, vignette.intensity.value);
+            }
+        }
+        return (Color.black, 0.32f);
+    }
+    
+    /// <summary>
+    /// Gibt die aktuellen Lift Gamma Gain Werte zurück
+    /// </summary>
+    /// <returns>Aktuelle Lift-Farbe als Vector4</returns>
+    public Vector4 GetLiftGammaGainValues()
+    {
+        if (volume != null && volume.profile != null)
+        {
+            if (volume.profile.TryGet<LiftGammaGain>(out var liftGammaGain))
+            {
+                return liftGammaGain.lift.value;
+            }
+        }
+        return Vector4.zero;
+    }
+    
+    /// <summary>
+    /// Gibt die aktuelle Chromatic Aberration Intensität zurück
+    /// </summary>
+    /// <returns>Aktuelle Chromatic Aberration Intensität</returns>
+    public float GetChromaticAberrationValue()
+    {
+        if (volume != null && volume.profile != null)
+        {
+            if (volume.profile.TryGet<ChromaticAberration>(out var chromaticAberration))
+            {
+                return chromaticAberration.intensity.value;
+            }
+        }
+        return 0f;
+    }
+    
+    /// <summary>
+    /// Erzwingt ein Update des Volume-Profiles um sicherzustellen dass Änderungen sofort sichtbar werden
+    /// </summary>
+    private void RefreshVolume()
+    {
+        if (volume != null)
+        {
+            // Methode 1: Volume kurz deaktivieren und wieder aktivieren
+            volume.enabled = false;
+            volume.enabled = true;
+            
+            // Methode 2: Profile als "dirty" markieren falls möglich
+            #if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(volume.profile);
+            #endif
+        }
+    }
+    
+    #endregion
 }

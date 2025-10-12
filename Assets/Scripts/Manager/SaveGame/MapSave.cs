@@ -13,7 +13,12 @@ public class MapSave
 
     //public bool[][] isMapExplored = new bool[][] { };
 
-    public bool gotTeleporter;
+    // GEÄNDERT: gotTeleporter durch isCleared ersetzt
+    public bool isCleared = false;
+    
+    // NEU: Ob diese Map bereits besucht wurde
+    public bool isVisited = false;
+    
     //Map Level
     public int mapLevel;
 
@@ -44,9 +49,6 @@ public class MapSave
     ///
     public MapSave()
     {
-        //CalculateMapLevel();
-
-
         //Save the Map Coordinates
         if(GlobalMap.instance != null)
         {
@@ -60,14 +62,32 @@ public class MapSave
             mapLevel = Mathf.Abs(v2.x) > Mathf.Abs(v2.y) ? (int)Mathf.Abs(v2.x) : (int)Mathf.Abs(v2.y);
         }
 
-        gotTeleporter = false;
+        isCleared = false;
+        isVisited = true; // Diese Map wird gerade erstellt/besucht
 
         //Fetch the current Theme and save it
         if(PrefabCollection.instance != null)
         mapTheme = PrefabCollection.instance.worldType;
 
-        // Sammle alle Interactables der aktuellen Map
-        SaveCurrentMapInteractables();
+        // NEU: Nur für aktuell geladene Maps Interactables sammeln
+        // Für pre-generierte Maps passiert das nicht
+        if (MapGenHandler.instance != null && MapGenHandler.instance.fieldPosSave != null)
+        {
+            SaveCurrentMapInteractables();
+        }
+    }
+
+    // NEU: Konstruktor für pre-generierte Maps (ohne aktuelle Szene)
+    public MapSave(int x, int y, int level, WorldType theme, FieldType[] fieldTypes)
+    {
+        mapIndexX = x;
+        mapIndexY = y;
+        mapLevel = level;
+        mapTheme = theme;
+        fieldType = fieldTypes ?? new FieldType[81];
+        isCleared = false;
+        isVisited = false; // Generierte Maps sind erstmal unbesucht
+        mapInteractables = new List<InteractableSaveData>();
     }
 
     private void CalculateMapLevel()

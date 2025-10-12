@@ -79,6 +79,6 @@ public class Scene_LoadNextScene : MonoBehaviour
         }
 
         //Tell the MaGenHandler to either create a NewMap, if its not explored yet or Load the explored one.
-        MapGenHandler.instance.LoadMap(GlobalMap.instance.ScanIfNextMapIsExplored(), nextSpawnpoint);
+        MapGenHandler.instance.LoadOrCreateMapForCurrentPosition(nextSpawnpoint);
     }
 }
