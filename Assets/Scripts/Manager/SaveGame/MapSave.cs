@@ -5,6 +5,30 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [System.Serializable]
+public class InteractableSave
+{
+    public float positionX;
+    public float positionY;
+    public float positionZ;
+    public string interactableType; // Name/type of the interactable prefab
+    public bool isUsed;
+    
+    public InteractableSave(Vector3 position, string type, bool used)
+    {
+        positionX = position.x;
+        positionY = position.y;
+        positionZ = position.z;
+        interactableType = type;
+        isUsed = used;
+    }
+    
+    public Vector3 GetPosition()
+    {
+        return new Vector3(positionX, positionY, positionZ);
+    }
+}
+
+[System.Serializable]
 public class MapSave
 {
     //MapSave muss wissen:
@@ -32,6 +56,9 @@ public class MapSave
 
     //Field Type
     public FieldType[] fieldType = new FieldType[81];
+
+    //Interactables on this map
+    public List<InteractableSave> interactables = new List<InteractableSave>();
 
     //To Save Mobs, declare an enum for every type of Mob. 
     //For Enemy[] loadedEnemies FindObjectsOfType<Enemy>

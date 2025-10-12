@@ -103,6 +103,9 @@ public class GlobalMap : MonoBehaviour
             newMap.fieldType[i] = MapGenHandler.instance.fieldPosSave[i].GetComponent<FieldPos>().Type;
         }
 
+        // Save current interactables
+        newMap.SaveInteractables();
+
         currentMap = newMap;
         exploredMaps.Add(newMap);
 
