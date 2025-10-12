@@ -207,27 +207,26 @@ public class EnemyWaveSpawner : MonoBehaviour
             enemy.name = enemy.name.Replace("(Clone)", "").Trim();
         }
         
-        // Apply difficulty scaling to enemy stats (if needed in future)
-        // This could modify MobStats component based on currentDifficultyLevel
-        ApplyDifficultyScaling(enemy);
-        
-        // Make sure enemy immediately knows about player
-        var enemyController = enemy.GetComponent<EnemyController>();
-        if (enemyController != null)
+        // Apply difficulty scaling after a frame to ensure MobStats.Start() has run
+        if (currentDifficultyLevel > 0)
         {
-            // Enemy will automatically target player through its AI
-            // No additional setup needed
+            StartCoroutine(ApplyDifficultyScalingDelayed(enemy));
         }
+        
+        // Enemy will automatically target player through its AI (EnemyController.Player property)
     }
     
-    private void ApplyDifficultyScaling(GameObject enemy)
+    private IEnumerator ApplyDifficultyScalingDelayed(GameObject enemy)
     {
-        if (currentDifficultyLevel == 0)
-            return;
+        // Wait for MobStats.Start() to run first
+        yield return new WaitForEndOfFrame();
         
+        if (enemy == null)
+            yield break;
+            
         var mobStats = enemy.GetComponent<MobStats>();
         if (mobStats == null)
-            return;
+            yield break;
         
         // Scale enemy stats based on difficulty level
         // Keep enemies relatively weak but slightly increase stats over time
@@ -243,6 +242,11 @@ public class EnemyWaveSpawner : MonoBehaviour
         if (mobStats.AttackPower != null)
         {
             mobStats.AttackPower.AddModifier(new StatModifier(mobStats.AttackPower.BaseValue * (damageScale - 1f), StatModType.Flat));
+        }
+        
+        if (debugLogs)
+        {
+            Debug.Log($"[EnemyWaveSpawner] Applied difficulty scaling (level {currentDifficultyLevel}) to {enemy.name}");
         }
     }
     
