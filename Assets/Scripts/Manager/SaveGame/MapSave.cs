@@ -153,6 +153,77 @@ public class MapSave
         // z.B. über Position oder Map-spezifische IDs
         return true; // Placeholder
     }
+
+    /// <summary>
+    /// Speichert alle aktuellen BaseInteractables in der Szene
+    /// </summary>
+    public void SaveInteractables()
+    {
+        Debug.Log("[MapSave] SaveInteractables wird ausgeführt...");
+        
+        interactables.Clear();
+        
+        // Finde alle BaseInteractable Objekte in der Szene
+        BaseInteractable[] sceneInteractables = UnityEngine.Object.FindObjectsByType<BaseInteractable>(UnityEngine.FindObjectsSortMode.None);
+        
+        foreach (BaseInteractable interactable in sceneInteractables)
+        {
+            InteractableSave save = new InteractableSave(
+                interactable.transform.position,
+                interactable.gameObject.name.Replace("(Clone)", ""),
+                interactable.isUsed
+            );
+            interactables.Add(save);
+            Debug.Log($"[MapSave] Saved {interactable.gameObject.name} at {interactable.transform.position} (Used: {interactable.isUsed})");
+        }
+        
+        Debug.Log($"[MapSave] Saved {interactables.Count} interactables total");
+    }
+
+    /// <summary>
+    /// Stellt alle gespeicherten Interactables in der Szene wieder her
+    /// </summary>
+    public void RestoreInteractables()
+    {
+        Debug.Log("[MapSave] RestoreInteractables wird ausgeführt...");
+        
+        if (PrefabCollection.instance == null)
+        {
+            Debug.LogWarning("[MapSave] PrefabCollection not found - cannot restore interactables");
+            return;
+        }
+        
+        // Erst alle existierenden BaseInteractables entfernen
+        BaseInteractable[] existingInteractables = UnityEngine.Object.FindObjectsByType<BaseInteractable>(UnityEngine.FindObjectsSortMode.None);
+        foreach (BaseInteractable existing in existingInteractables)
+        {
+            UnityEngine.Object.DestroyImmediate(existing.gameObject);
+        }
+        Debug.Log($"[MapSave] Removed {existingInteractables.Length} existing interactables");
+        
+        // Dann gespeicherte wiederherstellen
+        foreach (InteractableSave save in interactables)
+        {
+            GameObject prefab = PrefabCollection.instance.GetInteractableByName(save.interactableType);
+            if (prefab != null)
+            {
+                GameObject restored = UnityEngine.Object.Instantiate(prefab, save.GetPosition(), Quaternion.identity);
+                
+                BaseInteractable interactableComponent = restored.GetComponent<BaseInteractable>();
+                if (interactableComponent != null)
+                {
+                    interactableComponent.isUsed = save.isUsed;
+                    Debug.Log($"[MapSave] Restored {save.interactableType} at {save.GetPosition()} (Used: {save.isUsed})");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[MapSave] Could not find prefab for {save.interactableType}");
+            }
+        }
+        
+        Debug.Log($"[MapSave] Restored {interactables.Count} interactables total");
+    }
 }
 
 
