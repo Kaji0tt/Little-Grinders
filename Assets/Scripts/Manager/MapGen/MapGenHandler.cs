@@ -25,6 +25,8 @@ public class MapGenHandler : MonoBehaviour
     public GameObject mobParentObj;
 
     public GameObject[] fieldPosSave { get { return fieldsPosObj; } private set { fieldsPosObj = value; } }
+    
+    private GameObject enemyWaveSpawnerObj;
 
     void Start()
     {
@@ -112,6 +114,9 @@ public class MapGenHandler : MonoBehaviour
         navMeshSurface.BuildNavMesh();
         GlobalMap.instance.CreateAndSaveNewMap();
         
+        // Initialize wave spawner
+        InitializeEnemyWaveSpawner();
+        
         Debug.Log("=== [CreateNewMap] ENDE ===");
     }
 
@@ -144,6 +149,9 @@ public class MapGenHandler : MonoBehaviour
 
             // NEU: Generiere Nachbarn auch beim Laden existierender Maps
             StartCoroutine(GenerateNeighborMapsDelayed());
+            
+            // Initialize wave spawner
+            InitializeEnemyWaveSpawner();
 
             Debug.Log("[LoadExistingMap] Map erfolgreich aus Save Data geladen");
         }
@@ -369,10 +377,35 @@ public class MapGenHandler : MonoBehaviour
         {
             Destroy(prefab.gameObject);
         }
+        
+        // Reset wave spawner when map is reset
+        if (EnemyWaveSpawner.instance != null)
+        {
+            EnemyWaveSpawner.instance.ResetSpawner();
+        }
     }
 
     public void RebuildNavMesh()
     {
         navMeshSurface.BuildNavMesh();
+    }
+    
+    private void InitializeEnemyWaveSpawner()
+    {
+        // Check if spawner already exists
+        if (EnemyWaveSpawner.instance != null)
+        {
+            Debug.Log("[MapGenHandler] EnemyWaveSpawner already exists, resetting it");
+            EnemyWaveSpawner.instance.ResetSpawner();
+            return;
+        }
+        
+        // Create new spawner if it doesn't exist
+        if (enemyWaveSpawnerObj == null)
+        {
+            enemyWaveSpawnerObj = new GameObject("EnemyWaveSpawner");
+            enemyWaveSpawnerObj.AddComponent<EnemyWaveSpawner>();
+            Debug.Log("[MapGenHandler] Created new EnemyWaveSpawner");
+        }
     }
 }

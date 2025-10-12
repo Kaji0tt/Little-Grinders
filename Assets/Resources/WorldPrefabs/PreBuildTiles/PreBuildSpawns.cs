@@ -13,9 +13,11 @@ public class PreBuildSpawns : MonoBehaviour
 
     private void Start()
     {
+        // Reduced spawn chance in camps - main spawning handled by EnemyWaveSpawner
+        // Keep some enemies in camps for flavor and as initial threats
         foreach(Transform spawn in enemiesSpawn)
         {
-            if(Random.Range(0,2) == 1)
+            if(Random.Range(0,4) == 1) // Reduced from 1/2 to 1/4 chance
             {
                 GameObject enemyPrefab = enemiesPF[Random.Range(0, enemiesPF.Length)];
                 GameObject mob = Instantiate(enemyPrefab, spawn.transform.position, Quaternion.identity);
