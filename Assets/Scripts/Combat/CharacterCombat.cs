@@ -157,10 +157,12 @@ public class CharacterCombat : MonoBehaviour
                 currentSlowValue = -0.5f;
                 isSlowing = true;
 
-                attackStepTimer = currentAttackStep.timeForAttackStep;
+                // Berechne AttackStep-Dauer basierend auf AttackSpeed
+                attackStepTimer = currentAttackStep.timeForAttackStep / playerStats.AttackSpeed.Value;
                 PerformAttack();
 
-                comboWindowTime = 1.0f;
+                // Berechne ComboWindow-Zeit basierend auf AttackSpeed
+                comboWindowTime = 1.0f / playerStats.AttackSpeed.Value;
                 currentState = CombatState.ComboWindow;
                 break;
 
@@ -171,7 +173,8 @@ public class CharacterCombat : MonoBehaviour
 
                     if (attackStepTimer <= 0f)
                     {
-                        comboWindowTime = 1.0f;
+                        // Berechne ComboWindow-Zeit basierend auf AttackSpeed
+                        comboWindowTime = 1.0f / playerStats.AttackSpeed.Value;
 
                         if (bufferedInputs.Count > 0)
                         {
@@ -290,7 +293,11 @@ public class CharacterCombat : MonoBehaviour
 
         StartCoroutine(DashTowardsTarget(currentAttackStep));
         DealDamage(currentAttackStep);
-        isoRenderer.PlayWeaponAttackWithDuration(currentAttackStep.animationClip, currentAttackStep.timeForAttackStep);
+        
+        // Berechne Animation-Dauer basierend auf AttackSpeed
+        float adjustedDuration = currentAttackStep.timeForAttackStep / playerStats.AttackSpeed.Value;
+        isoRenderer.PlayWeaponAttackWithDuration(currentAttackStep.animationClip, adjustedDuration);
+        
         PlaySound("Attack");
         //StartCoroutine(DelayedHit(delay, currentStep));
     }

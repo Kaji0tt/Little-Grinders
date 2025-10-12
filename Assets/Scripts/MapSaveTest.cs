@@ -89,8 +89,8 @@ public class MapSaveTest : MonoBehaviour
     {
         Debug.Log("=== CLEARING ALL INTERACTABLES ===");
         
-        Interactable[] interactables = FindObjectsOfType<Interactable>();
-        foreach (Interactable interactable in interactables)
+        BaseInteractable[] interactables = UnityEngine.Object.FindObjectsByType<BaseInteractable>(UnityEngine.FindObjectsSortMode.None);
+        foreach (BaseInteractable interactable in interactables)
         {
             DestroyImmediate(interactable.gameObject);
         }
