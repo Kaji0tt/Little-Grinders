@@ -154,30 +154,58 @@ public class EnemyWaveSpawner : MonoBehaviour
     {
         Vector3 playerPos = playerTransform.position;
         
-        // Try multiple times to find a valid spawn position
-        for (int attempt = 0; attempt < 10; attempt++)
+        // Find all spawn positions marked with "SpawnPos" tag
+        GameObject[] spawnPositions = GameObject.FindGameObjectsWithTag("SpawnPos");
+        
+        if (spawnPositions.Length == 0)
         {
-            // Generate random angle
-            float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            float distance = Random.Range(minSpawnDistance, maxSpawnDistance);
-            
-            Vector3 offset = new Vector3(
-                Mathf.Cos(angle) * distance,
-                0,
-                Mathf.Sin(angle) * distance
-            );
-            
-            Vector3 potentialSpawn = playerPos + offset;
-            
-            // Check if position is on NavMesh
-            UnityEngine.AI.NavMeshHit hit;
-            if (UnityEngine.AI.NavMesh.SamplePosition(potentialSpawn, out hit, 5f, UnityEngine.AI.NavMesh.AllAreas))
+            if (debugLogs)
             {
-                return hit.position;
+                Debug.LogWarning("[EnemyWaveSpawner] No GameObjects with tag 'SpawnPos' found!");
+            }
+            return Vector3.zero;
+        }
+        
+        // Filter spawn positions by distance from player
+        List<GameObject> validSpawnPositions = new List<GameObject>();
+        
+        foreach (GameObject spawnPos in spawnPositions)
+        {
+            float distance = Vector3.Distance(playerPos, spawnPos.transform.position);
+            
+            // Check if spawn position is within valid distance range
+            if (distance >= minSpawnDistance && distance <= maxSpawnDistance)
+            {
+                validSpawnPositions.Add(spawnPos);
             }
         }
         
-        return Vector3.zero;
+        // If no spawn positions in range, use any spawn position outside minimum distance
+        if (validSpawnPositions.Count == 0)
+        {
+            foreach (GameObject spawnPos in spawnPositions)
+            {
+                float distance = Vector3.Distance(playerPos, spawnPos.transform.position);
+                if (distance >= minSpawnDistance)
+                {
+                    validSpawnPositions.Add(spawnPos);
+                }
+            }
+        }
+        
+        // If still no valid positions, return zero (shouldn't happen with proper setup)
+        if (validSpawnPositions.Count == 0)
+        {
+            if (debugLogs)
+            {
+                Debug.LogWarning("[EnemyWaveSpawner] No valid spawn positions found within distance constraints!");
+            }
+            return Vector3.zero;
+        }
+        
+        // Return random valid spawn position
+        GameObject selectedSpawn = validSpawnPositions[Random.Range(0, validSpawnPositions.Count)];
+        return selectedSpawn.transform.position;
     }
     
     private void SpawnEnemy(Vector3 position)
@@ -213,7 +241,8 @@ public class EnemyWaveSpawner : MonoBehaviour
             StartCoroutine(ApplyDifficultyScalingDelayed(enemy));
         }
         
-        // Enemy will automatically target player through its AI (EnemyController.Player property)
+        // Set pulled flag to make enemy immediately chase player
+        StartCoroutine(ForceChaseStateDelayed(enemy));
     }
     
     private IEnumerator ApplyDifficultyScalingDelayed(GameObject enemy)
@@ -247,6 +276,52 @@ public class EnemyWaveSpawner : MonoBehaviour
         if (debugLogs)
         {
             Debug.Log($"[EnemyWaveSpawner] Applied difficulty scaling (level {currentDifficultyLevel}) to {enemy.name}");
+        }
+    }
+    
+    private IEnumerator ForceChaseStateDelayed(GameObject enemy)
+    {
+        // Länger warten, bis der EnemyController vollständig initialisiert ist
+        yield return new WaitForSeconds(1f);
+        
+        if (enemy == null)
+        {
+            if (debugLogs)
+            {
+                Debug.LogWarning("[EnemyWaveSpawner] Enemy object is null, cannot set pulled flag");
+            }
+            yield break;
+        }
+            
+        EnemyController enemyController = enemy.GetComponent<EnemyController>();
+        if (enemyController == null)
+        {
+            if (debugLogs)
+            {
+                Debug.LogWarning($"[EnemyWaveSpawner] No EnemyController found on {enemy.name}");
+            }
+            yield break;
+        }
+        
+        // Setze Flag UND forciere State-Wechsel als Backup
+        enemyController.pulled = true;
+        
+        if (debugLogs)
+        {
+            Debug.Log($"[EnemyWaveSpawner] Set pulled=true on {enemy.name}");
+        }
+        
+        // Backup: Falls IdleState Update nicht funktioniert, direkt State wechseln
+        yield return new WaitForSeconds(0.1f);
+        
+        if (enemyController != null && !enemyController.isDead)
+        {
+            enemyController.TransitionTo(new ChaseState(enemyController));
+            
+            if (debugLogs)
+            {
+                Debug.Log($"[EnemyWaveSpawner] Forced ChaseState on {enemy.name}");
+            }
         }
     }
     

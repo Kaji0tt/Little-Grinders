@@ -14961,7 +14961,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 740210742}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.33998817, y: -0.5383791, z: 0.2510692, w: 0.7290544}
+  m_LocalRotation: {x: 0.32429183, y: 0.5812076, z: -0.271042, w: 0.6953911}
   m_LocalPosition: {x: -13.510178, y: 8.260615, z: -21.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -15001,8 +15001,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 0.3982002, g: 0.38990235, b: 0.49679995, a: 1}
-  m_Intensity: 0.74175185
+  m_Color: {r: 0.27326202, g: 0.27405494, b: 0.416457, a: 1}
+  m_Intensity: 0.70130897
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -20647,6 +20647,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 663814506}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1065834535
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1065834536}
+  - component: {fileID: 1065834537}
+  m_Layer: 0
+  m_Name: _Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1065834536
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065834535}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1952174354}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1065834537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065834535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 536f69cc60eba9647a0abedebf156de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnInterval: 8
+  baseEnemiesPerWave: 3
+  minSpawnDistance: 15
+  maxSpawnDistance: 20
+  spawnRadius: 3
+  difficultyIncreaseInterval: 60
+  maxEnemiesPerWave: 16
+  enemyHealthMultiplier: 1
+  enemyDamageMultiplier: 1
+  enableSpawning: 1
+  debugLogs: 1
 --- !u!1 &1070841173
 GameObject:
   m_ObjectHideFlags: 0
@@ -37636,6 +37691,7 @@ Transform:
   m_Children:
   - {fileID: 476892429}
   - {fileID: 854868762}
+  - {fileID: 1065834536}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1956774347
@@ -38192,8 +38248,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1586091267}
   m_HandleRect: {fileID: 1586091266}
   m_Direction: 2
-  m_Value: 0.34942758
-  m_Size: 0.37474588
+  m_Value: 0.34942764
+  m_Size: 0.37474582
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

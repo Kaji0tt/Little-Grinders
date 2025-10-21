@@ -62,6 +62,8 @@ public class EnemyController : MonoBehaviour, IEntitie
     private float maxHpForUI;
     [HideInInspector]
     public bool isDead = false;
+    [HideInInspector]
+    public bool pulled = false; // Flag for wave-spawned enemies to immediately chase player
     //public int level;
 
     [Space]
@@ -261,6 +263,15 @@ public class EnemyController : MonoBehaviour, IEntitie
         if (myNavMeshAgent == null)
             myNavMeshAgent = GetComponent<NavMeshAgent>();
 
+        // Wenn gepullt: Direkt zum Spieler laufen
+        if (pulled)
+        {
+            if (!mobStats.isDead)
+                myNavMeshAgent.SetDestination(Player.position);
+            return;
+        }
+
+        // Normale Bewegung mit gewichteter Richtung (für Aggro-Verhalten)
         directionTimer -= Time.deltaTime;
 
         if (directionTimer <= 0f)

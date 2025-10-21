@@ -62,7 +62,14 @@ public class IdleState : EntitieState
 
     public override void Update()
     {
-
+        // Debug: Zeige pulled Status
+        if (controller.pulled)
+        {
+            Debug.Log($"[IdleState] Enemy {controller.name} is pulled, transitioning to Chase!");
+            controller.TransitionTo(new ChaseState(controller));
+            return;
+        }
+        
         // Falls Spieler zu nahe ist -> Zustandswechsel
         if (Vector3.Distance(controller.transform.position, controller.Player.position) <= controller.aggroRange)
         {
@@ -149,8 +156,8 @@ public class ChaseState : EntitieState
         // Nur verfolgen, wenn nicht in Angriffsreichweite
         controller.MoveToPlayer();
 
-        // Wenn Ziel wieder außerhalb der Aggro-Reichweite ist
-        if (controller.TargetDistance() > controller.aggroRange)
+        // Wenn Ziel wieder außerhalb der Aggro-Reichweite ist UND nicht gepullt
+        if (controller.TargetDistance() > controller.aggroRange && !controller.pulled)
         {
             // Animation wird automatisch durch IsometricRenderer Movement-Detection gesteuert
             // GameEvents.Instance?.EnemyStartIdle(controller);
