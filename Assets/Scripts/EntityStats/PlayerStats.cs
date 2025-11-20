@@ -27,6 +27,15 @@ public class PlayerStats : MonoBehaviour, IEntitie
     public static event Action eventLevelUp;
 
 
+    #region Stumble System (Straucheln beim Schaden erhalten)
+    private StatModifier stumbleSlow = new StatModifier(-0.7f, StatModType.PercentMult);
+    private float stumbleDuration = 0.8f;
+    private float stumbleTimer = 0f;
+    private float currentStumbleValue = 0f;
+    private bool isStumbling = false;
+    #endregion
+
+    #region Buff & Debuff System
     /// <summary>
     /// Buff / Debuff System
     /// </summary>
@@ -75,24 +84,24 @@ public class PlayerStats : MonoBehaviour, IEntitie
     private void HandleBuffs()
     {
         //print(activeBuffs.Count);
-        if(activeBuffs.Count > 0)
+        if (activeBuffs.Count > 0)
         {
-            foreach(BuffInstance buff in activeBuffs)
+            foreach (BuffInstance buff in activeBuffs)
             {
                 buff.active = true;
                 buff.Update();
             }
         }
 
-        if(newBuffs.Count > 0)
+        if (newBuffs.Count > 0)
         {
             activeBuffs.AddRange(newBuffs);
             newBuffs.Clear();
         }
 
-        if(expiredBuffs.Count > 0)
+        if (expiredBuffs.Count > 0)
         {
-            foreach(BuffInstance buff in expiredBuffs)
+            foreach (BuffInstance buff in expiredBuffs)
             {
                 buff.active = false;
                 activeBuffs.Remove(buff);
@@ -102,11 +111,31 @@ public class PlayerStats : MonoBehaviour, IEntitie
         }
 
     }
+    #endregion
+
+    #region XP & Leveling
+    /// <summary>
+    /// Level-Stuff
+    /// </summary>
+    public int level = 1;
+    public int Get_level()
+    { return level; }
+    public int LevelUp()
+    {
+        xp -= LevelUp_need();
+        level++;
+        if (level >= 2)
+            skillPoints++;
+
+        eventLevelUp?.Invoke();
+
+        return level;
+
+    }
 
     /// <summary>
     /// XP Stuff
     /// </summary>
-
     public int xp;
     public int Get_xp()
     {
@@ -120,17 +149,19 @@ public class PlayerStats : MonoBehaviour, IEntitie
             LevelUp();
         return xp;
     }
-    //public int xp_needed;
 
+    #endregion
 
+    #region Combat Values
     /// <summary>
     /// Combat Values
     /// </summary>
     public float attackCD = 0f;
 
     public int Range;
+    #endregion
 
-
+    #region HP-Stuff
     /// <summary>
     /// HP-Stuff
     /// </summary>
@@ -158,8 +189,9 @@ public class PlayerStats : MonoBehaviour, IEntitie
     {
         maxHp = Hp.Value;
     }
+    #endregion
 
-
+    #region SkilloPoints
     /// <summary>
     /// Skill-Point stuff
     /// </summary>
@@ -173,57 +205,65 @@ public class PlayerStats : MonoBehaviour, IEntitie
     public void Set_SkillPoints(int amount)
     {
         skillPoints = amount;
-       
+
     }
     public int Decrease_SkillPoints(int amount)
     {
         skillPoints -= amount;
         return skillPoints;
     }
-
-
-    /// <summary>
-    /// Level-Stuff
-    /// </summary>
-    public int level = 1;
-    public int Get_level()
-    { return level;}
-    public int LevelUp()
-    {
-        xp -= LevelUp_need();
-        level ++;
-        if(level >= 2)
-        skillPoints++;
-
-        eventLevelUp?.Invoke();
-        #region "Tutorial"
-        if (level >= 2)
-        {
-            /* Currently disabled due to destroy of TutorialGameObject
-            Tutorial tutorialScript = GameObject.FindGameObjectWithTag("TutorialScript").GetComponent<Tutorial>();
-            tutorialScript.ShowTutorial(6);
-            */
-            //if(AudioManager.instance != null)
-            //AudioManager.instance.Play("Level-UP");
-
-        }
-        #endregion
-        return level;
-
-    }
+    #endregion
 
     public void Update()
     {
         LevelUp_need();
 
         HandleBuffs();
-
+        HandleStumble();
 
     }
 
+    #region Stumble Handling
+    private void HandleStumble()
+    {
+        if (isStumbling)
+        {
+            stumbleTimer -= Time.deltaTime;
 
+            // Berechne das aktuelle Slow-Level (von -0.7f zu 0f über Zeit)
+            float t = Mathf.Clamp01(stumbleTimer / stumbleDuration);
+            float newValue = Mathf.Lerp(0f, currentStumbleValue, t);
 
+            // Entferne alten Modifier und füge neuen hinzu
+            MovementSpeed.RemoveModifier(stumbleSlow);
+            stumbleSlow = new StatModifier(newValue, StatModType.PercentMult);
+            MovementSpeed.AddModifier(stumbleSlow);
 
+            // Beende das Straucheln wenn Zeit abgelaufen
+            if (t <= 0)
+            {
+                isStumbling = false;
+                MovementSpeed.RemoveModifier(stumbleSlow);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Löst das "Straucheln" aus - Verlangsamung die sich über Zeit regeneriert
+    /// </summary>
+    /// <param name="slowAmount">Stärke der Verlangsamung (negativ für Slow, z.B. -0.7f für 70% Verlangsamung)</param>
+    /// <param name="duration">Dauer bis zur vollständigen Regeneration</param>
+    public void TriggerStumble(float slowAmount = -0.7f, float duration = 0.8f)
+    {
+        // Setze die Parameter für das Straucheln
+        stumbleDuration = duration;
+        stumbleTimer = duration;
+        currentStumbleValue = slowAmount;
+        isStumbling = true;
+
+        Debug.Log($"[STUMBLE] Spieler strauchelt für {duration}s mit {Mathf.Abs(slowAmount * 100)}% Verlangsamung");
+    }
+    #endregion
 
     public void Start()
     {
@@ -242,10 +282,10 @@ public class PlayerStats : MonoBehaviour, IEntitie
 
     IEnumerator Regenerate()
     {
-       while(isRegenerating)
+        while (isRegenerating)
         {
             yield return new WaitForSeconds(1);
-            if(currentHp < Hp.Value)
+            if (currentHp < Hp.Value)
             {
                 currentHp = Mathf.Min(currentHp + Regeneration.Value, Hp.Value);
             }
@@ -294,6 +334,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
         return this.transform;
     }
 
+    #region Interface Methoden 
     public void TakeDamage(float damage, bool criticalHit)
     {
         // Die Angriffsreichweite der Mobs (range) spielt derzeit keine Rolle. 
@@ -307,9 +348,9 @@ public class PlayerStats : MonoBehaviour, IEntitie
             if (criticalHit)
             {
                 AudioManager.instance.PlaySound("Player_Hitted_Critical");
-                if(VFX_Manager.instance != null)
+                if (VFX_Manager.instance != null)
                     // VFX-Manager ruft den Effekt auf, der am Spieler abgespielt werden soll.
-                VFX_Manager.instance.PlayEffect("VFX_BloodSplash", this);
+                    VFX_Manager.instance.PlayEffect("VFX_BloodSplash", this);
             }
 
             else
@@ -322,6 +363,17 @@ public class PlayerStats : MonoBehaviour, IEntitie
         // Ziehe den Schaden vom Spielerleben ab.
         Set_currentHp(-damage);
 
+        // Löse das "Straucheln" aus - Verlangsamung beim Schaden erhalten
+        // Bei kritischen Treffern stärkere Verlangsamung
+        if (criticalHit)
+        {
+            TriggerStumble(-0.8f, 1.2f); // Stärkere Verlangsamung bei Crits
+        }
+        else
+        {
+            TriggerStumble(-0.6f, 0.8f); // Normale Verlangsamung
+        }
+
         // Falls das Leben gegen 0 geht, stirbt der Spieler.
         if (currentHp <= 0)
             Die();
@@ -331,18 +383,22 @@ public class PlayerStats : MonoBehaviour, IEntitie
     public void TakeDirectDamage(float damage, float range)
     {
         Set_currentHp(-damage);
+
+        // Löse leichtes Straucheln bei direktem Schaden aus
+        TriggerStumble(-0.5f, 0.6f);
+
         if (currentHp <= 0)
             Die();
     }
 
     //Ggf. TakeDirectDamage hinzufügen? Oder TakeMagicDamage oder ähnliches? Bis dahin wird Schaden lediglich abzgl. Armor abgerechnet.
 
-    public void Heal (int healAmount)
+    public void Heal(int healAmount)
     {
         //Der Heal sollte gefixxed werden. So dass der healAmount nicht größer sein kann als die Differenz von currentHP zu maxHP.
         if (healAmount + (int)Get_currentHp() >= (int)Get_maxHp())
         {
-            healAmount =  (int)Get_maxHp() - (int)Get_currentHp();
+            healAmount = (int)Get_maxHp() - (int)Get_currentHp();
 
             Set_currentHp(healAmount);
         }
@@ -359,7 +415,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
         // Ein Spieler auf Level 1 muss die XP für Level 1 sammeln, um Level 2 zu werden.
         float max_xp = (Mathf.Log(1 + Mathf.Pow(level, 3)) * 300) / 2.5f;
         int xp_needed = Mathf.CeilToInt(max_xp);
-        
+
         // Ein Level-Up sollte niemals 0 XP kosten. Wir geben einen Mindestwert zurück.
         return Mathf.Max(1, xp_needed);
     }
@@ -372,6 +428,7 @@ public class PlayerStats : MonoBehaviour, IEntitie
         Time.timeScale = 1f;
     }
 
+    #endregion
 }
 
 

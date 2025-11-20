@@ -161,16 +161,31 @@ public class TotemInteractable : BaseInteractable
             // Entferne null-Referenzen (zerstörte Mobs)
             spawnedMobs.RemoveAll(mob => mob == null);
             
-            // Alternative Überprüfung über SummonedMob-Components
+            // Prüfe über SummonedMob-Components und deren Lebensstatus
             SummonedMob[] summonedMobs = FindObjectsByType<SummonedMob>(FindObjectsSortMode.None);
+            int aliveMobsCount = 0;
             
-            if (summonedMobs.Length == 0 && spawnedMobs.Count == 0)
+            // Zähle nur lebende Mobs
+            foreach (SummonedMob summonedMob in summonedMobs)
+            {
+                if (summonedMob != null)
+                {
+                    MobStats mobStats = summonedMob.GetComponent<MobStats>();
+                    if (mobStats != null && !mobStats.isDead)
+                    {
+                        aliveMobsCount++;
+                    }
+                }
+            }
+            
+            // Challenge ist erfolgreich wenn keine lebenden Mobs mehr da sind
+            if (aliveMobsCount == 0)
             {
                 CompleteChallenge();
                 break;
             }
             
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
     

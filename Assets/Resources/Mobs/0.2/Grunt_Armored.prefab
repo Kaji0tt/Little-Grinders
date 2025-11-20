@@ -636,7 +636,7 @@ MonoBehaviour:
   AbilityPower:
     BaseValue: 5
   MovementSpeed:
-    BaseValue: 2
+    BaseValue: 1
   AttackSpeed:
     BaseValue: 0.8
   Regeneration:
@@ -678,6 +678,7 @@ MonoBehaviour:
   aggroRange: 3
   stoppingDistance: 0
   isDead: 0
+  pulled: 0
   customRange: 10
   customRangeColor: {r: 0, g: 1, b: 0, a: 1}
   showCustomRange: 1

@@ -388,7 +388,7 @@ MonoBehaviour:
   AbilityPower:
     BaseValue: 5
   MovementSpeed:
-    BaseValue: 2.4
+    BaseValue: 2.7
   AttackSpeed:
     BaseValue: 1
   Regeneration:
@@ -416,6 +416,7 @@ MonoBehaviour:
   aggroRange: 3
   stoppingDistance: 0
   isDead: 0
+  pulled: 0
   customRange: 10
   customRangeColor: {r: 0, g: 1, b: 0, a: 1}
   showCustomRange: 1
@@ -432,7 +433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13131c4283b7fb84b9b589e45712e1a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseTime: 2
+  pauseTime: 1
   holdDistance: 1.5
 --- !u!195 &6339311846805323509
 NavMeshAgent:
