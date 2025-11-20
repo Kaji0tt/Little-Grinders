@@ -13,6 +13,7 @@ public class Scene_LoadNextScene : MonoBehaviour
         if (collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>())
         {
             Debug.Log("You got here!");
+            
             //Wenn wir im Tutorial sind (buildIndex 1), erschaffe eine Map und füge sie der GlobalMap Instanz hinzu.
             if (SceneManager.GetActiveScene().buildIndex != 2)
             {

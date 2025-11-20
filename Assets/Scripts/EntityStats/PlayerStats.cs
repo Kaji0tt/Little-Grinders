@@ -342,6 +342,9 @@ public class PlayerStats : MonoBehaviour, IEntitie
         damage = 10 * (damage * damage) / (Armor.Value + (10 * damage)); // DMG & Armor als Werte
         damage = Mathf.Clamp(damage, 1, int.MaxValue);
 
+        if (criticalHit)        // Falls es ein kritischer Treffer ist
+            damage *= 2;    // Verdopple den Schaden
+
         // Sound abspielen, abhängig davon, ob kritischer Treffer
         if (AudioManager.instance != null)
         {

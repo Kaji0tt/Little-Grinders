@@ -16,7 +16,7 @@ public abstract class BaseInteractable : MonoBehaviour
         public string useSoundName;
         
         [Header("UI Feedback")]
-        public string interactPrompt = "Press [E] to interact";
+        public string interactPrompt = "Press [F] to interact";
         
         // Hilfsfunktion für dynamischen Interact-Prompt
         protected string GetDynamicInteractPrompt()
@@ -24,7 +24,7 @@ public abstract class BaseInteractable : MonoBehaviour
             if (KeyManager.MyInstance?.Keybinds != null && KeyManager.MyInstance.Keybinds.ContainsKey("PICK"))
             {
                 var pickKey = KeyManager.MyInstance.Keybinds["PICK"];
-                return interactPrompt.Replace("[E]", $"[{pickKey}]");
+                return interactPrompt.Replace("[F]", $"[{pickKey}]");
             }
             return interactPrompt;
         }

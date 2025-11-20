@@ -9,7 +9,11 @@ public class EnemyControllerEditor : Editor
 
     private void OnEnable()
     {
-        ApplySpriteSettings((EnemyController)target);
+        EnemyController controller = (EnemyController)target;
+        if (controller != null)
+        {
+            ApplySpriteSettings(controller);
+        }
     }
 
     public override void OnInspectorGUI()
@@ -17,6 +21,11 @@ public class EnemyControllerEditor : Editor
         DrawDefaultInspector();
 
         EnemyController controller = (EnemyController)target;
+        if (controller == null)
+        {
+            EditorGUILayout.HelpBox("EnemyController nicht gefunden!", MessageType.Error);
+            return;
+        }
 
         // Check für IAttackBehavior Component
         CheckForAttackBehavior(controller);
@@ -30,25 +39,16 @@ public class EnemyControllerEditor : Editor
     private void CheckForAttackBehavior(EnemyController controller)
     {
         // Suche nach IAttackBehavior Components
-        var behaviorComponents = controller.GetComponents<MonoBehaviour>();
-        bool hasAttackBehavior = false;
-
-        foreach (var component in behaviorComponents)
-        {
-            if (component is IAttackBehavior)
-            {
-                hasAttackBehavior = true;
-                break;
-            }
-        }
+        var attackBehaviors = controller.GetComponents<IAttackBehavior>();
+        bool hasAttackBehavior = attackBehaviors.Length > 0;
 
         if (!hasAttackBehavior)
         {
             EditorGUILayout.Space();
             EditorGUILayout.HelpBox("Kein IAttackBehavior Component gefunden!", MessageType.Warning);
-            
+
             EditorGUILayout.BeginHorizontal();
-            
+
             if (GUILayout.Button("PendingAttack hinzufügen"))
             {
                 Undo.AddComponent<PendingAttack>(controller.gameObject);
@@ -66,14 +66,14 @@ public class EnemyControllerEditor : Editor
         else
         {
             EditorGUILayout.Space();
-            EditorGUILayout.HelpBox("IAttackBehavior Component gefunden.", MessageType.Info);
+            EditorGUILayout.HelpBox($"IAttackBehavior Component gefunden: {attackBehaviors[0].GetType().Name}", MessageType.Info);
         }
     }
 
     private void ShowAttackBehaviorMenu(EnemyController controller)
     {
         GenericMenu menu = new GenericMenu();
-        
+
         menu.AddItem(new GUIContent("PendingAttack"), false, () => {
             Undo.AddComponent<PendingAttack>(controller.gameObject);
             EditorUtility.SetDirty(controller);
@@ -90,6 +90,9 @@ public class EnemyControllerEditor : Editor
 
     private static void ApplySpriteSettings(EnemyController controller)
     {
+        if (controller == null)
+            return;
+
         var go = controller.gameObject;
         var sr = go.GetComponent<SpriteRenderer>();
         if (sr == null)

@@ -188,6 +188,7 @@ MonoBehaviour:
   weaponPivot: {fileID: 0}
   isPerformingAction: 0
   minMovementSpeed: 0.1
+  turnOffIsometricRenderer: 0
   spriteSheet: {fileID: 648834624, guid: f0c1c8a38ee96454482b8e131cdd6887, type: 3}
   mirrorSpritesheet: 0
   generatedAnimator: {fileID: 0}
@@ -465,7 +466,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -484,8 +485,8 @@ GameObject:
   - component: {fileID: 764865214548323693}
   - component: {fileID: -3914968387557056489}
   - component: {fileID: 7839687458832828460}
-  - component: {fileID: 7839687458832828462}
   - component: {fileID: 7084725296111636664}
+  - component: {fileID: 3929408558038870565}
   m_Layer: 0
   m_Name: Dustling
   m_TagString: Enemy
@@ -560,6 +561,8 @@ MonoBehaviour:
   aggroRange: 5
   stoppingDistance: 0
   isDead: 0
+  pulled: 0
+  turnOffStandardBehaviour: 0
   customRange: 10
   customRangeColor: {r: 0, g: 1, b: 0, a: 1}
   showCustomRange: 1
@@ -576,8 +579,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13131c4283b7fb84b9b589e45712e1a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseTime: 1
-  holdDistance: 5
+  pauseTime: 1.5
+  holdDistance: 3.5
 --- !u!195 &7839687458832828460
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -600,33 +603,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &7839687458832828462
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7839687458832828465}
-  serializedVersion: 5
-  m_Mass: 0.5
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!82 &7084725296111636664
 AudioSource:
   m_ObjectHideFlags: 0
@@ -742,6 +718,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!54 &3929408558038870565
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7839687458832828465}
+  serializedVersion: 5
+  m_Mass: 0.5
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &7839687459591370673
 GameObject:
   m_ObjectHideFlags: 0

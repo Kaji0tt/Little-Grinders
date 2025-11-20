@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using System;
 
 [ExecuteInEditMode]
@@ -12,7 +13,67 @@ public class PPVolumeManager : MonoBehaviour
     public static PPVolumeManager instance;
     private void Awake()
     {
-        instance = this;
+        // Singleton-Pattern mit DontDestroyOnLoad
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            
+            SetUrpBasedOnScene();
+            
+            // Event-Listener für Szenen-Wechsel registrieren
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            
+            Debug.Log("[PPVolumeManager] Singleton instance created and set to persist across scenes.");
+        }
+        else if (instance != this)
+        {
+            // Falls bereits eine Instanz existiert, zerstöre diese neue
+            Debug.Log("[PPVolumeManager] Duplicate instance found, destroying this one to maintain singleton pattern.");
+            Destroy(gameObject);
+        }
+    }
+    
+    private void OnDestroy()
+    {
+        // Event-Listener entfernen um Memory Leaks zu vermeiden
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        // Singleton-Referenz zurücksetzen, falls diese Instanz zerstört wird
+        if (instance == this)
+        {
+            instance = null;
+            Debug.Log("[PPVolumeManager] Singleton instance destroyed and reference cleared.");
+        }
+    }
+    
+    /// <summary>
+    /// Wird aufgerufen wenn eine neue Szene geladen wird
+    /// </summary>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SetUrpBasedOnScene();
+    }
+    
+    /// <summary>
+    /// Zerstört das Singleton manuell (nützlich für Testing oder explizites Reset)
+    /// </summary>
+    public static void DestroySingleton()
+    {
+        if (instance != null)
+        {
+            Debug.Log("[PPVolumeManager] Manually destroying singleton instance.");
+            Destroy(instance.gameObject);
+            instance = null;
+        }
+    }
+    
+    /// <summary>
+    /// Überprüft ob eine gültige Singleton-Instanz existiert
+    /// </summary>
+    public static bool HasValidInstance()
+    {
+        return instance != null;
     }
     #endregion
 
@@ -24,6 +85,13 @@ public class PPVolumeManager : MonoBehaviour
     [Header("Lichtquelle")]
     [Tooltip("Directional Light für Tageszeit und Atmosphäre")]
     public Light directionalLight;
+
+    [Space]
+    [Header("URP Settings")]
+    [Tooltip("URP Asset für das Hauptmenü (ohne Schatten)")]
+    public UniversalRenderPipelineAsset menuUrpAsset;
+    [Tooltip("URP Asset für Gameplay-Szenen (mit Schatten)")]
+    public UniversalRenderPipelineAsset gameplayUrpAsset;
 
     [Space]
     [Header("Test Controls")]
@@ -368,6 +436,65 @@ public class PPVolumeManager : MonoBehaviour
             #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(volume.profile);
             #endif
+        }
+    }
+    
+    /// <summary>
+    /// Setzt das entsprechende URP Asset basierend auf der aktuellen Szene
+    /// Build Index 0 = Hauptmenü (ohne Schatten)
+    /// Alle anderen Szenen = Gameplay (mit Schatten)
+    /// </summary>
+    private void SetUrpBasedOnScene()
+    {
+        int currentBuildIndex = SceneManager.GetActiveScene().buildIndex;
+        
+        if (currentBuildIndex == 0)
+        {
+            // Hauptmenü - URP ohne Schatten verwenden
+            if (menuUrpAsset != null)
+            {
+                QualitySettings.renderPipeline = menuUrpAsset;
+                Debug.Log($"[PPVolumeManager] Switched to Menu URP (no shadows) for scene build index {currentBuildIndex}");
+            }
+            else
+            {
+                Debug.LogWarning("[PPVolumeManager] Menu URP Asset ist nicht zugewiesen!");
+            }
+        }
+        else
+        {
+            // Gameplay-Szenen - URP mit Schatten verwenden
+            if (gameplayUrpAsset != null)
+            {
+                QualitySettings.renderPipeline = gameplayUrpAsset;
+                Debug.Log($"[PPVolumeManager] Switched to Gameplay URP (with shadows) for scene build index {currentBuildIndex}");
+            }
+            else
+            {
+                Debug.LogWarning("[PPVolumeManager] Gameplay URP Asset ist nicht zugewiesen!");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Öffentliche Methode zum manuellen Wechseln des URP Assets
+    /// </summary>
+    /// <param name="useMenuUrp">True für Menu URP (ohne Schatten), False für Gameplay URP (mit Schatten)</param>
+    public void SwitchUrpAsset(bool useMenuUrp)
+    {
+        if (useMenuUrp && menuUrpAsset != null)
+        {
+            QualitySettings.renderPipeline = menuUrpAsset;
+            Debug.Log("[PPVolumeManager] Manually switched to Menu URP (no shadows)");
+        }
+        else if (!useMenuUrp && gameplayUrpAsset != null)
+        {
+            QualitySettings.renderPipeline = gameplayUrpAsset;
+            Debug.Log("[PPVolumeManager] Manually switched to Gameplay URP (with shadows)");
+        }
+        else
+        {
+            Debug.LogWarning("[PPVolumeManager] Could not switch URP Asset - asset is null!");
         }
     }
     

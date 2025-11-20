@@ -15,6 +15,8 @@ public class ParticleCamScript : MonoBehaviour
     private float DistSelfCamera;
     [SerializeField]
     private int sortingOrderBase = 5000;
+    [SerializeField]
+    private string sortingLayerName = "Umgebung_col Layer";
     private ParticleSystem particle;
 
 
@@ -24,7 +26,10 @@ public class ParticleCamScript : MonoBehaviour
         //agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         if (GetComponent<ParticleSystem>() != null)
+        {
             particle = GetComponent<ParticleSystem>();
+            particle.GetComponent<Renderer>().sortingLayerName = sortingLayerName;
+        }
     }
 
     void Update()
@@ -35,8 +40,11 @@ public class ParticleCamScript : MonoBehaviour
         DistSelfCamera = (transform.position - CameraPosition).sqrMagnitude;
 
         if (particle != null)
-            particle.GetComponent<Renderer>().sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
-
+        {
+            var renderer = particle.GetComponent<Renderer>();
+            renderer.sortingLayerName = sortingLayerName;
+            renderer.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
+        }
 
         //11.09
         //Die Folgenden Lines of Code sollten wohl verwendet werden, um Attack Animationen / Kampf zu berechnen,
