@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3016439826334479918}
   - component: {fileID: 800989784263202069}
   - component: {fileID: 5352797760996821717}
+  - component: {fileID: 3067821600236780506}
   m_Layer: 0
   m_Name: "GrGestr\xFCpp"
   m_TagString: Env
@@ -54,6 +55,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -75,6 +78,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -125,5 +129,26 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 3.25, z: 0.2}
-  m_Center: {x: 0.18, y: 1.625, z: 0}
+  m_Size: {x: 1, y: 3.257902, z: 0.2}
+  m_Center: {x: 0.18, y: 1.621049, z: 0}
+--- !u!65 &3067821600236780506
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4445931725034949707}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.1738243, y: 1.9665184, z: 0.2}
+  m_Center: {x: -0.039770126, y: 2.2667408, z: 0}

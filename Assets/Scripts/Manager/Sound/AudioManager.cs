@@ -67,18 +67,6 @@ public class AudioManager : MonoBehaviour
         
         // NEU: Starte Sound-Cleanup Coroutine
         StartCoroutine(CleanupFinishedSounds());
-        
-        // NEU: Spiele Hauptmenü-Musik direkt hier ab
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-        {
-            StartCoroutine(PlayMenuMusicDelayed());
-        }
-    }
-
-    private IEnumerator PlayMenuMusicDelayed()
-    {
-        yield return new WaitForEndOfFrame();
-        PlaySound("MenuMusic_1");
     }
 
     /// <summary>
@@ -375,6 +363,17 @@ public class AudioManager : MonoBehaviour
     #region Sound Options
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // NEU: Stoppe Hauptmenü-Musik, wenn wir die Hauptmenü-Szene verlassen
+        if (scene.buildIndex != 0)
+        {
+            StopSound("Abyssal_Echoes - Main Theme");
+        }
+        
+        // NEU: Spiele Hauptmenü-Musik, wenn wir zur Hauptmenü-Szene zurückkehren
+        if (scene.buildIndex == 0)
+        {
+            PlaySound("Abyssal_Echoes - Main Theme", loop: true, trackActive: true);
+        }
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("SoundControl"))
         {

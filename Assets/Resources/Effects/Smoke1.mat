@@ -47,7 +47,7 @@ Material:
     - Color_4f0f1b37f99b46e582356a6ef1804646: {r: 0, g: 1, b: 0.2328882, a: 0}
     - Color_fb4df05cbef944f2b1baf55ea52448ec: {r: 0, g: 0.0004096031, b: 1, a: 0}
     - Vector2_51db8f2b89c247f58670686ac34c0181: {r: 0, g: 0, b: 0, a: 0}
-    - Vector2_59734b43eb43404b8bb4cc163c3af797: {r: 0, g: -0.15, b: 0, a: 0}
+    - Vector2_59734b43eb43404b8bb4cc163c3af797: {r: 0, g: -0.33, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &9143588271500576977
@@ -62,4 +62,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 9
+  version: 10

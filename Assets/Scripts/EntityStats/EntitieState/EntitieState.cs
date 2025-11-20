@@ -178,6 +178,9 @@ public class AttackState : EntitieState
 
     public override void Enter()
     {
+        //Blickrichtung zum Spieler vor Angriff
+        controller.myIsoRenderer.SetFacingDirection();
+
         //Setze das Angriffsverhalten
         controller.attackBehavior?.Enter(controller);
         
@@ -185,28 +188,28 @@ public class AttackState : EntitieState
         attackTime = 1f / controller.mobStats.AttackSpeed.Value;
     }
 
-public override void Update()
-{
-    // Hier wird das Angriffsverhalten aktualisiert
-    //controller.myIsoRenderer.ToggleActionState(true);
-    //controller.myIsoRenderer.Play(AnimationState.Attack);
-    //controller.myIsoRenderer.UpdateAnimation();
-    controller.attackBehavior?.UpdateAttack(controller);
+    public override void Update()
+    {
+        // Hier wird das Angriffsverhalten aktualisiert
+        //controller.myIsoRenderer.ToggleActionState(true);
+        //controller.myIsoRenderer.Play(AnimationState.Attack);
+        //controller.myIsoRenderer.UpdateAnimation();
+        controller.attackBehavior?.OnUpdateAttack(controller);
 
-    // NEU: Sofort prüfen, ob Spieler noch in Reichweite ist
+        // NEU: Sofort prüfen, ob Spieler noch in Reichweite ist
         if (!controller.IsPlayerInAttackRange())
         {
             controller.TransitionTo(new IdleState(controller));
             return;
         }
 
-    attackTime -= Time.deltaTime;
+        attackTime -= Time.deltaTime;
 
-    if (controller.isDead)
-    {
-        controller.TransitionTo(null);
-        return;
-    }
+        if (controller.isDead)
+        {
+            controller.TransitionTo(null);
+            return;
+        }
 
         // Wenn die Angriffsanimation vorbei ist, zurück zu Idle oder erneut angreifen
         // Wird derzeit ausgeklammert, da dies über AttackBehavior gesteuert wird
@@ -225,7 +228,7 @@ public override void Update()
             }
         }
         */
-}
+    }
 }
 
 public class HitState : EntitieState

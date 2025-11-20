@@ -55,6 +55,9 @@ public class IsometricRenderer : MonoBehaviour
     /// These variables are only used for the animation of the of Enemy characters.
     /// </summary>
 
+    [Tooltip("Deaktiviert die automatische Animation für Intro-Mobs")]
+    public bool turnOffIsometricRenderer = false;
+
     private AnimationState currentState = AnimationState.Idle;
 
     // Mapping von AnimationState zu möglichen Clipnamen
@@ -98,8 +101,8 @@ public class IsometricRenderer : MonoBehaviour
             weaponAnimator.runtimeAnimatorController = weaponOverrideController;
         }
 
-        // Event-Listener für Enemy-Animationen registrieren
-        if (myEnemyController != null)
+        // Event-Listener für Enemy-Animationen registrieren (außer für Intro-Mobs)
+        if (myEnemyController != null && !turnOffIsometricRenderer)
         {
             if (GameEvents.Instance != null)
             {
@@ -117,8 +120,8 @@ public class IsometricRenderer : MonoBehaviour
 
     private void Update()
     {
-        // Movement Detection nur für Enemies
-        if (myEnemyController != null && !isPerformingAction)
+        // Movement Detection nur für Enemies (außer Intro-Mobs)
+        if (myEnemyController != null && !isPerformingAction && !turnOffIsometricRenderer)
         {
             DetectMovementAndUpdateAnimation();
         }
@@ -130,7 +133,7 @@ public class IsometricRenderer : MonoBehaviour
     private void DetectMovementAndUpdateAnimation()
     {
         // Wenn eine Action ausgeführt wird, keine automatischen Animationswechsel
-        if (isPerformingAction || myEnemyController.mobStats.isDead)
+            if (isPerformingAction || myEnemyController.mobStats.isDead)
             return;
 
         // Prüfe NavMeshAgent Geschwindigkeit
@@ -150,8 +153,6 @@ public class IsometricRenderer : MonoBehaviour
 
     public void Play(AnimationState state)
     {
-        //Bestimme die Blickrichtung des Controllers
-        //SetFacingDirection(myEnemyController.TargetDirection());
 
         currentState = state;
 
@@ -178,10 +179,12 @@ public class IsometricRenderer : MonoBehaviour
         currentState = state;
 
         if (!animationVariants.TryGetValue(state, out string[] variants))
+        {
             return;
+        }
 
         string chosenAnim = variants[Random.Range(0, variants.Length)];
-        
+
         // Animation starten
         myAnimator.Play(chosenAnim);
         
@@ -191,6 +194,7 @@ public class IsometricRenderer : MonoBehaviour
         if (state == AnimationState.Attack || state == AnimationState.Cast || state == AnimationState.Die)
         {
             isPerformingAction = true;
+
             StartCoroutine(ResetEnemyActionAfterDuration(desiredDuration));
         }
     }
@@ -206,16 +210,22 @@ public class IsometricRenderer : MonoBehaviour
         float requiredSpeed = originalLength / desiredDuration;
         myAnimator.speed = requiredSpeed;
         
-        //Debug.Log($"[IsometricRenderer] Animation {animName}: Original={originalLength:F2}s, Desired={desiredDuration:F2}s, Speed={requiredSpeed:F2}x");
+        //Debug.Log($"[IsometricRenderer.AdjustAnimationSpeed] 🎬 {animName}: Original={originalLength:F2}s, Desired={desiredDuration:F2}s, Speed={requiredSpeed:F2}x");
     }
 
     private IEnumerator ResetEnemyActionAfterDuration(float duration)
     {
+        //Debug.Log($"[IsometricRenderer.ResetEnemyActionAfterDuration] ⏱️ Starte Countdown für {duration:F2}s");
+        
         yield return new WaitForSeconds(duration);
+        
+        //Debug.Log($"[IsometricRenderer.ResetEnemyActionAfterDuration] 🏁 Countdown vorbei! Setze Geschwindigkeit zurück und isPerformingAction = false");
         
         // Geschwindigkeit zurücksetzen
         myAnimator.speed = 1f;
         isPerformingAction = false;
+        
+        //Debug.Log($"[IsometricRenderer.ResetEnemyActionAfterDuration] ✅ Reset abgeschlossen");
     }
 
     #region Event Handlers
@@ -225,9 +235,17 @@ public class IsometricRenderer : MonoBehaviour
     private void OnEnemyStartAttack(EnemyController enemy, float attackDuration)
     {
         // Prüfe ob dieses Event für diesen Enemy gedacht ist
-        if (enemy != myEnemyController) return;
+        if (enemy != myEnemyController) 
+        {
+            return;
+        }
         
-        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} startet Angriff (Dauer: {attackDuration:F2}s)");
+        // Spiele Attack-Sound ab
+        if (AudioManager.instance != null)
+        {
+            string soundName = enemy.GetBasePrefabName() + "_AttackStart";
+            AudioManager.instance.PlayEntitySound(soundName, enemy.gameObject);
+        }
         
         // Spiele Attack-Animation mit der richtigen Geschwindigkeit ab
         PlayAttackWithSpeed(AnimationState.Attack, attackDuration);
@@ -241,9 +259,9 @@ public class IsometricRenderer : MonoBehaviour
         // Prüfe ob dieses Event für diesen Enemy gedacht ist
         if (enemy != myEnemyController) return;
         
-        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} Angriff-Impact!");
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} Angriff-Impact!")
         
-        // Hier könnten Impact-Effects abgespielt werden
+        // Hier könnten weitere Impact-Effects eingefügt werden (z.B. Partikelsysteme)
         if (AudioManager.instance != null)
         {
             string soundName = enemy.GetBasePrefabName() + "_Attack";
@@ -299,8 +317,8 @@ public class IsometricRenderer : MonoBehaviour
     
     private void OnDestroy()
     {
-        // Event-Listener beim Zerstören des Objekts entfernen
-        if (GameEvents.Instance != null)
+        // Event-Listener beim Zerstören des Objekts entfernen (nur wenn sie registriert wurden)
+        if (GameEvents.Instance != null && myEnemyController != null && !turnOffIsometricRenderer)
         {
             GameEvents.Instance.OnEnemyStartAttack -= OnEnemyStartAttack;
             GameEvents.Instance.OnEnemyAttackHit -= OnEnemyAttackHit;
@@ -344,15 +362,26 @@ public class IsometricRenderer : MonoBehaviour
     
     private Vector2 lastNonZeroDirection = Vector2.right;
 
-    public void SetFacingDirection(Vector2 direction)
+    /// <summary>
+    /// Spiegelt das GameObject basierend auf der Blickrichtung zum Spieler (nur X-Achse).
+    /// Nur für NPCs/Enemies gedacht!
+    /// </summary>
+    public void SetFacingDirection()
     {
+        if (myEnemyController == null || myEnemyController.Player == null)
+            return;
+
+        // Berechne Richtung vom Enemy zum Spieler
+        Vector3 directionToPlayer = myEnemyController.Player.position - transform.position;
+        Vector2 direction = new Vector2(directionToPlayer.x, directionToPlayer.z);
+
         if (direction.sqrMagnitude > 0.01f)
             lastNonZeroDirection = direction;
 
         if (lastNonZeroDirection.x < -0.01f)
-            transform.localScale = new Vector3(-1f, 1f, 1f);
+            transform.localScale = new Vector3(-1f, 1f, 1f);  // Gespiegelt (links)
         else if (lastNonZeroDirection.x > 0.01f)
-            transform.localScale = new Vector3(1f, 1f, 1f);
+            transform.localScale = new Vector3(1f, 1f, 1f);   // Normal (rechts)
     }
 
     public void SetPlayerDirection(Vector2 direction){

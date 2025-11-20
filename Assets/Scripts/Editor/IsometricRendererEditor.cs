@@ -9,6 +9,7 @@ public class IsometricRendererEditor : Editor
     SerializedProperty weaponPivotProp;
     SerializedProperty spriteSheetProp;
     SerializedProperty mirrorSpritesheetProp;
+    SerializedProperty turnOffIsometricRendererProp;
 
     void OnEnable()
     {
@@ -17,6 +18,7 @@ public class IsometricRendererEditor : Editor
         weaponPivotProp = serializedObject.FindProperty("weaponPivot");
         spriteSheetProp = serializedObject.FindProperty("spriteSheet");
         mirrorSpritesheetProp = serializedObject.FindProperty("mirrorSpritesheet");
+        turnOffIsometricRendererProp = serializedObject.FindProperty("turnOffIsometricRenderer");
     }
 
     public override void OnInspectorGUI()
@@ -37,6 +39,11 @@ public class IsometricRendererEditor : Editor
         {
             EditorGUILayout.PropertyField(spriteSheetProp);
             EditorGUILayout.PropertyField(mirrorSpritesheetProp);
+
+            // Intro Mob Settings
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Disable IsoRenderer", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(turnOffIsometricRendererProp);
 
             if (iso.spriteSheet == null)
             {

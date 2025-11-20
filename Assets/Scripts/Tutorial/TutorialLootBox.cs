@@ -50,6 +50,7 @@ public class TutorialLootBox : MonoBehaviour
 
     private void Start()
     {
+        sprite = GetComponentInParent<SpriteRenderer>();
         StartCoroutine(ShowIntroLogs());
     }
 
@@ -77,51 +78,12 @@ public class TutorialLootBox : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        if (Input.GetKeyDown(KeyCode.F) && collider == PlayerManager.instance.player.gameObject.GetComponentInChildren<Collider>() && lootBoxOpened == false)
+        if (Input.GetKeyDown(KeyManager.MyInstance.Keybinds["PICK"]) && collider.gameObject.CompareTag("Player") && !lootBoxOpened)
         {
             lootBoxOpened = true;
 
-            Vector3 spawnPos = new Vector3(PlayerManager.instance.player.transform.position.x + .5f, gameObject.transform.position.y, PlayerManager.instance.player.transform.position.z + .9f);
-
-            foreach (Item item in firstItems)
-            {
-                if (item == null)
-                {
-                    Debug.LogWarning(message: Message);
-                    continue; // Überspringe null Items
-                }
-
-                ItemInstance firstItem = new ItemInstance(item);
-                
-                // --- NEUE LOGIK ZUM ANWENDEN VON MODS ---
-                foreach (var modDef in modsToApply)
-                {
-                    // Prüfe, ob der Item-Typ des Items in den erlaubten Typen des Mods enthalten ist.
-                    if (modDef != null && (modDef.allowedItemTypes & firstItem.itemType) != 0)
-                    {
-                        // Erstelle eine neue Mod-Instanz aus der Definition
-                        ItemMod newMod = new ItemMod { definition = modDef };
-                        
-                        // Für Testzwecke weisen wir eine feste Seltenheit zu.
-                        newMod.rolledRarity = Rarity.Rare; 
-                        
-                        // Initialisiere den Mod, um den 'rolledValue' zu berechnen
-                        int mapLevel = GlobalMap.instance != null ? GlobalMap.instance.currentMap.mapLevel : 1;
-                        newMod.Initialize(mapLevel);
-
-                        // Füge den gültigen Mod zum Item hinzu
-                        firstItem.addedItemMods.Add(newMod);
-                    }
-                }
-
-                // Wende die hinzugefügten Mods an (aktualisiert Stats, Namen, etc.)
-                firstItem.ApplyItemMods();
-
-                ItemWorld.SpawnItemWorld(spawnPos, firstItem);
-            }
-
-
             LootBoxOpenedSprite();
+            StartCoroutine(DropItemsWithDelay());
         }
     }
 
@@ -129,14 +91,55 @@ public class TutorialLootBox : MonoBehaviour
     {
         if (lootBoxOpened)
         {
-            sprite = GetComponentInParent<SpriteRenderer>();
             sprite.sprite = newSprite;
-
             tutorialUI1.gameObject.SetActive(false);
-
             StartCoroutine(PostLootLog()); // NEU
 
             // ...
+        }
+    }
+
+    private IEnumerator DropItemsWithDelay()
+    {
+        yield return new WaitForSeconds(0.1f); // Kleiner Delay, damit die Taste losgelassen werden kann
+
+        Vector3 spawnPos = new Vector3(PlayerManager.instance.player.transform.position.x + 0.5f, gameObject.transform.position.y, PlayerManager.instance.player.transform.position.z + 0.9f);
+
+        foreach (Item item in firstItems)
+        {
+            if (item == null)
+            {
+                Debug.LogWarning(message: Message);
+                continue; // Überspringe null Items
+            }
+
+            ItemInstance firstItem = new ItemInstance(item);
+            
+            // --- NEUE LOGIK ZUM ANWENDEN VON MODS ---
+            foreach (var modDef in modsToApply)
+            {
+                // Prüfe, ob der Item-Typ des Items in den erlaubten Typen des Mods enthalten ist.
+                if (modDef != null && (modDef.allowedItemTypes & firstItem.itemType) != 0)
+                {
+                    // Erstelle eine neue Mod-Instanz aus der Definition
+                    ItemMod newMod = new ItemMod { definition = modDef };
+                    
+                    // Für Testzwecke weisen wir eine feste Seltenheit zu.
+                    newMod.rolledRarity = Rarity.Rare; 
+                    
+                    // Initialisiere den Mod, um den 'rolledValue' zu berechnen
+                    int mapLevel = GlobalMap.instance != null ? GlobalMap.instance.currentMap.mapLevel : 1;
+                    newMod.Initialize(mapLevel);
+
+                    // Füge den gültigen Mod zum Item hinzu
+                    firstItem.addedItemMods.Add(newMod);
+                }
+            }
+
+            // Wende die hinzugefügten Mods an (aktualisiert Stats, Namen, etc.)
+            firstItem.ApplyItemMods();
+
+            ItemWorld.SpawnItemWorld(spawnPos, firstItem);
         }
     }
 

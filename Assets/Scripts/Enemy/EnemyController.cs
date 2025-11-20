@@ -67,6 +67,11 @@ public class EnemyController : MonoBehaviour, IEntitie
     //public int level;
 
     [Space]
+    [Header("Intro Mob Settings")]
+    [Tooltip("Deaktiviert die State Machine und Standardverhalten für Intro-Mobs")]
+    public bool turnOffStandardBehaviour = false;
+
+    [Space]
     [Header("Custom Range")]
     [Tooltip("Benutzerdefinierte Reichweite für Tests")]
     public float customRange = 5f;
@@ -123,12 +128,20 @@ public class EnemyController : MonoBehaviour, IEntitie
         // Audio Setup
         SetupAudioSource();
 
-        TransitionTo(new IdleState(this));
+        // State Machine nur initialisieren, wenn Standardverhalten nicht deaktiviert ist
+        if (!turnOffStandardBehaviour)
+        {
+            TransitionTo(new IdleState(this));
+        }
     }
     void Update()
     {
-
-        myEntitieState?.Update();
+        // State Machine nur ausführen, wenn Standardverhalten nicht deaktiviert ist
+        if (!turnOffStandardBehaviour)
+        {
+            myEntitieState?.Update();
+        }
+        
         UpdateAudioVolume();
 
         if (!mobStats.isDead)
@@ -142,7 +155,7 @@ public class EnemyController : MonoBehaviour, IEntitie
             // Optional glätten, falls nötig
             if (moveDirection.sqrMagnitude > 0.01f)
             {
-                myIsoRenderer.SetFacingDirection(new Vector2(moveDirection.x, moveDirection.z));
+                myIsoRenderer.SetFacingDirection();
             }
         }
         else
@@ -326,13 +339,15 @@ public class EnemyController : MonoBehaviour, IEntitie
     #region Action StateMachine
     public void TransitionTo(EntitieState newState)
     {
-        if (!mobStats.isDead)
+        // State Machine nur verwenden, wenn Standardverhalten nicht deaktiviert ist
+        if (!turnOffStandardBehaviour && !mobStats.isDead)
         {
             myEntitieState?.Exit();
             myEntitieState = newState;
             myEntitieState.Enter();
         }
     }
+    
 
     public void PerformAttack()
     {
@@ -349,8 +364,6 @@ public class EnemyController : MonoBehaviour, IEntitie
             // 3% Chance auf kritischen Treffer
             bool isCrit = UnityEngine.Random.value < 0.03f;
             float damage = mobStats.AttackPower.Value;
-            if (isCrit)
-                damage *= 2;
 
             //Füge dem Spieler Schaden entsprechend der AttackPower hinzu. int Range derzeit irrelevant (0)
             playerStats.TakeDamage(damage, isCrit);
