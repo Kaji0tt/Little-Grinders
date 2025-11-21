@@ -291,6 +291,12 @@ public class CharacterCombat : MonoBehaviour
             LogScript.instance.ShowLog($"AttackStep {currentComboIndex + 1}/{currentCombo.comboSteps.Count} gestartet!", 1.2f);
         }
 
+        // Enhanced feedback: Screen shake for attack start
+        if (ScreenShakeManager.Instance != null)
+        {
+            ScreenShakeManager.Instance.TriggerShake(ScreenShakeManager.ShakeType.Light);
+        }
+
         StartCoroutine(DashTowardsTarget(currentAttackStep));
         DealDamage(currentAttackStep);
         
@@ -385,6 +391,33 @@ public class CharacterCombat : MonoBehaviour
             {
                 bool isCrit = Random.value < playerStats.CriticalChance.Value;
                 float finalDamage = CalculateFinalDamage(baseDamage, currentAttack.damageMultiplier, isCrit, enemy.mobStats);
+                
+                // Enhanced feedback: Different effects for crit vs normal hits
+                if (isCrit)
+                {
+                    // Critical hit feedback
+                    if (ScreenShakeManager.Instance != null)
+                    {
+                        ScreenShakeManager.Instance.TriggerShake(ScreenShakeManager.ShakeType.Heavy);
+                    }
+                    if (HitStopManager.Instance != null)
+                    {
+                        HitStopManager.Instance.TriggerHitStop(HitStopManager.HitStopType.Heavy);
+                    }
+                }
+                else
+                {
+                    // Normal hit feedback
+                    if (ScreenShakeManager.Instance != null)
+                    {
+                        ScreenShakeManager.Instance.TriggerShake(ScreenShakeManager.ShakeType.Medium);
+                    }
+                    if (HitStopManager.Instance != null)
+                    {
+                        HitStopManager.Instance.TriggerHitStop(HitStopManager.HitStopType.Medium);
+                    }
+                }
+                
                 enemy.TakeDamage(finalDamage, playerStats.Range, isCrit);
             }
         }
