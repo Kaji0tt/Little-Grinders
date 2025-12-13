@@ -22,8 +22,10 @@ public class Heal : Ability
 
             foreach (TalentNode rootNode in TalentTreeGenerator.instance.allNodes)
             {
-                if (rootNode.Depth == 0)
-                    rootNode.uiElement.GetComponent<Talent_UI>().Unlock();
+                if (rootNode.Depth == 0 && rootNode.myTalentUI != null)
+                {
+                    rootNode.myTalentUI.Unlock();
+                }
             }
 
             isApplied = true;

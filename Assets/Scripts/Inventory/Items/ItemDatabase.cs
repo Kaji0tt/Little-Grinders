@@ -59,17 +59,17 @@ public class ItemDatabase : MonoBehaviour
 
         CalculateTotalWeight(playerStats);
 
-        currentDropTable.Sort(CompareItemPercents);
+        currentDropTable.Sort(CompareItemWeights);
 
-        // Berechnung des Rolls
-        percentSum = 0;
+        // Weighted Random Roll
         int roll = Random.Range(0, totalWeight);
+        int currentSum = 0;
 
         foreach (Item item in currentDropTable)
         {
-            percentSum += (int)item.c_percent;//((int)item.c_percent * 100) / totalWeight;
+            currentSum += item.calculatedWeight;
 
-            if (roll < percentSum)
+            if (roll < currentSum)
             {
                 position = position + new Vector3(Random.Range(-.5f, .5f), .1f, Random.Range(-.5f, .5f));
 
@@ -93,40 +93,46 @@ public class ItemDatabase : MonoBehaviour
     }
     int CalculateTotalWeight(PlayerStats playerStats)
     {
-        int mapLevel = playerStats.level;
-        const float MIN_WEIGHT_FACTOR = 0.1f; // Mindestens 10% Chance
+        int playerLevel = playerStats.level;
+        const float MIN_WEIGHT_FACTOR = 0.1f;  // Mindestens 10% vom Base-Weight
+        const float GEM_WEIGHT_MULTIPLIER = 0.5f;  // Gems sind halb so häufig wie normale Items
 
         currentDropTable.Clear();
         totalWeight = 0;
 
         foreach (Item item in allItems)
         {
-            float levelDiff = item.baseLevel - mapLevel;
-            float weightFactor;
+            // 1. Level-Penalty: Kann das Item überhaupt droppen?
+            int levelDiff = item.dropLevel - playerLevel;
+            float levelPenalty;
 
             if (levelDiff <= 0) 
             {
-                // Items gleich/niedriger: Volle Chance
-                weightFactor = 1f;
+                // Item ist für Spieler geeignet
+                levelPenalty = 1f;
             }
             else 
             {
-                // Items höher: Reduziert, aber mindestens 10%
-                weightFactor = Mathf.Max(MIN_WEIGHT_FACTOR, 1f / (1f + Mathf.Pow(levelDiff, 1.5f)));
+                // Item ist zu hoch-levelig → stark reduzierte Chance
+                levelPenalty = Mathf.Max(MIN_WEIGHT_FACTOR, 1f / (1f + Mathf.Pow(levelDiff, 1.5f)));
             }
 
-            item.c_percent = item.percent * weightFactor;
-            totalWeight += (int)item.c_percent;
+            // 2. Typ-Modifier: Gems seltener machen (optional)
+            float typeModifier = (item.itemType == ItemType.Gem) ? GEM_WEIGHT_MULTIPLIER : 1f;
+
+            // 3. Finaler Weight = BaseWeight * LevelPenalty * TypeModifier
+            item.calculatedWeight = Mathf.RoundToInt(item.dropWeight * levelPenalty * typeModifier);
+            
+            totalWeight += item.calculatedWeight;
             currentDropTable.Add(item);
         }
 
-        totalWeight = (totalWeight / 100) * 300;
         return totalWeight;
     }
 
-    public int CompareItemPercents(Item item1, Item item2)
+    public int CompareItemWeights(Item item1, Item item2)
     {
-        return item2.c_percent.CompareTo(item1.c_percent);
+        return item2.calculatedWeight.CompareTo(item1.calculatedWeight);
     }
 
 

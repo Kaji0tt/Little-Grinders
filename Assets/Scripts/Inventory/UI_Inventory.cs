@@ -85,6 +85,9 @@ public class UI_Inventory : MonoBehaviour
     {
         if (slotIndex >= 0 && slotIndex < inventorySlots.Count)
         {
+            // Blockiere Click-Events auf diesem Slot während des Updates
+            inventorySlots[slotIndex].BlockClicksTemporarily();
+            
             inventorySlots[slotIndex].StoreItem(item);
             // Synchronisiere das Dictionary direkt
             if (inventory != null)

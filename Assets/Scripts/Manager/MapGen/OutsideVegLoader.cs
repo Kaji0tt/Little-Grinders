@@ -22,16 +22,24 @@ public class OutsideVegLoader : MonoBehaviour
 
     [Header("Entities")]
     public GameObject characterSpawn;
-    [SerializeField] private GameObject[] entitieSpawn;
+    public GameObject[] entitieSpawn; // Public for MapGenHandler access
     [SerializeField] private GameObject[] interactableCollection;
 
+    [Header("Fence Gap Settings")]
+    [SerializeField] [Range(0f, 100f)] private float fenceGapChance = 40f; // Chance for a gap to start
+    [SerializeField] [Range(1, 5)] private int minGapSize = 2; // Minimum consecutive fence tiles to skip
+    [SerializeField] [Range(1, 5)] private int maxGapSize = 3; // Maximum consecutive fence tiles to skip
 
     private PrefabCollection prefabCollection;
 
-
-
-    private GameObject envParentObj;
-    private GameObject groundParentObj;
+    [HideInInspector]
+    public GameObject envParentObj;
+    [HideInInspector]
+    public GameObject groundParentObj;
+    [HideInInspector]
+    public GameObject mobParentObj;
+    [HideInInspector]
+    public bool shouldSpawnEnemies = true; // Controlled by MapGenHandler
 
 
     //Stuff for Saving
@@ -41,8 +49,14 @@ public class OutsideVegLoader : MonoBehaviour
     void Awake()
     {
         prefabCollection = PrefabCollection.instance;
-        envParentObj = MapGenHandler.instance.envParentObj;
-        groundParentObj = MapGenHandler.instance.groundParentObj;
+        
+        // These will be set by MapGenHandler.LoadPrefabs()
+        if (envParentObj == null)
+            envParentObj = MapGenHandler.instance.envParentObj;
+        if (groundParentObj == null)
+            groundParentObj = MapGenHandler.instance.groundParentObj;
+        if (mobParentObj == null)
+            mobParentObj = MapGenHandler.instance.mobParentObj;
 
     }
 
@@ -105,6 +119,39 @@ public class OutsideVegLoader : MonoBehaviour
             case FieldType.PreBuildTile:
                 LoadPreBuildTile();
                 break;
+            case FieldType.RoadVertical:
+                LoadRoadVerticalField();
+                break;
+            case FieldType.RoadHorizontal:
+                LoadRoadHorizontalField();
+                break;
+            case FieldType.RoadTJunctionTop:
+                LoadRoadTJunctionTopField();
+                break;
+            case FieldType.RoadTJunctionBot:
+                LoadRoadTJunctionBotField();
+                break;
+            case FieldType.RoadTJunctionLeft:
+                LoadRoadTJunctionLeftField();
+                break;
+            case FieldType.RoadTJunctionRight:
+                LoadRoadTJunctionRightField();
+                break;
+            case FieldType.RoadCrossroad:
+                LoadRoadCrossroadField();
+                break;
+            case FieldType.RoadCurveTopLeft:
+                LoadRoadCurveTopLeftField();
+                break;
+            case FieldType.RoadCurveTopRight:
+                LoadRoadCurveTopRightField();
+                break;
+            case FieldType.RoadCurveBottomLeft:
+                LoadRoadCurveBottomLeftField();
+                break;
+            case FieldType.RoadCurveBottomRight:
+                LoadRoadCurveBottomRightField();
+                break;
             default:
                 break;
         }
@@ -130,8 +177,8 @@ public class OutsideVegLoader : MonoBehaviour
 
         //LoadRoadTexture();
         //LoadRandomGroundTexture();
-        // Removed initial enemy spawning - now handled by EnemyWaveSpawner
-        // LoadEnemies(20);
+        
+        LoadEnemies(20); // Re-enabled: Standard enemy spawning on roads
     }
     
     public void LoadNoVegField()
@@ -144,11 +191,9 @@ public class OutsideVegLoader : MonoBehaviour
 
         //LoadRandomGroundTexture();
 
-        // Removed initial enemy spawning - now handled by EnemyWaveSpawner
-        // LoadEnemies(3);
+        LoadEnemies(3); // Re-enabled: Standard enemy spawning
 
-
-        LoadInteractable();
+        // Totem/Altar spawning is now handled centrally by MapGenHandler after all fields are loaded
     }
 
 
@@ -226,12 +271,7 @@ public class OutsideVegLoader : MonoBehaviour
     {
         LoadLowTopVeg();
         LoadLowBotVeg();
-        LoadLowLeftVeg();
-        LoadLowRightVeg();
         LoadLowCenterVeg();
-        
-        LoadMidLeftVeg();
-        LoadMidRightVeg();
 
         LoadLeftFence();
         LoadRightFence();
@@ -243,12 +283,7 @@ public class OutsideVegLoader : MonoBehaviour
     {
         LoadLowTopVeg();
         LoadLowBotVeg();
-        LoadLowLeftVeg();
-        LoadLowRightVeg();
         LoadLowCenterVeg();
-        
-        LoadMidLeftVeg();
-        LoadMidRightVeg();
 
         LoadLeftFence();
         LoadRightFence();
@@ -258,14 +293,9 @@ public class OutsideVegLoader : MonoBehaviour
     }
     public void LoadOutsideExitLeftField()
     {
-        LoadLowTopVeg();
-        LoadLowBotVeg();
         LoadLowLeftVeg();
         LoadLowRightVeg();
         LoadLowCenterVeg();
-        
-        LoadMidTopVeg();
-        LoadMidBotVeg();
 
         LoadTopFence();
         LoadBotFence();
@@ -275,8 +305,6 @@ public class OutsideVegLoader : MonoBehaviour
     }
     public void LoadOutsideExitRightField()
     {
-        LoadLowTopVeg();
-        LoadLowBotVeg();
         LoadLowLeftVeg();
         LoadLowRightVeg();
         LoadLowCenterVeg();
@@ -284,15 +312,121 @@ public class OutsideVegLoader : MonoBehaviour
         //if Statement, um zu prüfen, von wo der Charakter kam
         //if(Charakter kam von Rechts)
         //LoadCharakter();
-        
-        LoadMidTopVeg();
-        LoadMidBotVeg();
 
         LoadTopFence();
         LoadBotFence();
 
         exitPos[0].gameObject.SetActive(true);
         //Start from LeftSide
+    }
+
+    // New Directional Road Methods with Fences
+    public void LoadRoadVerticalField()
+    {
+        LoadLowTopVeg();
+        LoadLowBotVeg();
+        LoadLowCenterVeg();
+        LoadLeftFenceWithGaps();
+        LoadRightFenceWithGaps();
+    }
+
+    public void LoadRoadHorizontalField()
+    {
+        LoadLowLeftVeg();
+        LoadLowRightVeg();
+        LoadLowCenterVeg();
+        LoadTopFenceWithGaps();
+        LoadBotFenceWithGaps();
+    }
+
+    public void LoadRoadTJunctionTopField()
+    {
+        // T-junction with opening at top (roads go left, right, bottom)
+        LoadLowBotVeg();
+        LoadLowLeftVeg();
+        LoadLowRightVeg();
+        LoadLowCenterVeg();
+        LoadTopFenceWithGaps();
+    }
+
+    public void LoadRoadTJunctionBotField()
+    {
+        // T-junction with opening at bottom (roads go left, right, top)
+        LoadLowTopVeg();
+        LoadLowLeftVeg();
+        LoadLowRightVeg();
+        LoadLowCenterVeg();
+        LoadBotFenceWithGaps();
+    }
+
+    public void LoadRoadTJunctionLeftField()
+    {
+        // T-junction with opening at left (roads go top, bottom, right)
+        LoadLowTopVeg();
+        LoadLowBotVeg();
+        LoadLowRightVeg();
+        LoadLowCenterVeg();
+        LoadLeftFenceWithGaps();
+    }
+
+    public void LoadRoadTJunctionRightField()
+    {
+        // T-junction with opening at right (roads go top, bottom, left)
+        LoadLowTopVeg();
+        LoadLowBotVeg();
+        LoadLowLeftVeg();
+        LoadLowCenterVeg();
+        LoadRightFenceWithGaps();
+    }
+
+    public void LoadRoadCrossroadField()
+    {
+        // Crossroad - only center vegetation, no fences
+        LoadLowCenterVeg();
+    }
+
+    public void LoadRoadCurveTopLeftField()
+    {
+        // Curve connecting top and left (roads go up and left)
+        // Fences on right and bottom
+        LoadLowTopVeg();
+        LoadLowLeftVeg();
+        LoadLowCenterVeg();
+        LoadRightFenceWithGaps();
+        LoadBotFenceWithGaps();
+    }
+
+    public void LoadRoadCurveTopRightField()
+    {
+        // Curve connecting top and right (roads go up and right)
+        // Fences on left and bottom
+        LoadLowTopVeg();
+        LoadLowRightVeg();
+        LoadLowCenterVeg();
+        LoadLeftFenceWithGaps();
+        LoadBotFenceWithGaps();
+    }
+
+    public void LoadRoadCurveBottomLeftField()
+    {
+        // Curve connecting bottom and left (roads go down and left)
+        // Fences on right and top
+        LoadLowBotVeg();
+        LoadLowLeftVeg();
+        LoadLowCenterVeg();
+        LoadRightFenceWithGaps();
+        LoadTopFenceWithGaps();
+    }
+
+    public void LoadRoadCurveBottomRightField()
+    {
+        // Curve connecting bottom and right (roads go down and right)
+        // Fences on left and top
+        LoadLowBotVeg();
+        LoadLowRightVeg();
+        LoadLowCenterVeg();
+        LoadLeftFenceWithGaps();
+        LoadTopFenceWithGaps();
     }
 
     /// <summary>
@@ -306,7 +440,7 @@ public class OutsideVegLoader : MonoBehaviour
         for (int i = 0; i < topVegPF.Length; i++)
         {
             //roll the dice. if we hit 1..
-            if (Random.Range(0, 2) == 1)
+            if (Random.Range(0, 4) == 1)
             {
                 //..roll again, wether to spawn low, medium or large prefabs at the spawnpoint of the upper border.
                 switch (Random.Range(0,3))
@@ -334,7 +468,7 @@ public class OutsideVegLoader : MonoBehaviour
     {
         for (int i = 0; i < botVegPF.Length; i++)
         {
-            if (Random.Range(0, 2) == 1)
+            if (Random.Range(0, 4) == 1)
             {
                 switch (Random.Range(0, 3))
                 {
@@ -359,7 +493,7 @@ public class OutsideVegLoader : MonoBehaviour
     {
         for (int i = 0; i < leftVegPF.Length; i++)
         {
-            if (Random.Range(0, 2) == 1)
+            if (Random.Range(0, 4) == 1)
             {
                 switch (Random.Range(0, 3))
                 {
@@ -384,7 +518,7 @@ public class OutsideVegLoader : MonoBehaviour
     {
         for (int i = 0; i < rightVegPF.Length; i++)
         {
-            if (Random.Range(0, 2) == 1)
+            if (Random.Range(0, 4) == 1)
             {
                 switch (Random.Range(0, 3))
                 {
@@ -409,7 +543,7 @@ public class OutsideVegLoader : MonoBehaviour
     {
         for (int i = 0; i < centerVegPF.Length; i++)
         {
-            if (Random.Range(0, 2) == 1)
+            if (Random.Range(0, 4) == 1)
             {
                 switch (Random.Range(0, 3))
                 {
@@ -665,6 +799,7 @@ public class OutsideVegLoader : MonoBehaviour
     /// </summary>
 
     #region Select Fences for Border at Random
+    // Legacy methods for Outside fields (no gaps)
     private void LoadTopFence()
     {
         for (int i = 0; i < topFencePF.Length; i++)
@@ -683,7 +818,7 @@ public class OutsideVegLoader : MonoBehaviour
     }
     private void LoadLeftFence()
     {
-        for (int i = 0; i < botFencePF.Length; i++)
+        for (int i = 0; i < leftFencePF.Length; i++)
         {
             Instantiate(prefabCollection.GetRandomVFencePFPF(), leftFencePF[i].transform.position, Quaternion.Euler(0, 90, 0)).transform.SetParent(envParentObj.transform);
             Destroy(leftFencePF[i]);
@@ -691,10 +826,65 @@ public class OutsideVegLoader : MonoBehaviour
     }
     private void LoadRightFence()
     {
-        for (int i = 0; i < botFencePF.Length; i++)
+        for (int i = 0; i < rightFencePF.Length; i++)
         {
             Instantiate(prefabCollection.GetRandomVFencePFPF(), rightFencePF[i].transform.position, Quaternion.Euler(0,90,0)).transform.SetParent(envParentObj.transform);
             Destroy(rightFencePF[i]);
+        }
+    }
+
+    // New methods with gap logic for road fences
+    private void LoadTopFenceWithGaps()
+    {
+        LoadFenceWithGaps(topFencePF, prefabCollection.GetRandomHFencePFPF, Quaternion.identity);
+    }
+    
+    private void LoadBotFenceWithGaps()
+    {
+        LoadFenceWithGaps(botFencePF, prefabCollection.GetRandomHFencePFPF, Quaternion.identity);
+    }
+    
+    private void LoadLeftFenceWithGaps()
+    {
+        LoadFenceWithGaps(leftFencePF, prefabCollection.GetRandomVFencePFPF, Quaternion.Euler(0, 90, 0));
+    }
+    
+    private void LoadRightFenceWithGaps()
+    {
+        LoadFenceWithGaps(rightFencePF, prefabCollection.GetRandomVFencePFPF, Quaternion.Euler(0, 90, 0));
+    }
+
+    /// <summary>
+    /// Core fence spawning logic with gaps
+    /// </summary>
+    private void LoadFenceWithGaps(GameObject[] spawnPoints, System.Func<GameObject> getPrefabFunc, Quaternion rotation)
+    {
+        int i = 0;
+        while (i < spawnPoints.Length)
+        {
+            // Check if we should create a gap
+            if (Random.Range(0f, 100f) < fenceGapChance)
+            {
+                // Create a gap of random size
+                int gapSize = Random.Range(minGapSize, maxGapSize + 1);
+                
+                // Skip 'gapSize' fence positions
+                for (int j = 0; j < gapSize && i < spawnPoints.Length; j++)
+                {
+                    Destroy(spawnPoints[i]);
+                    i++;
+                }
+            }
+            else
+            {
+                // Spawn fence at this position
+                if (i < spawnPoints.Length)
+                {
+                    Instantiate(getPrefabFunc(), spawnPoints[i].transform.position, rotation).transform.SetParent(envParentObj.transform);
+                    Destroy(spawnPoints[i]);
+                    i++;
+                }
+            }
         }
     }
 
@@ -702,9 +892,144 @@ public class OutsideVegLoader : MonoBehaviour
 
     #region EntitieSpawn
 
+    /// <summary>
+    /// PUBLIC method to spawn enemies only (called by MapGenHandler after NavMesh baking)
+    /// </summary>
+    public void SpawnEnemiesOnly(FieldType fieldType)
+    {
+        shouldSpawnEnemies = true;
+        
+        switch (fieldType)
+        {
+            case FieldType.Road:
+            case FieldType.RoadVertical:
+            case FieldType.RoadHorizontal:
+            case FieldType.RoadTJunctionTop:
+            case FieldType.RoadTJunctionBot:
+            case FieldType.RoadTJunctionLeft:
+            case FieldType.RoadTJunctionRight:
+            case FieldType.RoadCrossroad:
+            case FieldType.RoadCurveTopLeft:
+            case FieldType.RoadCurveTopRight:
+            case FieldType.RoadCurveBottomLeft:
+            case FieldType.RoadCurveBottomRight:
+                LoadEnemies(20);
+                break;
+                
+            case FieldType.NoVeg:
+                LoadEnemies(3);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Spawns enemy groups instead of individual enemies
+    /// Called by MapGenHandler for pack-based spawning
+    /// </summary>
+    public void SpawnEnemyGroups(int groupCount, FieldType fieldType)
+    {
+        if (!shouldSpawnEnemies)
+        {
+            return;
+        }
+        
+        if (entitieSpawn == null || entitieSpawn.Length == 0)
+        {
+            Debug.LogWarning("[OutsideVegLoader] No entity spawn points available for group spawning");
+            return;
+        }
+        
+        // Collect valid spawn positions
+        List<GameObject> availableSpawnPoints = new List<GameObject>();
+        foreach (GameObject spawnPoint in entitieSpawn)
+        {
+            if (spawnPoint != null)
+            {
+                availableSpawnPoints.Add(spawnPoint);
+            }
+        }
+        
+        if (availableSpawnPoints.Count == 0)
+        {
+            Debug.LogWarning("[OutsideVegLoader] No valid spawn points found");
+            return;
+        }
+        
+        // Ensure groups spawn at least 20 units apart (2 tiles)
+        List<Vector3> usedPositions = new List<Vector3>();
+        float minDistanceBetweenGroups = 20f;
+        
+        int groupsSpawned = 0;
+        int attempts = 0;
+        int maxAttempts = groupCount * 3; // Allow multiple attempts to find valid positions
+        
+        while (groupsSpawned < groupCount && attempts < maxAttempts)
+        {
+            attempts++;
+            
+            // Pick random spawn point
+            GameObject spawnPoint = availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count)];
+            Vector3 spawnPos = spawnPoint.transform.position;
+            
+            // Check distance to other groups
+            bool tooClose = false;
+            foreach (Vector3 usedPos in usedPositions)
+            {
+                if (Vector3.Distance(spawnPos, usedPos) < minDistanceBetweenGroups)
+                {
+                    tooClose = true;
+                    break;
+                }
+            }
+            
+            if (tooClose)
+            {
+                continue; // Try another position
+            }
+            
+            // Create enemy group GameObject
+            GameObject groupObj = new GameObject($"EnemyGroup_{fieldType}_{groupsSpawned}");
+            groupObj.transform.position = spawnPos;
+            groupObj.transform.SetParent(mobParentObj.transform);
+            
+            EnemyGroup group = groupObj.AddComponent<EnemyGroup>();
+            group.isPatrol = false; // Packs are stationary
+            
+            // Random group size: 3-5 enemies
+            int enemyCount = Random.Range(3, 6);
+            
+            // Spawn the group
+            group.SpawnGroup(spawnPos, enemyCount, prefabCollection, mobParentObj.transform);
+            
+            // Mark position as used
+            usedPositions.Add(spawnPos);
+            groupsSpawned++;
+            
+            Debug.Log($"[OutsideVegLoader] Spawned EnemyGroup {groupsSpawned}/{groupCount} with {enemyCount} members at {spawnPos}");
+        }
+        
+        if (groupsSpawned < groupCount)
+        {
+            Debug.LogWarning($"[OutsideVegLoader] Only spawned {groupsSpawned}/{groupCount} groups due to spacing constraints");
+        }
+        
+        // Cleanup spawn point markers
+        foreach (GameObject spawnPoint in entitieSpawn)
+        {
+            if (spawnPoint != null)
+            {
+                Destroy(spawnPoint);
+            }
+        }
+    }
 
     private void LoadEnemies(int chance)
     {
+        // Skip enemy spawning if disabled (for NavMesh setup phase)
+        if (!shouldSpawnEnemies)
+        {
+            return; // Silent skip during first phase
+        }
 
         for (int i = 0; i < entitieSpawn.Length; i++)
         {
@@ -713,7 +1038,10 @@ public class OutsideVegLoader : MonoBehaviour
                 GameObject enemyPrefab = prefabCollection.GetRandomEnemie();
                 GameObject mob = Instantiate(enemyPrefab, entitieSpawn[i].transform.position, Quaternion.identity);
                 mob.name = enemyPrefab.name;
-                mob.transform.SetParent(MapGenHandler.instance.mobParentObj.transform);
+                
+                // Use mobParentObj if set, otherwise fallback to MapGenHandler
+                Transform parentTransform = mobParentObj != null ? mobParentObj.transform : MapGenHandler.instance.mobParentObj.transform;
+                mob.transform.SetParent(parentTransform);
 
                 // Entferne "(Clone)" aus dem Namen
                 if (mob.name.Contains("(Clone)"))
@@ -724,74 +1052,181 @@ public class OutsideVegLoader : MonoBehaviour
     }
     #endregion
 
-    private void LoadInteractable()
+    /// <summary>
+    /// Spawns exactly 1 Totem and 1 Altar on the map after all fields are loaded.
+    /// Called by MapGenHandler after map generation is complete.
+    /// FALLBACK: If < 2 NoVeg fields exist, converts High/Medium Veg fields to NoVeg.
+    /// </summary>
+    public void SpawnTotemAndAltar()
     {
-        bool totemSpawned = false;
+        GameObject[] allFields = MapGenHandler.instance.fieldPosSave;
+        List<GameObject> noVegFields = new List<GameObject>();
         
-        // Garantiere mindestens 1 Totem pro Map
-        for (int i = 0; i < interactableCollection.Length; i++)
+        // Collect all NoVeg fields
+        foreach (GameObject field in allFields)
         {
-            bool shouldSpawn = false;
+            FieldPos fieldPos = field.GetComponent<FieldPos>();
+            if (fieldPos != null && fieldPos.Type == FieldType.NoVeg)
+            {
+                noVegFields.Add(field);
+            }
+        }
+        
+        Debug.Log($"[OutsideVegLoader] SpawnTotemAndAltar: Found {noVegFields.Count} NoVeg fields");
+        
+        // FALLBACK: If not enough NoVeg fields, convert High/Medium Veg to NoVeg
+        if (noVegFields.Count < 2)
+        {
+            Debug.LogWarning($"[OutsideVegLoader] ⚠️ Only {noVegFields.Count} NoVeg fields! Converting High/Medium Veg fields...");
             
-            if (!totemSpawned)
+            List<GameObject> vegFields = new List<GameObject>();
+            
+            // Collect High and Medium Veg fields (prefer HighVeg first)
+            foreach (GameObject field in allFields)
             {
-                // Erste Chance: Spawne mit höherer Wahrscheinlichkeit wenn noch kein Totem da ist
-                shouldSpawn = Random.Range(0, 8) == 1; // Höhere Chance für erstes Totem
-            }
-            else
-            {
-                // Normale Spawn-Chance für weitere Interactables
-                shouldSpawn = Random.Range(0, 15) == 1;
-            }
-
-            if (shouldSpawn)
-            {
-                GameObject spawnedInteractable = Instantiate(prefabCollection.GetRandomInteractable(), 
-                    interactableCollection[i].transform.position, Quaternion.identity);
-                
-                spawnedInteractable.transform.SetParent(envParentObj.transform);
-                
-                // Prüfe ob ein Totem gespawnt wurde
-                if (spawnedInteractable.GetComponent<TotemInteractable>() != null)
+                FieldPos fieldPos = field.GetComponent<FieldPos>();
+                if (fieldPos != null && (fieldPos.Type == FieldType.HighVeg || fieldPos.Type == FieldType.LowVeg))
                 {
-                    totemSpawned = true;
+                    vegFields.Add(field);
                 }
             }
+            
+            if (vegFields.Count == 0)
+            {
+                Debug.LogError("[OutsideVegLoader] ❌ CRITICAL: No High/Medium Veg fields available for conversion! Cannot spawn Totem/Altar!");
+                return;
+            }
+            
+            // Calculate how many fields we need to convert
+            int fieldsNeeded = 2 - noVegFields.Count;
+            int fieldsToConvert = Mathf.Min(fieldsNeeded, vegFields.Count);
+            
+            Debug.Log($"[OutsideVegLoader] Converting {fieldsToConvert} Veg fields to NoVeg...");
+            
+            // Shuffle and convert fields
+            for (int i = 0; i < fieldsToConvert; i++)
+            {
+                int randomIndex = Random.Range(0, vegFields.Count);
+                GameObject fieldToConvert = vegFields[randomIndex];
+                FieldPos fieldPos = fieldToConvert.GetComponent<FieldPos>();
+                
+                FieldType oldType = fieldPos.Type;
+                fieldPos.Type = FieldType.NoVeg;
+                noVegFields.Add(fieldToConvert);
+                vegFields.RemoveAt(randomIndex);
+                
+                Debug.Log($"[OutsideVegLoader] ✓ Converted field at {fieldToConvert.transform.position} from {oldType} to NoVeg");
+                
+                // Reload this field's prefabs to reflect NoVeg type
+                OutsideVegLoader loader = fieldToConvert.GetComponent<OutsideVegLoader>();
+                if (loader != null)
+                {
+                    // Clear existing vegetation
+                    foreach (Transform child in loader.envParentObj.transform)
+                    {
+                        if (child.gameObject != fieldToConvert)
+                        {
+                            Destroy(child.gameObject);
+                        }
+                    }
+                    
+                    // Reload as NoVeg
+                    loader.LoadFieldType(FieldType.NoVeg);
+                }
+            }
+            
+            Debug.Log($"[OutsideVegLoader] ✓ Conversion complete! Now have {noVegFields.Count} NoVeg fields");
         }
         
-        // Falls kein Totem gespawnt wurde, erzwinge eins am letzten verfügbaren Platz
-        if (!totemSpawned && interactableCollection.Length > 0)
+        // Verify we now have enough fields
+        if (noVegFields.Count < 2)
         {
-            // Hole einen Totem-Prefab aus der Collection
-            GameObject totemPrefab = prefabCollection.GetTotemPrefab();
+            Debug.LogError($"[OutsideVegLoader] ❌ CRITICAL: Still only {noVegFields.Count} NoVeg fields after conversion! Cannot spawn Totem/Altar!");
+            return;
+        }
+        
+        // Spawn Totem at random NoVeg field
+        GameObject totemField = noVegFields[Random.Range(0, noVegFields.Count)];
+        GameObject totemPrefab = prefabCollection.GetTotemPrefab();
+        
+        if (totemPrefab == null)
+        {
+            Debug.LogError("[OutsideVegLoader] No Totem prefab found in PrefabCollection!");
+            return;
+        }
+        
+        Vector3 totemPos = totemField.transform.position;
+        GameObject spawnedTotem = Instantiate(totemPrefab, totemPos, Quaternion.identity);
+        spawnedTotem.transform.SetParent(envParentObj.transform);
+        
+        Debug.Log($"[OutsideVegLoader] Totem spawned at {totemPos}");
+        
+        // Find valid Altar position (min. 20 units away)
+        GameObject altarField = null;
+        int attempts = 0;
+        int maxAttempts = 50;
+        
+        while (altarField == null && attempts < maxAttempts)
+        {
+            GameObject candidate = noVegFields[Random.Range(0, noVegFields.Count)];
             
-            if (totemPrefab != null)
+            if (candidate != totemField)
             {
-                int randomIndex = Random.Range(0, interactableCollection.Length);
-                GameObject forcedTotem = Instantiate(totemPrefab, 
-                    interactableCollection[randomIndex].transform.position, Quaternion.identity);
-                
-                forcedTotem.transform.SetParent(envParentObj.transform);
-                Debug.Log("Erzwungenes Totem gespawnt an Position: " + randomIndex);
+                float distance = Vector3.Distance(totemPos, candidate.transform.position);
+                if (distance >= 20f)
+                {
+                    altarField = candidate;
+                    break;
+                }
+            }
+            
+            attempts++;
+        }
+        
+        // Spawn Altar
+        if (altarField != null)
+        {
+            GameObject altarPrefab = prefabCollection.GetAltarPrefab();
+            
+            if (altarPrefab == null)
+            {
+                Debug.LogError("[OutsideVegLoader] No Altar prefab found in PrefabCollection!");
+                return;
+            }
+            
+            Vector3 altarPos = altarField.transform.position;
+            GameObject spawnedAltar = Instantiate(altarPrefab, altarPos, Quaternion.identity);
+            spawnedAltar.transform.SetParent(envParentObj.transform);
+            
+            float finalDistance = Vector3.Distance(totemPos, altarPos);
+            Debug.Log($"[OutsideVegLoader] Altar spawned at {altarPos} (distance: {finalDistance:F1} from Totem)");
+            
+            // Link Totem and Altar
+            TotemInteractable totem = spawnedTotem.GetComponent<TotemInteractable>();
+            AltarInteractable altar = spawnedAltar.GetComponent<AltarInteractable>();
+            
+            if (totem != null && altar != null)
+            {
+                totem.SetLinkedAltar(altar);
+                Debug.Log("[OutsideVegLoader] Totem and Altar successfully linked!");
             }
             else
             {
-                Debug.LogWarning("Kein Totem-Prefab in der PrefabCollection gefunden!");
+                Debug.LogError("[OutsideVegLoader] Failed to link Totem and Altar - scripts not found!");
             }
         }
-    }
-    
-    private GameObject FindTotemPrefab()
-    {
-        // Durchsuche die Interactables nach einem Totem
-        GameObject[] interactables = prefabCollection.GetInteractablesPF();
-        foreach (GameObject interactable in interactables)
+        else
         {
-            if (interactable.GetComponent<TotemInteractable>() != null)
-            {
-                return interactable;
-            }
+            Debug.LogWarning($"[OutsideVegLoader] Could not find valid Altar position (min 20 units) after {attempts} attempts!");
         }
-        return null;
     }
+
+    #region Deprecated Methods
+    // OLD METHOD - No longer used, kept for reference
+    private void LoadInteractable()
+    {
+        // This method is deprecated and replaced by SpawnTotemAndAltar()
+        // which is called once after all fields are loaded
+    }
+    #endregion
 }

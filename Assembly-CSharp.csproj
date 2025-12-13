@@ -42,7 +42,7 @@
     <UnityVersion>6000.2.12f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\jasch\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.3\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\jasch\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.2.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.2.12f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.2.12f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.2.12f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
@@ -58,6 +58,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\CameraManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UILineConnector.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Enemy Abilities\FireballAbility.cs" />
     <Compile Include="Assets\Resources\WorldPrefabs\Interactable\Inter_HealFountain.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\Buffs\Poison.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\OptionsMenu.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Assets\Scripts\SaveSystemTester.cs" />
     <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\UI_BuffHolder.cs" />
+    <Compile Include="Assets\Scripts\Manager\World\Interactables\AltarInteractable.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ScrollConflictManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardStack2D.cs" />
@@ -110,8 +112,8 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\ShaderEffects\UIAdditiveEffect.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\InterfaceDragging.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ReorderableList\ReorderableListElement.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Enemy Abilities\AimedShotAbility.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\IEntitie.cs" />
-    <Compile Include="Assets\Scripts\TalentSystem\Buffs\BuffDatabase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\switchToRectTransform.cs" />
     <Compile Include="Assets\UnityAssetStore\Matthew Guz\Orbs Effects FREE\Scripts\CameraRotation.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ContentScrollSnapHorizontal.cs" />
@@ -167,7 +169,9 @@
     <Compile Include="Assets\Scripts\Manager\Camera\SortingOrder.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewContext.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorLabel.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyGroup.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Main\UI_GlobalMap.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\UI_VoidEssence.cs" />
     <Compile Include="Assets\Scripts\Manager\GameAssets.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\DropDownList.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\TiltWindow.cs" />
@@ -185,6 +189,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Scripts\Inventory\Items\ItemDatabase.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UISquircle.cs" />
+    <Compile Include="Assets\Scripts\InterfaceScripts\UI_TotemChallenge.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\ShaderEffects\UILinearDodgeEffect.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\StatTooltips.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\Gradient2.cs" />
@@ -280,6 +285,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\Superellipse Creation\MeshCreator.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\IFancyGridViewContext.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\DragCorrector.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Enemy Abilities\TeleportAbility.cs" />
     <Compile Include="Assets\Scripts\TalentSystem\TalentTree\TalentNode.cs" />
     <Compile Include="Assets\Scripts\Manager\DirectionCollider.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\BoxSlider.cs" />
@@ -312,12 +318,14 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_MagneticInfiniteScroll.cs" />
     <Compile Include="Assets\Scripts\Manager\VFX Manager\VFX_Manager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\FancyScrollView\GridView\FancyGridViewCell.cs" />
+    <Compile Include="Assets\Scripts\Enemy\IAbilityBehaviour.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UIExtensionMethods.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorSlider.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ComboBox\ComboBox.cs" />
     <Compile Include="Assets\Scripts\Enemy\SummonedMob.cs" />
     <Compile Include="Assets\Scripts\Manager\Camera\EnvLookAt.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\TalentSystem\Buffs\SlowDebuff.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\LetterSpacing.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardPopup2D.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\HandScript.cs" />
@@ -336,6 +344,7 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\ScrollSnapScrollbarHelper.cs" />
     <Compile Include="Assets\Scripts\Manager\Sound\AudioManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\HoverTooltip.cs" />
+    <Compile Include="Assets\Scripts\Manager\World\Interactables\TotemAltarPathGuide.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy Types\SteadyCloseAttack.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\ShineEffect.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Sorting of EQ\SO_Hose.cs" />
@@ -431,6 +440,7 @@
     <Compile Include="Assets\Scripts\Manager\SaveGame\DebugPlayerPref.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\IScrollSnap.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Item Handling\Int_SlotBtn.cs" />
+    <Compile Include="Assets\Scripts\Manager\VoidEssenceManager.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Utils\FunctionPeriodic.cs" />
     <Compile Include="Assets\Scripts\InterfaceScripts\Interface Handling\ISpell.cs" />
   </ItemGroup>
@@ -474,6 +484,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UI Particle Blend.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\Material\FlowingLine.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Fonts\Font License.txt" />

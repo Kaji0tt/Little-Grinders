@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IDropHandler
+public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IDropHandler, IPointerClickHandler
 {
     public int slotIndex;
     public ItemType slotType; // None = Inventar, sonst Equip-Slot
@@ -14,6 +14,12 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     // Lokale ItemInstance für Equip-Slots
     private ItemInstance equippedItem;
+    
+    // Flag um doppelte Click-Events zu verhindern (pro Slot-Instanz)
+    private bool isProcessingClickOnThisSlot = false;
+    
+    // Zeitstempel für temporäres Click-Blocking (verhindert asynchrone Event-Queue Probleme)
+    private float blockClicksUntilTime = 0f;
 
     private void Awake()
     {
@@ -30,10 +36,16 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // UI-Visualisierung
         slotImage.sprite = item != null ? item.icon : Resources.Load<Sprite>("Blank_Icon");
 
-        // Für Equip-Slots: Item lokal speichern
+        // Für Equip-Slots: Item lokal speichern und GameEvents triggern
         if (slotType != ItemType.None)
         {
             equippedItem = item;
+            
+            // Triggere GameEvents für Equipment-Änderungen
+            if (item != null && GameEvents.Instance != null)
+            {
+                GameEvents.Instance.EquipChanged(item);
+            }
         }
 
         // Speziallogik für Waffen-Slot
@@ -48,111 +60,177 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             PlayerManager.instance.player.rangedWeapon = item != null && item.RangedWeapon;
         }
 
-        // Tooltip
-        if (item != null && UI_Manager.instance.tooltip.activeSelf)
-            UI_Manager.instance.ShowItemTooltip(new Vector2(transform.position.x, transform.position.y), item);
-        else
-            UI_Manager.instance.HideTooltip();
+        // KEIN automatisches Tooltip-Anzeigen hier!
+        // Tooltip wird nur bei OnPointerEnter angezeigt
     }
 
     public void ClearSlot()
     {
         StoreItem(null);
     }
-
-    public void PointerClick()
+    
+    // Blockiere Clicks für kurze Zeit (verhindert Event-Queue Probleme)
+    public void BlockClicksTemporarily()
     {
-        // Für Equip-Slots: Lokale ItemInstance verwenden
-        var item = slotType != ItemType.None ? equippedItem : inventory.GetItemAtIndex(slotIndex);
+        blockClicksUntilTime = Time.time + 0.2f; // 200ms Blockade
+        Debug.Log($"[Int_SlotBtn] Slot {slotIndex} - Clicks blockiert bis {blockClicksUntilTime:F3}");
+    }
 
-        Debug.Log($"[Int_SlotBtn] PointerClick auf Slot {slotIndex} ({slotType}), Item: {(item != null ? item.GetName() : "leer")}");
-        if (slotType == ItemType.None && item != null)
+    // Neuer Event-Handler für Mausklicks (Links + Rechts)
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log($"[Int_SlotBtn] OnPointerClick AUFGERUFEN! Slot {slotIndex}, Button: {eventData.button}, SlotType: {slotType}");
+        
+        // Rechtsklick = Item auf den Boden werfen
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
-            // Inventar → Equip
-            var allSlots = FindObjectsOfType<Int_SlotBtn>();
-            var equipSlot = allSlots
-                    .FirstOrDefault(slot => slot.slotType == item.itemType && slot.slotType != ItemType.None && slot != this);
-
-            Debug.Log($"[Int_SlotBtn] Suche EquipSlot für ItemType {item.itemType}: {(equipSlot != null ? equipSlot.slotIndex.ToString() : "kein Slot gefunden")}");
-            if (equipSlot != null)
+            var item = slotType != ItemType.None ? equippedItem : inventory.GetItemAtIndex(slotIndex);
+            
+            if (item != null)
             {
-                Debug.Log($"[Int_SlotBtn] Rüste Item '{item.GetName()}' aus Inventar-Slot {slotIndex} in Equip-Slot {equipSlot.slotIndex}");
-                EquipOrUnequipItem(item, slotIndex, equipSlot.slotIndex, true);
+                // Item aus Slot entfernen
+                if (slotType == ItemType.None)
+                {
+                    // Aus Inventar entfernen
+                    inventory.RemoveItemAtIndex(slotIndex);
+                    StoreItem(null);
+                    Debug.Log($"[Int_SlotBtn] Item '{item.GetName()}' aus Inventar-Slot {slotIndex} entfernt");
+                }
+                else
+                {
+                    // Aus Equip-Slot entfernen (Unequip)
+                    item.Unequip(PlayerManager.instance.player.playerStats);
+                    StoreItem(null);
+                    Debug.Log($"[Int_SlotBtn] Item '{item.GetName()}' aus Equip-Slot abgerüstet");
+                }
+
+                // Item vor dem Spieler auf den Boden spawnen
+                // In isometrischer Perspektive: Verwende die Blickrichtung in der XZ-Ebene
+                Vector3 playerPos = PlayerManager.instance.player.transform.position;
+                Vector3 forward = PlayerManager.instance.player.transform.forward;
+                
+                // Projiziere forward auf XZ-Ebene (ignoriere Y) für echte Bodenrichtung
+                Vector3 dropDirection = new Vector3(forward.x, 0, forward.z).normalized;
+                
+                // Kürzere Distanz für isometrische Perspektive (0.8 statt 1.5)
+                Vector3 dropPosition = playerPos + dropDirection * 0.8f;
+                dropPosition.y = 0.3f; // Leicht über dem Boden
+                
+                ItemWorld.SpawnItemWorld(dropPosition, item);
+                
+                Debug.Log($"[Int_SlotBtn] Item '{item.GetName()}' auf den Boden geworfen bei {dropPosition}");
             }
         }
-        else if (slotType != ItemType.None && item != null)
+        // Linksklick = Equip/Unequip (alte Logik)
+        else if (eventData.button == PointerEventData.InputButton.Left)
         {
-            // Equip → Inventar (ersten freien Slot verwenden)
-            bool added = inventory.AddItemToFirstFreeSlot(item);
-            if (added)
-            {
-                Debug.Log($"[Int_SlotBtn] Lege Item '{item.GetName()}' aus Equip-Slot zurück ins Inventar");
-                EquipOrUnequipItem(item, slotIndex, -1, false); // -1 da der Slot automatisch gefunden wird
-            }
-            else
-            {
-                Debug.LogWarning($"[Int_SlotBtn] Inventar voll - kann Item '{item.GetName()}' nicht abrüsten");
-            }
+            PointerClick();
         }
     }
 
-    private void EquipOrUnequipItem(ItemInstance item, int fromSlotIndex, int toSlotIndex, bool isEquip)
+    private void PointerClick()
     {
-        Debug.Log($"[Int_SlotBtn] EquipOrUnequipItem: {(isEquip ? "Equip" : "Unequip")} Item '{item?.GetName()}' von Slot {fromSlotIndex} nach Slot {toSlotIndex}");
-
-        if (isEquip)
+        // Prüfe zeitbasierte Blockade (für asynchrone Events aus Event-Queue)
+        if (Time.time < blockClicksUntilTime)
         {
-            // Suche den passenden Equip-Slot anhand des ItemTypes
-            var allSlots = FindObjectsOfType<Int_SlotBtn>();
-            var equipSlot = allSlots.FirstOrDefault(slot => slot.slotType == item.itemType && slot.slotType != ItemType.None);
-
-            if (equipSlot == null)
-            {
-                Debug.LogWarning($"[Int_SlotBtn] Kein Equip-Slot für ItemType {item.itemType} gefunden!");
-                return;
-            }
-
-            // Prüfe, ob bereits ein Item im Equip-Slot ist (lokal gespeichert)
-            ItemInstance oldEquippedItem = equipSlot.equippedItem;
-
-            // Wenn bereits ein Item des gleichen Typs ausgerüstet ist, tausche sie
-            if (oldEquippedItem != null)
-            {
-                Debug.Log($"[Int_SlotBtn] Austausch: Entferne altes Item '{oldEquippedItem.GetName()}' und lege es in Inventar-Slot {fromSlotIndex}");
-                oldEquippedItem.Unequip(PlayerManager.instance.player.playerStats);
-                
-                // WICHTIG: ItemType explizit übergeben!
-                UI_Manager.instance.UpdateAbilityForEquippedItem(null, oldEquippedItem.itemType);
-
-                // Altes Item ins Inventar legen (an die Stelle des neuen Items)
-                inventory.AddItemAtIndex(oldEquippedItem, fromSlotIndex);
-            }
-            else
-            {
-                // Kein Austausch - nur aus Inventar entfernen
-                inventory.RemoveItemAtIndex(fromSlotIndex);
-            }
-
-            // Neues Item ausrüsten (lokal im Equip-Slot speichern)
-            Debug.Log($"[Int_SlotBtn] Ausrüsten: Item '{item.GetName()}' wird in Equip-Slot {equipSlot.slotType} gelegt");
-            item.Equip(PlayerManager.instance.player.playerStats);
-            UI_Manager.instance.UpdateAbilityForEquippedItem(item);
-
-            // Visuell im Equip-Slot anzeigen (speichert automatisch lokal)
-            equipSlot.StoreItem(item);
+            Debug.LogWarning($"[Int_SlotBtn] Click auf Slot {slotIndex} ZEITBASIERT blockiert! (Time: {Time.time:F3} < {blockClicksUntilTime:F3})");
+            return;
         }
-        else
+        
+        // Verhindere doppelte Click-Events auf diesem spezifischen Slot
+        if (isProcessingClickOnThisSlot)
         {
-            // Unequip: Item aus Equip-Slot ins Inventar verschieben
-            Debug.Log($"[Int_SlotBtn] Unequip: Item '{item.GetName()}' aus Equip-Slot wird ins Inventar verschoben");
-            item.Unequip(PlayerManager.instance.player.playerStats);
-            
-            // WICHTIG: ItemType explizit übergeben!
-            UI_Manager.instance.UpdateAbilityForEquippedItem(null, item.itemType);
+            Debug.LogWarning($"[Int_SlotBtn] Click auf Slot {slotIndex} blockiert - bereits ein Click in Verarbeitung!");
+            return;
+        }
+        
+        isProcessingClickOnThisSlot = true;
+        
+        try
+        {
+            // Für Equip-Slots: Lokale ItemInstance verwenden
+            var item = slotType != ItemType.None ? equippedItem : inventory.GetItemAtIndex(slotIndex);
 
-            // Item ist bereits ins Inventar gelegt (via AddItemToFirstFreeSlot in PointerClick)
-            // Visuell aus Equip-Slot entfernen (löscht automatisch lokale Variable)
-            StoreItem(null);
+            Debug.Log($"[Int_SlotBtn] PointerClick auf Slot {slotIndex} ({slotType}), Item: {(item != null ? item.GetName() : "leer")}");
+            
+            // WICHTIG: Nur aus INVENTAR-Slots können Items ausgerüstet werden
+            // Equip-Slots sollten Items nur abrüsten (ins Inventar zurücklegen)
+            if (slotType == ItemType.None && item != null)
+            {
+                // Inventar → Equip
+                var allSlots = FindObjectsOfType<Int_SlotBtn>();
+                var equipSlot = allSlots
+                        .FirstOrDefault(slot => slot.slotType == item.itemType && slot.slotType != ItemType.None && slot != this);
+
+                Debug.Log($"[Int_SlotBtn] Suche EquipSlot für ItemType {item.itemType}: {(equipSlot != null ? equipSlot.slotIndex.ToString() : "kein Slot gefunden")}");
+                
+                if (equipSlot != null)
+                {
+                    // Prüfe, ob bereits ein Item im Equip-Slot ist
+                    ItemInstance oldEquippedItem = equipSlot.equippedItem;
+
+                    if (oldEquippedItem != null)
+                    {
+                        // Tausche Items: Altes Item abrüsten und ins Inventar legen
+                        Debug.Log($"[Int_SlotBtn] Tausche: '{item.GetName()}' aus Slot {slotIndex} mit '{oldEquippedItem.GetName()}' aus Equip-Slot");
+                        oldEquippedItem.Unequip(PlayerManager.instance.player.playerStats);
+                        UI_Manager.instance.UpdateAbilityForEquippedItem(null, oldEquippedItem.itemType);
+                        
+                        // Altes Item ins Inventar legen (an die Stelle des neuen Items)
+                        inventory.AddItemAtIndex(oldEquippedItem, slotIndex);
+                    }
+                    else
+                    {
+                        // Kein Item im Equip-Slot: Nur aus Inventar entfernen
+                        inventory.RemoveItemAtIndex(slotIndex);
+                    }
+
+                    // Neues Item ausrüsten
+                    Debug.Log($"[Int_SlotBtn] Rüste Item '{item.GetName()}' aus Inventar-Slot {slotIndex} in Equip-Slot aus");
+                    item.Equip(PlayerManager.instance.player.playerStats);
+                    UI_Manager.instance.UpdateAbilityForEquippedItem(item);
+                    
+                    // Aktualisiere den Equip-Slot visuell
+                    equipSlot.StoreItem(item);
+                    
+                    // Aktualisiere den Inventar-Slot visuell (zeige altes Item oder leeren Slot)
+                    StoreItem(oldEquippedItem);
+                    
+                    // WICHTIG: Aktualisiere Tooltip mit dem neuen Item (getauschtes Item liegt jetzt im Inventar-Slot)
+                    if (oldEquippedItem != null)
+                    {
+                        UI_Manager.instance.ShowItemTooltip(new Vector2(transform.position.x, transform.position.y), oldEquippedItem);
+                    }
+                    else
+                    {
+                        UI_Manager.instance.HideTooltip();
+                    }
+                }
+            }
+            else if (slotType != ItemType.None && item != null)
+            {
+                // Equip → Inventar (ersten freien Slot verwenden)
+                bool added = inventory.AddItemToFirstFreeSlot(item);
+                if (added)
+                {
+                    Debug.Log($"[Int_SlotBtn] Lege Item '{item.GetName()}' aus Equip-Slot zurück ins Inventar");
+                    item.Unequip(PlayerManager.instance.player.playerStats);
+                    UI_Manager.instance.UpdateAbilityForEquippedItem(null, item.itemType);
+                    StoreItem(null); // Visuell aus Equip-Slot entfernen
+                    
+                    // WICHTIG: Verstecke Tooltip nach dem Abrüsten
+                    UI_Manager.instance.HideTooltip();
+                }
+                else
+                {
+                    Debug.LogWarning($"[Int_SlotBtn] Inventar voll - kann Item '{item.GetName()}' nicht abrüsten");
+                }
+            }
+        }
+        finally
+        {
+            // WICHTIG: Flag zurücksetzen, auch wenn ein Fehler auftritt
+            isProcessingClickOnThisSlot = false;
         }
     }
 
@@ -160,6 +238,8 @@ public class Int_SlotBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         // Für Equip-Slots: Lokale ItemInstance verwenden
         var item = slotType != ItemType.None ? equippedItem : inventory.GetItemAtIndex(slotIndex);
+
+        Debug.Log($"[Int_SlotBtn] OnPointerEnter auf Slot {slotIndex} ({slotType}), Item: {(item != null ? item.GetName() : "leer")}");
 
         if (item == null)
         {

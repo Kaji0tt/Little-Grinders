@@ -19,6 +19,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Vector3 overviewRotationOffset = new Vector3(20, 0, 0);
     [SerializeField] private float overviewFieldOfView = 70f;
     [SerializeField] private float transitionSpeed = 3f;
+    [SerializeField] private float overviewOrbitSpeed = 50f; // Grad pro Sekunde für Orbit-Rotation
 
     [Header("Camera Lock Settings")]
     [SerializeField] private bool cameraLocked = false; // Standard: Kamera ist nicht gelockt
@@ -31,6 +32,10 @@ public class CameraFollow : MonoBehaviour
     private Vector3 originalLocalPosition;
     private Vector3 originalLocalRotation;
     private float originalFieldOfView;
+    
+    // Orbit System für Overview
+    private bool isOrbitingCamera = false;
+    private Quaternion originalPlayerRotation; // Speichere die ursprüngliche Player-Rotation
 
     // Camera Lock System
     private Vector3 mouseInfluenceOffset = Vector3.zero;
@@ -73,6 +78,12 @@ public class CameraFollow : MonoBehaviour
         // Overview-Kontrolle
         HandleOverviewInput();
 
+        // Overview Orbit Rotation (nur im Overview-Modus)
+        if (isInOverviewMode)
+        {
+            HandleOverviewOrbitRotation();
+        }
+
         // Camera Lock Kontrolle
         HandleCameraLockInput();
 
@@ -101,6 +112,45 @@ public class CameraFollow : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Tab))
         {
             DisableOverviewMode();
+        }
+    }
+
+    private void HandleOverviewOrbitRotation()
+    {
+        // Rechte Maustaste für Orbit-Rotation
+        if (Input.GetMouseButtonDown(1))
+        {
+            isOrbitingCamera = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            isOrbitingCamera = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            
+            // Stelle die ursprüngliche Player-Rotation wieder her
+            if (transform.parent != null)
+            {
+                transform.parent.rotation = originalPlayerRotation;
+            }
+        }
+
+        if (isOrbitingCamera && transform.parent != null)
+        {
+            // Rotiere das Player-Transform um die Y-Achse (wie bei IdleRotation)
+            float mouseX = Input.GetAxis("Mouse X");
+            float rotationAmount = mouseX * overviewOrbitSpeed * Time.deltaTime;
+            
+            // Rotiere Parent (Player) um Y-Achse
+            Vector3 currentRotation = transform.parent.eulerAngles;
+            transform.parent.eulerAngles = new Vector3(
+                currentRotation.x, 
+                currentRotation.y + rotationAmount, 
+                currentRotation.z
+            );
         }
     }
 
@@ -215,9 +265,15 @@ public class CameraFollow : MonoBehaviour
         
         isInOverviewMode = true;
 
+        // Speichere die ursprüngliche Player-Rotation
+        if (transform.parent != null)
+        {
+            originalPlayerRotation = transform.parent.rotation;
+        }
+
         if (LogScript.instance != null)
         {
-            LogScript.instance.ShowLog("Overview Mode ON", 1f);
+            LogScript.instance.ShowLog("Overview Mode ON - RMB to rotate", 1.5f);
         }
     }
 
@@ -226,6 +282,20 @@ public class CameraFollow : MonoBehaviour
         if (!isInOverviewMode) return;
         
         isInOverviewMode = false;
+
+        // Cursor freigeben falls noch gelockt
+        if (isOrbitingCamera)
+        {
+            isOrbitingCamera = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
+        // Stelle die ursprüngliche Player-Rotation wieder her
+        if (transform.parent != null)
+        {
+            transform.parent.rotation = originalPlayerRotation;
+        }
 
         if (LogScript.instance != null)
         {

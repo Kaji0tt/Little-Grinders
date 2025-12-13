@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b95acfd6bf6c5e479bfd7d937d42a15, type: 3}
   m_Name: HO0005
   m_EditorClassIdentifier: 
-  ItemID: HO0005
+  ItemID: LEGS_HOSEN_HO0005
   ItemName: Beinplatten Panzer
   ItemDescription: "Schwerer Stahl - sch\xFCtzt, aber klemmt im Schritt."
   itemType: 4
   weaponCombo: {fileID: 0}
+  gemType: 0
+  gemAbility: {fileID: 0}
   itemRarity: 0
   Range: 0
   RangedWeapon: 0
   icon: {fileID: -3359294393809867381, guid: 49b0e89f43e1b2443bfac3a28bf3ee1c, type: 3}
-  percent: 20
-  baseLevel: 15
+  dropLevel: 1
+  dropWeight: 100
+  calculatedWeight: 0
   activeItem: 0
   hp: 0
   armor: 20

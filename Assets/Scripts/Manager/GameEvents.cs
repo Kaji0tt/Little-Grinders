@@ -43,6 +43,11 @@ public class GameEvents : MonoBehaviour
     public event Action<EnemyController> OnEnemyAttackHit; // Für Impact-Timing
     public event Action<EnemyController> OnEnemyEndAttack;
     
+    // Ability/Cast Events
+    public event Action<EnemyController> OnEnemyRequestCast; // Anfrage Cast-State zu wechseln
+    public event Action<EnemyController, float> OnEnemyStartCast; // Enemy, castDuration
+    public event Action<EnemyController> OnEnemyCastComplete; // Cast abgeschlossen
+    
     // Movement Animation Events
     public event Action<EnemyController> OnEnemyStartIdle;
     public event Action<EnemyController> OnEnemyStartWalk;
@@ -53,7 +58,8 @@ public class GameEvents : MonoBehaviour
     public event Action<float, EnemyController, bool> OnEnemyTookDirectDamage; // Enemy, isCrit
     public event Action<EnemyController> OnEnemyDied;
 
-
+    // Spieler-Tod Event
+    public event Action OnPlayerDied;
 
     // Sound-Event
     public static event Action<string> PlaySound;
@@ -119,8 +125,13 @@ public class GameEvents : MonoBehaviour
     {
         OnEnemyDied?.Invoke(enemy);
     }
+
+    public void PlayerDied()
+    {
+        OnPlayerDied?.Invoke();
+    }
     
-        public void EnemyTookDirectDamage(float damage, EnemyController enemyController, bool isCrit)
+    public void EnemyTookDirectDamage(float damage, EnemyController enemyController, bool isCrit)
     {
         OnEnemyTookDirectDamage?.Invoke(damage, enemyController, isCrit);
     }
@@ -139,6 +150,22 @@ public class GameEvents : MonoBehaviour
     public void EnemyEndAttack(EnemyController enemy)
     {
         OnEnemyEndAttack?.Invoke(enemy);
+    }
+    
+    // Ability/Cast Events
+    public void EnemyRequestCast(EnemyController enemy)
+    {
+        OnEnemyRequestCast?.Invoke(enemy);
+    }
+    
+    public void EnemyStartCast(EnemyController enemy, float castDuration)
+    {
+        OnEnemyStartCast?.Invoke(enemy, castDuration);
+    }
+    
+    public void EnemyCastComplete(EnemyController enemy)
+    {
+        OnEnemyCastComplete?.Invoke(enemy);
     }
     
     // Movement Animation Events

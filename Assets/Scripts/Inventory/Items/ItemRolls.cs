@@ -28,6 +28,9 @@ public class ItemRolls : MonoBehaviour
 
         while (ShouldRollAnotherMod(mods.Count))
         {
+            // Filtere gültige Mods basierend auf ItemType
+            // HINWEIS: Aptitude-Mods (Abilities) wurden aus dem System entfernt
+            // Abilities werden jetzt nur über Gems im Talentbaum verwaltet
             var validDefs = ItemDatabase.instance.allModDefs
                 .Where(def => (def.allowedItemTypes & itemTemplate.itemType) != 0)
                 .ToArray();

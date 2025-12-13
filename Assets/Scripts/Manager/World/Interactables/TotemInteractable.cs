@@ -2,346 +2,467 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// NEW Wave-Based Totem System
+/// Spawns enemy waves that get progressively harder
+/// Must be deactivated at an Altar to receive rewards
+/// No longer uses Singleton - each map has its own Totem instance
+/// </summary>
 public class TotemInteractable : BaseInteractable
 {
+    
     [Header("Totem Settings")]
     [SerializeField] private GameObject[] spawnPoints;
     [SerializeField] private Light lightBulb;
-    [SerializeField] private int xpReward = 20;
-    [SerializeField] private float dropInterval = 0.5f;
-    [SerializeField] private float maxDropTime = 5f;
+    [SerializeField] private TotemAltarPathGuide pathGuide; // Visual guide to altar
     
-    [Header("Spawn Settings")]
-    [SerializeField] private float spawnChance = 0.5f; // 50% Chance pro Spawnpoint
+    [Header("Wave System Settings")]
+    [SerializeField] private float waveInterval = 12f; // Time between waves
+    [SerializeField] private int baseEnemiesPerWave = 2; // Starting enemies per wave
+    [SerializeField] private int maxEnemiesPerWave = 8; // Maximum enemies per wave
+    
+    [Header("Spawn Position Settings")]
+    [SerializeField] private float altarSpawnRadius = 8f; // Radius around altar for main wave spawns
+    [SerializeField] [Range(0f, 1f)] private float totemSpawnPercentage = 0.25f; // Percentage of enemies that spawn at totem (blocks direct path)
+    [SerializeField] private int firstWaveTotemEnemies = 5; // Extra enemies at Totem for first wave (4-6 recommended)
     
     [Header("Sound Settings")]
     [SerializeField] private string callSoundName = "Totem_Call"; // Sound bei Aktivierung
     [SerializeField] private string loopSoundName = "Totem_Loop"; // Sound während Challenge
-    [SerializeField] private string clearSoundName = "Totem_Clear"; // Sound bei Completion
+    [SerializeField] private string deactivationSoundName = "Totem_Deactivate"; // Sound bei Deaktivierung
     
     [Header("Visual Effects")]
-    [SerializeField] private bool enableVoidEffect = true; // Im Inspector einstellbar
+    [SerializeField] private bool enableVoidEffect = true;
     [SerializeField] private Color totemVignetteColor = new Color(0.254f, 0.027f, 0.302f, 1f); // #41074D
     
     [Header("Void Effect Settings")]
-    [SerializeField] private Color voidLiftColor = new Color(0.3f, 0.1f, 0.4f, 1f); // Lila Lift-Farbe
-    [SerializeField] private float voidVignetteIntensity = 0.6f; // Vignette-Intensität
-    [SerializeField] private float voidSaturation = -30f; // Sättigung
-    [SerializeField] private float voidTransitionDuration = 2f; // Übergangszeit
-    [SerializeField] private bool enableVoidAnimation = true; // Animation aktivieren
-    [SerializeField] private float voidAnimationSpeed = 1.5f; // Animationsgeschwindigkeit
+    [SerializeField] private Color voidLiftColor = new Color(0.3f, 0.1f, 0.4f, 1f);
+    [SerializeField] private float voidVignetteIntensity = 0.6f;
+    [SerializeField] private float voidSaturation = -30f;
+    [SerializeField] private float voidTransitionDuration = 2f;
+    [SerializeField] private bool enableVoidAnimation = true;
+    [SerializeField] private float voidAnimationSpeed = 1.5f;
+    [SerializeField] private float voidChromaticAberration = 0.3f;
+    [SerializeField] private bool enableChromaticPulse = true;
+    [SerializeField] private float chromaticPulseSpeed = 2f;
     
-    // NEU: Chromatic Aberration Settings
-    [SerializeField] private float voidChromaticAberration = 0.3f; // Chromatic Aberration Intensität
-    [SerializeField] private bool enableChromaticPulse = true; // Chromatic Aberration Pulsieren
-    [SerializeField] private float chromaticPulseSpeed = 2f; // Pulsgeschwindigkeit
-    
+    // Runtime data
     private PrefabCollection prefabCollection;
     private GameObject mobParent;
-    private List<GameObject> spawnedMobs = new List<GameObject>();
+    private AltarInteractable linkedAltar;
     
-    // Challenge-Status
+    // Challenge state
     private bool challengeActive = false;
-    private bool challengeCompleted = false;
-    private bool soundPlayed = false;
+    private int waveNumber = 0;
+    private float activeTime = 0f;
+    private float timeSinceLastWave = 0f; // Track time since last wave spawned
+    private Coroutine waveSpawnCoroutine;
     
-    // Sound-System
-    private bool isLoopSoundPlaying = false;
+    // Sound system
     private AudioManager.ActiveSound activeLoopSound;
     
-    // Void-Effekt System
+    // Void effect system
     private bool isVoidEffectActive = false;
     private Coroutine voidEffectCoroutine;
     private Vector4 originalLiftColor;
     private float originalVignetteIntensity;
     private Color originalVignetteColor;
     private float originalSaturation;
-    private float originalChromaticAberration; // NEU
+    private float originalChromaticAberration;
     private bool hasStoredOriginalValues = false;
-    
-    // Drop-System
-    private float dropTimeStamp = 0f;
-    private float currentDropInterval;
     
     protected override void Start()
     {
-        // Standard-Einstellungen für Totem
-        canBeUsedMultipleTimes = false; // Totem kann nur einmal aktiviert werden
+        canBeUsedMultipleTimes = false;
         displayName = "Ancient Totem";
-        interactPrompt = "Press [E] to activate Totem";
+        interactPrompt = "Press [E] to activate Totem Challenge";
         
-        // Initialisierung
         mobParent = GameObject.Find("MobParent");
         prefabCollection = FindFirstObjectByType<PrefabCollection>();
-        currentDropInterval = dropInterval;
+        
+        // Subscribe to events
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnPlayerDied += HandlePlayerDeath;
+        }
         
         base.Start();
     }
     
     protected override bool CanInteract()
     {
-        return base.CanInteract() && !challengeActive && !challengeCompleted;
+        return base.CanInteract() && !challengeActive;
     }
     
     protected override void OnInteract()
     {
+        StartChallenge();
+    }
+    
+    private void StartChallenge()
+    {
         challengeActive = true;
+        waveNumber = 0;
+        activeTime = 0f;
+        timeSinceLastWave = 0f;
         
-        // Spiele Call-Sound ab
+        Debug.Log("[TotemInteractable] Challenge started!");
+        
+        // Play sound
         if (AudioManager.instance != null && !string.IsNullOrEmpty(callSoundName))
         {
             AudioManager.instance.PlaySound(callSoundName);
         }
         
-        SpawnEnemies();
-        
-        // Licht ausschalten
+        // Turn off light
         if (lightBulb != null)
         {
             lightBulb.intensity = 0;
         }
         
-        // NEU: Aktiviere Void-Effekt mit spezifischer Totem-Farbe
+        // Enable EnemyWaveSpawner for totem waves
+        if (EnemyWaveSpawner.instance != null)
+        {
+            EnemyWaveSpawner.instance.SetSpawningEnabled(true);
+        }
+        
+        // Activate void effect
         if (enableVoidEffect && PPVolumeManager.instance != null)
         {
             ActivateTotemVoidEffect();
-            Debug.Log("Void-Effekt aktiviert für Totem-Challenge mit Farbe #41074D");
         }
         
-        // Starte Loop-Sound
+        // Start loop sound
         StartLoopSound();
+        
+        // Notify altar
+        if (linkedAltar != null)
+        {
+            linkedAltar.OnTotemActivated();
+        }
+        
+        // Show Challenge UI
+        UI_TotemChallenge challengeUI = FindFirstObjectByType<UI_TotemChallenge>();
+        if (challengeUI != null)
+        {
+            challengeUI.ShowChallengeUI(this);
+        }
+        
+        // Show Void Essence UI during challenge
+        UI_VoidEssence voidEssenceUI = FindFirstObjectByType<UI_VoidEssence>();
+        if (voidEssenceUI != null)
+        {
+            voidEssenceUI.ShowForChallenge();
+        }
+        
+        // Show path guide to Altar
+        if (pathGuide != null && linkedAltar != null)
+        {
+            pathGuide.ShowPath(transform, linkedAltar.transform);
+        }
+        
+        // Start wave spawning
+        waveSpawnCoroutine = StartCoroutine(WaveSpawnLoop());
         
         if (LogScript.instance != null)
         {
-            LogScript.instance.ShowLog("Totem Challenge activated!", 3f);
+            LogScript.instance.ShowLog("Totem Challenge activated! Survive the waves!", 3f);
         }
-        
-        StartCoroutine(MonitorChallenge());
     }
     
-    private void SpawnEnemies()
+    private IEnumerator WaveSpawnLoop()
     {
-        if (prefabCollection == null)
+        while (challengeActive)
         {
-            Debug.LogWarning("PrefabCollection not found!");
+            // Increment wave
+            waveNumber++;
+            timeSinceLastWave = 0f; // Reset timer
+            
+            // Spawn wave
+            SpawnWave(waveNumber);
+            
+            // Wait for next wave
+            float timeWaited = 0f;
+            while (timeWaited < waveInterval && challengeActive)
+            {
+                timeWaited += Time.deltaTime;
+                timeSinceLastWave += Time.deltaTime;
+                activeTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+    }
+    
+    private void SpawnWave(int wave)
+    {
+        if (EnemyWaveSpawner.instance == null)
+        {
+            Debug.LogError("[TotemInteractable] Cannot spawn wave - EnemyWaveSpawner not found!");
             return;
         }
         
-        foreach (GameObject spawnPoint in spawnPoints)
+        if (linkedAltar == null)
         {
-            // Zufällige Spawn-Chance
-            if (Random.value <= spawnChance)
+            Debug.LogWarning("[TotemInteractable] Cannot spawn wave - no linked Altar found!");
+            return;
+        }
+        
+        // Calculate enemy count
+        int enemyCount = Mathf.Min(baseEnemiesPerWave + wave - 1, maxEnemiesPerWave);
+        
+        // Special handling for first wave: spawn more enemies at Totem
+        float currentTotemPercentage = totemSpawnPercentage;
+        if (wave == 1 && firstWaveTotemEnemies > 0)
+        {
+            // Override: spawn fixed number at Totem for wave 1
+            enemyCount = Mathf.Max(enemyCount, firstWaveTotemEnemies);
+            currentTotemPercentage = (float)firstWaveTotemEnemies / enemyCount;
+            Debug.Log($"[TotemInteractable] Wave 1 - Spawning {firstWaveTotemEnemies} enemies at Totem, {enemyCount - firstWaveTotemEnemies} at Altar");
+        }
+        
+        Debug.Log($"[TotemInteractable] Requesting Wave {wave} spawn with {enemyCount} enemies from EnemyWaveSpawner");
+        
+        // Update wave number in EnemyWaveSpawner for difficulty calculation
+        EnemyWaveSpawner.instance.SetWaveNumber(wave);
+        
+        // Collect totem spawn positions
+        Vector3[] totemPositions = null;
+        if (spawnPoints != null && spawnPoints.Length > 0)
+        {
+            totemPositions = new Vector3[spawnPoints.Length];
+            for (int i = 0; i < spawnPoints.Length; i++)
             {
-                GameObject mob = prefabCollection.GetRandomEnemie();
-                
-                if (mob != null)
-                {
-                    GameObject instanceMob = Instantiate(mob, spawnPoint.transform.position, Quaternion.identity);
-                    
-                    // Parent setzen
-                    if (mobParent != null)
-                    {
-                        instanceMob.transform.SetParent(mobParent.transform);
-                    }
-                    
-                    // SummonedMob-Component hinzufügen
-                    instanceMob.AddComponent<SummonedMob>();
-                    spawnedMobs.Add(instanceMob);
-                }
+                totemPositions[i] = spawnPoints[i].transform.position;
             }
         }
         
-        Debug.Log($"Totem spawned {spawnedMobs.Count} enemies");
-    }
-    
-    private IEnumerator MonitorChallenge()
-    {
-        while (challengeActive && !challengeCompleted)
-        {
-            // Entferne null-Referenzen (zerstörte Mobs)
-            spawnedMobs.RemoveAll(mob => mob == null);
-            
-            // Prüfe über SummonedMob-Components und deren Lebensstatus
-            SummonedMob[] summonedMobs = FindObjectsByType<SummonedMob>(FindObjectsSortMode.None);
-            int aliveMobsCount = 0;
-            
-            // Zähle nur lebende Mobs
-            foreach (SummonedMob summonedMob in summonedMobs)
-            {
-                if (summonedMob != null)
-                {
-                    MobStats mobStats = summonedMob.GetComponent<MobStats>();
-                    if (mobStats != null && !mobStats.isDead)
-                    {
-                        aliveMobsCount++;
-                    }
-                }
-            }
-            
-            // Challenge ist erfolgreich wenn keine lebenden Mobs mehr da sind
-            if (aliveMobsCount == 0)
-            {
-                CompleteChallenge();
-                break;
-            }
-            
-            yield return new WaitForSeconds(0.2f);
-        }
-    }
-    
-    private void CompleteChallenge()
-    {
-        challengeCompleted = true;
-        challengeActive = false;
-        
-        // WICHTIG: Stoppe Loop-Sound SOFORT und warte kurz
-        StopLoopSound();
-        
-        // Warte einen Frame um sicherzustellen dass Loop-Sound gestoppt ist
-        StartCoroutine(PlayClearSoundAfterDelay());
-        
-        // NEU: Deaktiviere Void-Effekt
-        if (enableVoidEffect && PPVolumeManager.instance != null)
-        {
-            DeactivateTotemVoidEffect();
-            Debug.Log("Void-Effekt deaktiviert nach Totem-Completion");
-        }
-        
-        // NEU: Markiere die aktuelle Map als cleared
-        if (GlobalMap.instance != null && GlobalMap.instance.currentMap != null)
-        {
-            GlobalMap.instance.currentMap.isCleared = true;
-            Debug.Log("Map als 'cleared' markiert!");
-            
-            // Benachrichtige UI über Änderung
-            GlobalMap.instance.TriggerMapListChanged();
-        }
-    }
-    
-    private IEnumerator DropRewards()
-    {
-        dropTimeStamp = 0f;
-        
-        while (dropTimeStamp < maxDropTime)
-        {
-            yield return new WaitForSeconds(currentDropInterval);
-            
-            // Drop ein Item
-            if (ItemDatabase.instance != null)
-            {
-                ItemDatabase.instance.GetWeightDrop(transform.position);
-            }
-            
-            dropTimeStamp += currentDropInterval;
-            currentDropInterval += dropInterval; // Intervall wird länger
-        }
+        // Delegate spawning to EnemyWaveSpawner
+        EnemyWaveSpawner.instance.SpawnTotemWave(
+            enemyCount,
+            linkedAltar.transform.position,
+            altarSpawnRadius,
+            totemPositions,
+            currentTotemPercentage
+        );
     }
     
     /// <summary>
-    /// Spielt den Clear-Sound nach einer kurzen Verzögerung ab, um sicherzustellen dass der Loop-Sound gestoppt ist
+    /// Called by Altar when player deactivates the totem
     /// </summary>
-    private IEnumerator PlayClearSoundAfterDelay()
+    public void DeactivateChallenge()
     {
-        // Warte einen kurzen Moment um sicherzustellen dass Loop-Sound gestoppt ist
-        yield return new WaitForSeconds(0.1f);
+        if (!challengeActive) return;
         
-        // Erfolgs-Sound abspielen
-        if (AudioManager.instance != null && !soundPlayed && !string.IsNullOrEmpty(clearSoundName))
+        Debug.Log("[TotemInteractable] Challenge deactivated by Altar");
+        
+        challengeActive = false;
+        
+        // Stop wave spawning
+        if (waveSpawnCoroutine != null)
         {
-            AudioManager.instance.PlaySound(clearSoundName);
-            soundPlayed = true;
+            StopCoroutine(waveSpawnCoroutine);
+            waveSpawnCoroutine = null;
         }
         
-        // XP-Belohnung geben
-        PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
-        if (playerStats != null)
+        // Disable EnemyWaveSpawner
+        if (EnemyWaveSpawner.instance != null)
         {
-            playerStats.Gain_xp(xpReward);
+            EnemyWaveSpawner.instance.SetSpawningEnabled(false);
         }
         
-        // Licht wieder anschalten
+        // Stop sounds
+        StopLoopSound();
+        if (AudioManager.instance != null && !string.IsNullOrEmpty(deactivationSoundName))
+        {
+            AudioManager.instance.PlaySound(deactivationSoundName);
+        }
+        
+        // Deactivate void effect
+        if (enableVoidEffect && PPVolumeManager.instance != null)
+        {
+            DeactivateTotemVoidEffect();
+        }
+        
+        // Turn light back on
         if (lightBulb != null)
         {
             lightBulb.color = Color.white;
             lightBulb.intensity = 0.7f;
         }
         
-        if (LogScript.instance != null)
+        // Clean up summoned mobs
+        CleanupSummonedMobs();
+        
+        // Hide Challenge UI
+        UI_TotemChallenge challengeUI = FindFirstObjectByType<UI_TotemChallenge>();
+        if (challengeUI != null)
         {
-            LogScript.instance.ShowLog($"Totem Challenge completed! Map cleared! +{xpReward} XP!", 4f);
+            challengeUI.HideChallengeUI();
         }
         
-        // Starte Drop-Belohnungen
-        StartCoroutine(DropRewards());
+        // NOTE: UI_VoidEssence.HideForChallenge() moved to AltarInteractable.OnInteract()
+        // to ensure UI stays visible during reward animation
         
-        // Speichere Zustand
-        SaveState();
+        // Hide path guide
+        if (pathGuide != null)
+        {
+            pathGuide.HidePath();
+        }
+        
+        if (LogScript.instance != null)
+        {
+            LogScript.instance.ShowLog("Totem Challenge deactivated!", 2f);
+        }
     }
     
-    #region Sound Management
-
-    /// <summary>
-    /// Startet den Loop-Sound der während der Challenge abgespielt wird
-    /// </summary>
-    private void StartLoopSound()
+    private void CleanupSummonedMobs()
     {
-        if (AudioManager.instance != null && !string.IsNullOrEmpty(loopSoundName) && !isLoopSoundPlaying)
+        SummonedMob[] summonedMobs = FindObjectsByType<SummonedMob>(FindObjectsSortMode.None);
+        foreach (SummonedMob mob in summonedMobs)
         {
-            // Verwende das neue System für Loop-Sounds
-            activeLoopSound = AudioManager.instance.PlaySound(loopSoundName, loop: true, trackActive: true);
-            
-            if (activeLoopSound != null)
+            if (mob != null)
             {
-                isLoopSoundPlaying = true;
-                Debug.Log($"Loop-Sound '{loopSoundName}' gestartet");
+                Destroy(mob.gameObject);
             }
         }
     }
     
     /// <summary>
-    /// Stoppt den Loop-Sound sofort
+    /// Called when player dies or map changes - cancel without rewards
     /// </summary>
+    private void HandlePlayerDeath()
+    {
+        if (challengeActive)
+        {
+            CancelChallenge();
+        }
+    }
+    
+    public void CancelChallenge()
+    {
+        if (!challengeActive) return;
+        
+        Debug.Log("[TotemInteractable] Challenge cancelled (no rewards)");
+        
+        challengeActive = false;
+        
+        // Stop wave spawning
+        if (waveSpawnCoroutine != null)
+        {
+            StopCoroutine(waveSpawnCoroutine);
+            waveSpawnCoroutine = null;
+        }
+        
+        // Disable spawner
+        if (EnemyWaveSpawner.instance != null)
+        {
+            EnemyWaveSpawner.instance.SetSpawningEnabled(false);
+        }
+        
+        // Stop sounds & effects
+        StopLoopSound();
+        
+        // IMPORTANT: Reset PostProcessing IMMEDIATELY when cancelled (player died - Time.timeScale = 0)
+        if (enableVoidEffect && PPVolumeManager.instance != null)
+        {
+            // Stop any running coroutine
+            if (voidEffectCoroutine != null)
+            {
+                StopCoroutine(voidEffectCoroutine);
+                voidEffectCoroutine = null;
+            }
+            
+            // Reset immediately without animation
+            isVoidEffectActive = false;
+            PPVolumeManager.instance.SetDayNightUpdates(true);
+            
+            if (hasStoredOriginalValues)
+            {
+                PPVolumeManager.instance.SetLiftGammaGain(originalLiftColor);
+                PPVolumeManager.instance.SetVignetteIntensity(originalVignetteIntensity);
+                PPVolumeManager.instance.SetVignetteColor(originalVignetteColor);
+                PPVolumeManager.instance.SetSaturation(0f);
+                PPVolumeManager.instance.SetChromaticAberration(originalChromaticAberration);
+                
+                Debug.Log("[TotemInteractable] PostProcessing reset immediately (cancelled)");
+            }
+        }
+        
+        // Notify altar
+        if (linkedAltar != null)
+        {
+            linkedAltar.OnTotemDeactivated();
+        }
+        
+        // Hide Challenge UI
+        UI_TotemChallenge challengeUI = FindFirstObjectByType<UI_TotemChallenge>();
+        if (challengeUI != null)
+        {
+            challengeUI.HideChallengeUI();
+        }
+        
+        // Hide Void Essence UI
+        UI_VoidEssence voidEssenceUI = FindFirstObjectByType<UI_VoidEssence>();
+        if (voidEssenceUI != null)
+        {
+            voidEssenceUI.HideForChallenge();
+        }
+        
+        // Hide path guide
+        if (pathGuide != null)
+        {
+            pathGuide.HidePath();
+        }
+        
+        // Cleanup
+        CleanupSummonedMobs();
+        
+        if (lightBulb != null)
+        {
+            lightBulb.color = Color.white;
+            lightBulb.intensity = 0.7f;
+        }
+    }
+    
+    // Public getters for Altar and UI
+    public bool IsChallengeActive() => challengeActive;
+    public int GetWaveNumber() => waveNumber;
+    public float GetActiveTime() => activeTime;
+    public float GetTimeSinceLastWave() => timeSinceLastWave;
+    public void SetLinkedAltar(AltarInteractable altar) => linkedAltar = altar;
+    
+    #region Sound Management
+    private void StartLoopSound()
+    {
+        if (AudioManager.instance != null && !string.IsNullOrEmpty(loopSoundName))
+        {
+            activeLoopSound = AudioManager.instance.PlaySound(loopSoundName, loop: true, trackActive: true);
+        }
+    }
+    
     private void StopLoopSound()
     {
-        if (activeLoopSound != null)
+        if (activeLoopSound != null && AudioManager.instance != null)
         {
             AudioManager.instance.StopActiveSound(activeLoopSound);
             activeLoopSound = null;
-            Debug.Log("Loop-Sound gestoppt");
         }
-        
-        // Fallback: Stoppe alle Sounds dieser Gruppe
-        if (AudioManager.instance != null && !string.IsNullOrEmpty(loopSoundName))
-        {
-            AudioManager.instance.StopSound(loopSoundName);
-        }
-        
-        isLoopSoundPlaying = false;
     }
     #endregion
     
     #region Void Effect Management
-    
-    /// <summary>
-    /// Aktiviert den Totem-spezifischen Void-Effekt
-    /// </summary>
     private void ActivateTotemVoidEffect()
     {
         if (isVoidEffectActive || PPVolumeManager.instance == null) return;
         
-        Debug.Log("[TotemInteractable] Aktiviere Totem Void-Effekt");
         isVoidEffectActive = true;
-        
-        // Deaktiviere Day/Night-Updates
         PPVolumeManager.instance.SetDayNightUpdates(false);
         
-        // Speichere originale Werte
         if (!hasStoredOriginalValues)
         {
             StoreOriginalPostProcessingValues();
         }
         
-        // Stoppe vorherige Coroutine falls aktiv
         if (voidEffectCoroutine != null)
         {
             StopCoroutine(voidEffectCoroutine);
@@ -350,20 +471,13 @@ public class TotemInteractable : BaseInteractable
         voidEffectCoroutine = StartCoroutine(TotemVoidEffectRoutine(true));
     }
     
-    /// <summary>
-    /// Deaktiviert den Totem-spezifischen Void-Effekt
-    /// </summary>
     private void DeactivateTotemVoidEffect()
     {
         if (!isVoidEffectActive) return;
         
-        Debug.Log("[TotemInteractable] Deaktiviere Totem Void-Effekt");
         isVoidEffectActive = false;
-        
-        // Reaktiviere Day/Night-Updates
         PPVolumeManager.instance.SetDayNightUpdates(true);
         
-        // Stoppe vorherige Coroutine falls aktiv
         if (voidEffectCoroutine != null)
         {
             StopCoroutine(voidEffectCoroutine);
@@ -372,26 +486,20 @@ public class TotemInteractable : BaseInteractable
         voidEffectCoroutine = StartCoroutine(TotemVoidEffectRoutine(false));
     }
     
-    /// <summary>
-    /// Hauptroutine für den Totem Void-Effekt mit sanften Übergängen und Animation
-    /// </summary>
     private IEnumerator TotemVoidEffectRoutine(bool activate)
     {
-        // Hole aktuelle Werte vom PPVolumeManager
         var currentVignetteValues = PPVolumeManager.instance.GetVignetteValues();
         Vector4 currentLiftColor = PPVolumeManager.instance.GetLiftGammaGainValues();
-        float currentChromaticAberration = PPVolumeManager.instance.GetChromaticAberrationValue(); // NEU
+        float currentChromaticAberration = PPVolumeManager.instance.GetChromaticAberrationValue();
         
-        // Start- und Zielwerte definieren
         Vector4 startLiftColor, targetLiftColor;
         float startVignetteIntensity, targetVignetteIntensity;
         Color startVignetteColor, targetVignetteColor;
-        float startSaturation, targetSaturation = 0f;
-        float startChromaticAberration, targetChromaticAberration; // NEU
+        float startSaturation, targetSaturation;
+        float startChromaticAberration, targetChromaticAberration;
         
         if (activate)
         {
-            // Aktivierung: Von aktuellen Werten zu Totem-Void-Werten
             startLiftColor = currentLiftColor;
             targetLiftColor = new Vector4(
                 voidLiftColor.r * 0.1f - 0.05f,
@@ -406,16 +514,14 @@ public class TotemInteractable : BaseInteractable
             startVignetteColor = currentVignetteValues.color;
             targetVignetteColor = totemVignetteColor;
             
-            startSaturation = 0f; // Annahme: Startwert
+            startSaturation = 0f;
             targetSaturation = voidSaturation;
             
-            // NEU: Chromatic Aberration
             startChromaticAberration = currentChromaticAberration;
             targetChromaticAberration = voidChromaticAberration;
         }
         else
         {
-            // Deaktivierung: Von Void-Werten zurück zu originalen Werten
             startLiftColor = currentLiftColor;
             targetLiftColor = originalLiftColor;
             
@@ -428,61 +534,48 @@ public class TotemInteractable : BaseInteractable
             startSaturation = voidSaturation;
             targetSaturation = 0f;
             
-            // NEU: Chromatic Aberration zurücksetzen
             startChromaticAberration = currentChromaticAberration;
             targetChromaticAberration = originalChromaticAberration;
         }
         
-        // Sanfter Übergang
         float transitionProgress = 0f;
         while (transitionProgress < 1f)
         {
             transitionProgress += Time.deltaTime / voidTransitionDuration;
             float smoothProgress = Mathf.SmoothStep(0f, 1f, transitionProgress);
             
-            // Lift Gamma Gain (Hauptfarbe)
             Vector4 currentLift = Vector4.Lerp(startLiftColor, targetLiftColor, smoothProgress);
             PPVolumeManager.instance.SetLiftGammaGain(currentLift);
             
-            // Vignette Intensität
             float currentIntensity = Mathf.Lerp(startVignetteIntensity, targetVignetteIntensity, smoothProgress);
             PPVolumeManager.instance.SetVignetteIntensity(currentIntensity);
             
-            // Vignette Farbe
             Color currentVignetteCol = Color.Lerp(startVignetteColor, targetVignetteColor, smoothProgress);
             PPVolumeManager.instance.SetVignetteColor(currentVignetteCol);
             
-            // Sättigung
             float currentSat = Mathf.Lerp(startSaturation, targetSaturation, smoothProgress);
             PPVolumeManager.instance.SetSaturation(currentSat);
             
-            // NEU: Chromatic Aberration
             float currentChromatic = Mathf.Lerp(startChromaticAberration, targetChromaticAberration, smoothProgress);
             PPVolumeManager.instance.SetChromaticAberration(currentChromatic);
             
             yield return null;
         }
         
-        // Finale Werte setzen
         PPVolumeManager.instance.SetLiftGammaGain(targetLiftColor);
         PPVolumeManager.instance.SetVignetteIntensity(targetVignetteIntensity);
         PPVolumeManager.instance.SetVignetteColor(targetVignetteColor);
         PPVolumeManager.instance.SetSaturation(targetSaturation);
-        PPVolumeManager.instance.SetChromaticAberration(targetChromaticAberration); // NEU
+        PPVolumeManager.instance.SetChromaticAberration(targetChromaticAberration);
         
-        // Wenn aktiviert und Animation enabled, starte kontinuierliche Animation
         if (activate && isVoidEffectActive && enableVoidAnimation)
         {
             yield return TotemVoidAnimationLoop();
         }
     }
     
-    /// <summary>
-    /// Kontinuierliche Animation während der Totem Void-Effekt aktiv ist
-    /// </summary>
     private IEnumerator TotemVoidAnimationLoop()
     {
-        // Basis-Werte für Animation
         Vector4 baseLiftColor = new Vector4(
             voidLiftColor.r * 0.1f - 0.05f,
             voidLiftColor.g * 0.05f - 0.02f,
@@ -493,37 +586,29 @@ public class TotemInteractable : BaseInteractable
         while (isVoidEffectActive)
         {
             float time = Time.time * voidAnimationSpeed;
+            float waveIntensity = (Mathf.Sin(time) + 1f) * 0.5f;
             
-            // Wabernde Farbeffekte - subtil
-            float waveIntensity = (Mathf.Sin(time) + 1f) * 0.5f; // 0 bis 1
-            
-            // Sehr subtile Variation um die Basis-Farbe
             Vector4 animatedVoidColor = Vector4.Lerp(
-                baseLiftColor * 0.8f, // Dunklere Version
-                baseLiftColor * 1.2f, // Hellere Version
-                waveIntensity * 0.3f // Reduzierte Intensität
+                baseLiftColor * 0.8f,
+                baseLiftColor * 1.2f,
+                waveIntensity * 0.3f
             );
             
             PPVolumeManager.instance.SetLiftGammaGain(animatedVoidColor);
             
-            // Pulsierende Vignette - subtil
-            float pulseFactor = (Mathf.Sin(time * 1.5f) + 1f) * 0.5f; // 0 bis 1
+            float pulseFactor = (Mathf.Sin(time * 1.5f) + 1f) * 0.5f;
             float animatedIntensity = Mathf.Lerp(voidVignetteIntensity * 0.8f, voidVignetteIntensity * 1.1f, pulseFactor * 0.3f);
             PPVolumeManager.instance.SetVignetteIntensity(animatedIntensity);
             
-            // NEU: Pulsierende Chromatic Aberration
             if (enableChromaticPulse)
             {
                 float chromaticTime = Time.time * chromaticPulseSpeed;
-                float chromaticPulseFactor = (Mathf.Sin(chromaticTime) + 1f) * 0.5f; // 0 bis 1
-                
-                // Pulsiere zwischen 70% und 130% der Basis-Intensität
+                float chromaticPulseFactor = (Mathf.Sin(chromaticTime) + 1f) * 0.5f;
                 float animatedChromatic = Mathf.Lerp(
-                    voidChromaticAberration * 0.7f, 
-                    voidChromaticAberration * 1.3f, 
+                    voidChromaticAberration * 0.7f,
+                    voidChromaticAberration * 1.3f,
                     chromaticPulseFactor
                 );
-                
                 PPVolumeManager.instance.SetChromaticAberration(animatedChromatic);
             }
             
@@ -531,9 +616,6 @@ public class TotemInteractable : BaseInteractable
         }
     }
     
-    /// <summary>
-    /// Speichert die aktuellen Post-Processing-Werte bevor der Void-Effekt angewendet wird
-    /// </summary>
     private void StoreOriginalPostProcessingValues()
     {
         if (PPVolumeManager.instance != null)
@@ -542,128 +624,41 @@ public class TotemInteractable : BaseInteractable
             var vignetteValues = PPVolumeManager.instance.GetVignetteValues();
             originalVignetteIntensity = vignetteValues.intensity;
             originalVignetteColor = vignetteValues.color;
-            originalSaturation = 0f; // Annahme für Standard-Sättigung
-            originalChromaticAberration = PPVolumeManager.instance.GetChromaticAberrationValue(); // NEU
-            
+            originalSaturation = 0f;
+            originalChromaticAberration = PPVolumeManager.instance.GetChromaticAberrationValue();
             hasStoredOriginalValues = true;
-            Debug.Log($"[TotemInteractable] Originale PP-Werte gespeichert: Lift={originalLiftColor}, Vignette={originalVignetteIntensity}, VignetteColor={originalVignetteColor}, ChromaticAberration={originalChromaticAberration}");
         }
     }
-    
     #endregion
-    
-    protected override string GetCustomSaveData()
-    {
-        return JsonUtility.ToJson(new TotemSaveData
-        {
-            challengeActive = this.challengeActive,
-            challengeCompleted = this.challengeCompleted,
-            soundPlayed = this.soundPlayed,
-            isLoopSoundPlaying = this.isLoopSoundPlaying,
-            lightIntensity = lightBulb != null ? lightBulb.intensity : 0f,
-            lightColorR = lightBulb != null ? lightBulb.color.r : 1f,
-            lightColorG = lightBulb != null ? lightBulb.color.g : 1f,
-            lightColorB = lightBulb != null ? lightBulb.color.b : 1f,
-            enableVoidEffect = this.enableVoidEffect,
-            isVoidEffectActive = this.isVoidEffectActive, // NEU: Speichere Void-Effekt-Zustand
-            // NEU: Chromatic Aberration Settings
-            enableChromaticPulse = this.enableChromaticPulse,
-            voidChromaticAberration = this.voidChromaticAberration,
-            chromaticPulseSpeed = this.chromaticPulseSpeed
-        });
-    }
-    
-    protected override void ApplyCustomSaveData(string data)
-    {
-        if (!string.IsNullOrEmpty(data))
-        {
-            try
-            {
-                var saveData = JsonUtility.FromJson<TotemSaveData>(data);
-                
-                this.challengeActive = saveData.challengeActive;
-                this.challengeCompleted = saveData.challengeCompleted;
-                this.soundPlayed = saveData.soundPlayed;
-                this.isLoopSoundPlaying = saveData.isLoopSoundPlaying;
-                this.enableVoidEffect = saveData.enableVoidEffect;
-                this.isVoidEffectActive = saveData.isVoidEffectActive; // NEU: Lade Void-Effekt-Zustand
-                
-                // NEU: Lade Chromatic Aberration Settings
-                this.enableChromaticPulse = saveData.enableChromaticPulse;
-                this.voidChromaticAberration = saveData.voidChromaticAberration;
-                this.chromaticPulseSpeed = saveData.chromaticPulseSpeed;
-                
-                // Loop-Sound wiederherstellen falls aktiv
-                if (this.challengeActive && !this.challengeCompleted && this.isLoopSoundPlaying)
-                {
-                    StartLoopSound();
-                }
-                
-                // NEU: Void-Effekt mit Totem-Farbe wiederherstellen
-                if (this.challengeActive && !this.challengeCompleted && this.enableVoidEffect)
-                {
-                    if (PPVolumeManager.instance != null)
-                    {
-                        ActivateTotemVoidEffect();
-                        Debug.Log("Void-Effekt nach Laden wiederhergestellt mit Totem-Farbe");
-                    }
-                }
-                
-                // Licht-Zustand wiederherstellen
-                if (lightBulb != null)
-                {
-                    lightBulb.intensity = saveData.lightIntensity;
-                    lightBulb.color = new Color(saveData.lightColorR, saveData.lightColorG, saveData.lightColorB);
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning($"Failed to load Totem save data: {e.Message}");
-            }
-        }
-    }
-    
-    [System.Serializable]
-    private class TotemSaveData
-    {
-        public bool challengeActive;
-        public bool challengeCompleted;
-        public bool soundPlayed;
-        public bool isLoopSoundPlaying;
-        public float lightIntensity;
-        public float lightColorR, lightColorG, lightColorB;
-        public bool enableVoidEffect; // NEU
-        public bool isVoidEffectActive; // NEU: Void-Effekt-Zustand
-        // NEU: Chromatic Aberration Settings
-        public bool enableChromaticPulse;
-        public float voidChromaticAberration;
-        public float chromaticPulseSpeed;
-    }
     
     void OnDestroy()
     {
-        // Stoppe alle laufenden Sound-Coroutines
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnPlayerDied -= HandlePlayerDeath;
+        }
+        
         StopLoopSound();
         
-        // NEU: Stelle sicher dass Void-Effekt deaktiviert wird
-        if (enableVoidEffect && PPVolumeManager.instance != null && challengeActive)
+        if (challengeActive)
+        {
+            CancelChallenge();
+        }
+        
+        if (enableVoidEffect && PPVolumeManager.instance != null)
         {
             DeactivateTotemVoidEffect();
         }
     }
     
-    void Update()
+    protected override string GetCustomSaveData()
     {
-        // Update-Logik wird jetzt komplett über Coroutines gehandhabt
-        // Nur für Debug-Zwecke
-        if (challengeActive)
-        {
-            // Optional: Debug-Anzeige der verbleibenden Mobs
-            SummonedMob[] remainingMobs = FindObjectsByType<SummonedMob>(FindObjectsSortMode.None);
-            if (Time.frameCount % 60 == 0) // Nur jede Sekunde loggen
-            {
-                Debug.Log($"Totem Challenge: {remainingMobs.Length} mobs remaining, Loop Sound: {(isLoopSoundPlaying ? "Playing" : "Stopped")}");
-            }
-        }
+        // No save support for now
+        return string.Empty;
+    }
+    
+    protected override void ApplyCustomSaveData(string data)
+    {
+        // No save support for now
     }
 }

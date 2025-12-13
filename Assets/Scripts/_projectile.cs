@@ -25,12 +25,20 @@ public class _projectile : MonoBehaviour
 
     public float _pSpeed;
 
+    [Header("Arrow Scaling and Rotation")]
+    [Tooltip("Wendet spezielle Rotation (-90° Z) und Skalierung (0.5x Y) für Pfeil-Projektile an")]
+    public bool applyArrowTransform = false;
+
     [Header("Collision Behavior")]
     [Tooltip("Kann das Projektil nach einer Umgebungskollision noch den Spieler treffen?")]
     public bool hitAfterEnvCollision = false;
     
-    public bool hasHitEnvironment = false;
+    [Tooltip("Ist das Projektil aktuell in der Luft? (wird automatisch verwaltet)")]
+    [HideInInspector]
+    public bool isInAir = true;
+    
     private bool hasHitPlayer = false;
+    private bool hasHitEnvironment = false;
 
     //public float _pYOffSet;
 
@@ -58,11 +66,29 @@ public class _projectile : MonoBehaviour
     void Start()
     {
         _pRbody = GetComponent<Rigidbody>();
+        
+        // Projektil startet immer in der Luft
+        isInAir = true;
+
+        // Wende Arrow-Skalierung an falls aktiviert
+        if (applyArrowTransform)
+        {
+            Vector3 scale = transform.localScale;
+            scale.y *= 0.5f;
+            transform.localScale = scale;
+        }
 
         if(trajectory == Trajectory.Direction)
         {
             //_pDirection = new Vector2((PlayerManager.instance.player.transform.position.x - transform.position.x), (PlayerManager.instance.player.transform.position.z - transform.position.z));
             _pDirection = new Vector3(PlayerManager.instance.player.transform.position.x - transform.position.x, 0, PlayerManager.instance.player.transform.position.z - transform.position.z);
+            
+            // ✅ FIX: Setze Collision Detection auf Continuous Dynamic für schnelle Projektile
+            if (_pRbody != null)
+            {
+                _pRbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                Debug.Log($"[Projectile] {gameObject.name} - Direction Trajectory mit ContinuousDynamic Collision Detection");
+            }
         }
         if (trajectory == Trajectory.FollowTarget)
         {
@@ -99,8 +125,16 @@ public class _projectile : MonoBehaviour
 
         _pRotation = Quaternion.LookRotation(_pDirection);
         transform.localRotation = Quaternion.Lerp(transform.rotation, _pRotation, 1);
-        transform.Rotate(new Vector3(-90, 0, 0));
         
+        // Wende Arrow-Rotation an (-90° Y und -90° Z falls aktiviert)
+        if (applyArrowTransform)
+        {
+            transform.rotation = Quaternion.LookRotation(_pDirection) * Quaternion.Euler(0, -90, -90);
+        }
+        else
+        {
+            transform.rotation = Quaternion.LookRotation(_pDirection) * Quaternion.Euler(0, -90, 0);
+        }
     }
 
     /// <summary>
@@ -173,19 +207,29 @@ public class _projectile : MonoBehaviour
     //Falls der Collider der Spieler ist
     private void OnTriggerEnter(Collider collider)
     {
+        // Debug-Log für alle Kollisionen (aktiviert für Debugging)
+        Debug.Log($"[Projectile {gameObject.name}] OnTriggerEnter mit: {collider.gameObject.name} | Tag: {collider.tag} | Trajectory: {trajectory} | isInAir: {isInAir}");
+        
         // Ignoriere DirCollider
         if (collider.gameObject.name == "DirCollider")
         {
+            Debug.Log("[Projectile] DirCollider ignoriert");
             return;
         }
         
-        if (collider.tag == "Player")
+        // Prüfe ob Collider oder Parent den Tag "Player" hat
+        bool isPlayer = collider.CompareTag("Player") || (collider.transform.parent != null && collider.transform.parent.CompareTag("Player"));
+        
+        if (isPlayer)
         {
-            // Wenn bereits Umgebung getroffen wurde und hitAfterEnvCollision = false, ignoriere Spielerkollision
-            if (hasHitEnvironment && !hitAfterEnvCollision)
+            // Wenn Projektil nicht mehr in der Luft ist und hitAfterEnvCollision = false, ignoriere Spielerkollision
+            if (!isInAir && !hitAfterEnvCollision)
             {
+                //Debug.Log($"[Projectile] Spieler-Kollision ignoriert - Projektil nicht in der Luft (isInAir={isInAir}, hitAfterEnvCollision={hitAfterEnvCollision})");
                 return;
             }
+            
+            //Debug.Log($"[Projectile] Spieler-Treffer erkannt! isInAir={isInAir}, hasHitPlayer={hasHitPlayer}");
             
             // Wenn bereits Spieler getroffen wurde, ignoriere weitere Spielerkollisionen
             if (hasHitPlayer)
@@ -195,13 +239,27 @@ public class _projectile : MonoBehaviour
             
             hasHitPlayer = true;
             
-            PlayerStats playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
+            // Suche PlayerStats entweder am Collider selbst oder am Parent (falls Child-Collider getroffen)
+            PlayerStats playerStats = collider.GetComponent<PlayerStats>();
+            if (playerStats == null && collider.transform.parent != null)
+            {
+                playerStats = collider.transform.parent.GetComponent<PlayerStats>();
+            }
+            
+            // Fallback: Nutze PlayerManager
+            if (playerStats == null && PlayerManager.instance?.player != null)
+            {
+                playerStats = PlayerManager.instance.player.transform.GetComponent<PlayerStats>();
+            }
             
             if (playerStats == null)
             {
+                Debug.LogWarning($"[Projectile] PlayerStats nicht gefunden auf {collider.gameObject.name}!");
                 DestroyProjectileAfterDelay();
                 return;
             }
+            
+            //Debug.Log($"[Projectile] PlayerStats gefunden, füge {_pDamage} Schaden zu!");
 
             //Und falls das Projektil einen SpecialEffect besitzt
             if(_pSpecialEffect)
@@ -249,6 +307,7 @@ public class _projectile : MonoBehaviour
         PlayProjectileImpactSound();
         
         hasHitEnvironment = true;
+        isInAir = false; // Projektil ist nicht mehr in der Luft
         
         // Freeze alle Rigidbody Constraints um Wackeln zu verhindern
         if (_pRbody != null)
@@ -274,13 +333,40 @@ public class _projectile : MonoBehaviour
 
     public virtual void ApplySpecialEffect(IEntitie targetEntitie)
     {
-        //Erschaffe eine Kopie des angegebenen Buffs
-        BuffInstance buffInstance = BuffDatabase.instance.GetInstance(buff.buffName);
+        // Prüfe ob Buff zugewiesen ist
+        if (buff == null)
+        {
+            Debug.LogWarning($"[Projectile] Kein Buff im Projektil {gameObject.name} zugewiesen! SpecialEffect wird übersprungen.");
+            return;
+        }
+        
+        // Erstelle BuffInstance mit ScriptableObject.CreateInstance (korrekter Weg für SO)
+        BuffInstance buffInstance = ScriptableObject.CreateInstance<BuffInstance>();
+        
+        // Kopiere Daten vom Buff ScriptableObject
+        buffInstance.buffName = buff.buffName;
+        buffInstance.MyDuration = buff.MyDuration;
+        buffInstance.tick = buff.tickIntervall;
+        buffInstance.stackable = buff.stackable;
+        buffInstance.icon = buff.icon;
+        buffInstance.MyBaseDamage = buff.MyBaseDamage;
+        buffInstance.particleEffect = buff.particleEffect;
+        buffInstance.originalBuff = buff;
+        buffInstance.MyDescription = buff.MyDescription;
+        
+        // Kopiere auch die Buff-Logik (wichtig für SlowDebuff!)
+        buffInstance.CopyFrom(buff);
+        
+        if (buffInstance == null)
+        {
+            Debug.LogWarning($"[Projectile] BuffInstance konnte nicht erstellt werden für Buff '{buff.buffName}'!");
+            return;
+        }
 
-        //Und f�ge diese der Ziel-Entitie des Projektils hinzu und vermittel ?Der Ziel-Entitie? die Informationen des Ursprungs.
-        //->Die Ziel-Entitie muss nicht wissen, wo der Urpsrung des Buffs liegt, lediglich der Buff muss dies wissen.
+        // Füge den Buff der Ziel-Entitie hinzu
         buffInstance.ApplyBuff(targetEntitie, _origin);
-
+        
+        Debug.Log($"[Projectile] Buff '{buff.buffName}' erfolgreich auf {targetEntitie.GetTransform().name} angewendet!");
     }
 
     public void SetOrigin(IEntitie origin)
@@ -295,11 +381,32 @@ public class _projectile : MonoBehaviour
     {
         trajectory = newTrajectory;
         
+        // Wenn auf Direction gesetzt und noch keine Richtung gesetzt, berechne zum Spieler
+        if (trajectory == Trajectory.Direction && _pDirection == Vector3.zero)
+        {
+            if (PlayerManager.instance != null && PlayerManager.instance.player != null)
+            {
+                _pDirection = new Vector3(
+                    PlayerManager.instance.player.transform.position.x - transform.position.x, 
+                    0, 
+                    PlayerManager.instance.player.transform.position.z - transform.position.z
+                );
+            }
+        }
+        
         // Wenn auf Curve gesetzt, deaktiviere automatische Physik
         if (trajectory == Trajectory.Curve && _pRbody != null)
         {
             _pRbody.isKinematic = true;
         }
+    }
+
+    /// <summary>
+    /// Setzt eine manuelle Richtung für Direction-Trajectory
+    /// </summary>
+    public void SetDirection(Vector3 direction)
+    {
+        _pDirection = direction;
     }
 
     /// <summary>
@@ -312,7 +419,17 @@ public class _projectile : MonoBehaviour
             return;
 
         Quaternion rotation = Quaternion.LookRotation(direction);
-        rotation *= Quaternion.Euler(0, -90, 0); // Korrektur für Modell-Orientierung (Y-Achse)
+        
+        // Wende Arrow-Rotation an (-90° Y und -90° Z falls aktiviert)
+        if (applyArrowTransform)
+        {
+            rotation *= Quaternion.Euler(0, -90, -90); // Korrektur für Pfeil-Modelle (Y- und Z-Achse)
+        }
+        else
+        {
+            rotation *= Quaternion.Euler(0, -90, 0); // Korrektur für Standard-Modelle (Y-Achse)
+        }
+        
         transform.rotation = rotation;
     }
 

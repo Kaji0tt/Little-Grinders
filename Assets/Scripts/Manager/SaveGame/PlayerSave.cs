@@ -24,7 +24,6 @@ public class SavedItem
     // Neue Felder für die gewürfelten Stats
     public Dictionary<string, int> flatStats = new Dictionary<string, int>();
     public Dictionary<string, float> percentStats = new Dictionary<string, float>();
-    public int requiredLevel = 1;
     public string itemName;
     public string itemDescription;
 }
@@ -271,7 +270,6 @@ public class PlayerSave
         var save = new SavedItem();
         save.itemID = itemInstance.ItemID;
         save.rarity = itemInstance.itemRarity.ToString();
-        save.requiredLevel = itemInstance.requiredLevel;
         save.itemName = itemInstance.ItemName;
         save.itemDescription = itemInstance.ItemDescription;
 

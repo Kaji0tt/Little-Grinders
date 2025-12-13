@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -57,6 +58,8 @@ public class EnemyController : MonoBehaviour, IEntitie
     public MobStats mobStats { get; private set; }
     [Tooltip("Angriffsverhalten des Gegners")]
     public IAttackBehavior attackBehavior;
+    [Tooltip("Fähigkeitsverhalten des Gegners (optional, mehrere möglich)")]
+    public List<IAbilityBehavior> abilities = new List<IAbilityBehavior>();
     [Tooltip("Reichweite des Angriffs und die Distanz und wie nah der Gegner an den Spieler heran darf, bevor er stoppt")]
     public float attackRange, aggroRange, stoppingDistance;
     private float maxHpForUI;
@@ -64,6 +67,11 @@ public class EnemyController : MonoBehaviour, IEntitie
     public bool isDead = false;
     [HideInInspector]
     public bool pulled = false; // Flag for wave-spawned enemies to immediately chase player
+
+    // ✅ NEU: Referenz zur EnemyGroup
+    [HideInInspector]
+    public EnemyGroup myGroup = null;
+
     //public int level;
 
     [Space]
@@ -128,6 +136,12 @@ public class EnemyController : MonoBehaviour, IEntitie
         // Audio Setup
         SetupAudioSource();
 
+        // Event-Listener für Cast-Request registrieren
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnEnemyRequestCast += OnRequestCast;
+        }
+
         // State Machine nur initialisieren, wenn Standardverhalten nicht deaktiviert ist
         if (!turnOffStandardBehaviour)
         {
@@ -136,6 +150,15 @@ public class EnemyController : MonoBehaviour, IEntitie
     }
     void Update()
     {
+        // Ability Cooldowns aktualisieren (ALLE Abilities)
+        if (abilities != null && abilities.Count > 0 && !turnOffStandardBehaviour)
+        {
+            foreach (var ability in abilities)
+            {
+                ability.OnUpdateAbility(this);
+            }
+        }
+        
         // State Machine nur ausführen, wenn Standardverhalten nicht deaktiviert ist
         if (!turnOffStandardBehaviour)
         {
@@ -207,6 +230,29 @@ public class EnemyController : MonoBehaviour, IEntitie
                 attackBehavior = gameObject.AddComponent<PendingAttack>();
             }
         }
+        
+        // Ability Behavior Setup (optional, mehrere möglich)
+        if (abilities.Count == 0)
+        {
+            // Suche nach ALLEN IAbilityBehavior Components
+            var abilityComponents = GetComponents<IAbilityBehavior>();
+            if (abilityComponents != null && abilityComponents.Length > 0)
+            {
+                // Füge alle Abilities zur Liste hinzu
+                abilities.AddRange(abilityComponents);
+                
+                // Sortiere nach Priorität (höchste zuerst)
+                abilities = abilities.OrderByDescending(a => a.GetPriority()).ToList();
+                
+                // Initialisiere alle Abilities
+                foreach (var ability in abilities)
+                {
+                    ability.Enter(this);
+                }
+                
+                Debug.Log($"[EnemyController] {name} hat {abilities.Count} Abilities geladen (Priority-sortiert)");
+            }
+        }
     }
 
     #region Audio Management
@@ -250,15 +296,15 @@ public class EnemyController : MonoBehaviour, IEntitie
     /// <returns>Entfernung als float</returns>
     /// 
         public float GetDistanceToPlayer()
-    {
-        if (Player == null) return float.MaxValue;
-        return Vector3.Distance(Player.position, transform.position);
-    }
+        {
+            if (Player == null) return float.MaxValue;
+            return Vector3.Distance(Player.position, transform.position);
+        }
 
         public float TargetDistance()
-    {
-        return GetDistanceToPlayer();
-    }
+        {
+            return GetDistanceToPlayer();
+        }
 
     /// <summary>
     /// Intervalle für den Zufälligkeitswert von zu wählenenden Richtungen
@@ -324,15 +370,15 @@ public class EnemyController : MonoBehaviour, IEntitie
     }
 
         public Vector2 TargetDirection()
-    {
-        Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
+        {
+            Vector3 Direction = PlayerManager.instance.player.transform.position - transform.position;
 
-        Vector2 outputVector = new Vector2(Direction.x * -1, Direction.z);
+            Vector2 outputVector = new Vector2(Direction.x * -1, Direction.z);
 
-        outputVector = Vector2.ClampMagnitude(outputVector, 1);
+            outputVector = Vector2.ClampMagnitude(outputVector, 1);
 
-        return outputVector;
-    }
+            return outputVector;
+        }
 
     #endregion
 
@@ -493,8 +539,8 @@ public class EnemyController : MonoBehaviour, IEntitie
 
         if (player_distance <= range_radius_ofDMG)
         {
-
-            mobStats.Hp.AddModifier(new StatModifier(-incoming_damage, StatModType.Flat));
+            // Delegiere Schadenberechnung an MobStats
+            ((IEntitie)mobStats).TakeDirectDamage(incoming_damage, range_radius_ofDMG);
 
             //Setze den Entitie State auf "Hit"
             myIsoRenderer.Play(AnimationState.Hit);
@@ -628,6 +674,51 @@ public class EnemyController : MonoBehaviour, IEntitie
     public void RemoveBuff(BuffInstance buff)
     {
         ((IEntitie)mobStats).RemoveBuff(buff);
+    }
+
+    /// <summary>
+    /// Event-Handler: Wird aufgerufen wenn eine Ability ausgeführt werden soll
+    /// </summary>
+    private void OnRequestCast(EnemyController enemy)
+    {
+        // Nur reagieren wenn es dieser Enemy ist
+        if (enemy != this)
+            return;
+
+        // Wechsel zu CastState
+        if (!isDead && !turnOffStandardBehaviour)
+        {
+            TransitionTo(new CastState(this));
+        }
+    }
+    
+    /// <summary>
+    /// Gibt die Ability mit der höchsten Priorität zurück, die bereit ist
+    /// </summary>
+    public IAbilityBehavior GetReadyAbility()
+    {
+        if (abilities == null || abilities.Count == 0)
+            return null;
+        
+        // Liste ist bereits nach Priorität sortiert, erste Ready-Ability zurückgeben
+        foreach (var ability in abilities)
+        {
+            if (ability.IsAbilityReady(this))
+            {
+                return ability;
+            }
+        }
+        
+        return null;
+    }
+
+    private void OnDestroy()
+    {
+        // Event-Listener aufräumen
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnEnemyRequestCast -= OnRequestCast;
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -17,7 +18,7 @@ using UnityEngine.EventSystems;
 //values for passive talents
 //public enum TalentType { Health, Regenration, Armor, AttackDamage, AbilityPower, Movement };
 
-public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IDropHandler
 {
     //Is this talent a passive talent? If not, set the ability.
     public bool passive;
@@ -42,6 +43,9 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     public RectTransform circle;
 
     public RectTransform myRectTransform { get; private set;} 
+
+    // Speichere die Original-Größe des Circles, um wiederholtes Multiplizieren zu vermeiden
+    private Vector2 originalCircleSize; 
 
     public void Set_currentCount(int newCount)
     {
@@ -98,6 +102,13 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         image = GetComponent<Image>();
         textComponent = GetComponentInChildren<Text>();
 
+        // Speichere die Original-Größe des Circles beim ersten Aufruf
+        if (originalCircleSize == Vector2.zero && circle != null)
+        {
+            originalCircleSize = circle.sizeDelta;
+            Debug.Log($"[Talent_UI] originalCircleSize gespeichert: {originalCircleSize}");
+        }
+
         if (node != null)
         {
             SetNodeInfo();
@@ -106,6 +117,12 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             Lock();
             UpdateTalent();
             node.SetGameObject(this);
+            
+            // Gem-Visualisierung aktualisieren (wichtig für geladene Savegames)
+            if (node.isGemSocket)
+            {
+                UpdateGemVisual();
+            }
         }
         OwnStart();
     }
@@ -118,33 +135,69 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
         myTypes = myNode.myTypes;
 
-        //Setze Icon
-        var manager = TalentTreeManager.instance;
-        foreach (TalentType type in myTypes)
+        // === GEM SOCKET HANDLING ===
+        if (myNode.isGemSocket)
         {
-            icon = type switch
+            // Zeige Gem-Socket-Sprite
+            if (TalentTreeGenerator.instance.gemSocketSprite != null)
             {
-                TalentType.HP => image.sprite = manager.hpIcon,
-                TalentType.AP => image.sprite = manager.apIcon,
-                TalentType.AD => image.sprite = manager.adIcon,
-                TalentType.AR => image.sprite = manager.arIcon,
-                TalentType.AS => image.sprite = manager.asIcon,
-                TalentType.RE => image.sprite = manager.reIcon,
-                _ => image.sprite = manager.defaultIcon // Falls kein passendes TalentType existiert
-            };
-        }
+                image.sprite = TalentTreeGenerator.instance.gemSocketSprite;
+            }
 
-        //Setze Count, bzw. modifiziere Sprite in Abhängigkeit der Werte
-        if(myNode.myTypes.Count > 1)
-        {
-            circle.sizeDelta *= 1.5f;
-            Outline hybrid = gameObject.GetComponent<Outline>();
+            // Wenn ein Gem equipped ist, zeige dessen Icon
+            if (myNode.equippedGem != null)
+            {
+                // TODO: Gem-Icon overlay zeigen
+                // Könnte ein zweites Image-Element sein, das über dem Socket liegt
+            }
 
-            hybrid.enabled = true;
+            // Setze Größe basierend auf Original (nicht multiplizieren!)
+            if (originalCircleSize != Vector2.zero)
+            {
+                circle.sizeDelta = originalCircleSize * 1.8f; // Gem Sockets am größten
+                Debug.Log($"[Talent_UI] Gem Socket circle.sizeDelta gesetzt: {circle.sizeDelta}");
+            }
         }
         else
         {
-            circle.sizeDelta *= 1.2f;
+            // Normale Talent-Node: Setze Icon basierend auf TalentType
+            var manager = TalentTreeManager.instance;
+            foreach (TalentType type in myTypes)
+            {
+                icon = type switch
+                {
+                    TalentType.HP => image.sprite = manager.hpIcon,
+                    TalentType.AP => image.sprite = manager.apIcon,
+                    TalentType.AD => image.sprite = manager.adIcon,
+                    TalentType.AR => image.sprite = manager.arIcon,
+                    TalentType.AS => image.sprite = manager.asIcon,
+                    TalentType.RE => image.sprite = manager.reIcon,
+                    _ => image.sprite = manager.defaultIcon // Falls kein passendes TalentType existiert
+                };
+            }
+
+            //Setze Count, bzw. modifiziere Sprite in Abhängigkeit der Werte
+            if(myNode.myTypes.Count > 1)
+            {
+                // Setze Größe basierend auf Original (nicht multiplizieren!)
+                if (originalCircleSize != Vector2.zero)
+                {
+                    circle.sizeDelta = originalCircleSize * 2.2f; // Hybrid Talents mittelgroß
+                    Debug.Log($"[Talent_UI] Hybrid Talent circle.sizeDelta gesetzt: {circle.sizeDelta}");
+                }
+                Outline hybrid = gameObject.GetComponent<Outline>();
+
+                hybrid.enabled = true;
+            }
+            else
+            {
+                // Setze Größe basierend auf Original (nicht multiplizieren!)
+                if (originalCircleSize != Vector2.zero)
+                {
+                    circle.sizeDelta = originalCircleSize * 1.6f; // Normale Talents am kleinsten
+                    Debug.Log($"[Talent_UI] Normal Talent circle.sizeDelta gesetzt: {circle.sizeDelta}");
+                }
+            }
         }
 
         //Setze Werte
@@ -162,8 +215,43 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     public void SetDescription()
     {
-        if (myAbility == null)
+        if (myNode.isGemSocket)
+        {
+            // Gem-Socket Beschreibung
+            description = "<b>Gem Socket</b>\n";
+            
+            if (myNode.equippedGem != null)
+            {
+                var gem = myNode.equippedGem;
+                description += $"\n<color=yellow>Equipped: {gem.ItemName}</color>\n";
+                description += $"GemType: {gem.gemType}\n";
+                
+                // Prüfe ob Gem eine Ability hat (über gemAbility-Referenz)
+                if (gem.gemAbility != null)
+                {
+                    description += $"\n<color=cyan>Ability: {gem.gemAbility.abilityName}</color>\n";
+                    description += $"{gem.gemAbility.description}\n";
+                    
+                    // Zeige Skillpoint-Bonus
+                    int totalSkillpoints = TalentNode.GetTotalSkillpointsForGemType(gem.gemType);
+                    description += $"\n<color=lime>Total Skillpoints ({gem.gemType}): {totalSkillpoints}</color>";
+                }
+                else
+                {
+                    description += "\n<color=gray>Support Gem (kein Ability)</color>";
+                }
+            }
+            else
+            {
+                description += "\n<color=gray>Empty Socket</color>\n";
+                description += "Drag a Gem here to equip it.\n";
+                description += "All GemTypes can be equipped in any socket.";
+            }
+        }
+        else if (myAbility == null)
+        {
             description = "<b>ID: " + myNode.ID + "</b>\n Increases the players <b>" + string.Join(", ", myTypes) + "</b> by <b>" + value.ToString() + "%</b> per skillpoint invested. ";
+        }
         else
         {
             Debug.Log("###Wird nicht gecalled.");
@@ -181,6 +269,9 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     
 
     private Text textComponent;
+
+    // Für Gem-Visualisierung
+    private Image gemIconImage; // Image-Component für das Gem-Icon über dem Socket
 
 
 
@@ -377,7 +468,50 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        TalentTreeManager.instance.TryUseTalent(this);
+        // Rechtsklick auf Gem-Socket: Gem unequippen
+        if (eventData.button == PointerEventData.InputButton.Right && myNode.isGemSocket && myNode.equippedGem != null)
+        {
+            ItemInstance gem = myNode.equippedGem;
+            Debug.Log($"[Talent_UI] Rechtsklick: Versuche Gem '{gem.GetName()}' zu unequippen");
+
+            // Unequip über TalentTreeManager (inkl. Cooldown-Check über ActionButton)
+            ItemInstance unequippedGem = TalentTreeManager.instance.UnequipGemFromSocket(myNode);
+
+            if (unequippedGem != null)
+            {
+                // Füge Gem zurück ins Inventar hinzu
+                bool added = UI_Inventory.instance.inventory.AddItemToFirstFreeSlot(unequippedGem);
+
+                if (added)
+                {
+                    // Visualisierung aktualisieren
+                    UpdateGemVisual();
+
+                    // Tooltip aktualisieren
+                    SetDescription();
+
+                    Debug.Log($"[Talent_UI] Gem '{unequippedGem.GetName()}' erfolgreich unequipped und zurück ins Inventar");
+                }
+                else
+                {
+                    // Kein freier Slot: Gem wieder equippen (Rollback)
+                    Debug.LogWarning($"[Talent_UI] Inventar voll - Gem '{unequippedGem.GetName()}' wird wieder equipped");
+                    myNode.EquipGem(unequippedGem);
+                    UpdateGemVisual();
+                    UI_Manager.instance.ShowTooltip("Inventory is full! Cannot unequip Gem.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[Talent_UI] Gem '{gem.GetName()}' konnte nicht unequipped werden (Cooldown aktiv oder Fehler)");
+                UI_Manager.instance.ShowTooltip("Cannot unequip Gem while ability is on cooldown!");
+            }
+        }
+        // Linksklick: Normale Talent-Click-Logik
+        else if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            TalentTreeManager.instance.TryUseTalent(this);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -396,6 +530,114 @@ public class Talent_UI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         UI_Manager.instance.HideTooltip();
         circle.gameObject.SetActive(false);
 
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        // Nur für Gem-Sockets relevant
+        if (!myNode.isGemSocket)
+            return;
+
+        // Hole das gedraggede Item aus HandScript
+        IMoveable moveable = HandScript.instance.MyMoveable;
+        ItemInstance draggedItem = moveable as ItemInstance;
+
+        if (draggedItem == null)
+        {
+            Debug.LogWarning("[Talent_UI] OnDrop: Kein ItemInstance gefunden");
+            return;
+        }
+
+        // Prüfe, ob es ein Gem ist
+        if (draggedItem.itemType != ItemType.Gem)
+        {
+            Debug.LogWarning($"[Talent_UI] OnDrop: Item '{draggedItem.GetName()}' ist kein Gem (Type: {draggedItem.itemType})");
+            UI_Manager.instance.ShowTooltip("Only Gems can be equipped in Gem Sockets!");
+            return;
+        }
+
+        // Prüfe, ob Socket bereits belegt ist
+        if (myNode.equippedGem != null)
+        {
+            Debug.LogWarning($"[Talent_UI] OnDrop: Socket bereits belegt mit '{myNode.equippedGem.GetName()}'");
+            UI_Manager.instance.ShowTooltip("This socket is already occupied. Right-click to unequip first.");
+            return;
+        }
+
+        Debug.Log($"[Talent_UI] OnDrop: Versuche Gem '{draggedItem.GetName()}' (Type: {draggedItem.gemType}) zu equippen");
+
+        // Rufe TalentTreeManager auf, um das Gem zu equippen (inkl. Cooldown-Check)
+        bool success = TalentTreeManager.instance.EquipGemToSocket(draggedItem, myNode);
+
+        if (success)
+        {
+            // Item aus Hand entfernen
+            HandScript.instance.Put();
+
+            // Visualisierung aktualisieren
+            UpdateGemVisual();
+
+            // Tooltip aktualisieren
+            SetDescription();
+
+            Debug.Log($"[Talent_UI] Gem '{draggedItem.GetName()}' erfolgreich in Socket equipped");
+        }
+        else
+        {
+            Debug.LogWarning($"[Talent_UI] Gem '{draggedItem.GetName()}' konnte nicht equipped werden (Cooldown aktiv?)");
+        }
+    }
+
+    // Aktualisiert die visuelle Darstellung des Gems über dem Socket
+    private void UpdateGemVisual()
+    {
+        if (!myNode.isGemSocket)
+            return;
+
+        // Finde oder erstelle das Gem-Icon-Image
+        if (gemIconImage == null)
+        {
+            // Suche nach einem existierenden Child mit dem Namen "GemIcon"
+            Transform gemIconTransform = transform.Find("GemIcon");
+
+            if (gemIconTransform == null)
+            {
+                // Erstelle ein neues Child-GameObject für das Gem-Icon
+                GameObject gemIconObj = new GameObject("GemIcon");
+                gemIconObj.transform.SetParent(transform, false);
+
+                // Füge Image-Component hinzu
+                gemIconImage = gemIconObj.AddComponent<Image>();
+                gemIconImage.raycastTarget = false; // Verhindert, dass das Icon Raycasts blockiert
+
+                // Positioniere das Icon über dem Socket (zentriert, etwas verkleinert)
+                RectTransform iconRect = gemIconObj.GetComponent<RectTransform>();
+                iconRect.anchorMin = new Vector2(0.5f, 0.5f);
+                iconRect.anchorMax = new Vector2(0.5f, 0.5f);
+                iconRect.pivot = new Vector2(0.5f, 0.5f);
+                iconRect.anchoredPosition = Vector2.zero;
+                iconRect.sizeDelta = new Vector2(40, 40); // Etwas kleiner als der Socket selbst
+            }
+            else
+            {
+                gemIconImage = gemIconTransform.GetComponent<Image>();
+            }
+        }
+
+        // Setze das Icon-Sprite basierend auf dem equipped Gem
+        if (myNode.equippedGem != null)
+        {
+            gemIconImage.sprite = myNode.equippedGem.icon;
+            gemIconImage.color = Color.white;
+            gemIconImage.enabled = true;
+            Debug.Log($"[Talent_UI] Gem-Icon angezeigt: {myNode.equippedGem.GetName()}");
+        }
+        else
+        {
+            gemIconImage.sprite = null;
+            gemIconImage.enabled = false;
+            Debug.Log("[Talent_UI] Gem-Icon versteckt (Socket leer)");
+        }
     }
 
 

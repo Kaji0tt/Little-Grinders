@@ -226,13 +226,13 @@ public class TalentTreeManager : MonoBehaviour
     public void UpdateTalentPointText()
     {
         // Null-Prüfung hinzufügen
-        if(PlayerManager.instance != null && PlayerManager.instance.player != null)
+        if(PlayerStats.instance != null)
         {
-            talentPointText.text = PlayerManager.instance.player.GetComponent<PlayerStats>().Get_SkillPoints().ToString();
+            talentPointText.text = PlayerStats.instance.Get_SkillPoints().ToString();
         }
         else
         {
-            Debug.Log("[UpdateTalentPointText] PlayerManager oder Player noch nicht verfügbar - überspringe Aktualisierung");
+            Debug.Log("[UpdateTalentPointText] PlayerStats.instance nicht verfügbar - überspringe Aktualisierung");
             // Optional: Setze einen Standardwert
             if (talentPointText != null)
                 talentPointText.text = "0";
@@ -262,9 +262,168 @@ public class TalentTreeManager : MonoBehaviour
             {
                 neighborNode.uiElement.GetComponent<Talent_UI>().Unlock();
             }
-
         }
         
+    }
+
+    // ===== GEM-SOCKET MANAGEMENT =====
+
+    /// <summary>
+    /// Rüstet ein Gem in einem Socket aus
+    /// </summary>
+    /// <param name="gem">Das Gem das ausgerüstet werden soll</param>
+    /// <param name="socketNode">Der Gem-Socket TalentNode</param>
+    /// <returns>true wenn erfolgreich, false wenn fehlgeschlagen</returns>
+    public bool EquipGemToSocket(ItemInstance gem, TalentNode socketNode)
+    {
+        if (gem == null)
+        {
+            Debug.LogWarning("Kein Gem zum Ausrüsten angegeben!");
+            return false;
+        }
+
+        if (socketNode == null || !socketNode.isGemSocket)
+        {
+            Debug.LogWarning("Ungültiger Socket!");
+            return false;
+        }
+
+        if (gem.itemType != ItemType.Gem)
+        {
+            Debug.LogWarning($"Item {gem.ItemName} ist kein Gem!");
+            return false;
+        }
+
+        // Prüfe ob Gem eine Ability hat (über gemAbility-Referenz)
+        bool hasAbility = (gem.gemAbility != null);
+
+        // Wenn Gem eine Ability hat, prüfe Cooldown
+        if (hasAbility)
+        {
+            // Finde den ActionButton für diesen GemType
+            var actionButton = UI_Manager.instance.actionButtons.FirstOrDefault(btn => btn.myGemType == gem.gemType);
+            
+            if (actionButton != null && actionButton.IsOnCooldown())
+            {
+                Debug.LogWarning($"Ability für {gem.gemType} ist auf Cooldown! Gem kann nicht getauscht werden.");
+                UI_Manager.instance.ShowMessage($"Ability auf Cooldown! Warte bis die Fähigkeit bereit ist.");
+                return false;
+            }
+        }
+
+        // Versuche Gem auszurüsten
+        if (!socketNode.CanEquipGem(gem))
+        {
+            Debug.LogWarning($"Gem {gem.ItemName} kann nicht in Socket {socketNode.ID} ausgerüstet werden!");
+            return false;
+        }
+
+        // Rüste Gem aus
+        if (socketNode.EquipGem(gem))
+        {
+            Debug.Log($"Gem {gem.ItemName} wurde in Socket {socketNode.ID} ausgerüstet");
+
+            // UI aktualisieren
+            socketNode.myTalentUI?.SetNode(socketNode);
+
+            // Wenn Gem eine Ability hat, aktualisiere ActionButton
+            if (hasAbility)
+            {
+                UpdateActionButtonForGemType(gem.gemType);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Entfernt ein Gem aus einem Socket
+    /// </summary>
+    /// <param name="socketNode">Der Socket aus dem das Gem entfernt werden soll</param>
+    /// <returns>Das entfernte Gem (oder null)</returns>
+    public ItemInstance UnequipGemFromSocket(TalentNode socketNode)
+    {
+        if (socketNode == null || !socketNode.isGemSocket)
+        {
+            Debug.LogWarning("Ungültiger Socket!");
+            return null;
+        }
+
+        var gem = socketNode.UnequipGem();
+        
+        if (gem != null)
+        {
+            Debug.Log($"Gem {gem.ItemName} wurde aus Socket {socketNode.ID} entfernt");
+
+            // UI aktualisieren
+            socketNode.myTalentUI?.SetNode(socketNode);
+
+            // Prüfe ob es ein Ability-Gem war
+            bool hadAbility = (gem.gemType != GemType.None);
+            if (hadAbility)
+            {
+                // Aktualisiere ActionButton für diesen GemType
+                UpdateActionButtonForGemType(gem.gemType);
+            }
+
+            // TODO: Gem zurück ins Inventar legen
+            // Inventory.instance.AddItem(gem);
+        }
+
+        return gem;
+    }
+
+    /// <summary>
+    /// Aktualisiert den ActionButton für einen bestimmten GemType
+    /// Sucht das aktive Ability-Gem und setzt dessen Ability auf den Button
+    /// </summary>
+    private void UpdateActionButtonForGemType(GemType gemType)
+    {
+        // Finde den ActionButton für diesen GemType
+        var actionButton = UI_Manager.instance.actionButtons.FirstOrDefault(btn => btn.myGemType == gemType);
+        
+        if (actionButton == null)
+        {
+            Debug.LogWarning($"Kein ActionButton für GemType {gemType} gefunden!");
+            return;
+        }
+
+        // Finde das aktuelle Ability-Gem für diesen GemType
+        var abilitySocket = TalentNode.GetAbilityGemSocket(gemType);
+        
+        if (abilitySocket != null && abilitySocket.equippedGem != null)
+        {
+            // Berechne Gesamtanzahl Skillpunkte für diesen GemType
+            int totalSkillpoints = TalentNode.GetTotalSkillpointsForGemType(gemType);
+            
+            // Setze Ability auf ActionButton
+            actionButton.SetAbilityFromGem(abilitySocket.equippedGem, totalSkillpoints);
+            
+            Debug.Log($"ActionButton für {gemType} aktualisiert mit {totalSkillpoints} Skillpoints");
+        }
+        else
+        {
+            // Kein Ability-Gem für diesen Type -> Clear Button
+            actionButton.Clear();
+            Debug.Log($"ActionButton für {gemType} geleert (kein Ability-Gem)");
+        }
+    }
+
+    /// <summary>
+    /// Aktualisiert alle ActionButtons basierend auf aktuell ausgerüsteten Gems
+    /// Sollte beim Laden eines Savegames aufgerufen werden
+    /// </summary>
+    public void RefreshAllGemActionButtons()
+    {
+        Debug.Log("=== Aktualisiere alle Gem-ActionButtons ===");
+
+        foreach (GemType gemType in System.Enum.GetValues(typeof(GemType)))
+        {
+            if (gemType == GemType.None) continue;
+            UpdateActionButtonForGemType(gemType);
+        }
     }
 
 }

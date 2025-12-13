@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b95acfd6bf6c5e479bfd7d937d42a15, type: 3}
+  m_Name: Amethyst
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  ItemID: GEM_GEMS_AMETHYST
+  ItemName: 
+  ItemDescription: 
+  itemType: 64
+  weaponCombo: {fileID: 0}
+  gemType: 8
+  gemAbility: {fileID: 0}
+  itemRarity: 0
+  Range: 0
+  RangedWeapon: 0
+  icon: {fileID: 21300000, guid: e0b27b1a2902be84e90a67e5aba7035a, type: 3}
+  dropLevel: 10
+  dropWeight: 50
+  calculatedWeight: 0
+  activeItem: 0
+  hp: 0
+  armor: 0
+  attackPower: 5
+  abilityPower: 5
+  reg: 0
+  critChance: 0
+  critDamage: 0
+  p_hp: 0
+  p_armor: 0
+  p_attackPower: 0.02
+  p_abilityPower: 0.02
+  p_attackSpeed: 0
+  p_movementSpeed: 0
+  p_reg: 0
+  p_critChance: 0
+  p_critDamage: 0
+  usable: 0
+  itemPotion: {fileID: 0}
+  c_percent: 0
+  level_needed: 0

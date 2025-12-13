@@ -65,11 +65,14 @@ public class PlayerStats : MonoBehaviour, IEntitie
                 //Falls ein aktiver Buff vorhanden war, erneuere ihn mit dem neuen Buff.
                 expiredBuffs.Add(tmp);
             }
-
-            buff.Activated(this, transform);
         }
 
+        // ✅ WICHTIG: Buff ZUERST zur Liste hinzufügen, DANN Activated() aufrufen!
+        // Grund: Activated() könnte GetBuffs() aufrufen und muss den Buff finden können
         activeBuffs.Add(buff);
+        
+        // ✅ Activated() muss IMMER aufgerufen werden (nicht nur bei non-stackable!)
+        buff.Activated(this, transform);
 
         UI_Buff.instance.ApplyUIBuff(buff);
 
@@ -95,16 +98,24 @@ public class PlayerStats : MonoBehaviour, IEntitie
 
         if (newBuffs.Count > 0)
         {
+            Debug.Log($"[PlayerStats] HandleBuffs - Füge {newBuffs.Count} neue Buffs hinzu");
             activeBuffs.AddRange(newBuffs);
             newBuffs.Clear();
         }
 
         if (expiredBuffs.Count > 0)
         {
+            Debug.Log($"[PlayerStats] HandleBuffs - Entferne {expiredBuffs.Count} abgelaufene Buffs");
             foreach (BuffInstance buff in expiredBuffs)
             {
+                Debug.Log($"[PlayerStats] Rufe Expired() auf für: {buff.buffName}");
+                // ✅ WICHTIG: Expired() MUSS aufgerufen werden BEVOR der Buff aus activeBuffs entfernt wird!
+                // Grund: Expired() sucht die BuffInstance über GetBuffs() (= activeBuffs)
+                buff.Expired(this, buff.MyOriginEntitie);
                 buff.active = false;
+                // ✅ Entferne NACH Expired(), damit Expired() die Instance noch finden kann
                 activeBuffs.Remove(buff);
+                UI_Buff.instance?.RemoveUIBuff(buff); // UI-Update
             }
 
             expiredBuffs.Clear();
@@ -427,8 +438,18 @@ public class PlayerStats : MonoBehaviour, IEntitie
     {
         //Debug.Log(transform.name + "ist gestorben.");
         AudioManager.instance.PlaySound("Dead2");
-        SceneManager.LoadScene(0);
-        Time.timeScale = 1f;
+        
+        // Benachrichtige alle Listener über den Spielertod via Event
+        GameEvents.Instance.PlayerDied();
+        
+        // Zeige das Death UI statt die Szene zu wechseln
+        if (UI_Manager.instance != null)
+        {
+            UI_Manager.instance.ToggleDeathTab(true);
+        }
+        
+        // Stoppe das Spiel
+        Time.timeScale = 0f;
     }
 
     #endregion

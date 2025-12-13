@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c3a11d03efce046b0a5b8e38828b18, type: 3}
+  m_Name: SlowDebuff
+  m_EditorClassIdentifier: Assembly-CSharp::SlowDebuff
+  buffName: Stunning Slow
+  MyDuration: 3
+  MyBaseDamage: 0
+  ProcChance: 100
+  tickIntervall: 0.1
+  stackable: 1
+  active: 0
+  particleEffect: {fileID: 0}
+  icon: {fileID: 21300000, guid: c3f01ed61f725f947abe52d376f1516f, type: 3}
+  MyDescription: Slows the player.
+  initialSlowPercentage: 0.5

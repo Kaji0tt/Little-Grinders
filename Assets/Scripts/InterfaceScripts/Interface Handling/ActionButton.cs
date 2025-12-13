@@ -9,10 +9,9 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     // MyUseable bleibt die zentrale Referenz zur Fähigkeit.
     public IUseable MyUseable { get; private set; }
 
-    // ALT: public ItemType myItemType { get; private set; }
-    // NEU: Mache den ItemType im Inspector zuweisbar.
-    [Tooltip("Für welchen Ausrüstungs-Slot ist dieser Button zuständig?")]
-    public ItemType myItemType;
+    // Gem-System: ActionButtons sind jetzt an GemTypes gebunden
+    [Tooltip("Für welchen Gem-Slot ist dieser Button zuständig?")]
+    public GemType myGemType;
 
     // Referenzen zu den UI-Komponenten
     public Button MyButton { get; private set; }
@@ -252,7 +251,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
             // Setze den SlotNamen der Fähigkeit.
             // Dies ist wichtig, damit die Fähigkeit weiß, über welche Taste sie im KeyManager aufgerufen wird.
-            abilityComponent.SetSlotName(myItemType.ToString().ToUpper());
+            abilityComponent.SetSlotName(myGemType.ToString().ToUpper());
 
             //abilityComponent.SetRarityScaling(rarityMultiplier); // NEU: Wert setzen!
 
@@ -298,25 +297,57 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
     }
 
-    public ItemInstance CurrentItemInstance { get; private set; }
+    public ItemInstance CurrentGemInstance { get; private set; }
 
+    /// <summary>
+    /// VERALTET: Wird nicht mehr verwendet (Abilities kommen jetzt nur von Gems)
+    /// </summary>
+    [Obsolete("Use SetAbilityFromGem instead")]
     public void SetItemInstance(ItemInstance item)
     {
+        Debug.LogWarning("SetItemInstance ist veraltet! Abilities werden nur noch über Gems im Talentbaum verwaltet.");
         Clear();
-        CurrentItemInstance = item;
+    }
 
-        if (item == null)
-            return;
+    /// <summary>
+    /// Setzt die Ability basierend auf einem Gem aus dem Talentbaum
+    /// </summary>
+    /// <param name="gem">Das Gem mit der Ability</param>
+    /// <param name="totalSkillpoints">Gesamtanzahl Skillpunkte für diesen GemType (für Ability-Verstärkung)</param>
+    public void SetAbilityFromGem(ItemInstance gem, int totalSkillpoints)
+    {
+        Clear();
+        CurrentGemInstance = gem;
 
-        // Suche nach dem ersten Mod mit Ability
-        var mod = item.addedItemMods.FirstOrDefault(m => m.definition.modAbilityData != null);
-        if (mod != null)
+        if (gem == null || gem.itemType != ItemType.Gem)
         {
-            var abilityData = mod.definition.modAbilityData;
-            float rarityMultiplier = mod.definition.GetRarityMultiplier(mod.rolledRarity);
-
-            // Setze die Ability wie gehabt
-            SetAbility(abilityData, rarityMultiplier);
+            Debug.LogWarning("Kein gültiges Gem zum Setzen der Ability!");
+            return;
         }
+
+        // Prüfe ob das Gem eine Ability hat
+        if (gem.gemAbility == null)
+        {
+            Debug.LogWarning($"Gem {gem.ItemName} hat keine Ability (gemAbility ist null)!");
+            return;
+        }
+
+        // Berechne Rarity-Multiplier basierend auf totalSkillpoints
+        // Pro Skillpoint: +10% Stärke (z.B. 5 Skillpoints = 1.5x Stärke)
+        float rarityMultiplier = 1f + (totalSkillpoints * 0.1f);
+        
+        Debug.Log($"[ActionButton] Setze Ability '{gem.gemAbility.abilityName}' für GemType {myGemType} mit Multiplier: {rarityMultiplier:F2} ({totalSkillpoints} Skillpoints)");
+        
+        // Setze die Ability mit dem berechneten Multiplier
+        SetAbility(gem.gemAbility, rarityMultiplier);
+    }
+
+    /// <summary>
+    /// Prüft ob diese Ability gerade auf Cooldown ist (verhindert Gem-Tausch während Cooldown)
+    /// </summary>
+    public bool IsOnCooldown()
+    {
+        if (MyUseable == null) return false;
+        return MyUseable.IsOnCooldown();
     }
 }

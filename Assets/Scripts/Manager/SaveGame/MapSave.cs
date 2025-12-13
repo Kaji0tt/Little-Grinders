@@ -85,8 +85,11 @@ public class MapSave
             mapIndexX = v2.x;
             mapIndexY = v2.y;
 
-            //Calculate Map-Level in dependency of floats
-            mapLevel = Mathf.Abs(v2.x) > Mathf.Abs(v2.y) ? (int)Mathf.Abs(v2.x) : (int)Mathf.Abs(v2.y);
+            // ✅ FIX: Calculate Map-Level from THIS map's coordinates, not currentPosition!
+            // This prevents wrong MapLevel when creating maps during neighbor generation
+            mapLevel = Mathf.Abs(mapIndexX) > Mathf.Abs(mapIndexY) ? (int)Mathf.Abs(mapIndexX) : (int)Mathf.Abs(mapIndexY);
+            
+            Debug.Log($"[MapSave Constructor] Created Map({mapIndexX}, {mapIndexY}) with MapLevel={mapLevel} (from map coordinates, currentPos was {v2})");
         }
 
         isCleared = false;
@@ -111,7 +114,22 @@ public class MapSave
         mapIndexY = y;
         mapLevel = level;
         mapTheme = theme;
-        fieldType = fieldTypes ?? new FieldType[81];
+        
+        // ✅ KRITISCH: FieldTypes korrekt kopieren
+        fieldType = new FieldType[81];
+        if (fieldTypes != null && fieldTypes.Length == 81)
+        {
+            for (int i = 0; i < 81; i++)
+            {
+                fieldType[i] = fieldTypes[i];
+            }
+            Debug.Log($"[MapSave Constructor] Map ({x}, {y}) created: Theme={theme}, Level={level}, fieldType[0]={fieldType[0]}, fieldType[40]={fieldType[40]}");
+        }
+        else
+        {
+            Debug.LogError($"[MapSave Constructor] ❌ Invalid FieldTypes array! Length: {fieldTypes?.Length ?? 0}");
+        }
+        
         isCleared = false;
         isVisited = false; // Generierte Maps sind erstmal unbesucht
         mapInteractables = new List<InteractableSaveData>();

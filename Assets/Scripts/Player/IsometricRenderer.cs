@@ -110,6 +110,10 @@ public class IsometricRenderer : MonoBehaviour
                 GameEvents.Instance.OnEnemyAttackHit += OnEnemyAttackHit;
                 GameEvents.Instance.OnEnemyEndAttack += OnEnemyEndAttack;
                 
+                // Ability/Cast Events
+                GameEvents.Instance.OnEnemyStartCast += OnEnemyStartCast;
+                GameEvents.Instance.OnEnemyCastComplete += OnEnemyCastComplete;
+                
                 // Movement Animation Events
                 GameEvents.Instance.OnEnemyStartIdle += OnEnemyStartIdle;
                 GameEvents.Instance.OnEnemyStartWalk += OnEnemyStartWalk;
@@ -315,6 +319,123 @@ public class IsometricRenderer : MonoBehaviour
         Play(AnimationState.Hit);
     }
     
+    /// <summary>
+    /// Event-Handler: Wenn Enemy einen Cast startet
+    /// </summary>
+    private void OnEnemyStartCast(EnemyController enemy, float castDuration)
+    {
+        // Nur für diesen Enemy reagieren
+        if (enemy != myEnemyController) return;
+        
+        // Hole Animation-Typ von der aktuell aktiven Ability
+        AbilityAnimationType animType = AbilityAnimationType.Casting; // Default
+        IAbilityBehavior readyAbility = enemy.GetReadyAbility();
+        if (readyAbility != null)
+        {
+            animType = readyAbility.GetAnimationType();
+        }
+        
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} -> {animType} Animation (Duration: {castDuration}s)");
+        
+        // Sound abspielen (optional)
+        if (AudioManager.instance != null)
+        {
+            string soundName = myEnemyController.GetBasePrefabName() + "_Cast";
+            AudioManager.instance.PlayEntitySound(soundName, myEnemyController.gameObject);
+        }
+        
+        // Spiele die entsprechende Animation basierend auf animType
+        if (animType == AbilityAnimationType.None)
+        {
+            // Keine Animation - nur Timing
+            isPerformingAction = true;
+            return;
+        }
+        
+        // Konvertiere Enum zu Animation-Clip-Namen und spiele ab
+        string animationName = GetAnimationNameFromType(animType);
+        if (!string.IsNullOrEmpty(animationName))
+        {
+            if (castDuration > 0f)
+            {
+                // Spiele Animation mit angepasster Geschwindigkeit
+                PlayAbilityAnimationWithSpeed(animationName, castDuration);
+            }
+            else
+            {
+                // Instant-Cast: Normale Geschwindigkeit
+                PlayAbilityAnimation(animationName);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Event-Handler: Wenn Cast abgeschlossen ist
+    /// </summary>
+    private void OnEnemyCastComplete(EnemyController enemy)
+    {
+        // Nur für diesen Enemy reagieren
+        if (enemy != myEnemyController) return;
+        
+        //Debug.Log($"[IsometricRenderer] Enemy {enemy.name} -> Cast Complete");
+        
+        // Action-Flag zurücksetzen
+        isPerformingAction = false;
+    }
+    
+    /// <summary>
+    /// Konvertiert AbilityAnimationType Enum zu Animation-Clip-Namen
+    /// </summary>
+    private string GetAnimationNameFromType(AbilityAnimationType animType)
+    {
+        switch (animType)
+        {
+            case AbilityAnimationType.Idle:     return "Idle";
+            case AbilityAnimationType.Walk:     return "Walk";
+            case AbilityAnimationType.Attack1:  return "Attack1";
+            case AbilityAnimationType.Attack2:  return "Attack2";
+            case AbilityAnimationType.Casting:  return "Casting";
+            case AbilityAnimationType.Die1:     return "Die1";
+            case AbilityAnimationType.Die2:     return "Die2";
+            case AbilityAnimationType.Hit1:     return "Hit1";
+            case AbilityAnimationType.Hit2:     return "Hit2";
+            case AbilityAnimationType.Open1:    return "Open1";
+            case AbilityAnimationType.Open2:    return "Open2";
+            case AbilityAnimationType.None:
+            default:
+                return null;
+        }
+    }
+    
+    /// <summary>
+    /// Spielt eine Ability-Animation mit normaler Geschwindigkeit
+    /// </summary>
+    private void PlayAbilityAnimation(string animationName)
+    {
+        if (myAnimator == null || string.IsNullOrEmpty(animationName))
+            return;
+        
+        myAnimator.Play(animationName);
+        isPerformingAction = true;
+        
+        StartCoroutine(ResetActionAfterAnimation());
+    }
+    
+    /// <summary>
+    /// Spielt eine Ability-Animation mit angepasster Geschwindigkeit
+    /// </summary>
+    private void PlayAbilityAnimationWithSpeed(string animationName, float desiredDuration)
+    {
+        if (myAnimator == null || string.IsNullOrEmpty(animationName))
+            return;
+        
+        myAnimator.Play(animationName);
+        isPerformingAction = true;
+        
+        StartCoroutine(AdjustAnimationSpeed(animationName, desiredDuration));
+        StartCoroutine(ResetEnemyActionAfterDuration(desiredDuration));
+    }
+    
     private void OnDestroy()
     {
         // Event-Listener beim Zerstören des Objekts entfernen (nur wenn sie registriert wurden)
@@ -323,6 +444,10 @@ public class IsometricRenderer : MonoBehaviour
             GameEvents.Instance.OnEnemyStartAttack -= OnEnemyStartAttack;
             GameEvents.Instance.OnEnemyAttackHit -= OnEnemyAttackHit;
             GameEvents.Instance.OnEnemyEndAttack -= OnEnemyEndAttack;
+            
+            // Ability/Cast Events
+            GameEvents.Instance.OnEnemyStartCast -= OnEnemyStartCast;
+            GameEvents.Instance.OnEnemyCastComplete -= OnEnemyCastComplete;
             
             // Movement Events
             GameEvents.Instance.OnEnemyStartIdle -= OnEnemyStartIdle;

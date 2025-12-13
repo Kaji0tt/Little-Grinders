@@ -39,7 +39,7 @@ public class ItemTypeAutoFixer
                     item.itemType = ItemType.Schmuck;
                     break;
                 case "Consumable":
-                    item.itemType = ItemType.Consumable;
+                    item.itemType = ItemType.Gem;
                     break;
             }
 

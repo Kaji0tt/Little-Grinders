@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b95acfd6bf6c5e479bfd7d937d42a15, type: 3}
   m_Name: SM0003
   m_EditorClassIdentifier: 
-  ItemID: SM0003
+  ItemID: JEWELRY_SCHMUCK_SM0003
   ItemName: Kampfreif
   ItemDescription: Vorsicht, Stacheln.
   itemType: 16
   weaponCombo: {fileID: 0}
+  gemType: 0
+  gemAbility: {fileID: 0}
   itemRarity: 0
   Range: 0
   RangedWeapon: 0
   icon: {fileID: 7046924291971681360, guid: e977bd5957502e9488194c6d535f580a, type: 3}
-  percent: 15
-  baseLevel: 20
+  dropLevel: 1
+  dropWeight: 100
+  calculatedWeight: 0
   activeItem: 0
   hp: 0
   armor: 5

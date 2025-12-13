@@ -248,6 +248,22 @@ public class PrefabCollection : MonoBehaviour
         Debug.LogError("Kein Totem-Prefab gefunden!");
         return null;
     }
+    
+    // NEU: Methode um gezielt einen Altar zu bekommen
+    public GameObject GetAltarPrefab()
+    {
+        // Suche in Interactables nach einem Altar
+        foreach (GameObject interactable in interactablesPF)
+        {
+            if (interactable.GetComponent<AltarInteractable>() != null)
+            {
+                return interactable;
+            }
+        }
+        
+        Debug.LogError("Kein Altar-Prefab gefunden!");
+        return null;
+    }
 
     // NEU: Public getter für interactables (für OutsideVegLoader)
     public GameObject[] GetInteractablesPF()

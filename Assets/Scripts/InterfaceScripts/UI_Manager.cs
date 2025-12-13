@@ -59,24 +59,7 @@ public class UI_Manager : MonoBehaviour
     //Die Zuweisung über den Inspector ist scheiße, da bei SzeneWechsel die Einstellungen / Zuweisung verloren geht.
     //Hilfreich wäre ein "OnSceneChange" Event oder so.
     //[SerializeField]
-    private CanvasGroup inventoryTab;
-
-    //[SerializeField]
-    private CanvasGroup skillTab;
-
-    //[SerializeField]
-    private CanvasGroup mainMenu;  //hier sollte später das komplette Hauptmenü drin liegen.
-
-    //[SerializeField]
-    private CanvasGroup actionBar;
-
-    //[SerializeField]
-    private CanvasGroup mapTab;
-
-
-    //BadManner WorkAround für MainMenü
-    //[SerializeField]
-    //private GameObject canvasIG;
+    private CanvasGroup inventoryTab, skillTab, deathTab, mainMenu, actionBar, mapTab;
 
 
     public static bool GameIsPaused = false;
@@ -198,8 +181,8 @@ public class UI_Manager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             PlayerManager.instance.player.GetComponent<PlayerStats>().Gain_xp(600);
-            foreach (Item item in itemsOnStart)
-                UI_Inventory.instance.inventory.AddItemToFirstFreeSlot(new ItemInstance(item));
+            //foreach (Item item in itemsOnStart)
+           //     UI_Inventory.instance.inventory.AddItemToFirstFreeSlot(new ItemInstance(item));
 
         }
 
@@ -317,68 +300,36 @@ public class UI_Manager : MonoBehaviour
 
     private Button aBtn1, aBtn2, aBtn3, aBtn4, aBtn5;
 
+
     public List<ActionButton> actionButtons { get; private set; } = new List<ActionButton>();
 
     /// <summary>
-    /// Weist eine Fähigkeit aus einem Mod dem korrekten ActionButton zu.
+    /// VERALTET: Abilities werden jetzt über Gems im Talentbaum verwaltet, nicht über Equipment-Items
     /// </summary>
+    [Obsolete("Abilities werden nur noch über Gems verwaltet")]
     private void AssignAbilityFromMod(ItemInstance item, ItemType itemType)
     {
-        if (item == null) return;
-
-        ActionButton targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == itemType);
-
-        if (targetButton != null)
-        {
-            //Debug.Log($"'{targetButton.name}' wird mit ItemInstance '{item.ItemName}' belegt.");
-            targetButton.SetItemInstance(item);
-        }
-        else
-        {
-            Debug.LogWarning($"Kein ActionButton für den Item-Typ '{itemType}' im UI_Manager gefunden.");
-        }
+        Debug.LogWarning("AssignAbilityFromMod ist veraltet! Abilities werden nur noch über Gems im Talentbaum verwaltet.");
     }
 
     /// <summary>
-    /// Aktualisiert den entsprechenden ActionButton für ein ausgerüstetes Item.
-    /// Weist die Fähigkeit zu, falls eine vorhanden ist, oder leert den Button, falls nicht.
-    /// Diese Methode wird von GameEvents aufgerufen, wenn sich die Ausrüstung ändert.
+    /// VERALTET: Abilities werden jetzt über Gems im Talentbaum verwaltet, nicht über Equipment-Items
+    /// Diese Methode macht nichts mehr - Equipment hat keine Abilities mehr
     /// </summary>
+    [Obsolete("Abilities werden nur noch über Gems verwaltet")]
     public void UpdateAbilityForEquippedItem(ItemInstance equippedItem, ItemType itemType = ItemType.None)
     {
-        if (equippedItem == null)
-        {
-            // Nur den spezifischen Button leeren, wenn itemType bekannt ist
-            if (itemType != ItemType.None)
-            {
-                var buttonToClear = actionButtons.FirstOrDefault(btn => btn.myItemType == itemType);
-                if (buttonToClear != null)
-                    buttonToClear.SetItemInstance(null);
-            }
-            return;
-        }
+        // Absichtlich leer - Equipment hat keine Abilities mehr
+        // Abilities werden nur noch über TalentTreeManager.EquipGemToSocket() verwaltet
+    }
 
-        var targetButton = actionButtons.FirstOrDefault(btn => btn.myItemType == equippedItem.itemType);
-        if (targetButton != null)
-        {
-            if (equippedItem.addedItemMods == null || !equippedItem.addedItemMods.Any(m => m.definition != null && m.definition.modAbilityData != null))
-            {
-                targetButton.SetItemInstance(null);
-            }
-            else
-            {
-                targetButton.SetItemInstance(equippedItem);
-            }
-        }
-
-        if (equippedItem.addedItemMods == null || !equippedItem.addedItemMods.Any())
-            return;
-
-        var abilityMods = equippedItem.addedItemMods.Where(mod => mod.definition != null && mod.definition.modAbilityData != null).ToList();
-        if (!abilityMods.Any())
-            return;
-
-        AssignAbilityFromMod(equippedItem, equippedItem.itemType);
+    /// <summary>
+    /// Hilfsmethode um Fehlermeldungen/Feedback anzuzeigen
+    /// </summary>
+    public void ShowMessage(string message)
+    {
+        Debug.Log($"[UI Message] {message}");
+        // TODO: Implementiere eine schönere UI-Nachricht (Toast, Popup, etc.)
     }
 
     private void ActionButtonOnClick(int btnIndex)
@@ -426,6 +377,9 @@ public class UI_Manager : MonoBehaviour
 
     public void ShowItemTooltip(Vector3 position, ItemInstance item)
     {
+        if(tooltip == null)
+            CheckForUI_Elements();
+            
         tooltip.SetActive(true);
         tooltip.transform.position = position;
 
@@ -561,6 +515,11 @@ public class UI_Manager : MonoBehaviour
 
                     break;
 
+                case InterfaceElementDeclaration.DeathTab:
+
+                    deathTab = interfaceElement.GetComponent<CanvasGroup>();
+
+                    break;
                     /*
                 case InterfaceElementDeclaration.Tooltip:
 
@@ -607,6 +566,24 @@ public class UI_Manager : MonoBehaviour
 
         }
 
+    }
+
+    public void ToggleDeathTab(bool show)
+    {
+        if (deathTab == null)
+        {
+            CheckForUI_Elements();
+        }
+
+        deathTab.alpha = show ? 1 : 0;
+        deathTab.blocksRaycasts = show;
+        deathTab.interactable = show;
+
+        // Time.timeScale wird bereits in PlayerStats.Die() gesetzt
+        // Wir setzen nur noch GameIsPaused für UI-Konsistenz
+        GameIsPaused = show;
+
+        Debug.Log($"[UI_Manager] Death Tab {(show ? "angezeigt" : "versteckt")}, GameIsPaused={GameIsPaused}");
     }
 
 }

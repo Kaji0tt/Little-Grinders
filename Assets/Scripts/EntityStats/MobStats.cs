@@ -66,7 +66,7 @@ public class MobStats : MonoBehaviour
         {
             if(GlobalMap.instance.currentMap != null)
             {
-                //Debug.Log("Current Map Level: " + GlobalMap.instance.currentMap.mapLevel);
+                Debug.Log($"[MobStats.CalculateMobStats] {gameObject.name} - Map at ({GlobalMap.instance.currentMap.mapIndexX}, {GlobalMap.instance.currentMap.mapIndexY}), MapLevel: {GlobalMap.instance.currentMap.mapLevel}");
                 level = GlobalMap.instance.currentMap.mapLevel;
             }
             else
@@ -92,7 +92,7 @@ public class MobStats : MonoBehaviour
                 AttackPower.BaseValue = AttackPower.BaseValue + (GlobalMap.instance.currentMap.mapLevel * 2);
                 //AttackPower.AddModifier(new StatModifier(AttackPower.Value + (GlobalMap.instance.currentMap.mapLevel * 2), StatModType.Flat));
 
-
+                Debug.Log($"[MobStats.CalculateMobStats] {gameObject.name} scaled - Level: {level}, HP: {Hp.BaseValue:F0}, Armor: {Armor.BaseValue:F0}, Attack: {AttackPower.BaseValue:F0}");
             }
 
             //Erhöhe abschließend die ausgeteilte Erfahrung um das Kartenlevel * 10
@@ -138,7 +138,11 @@ public class MobStats : MonoBehaviour
             }
         }
 
+        // ✅ WICHTIG: Buff ZUERST zur Liste hinzufügen, DANN Activated() aufrufen!
         this.activeBuffs.Add(buff);
+        
+        // ✅ Activated() muss IMMER aufgerufen werden (nicht nur bei non-stackable!)
+        buff.Activated(GetComponent<EnemyController>(), transform);
 
     }
 

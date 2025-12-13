@@ -24,11 +24,32 @@ public class GlobalMap : MonoBehaviour
 
     public void Set_CurrentMap(MapSave map)
     {
+        Debug.Log($"[GlobalMap.Set_CurrentMap] Setting current map to ({map.mapIndexX}, {map.mapIndexY}) - Level={map.mapLevel}, Theme={map.mapTheme}, isVisited={map.isVisited}");
+        
         currentMap = map;
-        currentPosition = new Vector2(map.mapIndexX, map.mapIndexY);
+        // ❌ REMOVED: currentPosition = new Vector2(map.mapIndexX, map.mapIndexY);
+        // ✅ FIX: currentPosition wurde bereits von ScanExitDirection() gesetzt!
+        // Ein erneutes Setzen würde zu falschen Koordinaten führen.
+        
+        // Validierung: Prüfe ob Map-Koordinaten mit currentPosition übereinstimmen
+        if (map.mapIndexX != currentPosition.x || map.mapIndexY != currentPosition.y)
+        {
+            Debug.LogWarning($"[GlobalMap.Set_CurrentMap] ⚠️ MISMATCH! currentPosition=({currentPosition.x},{currentPosition.y}) but map=({map.mapIndexX},{map.mapIndexY})");
+        }
+        else
+        {
+            Debug.Log($"[GlobalMap.Set_CurrentMap] ✅ Position validated: ({currentPosition.x}, {currentPosition.y})");
+        }
         
         // Markiere Map als besucht
         map.isVisited = true;
+        
+        // ✅ Zeige dem Spieler seine aktuelle Position
+        if (LogScript.instance != null)
+        {
+            string posText = $"Map Position: ({currentPosition.x}, {currentPosition.y}) | Level: {map.mapLevel}";
+            LogScript.instance.ShowLog(posText, 4f);
+        }
         
         // Generiere neue Nachbarn um die neue Position (aber nicht sofort, um Konflikte zu vermeiden)
         StartCoroutine(DelayedNeighborGeneration());
@@ -68,15 +89,43 @@ public class GlobalMap : MonoBehaviour
 
     public MapSave GetMapByCords(Vector2 cords)
     {
+        Debug.Log($"[GlobalMap.GetMapByCords] Searching for map at ({cords.x}, {cords.y}) - Total maps: {exploredMaps.Count}");
+        
+        MapSave visitedMap = null;
+        MapSave pregeneratedMap = null;
+        
         foreach(MapSave map in exploredMaps)
         {
+            Debug.Log($"  - Checking map ({map.mapIndexX}, {map.mapIndexY}): visited={map.isVisited}, cleared={map.isCleared}, level={map.mapLevel}, fieldType[0]={map.fieldType?[0] ?? FieldType.Road}");
+            
             if (map.mapIndexX == cords.x && map.mapIndexY == cords.y)
             {
-                return map;
+                if (map.isVisited)
+                {
+                    visitedMap = map;
+                    Debug.Log($"[GlobalMap.GetMapByCords] ✓ Found VISITED map at ({cords.x}, {cords.y}) - Level={map.mapLevel}");
+                }
+                else if (pregeneratedMap == null)
+                {
+                    pregeneratedMap = map;
+                    Debug.Log($"[GlobalMap.GetMapByCords] Found pre-generated map at ({cords.x}, {cords.y}) - Level={map.mapLevel}");
+                }
             }
         }
+        
+        // ✅ FIX: Always prioritize visited maps over pre-generated ones
+        if (visitedMap != null)
+        {
+            Debug.Log($"[GlobalMap.GetMapByCords] Returning VISITED map (Level={visitedMap.mapLevel})");
+            return visitedMap;
+        }
+        else if (pregeneratedMap != null)
+        {
+            Debug.Log($"[GlobalMap.GetMapByCords] Returning PRE-GENERATED map (Level={pregeneratedMap.mapLevel})");
+            return pregeneratedMap;
+        }
 
-        Debug.Log("Could not find a Map with Cords: " + cords);
+        Debug.Log($"[GlobalMap.GetMapByCords] ✗ Could not find map at ({cords.x}, {cords.y})");
         return null;
     }
 
@@ -93,23 +142,71 @@ public class GlobalMap : MonoBehaviour
         return map != null && map.isVisited;
     }
 
-    public void CreateAndSaveNewMap()
+    /// <summary>
+    /// NEU: Aktualisiert eine existierende Map oder erstellt eine neue
+    /// Verhindert Duplikate wenn pre-generierte Maps existieren
+    /// </summary>
+    public void UpdateOrCreateCurrentMap()
     {
-        MapSave newMap = new MapSave();
-        newMap.isVisited = true; // Diese Map wird gerade besucht
-
-        for (int i = 0; i < 81; i++)
+        Vector2 currentPos = currentPosition;
+        Debug.Log($"[GlobalMap.UpdateOrCreateCurrentMap] === START === Position: ({currentPos.x}, {currentPos.y})");
+        
+        // Prüfe ob bereits eine Map an dieser Position existiert
+        MapSave existingMap = GetMapByCords(currentPos);
+        
+        if (existingMap != null)
         {
-            newMap.fieldType[i] = MapGenHandler.instance.fieldPosSave[i].GetComponent<FieldPos>().Type;
+            Debug.Log($"[GlobalMap.UpdateOrCreateCurrentMap] ✓ Map existiert bereits - aktualisiere sie");
+            Debug.Log($"[GlobalMap.UpdateOrCreateCurrentMap]   Pre-existing: Level={existingMap.mapLevel}, fieldType[0]={existingMap.fieldType[0]}, Theme={existingMap.mapTheme}, isVisited={existingMap.isVisited}");
+            
+            // ❌ NICHT überschreiben! FieldTypes wurden bereits in LoadExistingMap() korrekt geladen
+            // Die Map wurde mit den pre-generierten FieldTypes geladen und in die Szene gebaut
+            // Ein Überschreiben würde die bereits geladenen (korrekten) Werte zerstören
+            
+            // ✅ NUR Status und Interactables aktualisieren
+            existingMap.isVisited = true;
+            existingMap.SaveInteractables();
+            
+            // ✅ FIX: Use Set_CurrentMap for consistency
+            Set_CurrentMap(existingMap);
+            
+            Debug.Log($"[GlobalMap.UpdateOrCreateCurrentMap] Map Status aktualisiert: Level={existingMap.mapLevel}, Theme={existingMap.mapTheme}, isVisited={existingMap.isVisited}");
+        }
+        else
+        {
+            Debug.Log($"[GlobalMap.UpdateOrCreateCurrentMap] ✗ Map existiert nicht - erstelle neue");
+            
+            // Erstelle komplett neue Map
+            MapSave newMap = new MapSave();
+            newMap.isVisited = true;
+
+            for (int i = 0; i < 81; i++)
+            {
+                newMap.fieldType[i] = MapGenHandler.instance.fieldPosSave[i].GetComponent<FieldPos>().Type;
+            }
+
+            // Save current interactables
+            newMap.SaveInteractables();
+
+            exploredMaps.Add(newMap);
+            
+            // ✅ FIX: Use Set_CurrentMap for consistency (triggers neighbor generation and player notification)
+            Set_CurrentMap(newMap);
+            
+            Debug.Log($"[GlobalMap.UpdateOrCreateCurrentMap] ✓ Neue Map erstellt: Level={newMap.mapLevel}, Theme={newMap.mapTheme}");
         }
 
-        // Save current interactables
-        newMap.SaveInteractables();
-
-        currentMap = newMap;
-        exploredMaps.Add(newMap);
-
         OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);
+        Debug.Log($"[GlobalMap.UpdateOrCreateCurrentMap] === ENDE === Total maps: {exploredMaps.Count}");
+    }
+    
+    /// <summary>
+    /// DEPRECATED: Verwende UpdateOrCreateCurrentMap() stattdessen
+    /// </summary>
+    [System.Obsolete("Use UpdateOrCreateCurrentMap() instead to prevent duplicates")]
+    public void CreateAndSaveNewMap()
+    {
+        UpdateOrCreateCurrentMap();
     }
 
     /// <summary>
@@ -117,7 +214,7 @@ public class GlobalMap : MonoBehaviour
     /// </summary>
     public void GenerateNeighborMaps(int radius = 1)
     {
-        Debug.Log($"[GlobalMap] Generiere Nachbar-Maps mit Radius {radius} um Position {currentPosition}");
+        Debug.Log($"[MapBug][{Time.time:F2}s] GenerateNeighborMaps START - Radius: {radius}, currentPos: ({currentPosition.x}, {currentPosition.y}), exploredMaps.Count: {exploredMaps.Count}");
         
         List<Vector2> newMapPositions = new List<Vector2>();
         
@@ -128,11 +225,31 @@ public class GlobalMap : MonoBehaviour
             {
                 Vector2 neighborPos = new Vector2(currentPosition.x + x, currentPosition.y + y);
                 
-                // Prüfe ob Map bereits existiert
-                if (!MapExistsAtCords(neighborPos))
+                // ✅ FIX: NEVER generate at the exact currentPosition - it's being loaded!
+                if (neighborPos.x == currentPosition.x && neighborPos.y == currentPosition.y)
                 {
-                    newMapPositions.Add(neighborPos);
+                    Debug.Log($"[MapBug][{Time.time:F2}s] Skipping currentPosition itself: ({neighborPos.x}, {neighborPos.y})");
+                    continue;
                 }
+                
+                // ✅ FIX: Check if a VISITED map already exists - don't regenerate visited maps!
+                MapSave existingMap = GetMapByCords(neighborPos);
+                if (existingMap != null)
+                {
+                    if (existingMap.isVisited)
+                    {
+                        Debug.Log($"[MapBug][{Time.time:F2}s] Skipping VISITED map: ({neighborPos.x}, {neighborPos.y}) - Level={existingMap.mapLevel}");
+                        continue;
+                    }
+                    else
+                    {
+                        Debug.Log($"[MapBug][{Time.time:F2}s] Pre-generated map already exists: ({neighborPos.x}, {neighborPos.y})");
+                        continue;
+                    }
+                }
+                
+                newMapPositions.Add(neighborPos);
+                Debug.Log($"[MapBug][{Time.time:F2}s] Will generate: ({neighborPos.x}, {neighborPos.y})");
             }
         }
         
@@ -142,10 +259,10 @@ public class GlobalMap : MonoBehaviour
             MapSave newMap = MapGenHandler.GenerateMapDataOnly((int)mapPos.x, (int)mapPos.y);
             newMap.isVisited = false; // Als unbesucht markieren
             exploredMaps.Add(newMap);
-            Debug.Log($"[GlobalMap] Neue Map generiert: ({mapPos.x}, {mapPos.y}) - Theme: {newMap.mapTheme}");
+            Debug.Log($"[MapBug][{Time.time:F2}s] ✓ Generated map ({mapPos.x}, {mapPos.y}): Theme={newMap.mapTheme}, Level={newMap.mapLevel}, fieldType[0]={newMap.fieldType[0]}");
         }
         
-        Debug.Log($"[GlobalMap] {newMapPositions.Count} neue Nachbar-Maps generiert. Total maps: {exploredMaps.Count}");
+        Debug.Log($"[MapBug][{Time.time:F2}s] GenerateNeighborMaps END - {newMapPositions.Count} neue Maps generiert. Total: {exploredMaps.Count}");
         
         // Benachrichtige UI über Änderungen
         OnMapListChanged?.Invoke(exploredMaps, EventArgs.Empty);

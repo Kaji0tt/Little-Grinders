@@ -15,11 +15,75 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<IsometricPlayer>();
-        playerStats = player.GetComponent<PlayerStats>();
-
+        
+        // Versuche Player zu finden
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        
+        if (playerObj != null)
+        {
+            player = playerObj.GetComponent<IsometricPlayer>();
+            
+            if (player != null)
+            {
+                playerStats = player.GetComponent<PlayerStats>();
+                Debug.Log("[PlayerManager] Player erfolgreich initialisiert");
+            }
+            else
+            {
+                Debug.LogError("[PlayerManager] IsometricPlayer Komponente nicht gefunden auf Player GameObject!");
+            }
+        }
+        else
+        {
+            Debug.LogError("[PlayerManager] Kein GameObject mit Tag 'Player' gefunden! Bitte Tag setzen.");
+        }
+    }
+    
+    // NEU: Fallback-Methode falls Awake fehlschlägt
+    private void Start()
+    {
+        // Falls in Awake nicht gefunden, nochmal versuchen
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            
+            if (playerObj != null)
+            {
+                player = playerObj.GetComponent<IsometricPlayer>();
+                playerStats = player?.GetComponent<PlayerStats>();
+                Debug.Log("[PlayerManager] Player in Start() nachgeladen");
+            }
+        }
     }
 
+    public void SetPlayer()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        
+        if (playerObj != null)
+        {
+            player = playerObj.GetComponent<IsometricPlayer>();
+            playerStats = player.GetComponent<PlayerStats>();
+            Debug.Log("[PlayerManager] Player via SetPlayer() gesetzt");
+        }
+        else
+        {
+            Debug.LogError("[PlayerManager] Kein GameObject mit Tag 'Player' gefunden in SetPlayer()!");
+        }
+    }
+
+    public void SetPlayerStats()
+    {
+        if (player != null)
+        {
+            playerStats = player.GetComponent<PlayerStats>();
+            Debug.Log("[PlayerManager] PlayerStats via SetPlayerStats() gesetzt");
+        }
+        else
+        {
+            Debug.LogError("[PlayerManager] Player ist null in SetPlayerStats()!");
+        }
+    }
 
     #endregion
     public static ItemInstance GetEquippedWeapon()

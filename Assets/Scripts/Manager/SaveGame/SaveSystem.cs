@@ -53,6 +53,18 @@ public static class SaveSystem
                 if (data != null)
                 {
                     Debug.Log($"[SaveSystem.LoadPlayer] Geladene Daten - Level: {data.mySavedLevel}, XP: {data.mySavedXp}, HP: {data.hp}");
+                    Debug.Log($"[SaveSystem.LoadPlayer] exploredMaps.Count: {data.exploredMaps?.Count ?? 0}");
+                    
+                    // Debug: Log erste paar Maps
+                    if (data.exploredMaps != null && data.exploredMaps.Count > 0)
+                    {
+                        Debug.Log($"[SaveSystem.LoadPlayer] First 3 maps:");
+                        for (int i = 0; i < Mathf.Min(3, data.exploredMaps.Count); i++)
+                        {
+                            MapSave map = data.exploredMaps[i];
+                            Debug.Log($"  [{i}] ({map.mapIndexX}, {map.mapIndexY}): cleared={map.isCleared}, visited={map.isVisited}, fieldType[0]={map.fieldType?[0] ?? FieldType.Road}");
+                        }
+                    }
                 }
                 
                 Debug.Log("=== [SaveSystem.LoadPlayer] ENDE - ERFOLGREICH ===");
@@ -110,6 +122,18 @@ public static class SaveSystem
     public static void SavePlayer(PlayerSave data)
     {
         Debug.Log("=== [SaveSystem.SavePlayer] START ===");
+        Debug.Log($"[SaveSystem.SavePlayer] Saving data: Level={data.mySavedLevel}, XP={data.mySavedXp}, exploredMaps.Count={data.exploredMaps?.Count ?? 0}");
+        
+        // Debug: Log erste paar Maps
+        if (data.exploredMaps != null && data.exploredMaps.Count > 0)
+        {
+            Debug.Log($"[SaveSystem.SavePlayer] First 3 maps:");
+            for (int i = 0; i < Mathf.Min(3, data.exploredMaps.Count); i++)
+            {
+                MapSave map = data.exploredMaps[i];
+                Debug.Log($"  [{i}] ({map.mapIndexX}, {map.mapIndexY}): cleared={map.isCleared}, visited={map.isVisited}, fieldType[0]={map.fieldType?[0] ?? FieldType.Road}");
+            }
+        }
         
         // Lokales Speichern (wie bisher)
         try

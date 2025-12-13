@@ -20,25 +20,14 @@ public class ItemModDefinitionEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("modType"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedItemTypes"));
 
-        // Jetzt entscheiden, was angezeigt wird – je nach ModType
-        bool isAptitude = modDef.modType == ModType.Aptitude;
+        // Normale Mods: Zeige alle Stat-Felder
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("targetStat"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("baseValue"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("rarityScalings"), true);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("scalingPerLevel"));
 
-        if (isAptitude)
-        {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("modAbilityData"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("rarityScalings"), true);
-        }
-        else
-        {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("targetStat"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("baseValue"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("rarityScalings"), true);
-            //EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedItemTypes"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("scalingPerLevel"));
-
-            // Vorschau nur bei Nicht-Aptitude
-            DrawPreview(modDef);
-        }
+        // Vorschau
+        DrawPreview(modDef);
 
         serializedObject.ApplyModifiedProperties();
     }

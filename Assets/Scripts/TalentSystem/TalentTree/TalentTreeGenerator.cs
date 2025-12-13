@@ -35,6 +35,10 @@ public class TalentTreeGenerator : MonoBehaviour
     public LineRenderer linePrefab; // Prefab für Verbindungen
     public Talent_UI Ursprung;
 
+    [Header("Gem Socket Settings")]
+    [Tooltip("Sprite für Gem-Socket-Nodes (einheitlich für alle Sockets)")]
+    public Sprite gemSocketSprite;
+
 
     public List<TalentNode> allNodes = new List<TalentNode>(); // Alle erzeugten Knoten
     private int nextID = 0;
@@ -97,12 +101,18 @@ public class TalentTreeGenerator : MonoBehaviour
         // 2.2. Erst jetzt UI-Elemente für alle Root-Nodes zeichnen
         SetAndDrawRootNodes();
 
+        // 2.2.5 Generiere initiale Gem-Sockets (Distanz 2-3 von Root-Nodes)
+        GenerateInitialGemSockets();
+
         // 2.3 Erweitere den Ast der Baumes ausgehend von den Rootnodes
         for (int i = 0; i <= depthGeneration; i++)
         {
             foreach (TalentNode node in GetNodesAtDepth(i))
                 ExpandNode(node);
         }
+
+        // 2.4 Aktualisiere Gem-Socket-Distanzen für Wahrscheinlichkeitsberechnung
+        UpdateGemSocketDistances();
 
     }
 
@@ -169,8 +179,160 @@ public class TalentTreeGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// Generiert initiale Gem-Sockets in Distanz 2 von Root-Nodes
+    /// Stellt sicher, dass jede Root-Node einen Gem-Socket in erreichbarer Nähe hat
+    /// </summary>
+    private void GenerateInitialGemSockets()
+    {
+        Debug.Log("=== Generiere initiale Gem-Sockets ===");
+        
+        // Wir wollen ca. 5-8 initiale Gem-Sockets verteilen
+        int targetSockets = UnityEngine.Random.Range(5, 9);
+        int socketsCreated = 0;
+
+        // Gehe durch alle Root-Nodes und erstelle Sockets in ihrer Nähe
+        List<TalentNode> rootNodes = allNodes.Where(n => n.Depth == 0).ToList();
+        
+        foreach (var rootNode in rootNodes)
+        {
+            if (socketsCreated >= targetSockets) break;
+
+            // Finde Nodes in genau Distanz 2 von dieser Root-Node
+            List<TalentNode> candidateNodes = ClaculateAllNodesInDistanceTo(rootNode, 2, true)
+                .Where(n => n.Depth == 2 && !n.isGemSocket)
+                .ToList();
+
+            if (candidateNodes.Count > 0)
+            {
+                // Wähle zufällig einen davon und konvertiere zu Gem-Socket
+                TalentNode selectedNode = candidateNodes[UnityEngine.Random.Range(0, candidateNodes.Count)];
+                ConvertToGemSocket(selectedNode);
+                socketsCreated++;
+                Debug.Log($"Initialer Gem-Socket erstellt: Node {selectedNode.ID} (Depth {selectedNode.Depth})");
+            }
+        }
+
+        Debug.Log($"Insgesamt {socketsCreated} initiale Gem-Sockets erstellt");
+    }
+
+    /// <summary>
+    /// Konvertiert einen normalen TalentNode zu einem Gem-Socket
+    /// Gem-Sockets können wie normale Nodes mehrfach geskillt werden (1-5 Skillpunkte)
+    /// um die Ability zu verstärken
+    /// </summary>
+    private void ConvertToGemSocket(TalentNode node)
+    {
+        node.isGemSocket = true;
+        node.myTypes.Clear(); // Gem-Sockets haben keine TalentTypes
+        node.myValue = 0;
+        // Zufällige Anzahl Skillpunkte wie bei normalen Nodes (1-5)
+        node.myMaxCount = UnityEngine.Random.Range(1, 6);
+        node.myCurrentCount = 0;
+        node.distanceToNearestGemSocket = 0; // Ist selbst ein Socket
+
+        // UI aktualisieren falls bereits erstellt
+        if (node.myTalentUI != null)
+        {
+            node.myTalentUI.SetNode(node);
+        }
+    }
+
+    /// <summary>
+    /// Aktualisiert für jeden Node die Distanz zum nächsten Gem-Socket
+    /// Wird für die Wahrscheinlichkeitsberechnung bei der Expansion verwendet
+    /// </summary>
+    private void UpdateGemSocketDistances()
+    {
+        List<TalentNode> gemSockets = allNodes.Where(n => n.isGemSocket).ToList();
+        
+        foreach (var node in allNodes)
+        {
+            if (node.isGemSocket)
+            {
+                node.distanceToNearestGemSocket = 0;
+                continue;
+            }
+
+            // BFS um nächsten Gem-Socket zu finden
+            int minDistance = CalculateDistanceToNearestGemSocket(node, gemSockets);
+            node.distanceToNearestGemSocket = minDistance;
+        }
+    }
+
+    /// <summary>
+    /// Berechnet die Distanz vom gegebenen Node zum nächsten Gem-Socket via BFS
+    /// </summary>
+    private int CalculateDistanceToNearestGemSocket(TalentNode startNode, List<TalentNode> gemSockets)
+    {
+        if (gemSockets.Count == 0) return int.MaxValue;
+
+        HashSet<TalentNode> visited = new HashSet<TalentNode>();
+        Queue<(TalentNode node, int distance)> queue = new Queue<(TalentNode, int)>();
+        
+        queue.Enqueue((startNode, 0));
+        visited.Add(startNode);
+
+        while (queue.Count > 0)
+        {
+            var (currentNode, distance) = queue.Dequeue();
+
+            // Prüfe ob dieser Node ein Gem-Socket ist
+            if (currentNode.isGemSocket)
+            {
+                return distance;
+            }
+
+            // Durchsuche Nachbarn
+            foreach (var neighbor in currentNode.myConnectedNodes)
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    visited.Add(neighbor);
+                    queue.Enqueue((neighbor, distance + 1));
+                }
+            }
+        }
+
+        return int.MaxValue; // Kein Gem-Socket erreichbar
+    }
+
+    /// <summary>
+    /// Berechnet die Wahrscheinlichkeit, dass an dieser Position ein Gem-Socket gespawnt werden soll
+    /// Basierend auf Distanz zum nächsten Gem-Socket (wird von jedem Socket aus neu berechnet)
+    /// 
+    /// Wahrscheinlichkeitskurve:
+    /// Distanz 1: ~1%
+    /// Distanz 2: ~3%
+    /// Distanz 3: ~5%
+    /// Distanz 4: ~10%
+    /// Distanz 5: ~23%
+    /// Distanz 7: ~82%
+    /// Distanz 8+: ~95-100%
+    /// </summary>
+    private float CalculateGemSocketSpawnProbability(int distanceFromGemSocket)
+    {
+        // Verwende eine logistische Kurve für sanften Übergang
+        // f(x) = 1 / (1 + e^(-k * (x - x0)))
+        // k = Steilheit, x0 = Mittelpunkt der Kurve
+        
+        float k = 1.2f; // Steilheit
+        float x0 = 5.5f; // Mittelpunkt bei ~Depth 5-6
+
+        float probability = 1f / (1f + Mathf.Exp(-k * (distanceFromGemSocket - x0)));
+
+        // Spezialanpassungen für exakte Werte
+        if (distanceFromGemSocket <= 1) return 0.01f; // ~1%
+        if (distanceFromGemSocket == 2) return 0.03f; // ~3%
+        if (distanceFromGemSocket == 3) return 0.05f; // ~5%
+        if (distanceFromGemSocket >= 8) return Mathf.Min(0.95f + (distanceFromGemSocket - 8) * 0.01f, 1f); // 95-100%
+
+        return probability;
+    }
+
+    /// <summary>
     /// Erweitert den Talentbaum ausgehend vom gegebenen Parent-Node.
     /// Fügt genau numChildren neue, tieferliegende Nodes hinzu oder verbindet sie.
+    /// ERWEITERT: Kann auch Gem-Sockets basierend auf Wahrscheinlichkeit erstellen
     /// </summary>
     /// <param name="parent">Der Ausgangs-Knoten, von dem neue Talente verzweigen sollen</param>
     public void ExpandNode(TalentNode parent)
@@ -214,7 +376,33 @@ public class TalentTreeGenerator : MonoBehaviour
                 // Erstelle neue Node, weise Position und Typ zu
                 TalentNode newNode = CreateChildNode(parent);
                 newNode.myPosition = validPosition;
-                newNode.myTypes.Add(GetTalentType(newNode.myPosition));
+
+                // === GEM SOCKET SPAWN CHECK ===
+                // Prüfe ob dieser Node ein Gem-Socket werden soll
+                bool shouldBeGemSocket = false;
+                
+                if (parent.Depth >= 2) // Erst ab Depth 2+ weitere Sockets spawnen (initiale bei Depth 2)
+                {
+                    int distanceToSocket = CalculateDistanceToNearestGemSocket(newNode, allNodes.Where(n => n.isGemSocket).ToList());
+                    float spawnChance = CalculateGemSocketSpawnProbability(distanceToSocket);
+                    
+                    if (UnityEngine.Random.value < spawnChance)
+                    {
+                        shouldBeGemSocket = true;
+                        Debug.Log($"Gem-Socket spawnt bei Node {newNode.ID} (Distanz: {distanceToSocket}, Chance: {spawnChance:P})");
+                    }
+                }
+
+                if (shouldBeGemSocket)
+                {
+                    // Konvertiere zu Gem-Socket
+                    ConvertToGemSocket(newNode);
+                }
+                else
+                {
+                    // Normales Talent: Weise TalentType zu
+                    newNode.myTypes.Add(GetTalentType(newNode.myPosition));
+                }
 
                 // UI-Element instanziieren und dem Node zuweisen
                 Talent_UI uiNode = Instantiate(myTalentUI, canvasTransform);
@@ -229,11 +417,16 @@ public class TalentTreeGenerator : MonoBehaviour
                 if (newNode.Depth != 0)
                 {
                     DrawConnection(parent.uiElement.GetComponent<RectTransform>(), uiNode.myRectTransform);
-                    CheckAndAssignHybridType(newNode, parent);
+                    
+                    // Nur für normale Talente (nicht Gem-Sockets)
+                    if (!newNode.isGemSocket)
+                    {
+                        CheckAndAssignHybridType(newNode, parent);
 
-                    // Hybrid-Talente sind schwächer: Wert halbieren
-                    if (newNode.myTypes.Count > 1)
-                        newNode.myValue /= 2;
+                        // Hybrid-Talente sind schwächer: Wert halbieren
+                        if (newNode.myTypes.Count > 1)
+                            newNode.myValue /= 2;
+                    }
                 }
 
                 createdChildren++; // Erfolgreich hinzugefügt

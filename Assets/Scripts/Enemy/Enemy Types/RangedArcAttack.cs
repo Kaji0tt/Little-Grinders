@@ -19,17 +19,9 @@ public class RangedArcAttack : AttackBehavior
     [Tooltip("Zeitpunkt beim Abschuss des Projektils als Prozentsatz der Animation (0-1, z.B. 0.3 = 30%)")]
     public float projectileFireTiming = 0.3f;
     
-    //[Tooltip("Animationsname für Projektil 1 (wird zufällig ausgewählt)")]
-    //private string projectileAnimation1 = "Open1";
-    
-    //[Tooltip("Animationsname für Projektil 2 (wird zufällig ausgewählt)")]
-    //public string projectileAnimation2 = "Open2";
-    
     private float timer;
     private float attackCooldown;
     private bool isAttacking = false;
-    private Animator animator;
-    private string currentProjectileAnimation;
     
     public override void Enter(EnemyController controller)
     {
@@ -39,17 +31,10 @@ public class RangedArcAttack : AttackBehavior
         attackCooldown = 1f / controller.mobStats.AttackSpeed.Value;
         timer = 0f; // Starte sofort mit Angriff
         isAttacking = false;
-        
-        // Hole Animator-Komponente
-        animator = controller.GetComponent<Animator>();
-        if (animator == null)
-        {
-            Debug.LogWarning($"[RangedArcAttack] Kein Animator auf {controller.gameObject.name} gefunden!");
-        }
     }
 
     /// <summary>
-    /// UpdateAttack wird von der Base-Klasse aufgerufen
+    /// Überschreibt UpdateAttack - wird von Base-Klasse aufgerufen
     /// FacingDirection wird automatisch in OnUpdateAttack gesteuert
     /// </summary>
     protected override void UpdateAttack()
@@ -76,10 +61,7 @@ public class RangedArcAttack : AttackBehavior
         
         GameEvents.Instance?.EnemyStartAttack(controller, attackDuration);
         
-        // Speichere gewählte Projektil-Animation für später
-        //currentProjectileAnimation = selectedProjectileAnimation;
-        
-        // Warte bis zum Projektil-Abschuss (60% der Animation)
+        // Warte bis zum Projektil-Abschuss (z.B. 30% der Animation)
         yield return new WaitForSeconds(projectileFireDelay);
         
         // Feuere Projektil ab
@@ -131,35 +113,8 @@ public class RangedArcAttack : AttackBehavior
         // Starte Bogenbahn zum Spieler
         Vector3 targetPosition = PlayerManager.instance.player.transform.position;
         projectileScript.SetCurveTarget(targetPosition, arcHeight);
-        
-        // Kopiere AnimationController und spiele Projektil-Animation ab
-        SetupProjectileAnimation(projectile, controller);
     }
-    
-    /// <summary>
-    /// Kopiert den AnimationController vom Enemy zum Projektil und spielt die gewählte Animation ab
-    /// </summary>
-    private void SetupProjectileAnimation(GameObject projectile, EnemyController controller)
-    {
-        if (animator == null || string.IsNullOrEmpty(currentProjectileAnimation))
-        {
-            Debug.LogWarning("[RangedArcAttack] Kein Animator oder Projektil-Animation verfügbar");
-            return;
-        }
-        
-        // Hole oder erstelle Animator auf dem Projektil
-        Animator projectileAnimator = projectile.GetComponent<Animator>();
-        if (projectileAnimator == null)
-        {
-            projectileAnimator = projectile.AddComponent<Animator>();
-        }
-        
-        // Kopiere den AnimatorController vom Enemy
-        projectileAnimator.runtimeAnimatorController = animator.runtimeAnimatorController;
-        
-        // Spiele die gewählte Projektil-Animation ab
-        projectileAnimator.Play(currentProjectileAnimation);
-    }
+
 
     public override void Exit(EnemyController controller)
     {

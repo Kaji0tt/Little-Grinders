@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//Könnte für Buffs ebensow ie Debuffs verwendet werden.
+//KÃ¶nnte fÃ¼r Buffs ebensow ie Debuffs verwendet werden.
 public class UI_Buff : MonoBehaviour
 {
     #region Singleton
@@ -24,25 +24,25 @@ public class UI_Buff : MonoBehaviour
 
     private List<BuffInstance> expiredBuffs = new List<BuffInstance>();
 
-    //Erfasse alle Kinder und überprüfe ob der in ihnen gespeicherte Buff den gleichen Namen hat, wie der neue Buff.
-    //Falls ja, entferne das alte GameObject und füge das neue hinzu
+    //Erfasse alle Kinder und ï¿½berprï¿½fe ob der in ihnen gespeicherte Buff den gleichen Namen hat, wie der neue Buff.
+    //Falls ja, entferne das alte GameObject und fï¿½ge das neue hinzu
     //Falls nein, mache nichts.
 
     ///Approach New:
-    ///Wenn der Spieler in seiner aktiven Liste einen neuen Buff erhält, füge eine Kopie vom UI_BuffHolder mit der BuffInstanz hinzu.
-    ///Der BuffHolder sollte überprüfen, wie hoch die ZeitIntervall des aktiven Buffs ist. Falls dieses kleiner als 0 ist, soll er sich löschen.
+    ///Wenn der Spieler in seiner aktiven Liste einen neuen Buff erhï¿½lt, fï¿½ge eine Kopie vom UI_BuffHolder mit der BuffInstanz hinzu.
+    ///Der BuffHolder sollte ï¿½berprï¿½fen, wie hoch die ZeitIntervall des aktiven Buffs ist. Falls dieses kleiner als 0 ist, soll er sich lï¿½schen.
     
     public void ApplyUIBuff(BuffInstance newBuff)
     {
-        //Überprüfe ob es bereits eine Instanz dieses Buffs gibt.
+        //ï¿½berprï¿½fe ob es bereits eine Instanz dieses Buffs gibt.
         if(DoesBuffExist(newBuff) != null)
         {
-            //Falls ja, zerstöre das UI GO auf dem der Buff liegt.
+            //Falls ja, zerstï¿½re das UI GO auf dem der Buff liegt.
             DoesBuffExist(newBuff).DestroyGameObject();
 
         }
 
-        //füge eine Kopie vom UI_BuffHolder 
+        //fï¿½ge eine Kopie vom UI_BuffHolder 
         GameObject tmp = Instantiate(templateBuff, this.gameObject.transform);
 
         //Setting Sprite
@@ -60,7 +60,7 @@ public class UI_Buff : MonoBehaviour
         {
             activeUIBuffs.Add(uiBuff);
         }
-        //Falls ein neuer Buff hinzugefügt wird, überprüfe ob dieser Stackbar ist.
+        //Falls ein neuer Buff hinzugefï¿½gt wird, ï¿½berprï¿½fe ob dieser Stackbar ist.
         if (!buff.stackable)
         {
             //Falls nicht, erstelle ein Template des Buffs, falls er sich bereits in der aktiven Liste befindet.
@@ -82,20 +82,30 @@ public class UI_Buff : MonoBehaviour
 
     public UI_BuffHolder DoesBuffExist(BuffInstance newBuff)
     {
-        UI_BuffHolder[] allUIBUffs = GetComponentsInChildren<UI_BuffHolder>();
+        UI_BuffHolder[] allUIBuffs = GetComponentsInChildren<UI_BuffHolder>();
 
-        if(allUIBUffs.Length > 0)
-        foreach(UI_BuffHolder uiBuff in allUIBUffs)
+        if (allUIBuffs.Length > 0)
         {
-            if (uiBuff.buff.buffName == newBuff.buffName)
-                return uiBuff;
+            foreach (UI_BuffHolder uiBuff in allUIBuffs)
+            {
+                // PrÃ¼fe ob buff null ist (ScriptableObject kann destroyed sein)
+                if (uiBuff.buff == null)
+                {
+                    Debug.LogWarning($"[UI_Buff] UI_BuffHolder hat null buff! Ãœberspringe...");
+                    continue;
+                }
 
-            else return null;
+                // PrÃ¼fe ob buffName Ã¼bereinstimmt
+                if (uiBuff.buff.buffName == newBuff.buffName)
+                {
+                    return uiBuff; // âœ… Gefunden!
+                }
+                // âœ… KEIN else return null hier! Weiter mit nÃ¤chstem Element
+            }
         }
 
-        print("Error occured circling through UI_BuffHolder.cs to return active Buffs.");
+        // âœ… Nur null zurÃ¼ckgeben wenn ALLE durchlaufen wurden
         return null;
-
     }
 
     public void CreateUIBuff(BuffInstance newBuff)
@@ -111,6 +121,31 @@ public class UI_Buff : MonoBehaviour
         */
 
 
+    }
+
+    /// <summary>
+    /// Entfernt den UI-Buff fÃ¼r die angegebene BuffInstance
+    /// </summary>
+    public void RemoveUIBuff(BuffInstance buff)
+    {
+        if (buff == null)
+        {
+            Debug.LogWarning("[UI_Buff] RemoveUIBuff - Buff ist null!");
+            return;
+        }
+
+        // Finde den entsprechenden UI_BuffHolder
+        UI_BuffHolder holder = DoesBuffExist(buff);
+        
+        if (holder != null)
+        {
+            Debug.Log($"[UI_Buff] Entferne UI fÃ¼r Buff: {buff.buffName}");
+            holder.DestroyGameObject();
+        }
+        else
+        {
+            Debug.LogWarning($"[UI_Buff] RemoveUIBuff - Kein UI_BuffHolder fÃ¼r '{buff.buffName}' gefunden!");
+        }
     }
     
 

@@ -26,8 +26,8 @@ using UnityEngine.EventSystems;
 /// Group Effects,
 /// SpellVamp / Lifeleech
 /// 
-///Immer wenn TakeDamage gecalled wird, muss 'damage / 10' als TakeDamage auf die Origin der Klasse zurück gecalled werden.. irgendwie so.
-///Wenn wir nicht in die TakeDamage Funktion eingreifen wollen, kann dies lediglich über das Event-System geschehen.
+///Immer wenn TakeDamage gecalled wird, muss 'damage / 10' als TakeDamage auf die Origin der Klasse zurï¿½ck gecalled werden.. irgendwie so.
+///Wenn wir nicht in die TakeDamage Funktion eingreifen wollen, kann dies lediglich ï¿½ber das Event-System geschehen.
 
 
 
@@ -43,7 +43,7 @@ public class BuffInstance : Buff, IDescribable
 
     public IEntitie MyTargetEntitie;
 
-    //Lediglich die BuffInstance kann von der Origin Wissen, ansonsten werden die Scriptable Objects persistent überwiesen.
+    //Lediglich die BuffInstance kann von der Origin Wissen, ansonsten werden die Scriptable Objects persistent ï¿½berwiesen.
     //
     public IEntitie MyOriginEntitie { get; set; }
 
@@ -61,10 +61,50 @@ public class BuffInstance : Buff, IDescribable
 
     public new string MyDescription { get; set; }
 
+    // âœ… KONZEPT 1: Instanzspezifische Buff-Daten (fÃ¼r SlowDebuff, Poison, etc.)
+    // Jede BuffInstance hÃ¤lt ihre eigenen Daten, kein Dictionary im ScriptableObject nÃ¶tig
+    private Dictionary<string, object> instanceData = new Dictionary<string, object>();
 
+    /// <summary>
+    /// Speichert instanzspezifische Daten fÃ¼r diese BuffInstance
+    /// </summary>
+    public void SetInstanceData(string key, object value)
+    {
+        // âœ… Lazy Initialization - falls Dictionary noch nicht existiert
+        if (instanceData == null)
+            instanceData = new Dictionary<string, object>();
+            
+        instanceData[key] = value;
+    }
+
+    /// <summary>
+    /// Holt instanzspezifische Daten fÃ¼r diese BuffInstance
+    /// </summary>
+    public T GetInstanceData<T>(string key, T defaultValue = default(T))
+    {
+        // âœ… Lazy Initialization
+        if (instanceData == null)
+            instanceData = new Dictionary<string, object>();
+            
+        if (instanceData.ContainsKey(key))
+            return (T)instanceData[key];
+        return defaultValue;
+    }
+
+    /// <summary>
+    /// PrÃ¼ft ob instanzspezifische Daten vorhanden sind
+    /// </summary>
+    public bool HasInstanceData(string key)
+    {
+        // âœ… Lazy Initialization
+        if (instanceData == null)
+            instanceData = new Dictionary<string, object>();
+            
+        return instanceData.ContainsKey(key);
+    }
 
     //Der StatModifier sollte in der geerbten Klasse definiert werden.
-    //Er könnte sich auf das MovementSpeed ebenso auswirken, wie auf die HP!
+    //Er kï¿½nnte sich auf das MovementSpeed ebenso auswirken, wie auf die HP!
     //Ergo liegt in der Klasse Buff lediglich eine Methode, welcher der entsprechende Stat mitgegeben wird.
     //public StatModifier mod;
 
@@ -78,6 +118,8 @@ public class BuffInstance : Buff, IDescribable
 
     public BuffInstance(Buff buff)
     {       
+        // âœ… Initialisiere instanceData Dictionary beim Konstruktor
+        instanceData = new Dictionary<string, object>();
         
         buffName = buff.buffName;
 
@@ -103,22 +145,22 @@ public class BuffInstance : Buff, IDescribable
     }
 
     //BuffInstance wird mittels ApplyBuff und einer entsprechenden Entitie zugewiesen.
-    //Über die Entitie lassen sich alle Stats und Values verändern.
-    //Innerhalb der Entittie (MobStat / PlayerStat) wird der Buff einer Liste hinzugefügt.
+    //ï¿½ber die Entitie lassen sich alle Stats und Values verï¿½ndern.
+    //Innerhalb der Entittie (MobStat / PlayerStat) wird der Buff einer Liste hinzugefï¿½gt.
     public void ApplyBuff(IEntitie myTargetEntitie, IEntitie myOriginEntititie)
     {
         //Die Entitie wird in der BuffInstance gespeichert.
         MyTargetEntitie = myTargetEntitie;
 
-        //Das TickIntervall wird übernommen, so dass der Buff in dem im SO gespeicherten Intervall tickt.
+        //Das TickIntervall wird ï¿½bernommen, so dass der Buff in dem im SO gespeicherten Intervall tickt.
         MyTickTimer = tick;
 
         MyOriginEntitie = myOriginEntititie;
 
-        //Prüfe ob der Buff Stackable ist und füge die BuffInstanz der Entitie hinzu.
+        //Prï¿½fe ob der Buff Stackable ist und fï¿½ge die BuffInstanz der Entitie hinzu.
         myTargetEntitie.ApplyBuff(this);
 
-        //Speicher die Transform der Entitie. Relevant für Positionierung von Particel-Effekten.
+        //Speicher die Transform der Entitie. Relevant fï¿½r Positionierung von Particel-Effekten.
         MyTargetTransform = myTargetEntitie.GetTransform();
     }
 
@@ -134,11 +176,13 @@ public class BuffInstance : Buff, IDescribable
 
     public virtual void Remove()
     {
+        Debug.Log($"[BuffInstance] Remove() wird aufgerufen fÃ¼r {buffName} auf {MyTargetEntitie.GetTransform().name}");
         MyTargetEntitie.RemoveBuff(this);
     }
 
     public override void Expired(IEntitie instanceTarget, IEntitie instanceOrigin)
     {
+        Debug.Log($"[BuffInstance] Expired() wird aufgerufen fÃ¼r {buffName} - Delegiere zu originalBuff.Expired()");
         originalBuff.Expired(instanceTarget, instanceOrigin);
     }
     public override void Update()
@@ -151,7 +195,10 @@ public class BuffInstance : Buff, IDescribable
             CalculateTickers();
         }
         else
+        {
+            Debug.Log($"[BuffInstance] {buffName} ist abgelaufen! MyDuration: {MyDuration:F2} - Rufe Remove() auf...");
             Remove();
+        }
 
         //Debug.Log("Current Duration: " + MyDuration);
 
@@ -230,6 +277,16 @@ public abstract class Buff : ScriptableObject
     public abstract void Expired(IEntitie instanceTarget, IEntitie instanceOrigin);
 
     public abstract void OnTick(IEntitie instanceTarget, IEntitie instanceOrigin);
+
+    /// <summary>
+    /// Kopiert Buff-spezifische Logik in eine BuffInstance.
+    /// Wird Ã¼berschrieben von abgeleiteten Klassen (z.B. SlowDebuff, Poison, etc.)
+    /// </summary>
+    public virtual void CopyFrom(Buff source)
+    {
+        // Basis-Implementierung: Nichts zu tun
+        // Wird von SlowDebuff, Poison, etc. Ã¼berschrieben
+    }
 
 
 }

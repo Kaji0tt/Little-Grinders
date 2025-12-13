@@ -15,9 +15,6 @@ public class ItemModDefinition : ScriptableObject
     public ModType modType; // Flat, Percent, etc.
     public RarityScaling[] rarityScalings;
 
-    [Tooltip("Wenn der Mod eine Fähigkeit sein soll, verweise hier auf die entsprechende Ability")]
-    public AbilityData modAbilityData;
-
     [Tooltip("Auf welchen Item Typen diese Modifikation verfügbar sein soll.")]
     public ItemType allowedItemTypes;
 
@@ -75,15 +72,6 @@ public class ItemMod
     // Gibt die Beschreibung mit Wert, Zielstat und statischer Textbeschreibung zurück
     public string GetDescription()
     {
-        if (definition == null) return "";
-
-        // Spezialbehandlung für Aptitude Mods
-        if (definition.modType == ModType.Aptitude)
-        {
-            return $"Fügt dem Spieler die Fähigkeit {definition.modName} hinzu.";
-        }
-
-        // Standard-Beschreibung für andere Mod-Typen
         string valueStr = definition.modType == ModType.Percent || definition.modType == ModType.PercentFortune
             ? $"+{rolledValue * 100f:F1}%"
             : $"+{rolledValue:F1}";
@@ -100,4 +88,4 @@ public class RarityScaling
     public string displayName; // z. B. "Segen des Hirten" für Legendary
 }
 
-public enum ModType { Flat, Percent, FlatFortune, PercentFortune, Aptitude }
+public enum ModType { Flat, Percent, FlatFortune, PercentFortune }

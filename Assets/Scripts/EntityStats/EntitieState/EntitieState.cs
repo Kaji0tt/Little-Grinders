@@ -73,6 +73,12 @@ public class IdleState : EntitieState
         // Falls Spieler zu nahe ist -> Zustandswechsel
         if (Vector3.Distance(controller.transform.position, controller.Player.position) <= controller.aggroRange)
         {
+            // Pull entire group if member of one
+            if (controller.myGroup != null)
+            {
+                controller.myGroup.PullGroup();
+            }
+            
             controller.TransitionTo(new ChaseState(controller)); // musst du ggf. anpassen
             return;
         }
@@ -141,6 +147,11 @@ public class ChaseState : EntitieState
     {
         // Animation wird automatisch durch IsometricRenderer Movement-Detection gesteuert
         // GameEvents.Instance?.EnemyStartWalk(controller);
+            // ✅ NEU: Pull group when entering chase state
+        if (controller.myGroup != null)
+        {
+            controller.myGroup.PullGroup();
+        }
     }
 
     public override void Update()
@@ -228,6 +239,122 @@ public class AttackState : EntitieState
             }
         }
         */
+    }
+}
+
+public class CastState : EntitieState
+{
+    public CastState(EnemyController controller) : base(controller) { }
+
+    private float castTimer;
+    private float totalCastTime;
+    private float executionTime;
+    private bool hasExecuted = false;
+    private IAbilityBehavior activeAbility; // Die aktuell ausgeführte Ability
+
+    public override void Enter()
+    {
+        // Blickrichtung zum Spieler vor Cast
+        controller.myIsoRenderer.SetFacingDirection();
+
+        // Stoppe Bewegung
+        controller.StopMoving();
+
+        // Hole die Ability mit höchster Priorität die ready ist
+        activeAbility = controller.GetReadyAbility();
+        
+        if (activeAbility == null)
+        {
+            Debug.LogWarning($"[CastState] {controller.name} hat keine bereite Ability!");
+            controller.TransitionTo(new IdleState(controller));
+            return;
+        }
+
+        activeAbility.Enter(controller);
+        
+        // Cast-Zeit und Execution-Timing abrufen
+        float castTime = 0f;
+        float executionTiming = 0.5f; // Default
+        
+        if (activeAbility is AbilityBehavior abilityBehavior)
+        {
+            castTime = abilityBehavior.castTime;
+            executionTiming = abilityBehavior.executionTiming;
+        }
+
+        totalCastTime = castTime;
+        castTimer = castTime;
+        
+        // Berechne wann die Ability ausgeführt werden soll (z.B. bei 0.5 = nach Hälfte der Cast-Zeit)
+        executionTime = castTime * executionTiming;
+        hasExecuted = false;
+
+        // Cast-Animation starten (wird jetzt im IsometricRenderer basierend auf animationType abgespielt)
+        GameEvents.Instance?.EnemyStartCast(controller, castTime);
+
+        // Bei Instant-Cast (castTime == 0) sofort ausführen
+        if (castTime <= 0f)
+        {
+            ExecuteAbility();
+        }
+    }
+
+    public override void Update()
+    {
+        // Wenn der Feind stirbt, Cast abbrechen
+        if (controller.isDead)
+        {
+            controller.TransitionTo(null);
+            return;
+        }
+
+        castTimer -= Time.deltaTime;
+
+        // Ability zur richtigen Zeit ausführen (basierend auf executionTiming)
+        float elapsedTime = totalCastTime - castTimer;
+        if (!hasExecuted && elapsedTime >= executionTime)
+        {
+            ExecuteAbility();
+        }
+
+        // Cast abgeschlossen
+        if (castTimer <= 0f && hasExecuted)
+        {
+            CompleteCast();
+        }
+    }
+
+    private void ExecuteAbility()
+    {
+        hasExecuted = true;
+        activeAbility?.Execute(controller);
+    }
+
+    private void CompleteCast()
+    {
+        // Cast-Complete Event
+        GameEvents.Instance?.EnemyCastComplete(controller);
+
+        // Callback an Ability
+        if (activeAbility is AbilityBehavior abilityBehavior)
+        {
+            abilityBehavior.OnCastComplete();
+        }
+
+        // Zurück zu passendem State
+        if (controller.IsPlayerInAttackRange())
+        {
+            controller.TransitionTo(new AttackState(controller));
+        }
+        else
+        {
+            controller.TransitionTo(new ChaseState(controller));
+        }
+    }
+
+    public override void Exit()
+    {
+        activeAbility?.Exit(controller);
     }
 }
 

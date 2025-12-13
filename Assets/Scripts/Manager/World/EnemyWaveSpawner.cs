@@ -26,20 +26,24 @@ public class EnemyWaveSpawner : MonoBehaviour
     #endregion
     
     [Header("Spawn Settings")]
-    [SerializeField] private float spawnInterval = 8f; // Time between spawn waves
-    [SerializeField] private int baseEnemiesPerWave = 2; // Starting number of enemies per wave
-    [SerializeField] private float minSpawnDistance = 15f; // Min distance from player
-    [SerializeField] private float maxSpawnDistance = 25f; // Max distance from player
-    [SerializeField] private float spawnRadius = 3f; // Radius around spawn point for enemy group
+    [SerializeField] private float spawnInterval = 15f; // Time between spawn waves (longer interval for scattered enemies)
+    [SerializeField] private float minSpawnDistance = 25f; // Min distance from player (increased to spawn further away)
+    [SerializeField] private float maxSpawnDistance = 40f; // Max distance from player (increased for more variation)
+    [SerializeField] private float spawnRadius = 3f; // Radius around spawn point for enemy group (smaller for single enemies)
     
     [Header("Difficulty Scaling")]
-    [SerializeField] private float difficultyIncreaseInterval = 60f; // Increase difficulty every X seconds
-    [SerializeField] private int maxEnemiesPerWave = 8; // Maximum enemies in one wave
-    [SerializeField] private float enemyHealthMultiplier = 1.0f; // Multiplier for enemy health over time
-    [SerializeField] private float enemyDamageMultiplier = 1.0f; // Multiplier for enemy damage over time
+    [SerializeField] private float difficultyIncreaseInterval = 60f; // Increase difficulty every X seconds (for scattered spawns only)
+    [SerializeField] private int baseEnemiesPerWave = 5; // Base number of enemies per wave (scattered spawns)
+    [SerializeField] [Range(0f, 1f)] private float increaseEnemiesPerWavePercent = 0.25f; // +15% enemies per difficulty level (0.15 = +15%)
+    [SerializeField] private float enemyHealthMultiplier = 1.1f; // +10% HP per difficulty level
+    [SerializeField] private float enemyDamageMultiplier = 1.05f; // +5% damage per difficulty level
+    
+    [Header("Totem Wave Settings")]
+    [SerializeField] private bool useWaveBasedDifficulty = true; // Use wave number for difficulty instead of time
+    private int currentWaveNumber = 0; // Controlled by TotemInteractable
     
     [Header("Debug")]
-    [SerializeField] private bool enableSpawning = true;
+    [SerializeField] private bool enableSpawning = false; // Disabled by default - only active during Totem challenges
     [SerializeField] private bool debugLogs = false;
     
     private float timeSinceLastSpawn = 0f;
@@ -56,6 +60,9 @@ public class EnemyWaveSpawner : MonoBehaviour
     
     private IEnumerator InitializeDelayed()
     {
+        // Force disable spawning at start - only Totem can enable it
+        enableSpawning = false;
+        
         // Wait for game systems to initialize
         yield return new WaitForSeconds(2f);
         
@@ -116,11 +123,9 @@ public class EnemyWaveSpawner : MonoBehaviour
         if (playerTransform == null || prefabCollection == null)
             return;
         
-        // Calculate number of enemies based on difficulty
-        int enemyCount = Mathf.Min(
-            baseEnemiesPerWave + currentDifficultyLevel, 
-            maxEnemiesPerWave
-        );
+        // Calculate number of enemies based on difficulty with percentage increase
+        float enemyCountFloat = baseEnemiesPerWave * (1f + (currentDifficultyLevel * increaseEnemiesPerWavePercent));
+        int enemyCount = Mathf.RoundToInt(enemyCountFloat);
         
         // Find a spawn position outside player's view
         Vector3 spawnCenter = FindSpawnPosition();
@@ -141,7 +146,7 @@ public class EnemyWaveSpawner : MonoBehaviour
             spawnOffset.y = 0; // Keep on ground level
             Vector3 finalSpawnPos = spawnCenter + spawnOffset;
             
-            SpawnEnemy(finalSpawnPos);
+            SpawnEnemyWithDifficulty(finalSpawnPos, false);
         }
         
         if (debugLogs)
@@ -154,14 +159,43 @@ public class EnemyWaveSpawner : MonoBehaviour
     {
         Vector3 playerPos = playerTransform.position;
         
-        // Find all spawn positions marked with "SpawnPos" tag
+        // Spawn in random direction around player for true 360° coverage
+        // This prevents predictable spawns and forces player to watch all directions
+        
+        int maxAttempts = 15;
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            // Random direction (360 degrees)
+            float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+            Vector3 direction = new Vector3(Mathf.Cos(randomAngle), 0f, Mathf.Sin(randomAngle));
+            
+            // Random distance within range
+            float randomDistance = Random.Range(minSpawnDistance, maxSpawnDistance);
+            
+            // Calculate spawn position
+            Vector3 potentialSpawnPos = playerPos + direction * randomDistance;
+            
+            // Check if position is on NavMesh
+            UnityEngine.AI.NavMeshHit navHit;
+            if (UnityEngine.AI.NavMesh.SamplePosition(potentialSpawnPos, out navHit, 10f, UnityEngine.AI.NavMesh.AllAreas))
+            {
+                // Valid spawn position found
+                if (debugLogs)
+                {
+                    Debug.Log($"[EnemyWaveSpawner] Found spawn position at {navHit.position} (distance: {Vector3.Distance(playerPos, navHit.position):F1}m, angle: {randomAngle * Mathf.Rad2Deg:F0}°)");
+                }
+                return navHit.position;
+            }
+        }
+        
+        // Fallback: Try using tagged SpawnPos if random positioning failed
         GameObject[] spawnPositions = GameObject.FindGameObjectsWithTag("SpawnPos");
         
         if (spawnPositions.Length == 0)
         {
             if (debugLogs)
             {
-                Debug.LogWarning("[EnemyWaveSpawner] No GameObjects with tag 'SpawnPos' found!");
+                Debug.LogWarning("[EnemyWaveSpawner] No GameObjects with tag 'SpawnPos' found and NavMesh spawn failed!");
             }
             return Vector3.zero;
         }
@@ -193,7 +227,7 @@ public class EnemyWaveSpawner : MonoBehaviour
             }
         }
         
-        // If still no valid positions, return zero (shouldn't happen with proper setup)
+        // If still no valid positions, return zero
         if (validSpawnPositions.Count == 0)
         {
             if (debugLogs)
@@ -205,10 +239,19 @@ public class EnemyWaveSpawner : MonoBehaviour
         
         // Return random valid spawn position
         GameObject selectedSpawn = validSpawnPositions[Random.Range(0, validSpawnPositions.Count)];
+        if (debugLogs)
+        {
+            Debug.Log($"[EnemyWaveSpawner] Using fallback SpawnPos: {selectedSpawn.name}");
+        }
         return selectedSpawn.transform.position;
     }
     
-    private void SpawnEnemy(Vector3 position)
+    /// <summary>
+    /// Spawns a single enemy with difficulty scaling applied
+    /// </summary>
+    /// <param name="position">Spawn position</param>
+    /// <param name="isSummonedMob">If true, adds SummonedMob component for cleanup</param>
+    private void SpawnEnemyWithDifficulty(Vector3 position, bool isSummonedMob = false)
     {
         GameObject enemyPrefab = prefabCollection.GetRandomEnemie();
         if (enemyPrefab == null)
@@ -235,17 +278,25 @@ public class EnemyWaveSpawner : MonoBehaviour
             enemy.name = enemy.name.Replace("(Clone)", "").Trim();
         }
         
-        // Apply difficulty scaling after a frame to ensure MobStats.Start() has run
-        if (currentDifficultyLevel > 0)
+        // Add SummonedMob component if this is a Totem-spawned enemy
+        if (isSummonedMob)
         {
-            StartCoroutine(ApplyDifficultyScalingDelayed(enemy));
+            enemy.AddComponent<SummonedMob>();
+        }
+        
+        // Apply difficulty scaling
+        int difficultyLevel = useWaveBasedDifficulty ? currentWaveNumber : currentDifficultyLevel;
+        
+        if (difficultyLevel > 0)
+        {
+            StartCoroutine(ApplyDifficultyScalingDelayed(enemy, difficultyLevel));
         }
         
         // Set pulled flag to make enemy immediately chase player
         StartCoroutine(ForceChaseStateDelayed(enemy));
     }
     
-    private IEnumerator ApplyDifficultyScalingDelayed(GameObject enemy)
+    private IEnumerator ApplyDifficultyScalingDelayed(GameObject enemy, int difficultyLevel)
     {
         // Wait for MobStats.Start() to run first
         yield return new WaitForEndOfFrame();
@@ -258,24 +309,29 @@ public class EnemyWaveSpawner : MonoBehaviour
             yield break;
         
         // Scale enemy stats based on difficulty level
-        // Keep enemies relatively weak but slightly increase stats over time
-        float healthScale = 1.0f + (currentDifficultyLevel * 0.1f); // +10% HP per level
-        float damageScale = 1.0f + (currentDifficultyLevel * 0.05f); // +5% damage per level
+        // For wave-based: difficultyLevel = wave number (1, 2, 3...)
+        // For time-based: difficultyLevel = time/interval (0, 1, 2...)
+        
+        // Use power formula for exponential scaling
+        float healthScale = Mathf.Pow(enemyHealthMultiplier, difficultyLevel);
+        float damageScale = Mathf.Pow(enemyDamageMultiplier, difficultyLevel);
         
         // Apply scaling
         if (mobStats.Hp != null)
         {
-            mobStats.Hp.AddModifier(new StatModifier(mobStats.Hp.BaseValue * (healthScale - 1f), StatModType.Flat));
+            float healthBonus = mobStats.Hp.BaseValue * (healthScale - 1f);
+            mobStats.Hp.AddModifier(new StatModifier(healthBonus, StatModType.Flat));
         }
         
         if (mobStats.AttackPower != null)
         {
-            mobStats.AttackPower.AddModifier(new StatModifier(mobStats.AttackPower.BaseValue * (damageScale - 1f), StatModType.Flat));
+            float damageBonus = mobStats.AttackPower.BaseValue * (damageScale - 1f);
+            mobStats.AttackPower.AddModifier(new StatModifier(damageBonus, StatModType.Flat));
         }
         
         if (debugLogs)
         {
-            Debug.Log($"[EnemyWaveSpawner] Applied difficulty scaling (level {currentDifficultyLevel}) to {enemy.name}");
+            Debug.Log($"[EnemyWaveSpawner] Applied difficulty scaling (level {difficultyLevel}) to {enemy.name}: HP x{healthScale:F2}, Damage x{damageScale:F2}");
         }
     }
     
@@ -335,6 +391,84 @@ public class EnemyWaveSpawner : MonoBehaviour
         if (debugLogs)
         {
             Debug.Log($"[EnemyWaveSpawner] Spawning {(enabled ? "enabled" : "disabled")}");
+        }
+    }
+    
+    /// <summary>
+    /// Set the current wave number for difficulty calculation (called by TotemInteractable)
+    /// </summary>
+    public void SetWaveNumber(int waveNumber)
+    {
+        currentWaveNumber = waveNumber;
+        
+        if (debugLogs)
+        {
+            Debug.Log($"[EnemyWaveSpawner] Wave number set to {waveNumber}");
+        }
+    }
+    
+    /// <summary>
+    /// Spawn a Totem wave at specific positions (Altar + Totem)
+    /// Called by TotemInteractable each wave
+    /// </summary>
+    public void SpawnTotemWave(int enemyCount, Vector3 altarPosition, float altarRadius, Vector3[] totemPositions, float totemPercentage)
+    {
+        if (!isInitialized || prefabCollection == null)
+        {
+            Debug.LogWarning("[EnemyWaveSpawner] Cannot spawn totem wave - not initialized!");
+            return;
+        }
+        
+        // Split enemies between Altar and Totem
+        int totemEnemies = Mathf.RoundToInt(enemyCount * totemPercentage);
+        int altarEnemies = enemyCount - totemEnemies;
+        
+        if (debugLogs)
+        {
+            Debug.Log($"[EnemyWaveSpawner] Spawning Totem Wave {currentWaveNumber}: {enemyCount} total ({altarEnemies} at Altar, {totemEnemies} at Totem)");
+        }
+        
+        // Spawn at Altar
+        for (int i = 0; i < altarEnemies; i++)
+        {
+            Vector2 randomCircle = Random.insideUnitCircle * altarRadius;
+            Vector3 spawnPos = altarPosition + new Vector3(randomCircle.x, 0f, randomCircle.y);
+            
+            // Ensure on NavMesh
+            UnityEngine.AI.NavMeshHit navHit;
+            if (UnityEngine.AI.NavMesh.SamplePosition(spawnPos, out navHit, 5f, UnityEngine.AI.NavMesh.AllAreas))
+            {
+                spawnPos = navHit.position;
+            }
+            
+            SpawnEnemyWithDifficulty(spawnPos, true);
+        }
+        
+        // Spawn at Totem positions
+        if (totemPositions != null && totemPositions.Length > 0)
+        {
+            for (int i = 0; i < totemEnemies; i++)
+            {
+                Vector3 spawnPos = totemPositions[Random.Range(0, totemPositions.Length)];
+                SpawnEnemyWithDifficulty(spawnPos, true);
+            }
+        }
+        else if (totemEnemies > 0)
+        {
+            // Fallback: spawn remaining enemies at Altar
+            for (int i = 0; i < totemEnemies; i++)
+            {
+                Vector2 randomCircle = Random.insideUnitCircle * altarRadius;
+                Vector3 spawnPos = altarPosition + new Vector3(randomCircle.x, 0f, randomCircle.y);
+                
+                UnityEngine.AI.NavMeshHit navHit;
+                if (UnityEngine.AI.NavMesh.SamplePosition(spawnPos, out navHit, 5f, UnityEngine.AI.NavMesh.AllAreas))
+                {
+                    spawnPos = navHit.position;
+                }
+                
+                SpawnEnemyWithDifficulty(spawnPos, true);
+            }
         }
     }
     

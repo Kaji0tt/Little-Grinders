@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnvCamNoRot : MonoBehaviour
 {
@@ -10,12 +11,38 @@ public class EnvCamNoRot : MonoBehaviour
     [SerializeField]
     private int sortingOrderBase = 5000;
     public int sO_OffSet;
+    
+    [Header("NavMesh Obstacle Settings")]
+    [SerializeField] private bool autoConfigureNavMeshObstacles = true;
+    [SerializeField] private bool carveNavMesh = true;
+    [SerializeField] private bool carveOnlyStationary = true;
+    [SerializeField] [Range(0.1f, 1.0f)] private float carvingSizeMultiplier = 0.7f; // Reduce carving size (0.7 = 70% of collider)
 
     private SpriteRenderer sprite;
     private ParticleSystemRenderer particle;
 
     private int no_children;
     private Transform child;
+
+    void Awake()
+    {
+        // Configure NavMesh Obstacles BEFORE Start (before NavMesh baking)
+        // NOTE: For procedural maps, this will be called again explicitly after prefab loading
+        if (autoConfigureNavMeshObstacles)
+        {
+            ConfigureNavMeshObstacles();
+        }
+    }
+    
+    /// <summary>
+    /// PUBLIC method to manually trigger NavMeshObstacle configuration.
+    /// Called by MapGenHandler after all environment prefabs are loaded.
+    /// </summary>
+    public void ConfigureObstaclesForProcedularMap()
+    {
+        Debug.Log("[EnvCamNoRot] Manual NavMeshObstacle configuration triggered for procedural map");
+        ConfigureNavMeshObstacles();
+    }
 
     void Start()
     {
@@ -99,6 +126,84 @@ public class EnvCamNoRot : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Automatically configures NavMeshObstacle components for all objects with colliders.
+    /// This ensures obstacles properly carve into the NavMesh for pathfinding.
+    /// Called in Awake() before NavMesh baking.
+    /// </summary>
+    private void ConfigureNavMeshObstacles()
+    {
+        Debug.Log("[EnvCamNoRot] Configuring NavMesh Obstacles for environment objects...");
+        
+        int configuredCount = 0;
+        int addedCount = 0;
+        
+        // Get all colliders in this GameObject and all children
+        Collider[] allColliders = GetComponentsInChildren<Collider>(true);
+        
+        foreach (Collider col in allColliders)
+        {
+            // Skip if it's a trigger collider (not a physical obstacle)
+            if (col.isTrigger)
+                continue;
+            
+            GameObject obj = col.gameObject;
+            
+            // Check if NavMeshObstacle already exists
+            NavMeshObstacle obstacle = obj.GetComponent<NavMeshObstacle>();
+            
+            if (obstacle == null)
+            {
+                // Add NavMeshObstacle component
+                obstacle = obj.AddComponent<NavMeshObstacle>();
+                addedCount++;
+                Debug.Log($"[EnvCamNoRot] Added NavMeshObstacle to: {obj.name}");
+            }
+            
+            // Configure obstacle settings
+            obstacle.carving = carveNavMesh;
+            obstacle.carveOnlyStationary = carveOnlyStationary;
+            
+            // Auto-size based on collider type
+            if (col is BoxCollider)
+            {
+                BoxCollider box = col as BoxCollider;
+                obstacle.shape = NavMeshObstacleShape.Box;
+                obstacle.center = box.center;
+                obstacle.size = box.size * carvingSizeMultiplier; // Apply size reduction
+            }
+            else if (col is CapsuleCollider)
+            {
+                CapsuleCollider capsule = col as CapsuleCollider;
+                obstacle.shape = NavMeshObstacleShape.Capsule;
+                obstacle.center = capsule.center;
+                obstacle.radius = capsule.radius * carvingSizeMultiplier; // Apply size reduction
+                obstacle.height = capsule.height * carvingSizeMultiplier;
+            }
+            else if (col is SphereCollider)
+            {
+                SphereCollider sphere = col as SphereCollider;
+                obstacle.shape = NavMeshObstacleShape.Capsule;
+                obstacle.center = sphere.center;
+                obstacle.radius = sphere.radius * carvingSizeMultiplier; // Apply size reduction
+                obstacle.height = sphere.radius * 2f * carvingSizeMultiplier;
+            }
+            else if (col is MeshCollider)
+            {
+                // MeshColliders: Use bounding box as approximation
+                MeshCollider mesh = col as MeshCollider;
+                Bounds bounds = mesh.bounds;
+                obstacle.shape = NavMeshObstacleShape.Box;
+                obstacle.center = mesh.transform.InverseTransformPoint(bounds.center);
+                obstacle.size = bounds.size * carvingSizeMultiplier; // Apply size reduction
+            }
+            
+            configuredCount++;
+        }
+        
+        Debug.Log($"[EnvCamNoRot] ✅ NavMesh Obstacles configured: {configuredCount} total ({addedCount} added, {configuredCount - addedCount} updated)");
+        Debug.Log($"[EnvCamNoRot] Settings: Carving={carveNavMesh}, CarveOnlyStationary={carveOnlyStationary}, SizeMultiplier={carvingSizeMultiplier:F2}");
+    }
 
 
     //LayerSprites war ein Ansatz für das Layering im Aufbau von ProcedualMap Generation

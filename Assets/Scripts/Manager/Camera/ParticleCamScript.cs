@@ -18,6 +18,7 @@ public class ParticleCamScript : MonoBehaviour
     [SerializeField]
     private string sortingLayerName = "Umgebung_col Layer";
     private ParticleSystem particle;
+    private TrailRenderer trailRenderer;
 
 
     void Start()
@@ -29,6 +30,12 @@ public class ParticleCamScript : MonoBehaviour
         {
             particle = GetComponent<ParticleSystem>();
             particle.GetComponent<Renderer>().sortingLayerName = sortingLayerName;
+        }
+        
+        if (GetComponent<TrailRenderer>() != null)
+        {
+            trailRenderer = GetComponent<TrailRenderer>();
+            trailRenderer.sortingLayerName = sortingLayerName;
         }
     }
 
@@ -44,6 +51,12 @@ public class ParticleCamScript : MonoBehaviour
             var renderer = particle.GetComponent<Renderer>();
             renderer.sortingLayerName = sortingLayerName;
             renderer.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
+        }
+        
+        if (trailRenderer != null)
+        {
+            trailRenderer.sortingLayerName = sortingLayerName;
+            trailRenderer.sortingOrder = (int)(sortingOrderBase - DistSelfCamera);
         }
 
         //11.09

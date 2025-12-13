@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b95acfd6bf6c5e479bfd7d937d42a15, type: 3}
   m_Name: SM0001
   m_EditorClassIdentifier: 
-  ItemID: SM0001
+  ItemID: JEWELRY_SCHMUCK_SM0001
   ItemName: Gezackte Kette
   ItemDescription: "Schmuckvoller Anh\xE4nger"
   itemType: 16
   weaponCombo: {fileID: 0}
+  gemType: 0
+  gemAbility: {fileID: 0}
   itemRarity: 0
   Range: 0
   RangedWeapon: 0
   icon: {fileID: 6938462861439164299, guid: e977bd5957502e9488194c6d535f580a, type: 3}
-  percent: 10
-  baseLevel: 4
+  dropLevel: 1
+  dropWeight: 100
+  calculatedWeight: 0
   activeItem: 0
   hp: 0
   armor: 0

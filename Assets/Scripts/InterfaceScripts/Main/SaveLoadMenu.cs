@@ -63,6 +63,12 @@ public class SaveLoadMenu : MonoBehaviour
             sceneToLoad = data.currentScene;
         }
 
+        // Verstecke Death-Tab
+        if(UI_Manager.instance != null)
+        {
+            UI_Manager.instance.ToggleDeathTab(false);
+        }
+
         SceneManager.LoadScene(sceneToLoad);
     }
 }

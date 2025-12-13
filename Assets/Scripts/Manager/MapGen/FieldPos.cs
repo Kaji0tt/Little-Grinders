@@ -7,6 +7,8 @@ public enum FieldType
 {
     Empty = 0,
     Road = 1,
+    RoadVertical = 2,
+    RoadHorizontal = 3,
     NoVeg = 4,
     LowVeg = 5,
     HighVeg = 6,
@@ -24,6 +26,15 @@ public enum FieldType
     OutsideRight = 18,
     OutsideCorner = 19,
     PreBuildTile = 20,
+    RoadTJunctionTop = 21,
+    RoadTJunctionBot = 22,
+    RoadTJunctionLeft = 23,
+    RoadTJunctionRight = 24,
+    RoadCrossroad = 25,
+    RoadCurveTopLeft = 26,
+    RoadCurveTopRight = 27,
+    RoadCurveBottomLeft = 28,
+    RoadCurveBottomRight = 29,
 }
 
 public class FieldPos : MonoBehaviour
